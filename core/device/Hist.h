@@ -16,6 +16,8 @@ namespace dev {
    /**
     *  @short Interface for creating histograms from the readout data
     *
+    *         This class is similar in function to dev::Disk. It is used
+    *         to instruct the histogram writing objects.
     *
     * @author Attila Krasznahorkay Jr.
     *

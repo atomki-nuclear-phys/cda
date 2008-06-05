@@ -21,6 +21,9 @@ namespace dev {
    /**
     *  @short Base class for the graphical representation of a device
     *
+    *         All devices have to be able to show their configuration in
+    *         a graphical way. This interface is also used to change the
+    *         the configuration of the devices.
     *
     * @author Attila Krasznahorkay Jr.
     *

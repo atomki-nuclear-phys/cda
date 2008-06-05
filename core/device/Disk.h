@@ -16,6 +16,11 @@ namespace dev {
    /**
     *  @short Interface for writing an output file from the readout data
     *
+    *         This is a first guess at what the interface of the disk writing
+    *         classes should look like. There should be a function that
+    *         prepares the writing of the output file, and another one
+    *         that can be called for each event to write an event record
+    *         to the file.
     *
     * @author Attila Krasznahorkay Jr.
     *
@@ -26,9 +31,23 @@ namespace dev {
 
    public:
       /// Function initializing the device
-      virtual void initialize() = 0;
+      /**
+       * Prepare the writing of the data read from this device.
+       *
+       * @returns <code>true</code> if the operation was successful,
+       *          <code>false</code> otherwise
+       */
+      virtual bool initialize() = 0;
       /// Function filling the histograms
-      virtual void writeEvent( const ev::Fragment& fragment ) = 0;
+      /**
+       * Write an event record to the output file. It should receive an
+       * event fragment that was read out by the dev::Readout object.
+       * How this object receives this data is for the future to see...
+       *
+       * @returns <code>true</code> if the operation was successful,
+       *          <code>false</code> otherwise
+       */
+      virtual bool writeEvent( const ev::Fragment& fragment ) = 0;
 
    }; // class Disk
 
