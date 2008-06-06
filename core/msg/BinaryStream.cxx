@@ -38,7 +38,7 @@ namespace msg {
    }
 
    /**
-    * This function encodes a MSG::Message object to a binary form
+    * This function encodes a msg::Message object to a binary form
     * that can be transmitted over the network, written to a file,
     * you name it.
     *
@@ -64,7 +64,7 @@ namespace msg {
       }
 
       //
-      // Encode the MSG::Message parameters in a specific order:
+      // Encode the msg::Message parameters in a specific order:
       //
       setVersion( QDataStream::Qt_4_4 );
       ( * ( QDataStream* ) this ) << message.getSender();
@@ -78,7 +78,7 @@ namespace msg {
    }
 
    /**
-    * This function decodes a MSG::Message object from binary data.
+    * This function decodes a msg::Message object from binary data.
     * Just as the encoding operator, this also relies on the
     * QDataStream base class to do the heavy work. I assume that
     * this implementation should be quite robust, but haven't
@@ -99,7 +99,7 @@ namespace msg {
       QTime   time;
 
       //
-      // Decode the MSG::Message parameters in a specific order:
+      // Decode the msg::Message parameters in a specific order:
       //
       setVersion( QDataStream::Qt_4_4 );
       ( * ( QDataStream* ) this ) >> sender;

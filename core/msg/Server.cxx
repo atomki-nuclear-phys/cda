@@ -13,7 +13,7 @@ namespace msg {
 
    //
    // Make sure that the following Qt classes are available in the
-   // MSG namespace even if Qt has been built in an arbitrary
+   // msg namespace even if Qt has been built in an arbitrary
    // namespace:
    //
    using QT_PREPEND_NAMESPACE( QFile );
@@ -83,7 +83,7 @@ namespace msg {
 
    /**
     * This function is responsible for reading the messages from the
-    * network. It does this using MSG::ByteStream to decode the
+    * network. It does this using msg::ByteStream to decode the
     * incoming data.
     *
     * Upon successfuly reading a message, it writes the message to the
@@ -121,7 +121,7 @@ namespace msg {
    /**
     * This function from the base class is re-implemented here to take
     * advantage of the additional feature(s) available in
-    * MSG::Socket and change the behaviour of the server a little.
+    * msg::Socket and change the behaviour of the server a little.
     *
     * @param socketDescriptor The socket descriptor on which a message
     *                         can be read

@@ -13,7 +13,7 @@
 
 // Check the Qt version used for compilation:
 #if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "MSG::Server needs Qt >= 4.0.0"
+#  error "msg::Server needs Qt >= 4.0.0"
 #endif
 
 namespace msg {
@@ -23,7 +23,7 @@ namespace msg {
 
    //
    // Make sure that the following Qt classes are available in the
-   // MSG namespace even if Qt has been built in an arbitrary
+   // msg namespace even if Qt has been built in an arbitrary
    // namespace:
    //
    using QT_PREPEND_NAMESPACE( QTcpServer );
@@ -39,7 +39,7 @@ namespace msg {
     *         the same commands. Most importantly, it can be started
     *         to listen to incoming connections with the
     *
-    *         <code>MSG::Server::listen(...)</code>
+    *         <code>msg::Server::listen(...)</code>
     *
     *         function. Currently it can do two things. It can
     *         write the incoming messages to a log file in a nicely

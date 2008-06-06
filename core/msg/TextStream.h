@@ -20,14 +20,14 @@ QT_FORWARD_DECLARE_CLASS( QByteArray )
 
 // Check the Qt version used for compilation:
 #if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "MSG::TextStream needs Qt >= 4.0.0"
+#  error "msg::TextStream needs Qt >= 4.0.0"
 #endif
 
 namespace msg {
 
    //
    // Make sure that the following Qt classes are available in the
-   // MSG namespace even if Qt has been built in an arbitrary
+   // msg namespace even if Qt has been built in an arbitrary
    // namespace:
    //
    using QT_PREPEND_NAMESPACE( QTextStream );

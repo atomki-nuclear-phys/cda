@@ -4,8 +4,8 @@
  *
  *          Example showing how to write data to a FIFO.
  *          This example opens a local FIFO file
- *          (<strong>./testfifo</strong>) and writes a MSG::Message
- *          object in it using MSG::BinaryStream. It kind of
+ *          (<strong>./testfifo</strong>) and writes a msg::Message
+ *          object in it using msg::BinaryStream. It kind of
  *          demonstrates how complex objects can be sent from
  *          process to process using FIFOs.
  *

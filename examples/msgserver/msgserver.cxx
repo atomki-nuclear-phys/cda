@@ -2,7 +2,7 @@
 /**
  * @example msgserver.cxx
  *
- *          This executable starts an instance of MSG::Server on
+ *          This executable starts an instance of msg::Server on
  *          port 49700 of localhost. The server writes all received
  *          messages in a file called "messages.log".
  *

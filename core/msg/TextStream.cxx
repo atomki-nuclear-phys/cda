@@ -11,7 +11,7 @@ namespace msg {
 
    //
    // Make sure that the following Qt classes are available in the
-   // MSG namespace even if Qt has been built in an arbitrary
+   // msg namespace even if Qt has been built in an arbitrary
    // namespace:
    //
    using QT_PREPEND_NAMESPACE( QStringList );
@@ -21,8 +21,8 @@ namespace msg {
 
    /**
     * This constructor is useful for handling any kind of Qt devices
-    * including files. Notice however that MSG::TextStream can not be
-    * used instead of a MSG::BinaryStream to transmit information over
+    * including files. Notice however that msg::TextStream can not be
+    * used instead of a msg::BinaryStream to transmit information over
     * network sockets, since it doesn't provide decoding for its own
     * output.
     *
@@ -141,7 +141,7 @@ namespace msg {
    }
 
    /**
-    * MSG::TextStream is not supposed to provide all the functionalities of
+    * msg::TextStream is not supposed to provide all the functionalities of
     * QTextStream, but this operator seemed to be quite important to have here
     * as well...
     *

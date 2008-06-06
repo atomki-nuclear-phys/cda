@@ -15,7 +15,7 @@
 
 // Check the Qt version used for compilation:
 #if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "MSG::Logger needs Qt >= 4.0.0"
+#  error "msg::Logger needs Qt >= 4.0.0"
 #endif
 
 /**
@@ -34,7 +34,7 @@ namespace msg {
 
    //
    // Make sure that the following Qt classes are available in the
-   // MSG namespace even if Qt has been built in an arbitrary
+   // msg namespace even if Qt has been built in an arbitrary
    // namespace:
    //
    using QT_PREPEND_NAMESPACE( QString );
@@ -76,7 +76,7 @@ namespace msg {
       Logger& operator<<( const QString& msg );
       /// Operator accepting basically any kind of argument
       /**
-       * MSG::Logger was designed to give all the features that std::ostream
+       * msg::Logger was designed to give all the features that std::ostream
        * objects usually provide. This operator handles all kinds of
        * arguments and passes it on to the std::ostringstream base class.
        */
@@ -88,13 +88,13 @@ namespace msg {
       }
 
    private:
-      /// Internal function giving a message to MSG::Sender
+      /// Internal function giving a message to msg::Sender
       void send();
 
       QString m_sender;      ///< Name of the component sending the messages
       Level   m_activeLevel; ///< Level of the message to be sent
 
-      Sender* m_msgSender;   ///< Pointer to the MSG::Sender singleton
+      Sender* m_msgSender;   ///< Pointer to the msg::Sender singleton
 
    }; // class Logger
 

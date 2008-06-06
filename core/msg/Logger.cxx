@@ -65,8 +65,8 @@ namespace msg {
    }
 
    /**
-    * The function constructs a MSG::Message object from the data collected
-    * since the last message sending, gives it to MSG::Sender and then
+    * The function constructs a msg::Message object from the data collected
+    * since the last message sending, gives it to msg::Sender and then
     * resets its internal buffer.
     */
    void Logger::send() {
@@ -88,7 +88,7 @@ namespace msg {
 
    /**
     * This function works pretty much like std::endl. When you set up a message,
-    * you can just call <code>logger << MSG::endmsg</code> and the message
+    * you can just call <code>logger << msg::endmsg</code> and the message
     * will be sent to the message server.
     *
     * @param logger The logger object to send the message from
