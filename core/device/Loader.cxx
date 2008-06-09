@@ -43,10 +43,10 @@ namespace dev {
             m_logger << msg::ERROR << "Device loading will probably not be "
                      << "successful" << msg::endmsg;
          } else {
-            m_logger << msg::DEBUG << "Setting device plugin directory "
-                     << "to: " << env_path << msg::endmsg;
             m_path = env_path;
             m_path.append( "/dev" );
+	    m_logger << msg::DEBUG << "Setting device plugin directory "
+                     << "to: " << m_path << msg::endmsg;
          }
          //
          // Delete the return value of getenv():
@@ -154,7 +154,7 @@ namespace dev {
       //
       // Try to load the specified library:
       //
-      QPluginLoader ploader( m_path + plugin_name );
+      QPluginLoader ploader( m_path + "/" + plugin_name );
       QObject* plugin = ploader.instance();
       if( ! plugin ) {
          m_logger << msg::ERROR << "Couldn't load plugin with name: "
