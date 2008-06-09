@@ -13,20 +13,13 @@
  *
  * @section CDAoverview Code overview
  *
- * The code is currently composed of a few useful libraries that
+ * The code is currently composed of one useful library that
  * should serve as a back-bone to the CDA application suit and some
- * example applications that use these libraries. The current
- * libraries are:
+ * example applications that use this library.
  *
- *   - <strong>cdamsg</strong>: A library that handles messages coming
- *     from various
- *     parts of the data acquisition system. The messages are
- *     transmitted from the components to a(multiple) server(s)
- *     over TCP/IP protocol to enable running the different parts of
- *     CDA on separate machines.
- *   - <strong>cdafifo</strong>: A very "thin" library built around
- *     the QFile class. It just demonstrates how to use U*IX file-system
- *     FIFOs for transmitting data between processes.
+ * The idea that the CAMAC devices will each be compiled in separate
+ * Qt plugins. The beginnings of one such example plugin are already
+ * available, but need finishing.
  *
  * @section CDAcompile Compilation
  *
