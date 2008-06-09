@@ -4,7 +4,8 @@
 # applications/examples.
 #
 
-export PATH=$PWD/bin:$PATH
-export LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH
+export CDASYS=$PWD
+export PATH=$CDASYS/bin:$PATH
+export LD_LIBRARY_PATH=$CDASYS/lib:$LD_LIBRARY_PATH
 # To support Mac OS X:
-export DYLD_LIBRARY_PATH=$PWD/lib:$DYLD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=$CDASYS/lib:$DYLD_LIBRARY_PATH

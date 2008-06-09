@@ -17,6 +17,9 @@ QT_FORWARD_DECLARE_CLASS( QDomNode )
  *         the implementation of the CAMAC devices, are stored in this
  *         namespace.
  *
+ *         In addition classes providing core functionalities for handling
+ *         the device objects are also placed in this namespace.
+ *
  * @author Attila Krasznahorkay Jr.
  *
  * $Revision$

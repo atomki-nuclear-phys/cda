@@ -4,7 +4,8 @@
 # applications/examples.
 #
 
-setenv PATH $PWD/bin:$PATH
-setenv LD_LIBRARY_PATH $PWD/lib:$LD_LIBRARY_PATH
+setenv CDASYS $PWD
+setenv PATH $CDASYS/bin:$PATH
+setenv LD_LIBRARY_PATH $CDASYS/lib:$LD_LIBRARY_PATH
 # To support Mac OS X:
-setenv DYLD_LIBRARY_PATH $PWD/lib:$DYLD_LIBRARY_PATH
+setenv DYLD_LIBRARY_PATH $CDASYS/lib:$DYLD_LIBRARY_PATH

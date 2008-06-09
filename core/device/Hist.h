@@ -28,9 +28,24 @@ namespace dev {
 
    public:
       /// Function initializing the device
-      virtual void initialize() = 0;
+      /**
+       * Prepare the writing of histograms with data read from this
+       * device.
+       *
+       * @returns <code>true</code> if the operation was successful,
+       *          <code>false</code> otherwise
+       */
+      virtual bool initialize() = 0;
       /// Function filling the histograms
-      virtual void displayEvent( const ev::Fragment& fragment ) = 0;
+      /**
+       * Fill the histograms with an event read from this device.
+       * This is of course only a first guess of how this function
+       * should look like.
+       *
+       * @returns <code>true</code> if the operation was successful,
+       *          <code>false</code> otherwise
+       */
+      virtual bool displayEvent( const ev::Fragment& fragment ) = 0;
 
    }; // class Hist
 

@@ -2,14 +2,12 @@
 // Qt include(s):
 #include <QtCore/QtPlugin>
 
-// CDA include(s):
-#include "device/Readout.h"
-#include "device/Hist.h"
-#include "device/Disk.h"
-
 // Local include(s):
 #include "Factory.h"
 #include "Gui.h"
+#include "Readout.h"
+#include "Hist.h"
+#include "Disk.h"
 
 namespace camac {
 
@@ -33,19 +31,19 @@ namespace camac {
 
    dev::Readout* Factory::createReadout() const {
 
-      return 0;
+      return new Readout();
 
    }
 
    dev::Hist* Factory::createHist() const {
 
-      return 0;
+      return new Hist();
 
    }
 
    dev::Disk* Factory::createDisk() const {
 
-      return 0;
+      return new Disk();
 
    }
 

@@ -1,4 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
+// $Id$
 #ifndef CDA_DEVICES_EXAMPLE_CONFIG_H
 #define CDA_DEVICES_EXAMPLE_CONFIG_H
 
