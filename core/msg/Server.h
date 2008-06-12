@@ -75,7 +75,7 @@ namespace msg {
 
    signals:
       /// Is emitted when a new message becomes available for readout
-      void messageAvailable( Message message );
+      void messageAvailable( const Message& message );
 
    protected slots:
       /// Function used internally to read the messages from the net

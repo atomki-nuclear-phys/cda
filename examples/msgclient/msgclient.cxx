@@ -28,6 +28,7 @@ int main() {
 
    // Set the destination of the messages:
    msg::Sender::addAddress( msg::Address( "127.0.0.1", 49700 ) );
+   msg::Sender::instance()->setMinLevel( msg::VERBOSE );
 
    // Create the logger class:
    msg::Logger logger( "msgclient" );
@@ -35,7 +36,7 @@ int main() {
    // Send some messages very quickly. Observe the order of the
    // received messages on the server side!
    for( int i = 0; i < 100; ++i ) {
-      logger << msg::ERROR << "A test message: " << i << msg::endmsg;
+      logger << msg::DEBUG << "A test message: " << i << msg::endmsg;
    }
 
    // Demonstation of what msg::Logger can absorbe:

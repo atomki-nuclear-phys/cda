@@ -1,22 +1,24 @@
 
 ##############################################################
 #                                                            #
-# This project file compiles the core library of CDA.        #
+# This project file compiles the msgserver example.          #
 #                                                            #
 # Attila Krasznahorkay Jr.                                   #
 #                                                            #
 ##############################################################
 
-TEMPLATE = lib
-VERSION  = 0.0.1
-TARGET   = cdacore
+TEMPLATE = app
+TARGET   = cda-msgserver
 
-HEADERS = fifo/*.h msg/*.h event/*.h device/*.h
-SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
+HEADERS = *.h
+SOURCES = *.cxx
 
-CONFIG += qt debug warn_on shared
-QT      = core network gui
+CONFIG      += qt debug warn_on
+QT           = core gui network
+INCLUDEPATH += ../../core ../../gui
+LIBS         = -L../../lib -lcdacore -lcdagui
+RESOURCES    = cda-msgserver.qrc
 
 OBJECTS_DIR = ./build
 MOC_DIR     = ./build
-DESTDIR     = ../lib
+DESTDIR     = ../../bin

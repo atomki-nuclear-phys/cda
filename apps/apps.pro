@@ -1,12 +1,12 @@
 
 ##############################################################
 #                                                            #
-# This is the main project directory for compiling the whole #
-# CDA application suit.                                      #
+# This project file compiles all the examples making use of  #
+# the core CDA libraries.                                    #
 #                                                            #
 # Attila Krasznahorkay Jr.                                   #
 #                                                            #
 ##############################################################
 
 TEMPLATE = subdirs
-SUBDIRS  = core devices gui examples apps
+SUBDIRS = cda-msgserver
