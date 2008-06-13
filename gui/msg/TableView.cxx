@@ -1,7 +1,5 @@
 // $Id$
 
-#include <iostream>
-
 // Qt include(s):
 #include <QtCore/QStringList>
 #include <QtCore/QSize>
@@ -14,7 +12,7 @@
 #include "msg/Message.h"
 
 // Local include(s):
-#include "View.h"
+#include "TableView.h"
 
 namespace msg {
 
@@ -31,18 +29,18 @@ namespace msg {
    //
    // Set the values of the constsnts:
    //
-   const int View::DEFAULT_TIME_WIDTH   = 160;
-   const int View::DEFAULT_SENDER_WIDTH = 150;
-   const int View::DEFAULT_LEVEL_WIDTH  = 70;
-   const int View::MINIMUM_TEXT_WIDTH   = 300;
+   const int TableView::DEFAULT_TIME_WIDTH   = 160;
+   const int TableView::DEFAULT_SENDER_WIDTH = 150;
+   const int TableView::DEFAULT_LEVEL_WIDTH  = 70;
+   const int TableView::MINIMUM_TEXT_WIDTH   = 300;
 
    /**
     * The constructor takes care of correctly setting up all all members
     * of the class, which is actually quite a bit of work in this case...
     */
-   View::View( QWidget* parent, Qt::WindowFlags flags )
+   TableView::TableView( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_maxMessageCount( 100 ),
-        m_sortByTime( true ) {
+        m_sortByTime( true ), m_minShownLevel( VERBOSE ) {
 
       // Initialise the maps used to display the messages:
       initMaps();
@@ -102,7 +100,7 @@ namespace msg {
 
    }
 
-   View::~View() {
+   TableView::~TableView() {
 
       //
       // Delete all child objects:
@@ -112,10 +110,17 @@ namespace msg {
 
    }
 
+   void TableView::setMinimumShownLevel( Level level ) {
+
+      m_minShownLevel = level;
+      return;
+
+   }
+
    /**
     * @param count Maximum number of messages to show
     */
-   void View::setMaximumMessageCount( int count ) {
+   void TableView::setMaximumMessageCount( int count ) {
 
       m_maxMessageCount = count;
       while( m_table->rowCount() > m_maxMessageCount ) {
@@ -129,9 +134,13 @@ namespace msg {
     * @param value <code>true</code> to sort the messages by time,
     *              <code>false</code> to disable it
     */
-   void View::setSortByTime( bool value ) {
+   void TableView::setSortByTime( bool value ) {
 
       m_sortByTime = value;
+      if( value ) {
+         m_table->setSortingEnabled( true );
+         m_table->verticalHeader()->resizeSections( QHeaderView::ResizeToContents );
+      }
       return;
 
    }
@@ -139,7 +148,7 @@ namespace msg {
    /**
     * @returns Maximum number of messages to show
     */
-   int View::getMaximumMessageCount() const {
+   int TableView::getMaximumMessageCount() const {
 
       return m_maxMessageCount;
 
@@ -149,9 +158,15 @@ namespace msg {
     * @returns <code>true</code> if the messages are sorted by time,
     *          <code>false</code> if they aren't
     */
-   bool View::getSortByTime() const {
+   bool TableView::getSortByTime() const {
 
       return m_sortByTime;
+
+   }
+
+   Level TableView::getMinimumShownLevel() const {
+
+      return m_minShownLevel;
 
    }
 
@@ -163,7 +178,12 @@ namespace msg {
     *
     * @param message The message that should be added to the widget
     */
-   void View::addMessage( const Message& message ) {
+   void TableView::addMessage( const Message& message ) {
+
+      //
+      // Return right away if the message should not be shown:
+      //
+      if( message.getLevel() < m_minShownLevel ) return;
 
       //
       // Disable sorting while we add the new message:
@@ -251,14 +271,14 @@ namespace msg {
 
    }
 
-   void View::showEvent( QShowEvent* ) {
+   void TableView::showEvent( QShowEvent* ) {
 
       adjustColumns();
       return;
 
    }
 
-   void View::resizeEvent( QResizeEvent* ) {
+   void TableView::resizeEvent( QResizeEvent* ) {
 
       adjustColumns();
       return;
@@ -270,7 +290,7 @@ namespace msg {
     * messages in an attractive fashion. These maps are initialised in this
     * function.
     */
-   void View::initMaps() {
+   void TableView::initMaps() {
 
       m_levelToString[ VERBOSE ] = "VERBOSE";
       m_levelToString[ DEBUG ]   = "DEBUG";
@@ -307,7 +327,7 @@ namespace msg {
     * space. When the size of the widget is small, the function sets the
     * width of the last column to its minimum allowed value.
     */
-   void View::adjustColumns() {
+   void TableView::adjustColumns() {
 
       const int time_width   = m_table->columnWidth( 0 );
       const int sender_width = m_table->columnWidth( 1 );

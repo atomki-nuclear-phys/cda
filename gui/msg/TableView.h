@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_GUI_MSG_VIEW_H
-#define CDA_GUI_MSG_VIEW_H
+#ifndef CDA_GUI_MSG_TABLEVIEW_H
+#define CDA_GUI_MSG_TABLEVIEW_H
 
 // STL include(s):
 #include <map>
@@ -46,20 +46,22 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class View : public QWidget {
+   class TableView : public QWidget {
 
       Q_OBJECT
 
    public:
       /// Standard QWidget-type constructor
-      View( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      TableView( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       /// Destructor
-      ~View();
+      ~TableView();
 
       /// Get the maximal number of messages that can be shown
-      int  getMaximumMessageCount() const;
+      int   getMaximumMessageCount() const;
       /// Get if the messages should be sorted
-      bool getSortByTime() const;
+      bool  getSortByTime() const;
+      /// Get the type under which messages should not be shown
+      Level getMinimumShownLevel() const;
 
    public slots:
       /// Insert a new message into the widget
@@ -68,6 +70,8 @@ namespace msg {
       void setMaximumMessageCount( int count );
       /// Set if the messages should be sorted
       void setSortByTime( bool value );
+      /// Set the type under which messages should not be shown
+      void setMinimumShownLevel( Level level );
 
    protected:
       /// Function taking care of the widget resize policy
@@ -100,11 +104,12 @@ namespace msg {
       /// Map to set the foreground of the messages
       std::map< Level, QBrush >  m_levelToForeground;
 
-      int  m_maxMessageCount; ///< Maximum number of shown messages
-      bool m_sortByTime;      ///< Flag for sorting the messages
+      int   m_maxMessageCount; ///< Maximum number of shown messages
+      bool  m_sortByTime;      ///< Flag for sorting the messages
+      Level m_minShownLevel;   ///< Level under which messages are not shown
 
-   }; // class View
+   }; // class TableView
 
 } // namespace msg
 
-#endif // CDA_GUI_MSG_VIEW_H
+#endif // CDA_GUI_MSG_TABLEVIEW_H

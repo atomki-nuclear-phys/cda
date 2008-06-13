@@ -31,7 +31,7 @@ int main( int argc, char* argv[] ) {
 
    // Create and start the server:
    msg::Server server;
-   if( ! server.listen( msg::Address( "127.0.0.1", 49700 ) ) ) {
+   if( ! server.listen( msg::Address( "0.0.0.0", 49700 ) ) ) {
       std::cerr << "The Message Server could not be started!" << std::endl;
       return 1;
    } else {
