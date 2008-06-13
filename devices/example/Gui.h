@@ -4,6 +4,7 @@
 
 // CDA include(s):
 #include "device/Gui.h"
+#include "msg/Logger.h"
 
 // Local include(s):
 #include "Config.h"
@@ -26,6 +27,7 @@ namespace camac {
 
    private:
       QLabel* m_label;
+      mutable msg::Logger m_logger;
 
    }; // class Gui
 

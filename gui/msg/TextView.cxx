@@ -39,8 +39,9 @@ namespace msg {
       m_edit->setSizePolicy( QSizePolicy::Expanding,
                              QSizePolicy::Expanding );
       m_edit->setReadOnly( true );
-      m_edit->setFontFamily( "Courier" );
+      m_edit->setFontFamily( "courier" );
       m_edit->setFontPointSize( 12 );
+      m_edit->setLineWrapMode( QTextEdit::NoWrap );
       m_edit->document()->setMaximumBlockCount( 100 );
 
       m_layout->addWidget( m_edit );

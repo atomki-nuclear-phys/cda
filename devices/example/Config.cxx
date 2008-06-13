@@ -36,7 +36,7 @@ namespace camac {
       m_doubleProperty  = 3.141592;
       m_stringProperty  = "Example_test";
 
-      m_logger << msg::VERBOSE << "Example::Config created" << msg::endmsg;
+      m_logger << msg::VERBOSE << "Object created" << msg::endmsg;
 
    }
 
