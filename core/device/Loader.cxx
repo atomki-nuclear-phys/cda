@@ -145,7 +145,7 @@ namespace dev {
     * library using QPluginLoader. If successful, it tries to create a
     * dev::Factory object from the plugin and cache a pointer to it.
     *
-    * @param name Name of the shared library to load
+    * @param plugin_name Name of the shared library to load
     * @returns <code>true</code> if the operation was successful,
     *          <code>false</code> otherwise
     */
