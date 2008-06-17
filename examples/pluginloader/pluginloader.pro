@@ -14,7 +14,7 @@ HEADERS =
 SOURCES = pluginloader.cxx
 
 CONFIG      += qt debug warn_on
-QT           = core network gui
+QT           = core network gui xml
 INCLUDEPATH += ../../core
 LIBS         = -L../../lib -lcdacore
 

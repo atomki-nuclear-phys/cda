@@ -13,7 +13,12 @@
  */
 
 // Qt include(s):
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <QtGui/QApplication>
+#include <QtXml/QDomImplementation>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 
 // CDA include(s):
 #include "msg/Sender.h"
@@ -71,7 +76,23 @@ int main( int argc, char* argv[] ) {
       dev::Gui* gui = factory->createGui();
       gui->show();
 
-      return app.exec();
+      app.exec();
+
+      QDomImplementation imp;
+      QDomDocument doc = imp.createDocument( "", "Setup",
+                                             imp.createDocumentType( "CDA_SETUP",
+                                                                     "", "" ) );
+      QDomElement rootElement = doc.documentElement();
+
+      QDomElement deviceElement = doc.createElement( "Example" );
+      gui->writeConfig( &deviceElement );
+
+      rootElement.appendChild( deviceElement );
+
+      QFile configFile( "example_config.xml" );
+      configFile.open( QFile::WriteOnly | QFile::Truncate );
+      QTextStream stream( &configFile );
+      doc.save( stream, 3 );
 
    } else {
 
