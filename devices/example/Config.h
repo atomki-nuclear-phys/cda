@@ -3,9 +3,17 @@
 #ifndef CDA_DEVICES_EXAMPLE_CONFIG_H
 #define CDA_DEVICES_EXAMPLE_CONFIG_H
 
+// Qt include(s):
+#include <QtCore/QGlobalStatic>
+
 // CDA include(s):
-#include "device/Config.h"
-#include "msg/Logger.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/device/Config.h"
+#   include "cdacore/msg/Logger.h"
+#else
+#   include "device/Config.h"
+#   include "msg/Logger.h"
+#endif
 
 namespace camac {
 

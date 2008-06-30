@@ -6,8 +6,19 @@
 #include <QtCore/QObject>
 
 // CDA include(s):
-#include "device/Factory.h"
-#include "msg/Logger.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/device/Factory.h"
+#   include "cdacore/msg/Logger.h"
+#else
+#   include "device/Factory.h"
+#   include "msg/Logger.h"
+#endif
+
+// There is no bloody way to tell qmake to add a -F... flag when running
+// MOC, so when MOC is being run on Mac OS X, this include has to be used...
+#ifdef Q_MOC_RUN
+#   include "device/Factory.h"
+#endif
 
 namespace camac {
 

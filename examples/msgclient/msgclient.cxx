@@ -20,9 +20,17 @@
 // STL include(s):
 #include <iomanip>
 
+// Qt include(s):
+#include <QtCore/QGlobalStatic>
+
 // Local include(s):
-#include "msg/Sender.h"
-#include "msg/Logger.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/msg/Sender.h"
+#   include "cdacore/msg/Logger.h"
+#else
+#   include "msg/Sender.h"
+#   include "msg/Logger.h"
+#endif
 
 int main() {
 

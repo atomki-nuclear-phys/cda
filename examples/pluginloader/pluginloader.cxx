@@ -21,11 +21,19 @@
 #include <QtXml/QDomElement>
 
 // CDA include(s):
-#include "msg/Sender.h"
-#include "msg/Logger.h"
-#include "device/Loader.h"
-#include "device/Factory.h"
-#include "device/Gui.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/msg/Sender.h"
+#   include "cdacore/msg/Logger.h"
+#   include "cdacore/device/Loader.h"
+#   include "cdacore/device/Factory.h"
+#   include "cdacore/device/Gui.h"
+#else
+#   include "msg/Sender.h"
+#   include "msg/Logger.h"
+#   include "device/Loader.h"
+#   include "device/Factory.h"
+#   include "device/Gui.h"
+#endif
 
 int main( int argc, char* argv[] ) {
 

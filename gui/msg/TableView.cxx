@@ -9,7 +9,11 @@
 #include <QtGui/QHeaderView>
 
 // CDA include(s):
-#include "msg/Message.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/msg/Message.h"
+#else
+#   include "msg/Message.h"
+#endif
 
 // Local include(s):
 #include "TableView.h"

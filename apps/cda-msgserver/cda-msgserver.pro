@@ -1,4 +1,4 @@
-
+# Dear emacs, this is normal -*- text -*-
 ##############################################################
 #                                                            #
 # This project file compiles the msgserver example.          #
@@ -7,18 +7,52 @@
 #                                                            #
 ##############################################################
 
+# Include the common checks:
+include(../../cda_checks.pri)
+
+# This will be an application with the name "cda-msgserver":
 TEMPLATE = app
 TARGET   = cda-msgserver
 
+# These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
 
-CONFIG      += qt debug warn_on
-QT           = core gui network
-INCLUDEPATH += ../../core ../../gui
-LIBS         = -L../../lib -lcdacore -lcdagui
-RESOURCES    = cda-msgserver.qrc
+# The application uses the QtCore, QtNetwork and QtGui libraries,
+# and it uses some built in resources.
+CONFIG   += qt debug warn_on
+QT        = core gui network
+RESOURCES = cda-msgserver.qrc
 
-OBJECTS_DIR = ./build
-MOC_DIR     = ./build
+# The places to put the intermediate and final build results:
+OBJECTS_DIR = ./.obj
+MOC_DIR     = ./.obj
 DESTDIR     = ../../bin
+
+#
+# These are the specific configuration options for compiling the code
+# on Mac OS X.
+#
+mac {
+   message(*)
+   message(* Configuring to build the \"cda-msgserver\" application on Mac OS X)
+   message(*)
+
+   QMAKE_CXXFLAGS += -F../../lib
+   LIBS           += -F../../lib -framework cdacore -framework cdagui
+
+   ICON = ../../images/cda-msgserver.icns
+}
+
+#
+# These are the specific configuration options for compiling the code
+# on Linux.
+#
+linux {
+   message(*)
+   message(* Configuring to build the \"cda-msgserver\" application on Linux)
+   message(*)
+
+   INCLUDEPATH += ../../core ../../gui
+   LIBS        += -L../../lib -lcdacore -lcdagui
+}

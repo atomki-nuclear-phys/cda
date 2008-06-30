@@ -21,7 +21,11 @@
 #include <QtCore/QCoreApplication>
 
 // Local include(s):
-#include "msg/Server.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/msg/Server.h"
+#else
+#   include "msg/Server.h"
+#endif
 
 int main( int argc, char* argv[] ) {
 

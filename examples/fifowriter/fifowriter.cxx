@@ -15,11 +15,25 @@
  * $Date$
  */
 
+// Qt include(s):
+#include <QtCore/QGlobalStatic>
+
 // CDA include(s):
-#include "msg/Sender.h"
-#include "msg/Logger.h"
-#include "msg/BinaryStream.h"
-#include "fifo/Fifo.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/fifo/Fifo.h"
+#   include "cdacore/msg/Sender.h"
+#   include "cdacore/msg/Logger.h"
+#   include "cdacore/msg/BinaryStream.h"
+#   include "cdacore/event/Event.h"
+#   include "cdacore/event/BinaryStream.h"
+#else
+#   include "fifo/Fifo.h"
+#   include "msg/Sender.h"
+#   include "msg/Logger.h"
+#   include "msg/BinaryStream.h"
+#   include "event/Event.h"
+#   include "event/EventStream.h"
+#endif
 
 int main() {
 
@@ -46,10 +60,34 @@ int main() {
    // Send a msg::Message over it:
    //
    msg::Message message( "fifowriter", "Test message this is..." );
-   msg::BinaryStream stream( &fifo );
-   stream << message;
+   msg::BinaryStream msgstream( &fifo );
+   msgstream << message;
 
    logger << msg::INFO << "msg::Message sent over FIFO" << msg::endmsg;
+
+   //
+   // Send an ev::Event over it:
+   //
+   ev::Event event;
+   ev::Fragment fragment1, fragment2;
+
+   fragment1.setCrateNumber( 2 );
+   fragment1.setModuleNumber( 10 );
+   fragment1.addDataWord( 0xf0 );
+   fragment1.addDataWord( 0xf00 );
+
+   fragment2.setCrateNumber( 1 );
+   fragment2.setModuleNumber( 15 );
+   fragment2.addDataWord( 0xc0 );
+   fragment2.addDataWord( 0xc00 );
+
+   event.addFragment( fragment1 );
+   event.addFragment( fragment2 );
+
+   ev::BinaryStream evstream( &fifo );
+   evstream << event;
+
+   logger << msg::INFO << "ev::Event sent over FIFO" << msg::endmsg;
 
    return 0;
 

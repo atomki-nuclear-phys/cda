@@ -4,7 +4,7 @@
 #define CDA_CORE_DEVICE_READOUT_H
 
 // CDA include(s):
-#include "event/Fragment.h"
+#include "../event/Fragment.h"
 
 // Local include(s):
 #include "Config.h"

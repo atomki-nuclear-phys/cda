@@ -12,7 +12,11 @@
 #include <QtGui/QBrush>
 
 // CDA include(s):
-#include "msg/Level.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/msg/Level.h"
+#else
+#   include "msg/Level.h"
+#endif
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedLayout )

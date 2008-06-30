@@ -7,8 +7,13 @@
 #include <QtGui/QTextDocument>
 
 // CDA include(s):
-#include "msg/Message.h"
-#include "msg/TextStream.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/msg/Message.h"
+#   include "cdacore/msg/TextStream.h"
+#else
+#   include "msg/Message.h"
+#   include "msg/TextStream.h"
+#endif
 
 // Local include(s):
 #include "TextView.h"
@@ -39,7 +44,7 @@ namespace msg {
       m_edit->setSizePolicy( QSizePolicy::Expanding,
                              QSizePolicy::Expanding );
       m_edit->setReadOnly( true );
-#ifdef Q_OS_MAC
+#ifdef Q_OS_DARWIN
       m_edit->setFontFamily( "Courier" );
 #else
       m_edit->setFontFamily( "courier" );

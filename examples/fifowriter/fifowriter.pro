@@ -1,4 +1,4 @@
-
+# Dear emacs, this is normal -*- text -*-
 ##############################################################
 #                                                            #
 # This project file compiles the fifowriter example.         #
@@ -7,17 +7,48 @@
 #                                                            #
 ##############################################################
 
+# Include the common checks:
+include(../../cda_checks.pri)
+
+# This will be an application with the name "fifowriter":
 TEMPLATE = app
 TARGET   = fifowriter
 
+# These are the header and source files:
 HEADERS =
 SOURCES = fifowriter.cxx
 
-CONFIG       = qt debug warn_on
-QT           = core network
-INCLUDEPATH += ../../core
-LIBS         = -L../../lib -lcdacore
+# The application uses the QtCore and QtNetwork libraries:
+CONFIG = qt debug warn_on
+QT     = core network
 
-OBJECTS_DIR = ./build
-MOC_DIR     = ./build
+# The places to put the intermediate and final build results:
+OBJECTS_DIR = ./.obj
+MOC_DIR     = ./.obj
 DESTDIR     = ../../bin
+
+#
+# These are the specific configuration options for compiling the code
+# on Mac OS X.
+#
+mac {
+   message(*)
+   message(* Configuring to build the \"fifowriter\" example on Mac OS X)
+   message(*)
+
+   QMAKE_CXXFLAGS += -F../../lib
+   LIBS           += -F../../lib -framework cdacore
+}
+
+#
+# These are the specific configuration options for compiling the code
+# on Linux.
+#
+linux {
+   message(*)
+   message(* Configuring to build the \"fifowriter\" example on Linux)
+   message(*)
+
+   INCLUDEPATH += ../../core
+   LIBS        += -L../../lib -lcdacore
+}

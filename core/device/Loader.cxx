@@ -37,15 +37,21 @@ namespace dev {
          //
          char* env_path = getenv( "CDASYS" );
          if( ! env_path ) {
+            /*
             m_logger << msg::ERROR << "Path property not specified "
                      << "and CDASYS environment variable not set!"
                      << std::endl;
             m_logger << msg::ERROR << "Device loading will probably not be "
                      << "successful" << msg::endmsg;
+            */
+            m_path = CDASYS;
+            m_path.append( "/dev" );
+            m_logger << msg::DEBUG << "Setting device plugin directory "
+                     << "to: " << m_path << msg::endmsg;
          } else {
             m_path = env_path;
             m_path.append( "/dev" );
-	    m_logger << msg::DEBUG << "Setting device plugin directory "
+            m_logger << msg::DEBUG << "Setting device plugin directory "
                      << "to: " << m_path << msg::endmsg;
          }
          //

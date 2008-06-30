@@ -1,4 +1,4 @@
-
+# Dear emacs, this is normal -*- text -*-
 ##############################################################
 #                                                            #
 # This project file compiles all the examples making use of  #
@@ -8,5 +8,8 @@
 #                                                            #
 ##############################################################
 
+# Include the common checks:
+include(../cda_checks.pri)
+
 TEMPLATE = subdirs
-SUBDIRS = msgserver msgclient fifowriter fiforeader pluginloader
+SUBDIRS  = msgserver msgclient fifowriter fiforeader pluginloader

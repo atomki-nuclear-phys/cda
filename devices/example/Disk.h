@@ -2,9 +2,17 @@
 #ifndef CDA_DEVICES_EXAMPLE_DISK_H
 #define CDA_DEVICES_EXAMPLE_DISK_H
 
+// Qt include(s):
+#include <QtCore/QGlobalStatic>
+
 // CDA include(s):
-#include "device/Disk.h"
-#include "msg/Logger.h"
+#ifdef Q_OS_DARWIN
+#   include "cdacore/device/Disk.h"
+#   include "cdacore/msg/Logger.h"
+#else
+#   include "device/Disk.h"
+#   include "msg/Logger.h"
+#endif
 
 // Local include(s):
 #include "Config.h"
