@@ -49,7 +49,7 @@ namespace msg {
 #else
       m_edit->setFontFamily( "courier" );
 #endif // Q_OS_MAC
-      m_edit->setFontPointSize( 12 );
+      m_edit->setFontPointSize( 11 );
       m_edit->setLineWrapMode( QTextEdit::NoWrap );
       m_edit->document()->setMaximumBlockCount( 100 );
 

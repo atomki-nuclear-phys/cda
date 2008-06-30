@@ -40,7 +40,7 @@ mac {
    LIBS           += -F../../lib -framework cdacore
 }
 
-linux {
+unix:!mac {
    message(*)
    message(* Configuring to build the \"example\" plugin on Linux)
    message(*)

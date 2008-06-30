@@ -44,7 +44,7 @@ mac {
 # These are the specific configuration options for compiling the code
 # on Linux.
 #
-linux {
+unix:!mac {
    message(*)
    message(* Configuring to build the \"fifowriter\" example on Linux)
    message(*)

@@ -18,7 +18,7 @@ int main( int argc, char* argv[] ) {
    QApplication app( argc, argv );
 
    QFont font = app.font();
-   font.setPointSize( 12 );
+   font.setPointSize( 11 );
    app.setFont( font );
 
    //

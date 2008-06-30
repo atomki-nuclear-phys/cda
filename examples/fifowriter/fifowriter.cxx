@@ -32,7 +32,7 @@
 #   include "msg/Logger.h"
 #   include "msg/BinaryStream.h"
 #   include "event/Event.h"
-#   include "event/EventStream.h"
+#   include "event/BinaryStream.h"
 #endif
 
 int main() {

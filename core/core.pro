@@ -94,7 +94,7 @@ mac {
 # These are the configuration options for compiling the code on Linux.
 # Way simpler than the Mac OS X ones...
 #
-linux {
+unix:!mac {
    message(*)
    message(* Configuring to build the \"cdacore\" shared library on Linux)
    message(*)
