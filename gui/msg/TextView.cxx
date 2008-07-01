@@ -46,10 +46,11 @@ namespace msg {
       m_edit->setReadOnly( true );
 #ifdef Q_OS_DARWIN
       m_edit->setFontFamily( "Courier" );
+      //      m_edit->setFontPointSize( 12 );
 #else
       m_edit->setFontFamily( "courier" );
+      m_edit->setFontPointSize( 10 );
 #endif // Q_OS_MAC
-      m_edit->setFontPointSize( 11 );
       m_edit->setLineWrapMode( QTextEdit::NoWrap );
       m_edit->document()->setMaximumBlockCount( 100 );
 

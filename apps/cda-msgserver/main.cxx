@@ -17,8 +17,16 @@ int main( int argc, char* argv[] ) {
    //
    QApplication app( argc, argv );
 
+   //
+   // Set the default application font size. Different font sizes look
+   // good on SLC4 and Leopard...
+   //
    QFont font = app.font();
-   font.setPointSize( 11 );
+#ifdef Q_OS_DARWIN
+   //   font.setPointSize( 12 );
+#else
+   font.setPointSize( 10 );
+#endif // Q_OS_DARWIN
    app.setFont( font );
 
    //
