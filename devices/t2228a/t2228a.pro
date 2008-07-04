@@ -26,7 +26,7 @@ QT      = core gui xml
 
 # Link the plugin against CERNLIB:
 DEFINES     += LINUX f2cFortran
-LIBS        += -L$$CERNLIB_PATH/lib -lpacklib_noshift
+LIBS        += -L$$CERNLIB_PATH/lib
 INCLUDEPATH += $$CERNLIB_PATH/include
 
 # The place to put the intermediate and final build results:
@@ -46,7 +46,7 @@ mac {
    LIBS           += -F../../lib -framework cdacore
 
    # On Mac OS X CERNLIB is compiled using gfortran:
-   LIBS += -lgfortran
+   LIBS += -lpacklib -lgfortran
 }
 
 unix:!mac {
@@ -59,5 +59,5 @@ unix:!mac {
    LIBS         = -L../../lib -lcdacore
 
    # On Linux CERNLIB is compiled using g77:
-   LIBS += -lg2c
+   LIBS += -lpacklib_noshift -lg2c
 }

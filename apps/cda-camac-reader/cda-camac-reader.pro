@@ -27,7 +27,7 @@ QT     = core network xml
 LIBS += -L../../dev -lt2228a
 
 # Link the application against CERNLIB:
-LIBS += -L$$CERNLIB_PATH/lib -lpacklib_noshift
+LIBS += -L$$CERNLIB_PATH/lib
 
 # The places to put the intermediate and final build results:
 OBJECTS_DIR = ./.obj
@@ -47,7 +47,7 @@ mac {
    LIBS           += -F../../lib -framework cdacore
 
    # On Mac OS X CERNLIB is compiled using gfortran:
-   LIBS += -lgfortran
+   LIBS += -lpacklib -lgfortran
 }
 
 #
@@ -63,5 +63,5 @@ unix:!mac {
    LIBS        += -L../../lib -lcdacore
 
    # On Linux CERNLIB is compiled using g77:
-   LIBS += -lg2c
+   LIBS += -lpacklib_noshift -lg2c
 }
