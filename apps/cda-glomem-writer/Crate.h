@@ -20,32 +20,49 @@
 #endif
 
 /**
- *  @short Class representing the CAMAC crate for histogram writing
+ *  @short Namespace holding classes used by cda-glomem-writer
  *
- *         This class is used to display the monitoring histograms from
- *         all the devices in the CAMAC crate.
+ *         Since all the applications use a class named Crate, I have
+ *         to put all these objects in different namespaces not to confuse
+ *         the documentation system. Even though these classes would
+ *         never see each other anyway...
  *
  * @author Attila Krasznahorkay Jr.
  *
  * $Revision$
  * $Date$
  */
-class Crate : public dev::Crate< dev::Hist > {
+namespace glomem {
 
-public:
-   /// Constructor
-   Crate();
-   /// Destructor
-   ~Crate();
+   /**
+    *  @short Class representing the CAMAC crate for histogram writing
+    *
+    *         This class is used to display the monitoring histograms from
+    *         all the devices in the CAMAC crate.
+    *
+    * @author Attila Krasznahorkay Jr.
+    *
+    * $Revision$
+    * $Date$
+    */
+   class Crate : public dev::Crate< dev::Hist > {
 
-   /// Initialise the monitoring histograms
-   bool initialize();
-   /// Add one event to the monitoring histograms
-   bool displayEvent( const ev::Event& event );
+   public:
+      /// Constructor
+      Crate();
+      /// Destructor
+      ~Crate();
 
-private:
-   mutable msg::Logger m_logger; ///< Message logging object
+      /// Initialise the monitoring histograms
+      bool initialize();
+      /// Add one event to the monitoring histograms
+      bool displayEvent( const ev::Event& event );
 
-}; // class Crate
+   private:
+      mutable msg::Logger m_logger; ///< Message logging object
+
+   }; // class Crate
+
+} // namespace glomem
 
 #endif // CDA_APPS_CDA_GLOMEM_WRITER_CREATE_H

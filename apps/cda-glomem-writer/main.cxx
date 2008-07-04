@@ -1,6 +1,6 @@
 // $Id$
 /**
- *   @file main.cxx
+ *   @file apps/cda-glomem-writer/main.cxx
  *  @short Main file for the monitoring histogram application
  *
  *         This file stores the code that runs the cda-glomem-writer application.
@@ -159,7 +159,7 @@ int main( int argc, char* argv[] ) {
    //
    // Initialise a Crate object with this configuration:
    //
-   Crate crate;
+   glomem::Crate crate;
    crate.setLoader( &loader );
    if( ! crate.readConfig( doc.documentElement() ) ) {
       g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl

@@ -1,6 +1,6 @@
 // $Id$
 /**
- *   @file main.cxx
+ *   @file apps/cda-camac-reader/main.cxx
  *  @short Main file for the CAMAC crate reader application
  *
  *         This file stores the code that runs the cda-camac-reader application.
@@ -58,7 +58,7 @@ void shutDown( int );
 
 // Global variable(s):
 msg::Logger   g_logger( "cda-camac-reader" );
-camac::Crate* g_crate;
+camac::Crate* g_crate = 0;
 
 // Description for the executable:
 static const char* description =
@@ -161,7 +161,7 @@ int main( int argc, char* argv[] ) {
    //
    // Initialise a Crate object with this configuration:
    //
-   Crate crate;
+   reader::Crate crate;
    crate.setLoader( &loader );
    if( ! crate.readConfig( doc.documentElement() ) ) {
       g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
