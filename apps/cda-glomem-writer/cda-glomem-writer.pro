@@ -23,13 +23,13 @@ SOURCES = *.cxx
 CONFIG = qt debug warn_on
 QT     = core network xml
 
+# Link with the static plugins:
+LIBS += -L../../dev -lt2228a
+
 # Link the application against CERNLIB:
 DEFINES     += LINUX f2cFortran
-LIBS        += -L../../dev -L$$CERNLIB_PATH/lib -lpacklib
+LIBS        += -L$$CERNLIB_PATH/lib -lpacklib_noshift
 INCLUDEPATH += $$CERNLIB_PATH/include
-
-# Link with the static plugins:
-LIBS += -lt2228a
 
 # The places to put the intermediate and final build results:
 OBJECTS_DIR = ./.obj

@@ -62,6 +62,14 @@ DEFINES += CDASYS=\'\"$$CDASYS\"\'
 DEFINES += TESTING
 
 #
+# If we're not in TESTING mode, everything has to be linked against
+# the CAMAC library (libcc32.so):
+#
+!contains(DEFINES,TESTING) {
+   LIBS += -lcc32
+}
+
+#
 # Compiler settings. In order to be able to link against CERNLIB on
 # Mac OS X, the built-in version of GCC can't be used. In my case
 # I installed CERNLIB using the Fink project. (www.finkproject.org)

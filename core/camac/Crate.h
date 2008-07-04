@@ -8,7 +8,7 @@
 
 // CAMAC library include(s):
 #ifndef TESTING
-#   include "pcicc32/libcc32.h"
+#   include "libcc32.h"
 #endif
 
 // CDA include(s):

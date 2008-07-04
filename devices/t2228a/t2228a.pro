@@ -26,7 +26,7 @@ QT      = core gui xml
 
 # Link the plugin against CERNLIB:
 DEFINES     += LINUX f2cFortran
-LIBS        += -L$$CERNLIB_PATH/lib -lpacklib
+LIBS        += -L$$CERNLIB_PATH/lib -lpacklib_noshift
 INCLUDEPATH += $$CERNLIB_PATH/include
 
 # The place to put the intermediate and final build results:

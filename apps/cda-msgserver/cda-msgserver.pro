@@ -56,3 +56,11 @@ unix:!mac {
    INCLUDEPATH += ../../core ../../gui
    LIBS        += -L../../lib -lcdacore -lcdagui
 }
+
+#
+# If we're not in TESTING mode, we also have to link the application
+# againt the cc32 library:
+#
+#!contains(DEFINES,TESTING) {
+#   LIBS += -lcc32
+#}

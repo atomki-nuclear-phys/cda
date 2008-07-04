@@ -65,7 +65,8 @@ namespace camac {
       }
 
 #ifndef TESTING
-      if( ( int error = cc32_open( m_deviceName, &m_handle ) ) ) {
+      int error;
+      if( ( error = cc32_open( ( char* ) m_devicePath, &m_handle ) ) ) {
          m_logger << msg::ERROR << "CAMAC crate could not be opened"
                   << std::endl
                   << "with message: " << strerror( error ) << msg::endmsg;
@@ -95,7 +96,8 @@ namespace camac {
       }
 
 #ifndef TESTING
-      if( ( int error = cc32_close( m_handle ) ) ) {
+      int error;
+      if( ( error = cc32_close( m_handle ) ) ) {
          m_logger << msg::ERROR << "CAMAC crate closing failed"
                   << std::endl
                   << "with message: " << strerror( error ) << msg::endmsg;
@@ -223,7 +225,8 @@ namespace camac {
       if( ! checkOpen() ) return false;
 
 #ifndef TESTING
-      if( ( int error = cc32_interrupt_enable( m_handle ) ) ) {
+      int error;
+      if( ( error = cc32_interrupt_enable( m_handle ) ) ) {
          m_logger << msg::ERROR << "There was a problem enabling interrupts"
                   << std::endl
                   << "on device: " << m_devicePath << msg::endmsg;
@@ -250,7 +253,8 @@ namespace camac {
       if( ! checkOpen() ) return false;
 
 #ifndef TESTING
-      if( ( int error = cc32_interrupt_disable( m_handle ) ) ) {
+      int error;
+      if( ( error = cc32_interrupt_disable( m_handle ) ) ) {
          m_logger << msg::ERROR << "There was a problem disabling interrupts"
                   << std::endl
                   << "on device: " << m_devicePath << msg::endmsg;
@@ -281,7 +285,8 @@ namespace camac {
 
 #ifndef TESTING
       int timeout, lam;
-      if( ( int error = cc32_wait_event( m_handle, &timeout, &lam ) ) ) {
+      int error;
+      if( ( error = cc32_wait_event( m_handle, &timeout, &lam ) ) ) {
          m_logger << msg::ERROR << "There was a problem waiting for a LAM "
                   << "interrupt." << std::endl
                   << "Cause: " << strerror( error ) << msg::endmsg;

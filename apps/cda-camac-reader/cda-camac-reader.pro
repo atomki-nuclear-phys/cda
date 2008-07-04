@@ -23,11 +23,11 @@ SOURCES = *.cxx
 CONFIG = qt debug warn_on
 QT     = core network xml
 
-# Link the application against CERNLIB:
-LIBS += -L$$CERNLIB_PATH/lib -lpacklib
-
 # Link with the static plugins:
 LIBS += -L../../dev -lt2228a
+
+# Link the application against CERNLIB:
+LIBS += -L$$CERNLIB_PATH/lib -lpacklib_noshift
 
 # The places to put the intermediate and final build results:
 OBJECTS_DIR = ./.obj
