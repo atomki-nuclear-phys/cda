@@ -9,7 +9,8 @@
 ##############################################################
 
 # Include the common checks:
-include(../cda_checks.pri)
+include(../cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS  = msgserver msgclient fifowriter fiforeader pluginloader
+SUBDIRS  = msgserver msgclient fifowriter fiforeader pluginloader \
+           camacaccess

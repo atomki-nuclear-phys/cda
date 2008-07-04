@@ -27,4 +27,11 @@ namespace ev {
 
    }
 
+   void Event::clear() {
+
+      m_fragments.clear();
+      return;
+
+   }
+
 } // namespace ev

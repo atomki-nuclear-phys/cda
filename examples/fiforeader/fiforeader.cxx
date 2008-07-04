@@ -19,7 +19,7 @@
 #include <cstdio>
 
 // Qt include(s):
-#include <QtCore/QGlobalStatic>
+#include <QtCore/QtGlobal>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -54,7 +54,7 @@ int main() {
    //
    // Open the fifo:
    //
-   Fifo fifo( "./testfifo" );
+   Fifo fifo( "../fifos/histFifo" );
    if( fifo.open() ) {
       logger << msg::INFO << "FIFO file opened" << msg::endmsg;
    } else {
@@ -70,12 +70,14 @@ int main() {
    //
    for( ; ; ) {
 
+      /*
       msg::BinaryStream msgstream( &fifo );
       msg::TextStream msgoutput( stdout );
 
       msg::Message message;
       msgstream >> message;
       msgoutput << message << "\n";
+      */
 
       ev::BinaryStream evstream( &fifo );
       ev::TextStream evoutput( stdout );

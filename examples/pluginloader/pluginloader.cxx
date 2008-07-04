@@ -82,10 +82,18 @@ int main( int argc, char* argv[] ) {
 
       dev::Factory* factory = loader.getFactory( devList.front() );
       dev::Gui* gui = factory->createGui();
+      if( ! gui ) {
+         logger << msg::FATAL << "Graphical interface not implemented for device: "
+                << devList.front() << msg::endmsg;
+         return 1;
+      }
       gui->show();
 
       app.exec();
 
+      //
+      // Write out the XML configuration of the device:
+      //
       QDomImplementation imp;
       QDomDocument doc = imp.createDocument( "", "Setup",
                                              imp.createDocumentType( "CDA_SETUP",
@@ -93,7 +101,7 @@ int main( int argc, char* argv[] ) {
       QDomElement rootElement = doc.documentElement();
 
       QDomElement deviceElement = doc.createElement( "Example" );
-      gui->writeConfig( &deviceElement );
+      gui->writeConfig( deviceElement );
 
       rootElement.appendChild( deviceElement );
 

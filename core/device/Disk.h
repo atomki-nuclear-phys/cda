@@ -4,7 +4,7 @@
 #define CDA_CORE_DEVICE_DISK_H
 
 // Local include(s):
-#include "Config.h"
+#include "Device.h"
 
 // Forward include(s):
 namespace ev {
@@ -27,7 +27,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Disk : virtual public Config {
+   class Disk : virtual public Device {
 
    public:
       /// Function initializing the device

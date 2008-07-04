@@ -7,8 +7,8 @@
 #                                                            #
 ##############################################################
 
-# Include the common checks:
-include(../../cda_checks.pri)
+# Include the common project options:
+include(../../cda_common.pri)
 
 # This will be an application with the name "cda-msgserver":
 TEMPLATE = app

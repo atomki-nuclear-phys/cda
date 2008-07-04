@@ -1,0 +1,18 @@
+<!DOCTYPE CDA_SETUP PUBLIC '' ''>
+<Setup xmlns="">
+  <!--                                                      -->
+  <!-- Example configuration for testing the T2228A plugin. -->
+  <!--                                                      -->
+  <T2228A Slot="10" GenerateLAM="1" >
+    <Channel Subaddress="3" Name="tone" NumberOfChannels="1024"
+             LowerBound="0." UpperBound="1024." />
+    <Channel Subaddress="5" Name="ttwo" NumberOfChannels="1024"
+             LowerBound="0." UpperBound="1024." />
+  </T2228A>
+  <T2228A Slot="15" GenerateLAM="0" >
+    <Channel Subaddress="1" Name="t3" NumberOfChannels="1024"
+             LowerBound="0." UpperBound="1024." />
+    <Channel Subaddress="2" Name="t4" NumberOfChannels="1024"
+             LowerBound="0." UpperBound="1024." />
+  </T2228A>
+</Setup>

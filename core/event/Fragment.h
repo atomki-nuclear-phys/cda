@@ -57,6 +57,9 @@ namespace ev {
       /// Add a 32-bit data word (information from one channel)
       void addDataWord( uint32_t dataWord );
 
+      /// Clear the event fragment
+      void clear();
+
    private:
       int m_crateNumber; ///< CAMAC crate number
       int m_moduleNumber; ///< Module number in the CAMAC crate

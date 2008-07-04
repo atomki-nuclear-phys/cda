@@ -7,8 +7,8 @@
 #                                                            #
 ##############################################################
 
-# Include the common checks:
-include(../cda_checks.pri)
+# Include the common project options:
+include(../cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS  = cda-msgserver
+SUBDIRS  = cda-msgserver cda-camac-reader cda-glomem-writer

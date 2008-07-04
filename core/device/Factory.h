@@ -52,8 +52,7 @@ namespace dev {
       virtual QString deviceName() const = 0;
 
       /// Create a graphical class describing the device
-      virtual Gui*     createGui( QWidget* widget = 0,
-                                  Qt::WindowFlags flags = 0 ) const = 0;
+      virtual Gui*     createGui() const = 0;
       /// Create a readout class handling the device
       virtual Readout* createReadout() const = 0;
       /// Create an object writing histograms with the device's data
@@ -65,6 +64,7 @@ namespace dev {
 
 } // namespace dev
 
+// Declare the dev::Factory interface to Qt:
 Q_DECLARE_INTERFACE( dev::Factory, "hu.atomki.CDA.dev.Factory/0.0.1" )
 
 #endif // CDA_CORE_DEVICE_FACTORY_H

@@ -26,9 +26,17 @@ namespace ev {
 
    }
 
+   /**
+    * The serialisation of an event is pretty simple. First the
+    * number of event fragments in written to the stream, then each
+    * fragment is serialised one after the other.
+    *
+    * @returns This same object
+    */
    BinaryStream& BinaryStream::operator<< ( const Event& event ) {
 
-      setVersion( QDataStream::Qt_4_4 );
+      setVersion( QDataStream::Qt_4_0 );
+
       ( * ( QDataStream* ) this ) << ( quint32 ) event.getFragments().size();
 
       for( std::vector< Fragment >::const_iterator fragment =
@@ -41,9 +49,19 @@ namespace ev {
 
    }
 
+   /**
+    * The de-serialisation is quite simple as well. First it reads
+    * how many event fragments it should expect, then it tries to
+    * read that many event fragments and add them to the event
+    * object given to the operator.
+    *
+    * @returns This same object
+    */
    BinaryStream& BinaryStream::operator>> ( Event& event ) {
 
-      setVersion( QDataStream::Qt_4_4 );
+      event.clear();
+
+      setVersion( QDataStream::Qt_4_0 );
 
       quint32 nFragments;
       ( * ( QDataStream* ) this ) >> nFragments;
@@ -58,9 +76,18 @@ namespace ev {
 
    }
 
+   /**
+    * Serialising an event fragment is a bit longer in code, but not
+    * more difficult. First the simple members of the class are written
+    * to the stream. Then the number of data words is written followed
+    * by the data words themselves.
+    *
+    * @returns This same object
+    */
    BinaryStream& BinaryStream::operator<< ( const Fragment& fragment ) {
 
-      setVersion( QDataStream::Qt_4_4 );
+      setVersion( QDataStream::Qt_4_0 );
+
       ( * ( QDataStream* ) this ) << fragment.getCrateNumber();
       ( * ( QDataStream* ) this ) << fragment.getModuleNumber();
       ( * ( QDataStream* ) this ) << ( quint32 ) fragment.getDataWords().size();
@@ -75,9 +102,19 @@ namespace ev {
 
    }
 
+   /**
+    * The operator reads the simple members of the event fragment in the
+    * same order that they were serialised in, then reads the number of
+    * data words that it should expect, finally reads that number of
+    * data words. Pretty simple actually...
+    *
+    * @returns This same object
+    */
    BinaryStream& BinaryStream::operator>> ( Fragment& fragment ) {
 
-      setVersion( QDataStream::Qt_4_4 );
+      fragment.clear();
+
+      setVersion( QDataStream::Qt_4_0 );
 
       int crateNumber;
       int moduleNumber;

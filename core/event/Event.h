@@ -37,9 +37,11 @@ namespace ev {
 
       /// Get all the event fragments
       const std::vector< Fragment >& getFragments() const;
-
       /// Add one more event fragment
       void addFragment( const Fragment& fragment );
+
+      /// Clear the event object
+      void clear();
 
    private:
       std::vector< Fragment > m_fragments; ///< Event fragments (module info)

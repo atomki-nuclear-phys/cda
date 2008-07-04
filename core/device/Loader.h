@@ -48,6 +48,8 @@ namespace dev {
       bool loadAll();
       /// Function loading a specific device plugin
       bool load( const QString& plugin_name );
+      /// Function "loading" all the statically linked plugins
+      bool loadStaticPlugins();
 
       /// Get the names of the loaded devices
       QStringList getDeviceNames() const;

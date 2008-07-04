@@ -95,7 +95,7 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool readConfig( const QDomNode* node ) = 0;
+      virtual bool readConfig( const QDomNode& node ) = 0;
       /// Function writing the configuration in XML format
       /**
        * This function can be used to write the configuration of the device
@@ -107,7 +107,7 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool writeConfig( QDomNode* node ) const = 0;
+      virtual bool writeConfig( QDomNode& node ) const = 0;
 
    }; // class Config
 

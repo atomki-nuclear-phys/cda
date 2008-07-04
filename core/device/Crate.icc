@@ -1,0 +1,321 @@
+// Dear emacs, this is -*- c++ -*-
+// $Id$
+#ifndef CDA_CORE_DEVICE_CRATE_ICC
+#define CDA_CORE_DEVICE_CRATE_ICC
+
+// Qt include(s):
+#include <QtCore/QIODevice>
+#include <QtCore/QDataStream>
+#include <QtXml/QDomNode>
+#include <QtXml/QDomElement>
+
+// Local include(s):
+#include "Crate.h"
+#include "Loader.h"
+
+namespace dev {
+
+   //
+   // Make sure that the following Qt classes are available in the
+   // current namespace even if Qt has been built in an arbitrary
+   // namespace:
+   //
+   using QT_PREPEND_NAMESPACE( QIODevice );
+   using QT_PREPEND_NAMESPACE( QDataStream );
+   using QT_PREPEND_NAMESPACE( QDomNode );
+   using QT_PREPEND_NAMESPACE( QDomElement );
+
+   /**
+    * The constructor expects a function pointer to one of the functions of
+    * dev::Factory. The specified function will later on be used to create
+    * the new device objects when reading a configuration. You should
+    * construct the object something like this:
+    *
+    * <code>
+    *   dev::Crate< dev::Hist >( &dev::Factory::createHist );
+    * </code>
+    *
+    * @param factoryFncn Function pointer to one of dev::Factory's functions
+    */
+   template< class Device >
+   Crate< Device >::Crate( Device* ( dev::Factory::*factoryFncn )( void ) const )
+      : m_devices(), m_factoryFncn( factoryFncn ), m_loader( 0 ),
+        m_logger( "dev::Crate" ) {
+
+   }
+
+   /**
+    * The destructor clears the configuration before destroying the object,
+    * so the handled devices wouldn't be leaked.
+    */
+   template< class Device >
+   Crate< Device >::~Crate() {
+
+      clear();
+
+   }
+
+   template< class Device >
+   bool Crate< Device >::readConfig( QIODevice* dev ) {
+
+      // Check that a correct loader is set:
+      if( ! checkLoader() ) return false;
+
+      m_logger << msg::VERBOSE << "Reading configuration from binary input"
+               << msg::endmsg;
+
+      clear();
+
+      QDataStream input( dev );
+      input.setVersion( QDataStream::Qt_4_0 );
+
+      quint32 nDevices;
+      input >> nDevices;
+
+      for( quint32 i = 0; i < nDevices; ++i ) {
+
+         QString type;
+         input >> type;
+
+         if( m_loader->isLoaded( type ) ) {
+
+            Factory* factory = m_loader->getFactory( type );
+            Device* device = ( factory->*m_factoryFncn )();
+            if( ! device->readConfig( dev ) ) {
+               m_logger << msg::ERROR << "There was a problem reading the "
+                        << "configuration of one of the devices!"
+                        << msg::endmsg;
+               delete device;
+               return false;
+            }
+
+            if( ! ( ( device->getSlot() > 0 ) &&
+                    ( device->getSlot() <= NUMBER_OF_SLOTS ) ) ) {
+               m_logger << msg::ERROR << "There was a problem reading the "
+                        << "configuration of one of the devices!"
+                        << msg::endmsg;
+               delete device;
+               return false;
+            }
+
+            typename std::map< int, Device* >::iterator it;
+            if( ( it = m_devices.find( device->getSlot() ) ) !=
+                m_devices.end() ) {
+               m_logger << msg::WARNING << "Redefining the device in slot: "
+                        << device->getSlot() << msg::endmsg;
+               delete it->second;
+            }
+
+            m_devices[ device->getSlot() ] = device;
+
+         } else {
+            m_logger << msg::ERROR << "Device type \"" << type
+                     << "\" unknown." << std::endl
+                     << "Check that you have all plugins available!"
+                     << msg::endmsg;
+            return false;
+         }
+
+      }
+
+      return true;
+
+   }
+
+   template< class Device >
+   bool Crate< Device >::writeConfig( QIODevice* dev ) const {
+
+      m_logger << msg::VERBOSE << "Writing configuration to binary output"
+               << msg::endmsg;
+
+      QDataStream output( dev );
+      output.setVersion( QDataStream::Qt_4_0 );
+      output << ( quint32 ) m_devices.size();
+
+      for( typename std::map< int, Device* >::const_iterator device_it =
+              m_devices.begin(); device_it != m_devices.end();
+           ++device_it ) {
+
+         output << device_it->second->type();
+         if( ! device_it->second->writeConfig( dev ) ) {
+            m_logger << msg::ERROR << "There was a problem writing the "
+                     << "configuration of a device" << msg::endmsg;
+            return false;
+         }
+
+      }
+
+      return true;
+
+   }
+
+   template< class Device >
+   bool Crate< Device >::readConfig( const QDomNode& node ) {
+
+      // Check that a correct loader is set:
+      if( ! checkLoader() ) return false;
+
+      m_logger << msg::VERBOSE << "Reading configuration from XML input"
+               << msg::endmsg;
+
+      clear();
+
+      // The node has to be an element:
+      if( ! node.isElement() ) {
+         m_logger << msg::ERROR << "Node received is not a DomElement"
+                  << msg::endmsg;
+         return false;
+      }
+      const QDomElement element = node.toElement();
+
+      for( int i = 0; i < node.childNodes().size(); ++i ) {
+
+         if( ! node.childNodes().at( i ).isElement() ) continue;
+
+         QString type = node.childNodes().at( i ).nodeName();
+
+         if( m_loader->isLoaded( type ) ) {
+
+            Factory* factory = m_loader->getFactory( type );
+            Device* device = ( factory->*m_factoryFncn )();
+            if( ! device->readConfig( node.childNodes().at( i ) ) ) {
+               m_logger << msg::ERROR << "There was a problem reading the "
+                        << "configuration of one of the devices!"
+                        << msg::endmsg;
+               delete device;
+               return false;
+            }
+
+            if( ! ( ( device->getSlot() > 0 ) &&
+                    ( device->getSlot() <= NUMBER_OF_SLOTS ) ) ) {
+               m_logger << msg::ERROR << "There was a problem reading the "
+                        << "configuration of one of the devices!"
+                        << msg::endmsg;
+               delete device;
+               return false;
+            }
+
+            typename std::map< int, Device* >::iterator it;
+            if( ( it = m_devices.find( device->getSlot() ) ) !=
+                m_devices.end() ) {
+               m_logger << msg::WARNING << "Redefining the device in slot: "
+                        << device->getSlot() << msg::endmsg;
+               delete it->second;
+            }
+
+            m_devices[ device->getSlot() ] = device;
+
+         } else {
+            m_logger << msg::ERROR << "Device type \"" << type
+                     << "\" unknown." << std::endl
+                     << "Check that you have all plugins available!"
+                     << msg::endmsg;
+            return false;
+         }
+
+      }
+
+      return true;
+
+   }
+
+   template< class Device >
+   bool Crate< Device >::writeConfig( QDomNode& node ) const {
+
+      m_logger << msg::VERBOSE << "Writing configuration to XML output"
+               << msg::endmsg;
+
+      // The node has to be an element:
+      if( ! node.isElement() ) {
+         m_logger << msg::ERROR << "Node received is not a DomElement"
+                  << msg::endmsg;
+         return false;
+      }
+      QDomElement element = node.toElement();
+
+      for( typename std::map< int, Device* >::const_iterator device_it =
+              m_devices.begin(); device_it != m_devices.end();
+           ++device_it ) {
+
+         QDomElement dev_element =
+            node.ownerDocument().createElement( device_it->second->type() );
+         if( ! device_it->second->writeConfig( dev_element ) ) {
+            m_logger << msg::ERROR << "There was a problem writing the "
+                     << "configuration of a device" << msg::endmsg;
+            return false;
+         }
+         node.appendChild( dev_element );
+
+      }
+
+      return true;
+
+   }
+
+   template< class Device >
+   Loader* Crate< Device >::getLoader() const {
+
+      return m_loader;
+
+   }
+
+   /**
+    * A correctly configured dev::Loader object is used by the class to access
+    * the dev::Factory objects for each supported CAMAC device. It is not
+    * possible to load a configuration without giving such a dev::Loader object
+    * to the class, so it should be done just after creating the object.
+    *
+    * @param loader Pointer to a correctly configured dev::Loader object
+    */
+   template< class Device >
+   void Crate< Device >::setLoader( const Loader* loader ) {
+
+      m_loader = loader;
+      return;
+
+   }
+
+   /**
+    * The function deletes all the device objects and resets the map storing
+    * them.
+    */
+   template< class Device >
+   void Crate< Device >::clear() {
+
+      for( typename std::map< int, Device* >::iterator device_it =
+              m_devices.begin(); device_it != m_devices.end();
+           ++device_it ) {
+         delete device_it->second;
+      }
+      m_devices.clear();
+
+      return;
+
+   }
+
+   /**
+    * The function doesn't do much for the moment, it just checks that the
+    * pointer to the dev::Loader object is not a null-pointer. It could be
+    * made smarter later on...
+    *
+    * @returns <code>true</code> if a correct dev::Loader is set,
+    *          <code>false</code> otherwise
+    */
+   template< class Device >
+   bool Crate< Device >::checkLoader() const {
+
+      if( ! m_loader ) {
+         m_logger << msg::ERROR << "No functional dev::Loader object specified "
+                  << "yet" << std::endl
+                  << "Configuration reading is not possible like this!"
+                  << msg::endmsg;
+         return false;
+      }
+
+      return true;
+
+   }
+
+} // namespace dev
+
+#endif // CDA_CORE_DEVICE_CRATE_ICC

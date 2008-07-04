@@ -30,7 +30,7 @@ namespace ev {
     *         Objects of this class can be used to send and receive
     *         full event records over some form of binary connection.
     *         It can be used to send the events over a FIFO, over a
-    *         network connection, or even to read/write it from/to
+    *         network connection, or even to read/write them from/to
     *         a physical file.
     *
     * @author Attila Krasznahorkay Jr.
@@ -41,16 +41,23 @@ namespace ev {
    class BinaryStream : public QDataStream {
 
    public:
+      /// Constructor operating on a binary device
       BinaryStream( QIODevice* device = 0 );
+      /// Constructor operating on a byte-array
       BinaryStream( QByteArray* array,
                     QIODevice::OpenMode openMode = QIODevice::ReadWrite );
+      /// Destructor
       ~BinaryStream();
 
+      /// Operator "serialising" a full CAMAC event
       BinaryStream& operator<< ( const Event& event );
+      /// Operator "de-serialising" a full CAMAC event
       BinaryStream& operator>> ( Event& event );
 
    private:
+      /// Operator "serialising" a CAMAC event fragment
       BinaryStream& operator<< ( const Fragment& fragment );
+      /// Operator "de-serialising" a CAMAC event fragment
       BinaryStream& operator>> ( Fragment& fragment );
 
    }; // class BinaryStream

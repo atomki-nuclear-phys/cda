@@ -7,7 +7,7 @@
 #include <QtGui/QWidget>
 
 // Local include(s):
-#include "Config.h"
+#include "Device.h"
 
 namespace dev {
 
@@ -31,7 +31,7 @@ namespace dev {
     * $Date$
     */
    class Gui : virtual public QWidget,
-               virtual public Config {
+               virtual public Device {
 
       Q_OBJECT
 

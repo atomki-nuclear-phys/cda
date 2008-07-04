@@ -7,8 +7,8 @@
 #                                                            #
 ##############################################################
 
-# Include the common checks:
-include(../cda_checks.pri)
+# Include the common project options:
+include(../cda_common.pri)
 
 # This will be a library with the name "cdacore":
 TEMPLATE = lib
@@ -16,8 +16,9 @@ VERSION  = 0.0.1
 TARGET   = cdacore
 
 # These are the header and source files:
-HEADERS = fifo/*.h msg/*.h event/*.h device/*.h
-SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
+HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h
+SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx \
+          cmdl/*.cpp
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
 CONFIG += qt debug warn_on
@@ -27,8 +28,8 @@ QT      = core network gui
 OBJECTS_DIR = ./.obj
 MOC_DIR     = ./.obj
 
-# To hardwire the location of the executables in the code:
-DEFINES += CDASYS=\'\"$$system(echo $CDASYS)\"\'
+# The following is needed to compiled the cmdl code:
+DEFINES += unix_style
 
 #
 # These are the specific configuration options for compiling the code
@@ -51,7 +52,7 @@ mac {
    # framework's layout correct.
 
    DEVICE_HEADERS.version = Versions
-   DEVICE_HEADERS.files = $$system(ls device/*.h)
+   DEVICE_HEADERS.files = $$system(ls device/*.h device/*.icc)
    DEVICE_HEADERS.path = Headers/device
    QMAKE_BUNDLE_DATA += DEVICE_HEADERS
 
@@ -70,6 +71,16 @@ mac {
    MSG_HEADERS.path = Headers/msg
    QMAKE_BUNDLE_DATA += MSG_HEADERS
 
+   CAMAC_HEADERS.version = Versions
+   CAMAC_HEADERS.files = $$system(ls camac/*.h)
+   CAMAC_HEADERS.path = Headers/camac
+   QMAKE_BUNDLE_DATA += CAMAC_HEADERS
+
+   CMDL_HEADERS.version = Versions
+   CMDL_HEADERS.files = cmdl/cmdargs.h cmdl/cmdline.h
+   CMDL_HEADERS.path = Headers/cmdl
+   QMAKE_BUNDLE_DATA += CMDL_HEADERS
+
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =
    DUMMY_HEADERS.path = Headers
@@ -87,7 +98,7 @@ mac {
    # will be looking for it in its correct directory. (Of course moving the
    # framework after compilation will make the applications unusable.)
    DESTDIR                     = /
-   QMAKE_FRAMEWORK_BUNDLE_NAME = $$system(echo $CDASYS)/lib/cdacore
+   QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdacore
 }
 
 #

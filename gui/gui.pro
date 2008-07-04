@@ -1,14 +1,14 @@
 # Dear emacs, this is normal -*- text -*-
 ##############################################################
 #                                                            #
-# This project file compiles the core library of CDA.        #
+# This project file compiles the gui library of CDA.         #
 #                                                            #
 # Attila Krasznahorkay Jr.                                   #
 #                                                            #
 ##############################################################
 
-# Include the common checks:
-include(../cda_checks.pri)
+# Include the common project options:
+include(../cda_common.pri)
 
 # This will be a library with the name "cdagui":
 TEMPLATE = lib
@@ -58,7 +58,7 @@ mac {
 
    # Here we do the same trick as with cdacore. See core/core.pro for details.
    DESTDIR                     = /
-   QMAKE_FRAMEWORK_BUNDLE_NAME = $$system(echo $CDASYS)/lib/cdagui
+   QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdagui
 }
 
 #

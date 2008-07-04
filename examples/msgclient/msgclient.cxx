@@ -21,7 +21,7 @@
 #include <iomanip>
 
 // Qt include(s):
-#include <QtCore/QGlobalStatic>
+#include <QtCore/QtGlobal>
 
 // Local include(s):
 #ifdef Q_OS_DARWIN

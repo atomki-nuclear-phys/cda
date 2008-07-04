@@ -53,4 +53,14 @@ namespace ev {
 
    }
 
+   void Fragment::clear() {
+
+      m_crateNumber = 0;
+      m_moduleNumber = -1;
+      m_dataWords.clear();
+
+      return;
+
+   }
+
 } // namespace ev

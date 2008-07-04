@@ -20,7 +20,18 @@
 #   include "device/Factory.h"
 #endif
 
-namespace camac {
+/**
+ *  @short Namespace for the T2228A TDC device
+ *
+ *         This namespace holds all the classes that handle the a T2228A
+ *         CAMAC TDC device.
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
+namespace t2228a {
 
    //
    // Make sure that the following Qt classes are available in the
@@ -30,6 +41,17 @@ namespace camac {
    using QT_PREPEND_NAMESPACE( QObject );
    using QT_PREPEND_NAMESPACE( QString );
 
+   /**
+    *  @short Factory creating all the T2228A objects
+    *
+    *         This factory is used when loading the T2228A plugin to access
+    *         all the classes provided by the plugin.
+    *
+    * @author Attila Krasznahorkay Jr.
+    *
+    * $Revision$
+    * $Date$
+    */
    class Factory : public QObject,
                    virtual public dev::Factory {
 
@@ -41,17 +63,13 @@ namespace camac {
 
       virtual QString deviceName() const;
 
-      virtual dev::Gui*     createGui( QWidget* parent = 0,
-                                       Qt::WindowFlags flags = 0 ) const;
+      virtual dev::Gui*     createGui() const;
       virtual dev::Readout* createReadout() const;
       virtual dev::Hist*    createHist() const;
       virtual dev::Disk*    createDisk() const;
 
-   private:
-      mutable msg::Logger m_logger;
-
    }; // class Factory
 
-} // namespace camac
+} // namespace t2228a
 
 #endif // CDA_DEVICES_EXAMPLE_FACTORY_H

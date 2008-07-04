@@ -33,7 +33,7 @@ namespace ev {
     *         This class is intended to help in debugging the communications
     *         between the components of CDA by allowing to print the
     *         contents of Event objects in an easy-to-read format. Of
-    *         course in a read data acquisition time should not be spent
+    *         course in a real data acquisition time should not be spent
     *         with printing the events, this is only for developing the
     *         code...
     *

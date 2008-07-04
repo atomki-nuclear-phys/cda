@@ -104,6 +104,17 @@ namespace dev {
    bool Loader::loadAll() {
 
       //
+      // First of all, load all the statically linked plugins:
+      //
+      if( ! loadStaticPlugins() ) {
+         m_logger << msg::ERROR << "There was a problem loading the static "
+                  << "plugins" << msg::endmsg;
+         return false;
+      } else {
+         m_logger << msg::DEBUG << "Loaded the static plugins" << msg::endmsg;
+      }
+
+      //
       // Get the names of all physical files in the specified directory:
       //
       QDir pluginDir( m_path );
@@ -192,6 +203,58 @@ namespace dev {
       m_deviceMap[ factory->deviceName() ] = factory;
       m_logger << msg::INFO << "Loaded device \"" << factory->deviceName()
                << "\" from plugin: " << plugin_name << msg::endmsg;
+
+      return true;
+
+   }
+
+   /**
+    * There are two types of plugins in Qt: dynamic and static plugins.
+    * The static plugins are compiled into a static library and are linked
+    * statically to the application. Unfortunately CERNLIB doesn't seem
+    * to play nice with dynamic plugins, so the CDA applications will
+    * have to link all the plugins statically.
+    *
+    * The function loops over all the plugins that have been statically
+    * linked to the application, and puts their information in the same
+    * map that is used for the dynamic plugins. So the user of this class
+    * should see no differences between using a dynamic or a static plugin.
+    *
+    * @returns <code>true</code> if the operation was successful,
+    *          <code>false</code> otherwise
+    */
+   bool Loader::loadStaticPlugins() {
+
+      //
+      // Get a list of all static plugins, and loop over them:
+      //
+      QObjectList plugin_list = QPluginLoader::staticInstances();
+      for( QObjectList::iterator plugin = plugin_list.begin();
+           plugin != plugin_list.end(); ++plugin ) {
+
+         //
+         // Check if the library provides the needed interface:
+         //
+         dev::Factory* factory = qobject_cast< dev::Factory* >( *plugin );
+         if( ! factory ) {
+            m_logger << msg::ERROR << "Found a static plugin not providing "
+                     << "the needed interface" << msg::endmsg;
+            delete factory;
+            return false;
+         } else {
+            m_logger << msg::VERBOSE << "Accessed dev::Factory interface in "
+                     << "static plugin" << msg::endmsg;
+         }
+
+         //
+         // Save a pointer to the dev::Factory implemented by the plugin
+         // and report the successive plugin loading:
+         //
+         m_deviceMap[ factory->deviceName() ] = factory;
+         m_logger << msg::INFO << "Loaded device \"" << factory->deviceName()
+                  << "\" from static plugin" << msg::endmsg;
+
+      }
 
       return true;
 

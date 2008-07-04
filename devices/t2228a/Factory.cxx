@@ -4,28 +4,24 @@
 
 // Local include(s):
 #include "Factory.h"
-#include "Gui.h"
 #include "Readout.h"
 #include "Hist.h"
-#include "Disk.h"
 
-namespace camac {
+namespace t2228a {
 
-   Factory::Factory()
-      : m_logger( "Example::Factory" ) {
+   Factory::Factory() {
 
    }
 
    QString Factory::deviceName() const {
 
-      return "Example";
+      return "T2228A";
 
    }
 
-   dev::Gui* Factory::createGui( QWidget* parent,
-                                 Qt::WindowFlags flags ) const {
+   dev::Gui* Factory::createGui() const {
 
-      return new Gui( parent, flags );
+      return 0;
 
    }
 
@@ -43,10 +39,11 @@ namespace camac {
 
    dev::Disk* Factory::createDisk() const {
 
-      return new Disk();
+      return 0;
 
    }
 
-} // namespace camac
+} // namespace t2228a
 
-Q_EXPORT_PLUGIN2( example, camac::Factory )
+// Declare this plugin to Qt:
+Q_EXPORT_PLUGIN2( t2228a, t2228a::Factory )

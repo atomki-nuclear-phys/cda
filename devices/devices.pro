@@ -8,8 +8,8 @@
 #                                                            #
 ##############################################################
 
-# Include the common checks:
-include(../cda_checks.pri)
+# Include the common project options:
+include(../cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS = example
+SUBDIRS  = t2228a

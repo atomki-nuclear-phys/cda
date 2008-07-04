@@ -8,8 +8,15 @@
 #                                                            #
 ##############################################################
 
-# Include the common checks:
-include(cda_checks.pri)
+# Include the common project options:
+include(cda_common.pri)
 
 TEMPLATE = subdirs
 SUBDIRS  = core gui devices apps examples
+
+#
+# Instruct the user:
+#
+message(----------------------------------------------------------)
+message(- CDA compilation configured. You should now run \"make\". -)
+message(----------------------------------------------------------)
