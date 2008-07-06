@@ -12,7 +12,7 @@
 include(cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS  = core gui devices apps examples
+SUBDIRS  = core gui devices apps
 
 #
 # Instruct the user:

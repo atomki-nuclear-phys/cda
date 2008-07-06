@@ -27,6 +27,11 @@ namespace t2228a {
     */
    bool Readout::initialize( camac::Crate& crate ) const {
 
+      //
+      // Clear the module:
+      //
+      crate.writeWord( m_slot, 0, 9, 0 );
+
       if( m_generateLam ) {
          m_logger << msg::DEBUG << "Initialising T2228A TDC in slot "
                   << m_slot << " to generate LAM" << msg::endmsg;
@@ -34,7 +39,7 @@ namespace t2228a {
       } else {
          m_logger << msg::DEBUG << "Initialising T2228A TDC in slot "
                   << m_slot << " NOT to generate LAM" << msg::endmsg;
-         crate.writeWord( m_slot, 0, 25, 0 );
+         crate.writeWord( m_slot, 0, 24, 0 );
       }
 
       return true;
@@ -63,11 +68,16 @@ namespace t2228a {
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-            uint32_t channel = crate.readLong( m_slot, i, 0 );
+            uint32_t channel = crate.readWord( m_slot, i, 0 );
             uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
             fragment.addDataWord( dword );
          }
       }
+
+      //
+      // Clear the module:
+      //
+      crate.writeWord( m_slot, 0, 9, 0 );
 
       return fragment;
 

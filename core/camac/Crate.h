@@ -51,7 +51,7 @@ namespace camac {
 
    public:
       /// Constructor with device driver name
-      Crate( const char* dev_path = "/dec/pcicc32_1" );
+      Crate( const char* dev_path = "/dev/cc32_1" );
       /// Destructor
       ~Crate();
 

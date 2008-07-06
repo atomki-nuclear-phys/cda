@@ -284,6 +284,7 @@ namespace camac {
       if( ! checkOpen() ) return false;
 
 #ifndef TESTING
+
       int timeout, lam;
       int error;
       if( ( error = cc32_wait_event( m_handle, &timeout, &lam ) ) ) {
@@ -292,6 +293,9 @@ namespace camac {
                   << "Cause: " << strerror( error ) << msg::endmsg;
          return false;
       }
+      /*
+      sleep( 4 );
+      */
 #else
       m_logger << msg::VERBOSE << "Waiting for LAM" << msg::endmsg;
 

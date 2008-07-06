@@ -183,6 +183,12 @@ int main( int argc, char* argv[] ) {
       g_logger << msg::INFO << "Opened the CAMAC crate" << msg::endmsg;
    }
 
+   // Reset the crate controller:
+   g_crate->writeLong( 31, 0, 0, 0 );
+
+   // Enable all CAMAC interrupts:
+   //   g_crate->writeLong( 28, 1, 16, 0x00FFFFFF );
+
    //
    // Initialize the CAMAC devices for data acquisition:
    //

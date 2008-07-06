@@ -83,6 +83,16 @@ namespace reader {
 
       ev::Event event;
 
+      // Enable all CAMAC interrupts:
+      crate.writeLong( 28, 1, 16, 0x00ffffff );
+
+      if( ! crate.enableInterrupt() ) {
+         m_logger << msg::ERROR << "There was a problem enabling interrupts"
+                  << std::endl
+                  << "for the CAMAC crate." << msg::endmsg;
+         return event;
+      }
+
       //
       // Wait for LAM signal:
       //
@@ -102,6 +112,9 @@ namespace reader {
          event.addFragment( device->second->readEvent( crate ) );
 
       }
+
+      // Clear LAM:
+      crate.writeWord( 28, 0, 16, 0 );
 
       return event;
 
