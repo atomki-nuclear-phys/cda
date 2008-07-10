@@ -7,7 +7,7 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifndef Q_OS_DARWIN
+#ifdef Q_OS_DARWIN
 #   include "cdacore/device/Gui.h"
 #else
 #   include "device/Gui.h"

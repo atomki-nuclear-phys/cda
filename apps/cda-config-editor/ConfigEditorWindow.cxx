@@ -35,9 +35,15 @@ ConfigEditorWindow::ConfigEditorWindow()
    //
    // Set the fixed size of the window:
    //
+#ifdef Q_OS_DARWIN
    resize( 645, 660 );
    setMinimumSize( 645, 660 );
    setMaximumSize( 645, 660 );
+#else
+   resize( 645, 685 );
+   setMinimumSize( 645, 685 );
+   setMaximumSize( 645, 685 );
+#endif
 
    //
    // Set the main window properties:
