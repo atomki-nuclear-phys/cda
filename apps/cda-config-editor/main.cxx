@@ -15,6 +15,9 @@
 
 // Qt include(s):
 #include <QtCore/QtPlugin>
+#include <QtCore/QTranslator>
+#include <QtCore/QLocale>
+#include <QtCore/QLibraryInfo>
 #include <QtGui/QApplication>
 
 // CDA include(s):
@@ -42,6 +45,19 @@ int main( int argc, char* argv[] ) {
    // Instantiate the back-bone of the Qt graphical application:
    //
    QApplication app( argc, argv );
+
+   QTranslator qtTranslator;
+   if( ! qtTranslator.load( "qt_hu",
+                            QLibraryInfo::location( QLibraryInfo::TranslationsPath ) ) ) {
+      return 1;
+   }
+   app.installTranslator( &qtTranslator );
+
+   QTranslator myappTranslator;
+   if( ! myappTranslator.load( QString( CDASYS ) + "/trans/cda-config-editor_hu" ) ) {
+      return 1;
+   }
+   app.installTranslator( &myappTranslator );
 
    //
    // Create and show the configuration editor window:

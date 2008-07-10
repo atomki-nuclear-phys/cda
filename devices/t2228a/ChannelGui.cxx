@@ -38,7 +38,7 @@ namespace t2228a {
       // Create the widget enabling/disabling the channel:
       //
       m_enabledEdit = new QCheckBox( QString::number( m_subaddress ) +
-                                     ". subaddress", this );
+                                     tr( ". subaddress" ), this );
       m_enabledEdit->setGeometry( QRect( 0, 0, 110, 25 ) );
       connect( m_enabledEdit, SIGNAL( toggled( bool ) ),
                this, SLOT( enableChangedSlot( bool ) ) );

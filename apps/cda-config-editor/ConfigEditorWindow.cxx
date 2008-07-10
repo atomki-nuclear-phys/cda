@@ -48,7 +48,7 @@ ConfigEditorWindow::ConfigEditorWindow()
    //
    // Set the main window properties:
    //
-   setWindowTitle( "CDA configuration editor - Untitled.cxml" );
+   setWindowTitle( tr( "CDA configuration editor - Untitled.cxml" ) );
    setWindowIcon( QIcon( ":/img/logo.png" ) );
 
    //
@@ -64,11 +64,6 @@ ConfigEditorWindow::ConfigEditorWindow()
    // Create the icon view for selecting the configuration "aspect":
    //
    m_setupSelect = new QListWidget( m_centralWidget );
-   /*
-   m_setupSelect->resize( 95, 640 );
-   m_setupSelect->setMinimumSize( 95, 640 );
-   m_setupSelect->setMaximumSize( 95, 640 );
-   */
    m_setupSelect->setViewMode( QListView::IconMode );
    m_setupSelect->setGeometry( QRect( 10, 10, 95, 640 ) );
 
@@ -76,7 +71,7 @@ ConfigEditorWindow::ConfigEditorWindow()
    // Create the icon for the CAMAC crate configuration:
    //
    m_deviceSetup = new QListWidgetItem( QIcon( ":/img/crate-settings.png" ),
-                                        "CAMAC setup", m_setupSelect );
+                                        tr( "CAMAC setup" ), m_setupSelect );
    m_deviceSetup->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
    m_deviceSetup->setTextAlignment( Qt::AlignHCenter | Qt::AlignBottom );
 
@@ -108,7 +103,7 @@ ConfigEditorWindow::~ConfigEditorWindow() {
 void ConfigEditorWindow::newConfigSlot() {
 
    m_devEdit->clear();
-   setWindowTitle( "CDA configuration editor - Untitled.cxml" );
+   setWindowTitle( tr( "CDA configuration editor - Untitled.cxml" ) );
    return;
 
 }
@@ -116,11 +111,11 @@ void ConfigEditorWindow::newConfigSlot() {
 void ConfigEditorWindow::readConfigSlot() {
 
    // Ask the user for a file name:
-   QString fileName = QFileDialog::getOpenFileName( this, "Open setup file",
-                                                    "default.cxml",
-                                                    "CDA XML setup files (*.cxml);;"
-                                                    "CDA binary setup files (*.cbin);;"
-                                                    "All files (*)" );
+   QString fileName = QFileDialog::getOpenFileName( this, tr( "Open setup file" ),
+                                                    tr( "default.cxml" ),
+                                                    tr( "CDA XML setup files (*.cxml);;"
+                                                        "CDA binary setup files (*.cbin);;"
+                                                        "All files (*)" ) );
 
    // If the cancel button has been pushed, don't continue:
    if( fileName.isEmpty() ) return;
@@ -158,10 +153,10 @@ void ConfigEditorWindow::writeConfigSlot() {
 
 void ConfigEditorWindow::writeConfigAsSlot() {
 
-   QString fileName = QFileDialog::getSaveFileName( this, "Save setup file",
-                                                    "default.cxml",
-                                                    "CDA XML setup files (*.cxml);;"
-                                                    "CDA binary setup files (*.cbin)" );
+   QString fileName = QFileDialog::getSaveFileName( this, tr( "Save setup file" ),
+                                                    tr( "default.cxml" ),
+                                                    tr( "CDA XML setup files (*.cxml);;"
+                                                    "CDA binary setup files (*.cbin)" ) );
 
    // If the cancel button has been pushed, don't continue:
    if( fileName.isEmpty() ) return;
@@ -182,29 +177,29 @@ void ConfigEditorWindow::writeConfigAsSlot() {
 
 void ConfigEditorWindow::aboutQtSlot() {
 
-   QMessageBox::aboutQt( this, "CDA Configuration Editor - built on Qt" );
+   QMessageBox::aboutQt( this, tr( "CDA Configuration Editor - built on Qt" ) );
    return;
 
 }
 
 void ConfigEditorWindow::aboutCDASlot() {
 
-   QMessageBox::about( this, "CDA - CAMAC Data Acquisition",
-                       "CDA is an application suit built for the "
-                       "Experimental Nuclear Physics department of the "
-                       "Atomki. It is composed of multiple executables "
-                       "that work together in the data acquisition." );
+   QMessageBox::about( this, tr( "CDA - CAMAC Data Acquisition" ),
+                       tr( "CDA is an application suit built for the "
+                           "Experimental Nuclear Physics department of the "
+                           "Atomki. It is composed of multiple executables "
+                           "that work together in the data acquisition." ) );
    return;
 
 }
 
 void ConfigEditorWindow::aboutConfigEditorSlot() {
 
-   QMessageBox::about( this, "CDA Configuration Editor",
-                       "This application can be used to construct "
-                       "configuration files for the CDA applications. "
-                       "The files can be read and saved in both binary "
-                       "and XML format." );
+   QMessageBox::about( this, tr( "CDA Configuration Editor" ),
+                       tr( "This application can be used to construct "
+                           "configuration files for the CDA applications. "
+                           "The files can be read and saved in both binary "
+                           "and XML format." ) );
    return;
 
 }
@@ -217,32 +212,32 @@ void ConfigEditorWindow::createMenus() {
    //                                                         //
    /////////////////////////////////////////////////////////////
 
-   QMenu* fileMenu = menuBar()->addMenu( "File" );
+   QMenu* fileMenu = menuBar()->addMenu( tr( "&File" ) );
 
    QAction* newAction = fileMenu->addAction( QIcon( ":/img/filenew.png" ),
-                                             "Create new configuration..." );
+                                             tr( "&Create new configuration..." ) );
    connect( newAction, SIGNAL( triggered() ),
             this, SLOT( newConfigSlot() ) );
 
    QAction* openAction = fileMenu->addAction( QIcon( ":/img/fileopen.png" ),
-                                              "Open configuration file..." );
+                                              tr( "&Open configuration file..." ) );
    connect( openAction, SIGNAL( triggered() ),
             this, SLOT( readConfigSlot() ) );
 
    QAction* saveAction = fileMenu->addAction( QIcon( ":/img/filesave.png" ),
-                                              "Save configuration file" );
+                                              tr( "&Save configuration file" ) );
    connect( saveAction, SIGNAL( triggered() ),
             this, SLOT( writeConfigSlot() ) );
 
    QAction* saveAsAction = fileMenu->addAction( QIcon( ":/img/filesaveas.png" ),
-                                                "Save configuration as..." );
+                                                tr( "Save configuration as..." ) );
    connect( saveAsAction, SIGNAL( triggered() ),
             this, SLOT( writeConfigAsSlot() ) );
 
    fileMenu->addSeparator();
 
    QAction* quitAction = fileMenu->addAction( QIcon( ":/img/warning.png" ),
-                                              "Quit" );
+                                              tr( "&Quit" ) );
    connect( quitAction, SIGNAL( triggered() ),
             this, SLOT( close() ) );
 
@@ -253,18 +248,18 @@ void ConfigEditorWindow::createMenus() {
    /////////////////////////////////////////////////////////////
 
    menuBar()->addSeparator();
-   QMenu* helpMenu = menuBar()->addMenu( "Help" );
+   QMenu* helpMenu = menuBar()->addMenu( tr( "&Help" ) );
 
-   QAction* aboutQtAction = helpMenu->addAction( "About Qt" );
+   QAction* aboutQtAction = helpMenu->addAction( tr( "About Qt" ) );
    connect( aboutQtAction, SIGNAL( triggered() ),
             this, SLOT( aboutQtSlot() ) );
 
-   QAction* aboutConfigEditorAc = helpMenu->addAction( "About Config Editor" );
+   QAction* aboutConfigEditorAc = helpMenu->addAction( tr( "About Config Editor" ) );
    connect( aboutConfigEditorAc, SIGNAL( triggered() ),
             this, SLOT( aboutConfigEditorSlot() ) );
 
    QAction* aboutCDAAction = helpMenu->addAction( QIcon( ":/img/logo.png" ),
-                                                  "About CDA" );
+                                                  tr( "About CDA" ) );
    connect( aboutCDAAction, SIGNAL( triggered() ),
             this, SLOT( aboutCDASlot() ) );
 
@@ -279,12 +274,12 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    //
    QFile config_file( filename );
    if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-      m_logger << msg::ERROR << "The specified configuration file (\""
+      m_logger << msg::ERROR << tr( "The specified configuration file (\"" )
                << filename << "\")" << std::endl
                << "could not be opened!" << msg::endmsg;
-      QMessageBox::critical( this, "File not opened",
-                             "The specified XML file (\"" + filename +
-                             "\") could not be opened!" );
+      QMessageBox::critical( this, tr( "File not opened" ),
+                             tr( "The specified XML file (\"" ) + filename +
+                             tr( "\") could not be opened!" ) );
       return;
    } else {
       m_logger << msg::VERBOSE << "Opened file: " << filename << msg::endmsg;
@@ -303,12 +298,12 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
                << "  Error message: " << errorMsg << std::endl
                << "  Error line   : " << errorLine << std::endl
                << "  Error column : " << errorColumn << msg::endmsg;
-      QMessageBox::critical( this, "XML error",
-                             "There is some problem with the format of the "
-                             "input file.\n\n "
-                             "Error message: " + errorMsg + "\n "
-                             "Error line: " + QString::number( errorLine ) + "\n "
-                             "Error column: " + QString::number( errorColumn ) );
+      QMessageBox::critical( this, tr( "XML error" ),
+                             tr( "There is some problem with the format of the "
+                                 "input file.\n\n " ) +
+                             tr( "Error message: " ) + errorMsg + "\n " +
+                             tr( "Error line: " ) + QString::number( errorLine ) + "\n " +
+                             tr( "Error column: " ) + QString::number( errorColumn ) );
       return;
    } else {
       m_logger << msg::DEBUG << "Successfully parsed: "
@@ -321,9 +316,9 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    if( ! m_devEdit->readConfig( doc.documentElement() ) ) {
       m_logger << msg::ERROR << "Failed to read configuration file!"
                << msg::endmsg;
-      QMessageBox::critical( this, "Configuration reading error",
-                             "The configuration could not be read. See "
-                             "the application messages for more information" );
+      QMessageBox::critical( this, tr( "Configuration reading error" ),
+                             tr( "The configuration could not be read. See "
+                                 "the application messages for more information" ) );
       return;
    } else {
       m_logger << msg::DEBUG << "Configuration successfully read from: "
@@ -334,7 +329,7 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( "CDA configuration editor - " + filePath.back() );
+   setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
 
    return;
 
@@ -349,9 +344,9 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    if( ! input_file.open( QFile::ReadOnly ) ) {
       m_logger << msg::ERROR << filename << " couldn't be opened "
                << "for reading" << msg::endmsg;
-      QMessageBox::critical( this, "File writing error",
-                             "The selected file could not be opened for "
-                             "reading. Check the file name!" );
+      QMessageBox::critical( this, tr( "File reading error" ),
+                             tr( "The selected file could not be opened for "
+                                 "reading. Check the file name!" ) );
       return;
    } else {
       m_logger << msg::DEBUG << filename << " opened for reading"
@@ -364,9 +359,9 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    if( ! m_devEdit->readConfig( &input_file ) ) {
       m_logger << msg::ERROR << "Some error happened while reading the "
                << "binary configuration" << msg::endmsg;
-      QMessageBox::critical( this, "Configuration reading error",
-                             "The configuration could not be read. See "
-                             "the application messages for more information" );
+      QMessageBox::critical( this, tr( "Configuration reading error" ),
+                             tr( "The configuration could not be read. See "
+                                 "the application messages for more information" ) );
       return;
    } else {
       m_logger << msg::VERBOSE << "Configuration read in binary format"
@@ -377,7 +372,7 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( "CDA configuration editor - " + filePath.back() );
+   setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
 
    return;
 
@@ -400,9 +395,9 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    if( ! m_devEdit->writeConfig( elem ) ) {
       m_logger << msg::ERROR << "Some error happened while creating the "
                << "XML configuration" << msg::endmsg;
-      QMessageBox::critical( this, "Configuration writing error",
-                             "The configuration could not be written. See "
-                             "the application messages for more information" );
+      QMessageBox::critical( this, tr( "Configuration writing error" ),
+                             tr( "The configuration could not be written. See "
+                                 "the application messages for more information." ) );
       return;
    } else {
       m_logger << msg::VERBOSE << "Configuration translated to XML format"
@@ -416,9 +411,9 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    if( ! output_file.open( QFile::WriteOnly | QFile::Truncate ) ) {
       m_logger << msg::ERROR << filename << " couldn't be opened "
                << "for writing" << msg::endmsg;
-      QMessageBox::critical( this, "File writing error",
-                             "The selected file could not be opened for "
-                             "writing. Check permissions!" );
+      QMessageBox::critical( this, tr( "File writing error" ),
+                             tr( "The selected file could not be opened for "
+                                 "writing. Check permissions!" ) );
       return;
    } else {
       m_logger << msg::DEBUG << filename << " opened for writing"
@@ -432,7 +427,7 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( "CDA configuration editor - " + filePath.back() );
+   setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
 
    return;
 
@@ -447,9 +442,9 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    if( ! output_file.open( QFile::WriteOnly | QFile::Truncate ) ) {
       m_logger << msg::ERROR << filename << " couldn't be opened "
                << "for writing" << msg::endmsg;
-      QMessageBox::critical( this, "File writing error",
-                             "The selected file could not be opened for "
-                             "writing. Check permissions!" );
+      QMessageBox::critical( this, tr( "File writing error" ),
+                             tr( "The selected file could not be opened for "
+                                 "writing. Check permissions!" ) );
       return;
    } else {
       m_logger << msg::DEBUG << filename << " opened for writing"
@@ -462,9 +457,9 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    if( ! m_devEdit->writeConfig( &output_file ) ) {
       m_logger << msg::ERROR << "Some error happened while creating the "
                << "binary configuration" << msg::endmsg;
-      QMessageBox::critical( this, "Configuration writing error",
-                             "The configuration could not be written. See "
-                             "the application messages for more information" );
+      QMessageBox::critical( this, tr( "Configuration writing error" ),
+                             tr( "The configuration could not be written. See "
+                                 "the application messages for more information." ) );
       return;
    } else {
       m_logger << msg::VERBOSE << "Configuration written in binary format"
@@ -475,7 +470,7 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( "CDA configuration editor - " + filePath.back() );
+   setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
 
    return;
 

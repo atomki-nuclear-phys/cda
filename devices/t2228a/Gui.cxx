@@ -27,7 +27,7 @@ namespace t2228a {
       //
       // Create a label telling us what kind of device this is:
       //
-      m_topLabel = new QLabel( "LeCroy 2228A Octal Time-to-Digital Converter",
+      m_topLabel = new QLabel( tr( "LeCroy 2228A Octal Time-to-Digital Converter" ),
                                this );
       m_topLabel->setAlignment( Qt::AlignCenter );
       m_topLabel->setGeometry( QRect( 35, 30, 430, 25 ) );
@@ -36,28 +36,28 @@ namespace t2228a {
       //
       // Create a label identifying the channel name settings:
       //
-      m_nameLabel = new QLabel( "Name", this );
+      m_nameLabel = new QLabel( tr( "Name" ), this );
       m_nameLabel->setAlignment( Qt::AlignCenter );
       m_nameLabel->setGeometry( QRect( 150, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram channel settings:
       //
-      m_channelsLabel = new QLabel( "Channels", this );
+      m_channelsLabel = new QLabel( tr( "Channels" ), this );
       m_channelsLabel->setAlignment( Qt::AlignCenter );
       m_channelsLabel->setGeometry( QRect( 230, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram lower bound settings:
       //
-      m_lowerBoundLabel = new QLabel( "Lower", this );
+      m_lowerBoundLabel = new QLabel( tr( "Lower" ), this );
       m_lowerBoundLabel->setAlignment( Qt::AlignCenter );
       m_lowerBoundLabel->setGeometry( QRect( 310, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram upper bound settings:
       //
-      m_upperBoundLabel = new QLabel( "Upper", this );
+      m_upperBoundLabel = new QLabel( tr( "Upper" ), this );
       m_upperBoundLabel->setAlignment( Qt::AlignCenter );
       m_upperBoundLabel->setGeometry( QRect( 390, 75, 75, 25 ) );
 
@@ -87,7 +87,7 @@ namespace t2228a {
       //
       // Create the widget modifying the LAM generation setting:
       //
-      m_generateLamEdit = new QCheckBox( "Generate LAM", this );
+      m_generateLamEdit = new QCheckBox( tr( "Generate LAM" ), this );
       m_generateLamEdit->setGeometry( QRect( 35, 310, 120, 25 ) );
       connect( m_generateLamEdit, SIGNAL( toggled( bool ) ),
                this, SLOT( generateLamChangedSlot( bool ) ) );
@@ -163,7 +163,11 @@ namespace t2228a {
       // Draw a "TDC" sign on the top:
       //
       QFont font = painter.font();
+#ifdef Q_OS_DARWIN
       font.setPointSize( 8 );
+#else
+      font.setPointSize( 6 );
+#endif
       painter.setFont( font );
       painter.setPen( Qt::white );
       painter.setBrush( Qt::white );

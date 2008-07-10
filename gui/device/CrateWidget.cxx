@@ -457,7 +457,7 @@ namespace dev {
          QMenu* menu = new QMenu( this );
 
          // Create the menu items for creating new modules:
-         QMenu* addMenu = menu->addMenu( "Add module" );
+         QMenu* addMenu = menu->addMenu( tr( "Add device" ) );
          if( m_loader ) {
             QStringList devices = m_loader->getDeviceNames();
             for( QStringList::const_iterator dev = devices.begin();
@@ -470,12 +470,12 @@ namespace dev {
 
             }
          } else {
-            addMenu->addAction( "No dev::Loader received..." );
+            addMenu->addAction( tr( "No dev::Loader received..." ) );
          }
 
          // Create the menu item for removing the module:
          if( getDevice( slot ) ) {
-            ClearAction* ac = new ClearAction( "Clear slot", slot, this );
+            ClearAction* ac = new ClearAction( tr( "Clear slot" ), slot, this );
             connect( ac, SIGNAL( triggered( int ) ),
                      this, SLOT( clearSlot( int ) ) );
             menu->addAction( ac );
