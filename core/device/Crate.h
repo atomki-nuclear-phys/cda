@@ -10,6 +10,7 @@
 #include "../msg/Logger.h"
 
 // Local include(s):
+#include "Config.h"
 #include "Factory.h"
 
 namespace dev {

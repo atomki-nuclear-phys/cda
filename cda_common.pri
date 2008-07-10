@@ -59,7 +59,7 @@ DEFINES += CDASYS=\'\"$$CDASYS\"\'
 # Comment-out this setting when compiling the code on the data
 # acquisition computer.
 #
-#DEFINES += TESTING
+DEFINES += TESTING
 
 #
 # If we're not in TESTING mode, everything has to be linked against

@@ -51,7 +51,7 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool displayEvent( const ev::Fragment& fragment ) = 0;
+      virtual bool displayEvent( const ev::Fragment& fragment ) const = 0;
 
    }; // class Hist
 

@@ -11,4 +11,5 @@
 include(../cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS  = cda-msgserver cda-camac-reader cda-glomem-writer
+SUBDIRS  = cda-msgserver cda-camac-reader cda-glomem-writer \
+           cda-config-editor

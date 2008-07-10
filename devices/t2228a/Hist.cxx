@@ -70,7 +70,7 @@ namespace t2228a {
 
    }
 
-   bool Hist::displayEvent( const ev::Fragment& fragment ) {
+   bool Hist::displayEvent( const ev::Fragment& fragment ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 

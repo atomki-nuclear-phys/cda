@@ -32,6 +32,8 @@ namespace t2228a {
    public:
       /// Constructor
       Device();
+      /// Destructor
+      ~Device();
 
       /// Function reading the configuration in binary format
       virtual bool readConfig( QIODevice* dev );

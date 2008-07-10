@@ -1,8 +1,7 @@
 # Dear emacs, this is normal -*- text -*-
 ##############################################################
 #                                                            #
-# This project file compiles the cda-camac-reader            #
-# application.                                               #
+# This project file compiles the msgserver example.          #
 #                                                            #
 # Attila Krasznahorkay Jr.                                   #
 #                                                            #
@@ -11,17 +10,19 @@
 # Include the common project options:
 include(../../cda_common.pri)
 
-# This will be an application with the name "cda-camacreader":
+# This will be an application with the name "cda-config-editor":
 TEMPLATE = app
-TARGET   = cda-camac-reader
+TARGET   = cda-config-editor
 
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
 
-# The application uses the QtCore and QtNetwork libraries:
-CONFIG = qt debug warn_on
-QT     = core network xml gui
+# The application uses the QtCore, QtNetwork and QtGui libraries,
+# and it uses some built in resources.
+CONFIG   += qt debug warn_on
+QT        = core gui network xml
+RESOURCES = cda-config-editor.qrc
 
 # Link with the static plugins:
 LIBS += -L../../dev -lt2228a
@@ -40,14 +41,16 @@ DESTDIR     = ../../bin
 #
 mac {
    message(*)
-   message(* Configuring to build the \"cda-camac-reader\" application on Mac OS X)
+   message(* Configuring to build the \"cda-config-editor\" application on Mac OS X)
    message(*)
 
    QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore
+   LIBS           += -F../../lib -framework cdacore -framework cdagui
 
    # On Mac OS X CERNLIB is compiled using gfortran:
    LIBS += -lpacklib -lgfortran
+
+   ICON = ../../images/cda-config-editor.icns
 }
 
 #
@@ -56,11 +59,11 @@ mac {
 #
 unix:!mac {
    message(*)
-   message(* Configuring to build the \"cda-camac-reader\" application on Linux)
+   message(* Configuring to build the \"cda-config-editor\" application on Linux)
    message(*)
 
-   INCLUDEPATH += ../../core
-   LIBS        += -L../../lib -lcdacore
+   INCLUDEPATH += ../../core ../../gui
+   LIBS        += -L../../lib -lcdacore -lcdagui
 
    # On Linux CERNLIB is compiled using g77:
    LIBS += -lpacklib_noshift -lg2c

@@ -11,7 +11,7 @@ QT_FORWARD_DECLARE_CLASS( QIODevice )
 QT_FORWARD_DECLARE_CLASS( QDomNode )
 
 /**
- *  @short Namespace holding the device base classes
+ *  @short Namespace holding the device (base) classes
  *
  *         All the classes that should be used as base classes for
  *         the implementation of the CAMAC devices, are stored in this

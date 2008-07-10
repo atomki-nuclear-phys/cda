@@ -16,12 +16,12 @@ VERSION  = 0.0.1
 TARGET   = cdagui
 
 # These are the header and source files:
-HEADERS = msg/*.h
-SOURCES = msg/*.cxx
+HEADERS = msg/*.h device/*.h
+SOURCES = msg/*.cxx device/*.cxx
 
-# The library uses the QtCore, QtNetwork and QtGui libraries:
+# The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
 CONFIG += qt debug warn_on
-QT      = core network gui
+QT      = core network gui xml
 
 # The place to put the intermediate build results:
 OBJECTS_DIR = ./.obj
@@ -46,6 +46,11 @@ mac {
    MSG_HEADERS.files = $$system(ls msg/*.h)
    MSG_HEADERS.path = Headers/msg
    QMAKE_BUNDLE_DATA += MSG_HEADERS
+
+   DEVICE_HEADERS.version = Versions
+   DEVICE_HEADERS.files = $$system(ls device/*.h)
+   DEVICE_HEADERS.path = Headers/device
+   QMAKE_BUNDLE_DATA += DEVICE_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =

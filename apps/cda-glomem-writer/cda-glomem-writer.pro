@@ -21,7 +21,7 @@ SOURCES = *.cxx
 
 # The application uses the QtCore and QtNetwork libraries:
 CONFIG = qt debug warn_on
-QT     = core network xml
+QT     = core network xml gui
 
 # Link with the static plugins:
 LIBS += -L../../dev -lt2228a

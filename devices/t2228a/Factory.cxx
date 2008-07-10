@@ -4,6 +4,7 @@
 
 // Local include(s):
 #include "Factory.h"
+#include "Gui.h"
 #include "Readout.h"
 #include "Hist.h"
 
@@ -21,7 +22,7 @@ namespace t2228a {
 
    dev::Gui* Factory::createGui() const {
 
-      return 0;
+      return new Gui();
 
    }
 

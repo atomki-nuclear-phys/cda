@@ -43,7 +43,7 @@ namespace t2228a {
       /// Initialise the monitoring histograms
       virtual bool initialize( unsigned int& counter );
       /// Fill the histograms with one event
-      virtual bool displayEvent( const ev::Fragment& fragment );
+      virtual bool displayEvent( const ev::Fragment& fragment ) const;
 
    private:
       /// Histogram ID "dictionary"

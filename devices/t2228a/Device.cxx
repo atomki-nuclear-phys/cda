@@ -32,6 +32,12 @@ namespace t2228a {
 
    }
 
+   Device::~Device() {
+
+      clear();
+
+   }
+
    bool Device::readConfig( QIODevice* dev ) {
 
       m_logger << msg::VERBOSE << "Reading configuration from binary input"
@@ -43,12 +49,14 @@ namespace t2228a {
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_slot;
       input >> m_generateLam;
-
-      m_logger << msg::VERBOSE << " - Slot       : " << m_slot << std::endl
-               << " - GenerateLAM: " << m_generateLam << msg::endmsg;
-
       quint32 number_of_channels;
       input >> number_of_channels;
+
+      m_logger << msg::VERBOSE << " - Slot        : " << m_slot << std::endl
+               << " - GenerateLAM : " << m_generateLam << std::endl
+               << " - Subaddresses: " << number_of_channels
+               << msg::endmsg;
+
       for( quint32 i = 0; i < number_of_channels; ++i ) {
          ChannelConfig* channel = new ChannelConfig();
          if( ! channel->readConfig( dev ) ) {
@@ -87,7 +95,7 @@ namespace t2228a {
       output << m_generateLam;
 
       // Count the number of configured channels:
-      quint32 number_of_channels;
+      quint32 number_of_channels = 0;
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) ++number_of_channels;
       }
