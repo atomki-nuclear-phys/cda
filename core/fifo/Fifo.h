@@ -5,6 +5,7 @@
 
 // Qt include(s):
 #include <QtCore/QFile>
+#include <QtCore/QCoreApplication>
 
 /**
  *  @short Light-weight layer over QFile for handling FIFOs
@@ -22,6 +23,8 @@
  * $Date$
  */
 class Fifo : public QT_PREPEND_NAMESPACE( QFile ) {
+
+   Q_DECLARE_TR_FUNCTIONS( Fifo )
 
 public:
    /// Constructor with FIFO path and Qt parent

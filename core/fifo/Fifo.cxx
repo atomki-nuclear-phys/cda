@@ -35,10 +35,12 @@ bool Fifo::open() {
 
    msg::Logger logger( "Fifo::open()" );
    if( exists() ) {
-      logger << msg::VERBOSE << fileName() << " exists" << msg::endmsg;
+      logger << msg::VERBOSE << tr( "%1 exists" ).arg( fileName() )
+             << msg::endmsg;
       return QT_PREPEND_NAMESPACE( QFile )::open( QIODevice::ReadWrite );
    } else {
-      logger << msg::WARNING << fileName() << " does not exist" << msg::endmsg;
+      logger << msg::WARNING << tr( "%1 does not exist" ).arg( fileName() )
+             << msg::endmsg;
       return false;
    }
 

@@ -6,6 +6,9 @@
 // STL include(s):
 #include <map>
 
+// Qt include(s):
+#include <QtCore/QCoreApplication>
+
 // CDA include(s):
 #include "../msg/Logger.h"
 
@@ -44,6 +47,8 @@ namespace dev {
     */
    template< class Device >
    class Crate : public virtual Config {
+
+      Q_DECLARE_TR_FUNCTIONS( dev::Crate )
 
    public:
       /// Constructor

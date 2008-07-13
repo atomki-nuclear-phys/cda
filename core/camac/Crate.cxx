@@ -30,7 +30,7 @@ namespace camac {
         m_isOpen( false ),
         m_logger( "camac::Crate" ) {
 
-      m_logger << msg::VERBOSE << "Device constructed" << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Device constructed" ) << msg::endmsg;
 
    }
 
@@ -41,7 +41,7 @@ namespace camac {
    Crate::~Crate() {
 
       close();
-      m_logger << msg::VERBOSE << "Device destructed" << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Device destructed" ) << msg::endmsg;
 
    }
 
@@ -67,15 +67,16 @@ namespace camac {
 #ifndef TESTING
       int error;
       if( ( error = cc32_open( ( char* ) m_devicePath, &m_handle ) ) ) {
-         m_logger << msg::ERROR << "CAMAC crate could not be opened"
-                  << std::endl
-                  << "with message: " << strerror( error ) << msg::endmsg;
+         m_logger << msg::ERROR << tr( "CAMAC crate could not be opened\n"
+                                       "with message: " )
+                  << strerror( error ) << msg::endmsg;
          return false;
       }
 #endif
 
-      m_logger << msg::DEBUG << "CAMAC crate opened on device: "
-               << m_devicePath << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "CAMAC crate opened on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
       m_isOpen = true;
 
       return true;
@@ -98,15 +99,16 @@ namespace camac {
 #ifndef TESTING
       int error;
       if( ( error = cc32_close( m_handle ) ) ) {
-         m_logger << msg::ERROR << "CAMAC crate closing failed"
-                  << std::endl
-                  << "with message: " << strerror( error ) << msg::endmsg;
+         m_logger << msg::ERROR << tr( "CAMAC crate closing failed\n"
+                                       "with message: " )
+                  << strerror( error ) << msg::endmsg;
          return false;
       }
 #endif
 
-      m_logger << msg::DEBUG << "CAMAC crate closed on device: "
-               << m_devicePath << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "CAMAC crate closed on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
       m_isOpen = false;
 
       return true;
@@ -129,8 +131,10 @@ namespace camac {
 #ifndef TESTING
       return cc32_read_word( m_handle, N, A, F );
 #else
-      m_logger << msg::DEBUG << "readWord(...) called with: N = "
-               << N << " A = " << A << " F = " << F << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "readWord(...) called with: N = %1 A = %2 "
+                      "F = %3" ).arg( N ).arg( A ).arg( F )
+               << msg::endmsg;
       return ( A * 10 );
 #endif // TESTING
 
@@ -152,8 +156,10 @@ namespace camac {
 #ifndef TESTING
       return cc32_read_long( m_handle, N, A, F );
 #else
-      m_logger << msg::DEBUG << "readLong(...) called with: N = "
-               << N << " A = " << A << " F = " << F << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "readLong(...) called with: N = %1 A = %2 "
+                      "F = %3" ).arg( N ).arg( A ).arg( F )
+               << msg::endmsg;
       return ( A * 100 );
 #endif // TESTING
 
@@ -177,9 +183,10 @@ namespace camac {
 #ifndef TESTING
       cc32_write_word( m_handle, N, A, F, data );
 #else
-      m_logger << msg::DEBUG << "writeWord(...) called with: N = "
-               << N << " A = " << A << " F = " << F 
-               << " data = " << data << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "writeWord(...) called with: N = %1 A = %2 F = %3 "
+                      "data = %4" ).arg( N ).arg( A ).arg( F ).arg( data )
+               << msg::endmsg;
 #endif // TESTING
 
       return;
@@ -203,9 +210,10 @@ namespace camac {
 #ifndef TESTING
       cc32_write_long( m_handle, N, A, F, data );
 #else
-      m_logger << msg::DEBUG << "writeLong(...) called with: N = "
-               << N << " A = " << A << " F = " << F 
-               << " data = " << data << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "writeLong(...) called with: N = %1 A = %2 F = %3 "
+                      "data = %4" ).arg( N ).arg( A ).arg( F ).arg( data )
+               << msg::endmsg;
 #endif // TESTING
 
       return;
@@ -227,14 +235,15 @@ namespace camac {
 #ifndef TESTING
       int error;
       if( ( error = cc32_interrupt_enable( m_handle ) ) ) {
-         m_logger << msg::ERROR << "There was a problem enabling interrupts"
-                  << std::endl
-                  << "on device: " << m_devicePath << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "There was a problem enabling interrupts\n"
+                         "on device: %1" ).arg( m_devicePath ) << msg::endmsg;
          return false;
       }
 #else
-      m_logger << msg::DEBUG << "Interrupts enabled on device: "
-               << m_devicePath << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "Interrupts enabled on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
 #endif // TESTING
 
       return true;
@@ -255,14 +264,15 @@ namespace camac {
 #ifndef TESTING
       int error;
       if( ( error = cc32_interrupt_disable( m_handle ) ) ) {
-         m_logger << msg::ERROR << "There was a problem disabling interrupts"
-                  << std::endl
-                  << "on device: " << m_devicePath << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "There was a problem disabling interrupts\n"
+                         "on device: %1" ).arg( m_devicePath ) << msg::endmsg;
          return false;
       }
 #else
-      m_logger << msg::DEBUG << "Interrupts disabled on device: "
-               << m_devicePath << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "Interrupts disabled on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
 #endif // TESTING
 
       return true;
@@ -288,16 +298,16 @@ namespace camac {
       int timeout, lam;
       int error;
       if( ( error = cc32_wait_event( m_handle, &timeout, &lam ) ) ) {
-         m_logger << msg::ERROR << "There was a problem waiting for a LAM "
-                  << "interrupt." << std::endl
-                  << "Cause: " << strerror( error ) << msg::endmsg;
+         m_logger << msg::ERROR << tr( "There was a problem waiting for a LAM "
+                                       "interrupt.\nCause: " )
+                  << strerror( error ) << msg::endmsg;
          return false;
       }
       /*
       sleep( 4 );
       */
 #else
-      m_logger << msg::VERBOSE << "Waiting for LAM" << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Waiting for LAM" ) << msg::endmsg;
 
       /*
       // Wait for a 100 miliseconds before returning. This is a good way
@@ -325,9 +335,10 @@ namespace camac {
    bool Crate::checkOpen() const {
 
       if( ! m_isOpen ) {
-         m_logger << msg::ERROR << "Trying to use the CAMAC crate without "
-                  << "opening it first" << std::endl
-                  << "Use the Crate::open(...) function!" << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "Trying to use the CAMAC crate without "
+                         "opening it first\n"
+                         "Use the Crate::open(...) function!" ) << msg::endmsg;
          return false;
       }
 

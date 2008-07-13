@@ -19,6 +19,7 @@ TARGET   = cdacore
 HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h
 SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx \
           cmdl/*.cpp
+TRANSLATIONS = cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
 CONFIG += qt debug warn_on

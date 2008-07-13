@@ -61,7 +61,8 @@ namespace dev {
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
 
-      m_logger << msg::VERBOSE << "Reading configuration from binary input"
+      m_logger << msg::VERBOSE
+               << tr( "Reading configuration from binary input" )
                << msg::endmsg;
 
       clear();
@@ -82,8 +83,9 @@ namespace dev {
             Factory* factory = m_loader->getFactory( type );
             Device* device = ( factory->*m_factoryFncn )();
             if( ! device->readConfig( dev ) ) {
-               m_logger << msg::ERROR << "There was a problem reading the "
-                        << "configuration of one of the devices!"
+               m_logger << msg::ERROR
+                        << tr( "There was a problem reading the "
+                               "configuration of one of the devices!" )
                         << msg::endmsg;
                delete device;
                return false;
@@ -91,8 +93,9 @@ namespace dev {
 
             if( ! ( ( device->getSlot() > 0 ) &&
                     ( device->getSlot() <= NUMBER_OF_SLOTS ) ) ) {
-               m_logger << msg::ERROR << "There was a problem reading the "
-                        << "configuration of one of the devices!"
+               m_logger << msg::ERROR
+                        << tr( "There was a problem reading the "
+                               "configuration of one of the devices!" )
                         << msg::endmsg;
                delete device;
                return false;
@@ -101,18 +104,19 @@ namespace dev {
             typename std::map< int, Device* >::iterator it;
             if( ( it = m_devices.find( device->getSlot() ) ) !=
                 m_devices.end() ) {
-               m_logger << msg::WARNING << "Redefining the device in slot: "
-                        << device->getSlot() << msg::endmsg;
+               m_logger << msg::WARNING
+                        << tr( "Redefining the device in slot: %1" )
+                  .arg( device->getSlot() ) << msg::endmsg;
                delete it->second;
             }
 
             m_devices[ device->getSlot() ] = device;
 
          } else {
-            m_logger << msg::ERROR << "Device type \"" << type
-                     << "\" unknown." << std::endl
-                     << "Check that you have all plugins available!"
-                     << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "Device type \"%1\" unknown.\n"
+                            "Check that you have all plugins available!" )
+               .arg( type ) << msg::endmsg;
             return false;
          }
 
@@ -125,7 +129,7 @@ namespace dev {
    template< class Device >
    bool Crate< Device >::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to binary output"
+      m_logger << msg::VERBOSE << tr( "Writing configuration to binary output" )
                << msg::endmsg;
 
       QDataStream output( dev );

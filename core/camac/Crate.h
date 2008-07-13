@@ -6,6 +6,9 @@
 // System include(s):
 #include <stdint.h>
 
+// Qt include(s):
+#include <QtCore/QCoreApplication>
+
 // CAMAC library include(s):
 #ifndef TESTING
 #   include "libcc32.h"
@@ -48,6 +51,9 @@ namespace camac {
     * $Date$
     */
    class Crate {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( camac::Crate )
 
    public:
       /// Constructor with device driver name

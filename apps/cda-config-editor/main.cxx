@@ -46,19 +46,6 @@ int main( int argc, char* argv[] ) {
    //
    QApplication app( argc, argv );
 
-   QTranslator qtTranslator;
-   if( ! qtTranslator.load( "qt_hu",
-                            QLibraryInfo::location( QLibraryInfo::TranslationsPath ) ) ) {
-      return 1;
-   }
-   app.installTranslator( &qtTranslator );
-
-   QTranslator myappTranslator;
-   if( ! myappTranslator.load( QString( CDASYS ) + "/trans/cda-config-editor_hu" ) ) {
-      return 1;
-   }
-   app.installTranslator( &myappTranslator );
-
    //
    // Create and show the configuration editor window:
    //
