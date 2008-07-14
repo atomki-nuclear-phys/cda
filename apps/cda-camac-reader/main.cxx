@@ -25,7 +25,6 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QFile>
 #include <QtCore/QString>
-#include <QtCore/QtPlugin>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
@@ -66,9 +65,6 @@ static const char* description =
    "application suit.\n\n"
    "This executable should normally be started by CDA internally.\n"
    "You should only start it by hand for debugging purposes.";
-
-// Load all the static plugins:
-Q_IMPORT_PLUGIN( t2228a )
 
 int main( int argc, char* argv[] ) {
 

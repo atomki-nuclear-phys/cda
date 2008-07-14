@@ -14,10 +14,6 @@
  */
 
 // Qt include(s):
-#include <QtCore/QtPlugin>
-#include <QtCore/QTranslator>
-#include <QtCore/QLocale>
-#include <QtCore/QLibraryInfo>
 #include <QtGui/QApplication>
 
 // CDA include(s):
@@ -29,9 +25,6 @@
 
 // Local include(s):
 #include "ConfigEditorWindow.h"
-
-// Load all the static plugins:
-Q_IMPORT_PLUGIN( t2228a )
 
 int main( int argc, char* argv[] ) {
 

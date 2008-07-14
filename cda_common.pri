@@ -39,6 +39,13 @@
 }
 
 #
+# During development the code is compiled in debug mode to make it easier
+# to find problems in it. But the programs used for real data acquisition
+# should not carry around the debug information...
+#
+CONFIG += debug warn_on
+
+#
 # Check that the CDASYS environment variable exists. The value of
 # the CDASYS environment variable is compiled into the applications
 # as a fallback solution if it is not set when running them. Also,
@@ -101,3 +108,5 @@ mac {
 unix:!mac {
    CERNLIB_PATH = /cern/pro
 }
+DEFINES     += LINUX f2cFortran
+INCLUDEPATH += $$CERNLIB_PATH/include

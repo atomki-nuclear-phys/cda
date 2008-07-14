@@ -28,7 +28,7 @@ namespace reader {
     */
    Crate::Crate()
       : dev::Crate< dev::Readout >( &dev::Factory::createReadout ),
-        m_logger( "Crate" ) {
+        m_logger( "reader::Crate" ) {
 
       m_logger << msg::VERBOSE << "Object constructed" << msg::endmsg;
 

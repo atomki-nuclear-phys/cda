@@ -20,7 +20,7 @@ HEADERS = msg/*.h device/*.h
 SOURCES = msg/*.cxx device/*.cxx
 
 # The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
-CONFIG += qt debug warn_on
+CONFIG += qt
 QT      = core network gui xml
 
 # The place to put the intermediate build results:

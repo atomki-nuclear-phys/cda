@@ -61,7 +61,8 @@ namespace t2228a {
    public:
       Factory();
 
-      virtual QString deviceName() const;
+      virtual QString shortName() const;
+      virtual QString longName() const;
 
       virtual dev::Gui*     createGui() const;
       virtual dev::Readout* createReadout() const;

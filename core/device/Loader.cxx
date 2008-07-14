@@ -37,13 +37,6 @@ namespace dev {
          //
          char* env_path = getenv( "CDASYS" );
          if( ! env_path ) {
-            /*
-            m_logger << msg::ERROR << "Path property not specified "
-                     << "and CDASYS environment variable not set!"
-                     << std::endl;
-            m_logger << msg::ERROR << "Device loading will probably not be "
-                     << "successful" << msg::endmsg;
-            */
             m_path = CDASYS;
             m_path.append( "/dev" );
             m_logger << msg::DEBUG << "Setting device plugin directory "
@@ -57,7 +50,8 @@ namespace dev {
          //
          // Delete the return value of getenv():
          //
-         if( env_path ) free( env_path );
+         // Mac OS X complains about this call, so it's removed for the moment.
+         //         if( env_path ) free( env_path );
       }
 
    }
@@ -200,8 +194,8 @@ namespace dev {
       // Save a pointer to the dev::Factory implemented by the plugin
       // and report the successive plugin loading:
       //
-      m_deviceMap[ factory->deviceName() ] = factory;
-      m_logger << msg::INFO << "Loaded device \"" << factory->deviceName()
+      m_deviceMap[ factory->shortName() ] = factory;
+      m_logger << msg::INFO << "Loaded device \"" << factory->longName()
                << "\" from plugin: " << plugin_name << msg::endmsg;
 
       return true;
@@ -250,8 +244,8 @@ namespace dev {
          // Save a pointer to the dev::Factory implemented by the plugin
          // and report the successive plugin loading:
          //
-         m_deviceMap[ factory->deviceName() ] = factory;
-         m_logger << msg::INFO << "Loaded device \"" << factory->deviceName()
+         m_deviceMap[ factory->shortName() ] = factory;
+         m_logger << msg::INFO << "Loaded device \"" << factory->longName()
                   << "\" from static plugin" << msg::endmsg;
 
       }

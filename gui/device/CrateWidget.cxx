@@ -463,7 +463,9 @@ namespace dev {
             for( QStringList::const_iterator dev = devices.begin();
                  dev != devices.end(); ++dev ) {
 
-               CreateAction* ac = new CreateAction( *dev, slot, *dev, this );
+               QString name = m_loader->getFactory( *dev )->longName();
+
+               CreateAction* ac = new CreateAction( name, slot, *dev, this );
                connect( ac, SIGNAL( triggered( int, const QString& ) ),
                         this, SLOT( createSlot( int, const QString& ) ) );
                addMenu->addAction( ac );

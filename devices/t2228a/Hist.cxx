@@ -3,12 +3,6 @@
 // System include(s):
 #include <cstdio>
 
-// CERNLIB include(s):
-extern "C" {
-#   include <cfortran/cfortran.h>
-#   include <cfortran/hbook.h>
-}
-
 // Qt include(s):
 #include <QtCore/QtGlobal>
 
@@ -34,7 +28,7 @@ namespace t2228a {
 
    }
 
-   bool Hist::initialize( unsigned int& counter ) {
+   bool Hist::initialize( cernlib::HistMgr& hmgr ) {
 
       m_logger << msg::DEBUG << "Initialising histograms" << msg::endmsg;
 
@@ -42,26 +36,22 @@ namespace t2228a {
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
 
-            // Increment the counter:
-            ++counter;
-
             // Create a fancy name for the histogram:
-            char name[ 50 ];
+            char name[ 80 ];
             sprintf( name, "%s (%s slot %i channel %i)",
                      m_channels[ i ]->getName().toLatin1().constData(),
                      type().toLatin1().constData(), getSlot(), i );
 
-            m_logger << msg::VERBOSE << "Creating histogram "
-                     << counter << " with name: \""
-                     << name << "\"" << msg::endmsg;
+            // Book the histogram and register it in the ID table:
+            m_histTable[ i ] = hmgr.book_1d( name,
+                                             m_channels[ i ]->getNumberOfChannels(),
+                                             m_channels[ i ]->getLowerBound(),
+                                             m_channels[ i ]->getUpperBound() );
 
-            // Book the histogram itself:
-            HBOOK1( counter, name, m_channels[ i ]->getNumberOfChannels(),
-                    m_channels[ i ]->getLowerBound(),
-                    m_channels[ i ]->getUpperBound(), 0. );
-
-            // Add an entry to the histogram table:
-            m_histTable[ i ] = counter;
+            m_logger << msg::VERBOSE
+                     << tr( "Created histogram %1 with name: \"%2\"" )
+               .arg( m_histTable[ i ] ).arg( name )
+                     << msg::endmsg;
 
          }
       }
@@ -70,7 +60,8 @@ namespace t2228a {
 
    }
 
-   bool Hist::displayEvent( const ev::Fragment& fragment ) const {
+   bool Hist::displayEvent( const ev::Fragment& fragment,
+                            const cernlib::HistMgr& hmgr ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 
@@ -87,7 +78,7 @@ namespace t2228a {
              m_channels[ subaddress ] ) {
 
             // Fill the histogram:
-            HF1( m_histTable[ subaddress ], data, 1. );
+            hmgr.fill_1d( m_histTable[ subaddress ], data, 1. );
 
          } else {
             m_logger << msg::ERROR << "Received data word from unknown channel"

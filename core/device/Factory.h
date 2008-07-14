@@ -41,15 +41,26 @@ namespace dev {
       /// Destructor
       virtual ~Factory() {}
 
-      /// Give the name of the device implemented in the plug-in
+      /// Give the short name of the device implemented in the plug-in
       /**
-       * To do some book-keeping of the devices that are available,
-       * each factory has to report what kind of device it handles.
-       * This string will then be used to list the available devices in
-       * the GUI and so the framework would know which factory to use
-       * when reading a data acquisition configuration.
+       * Each device type has to provide a short, unique string that
+       * identifies it. This text is used in the configuration files
+       * (both binary and XML) to identify the devices.
+       *
+       * @returns The short name of the device
        */
-      virtual QString deviceName() const = 0;
+      virtual QString shortName() const = 0;
+
+      /// Give the long name of the device implemented in the plug-in
+      /**
+       * Besides the short names, the devices should also provide a longer,
+       * more descriptive name for the devices. These are only used to
+       * print messages and in GUIs, so they don't have to be too compact,
+       * or contain only one word.
+       *
+       * @returns The long name of the device
+       */
+      virtual QString longName() const = 0;
 
       /// Create a graphical class describing the device
       virtual Gui*     createGui() const = 0;

@@ -7,6 +7,9 @@
 #include "Device.h"
 
 // Forward declaration(s):
+namespace cernlib {
+   class HistMgr;
+} // namespace cernlib
 namespace ev {
    class Fragment;
 } // namespace ev
@@ -41,7 +44,7 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool initialize( unsigned int& counter ) = 0;
+      virtual bool initialize( cernlib::HistMgr& hmgr ) = 0;
       /// Function filling the histograms
       /**
        * Fill the histograms with an event read from this device.
@@ -51,7 +54,8 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool displayEvent( const ev::Fragment& fragment ) const = 0;
+      virtual bool displayEvent( const ev::Fragment& fragment,
+                                 const cernlib::HistMgr& hmgr ) const = 0;
 
    }; // class Hist
 

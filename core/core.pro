@@ -12,18 +12,20 @@ include(../cda_common.pri)
 
 # This will be a library with the name "cdacore":
 TEMPLATE = lib
-VERSION  = 0.0.1
+VERSION  = 0.0.2
 TARGET   = cdacore
 
 # These are the header and source files:
-HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h
+HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h \
+          cernlib/*.h
 SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx \
-          cmdl/*.cpp
+          cmdl/*.cpp cernlib/*.cxx
 TRANSLATIONS = cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
-CONFIG += qt debug warn_on
+CONFIG += qt
 QT      = core network gui
+LIBS   += -L$$CERNLIB_PATH/lib
 
 # The place to put the intermediate build results:
 OBJECTS_DIR = ./.obj
@@ -82,6 +84,11 @@ mac {
    CMDL_HEADERS.path = Headers/cmdl
    QMAKE_BUNDLE_DATA += CMDL_HEADERS
 
+   CERNLIB_HEADERS.version = Versions
+   CERNLIB_HEADERS.files = $$system(ls cernlib/*.h)
+   CERNLIB_HEADERS.path = Headers/cernlib
+   QMAKE_BUNDLE_DATA += CERNLIB_HEADERS
+
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =
    DUMMY_HEADERS.path = Headers
@@ -100,6 +107,8 @@ mac {
    # framework after compilation will make the applications unusable.)
    DESTDIR                     = /
    QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdacore
+
+   LIBS += -lpacklib -lgfortran
 }
 
 #
@@ -113,4 +122,6 @@ unix:!mac {
 
    CONFIG += shared
    DESTDIR = ../lib
+
+   LIBS += -lpacklib -lg2c
 }

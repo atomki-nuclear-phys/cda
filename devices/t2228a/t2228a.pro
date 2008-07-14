@@ -10,9 +10,9 @@
 
 # Include the common project options:
 include(../../cda_common.pri)
+include(../devices.pri)
 
-# This will be a library with the name "example":
-TEMPLATE = lib
+# This will be a library with the name "t2228a":
 VERSION  = 0.0.1
 TARGET   = t2228a
 
@@ -20,33 +20,15 @@ TARGET   = t2228a
 HEADERS = *.h
 SOURCES = *.cxx
 
-# The library uses the QtCore, QtGui and QtXml libraries:
-CONFIG += qt debug warn_on plugin static
-QT      = core gui xml
-
-# Link the plugin against CERNLIB:
-DEFINES     += LINUX f2cFortran
-LIBS        += -L$$CERNLIB_PATH/lib
-INCLUDEPATH += $$CERNLIB_PATH/include
-
-# The place to put the intermediate and final build results:
-OBJECTS_DIR = ./.obj
-MOC_DIR     = ./.obj
-DESTDIR     = ../../dev
-
 mac {
    message(*)
    message(* Configuring to build the \"t2228a\" plugin on Mac OS X)
    message(*)
-   
 
    # The plugin has to be linked against the cdacore framework:
    INCLUDEPATH    += ../../core
    QMAKE_CXXFLAGS += -F../../lib
    LIBS           += -F../../lib -framework cdacore
-
-   # On Mac OS X CERNLIB is compiled using gfortran:
-   LIBS += -lpacklib -lgfortran
 }
 
 unix:!mac {

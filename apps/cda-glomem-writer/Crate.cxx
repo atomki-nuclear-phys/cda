@@ -1,11 +1,5 @@
 // $Id$
 
-// CERNLIB include(s):
-extern "C" {
-#   include <cfortran/cfortran.h>
-#   include <cfortran/hbook.h>
-}
-
 // Qt include(s):
 #include <QtCore/QtGlobal>
 
@@ -19,9 +13,6 @@ extern "C" {
 // Local include(s):
 #include "Crate.h"
 
-// Size of the PAW global memory:
-#define PAWC_SIZE 100000
-
 namespace glomem {
 
    /**
@@ -30,7 +21,7 @@ namespace glomem {
     */
    Crate::Crate()
       : dev::Crate< dev::Hist >( &dev::Factory::createHist ),
-        m_logger( "Crate" ) {
+        m_hmgr(), m_logger( "glomem::Crate" ) {
 
       m_logger << msg::VERBOSE << "Object constructed" << msg::endmsg;
 
@@ -63,16 +54,15 @@ namespace glomem {
       //
       // Initialise the global memory:
       //
-      HLIMAP( PAWC_SIZE, "CDA" );
+      m_hmgr.initialize();
 
       //
       // Let the devices create their own monitoring histograms:
       //
-      unsigned int counter = 0;
       for( std::map< int, dev::Hist* >::iterator device = m_devices.begin();
            device != m_devices.end(); ++device ) {
 
-         if( ! device->second->initialize( counter ) ) {
+         if( ! device->second->initialize( m_hmgr ) ) {
             m_logger << msg::ERROR << "There was a problem initializing one of "
                      << "the devices" << msg::endmsg;
             return false;
@@ -114,7 +104,7 @@ namespace glomem {
             return false;
          }
 
-         device->second->displayEvent( *fragment );
+         device->second->displayEvent( *fragment, m_hmgr );
 
       }
 

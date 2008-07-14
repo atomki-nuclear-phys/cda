@@ -10,29 +10,14 @@
 
 # Include the common project options:
 include(../../cda_common.pri)
+include(../console_app.pri)
 
-# This will be an application with the name "cda-camacreader":
-TEMPLATE = app
+# This will be an application with the name "cda-camac-reader":
 TARGET   = cda-camac-reader
 
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
-
-# The application uses the QtCore and QtNetwork libraries:
-CONFIG = qt debug warn_on
-QT     = core network xml gui
-
-# Link with the static plugins:
-LIBS += -L../../dev -lt2228a
-
-# Link the application against CERNLIB:
-LIBS += -L$$CERNLIB_PATH/lib
-
-# The places to put the intermediate and final build results:
-OBJECTS_DIR = ./.obj
-MOC_DIR     = ./.obj
-DESTDIR     = ../../bin
 
 #
 # These are the specific configuration options for compiling the code
@@ -45,9 +30,6 @@ mac {
 
    QMAKE_CXXFLAGS += -F../../lib
    LIBS           += -F../../lib -framework cdacore
-
-   # On Mac OS X CERNLIB is compiled using gfortran:
-   LIBS += -lpacklib -lgfortran
 }
 
 #

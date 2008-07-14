@@ -5,12 +5,15 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
+#   include "cdacore/cernlib/HistMgr.h"
 #   include "cdacore/device/Hist.h"
 #   include "cdacore/msg/Logger.h"
 #else
+#   include "cernlib/HistMgr.h"
 #   include "device/Hist.h"
 #   include "msg/Logger.h"
 #endif
@@ -36,14 +39,17 @@ namespace t2228a {
    class Hist : public virtual dev::Hist,
                 public virtual Device {
 
+      Q_DECLARE_TR_FUNCTIONS( t2228a::Hist )
+
    public:
       /// Constructor
       Hist();
 
       /// Initialise the monitoring histograms
-      virtual bool initialize( unsigned int& counter );
+      virtual bool initialize( cernlib::HistMgr& hmgr );
       /// Fill the histograms with one event
-      virtual bool displayEvent( const ev::Fragment& fragment ) const;
+      virtual bool displayEvent( const ev::Fragment& fragment,
+                                 const cernlib::HistMgr& hmgr ) const;
 
    private:
       /// Histogram ID "dictionary"

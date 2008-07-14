@@ -9,25 +9,17 @@
 
 # Include the common project options:
 include(../../cda_common.pri)
+include(../gui_app.pri)
 
 # This will be an application with the name "cda-msgserver":
-TEMPLATE = app
-TARGET   = cda-msgserver
+TARGET = cda-msgserver
 
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
 
-# The application uses the QtCore, QtNetwork and QtGui libraries,
-# and it uses some built in resources.
-CONFIG   += qt debug warn_on
-QT        = core gui network
+# The application uses some resources:
 RESOURCES = cda-msgserver.qrc
-
-# The places to put the intermediate and final build results:
-OBJECTS_DIR = ./.obj
-MOC_DIR     = ./.obj
-DESTDIR     = ../../bin
 
 #
 # These are the specific configuration options for compiling the code
@@ -56,11 +48,3 @@ unix:!mac {
    INCLUDEPATH += ../../core ../../gui
    LIBS        += -L../../lib -lcdacore -lcdagui
 }
-
-#
-# If we're not in TESTING mode, we also have to link the application
-# againt the cc32 library:
-#
-#!contains(DEFINES,TESTING) {
-#   LIBS += -lcc32
-#}

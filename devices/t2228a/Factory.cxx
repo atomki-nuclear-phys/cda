@@ -14,9 +14,15 @@ namespace t2228a {
 
    }
 
-   QString Factory::deviceName() const {
+   QString Factory::shortName() const {
 
       return "T2228A";
+
+   }
+
+   QString Factory::longName() const {
+
+      return "LeCroy 2228A TDC";
 
    }
 

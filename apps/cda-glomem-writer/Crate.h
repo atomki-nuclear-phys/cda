@@ -11,11 +11,13 @@
 #   include "cdacore/device/Hist.h"
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/event/Event.h"
+#   include "cdacore/cernlib/HistMgr.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Hist.h"
 #   include "device/Crate.h"
 #   include "event/Event.h"
+#   include "cernlib/HistMgr.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -59,6 +61,7 @@ namespace glomem {
       bool displayEvent( const ev::Event& event );
 
    private:
+      cernlib::HistMgr m_hmgr; ///< Interface for handling histograms
       mutable msg::Logger m_logger; ///< Message logging object
 
    }; // class Crate
