@@ -97,7 +97,7 @@ namespace reader {
          return event;
       }
 
-      crate.resetInhibit();
+      //      crate.resetInhibit();
 
       //
       // Wait for LAM signal:
@@ -107,6 +107,8 @@ namespace reader {
                   << std::endl
                   << "Returning empty event..." << msg::endmsg;
          return event;
+      } else {
+         m_logger << msg::VERBOSE << "Received LAM signal" << msg::endmsg;
       }
 
       //
@@ -138,8 +140,9 @@ namespace reader {
 
       }
 
-      // Clear LAM:
       crate.clearLAM();
+
+      m_logger << msg::VERBOSE << "Cleared crate" << msg::endmsg;
 
       return true;
 

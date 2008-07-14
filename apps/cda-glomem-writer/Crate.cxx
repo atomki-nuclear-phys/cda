@@ -98,6 +98,8 @@ namespace glomem {
     */
    bool Crate::displayEvent( const ev::Event& event ) {
 
+      m_logger << msg::VERBOSE << "Received new event" << msg::endmsg;
+
       const std::vector< ev::Fragment >& fragments = event.getFragments();
 
       for( std::vector< ev::Fragment >::const_iterator fragment =

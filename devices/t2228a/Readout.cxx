@@ -71,6 +71,8 @@ namespace t2228a {
             uint32_t channel = crate.readWord( m_slot, i, 0 );
             uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
             fragment.addDataWord( dword );
+            m_logger << msg::VERBOSE << "From subaddress " << i
+                     << " : " << channel << msg::endmsg;
          }
       }
 
@@ -83,7 +85,9 @@ namespace t2228a {
       //
       // Clear the module:
       //
-      crate.writeWord( m_slot, 0, 9, 0 );
+      crate.writeWord( m_slot, 0, 10, 0 );
+
+      m_logger << msg::VERBOSE << "Cleared module" << msg::endmsg;
 
       return true;
 

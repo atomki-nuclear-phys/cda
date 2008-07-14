@@ -232,8 +232,8 @@ int main( int argc, char* argv[] ) {
    ev::BinaryStream evstream( &fifo );
    for( ; ; ) {
 
-      crate.clear( *g_crate );
       ev::Event event = crate.readEvent( *g_crate );
+      crate.clear( *g_crate );
       evstream << event;
       fifo.flush();
 
