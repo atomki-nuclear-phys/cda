@@ -54,6 +54,17 @@ namespace dev {
        * @returns The event fragment coming from this device?
        */
       virtual ev::Fragment readEvent( camac::Crate& crate ) const = 0;
+      /// Clear the module to receive a new event
+      /**
+       * This function is called after all the modules have been read out
+       * to clear the data from the modules and make them ready to
+       * receive a new event.
+       *
+       * @param crate The object to access the CAMAC crate with
+       * @returns <code>true</code> if the operation was successful,
+       *          <code>false</code> otherwise
+       */
+      virtual bool clear( camac::Crate& crate ) const = 0;
 
    }; // class Readout
 

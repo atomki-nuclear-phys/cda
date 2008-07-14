@@ -74,12 +74,18 @@ namespace t2228a {
          }
       }
 
+      return fragment;
+
+   }
+
+   bool Readout::clear( camac::Crate& crate ) const {
+
       //
       // Clear the module:
       //
       crate.writeWord( m_slot, 0, 9, 0 );
 
-      return fragment;
+      return true;
 
    }
 

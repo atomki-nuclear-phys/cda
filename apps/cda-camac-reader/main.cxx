@@ -184,7 +184,7 @@ int main( int argc, char* argv[] ) {
    }
 
    // Reset the crate controller:
-   g_crate->writeLong( 31, 0, 0, 0 );
+   //   g_crate->writeLong( 31, 0, 0, 0 );
 
    // Enable all CAMAC interrupts:
    //   g_crate->writeLong( 28, 1, 16, 0x00FFFFFF );
@@ -232,6 +232,7 @@ int main( int argc, char* argv[] ) {
    ev::BinaryStream evstream( &fifo );
    for( ; ; ) {
 
+      crate.clear( *g_crate );
       ev::Event event = crate.readEvent( *g_crate );
       evstream << event;
       fifo.flush();

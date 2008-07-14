@@ -56,6 +56,9 @@ namespace reader {
 
       m_logger << msg::INFO << "Initializing CAMAC devices" << msg::endmsg;
 
+      crate.initialize();
+      crate.clear();
+
       for( std::map< int, dev::Readout* >::const_iterator device =
               m_devices.begin(); device != m_devices.end(); ++device ) {
 
@@ -66,6 +69,10 @@ namespace reader {
          }
 
       }
+
+      // Enable all CAMAC interrupts:
+      //      crate.writeLong( 28, 1, 16, 0x00ffffff );
+      crate.setLAMMask( 0xffffff );
 
       return true;
 
@@ -83,15 +90,14 @@ namespace reader {
 
       ev::Event event;
 
-      // Enable all CAMAC interrupts:
-      crate.writeLong( 28, 1, 16, 0x00ffffff );
-
       if( ! crate.enableInterrupt() ) {
          m_logger << msg::ERROR << "There was a problem enabling interrupts"
                   << std::endl
                   << "for the CAMAC crate." << msg::endmsg;
          return event;
       }
+
+      crate.resetInhibit();
 
       //
       // Wait for LAM signal:
@@ -113,10 +119,29 @@ namespace reader {
 
       }
 
-      // Clear LAM:
-      crate.writeWord( 28, 0, 16, 0 );
-
       return event;
+
+   }
+
+   bool Crate::clear( camac::Crate& crate ) const {
+
+      crate.clear();
+
+      for( std::map< int, dev::Readout* >::const_iterator device =
+              m_devices.begin(); device != m_devices.end(); ++device ) {
+
+         if( ! device->second->clear( crate ) ) {
+            m_logger << msg::ERROR << "There was a problem clearing one "
+                     << "of the devices" << msg::endmsg;
+            return false;
+         }
+
+      }
+
+      // Clear LAM:
+      crate.clearLAM();
+
+      return true;
 
    }
 

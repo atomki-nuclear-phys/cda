@@ -154,12 +154,45 @@ namespace camac {
       if( ! checkOpen() ) return 0;
 
 #ifndef TESTING
-      return cc32_read_long( m_handle, N, A, F );
+      return ( cc32_read_long( m_handle, N, A, F ) & 0xffffff );
 #else
       m_logger << msg::DEBUG
                << tr( "readLong(...) called with: N = %1 A = %2 "
                       "F = %3" ).arg( N ).arg( A ).arg( F )
                << msg::endmsg;
+      return ( A * 100 );
+#endif // TESTING
+
+   }
+
+   /**
+    * This function can be used to get additional information from the
+    * CAMAC bus on readout.
+    *
+    * @param N Address of the CAMAC module
+    * @param A Sub-address of the CAMAC module
+    * @param F Function code to access the address with
+    * @param Q CAMAC response line
+    * @param X CAMAC "command accepted" line
+    * @returns The read-out information
+    */
+   uint32_t Crate::readLong( unsigned int N, unsigned int A, unsigned int F,
+                             bool& Q, bool& X ) {
+
+      if( ! checkOpen() ) return 0;
+
+#ifndef TESTING
+      uint32_t data = cc32_read_long( m_handle, N, A, F );
+      Q = ( data & 0x80000000 ) ? true : false;
+      X = ( data & 0x40000000 ) ? true : false;
+      return ( data & 0xffffff );
+#else
+      m_logger << msg::DEBUG
+               << tr( "readLong(...) called with: N = %1 A = %2 "
+                      "F = %3, Q, X" ).arg( N ).arg( A ).arg( F )
+               << msg::endmsg;
+      Q = false;
+      X = false;
       return ( A * 100 );
 #endif // TESTING
 
@@ -279,6 +312,86 @@ namespace camac {
 
    }
 
+   void Crate::setInhibit() {
+
+      if( ! checkOpen() ) return;
+
+#ifndef TESTING
+      cc32_write_word( m_handle, 27, 0, 16, 0 );
+#else
+      m_logger << msg::DEBUG
+               << tr( "Inhibit set on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
+#endif // TESTING
+
+      return;
+
+   }
+
+   void Crate::resetInhibit() {
+
+      if( ! checkOpen() ) return;
+
+#ifndef TESTING
+      cc32_write_word( m_handle, 27, 1, 16, 0 );
+#else
+      m_logger << msg::DEBUG
+               << tr( "Inhibit reset on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
+#endif // TESTING
+
+      return;
+
+   }
+
+   void Crate::initialize() {
+
+      if( ! checkOpen() ) return;
+
+#ifndef TESTING
+      cc32_write_word( m_handle, 0, 1, 16, 0 );
+#else
+      m_logger << msg::DEBUG
+               << tr( "Initialize called on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
+#endif // TESTING
+
+      return;
+
+   }
+
+   void Crate::clear() {
+
+      if( ! checkOpen() ) return;
+
+#ifndef TESTING
+      cc32_write_word( m_handle, 0, 0, 16, 0 );
+#else
+      m_logger << msg::DEBUG
+               << tr( "Clear called on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
+#endif // TESTING
+
+      return;
+
+   }
+
+   void Crate::setLAMMask( uint32_t mask ) {
+
+      if( ! checkOpen() ) return;
+
+#ifndef TESTING
+      cc32_write_long( m_handle, 28, 1, 16, mask );
+#else
+      m_logger << msg::DEBUG
+               << tr( "LAM mask set to: 0x%1" ).arg( QString::number( mask, 16 ) )
+               << msg::endmsg;
+#endif // TESTING
+
+      return;
+
+   }
+
    /**
     * This function should be used in the data acquisition process to wait
     * for a new event. When a new event is registered by the CAMAC devices,
@@ -321,6 +434,22 @@ namespace camac {
 #endif // TESTING
 
       return true;
+
+   }
+
+   void Crate::clearLAM() {
+
+      if( ! checkOpen() ) return;
+
+#ifndef TESTING
+      cc32_write_word( m_handle, 28, 0, 16, 0 );
+#else
+      m_logger << msg::DEBUG
+               << tr( "LAM cleared on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
+#endif // TESTING
+
+      return;
 
    }
 

@@ -44,6 +44,8 @@ namespace t2228a {
       virtual bool initialize( camac::Crate& crate ) const;
       /// Read the contents of the device
       virtual ev::Fragment readEvent( camac::Crate& crate ) const;
+      /// Clear the module to receive a new event
+      virtual bool clear( camac::Crate& crate ) const;
 
    private:
       mutable msg::Logger m_logger; ///< Message logging object

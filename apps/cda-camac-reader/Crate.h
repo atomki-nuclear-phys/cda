@@ -64,6 +64,8 @@ namespace reader {
       bool initialize( camac::Crate& crate ) const;
       /// Function reading out one event from the crate
       ev::Event readEvent( camac::Crate& crate ) const;
+      /// Clear the crate to receive a new event
+      bool clear( camac::Crate& crate ) const;
 
    private:
       mutable msg::Logger m_logger; ///< Message logging object
