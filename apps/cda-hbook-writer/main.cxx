@@ -1,11 +1,11 @@
 // $Id$
 /**
- *   @file apps/cda-glomem-writer/main.cxx
- *  @short Main file for the monitoring histogram application
+ *   @file apps/cda-hbook-writer/main.cxx
+ *  @short Main file for the HBOOK writer application
  *
- *         This file stores the code that runs the cda-glomem-writer application.
- *         This application is used to fill monitoring histograms with the
- *         data read from the CAMAC devices.
+ *         This file stores the code that runs the cda-hbook-writer application.
+ *         This application is used to permanently store the data coming from
+ *         the DAQ system.
  *
  * @author Attila Krasznahorkay Jr.
  *
@@ -41,7 +41,6 @@
 #   include "msg/Logger.h"
 #   include "cmdl/cmdargs.h"
 #   include "device/Loader.h"
-#   include "fifo/Fifo.h"
 #   include "event/Event.h"
 #   include "event/EventServer.h"
 #endif
@@ -53,13 +52,13 @@
 void shutDown( int );
 
 // Global variable(s):
-msg::Logger g_logger( "cda-glomem-writer" );
+msg::Logger   g_logger( "cda-hbook-writer" );
+hbook::Crate* g_crate = 0;
 
-// Description for the executable:
 static const char* description =
-   "Program writing events which it receives, to a global memory\n"
-   "block of PAW. This makes it possible to monitor the data-taking\n"
-   "from within PAW++ while the data acquisition is on-going.\n\n"
+   "Program writing events which it receives, to a HBOOK format file.\n"
+   "The output file contains one ntuple with all the variables defined\n"
+   "in the data acquisition setup.\n\n"
    "This executable should normally be started by CDA internally.\n"
    "You should only start it by hand for debugging purposes.";
 
@@ -73,8 +72,10 @@ int main( int argc, char* argv[] ) {
                      CmdArg::isREQ );
    CmdArgStr server( 's', "server", "hostname", "Host name of the message server" );
    CmdArgInt port( 'p', "port", "number", "Port number of the message server" );
+   CmdArgStr output( 'o', "output", "filename", "Name of HBOOK file",
+                     CmdArg::isREQ );
 
-   CmdLine cmd( *argv, &verbosity, &config, &server, &port, NULL );
+   CmdLine cmd( *argv, &verbosity, &config, &server, &port, &output, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
@@ -154,9 +155,9 @@ int main( int argc, char* argv[] ) {
    //
    // Initialise a Crate object with this configuration:
    //
-   glomem::Crate crate;
-   crate.setLoader( &loader );
-   if( ! crate.readConfig( doc.documentElement() ) ) {
+   g_crate = new hbook::Crate();
+   g_crate->setLoader( &loader );
+   if( ! g_crate->readConfig( doc.documentElement() ) ) {
       g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
                << "See previous messages for more information..." << msg::endmsg;
       return 1;
@@ -166,14 +167,14 @@ int main( int argc, char* argv[] ) {
    }
 
    //
-   // Initialise the monitoring histograms:
+   // Initialise writing to a HBOOK file:
    //
-   if( ! crate.initialize() ) {
-      g_logger << msg::FATAL << "Failed to initialise histograms for data "
+   if( ! g_crate->initialize( ( const char* ) output ) ) {
+      g_logger << msg::FATAL << "Failed to initialise HBOOK file for data "
                << "acquisition" << msg::endmsg;
       return 1;
    } else {
-      g_logger << msg::DEBUG << "Initialised histograms for data acquisition"
+      g_logger << msg::DEBUG << "Initialised HBOOK file for data acquisition"
                << msg::endmsg;
    }
 
@@ -181,7 +182,7 @@ int main( int argc, char* argv[] ) {
    // Start an EventServer listening on "a" port:
    //
    ev::EventServer evserver;
-   evserver.listen( Address( "127.0.0.1", 45000 ) );
+   evserver.listen( Address( "127.0.0.1", 45100 ) );
 
    //
    // Connect the interrupt signal to the shutDown function:
@@ -191,19 +192,19 @@ int main( int argc, char* argv[] ) {
    //
    // Let the user know what we're doing:
    //
-   g_logger << msg::INFO << "Histogram writing running..." << msg::endmsg;
+   g_logger << msg::INFO << "HBOOK writing running..." << msg::endmsg;
 
    //
-   // Read events and give them to the crate to display, in an endless loop.
+   // Read events and give them to the crate to write, in an endless loop.
    //
    for( ; ; ) {
 
       ev::Event event;
       evserver >> event;
 
-      if( ! crate.displayEvent( event ) ) {
+      if( ! g_crate->writeEvent( event ) ) {
 
-         g_logger << msg::FATAL << "There was a problem diplaying an event"
+         g_logger << msg::FATAL << "There was a problem writing an event"
                   << msg::endmsg;
          return 1;
 
@@ -220,11 +221,13 @@ int main( int argc, char* argv[] ) {
 }
 
 /**
- * In the case of this application having this shutdown function is a bit of
- * an overkill. But it's nice to have all the CDA applications behaving the
- * same way...
+ * This function makes sure that the output HBOOK file is properly closed
+ * when the application terminates.
  */
 void shutDown( int ) {
+
+   g_crate->finalize();
+   delete g_crate;
 
    g_logger << msg::INFO << "Terminating application..." << msg::endmsg;
    exit( 0 );

@@ -7,6 +7,7 @@
 #include "Gui.h"
 #include "Readout.h"
 #include "Hist.h"
+#include "Disk.h"
 
 namespace t2228a {
 
@@ -46,7 +47,7 @@ namespace t2228a {
 
    dev::Disk* Factory::createDisk() const {
 
-      return 0;
+      return new Disk();
 
    }
 

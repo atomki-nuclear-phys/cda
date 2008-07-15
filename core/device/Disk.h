@@ -13,6 +13,9 @@
 #include "Device.h"
 
 // Forward include(s):
+namespace cernlib {
+   class NTupleMgr;
+} // namespace cernlib
 namespace ev {
    class Fragment;
 } // namespace ev
@@ -51,8 +54,7 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool initialize( unsigned int& counter,
-                               std::vector< QString >& names ) = 0;
+      virtual bool initialize( cernlib::NTupleMgr& nmgr ) = 0;
       /// Function filling the histograms
       /**
        * Write an event record to the output file. It should receive an
@@ -66,7 +68,7 @@ namespace dev {
        *          <code>false</code> otherwise
        */
       virtual bool writeEvent( const ev::Fragment& fragment,
-                               float*& data ) const = 0;
+                               cernlib::NTupleMgr& nmgr ) const = 0;
 
    }; // class Disk
 

@@ -35,18 +35,16 @@
 #   include "cdacore/cmdl/cmdargs.h"
 #   include "cdacore/device/Loader.h"
 #   include "cdacore/camac/Crate.h"
-#   include "cdacore/fifo/Fifo.h"
 #   include "cdacore/event/Event.h"
-#   include "cdacore/event/BinaryStream.h"
+#   include "cdacore/event/Sender.h"
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
 #   include "cmdl/cmdargs.h"
 #   include "device/Loader.h"
 #   include "camac/Crate.h"
-#   include "fifo/Fifo.h"
 #   include "event/Event.h"
-#   include "event/BinaryStream.h"
+#   include "event/Sender.h"
 #endif
 
 // Local include(s):
@@ -89,7 +87,7 @@ int main( int argc, char* argv[] ) {
    //
    // Set the destination of the messages:
    //
-   msg::Sender::addAddress( msg::Address( ( const char* ) server, port ) );
+   msg::Sender::addAddress( Address( ( const char* ) server, port ) );
 
    //
    // Translate the verbosity option:
@@ -179,12 +177,6 @@ int main( int argc, char* argv[] ) {
       g_logger << msg::INFO << "Opened the CAMAC crate" << msg::endmsg;
    }
 
-   // Reset the crate controller:
-   //   g_crate->writeLong( 31, 0, 0, 0 );
-
-   // Enable all CAMAC interrupts:
-   //   g_crate->writeLong( 28, 1, 16, 0x00FFFFFF );
-
    //
    // Initialize the CAMAC devices for data acquisition:
    //
@@ -198,19 +190,11 @@ int main( int argc, char* argv[] ) {
    }
 
    //
-   // Open the output FIFO:
+   // Open connections to all the event recepients:
    //
-   QString fifo_path;
-   fifo_path.append( CDASYS );
-   fifo_path.append( "/fifos/histFifo" );
-   Fifo fifo( fifo_path );
-   if( ! fifo.open() ) {
-      g_logger << msg::FATAL << "Couldn't open output FIFO" << msg::endmsg;
-      return 1;
-   } else {
-      g_logger << msg::DEBUG << "Output FIFO successfully opened"
-               << msg::endmsg;
-   }
+   ev::Sender sender;
+   sender.addAddress( Address( "127.0.0.1", 45000 ) );
+   sender.addAddress( Address( "127.0.0.1", 45100 ) );
 
    //
    // Connect the interrupt signal to the shutDown function:
@@ -225,13 +209,15 @@ int main( int argc, char* argv[] ) {
    //
    // Read events and send them on the opened FIFO in an endless loop.
    //
-   ev::BinaryStream evstream( &fifo );
    for( ; ; ) {
 
       ev::Event event = crate.readEvent( *g_crate );
       crate.clear( *g_crate );
-      evstream << event;
-      fifo.flush();
+      if( ! sender.send( event ) ) {
+         g_logger << msg::FATAL << "Failed to send event to all recepients.\n"
+                  << "Event readout can not continue!" << msg::endmsg;
+         shutDown( 0 );
+      }
 
    }
 

@@ -7,19 +7,21 @@
 #include <QtNetwork/QTcpServer>
 #include <QtCore/QString>
 
+// CDA include(s):
+#include "../common/Address.h"
+
 // Local include(s):
 #include "Message.h"
-#include "Address.h"
 
 // Check the Qt version used for compilation:
 #if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
 #  error "msg::Server needs Qt >= 4.0.0"
 #endif
 
-namespace msg {
+// Forward declaration(s):
+class Socket;
 
-   // Forward declaration(s):
-   class Socket;
+namespace msg {
 
    //
    // Make sure that the following Qt classes are available in the

@@ -31,7 +31,7 @@ int main( int argc, char* argv[] ) {
    //
    // Set the destination of the messages:
    //
-   msg::Sender::addAddress( msg::Address( "127.0.0.1", 49700 ) );
+   msg::Sender::addAddress( Address( "127.0.0.1", 49700 ) );
    msg::Sender::instance()->setMinLevel( msg::INFO );
 
    //

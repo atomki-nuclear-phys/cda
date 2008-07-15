@@ -416,21 +416,17 @@ namespace camac {
                   << strerror( error ) << msg::endmsg;
          return false;
       }
-      /*
-      sleep( 4 );
-      */
 #else
       m_logger << msg::VERBOSE << tr( "Waiting for LAM" ) << msg::endmsg;
 
-      /*
       // Wait for a 100 miliseconds before returning. This is a good way
       // to produce an eco-friendly 10 Hz readout rate in TESTING mode.
       struct timeval tv;
       tv.tv_sec = 0;
       tv.tv_usec = 100000;
       select( 0, NULL, NULL, NULL, &tv );
-      */
-      sleep( 1 );
+
+      //      sleep( 1 );
 #endif // TESTING
 
       return true;

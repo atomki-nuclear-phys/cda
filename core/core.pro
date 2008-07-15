@@ -17,9 +17,9 @@ TARGET   = cdacore
 
 # These are the header and source files:
 HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h \
-          cernlib/*.h
+          cernlib/*.h common/*.h
 SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx \
-          cmdl/*.cpp cernlib/*.cxx
+          cmdl/*.cpp cernlib/*.cxx common/*.cxx
 TRANSLATIONS = cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
@@ -88,6 +88,11 @@ mac {
    CERNLIB_HEADERS.files = $$system(ls cernlib/*.h)
    CERNLIB_HEADERS.path = Headers/cernlib
    QMAKE_BUNDLE_DATA += CERNLIB_HEADERS
+
+   COMMON_HEADERS.version = Versions
+   COMMON_HEADERS.files = $$system(ls common/*.h)
+   COMMON_HEADERS.path = Headers/common
+   QMAKE_BUNDLE_DATA += COMMON_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =

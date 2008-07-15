@@ -78,7 +78,7 @@ MsgServerWindow::MsgServerWindow()
    //
    // Start listening on port 49700 with all network interfaces:
    //
-   if( ! m_server->listen( msg::Address( "0.0.0.0", 49700 ) ) ) {
+   if( ! m_server->listen( Address( "0.0.0.0", 49700 ) ) ) {
       QMessageBox::critical( this, "Error starting server",
                              "The TCP/IP message server could not be "
                              "started on port 49700. Please select another "
@@ -119,7 +119,7 @@ void MsgServerWindow::portChangedSlot() {
       previous_port = port;
    }
    if( m_server->isListening() ) m_server->close();
-   if( ! m_server->listen( msg::Address( "0.0.0.0", port ) ) ) {
+   if( ! m_server->listen( Address( "0.0.0.0", port ) ) ) {
       QString message;
       message.sprintf( "The TCP/IP message server could not be "
                        "started on port %i. Please select another "

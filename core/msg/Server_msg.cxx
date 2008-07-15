@@ -3,9 +3,11 @@
 // Qt include(s):
 #include <QtCore/QFile>
 
+// CDA include(s):
+#include "../common/Socket.h"
+
 // Local include(s):
 #include "Server.h"
-#include "Socket.h"
 #include "BinaryStream.h"
 #include "TextStream.h"
 
@@ -131,7 +133,7 @@ namespace msg {
       Socket* socket = new Socket( this );
       socket->setSocketDescriptor( socketDescriptor );
 
-      connect( socket, SIGNAL( messageReady( Socket* ) ),
+      connect( socket, SIGNAL( dataReady( Socket* ) ),
                this, SLOT( readMessage( Socket* ) ) );
       connect( socket, SIGNAL( disconnected() ),
                socket, SLOT( deleteLater() ) );

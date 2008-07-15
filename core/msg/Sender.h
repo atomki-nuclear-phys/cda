@@ -6,13 +6,12 @@
 // STL include(s):
 #include <vector>
 
-// Qt include(s):
-#include <QtNetwork/QHostAddress>
+// CDA include(s):
+#include "../common/Address.h"
 
 // Local include(s):
 #include "Level.h"
 #include "Message.h"
-#include "Address.h"
 
 // Check the Qt version used for compilation:
 #if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
