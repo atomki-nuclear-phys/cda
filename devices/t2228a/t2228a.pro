@@ -39,7 +39,4 @@ unix:!mac {
    # The plugin has to be linked against the cdacore library:
    INCLUDEPATH += ../../core
    LIBS         = -L../../lib -lcdacore
-
-   # On Linux CERNLIB is compiled using g77:
-   LIBS += -lpacklib_noshift -lg2c
 }

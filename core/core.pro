@@ -128,5 +128,5 @@ unix:!mac {
    CONFIG += shared
    DESTDIR = ../lib
 
-   LIBS += -lpacklib -lg2c
+   LIBS += -lpacklib_noshift -lg2c
 }

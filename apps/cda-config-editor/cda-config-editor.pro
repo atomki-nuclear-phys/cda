@@ -47,7 +47,4 @@ unix:!mac {
 
    INCLUDEPATH += ../../core ../../gui
    LIBS        += -L../../lib -lcdacore -lcdagui
-
-   # On Linux CERNLIB is compiled using g77:
-   LIBS += -lpacklib_noshift -lg2c
 }
