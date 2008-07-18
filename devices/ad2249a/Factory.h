@@ -1,6 +1,6 @@
 // Dear emacs, this is -*- c++ -*-
-#ifndef CDA_DEVICES_T2228A_FACTORY_H
-#define CDA_DEVICES_T2228A_FACTORY_H
+#ifndef CDA_DEVICES_AD2249A_FACTORY_H
+#define CDA_DEVICES_AD2249A_FACTORY_H
 
 // Qt include(s):
 #include <QtCore/QObject>
@@ -21,17 +21,17 @@
 #endif
 
 /**
- *  @short Namespace for the T2228A TDC device
+ *  @short Namespace for the AD2249A ADC device
  *
- *         This namespace holds all the classes that handle the a T2228A
- *         CAMAC TDC device.
+ *         This namespace holds all the classes that handle the a AD2249A
+ *         CAMAC ADC device.
  *
  * @author Attila Krasznahorkay Jr.
  *
- * $Revision$
- * $Date$
+ * $Revision: 39 $
+ * $Date: 2008-07-14 19:15:52 +0200 (Mon, 14 Jul 2008) $
  */
-namespace t2228a {
+namespace ad2249a {
 
    //
    // Make sure that the following Qt classes are available in the
@@ -42,15 +42,15 @@ namespace t2228a {
    using QT_PREPEND_NAMESPACE( QString );
 
    /**
-    *  @short Factory creating all the T2228A objects
+    *  @short Factory creating all the AD2249A objects
     *
-    *         This factory is used when loading the T2228A plugin to access
+    *         This factory is used when loading the AD2249A plugin to access
     *         all the classes provided by the plugin.
     *
     * @author Attila Krasznahorkay Jr.
     *
-    * $Revision$
-    * $Date$
+    * $Revision: 39 $
+    * $Date: 2008-07-14 19:15:52 +0200 (Mon, 14 Jul 2008) $
     */
    class Factory : public QObject,
                    virtual public dev::Factory {
@@ -71,6 +71,6 @@ namespace t2228a {
 
    }; // class Factory
 
-} // namespace t2228a
+} // namespace ad2249a
 
-#endif // CDA_DEVICES_T2228A_FACTORY_H
+#endif // CDA_DEVICES_AD2249A_FACTORY_H
