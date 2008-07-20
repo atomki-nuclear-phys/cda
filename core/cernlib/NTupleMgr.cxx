@@ -6,7 +6,7 @@
 // CERNLIB include(s):
 extern "C" {
 #   include <cfortran/cfortran.h>
-#   include <cfortran/hbook.h>
+#   include <hbook.h>
 }
 
 // Local include(s):

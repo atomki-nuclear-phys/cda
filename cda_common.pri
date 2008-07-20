@@ -34,6 +34,7 @@
 # I use for development). This code snippet doesn't allow to
 # compile it on Windows:
 #
+QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline"
 !unix:!mac {
    error(CDA is only supported on Linux and Mac OS X!)
 }
@@ -106,7 +107,11 @@ mac {
    CERNLIB_PATH = /sw
 }
 unix:!mac {
-   CERNLIB_PATH = /cern/pro
+exists(/cern/pro){
+	CERNLIB_PATH = /cern/pro
+} else {
+	CERNLIB_PATH = /usr
+}
 }
 DEFINES     += LINUX f2cFortran
-INCLUDEPATH += $$CERNLIB_PATH/include
+INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran

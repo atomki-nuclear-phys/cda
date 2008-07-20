@@ -113,7 +113,6 @@ mac {
    DESTDIR                     = /
    QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdacore
 
-   LIBS += -lpacklib -lgfortran
 }
 
 #
@@ -128,5 +127,24 @@ unix:!mac {
    CONFIG += shared
    DESTDIR = ../lib
 
-   LIBS += -lpacklib_noshift -lg2c
 }
+system(gfortran --version){
+	LIBS += -lgfortran
+} else{
+	!system(g77 --version){
+		warning(Could not determinate which fortran library to use)
+	}
+	LIBS += -lg2c
+}
+
+exists($$CERNLIB_PATH/lib/libpacklib_noshift.a){
+	LIBS += -lpacklib_noshift
+} else{
+	!exists($$CERNLIB_PATH/lib/libpacklib.a){
+		warning(Could not determinate the packlib library name)
+	}
+	
+	LIBS += -lpacklib
+}
+
+

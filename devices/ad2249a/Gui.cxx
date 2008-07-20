@@ -30,7 +30,7 @@ namespace ad2249a {
       m_topLabel = new QLabel( tr( "LeCroy 2249A 12 channel  Analog-to-Digital Converter" ),
                                this );
       m_topLabel->setAlignment( Qt::AlignCenter );
-      m_topLabel->setGeometry( QRect( 35, 30, 430, 25 ) );
+      m_topLabel->setGeometry( QRect( 35, 10, 430, 20 ) );
 
 
       //
@@ -38,28 +38,28 @@ namespace ad2249a {
       //
       m_nameLabel = new QLabel( tr( "Name" ), this );
       m_nameLabel->setAlignment( Qt::AlignCenter );
-      m_nameLabel->setGeometry( QRect( 150, 75, 75, 25 ) );
+      m_nameLabel->setGeometry( QRect( 150, 35, 75, 25 ) );
 
       //
       // Create a label identifying the histogram channel settings:
       //
       m_channelsLabel = new QLabel( tr( "Channels" ), this );
       m_channelsLabel->setAlignment( Qt::AlignCenter );
-      m_channelsLabel->setGeometry( QRect( 230, 75, 75, 25 ) );
+      m_channelsLabel->setGeometry( QRect( 230, 35, 75, 25 ) );
 
       //
       // Create a label identifying the histogram lower bound settings:
       //
       m_lowerBoundLabel = new QLabel( tr( "Lower" ), this );
       m_lowerBoundLabel->setAlignment( Qt::AlignCenter );
-      m_lowerBoundLabel->setGeometry( QRect( 310, 75, 75, 25 ) );
+      m_lowerBoundLabel->setGeometry( QRect( 310, 35, 75, 25 ) );
 
       //
       // Create a label identifying the histogram upper bound settings:
       //
       m_upperBoundLabel = new QLabel( tr( "Upper" ), this );
       m_upperBoundLabel->setAlignment( Qt::AlignCenter );
-      m_upperBoundLabel->setGeometry( QRect( 390, 75, 75, 25 ) );
+      m_upperBoundLabel->setGeometry( QRect( 390, 35, 75, 25 ) );
 
       //
       // Create the widgets modifying the settings of the input channels:
@@ -67,7 +67,7 @@ namespace ad2249a {
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
 
          m_gchannels[ i ] = new ChannelGui( i, this );
-         m_gchannels[ i ]->setGeometry( QRect( 35, 80 + i * 20,
+         m_gchannels[ i ]->setGeometry( QRect( 35, 60 + i * 22,
                                                ChannelGui::WIDTH,
                                                ChannelGui::HEIGHT ) );
          connect( m_gchannels[ i ], SIGNAL( enableChanged( int, bool ) ),
@@ -88,7 +88,7 @@ namespace ad2249a {
       // Create the widget modifying the LAM generation setting:
       //
       m_generateLamEdit = new QCheckBox( tr( "Generate LAM" ), this );
-      m_generateLamEdit->setGeometry( QRect( 35, 320, 120, 25 ) );
+      m_generateLamEdit->setGeometry( QRect( 35, 330, 120, 25 ) );
       connect( m_generateLamEdit, SIGNAL( toggled( bool ) ),
                this, SLOT( generateLamChangedSlot( bool ) ) );
 
