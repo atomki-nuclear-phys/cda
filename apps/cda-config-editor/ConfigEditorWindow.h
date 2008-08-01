@@ -14,6 +14,13 @@
 #   include "msg/Logger.h"
 #endif
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdagui/network/NetworkEditor.h"
+#else
+#   include "network/NetworkEditor.h"
+#endif
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QListWidget )
 QT_FORWARD_DECLARE_CLASS( QListWidgetItem )
@@ -48,8 +55,6 @@ class ConfigEditorWindow : public QMainWindow {
 public:
    /// Constructor
    ConfigEditorWindow();
-   /// Destructor
-   ~ConfigEditorWindow();
 
 private slots:
    /// Slot handling configuration clearing
@@ -67,7 +72,7 @@ private slots:
    void aboutCDASlot();
    /// Slot showing a window about this application
    void aboutConfigEditorSlot();
-
+   void setupSelectActivated( QListWidgetItem * item );
 private:
    /// Function creating the application menus
    void createMenus();
@@ -87,9 +92,12 @@ private:
    /// Icon for the CAMAC crate settings
    QListWidgetItem* m_deviceSetup;
 
+   /// Icon for the Network settings
+   QListWidgetItem* m_networkSetup;
+
    /// Widget to modify the CAMAC crate settings
    dev::Editor*     m_devEdit;
-
+	net::NetworkEditor *m_netEdit;
    /// Name of the currently "opened" file
    QString          m_currFileName;
    /// Message logging object

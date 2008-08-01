@@ -2,6 +2,7 @@
 <qresource prefix="/img">
    <file alias="logo.png">../../images/logo.png</file>
    <file alias="crate-settings.png">../../images/crate-settings.png</file>
+   <file alias="network.png">../../images/network.png</file>
    <file alias="filenew.png">../../images/filenew.png</file>
    <file alias="fileopen.png">../../images/fileopen.png</file>
    <file alias="filesave.png">../../images/filesave.png</file>

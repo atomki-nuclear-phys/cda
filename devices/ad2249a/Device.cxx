@@ -49,15 +49,14 @@ namespace ad2249a {
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_slot;
       input >> m_generateLam;
-      quint32 number_of_channels;
-      input >> number_of_channels;
+      input >> m_number_of_channels;
 
       m_logger << msg::VERBOSE << " - Slot        : " << m_slot << std::endl
                << " - GenerateLAM : " << m_generateLam << std::endl
-               << " - Subaddresses: " << number_of_channels
+               << " - Subaddresses: " << m_number_of_channels
                << msg::endmsg;
 
-      for( quint32 i = 0; i < number_of_channels; ++i ) {
+      for( qint32 i = 0; i < m_number_of_channels; ++i ) {
          ChannelConfig* channel = new ChannelConfig();
          if( ! channel->readConfig( dev ) ) {
             m_logger << msg::ERROR << "The configuration of a channel couldn't be "
@@ -95,13 +94,12 @@ namespace ad2249a {
       output << m_generateLam;
 
       // Count the number of configured channels:
-      quint32 number_of_channels = 0;
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ] ) ++number_of_channels;
+         if( m_channels[ i ] ) ++m_number_of_channels;
       }
 
       // Write the number of channels to follow:
-      output << number_of_channels;
+      output << m_number_of_channels;
 
       // Write the channel configurations:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
@@ -152,6 +150,7 @@ namespace ad2249a {
       m_logger << msg::VERBOSE << " - Slot       : " << m_slot << std::endl
                << " - GenerateLAM: " << m_generateLam << msg::endmsg;
 
+	m_number_of_channels=0;	
       for( int i = 0; i < node.childNodes().size(); ++i ) {
 
          // Only process "Channel" type child-nodes:
@@ -172,7 +171,9 @@ namespace ad2249a {
                m_logger << msg::WARNING << "Redefining channel number: "
                         << channel->getSubaddress() << msg::endmsg;
                delete m_channels[ channel->getSubaddress() ];
-            }
+            } else {
+	     m_number_of_channels++;
+	    }
             m_channels[ channel->getSubaddress() ] = channel;
          } else {
             m_logger << msg::ERROR << "There was a problem reading the configuration "

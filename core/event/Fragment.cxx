@@ -10,8 +10,15 @@ namespace ev {
 
    }
 
+
    Fragment::~Fragment() {
 
+   }
+
+   Fragment::Fragment(int number_of_channels)
+      : m_crateNumber( 0 ), m_moduleNumber( -1 ), m_dataWords() {
+   
+	m_dataWords.reserve(number_of_channels);
    }
 
    int Fragment::getCrateNumber() const {

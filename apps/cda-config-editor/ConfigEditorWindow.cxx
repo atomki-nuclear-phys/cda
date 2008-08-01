@@ -75,29 +75,43 @@ ConfigEditorWindow::ConfigEditorWindow()
    m_deviceSetup->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
    m_deviceSetup->setTextAlignment( Qt::AlignHCenter | Qt::AlignBottom );
 
+//
+   // Create the icon for the Network configuration:
+   //
+   m_networkSetup = new QListWidgetItem( QIcon( ":/img/network.png" ),
+                                        tr( "network setup" ), m_setupSelect );
+   m_networkSetup->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+   m_networkSetup->setTextAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+
    //
    // Create the CAMAC crate editor:
    //
    m_devEdit = new dev::Editor( m_centralWidget );
    m_devEdit->setGeometry( QRect( 115, 10, 520, 640 ) );
 
+
+   m_netEdit = new net::NetworkEditor( m_centralWidget );
+   m_netEdit->setGeometry( QRect( 115, 10, 520, 640 ) );
+   m_netEdit->hide();
+	m_netEdit->addRow("localhost",true,true,true,true);
    //
    // Create the application menus:
    //
    createMenus();
+   connect(m_setupSelect,SIGNAL (itemActivated (QListWidgetItem *)),this,SLOT (setupSelectActivated( QListWidgetItem *)));
 
 }
-
-/**
- * The destructor deletes all the objects created in the constructor.
- */
-ConfigEditorWindow::~ConfigEditorWindow() {
-
-   delete m_devEdit;
-   delete m_deviceSetup;
-   delete m_setupSelect;
-   delete m_centralWidget;
-
+void ConfigEditorWindow::setupSelectActivated( QListWidgetItem * item )
+{
+	if (m_deviceSetup==item)
+	{
+			m_devEdit->show();
+			m_netEdit->hide();
+	} else if  (m_networkSetup==item)
+	{
+			m_devEdit->hide();
+			m_netEdit->show();
+	}
 }
 
 void ConfigEditorWindow::newConfigSlot() {
@@ -313,14 +327,56 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    //
    // Let the appropriate object read the configuration:
    //
-   if( ! m_devEdit->readConfig( doc.documentElement() ) ) {
+   QDomElement work,root=doc.documentElement();
+   QDomNodeList nl;
+   nl=root.elementsByTagName("Camac");
+   if (nl.count()!=1)
+   {
+      m_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Camac tag."
+               << msg::endmsg;
+	       goto fail_read_dialog;
+   }
+   work=nl.item(0).toElement();
+   if (!work.isElement())
+   {
+      m_logger << msg::ERROR << "Failed to read configuration file!: Camac tag, is not an Elment"
+               << msg::endmsg;
+	       goto fail_read_dialog;
+   }
+   ////
+   if( ! m_devEdit->readConfig( work ) ) { 
       m_logger << msg::ERROR << "Failed to read configuration file!"
                << msg::endmsg;
+fail_read_dialog:	       
       QMessageBox::critical( this, tr( "Configuration reading error" ),
                              tr( "The configuration could not be read. See "
                                  "the application messages for more information" ) );
       return;
-   } else {
+   } 
+
+   nl=root.elementsByTagName("Network");
+
+   if (nl.count()!=1)
+   {
+      m_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Network tag."
+               << msg::endmsg;
+	       goto fail_read_dialog;
+   }
+   work=nl.item(0).toElement();
+   if (!work.isElement())
+   {
+      m_logger << msg::ERROR << "Failed to read configuration file!: Network tag, is not an Elment"
+               << msg::endmsg;
+	       goto fail_read_dialog;
+   }
+   ////
+   if ( ! m_netEdit->readConfig( work ) ) { 
+
+      m_logger << msg::ERROR << "Failed to read configuration file!: while reading network part"
+               << msg::endmsg;
+   	goto fail_read_dialog;	
+   }
+   else {
       m_logger << msg::DEBUG << "Configuration successfully read from: "
                << filename << msg::endmsg;
    }
@@ -378,6 +434,7 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
 
 }
 
+/* Warning looks like is called twice instead one, but why */
 void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
 
    //
@@ -392,7 +449,9 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    // Write the configuration to this document:
    //
    QDomElement elem = doc.documentElement();
-   if( ! m_devEdit->writeConfig( elem ) ) {
+   QDomElement elem_work = doc.createElement("Camac") ;
+   elem.appendChild(elem_work);
+   if( ! m_devEdit->writeConfig( elem_work ) ) {
       m_logger << msg::ERROR << "Some error happened while creating the "
                << "XML configuration" << msg::endmsg;
       QMessageBox::critical( this, tr( "Configuration writing error" ),
@@ -403,6 +462,11 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
       m_logger << msg::VERBOSE << "Configuration translated to XML format"
                << msg::endmsg;
    }
+
+	elem_work = doc.createElement("Network") ;
+	elem.appendChild(elem_work);
+	m_netEdit->writeConfig (elem_work);
+
 
    //
    // Write the document to a file:

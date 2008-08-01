@@ -40,6 +40,7 @@ namespace ev {
    public:
       /// Defailt constructor
       Fragment();
+      Fragment(int);
       /// Destructor
       ~Fragment();
 

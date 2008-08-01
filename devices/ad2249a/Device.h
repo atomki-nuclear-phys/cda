@@ -64,6 +64,7 @@ namespace ad2249a {
       bool           m_generateLam; ///< Generate LAM signal at readout
       /// Configuration of the input channels of the device
       ChannelConfig* m_channels[ NUMBER_OF_SUBADDRESSES ];
+      mutable qint32  m_number_of_channels;
 
    private:
       mutable msg::Logger m_logger; ///< Message logger object
