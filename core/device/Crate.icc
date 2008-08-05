@@ -154,7 +154,7 @@ namespace dev {
    }
 
    template< class Device >
-   bool Crate< Device >::readConfig( const QDomNode& node ) {
+   bool Crate< Device >::readConfig( const QDomElement& node ) {
 
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
@@ -182,7 +182,7 @@ namespace dev {
 
             Factory* factory = m_loader->getFactory( type );
             Device* device = ( factory->*m_factoryFncn )();
-            if( ! device->readConfig( node.childNodes().at( i ) ) ) {
+            if( ! device->readConfig( node.childNodes().at( i ).toElement() ) ) {
                m_logger << msg::ERROR << "There was a problem reading the "
                         << "configuration of one of the devices!"
                         << msg::endmsg;
@@ -224,7 +224,7 @@ namespace dev {
    }
 
    template< class Device >
-   bool Crate< Device >::writeConfig( QDomNode& node ) const {
+   bool Crate< Device >::writeConfig( QDomElement& node ) const {
 
       m_logger << msg::VERBOSE << "Writing configuration to XML output"
                << msg::endmsg;

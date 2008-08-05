@@ -62,7 +62,7 @@ namespace net
 		workItem->setData(Qt::EditRole,glomem);
 		m_hosts->setItem(row,4, workItem );
 	}
-	bool NetworkEditor::writeConfig (QDomElement &elem)
+	bool NetworkEditor::writeConfig (QDomElement &elem) const
 	{
 		QDomDocument doc=elem.ownerDocument(); 
 		QDomElement work;
@@ -78,7 +78,7 @@ namespace net
 		}
 		return true;
 	}
-	bool NetworkEditor::readConfig (QDomElement &elem)
+	bool NetworkEditor::readConfig (const QDomElement &elem)
 	{
 		m_hosts->setRowCount(0)	; //clear,no rollback
 		QDomNodeList nl= elem.childNodes ();
@@ -89,7 +89,7 @@ namespace net
 			if (!work.isElement())
 			{
 				//add log msg, if you want
-				return false;
+				continue;
 			}
 			// add tag name check, if you want
 			addRow(
@@ -102,7 +102,7 @@ namespace net
 		}
 		return true;
 	}
-	bool NetworkEditor::writeConfig (QIODevice *dev)
+	bool NetworkEditor::writeConfig (QIODevice *dev) const
 	{
 
 		return false;
@@ -111,6 +111,11 @@ namespace net
 	{
 
 		return false;
+	}
+	void NetworkEditor::clear()
+	{
+		m_hosts->setRowCount(0)	; 
+		addRow("localhost",true,true,true,true);
 	}
 
 }

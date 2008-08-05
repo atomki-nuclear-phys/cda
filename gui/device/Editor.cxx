@@ -94,7 +94,7 @@ namespace dev {
     * The configuration reading is simply forwarded to the CrateWidget
     * object.
     */
-   bool Editor::readConfig( const QDomNode& node ) {
+   bool Editor::readConfig( const QDomElement& node ) {
 
       return m_crateView->readConfig( node );
 
@@ -104,7 +104,7 @@ namespace dev {
     * The configuration writing is simply forwarded to the CrateWidget
     * object.
     */
-   bool Editor::writeConfig( QDomNode& node ) const {
+   bool Editor::writeConfig( QDomElement& node ) const {
 
       return m_crateView->writeConfig( node );
 

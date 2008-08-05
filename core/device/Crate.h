@@ -62,9 +62,9 @@ namespace dev {
       virtual bool writeConfig( QIODevice* dev ) const;
 
       /// Read the configuration of the crate from an XML node
-      virtual bool readConfig( const QDomNode& node );
+      virtual bool readConfig( const QDomElement& node );
       /// Write the configuration of the crate to an XML node
-      virtual bool writeConfig( QDomNode& node ) const;
+      virtual bool writeConfig( QDomElement& node ) const;
 
       /// Get the dev::Loader object used by the crate
       Loader* getLoader() const;

@@ -68,7 +68,7 @@ namespace t2228a {
 
    }
 
-   bool ChannelConfig::readConfig( const QDomNode& node ) {
+   bool ChannelConfig::readConfig( const QDomElement& node ) {
 
       m_logger << msg::VERBOSE << "Reading configuration from XML input"
                << msg::endmsg;
@@ -122,7 +122,7 @@ namespace t2228a {
 
    }
 
-   bool ChannelConfig::writeConfig( QDomNode& node ) const {
+   bool ChannelConfig::writeConfig( QDomElement& node ) const {
 
       m_logger << msg::VERBOSE << "Writing configuration to XML output"
                << msg::endmsg;

@@ -130,11 +130,11 @@ namespace ad2249a {
    }
 
    /**
-    * The function calls the ad2249a::Device::readConfig(QDomNode&) function
+    * The function calls the ad2249a::Device::readConfig(QDomElement&) function
     * to read the device configuration and then calls sync() to show the
     * new configuration correctly.
     */
-   bool Gui::readConfig( const QDomNode& node ) {
+   bool Gui::readConfig( const QDomElement& node ) {
 
       if( ! Device::readConfig( node ) ) {
          return false;

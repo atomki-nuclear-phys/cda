@@ -40,9 +40,9 @@ namespace t2228a {
       virtual bool writeConfig( QIODevice* dev ) const;
 
       /// Function reading the configuration in XML format
-      virtual bool readConfig( const QDomNode& node );
+      virtual bool readConfig( const QDomElement& node );
       /// Function writing the configuration in XML format
-      virtual bool writeConfig( QDomNode& node ) const;
+      virtual bool writeConfig( QDomElement& node ) const;
 
       /// Get the subaddress of this channel
       int            getSubaddress() const;

@@ -117,6 +117,8 @@ void ConfigEditorWindow::setupSelectActivated( QListWidgetItem * item )
 void ConfigEditorWindow::newConfigSlot() {
 
    m_devEdit->clear();
+
+   m_netEdit->clear();
    setWindowTitle( tr( "CDA configuration editor - Untitled.cxml" ) );
    return;
 
@@ -281,6 +283,12 @@ void ConfigEditorWindow::createMenus() {
 
 }
 
+inline void  ConfigEditorWindow::readErrorDlg()
+{
+	QMessageBox::critical( this, tr( "Configuration reading error" ),
+                             tr( "The configuration could not be read. See "
+                                 "the application messages for more information" ) );
+}
 void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
 
    //
@@ -334,23 +342,21 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    {
       m_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Camac tag."
                << msg::endmsg;
-	       goto fail_read_dialog;
+	       readErrorDlg();
+	       return;
    }
    work=nl.item(0).toElement();
    if (!work.isElement())
    {
       m_logger << msg::ERROR << "Failed to read configuration file!: Camac tag, is not an Elment"
                << msg::endmsg;
-	       goto fail_read_dialog;
+	       readErrorDlg();
+	       return;
    }
    ////
    if( ! m_devEdit->readConfig( work ) ) { 
       m_logger << msg::ERROR << "Failed to read configuration file!"
                << msg::endmsg;
-fail_read_dialog:	       
-      QMessageBox::critical( this, tr( "Configuration reading error" ),
-                             tr( "The configuration could not be read. See "
-                                 "the application messages for more information" ) );
       return;
    } 
 
@@ -360,21 +366,24 @@ fail_read_dialog:
    {
       m_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Network tag."
                << msg::endmsg;
-	       goto fail_read_dialog;
+	       readErrorDlg();
+	       return;
    }
    work=nl.item(0).toElement();
    if (!work.isElement())
    {
       m_logger << msg::ERROR << "Failed to read configuration file!: Network tag, is not an Elment"
                << msg::endmsg;
-	       goto fail_read_dialog;
+	       readErrorDlg();
+	       return;
    }
    ////
    if ( ! m_netEdit->readConfig( work ) ) { 
 
       m_logger << msg::ERROR << "Failed to read configuration file!: while reading network part"
                << msg::endmsg;
-   	goto fail_read_dialog;	
+	       readErrorDlg();
+	       return;
    }
    else {
       m_logger << msg::DEBUG << "Configuration successfully read from: "

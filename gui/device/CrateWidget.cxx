@@ -115,7 +115,7 @@ namespace dev {
       //
       // Read the configuration using the base class:
       //
-      if( ! Crate< dev::Gui >::readConfig( node ) ) {
+      if( ! Crate< dev::Gui >::readConfig( node.toElement() ) ) {
          return false;
       }
       //

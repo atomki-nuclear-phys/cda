@@ -8,7 +8,7 @@
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QIODevice )
-QT_FORWARD_DECLARE_CLASS( QDomNode )
+QT_FORWARD_DECLARE_CLASS( QDomElement )
 
 /**
  *  @short Namespace holding the device (base) classes
@@ -33,7 +33,7 @@ namespace dev {
    // namespace:
    //
    using QT_PREPEND_NAMESPACE( QIODevice );
-   using QT_PREPEND_NAMESPACE( QDomNode );
+   using QT_PREPEND_NAMESPACE( QDomElement );
 
    /**
     *  @short Base interface for configuring a CAMAC device
@@ -90,24 +90,24 @@ namespace dev {
        * DOM node. It is used when reading the configuration of the
        * device from a text file.
        *
-       * @param node Pointer to the node holding the configuration of
+       * @param node Pointer to the element type node holding the configuration of
        *             this device
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool readConfig( const QDomNode& node ) = 0;
+      virtual bool readConfig( const QDomElement& node ) = 0;
       /// Function writing the configuration in XML format
       /**
        * This function can be used to write the configuration of the device
        * to an empty XML DOM node. It is used when writing the configuration
        * of the device to a text file.
        *
-       * @param node Pointer to an empty node where the configuration is
+       * @param node Pointer to an empty element type node where the configuration is
        *             to be written
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool writeConfig( QDomNode& node ) const = 0;
+      virtual bool writeConfig( QDomElement& node ) const = 0;
 
    }; // class Config
 

@@ -118,7 +118,7 @@ namespace t2228a {
 
    }
 
-   bool Device::readConfig( const QDomNode& node ) {
+   bool Device::readConfig( const QDomElement& node ) {
 
       m_logger << msg::VERBOSE << "Reading configuration from XML input"
                << msg::endmsg;
@@ -160,7 +160,7 @@ namespace t2228a {
          }
 
          ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( node.childNodes().at( i ) ) ) {
+         if( ! channel->readConfig( node.childNodes().at( i ).toElement() ) ) {
             m_logger << msg::ERROR << "The configuration of a channel couldn't be "
                      << "read!" << msg::endmsg;
             delete channel;
@@ -185,7 +185,7 @@ namespace t2228a {
 
    }
 
-   bool Device::writeConfig( QDomNode& node ) const {
+   bool Device::writeConfig( QDomElement& node ) const {
 
       m_logger << msg::VERBOSE << "Writing configuration to XML output"
                << msg::endmsg;

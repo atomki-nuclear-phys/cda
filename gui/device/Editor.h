@@ -5,7 +5,6 @@
 
 // Qt include(s):
 #include <QtGui/QWidget>
-
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Config.h"
@@ -54,9 +53,9 @@ namespace dev {
       /// Function writing the configuration in binary format
       virtual bool writeConfig( QIODevice* dev ) const;
       /// Function reading the configuration in XML format
-      virtual bool readConfig( const QDomNode& node );
+      virtual bool readConfig( const QDomElement& node );
       /// Function writing the configuration in XML format
-      virtual bool writeConfig( QDomNode& node ) const;
+      virtual bool writeConfig( QDomElement& node ) const;
 
       /// Clear the configuration
       void clear();

@@ -57,7 +57,7 @@ namespace t2228a {
       /// Read the device configuration from a binary file
       virtual bool readConfig( QIODevice* dev );
       /// Read the device configuration from an XML file
-      virtual bool readConfig( const QDomNode& node );
+      virtual bool readConfig( const QDomElement& node );
 
       /// Draw a graphical representation of the module
       virtual void drawModule( QPainter& painter ) const;

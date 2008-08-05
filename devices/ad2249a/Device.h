@@ -41,9 +41,9 @@ namespace ad2249a {
       virtual bool writeConfig( QIODevice* dev ) const;
 
       /// Function reading the configuration in XML format
-      virtual bool readConfig( const QDomNode& node );
+      virtual bool readConfig( const QDomElement& node );
       /// Function writing the configuration in XML format
-      virtual bool writeConfig( QDomNode& node ) const;
+      virtual bool writeConfig( QDomElement& node ) const;
 
       /// The type of the child class
       virtual QString type() const { return "AD2249A"; }
