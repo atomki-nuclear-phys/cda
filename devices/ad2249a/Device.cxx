@@ -116,20 +116,19 @@ namespace ad2249a {
 
    }
 
-   bool Device::readConfig( const QDomElement& node ) {
+   bool Device::readConfig( const QDomElement& element ) {
 
       m_logger << msg::VERBOSE << "Reading configuration from XML input"
                << msg::endmsg;
 
       clear();
 
-      // The node has to be an element:
-      if( ! node.isElement() ) {
+      // The element has to be an element:
+      if( ! element.isElement() ) {
          m_logger << msg::ERROR << "Node received is not a DomElement"
                   << msg::endmsg;
          return false;
       }
-      const QDomElement element = node.toElement();
 
       bool ok;
 
@@ -151,15 +150,15 @@ namespace ad2249a {
                << " - GenerateLAM: " << m_generateLam << msg::endmsg;
 
 	m_number_of_channels=0;	
-      for( int i = 0; i < node.childNodes().size(); ++i ) {
+      for( int i = 0; i < element.childNodes().size(); ++i ) {
 
          // Only process "Channel" type child-nodes:
-         if( node.childNodes().at( i ).nodeName() != "Channel" ) {
+         if( element.childNodes().at( i ).nodeName() != "Channel" ) {
             continue;
          }
 
          ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( node.childNodes().at( i ).toElement() ) ) {
+         if( ! channel->readConfig( element.childNodes().at( i ).toElement() ) ) {
             m_logger << msg::ERROR << "The configuration of a channel couldn't be "
                      << "read!" << msg::endmsg;
             delete channel;
@@ -186,18 +185,17 @@ namespace ad2249a {
 
    }
 
-   bool Device::writeConfig( QDomElement& node ) const {
+   bool Device::writeConfig( QDomElement& element ) const {
 
       m_logger << msg::VERBOSE << "Writing configuration to XML output"
                << msg::endmsg;
 
-      // The node has to be an element:
-      if( ! node.isElement() ) {
+      // The element has to be an element:
+      if( ! element.isElement() ) {
          m_logger << msg::ERROR << "Node received is not a DomElement"
                   << msg::endmsg;
          return false;
       }
-      QDomElement element = node.toElement();
 
       element.setAttribute( "Slot", m_slot );
       element.setAttribute( "GenerateLAM", m_generateLam );
@@ -209,13 +207,13 @@ namespace ad2249a {
          if( m_channels[ i ] ) {
 
             QDomElement ch_element =
-               node.ownerDocument().createElement( "Channel" );
+               element.ownerDocument().createElement( "Channel" );
             if( ! m_channels[ i ]->writeConfig( ch_element ) ) {
                m_logger << msg::ERROR << "A problem happened while writing out a "
                         << "channel configuration" << msg::endmsg;
                return false;
             }
-            node.appendChild( ch_element );
+            element.appendChild( ch_element );
 
          }
       }

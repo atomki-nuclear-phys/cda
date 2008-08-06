@@ -68,20 +68,19 @@ namespace t2228a {
 
    }
 
-   bool ChannelConfig::readConfig( const QDomElement& node ) {
+   bool ChannelConfig::readConfig( const QDomElement& element ) {
 
       m_logger << msg::VERBOSE << "Reading configuration from XML input"
                << msg::endmsg;
 
       clear();
 
-      // The node has to be an element:
-      if( ! node.isElement() ) {
+      // The element has to be an element:
+      if( ! element.isElement() ) {
          m_logger << msg::ERROR << "Node received is not a DomElement"
                   << msg::endmsg;
          return false;
       }
-      const QDomElement element = node.toElement();
 
       bool ok;
 
@@ -122,18 +121,17 @@ namespace t2228a {
 
    }
 
-   bool ChannelConfig::writeConfig( QDomElement& node ) const {
+   bool ChannelConfig::writeConfig( QDomElement& element ) const {
 
       m_logger << msg::VERBOSE << "Writing configuration to XML output"
                << msg::endmsg;
 
-      // The node has to be an element:
-      if( ! node.isElement() ) {
+      // The element has to be an element:
+      if( ! element.isElement() ) {
          m_logger << msg::ERROR << "Node received is not a DomElement"
                   << msg::endmsg;
          return false;
       }
-      QDomElement element = node.toElement();
 
       element.setAttribute( "Subaddress", m_subaddress );
       element.setAttribute( "NumberOfChannels", m_numberOfChannels );
