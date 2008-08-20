@@ -14,37 +14,53 @@ namespace ev {
     * either.
     */
    Sender::Sender()
-      : m_addresses(), m_logger( "ev::Sender" ) {
-
+      :  m_logger( "ev::Sender" ) {
       m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
 
    }
 
    /**
-    * The destructor doesn't have to do anything.
+    * The destructor have to closes the connections
     */
    Sender::~Sender() {
+      for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
+           socket != m_sockets.end(); ++socket ) 
+	   {
+	   	(*socket)->disconnectFromHost();
+	 	(*socket)->waitForDisconnected();
+		delete (*socket);
+	   }
 
       m_logger << msg::VERBOSE << tr( "Object deleted" ) << msg::endmsg;
 
-   }
-
-   void Sender::addAddress( const Address& address ) {
-
-      m_addresses.push_back( address );
-      return;
 
    }
 
-   const std::vector< Address >& Sender::getAddresses() const {
-
-      return m_addresses;
+   bool Sender::addSocket( const Address& address ) {
+	bool status=true;
+	QTcpSocket *socket= new QTcpSocket(); //die at vectors die
+        socket->connectToHost( address.getHost(), address.getPort(),
+                               QIODevice::WriteOnly );
+	 if( ! socket->waitForConnected( 5000 ) ) {
+            printError( *socket );
+            status = false;
+         } else
+         if( ! socket->open( QIODevice::WriteOnly ) ) {
+            printError( *socket );
+            status = false;
+         }
+	if (status)
+	{
+      		m_sockets.push_front( socket );//copy
+	}
+      return status;
 
    }
+
 
    /**
     * This is the main function of this class. It loops over all the
-    * network addresses that were specified to it, and tries to send
+    * network sockets that were specified to it, and tries to send
     * the specified event to all the destinations.
     *
     * @param event The event that has to be sent
@@ -58,43 +74,32 @@ namespace ev {
       //
       // Loop over all the specified addresses:
       //
-      for( std::vector< Address >::const_iterator address = m_addresses.begin();
-           address != m_addresses.end(); ++address ) {
+      for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
+           socket != m_sockets.end(); ++socket ) {
 
          //
          // Open a connection to the event server:
          //
-         QTcpSocket socket;
-         socket.connectToHost( address->getHost(), address->getPort(),
-                               QIODevice::WriteOnly );
-         if( ! socket.waitForConnected( 1000 ) ) {
-            printError( *address );
-            status = false;
-            continue;
-         }
-         if( ! socket.open( QIODevice::WriteOnly ) ) {
-            printError( *address );
-            status = false;
-            continue;
-         }
+//         socket->connectToHost( address->getHost(), address->getPort(),
+//                               QIODevice::WriteOnly );
 
          //
          // Send the event:
          //
-         BinaryStream out( &socket );
+         BinaryStream out( *socket );
          out << event;
 
          //
          // A little debugging message:
          //
-         m_logger << msg::VERBOSE << "Bytes to write: " << socket.bytesToWrite()
+         m_logger << msg::VERBOSE << "Bytes to write: " << (*socket)->bytesToWrite()
                   << msg::endmsg;
 
          //
          // Close the connection:
          //
-         socket.disconnectFromHost();
-         socket.waitForDisconnected();
+  //      socket.disconnectFromHost();
+  //      socket.waitForDisconnected();
 
       }
 
@@ -108,12 +113,12 @@ namespace ev {
     *
     * @param address The address that couldn't be reached
     */
-   void Sender::printError( const Address& address ) const {
+   void Sender::printError( const QTcpSocket& socket ) const {
 
       m_logger << msg::ERROR
                << tr( "An event could not be sent to address \"%1\", "
-                      "port \"%2\"" ).arg( address.getHost().toString() )
-         .arg( address.getPort() ) << msg::endmsg;
+                      "port \"%2\"" ).arg( socket.peerAddress().toString() 
+         .arg( socket.peerPort() ))<< msg::endmsg;
 
       return;
 

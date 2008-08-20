@@ -4,7 +4,7 @@
 #define CDA_CORE_EVENT_SENDER_H
 
 // STL include(s):
-#include <vector>
+#include <list>
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
@@ -43,18 +43,17 @@ namespace ev {
       ~Sender();
 
       /// Add an address to the "recipient list"
-      void addAddress( const Address& address );
-      /// Get all currently configured receiver addresses
-      const std::vector< Address >& getAddresses() const;
+      void addSocket(QTcpSocket &socket);
+      bool addSocket( const Address& address );
+      bool addSocket( const QHostAddress& address,const quint16 port);  
 
       /// Function for sending a message to the recipients
       bool send( const Event& event ) const;
 
    private:
       /// Internal function for printing error messages
-      void printError( const Address& address ) const;
-
-      std::vector< Address > m_addresses; ///< Event server addresses
+      void printError( const QTcpSocket& socket ) const;
+      std::list< QTcpSocket* > m_sockets;
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Sender

@@ -45,6 +45,37 @@ namespace ev {
 
       // Start a new thread:
       m_address = address;
+      m_pipefd=-1;
+      start();
+
+      return;
+
+   }
+ /**
+    * This function starts the event reading thread. 
+    * The thread reading from a given filedescriptor. 
+    * Note that this function
+    * automatically stops the thread if it is running at calling time.
+    * However it needs to call the QThread::terminate() function for this,
+    * which is considered to be a dangerous function to use. So if possible,
+    * only call this function once for any given object.
+    *
+    * @param pipefd The filedescriptor on the server should read
+    */
+   void EventServer::listen( int pipefd ) {
+
+      // Stop the thread if it is running right now:
+      if( isRunning() ) {
+         m_logger << msg::WARNING
+                  << tr( "Restarting the event reading thread.\n"
+                         "This could be dangerous..." )
+                  << msg::endmsg;
+         quit();
+         wait();
+      }
+
+      // Start a new thread:
+      m_pipefd=pipefd;
       start();
 
       return;
@@ -84,12 +115,14 @@ namespace ev {
     * a QTcpServer and uses it to read events in a never ending loop.
     */
    void EventServer::run() {
-
+	QTcpSocket *readDev;
+	if (m_pipefd==-1)
+	{
       //
       // Start the TCP server:
       //
-      QTcpServer server;
-      if( server.listen( m_address.getHost(), m_address.getPort() ) ) {
+      QTcpServer *server=new QTcpServer(this);
+      if( server->listen( m_address.getHost(), m_address.getPort() ) ) {
          m_logger << msg::VERBOSE
                   << tr( "Server is listening on host \"%1\" and port %2" )
             .arg( m_address.getHost().toString() ).arg( m_address.getPort() )
@@ -102,16 +135,13 @@ namespace ev {
                   << msg::endmsg;
          return;
       }
-
       //
-      // Start a never-ending loop:
+      // Waiting for connection
       //
-      for( ; ; ) {
-
          //
          // Wait indefinitely for an incoming connection:
          //
-         if( server.waitForNewConnection( -1 ) ) {
+         if( server->waitForNewConnection( -1 ) ) {
             m_logger << msg::VERBOSE
                      << tr( "Received new incoming connection" )
                      << msg::endmsg;
@@ -126,8 +156,33 @@ namespace ev {
          // Get the TCP socket and wait until data becomes available
          // on it. (This function actually reads the data...)
          //
-         QTcpSocket* socket = server.nextPendingConnection();
-         if( socket->waitForReadyRead( -1 ) ) {
+         readDev = server->nextPendingConnection();
+	 if (!readDev) {
+	    m_logger << msg::ERROR
+                     << tr( "There was a problem while accepting an "
+                            "incoming connection" ) << msg::endmsg;
+	 }
+
+	} else //useing pipe
+	{
+		readDev=new QTcpSocket(this);
+		if (!readDev->setSocketDescriptor(m_pipefd,QAbstractSocket::ConnectedState,QIODevice::ReadOnly))
+		{
+			
+	    		m_logger << msg::ERROR
+                    	 << tr( "File descriptor is not valid") << msg::endmsg;
+		}
+	}
+      //
+      // Start a never-ending loop:
+      // Use sinals (for ex. SIGINT) to stop it.
+      //
+
+      Event event;
+      BinaryStream stream( readDev );
+      for( ; ; ) {
+
+         if( readDev->waitForReadyRead( -1 ) ) {
             m_logger << msg::VERBOSE
                      << tr( "Data is ready for readout" )
                      << msg::endmsg;
@@ -139,28 +194,24 @@ namespace ev {
             return;
          }
 
+
          //
          // A little debugging message:
          //
          m_logger << msg::VERBOSE << "Bytes available: "
-                  << socket->bytesAvailable() << msg::endmsg;
+                  << readDev->bytesAvailable() << msg::endmsg;
 
          //
          // Read the event from the socket:
          //
-         Event event;
-         BinaryStream stream( socket );
          stream >> event;
 
          //
          // Add the event to the internal buffer:
          //
          m_mutex.lock();
-         m_events.push_back( event );
+         m_events.push_back( event );//copy
          m_mutex.unlock();
-
-         delete socket;
-
       }
 
       return;

@@ -72,16 +72,18 @@ int main( int argc, char* argv[] ) {
                      CmdArg::isREQ );
    CmdArgStr server( 's', "server", "hostname", "Host name of the message server" );
    CmdArgInt port( 'p', "port", "number", "Port number of the message server" );
+   CmdArgInt fifofd( 'f', "fifofd", "number", "Use this file descriptor(fifo) insted of tcp listen" );
    CmdArgStr output( 'o', "output", "filename", "Name of HBOOK file",
                      CmdArg::isREQ );
 
-   CmdLine cmd( *argv, &verbosity, &config, &server, &port, &output, NULL );
+   CmdLine cmd( *argv, &verbosity, &config, &server, &port, &fifofd, &output, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
    verbosity = 3;
    server = "127.0.0.1";
    port = 49700;
+   fifofd=-1;
    cmd.parse( arg_iter );
 
    //
