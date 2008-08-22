@@ -8,7 +8,7 @@
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
-
+#include <QTcpSocket>
 // CDA include(s):
 #include "../common/Address.h"
 #include "../msg/Logger.h"

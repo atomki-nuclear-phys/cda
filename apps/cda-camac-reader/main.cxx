@@ -193,8 +193,8 @@ int main( int argc, char* argv[] ) {
    // Open connections to all the event recepients:
    //
    ev::Sender sender;
-   sender.addAddress( Address( "127.0.0.1", 45000 ) );
-   sender.addAddress( Address( "127.0.0.1", 45100 ) );
+   sender.addSocket( Address( "127.0.0.1", 45000 ) );
+   sender.addSocket( Address( "127.0.0.1", 45100 ) );
 
    //
    // Connect the interrupt signal to the shutDown function:
