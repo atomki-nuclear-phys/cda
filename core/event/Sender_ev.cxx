@@ -38,7 +38,10 @@ namespace ev {
 
    bool Sender::addSocket( const Address& address ) {
 	bool status=true;
-	QTcpSocket *socket= new QTcpSocket(); //die at vectors die
+	QTcpSocket *socket= new QTcpSocket(); //die at senders die
+
+         m_logger << msg::INFO << tr ("Connecting to %1:%2").arg(address.getHost().toString()).arg(address.getPort())
+                  << msg::endmsg;
         socket->connectToHost( address.getHost(), address.getPort(),
                                QIODevice::WriteOnly );
 	 if( ! socket->waitForConnected( 5000 ) ) {
@@ -52,6 +55,12 @@ namespace ev {
 	if (status)
 	{
       		m_sockets.push_front( socket );//copy
+         m_logger << msg::INFO << tr ("Connect to %1:%2 OK").arg(address.getHost().toString()).arg(address.getPort())
+                  << msg::endmsg;
+	} else
+	{
+         m_logger << msg::ERROR << tr ("Connect to %1:%2 Failed").arg(address.getHost().toString()).arg(address.getPort())
+                  << msg::endmsg;
 	}
       return status;
 
@@ -117,8 +126,8 @@ namespace ev {
 
       m_logger << msg::ERROR
                << tr( "An event could not be sent to address \"%1\", "
-                      "port \"%2\"" ).arg( socket.peerAddress().toString() 
-         .arg( socket.peerPort() ))<< msg::endmsg;
+                      "port \"%2\"" ).arg( socket.peerAddress().toString()).arg(
+          		socket.peerPort() )<< msg::endmsg;
 
       return;
 

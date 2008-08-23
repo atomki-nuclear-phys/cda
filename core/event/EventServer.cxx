@@ -115,22 +115,22 @@ namespace ev {
     * a QTcpServer and uses it to read events in a never ending loop.
     */
    void EventServer::run() {
-	QTcpSocket *readDev;
+	QTcpSocket *readDev=NULL; //NEED FREE
 	if (m_pipefd==-1)
 	{
       //
       // Start the TCP server:
       //
-      QTcpServer *server=new QTcpServer(this);
-      if( server->listen( m_address.getHost(), m_address.getPort() ) ) {
+      QTcpServer server;
+      if( server.listen( m_address.getHost(), m_address.getPort() ) ) {
          m_logger << msg::VERBOSE
                   << tr( "Server is listening on host \"%1\" and port %2" )
             .arg( m_address.getHost().toString() ).arg( m_address.getPort() )
                   << msg::endmsg;
       } else {
          m_logger << msg::ERROR
-                  << tr( "Server could not be started on host \"%1\" and "
-                         "port \"%2\"" )
+                  << (tr( "Server could not be started on host \"%1\" and "
+                         "port \"%2\"" ))
             .arg( m_address.getHost().toString() ).arg( m_address.getPort() )
                   << msg::endmsg;
          return;
@@ -141,7 +141,7 @@ namespace ev {
          //
          // Wait indefinitely for an incoming connection:
          //
-         if( server->waitForNewConnection( -1 ) ) {
+         if( server.waitForNewConnection( -1 ) ) {
             m_logger << msg::VERBOSE
                      << tr( "Received new incoming connection" )
                      << msg::endmsg;
@@ -156,12 +156,15 @@ namespace ev {
          // Get the TCP socket and wait until data becomes available
          // on it. (This function actually reads the data...)
          //
-         readDev = server->nextPendingConnection();
+         readDev = server.nextPendingConnection();
 	 if (!readDev) {
 	    m_logger << msg::ERROR
                      << tr( "There was a problem while accepting an "
                             "incoming connection" ) << msg::endmsg;
-	 }
+	 } else
+	{
+		readDev->setParent(NULL);
+	}
 
 	} else //useing pipe
 	{
