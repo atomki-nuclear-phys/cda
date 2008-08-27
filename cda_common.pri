@@ -34,7 +34,7 @@
 # I use for development). This code snippet doesn't allow to
 # compile it on Windows:
 #
-QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline"
+QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline -W -Wall"
 !unix:!mac {
    error(CDA is only supported on Linux and Mac OS X!)
 }
