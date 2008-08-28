@@ -135,9 +135,11 @@ public:
 	};
 	
 	int m_myIndex; /// contains this hosts index in the conf vector
+	int m_readerIndex;
 	NetElements()
 	{
 		m_myIndex=-1;
+		m_readerIndex=-1;
 	}
 	std::vector<NetRecord> conf;
 	//
@@ -146,7 +148,6 @@ public:
 	{
 		QDomNodeList nl= elem.childNodes ();
 		QDomElement work;
-		bool hasReader=false;
 		bool hasNonLoopBack=false;
 		QList<QHostAddress> addr=QNetworkInterface::allAddresses ();
 		int id=0;
@@ -165,12 +166,13 @@ public:
 				if (work.attribute("reader","0")!="0")
 				{
 					serv|=NetRecord::NR_reader;
-					if (hasReader)
+					if (m_readerIndex!=-1)
 					{ 	//unlikely
 						qWarning("Only one reader allowed in config. It is FATAL\n");
 						shutDown(42);
 					}
-					hasReader=true;
+					m_readerIndex=id;
+					
 				}
 				if (work.attribute("hbook","0")!="0")
 					serv|=NetRecord::NR_hbook;
@@ -210,7 +212,7 @@ public:
 
 			id++;
 		}
-		if (!hasReader)
+		if (m_readerIndex==-1)
 		{ 	//unlikely
 			qWarning("No reader Host specifyed, we cant do anything without reader. FATAL \n");
 			shutDown(42);
@@ -230,7 +232,8 @@ public:
 class Process
 {
 	private:
-	static std::map<pid_t,Process*> s_pidMap;
+	typedef std::map<pid_t,Process*> PidMap;
+	static PidMap s_pidMap;
 	static const char * str_verbosity;
 	static const char * str_pipefd;
 	static const char * str_config;
@@ -307,11 +310,27 @@ class Process
 		m_pid=-1;
 		m_pipefd=-1;
 		addKeepOpenfd(fileno(stderr)); //2
+		addKeepOpenfd(fileno(stdout)); //1
 	}
 	~Process()
 	{
 		for (pList::iterator i=m_deleteOnDestroyList.begin();i!=m_deleteOnDestroyList.end();++i)
-			delete (char*)*i;		
+			delete (char*)*i;
+
+		if (m_pid!=-1)
+		{
+			sigset_t allSignal;
+			sigset_t saveSignal;
+			sigfillset(&allSignal);
+			sigprocmask(SIG_SETMASK,&allSignal,&saveSignal);
+			PidMap::iterator i=s_pidMap.find(m_pid);
+			if (i!=s_pidMap.end())
+			{
+				s_pidMap.erase(i);
+			}
+			sigprocmask(SIG_SETMASK,&saveSignal,NULL);
+		}
+
 	}
 
 	inline void addKeepOpenfd(int i)
@@ -368,7 +387,7 @@ class Process
 			sprintf(str_pipefd_value,"%d",m_pipefd);		
 			argv[argc]=str_pipefd_value; //  ++ missing
 		}
-		m_argv=argv;
+		m_argv=(char* const*)argv;
 		start();
 	}
 	int start(const char *file, char * const *argv)
@@ -377,7 +396,23 @@ class Process
 		m_file=file;
 		start();
 	}
-
+	
+	inline int sigSend(int sig)
+	{
+		if (m_running)
+		{
+			return kill(m_pid,sig);
+		}
+		return 1;
+		
+	}
+	static inline  void sigSendAll(int sig)
+	{
+		for (PidMap::iterator i=s_pidMap.begin();i!=s_pidMap.end();i++)
+		{
+			(*i).second->sigSend(sig);
+		}
+	}
 	inline int sigINT() const
 	{		
 		if (m_running)
@@ -386,6 +421,11 @@ class Process
 		}
 		return 1;
 	}
+	static inline void sigINTAll()
+	{
+		sigSendAll(SIGINT);
+	}
+
 	inline int sigKILL() const
 	{
 		if (m_running)
@@ -394,17 +434,30 @@ class Process
 		}
 		return 1;
 	}
+
+	static inline void sigKILLAll() 
+	{
+
+		sigSendAll(SIGKILL);
+	}
 };
 
-std::map<pid_t,Process*> Process::s_pidMap;
+Process::PidMap Process::s_pidMap;
 
 const char * Process::str_verbosity="--verbosity";
-const char * Process::str_pipefd="--pipefd";
+const char * Process::str_pipefd="--fd";
 const char * Process::str_config="--config";
 const char * Process::str_output="--output";
 
 static const char* description =
    "Program starting all necesery application on this host.\n";
+
+void pipeFail() //inline not needed
+{
+	qWarning("Failed to create pipes, reason:%s\n",strerror(errno));
+	shutDown(42);
+}
+int g_verbosity=3;
 
 int main( int argc, char* argv[] ) 
 {
@@ -415,8 +468,7 @@ int main( int argc, char* argv[] )
 	CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
 	CmdArgStr config( 'c', "config", "filename", "Name of an XML config file",
 			CmdArg::isREQ );
-	CmdArgStr output( 'o', "output", "filename", "Name of HBOOK file",
-			CmdArg::isREQ );
+	CmdArgStr output( 'o', "output", "filename", "Name of HBOOK file");
 
 	CmdLine cmd( *argv, &verbosity, &config, &output, NULL );
 	cmd.description( description );
@@ -425,7 +477,7 @@ int main( int argc, char* argv[] )
 	verbosity = 3;
 	cmd.parse( arg_iter );
 
-
+	g_verbosity=verbosity;
 //
 // Open the configuration file:
 //
@@ -459,6 +511,7 @@ int main( int argc, char* argv[] )
 // Connect the interrupt signal to the shutDown and sigChildAction function:
 //
 	signal( SIGINT, shutDown ); //deprecated
+	signal( SIGTERM, shutDown ); //deprecated
 	struct sigaction sigChildStruct;
 	sigChildStruct.sa_handler=NULL;
 	sigChildStruct.sa_sigaction=sigChildAction;
@@ -501,36 +554,93 @@ int main( int argc, char* argv[] )
 //
 //	logger
 //
+	int numProc=0;
 	if (g_NetElements.conf[g_NetElements.m_myIndex].needLogger())
 	{
 		Process *proc = new Process();
 		proc->setVerbosity(verbosity);
 		proc->setConfigFile(config);
 		proc->cdaProcStart("cda-msgserver");
+		numProc++;
 	}
 //
-//	hbook
+// Initcilize pipes if necessery
+//
+// When the reader, glomem-writer^hbook-writer is on the same host  
+// They should use pipe(s), it is faster than tcp.
+// Now when both in same, host reader have to use only one pipe, and the init will distribute the data via pipes 
+// if the one hbook-write glomme-writer thi init will connect to the reader, and distriute
+// the data to writers
+// when one writer running on disferent host than reader's, host use TCP
 //
 
+int readerfd=-1;
+int glomemfd=-1;
+int hbookfd=-1;
+int targets[2]={-1,-1};
+int source=-1;
+int pfd[2];
+if	(g_NetElements.conf[g_NetElements.m_myIndex].needReader())
+{
+	// we have reader
 	if (g_NetElements.conf[g_NetElements.m_myIndex].needHbook())
-	{
-		Process *proc = new Process();
-		proc->setVerbosity(verbosity);
-		proc->setConfigFile(config);
-		proc->setOutputFile(output);
-		proc->cdaProcStart("cda-hbook-writer");
-	}
-//
-//	glomem
-//
-	if (g_NetElements.conf[g_NetElements.m_myIndex].needGlomem())
-	{
-		Process *proc = new Process();
-		proc->setVerbosity(verbosity);
-		proc->setConfigFile(config);
-		proc->cdaProcStart("cda-glomem-writer");
-	}
+	{ //reader + hbook + ?
+		if (g_NetElements.conf[g_NetElements.m_myIndex].needGlomem())
+		{ //reader + hbook + glomem
+			if (pipe(pfd)) pipeFail();
+			source=pfd[0];
+			readerfd=pfd[1];
+			if (pipe(pfd)) pipeFail();
+			targets[0]=pfd[1];
+			hbookfd=pfd[0];
+			if (pipe(pfd)) pipeFail();
+			targets[1]=pfd[1];
+			glomemfd=pfd[0];
 
+			Process *proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->setOutputFile(output);
+			proc->setPipefd(hbookfd);
+			proc->cdaProcStart("cda-hbook-writer");
+			numProc++;
+
+			proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->setPipefd(glomemfd);
+			proc->cdaProcStart("cda-glomem-writer");
+			numProc++;
+
+
+		} else
+		{ //reader + hbook
+			if (pipe(pfd)) pipeFail();
+			hbookfd=pfd[0];
+			readerfd=pfd[1];
+			Process *proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->setOutputFile(output);
+			proc->setPipefd(hbookfd);
+			proc->cdaProcStart("cda-hbook-writer");
+			numProc++;
+		
+		}
+
+	}else
+		if (g_NetElements.conf[g_NetElements.m_myIndex].needGlomem())
+		{  //reader+glomem
+			if (pipe(pfd)) pipeFail();
+			glomemfd=pfd[0];
+			readerfd=pfd[1];
+			Process *proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->setPipefd(glomemfd);
+			proc->cdaProcStart("cda-glomem-writer");
+			numProc++;
+		}
 //
 //	reader
 //
@@ -539,13 +649,85 @@ int main( int argc, char* argv[] )
 		Process *proc = new Process();
 		proc->setVerbosity(verbosity);
 		proc->setConfigFile(config);
+		if (readerfd!=-1)
+		proc->setPipefd(readerfd);
 		proc->cdaProcStart("cda-camac-reader");
+		numProc++;
 	}
+} else
+{
+	if (g_NetElements.conf[g_NetElements.m_myIndex].needHbook()&&g_NetElements.conf[g_NetElements.m_myIndex].needGlomem())
+	{ //no reader hbook+glomem
+			if (pipe(pfd)) pipeFail();
+			targets[0]=pfd[1];
+			glomemfd=pfd[0];
+			if (pipe(pfd)) pipeFail();
+			targets[1]=pfd[1];
+			hbookfd=pfd[0];
 
-	int kuka=0;
-	while (1) 
+/*		socket();
+ *		listen here
+ */
+			Process *proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->setOutputFile(output);
+			proc->setPipefd(hbookfd);
+			proc->cdaProcStart("cda-hbook-writer");
+			numProc++;
+
+			proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->setPipefd(glomemfd);
+			proc->cdaProcStart("cda-glomem-writer");
+			numProc++;
+
+	}
+	else
+	{ // no reader hbook^glomem, normal TCP
+//
+//	hbook
+//
+
+		if (g_NetElements.conf[g_NetElements.m_myIndex].needHbook())
+		{
+			Process *proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->setOutputFile(output);
+			proc->cdaProcStart("cda-hbook-writer");
+			numProc++;
+		}
+//
+//	glomem
+//
+		if (g_NetElements.conf[g_NetElements.m_myIndex].needGlomem())
+		{
+			Process *proc = new Process();
+			proc->setVerbosity(verbosity);
+			proc->setConfigFile(config);
+			proc->cdaProcStart("cda-glomem-writer");
+			numProc++;
+		}	
+	}
+}
+
+
+/*
+ * Place here the distrubuters code
+ *
+ *
+ *
+ */
+
+
+
+	while (numProc) 
 	{
+		int kuka;
 		wait(&kuka);
+		numProc--;
 	}
 	return 0;
 
@@ -559,6 +741,7 @@ void shutDown( int ) {
 
 
 	qWarning("Terminating application...\n");
+	Process::sigINTAll(); //logger will survive
 	exit( 0 );
 
 	return;
@@ -588,7 +771,8 @@ QString siginfo_t2Qstring(const siginfo_t& info)
 }
 void     sigChildAction(int i, siginfo_t *info, void *data)
 {
-	qWarning()<<siginfo_t2Qstring(*info); //debug
+	if (g_verbosity<=0)
+		qWarning()<<siginfo_t2Qstring(*info); //debug
 	Process &proc=*Process::s_pidMap[info->si_pid];
 	proc.m_running=false;
 

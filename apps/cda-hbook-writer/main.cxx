@@ -72,7 +72,7 @@ int main( int argc, char* argv[] ) {
                      CmdArg::isREQ );
    CmdArgStr server( 's', "server", "hostname", "Host name of the message server" );
    CmdArgInt port( 'p', "port", "number", "Port number of the message server" );
-   CmdArgInt fifofd( 'f', "fifofd", "number", "Use this file descriptor(fifo) insted of tcp listen" );
+   CmdArgInt fifofd( 'f', "fd", "number", "Use this file descriptor(fifo) insted of tcp listen" );
    CmdArgStr output( 'o', "output", "filename", "Name of HBOOK file",
                      CmdArg::isREQ );
 

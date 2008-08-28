@@ -73,9 +73,9 @@ int main( int argc, char* argv[] ) {
    CmdArgStr config( 'c', "config", "filename", "Name of an XML config file",
                      CmdArg::isREQ );
    CmdArgStr server( 's', "server", "hostname", "Host name of the message server" );
-   CmdArgInt port( 'p', "port", "number", "Port number of the message server" );
-
-   CmdLine cmd( *argv, &verbosity, &config, &server, &port, NULL );
+   CmdArgInt port( 'p', "port", "number", "Port number of the message server" ); 
+   CmdArgInt pipefd( 'f', "fd", "number", "Use this file descriptor(pipe) insted of tcp connect if possible" );
+   CmdLine cmd( *argv, &verbosity, &config, &server, &port,&pipefd, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
