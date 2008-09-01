@@ -37,6 +37,7 @@
 #   include "cdacore/camac/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/Sender.h"
+#   include "cdacore/net/NetElements.h"
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
@@ -45,6 +46,7 @@
 #   include "camac/Crate.h"
 #   include "event/Event.h"
 #   include "event/Sender.h"
+#   include "net/NetElements.h"
 #endif
 
 // Local include(s):
@@ -52,11 +54,10 @@
 
 // Function forward declaration(s):
 void shutDown( int );
-
 // Global variable(s):
 msg::Logger   g_logger( "cda-camac-reader" );
 camac::Crate* g_crate = 0;
-
+NetElements g_NetElements(shutDown);
 // Description for the executable:
 static const char* description =
    "Program reading events from the CAMAC crate for the CDA\n"
@@ -157,7 +158,42 @@ int main( int argc, char* argv[] ) {
    //
    reader::Crate crate;
    crate.setLoader( &loader );
-   if( ! crate.readConfig( doc.documentElement() ) ) {
+
+   QDomElement work,root=doc.documentElement();
+   QDomNodeList nl;
+   nl=root.elementsByTagName("Network");
+
+   if (nl.count()!=1)
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Network tag."
+               << msg::endmsg;
+	       return 1;
+   }
+   work=nl.item(0).toElement();
+   if (!work.isElement())
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Network tag, is not an Elment"
+               << msg::endmsg;
+	       return 1;
+   }
+   g_NetElements.parseNetwork(work);
+
+   nl=root.elementsByTagName("Camac");
+   if (nl.count()!=1)
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Camac tag."
+               << msg::endmsg;              
+               return 1;
+   }
+   work=nl.item(0).toElement();
+   if (!work.isElement())
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Camac tag, is not an Elment"
+               << msg::endmsg;
+               return 1;
+   }
+   
+   if( ! crate.readConfig( work ) ) {
       g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
                << "See previous messages for more information..." << msg::endmsg;
       return 1;

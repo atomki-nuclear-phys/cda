@@ -31,6 +31,7 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Sender.h"
+#   include "cdacore/NetElements.h"
 #   include "cdacore/msg/Logger.h"
 #   include "cdacore/cmdl/cmdargs.h"
 #   include "cdacore/device/Loader.h"
@@ -38,6 +39,7 @@
 #   include "cdacore/event/EventServer.h"
 #else
 #   include "msg/Sender.h"
+#   include "net/NetElements.h"
 #   include "msg/Logger.h"
 #   include "cmdl/cmdargs.h"
 #   include "device/Loader.h"
@@ -54,7 +56,7 @@ void shutDown( int );
 // Global variable(s):
 msg::Logger   g_logger( "cda-hbook-writer" );
 hbook::Crate* g_crate = 0;
-
+NetElements g_NetElements(shutDown);
 static const char* description =
    "Program writing events which it receives, to a HBOOK format file.\n"
    "The output file contains one ntuple with all the variables defined\n"
@@ -153,13 +155,46 @@ int main( int argc, char* argv[] ) {
       g_logger << msg::FATAL << "There was an error loading the devices"
                << msg::endmsg;
    }
+   QDomElement work,root=doc.documentElement();
+   QDomNodeList nl;
+   nl=root.elementsByTagName("Network");
+
+   if (nl.count()!=1)
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Network tag."
+               << msg::endmsg;
+	       return 1;
+   }
+   work=nl.item(0).toElement();
+   if (!work.isElement())
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Network tag, is not an Elment"
+               << msg::endmsg;
+	       return 1;
+   }
+   g_NetElements.parseNetwork(work);
+
+   nl=root.elementsByTagName("Camac");
+   if (nl.count()!=1)
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Camac tag."
+               << msg::endmsg;              
+               return 1;
+   }
+   work=nl.item(0).toElement();
+   if (!work.isElement())
+   {
+      g_logger << msg::ERROR << "Failed to read configuration file!: Camac tag, is not an Elment"
+               << msg::endmsg;
+               return 1;
+   }
 
    //
    // Initialise a Crate object with this configuration:
    //
    g_crate = new hbook::Crate();
    g_crate->setLoader( &loader );
-   if( ! g_crate->readConfig( doc.documentElement() ) ) {
+   if( ! g_crate->readConfig( work ) ) {
       g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
                << "See previous messages for more information..." << msg::endmsg;
       return 1;

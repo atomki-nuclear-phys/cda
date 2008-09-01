@@ -17,9 +17,9 @@ TARGET   = cdacore
 
 # These are the header and source files:
 HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h \
-          cernlib/*.h common/*.h
+          cernlib/*.h common/*.h net/*.h
 SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx \
-          cmdl/*.cpp cernlib/*.cxx common/*.cxx
+          cmdl/*.cpp cernlib/*.cxx common/*.cxx net/*.cxx
 TRANSLATIONS = cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
