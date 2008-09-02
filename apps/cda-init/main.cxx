@@ -114,6 +114,7 @@ class Process
 						 close(i--);
 					 }
 
+					 sigprocmask(SIG_SETMASK,&saveSignal,NULL);
 					 if (-1==execvp(m_file,m_argv))
 					 {
 						 qWarning("Error occured while executing : %s  errno:%d :%s",m_file, errno, strerror(errno));

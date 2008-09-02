@@ -2,7 +2,7 @@
 
 // Qt include(s):
 #include <QtNetwork/QTcpSocket>
-
+#include <QTime>
 // Local include(s):
 #include "Sender.h"
 #include "BinaryStream.h"
@@ -35,6 +35,19 @@ namespace ev {
 
 
    }
+//
+// return the diference in ms
+// if b is greater we assumes it is mindnight problem, and calculate
+// the return value is always positve (or zero)
+// QTime is not the best for usage like this
+int operator-(const QTime &a,const QTime &b)
+{
+        static const QTime zero; //Default constructor set it to zero   
+        int a_ms=zero.msecsTo(a);
+        int b_ms=zero.msecsTo(b);
+        if (a_ms>=b_ms) return a_ms-b_ms;
+                else return 86400000-b_ms+b_ms;
+}
 
    bool Sender::addSocket( const Address& address ) {
 	bool status=true;
@@ -42,26 +55,39 @@ namespace ev {
 
          m_logger << msg::INFO << tr ("Connecting to %1:%2").arg(address.getHost().toString()).arg(address.getPort())
                   << msg::endmsg;
-        socket->connectToHost( address.getHost(), address.getPort(),
-                               QIODevice::WriteOnly );
-	 if( ! socket->waitForConnected( 5000 ) ) {
-            printError( *socket );
-            status = false;
-         } else
-         if( ! socket->open( QIODevice::WriteOnly ) ) {
-            printError( *socket );
-            status = false;
-         }
-	if (status)
+	QTime begin_time=QTime::currentTime();
+	do
 	{
-      		m_sockets.push_front( socket );//copy
-         m_logger << msg::INFO << tr ("Connect to %1:%2 OK").arg(address.getHost().toString()).arg(address.getPort())
-                  << msg::endmsg;
-	} else
-	{
-         m_logger << msg::ERROR << tr ("Connect to %1:%2 Failed").arg(address.getHost().toString()).arg(address.getPort())
-                  << msg::endmsg;
-	}
+		socket->connectToHost( address.getHost(), address.getPort(),
+				QIODevice::WriteOnly );
+		if( ! socket->waitForConnected( 50000 ) ) {
+			printError( *socket );
+			status = false;
+		} else
+			if( ! socket->open( QIODevice::WriteOnly ) ) {
+				printError( *socket );
+				status = false;
+			}
+		if (status)
+		{
+			m_sockets.push_front( socket );//copy
+			m_logger << msg::INFO << tr ("Connect to %1:%2 OK").arg(address.getHost().toString()).arg(address.getPort())
+				<< msg::endmsg;
+		} else
+		{
+			m_logger << msg::ERROR << tr ("Connect to %1:%2 Failed").arg(address.getHost().toString()).arg(address.getPort());
+				
+			if (QTime::currentTime()-begin_time>30000)
+			{
+				m_logger << ", Give up" << msg::endmsg;
+				return status;
+			}else
+			{
+				
+				m_logger << ", Retrying" << msg::endmsg;
+			}
+		}
+	} while (status);
       return status;
 
    }
@@ -97,7 +123,7 @@ namespace ev {
          //
          BinaryStream out( *socket );
          out << event;
-
+	 (*socket)->flush();
          //
          // A little debugging message:
          //
