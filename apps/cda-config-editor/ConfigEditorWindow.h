@@ -14,13 +14,6 @@
 #   include "msg/Logger.h"
 #endif
 
-// CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdagui/network/NetworkEditor.h"
-#else
-#   include "network/NetworkEditor.h"
-#endif
-
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QListWidget )
 QT_FORWARD_DECLARE_CLASS( QListWidgetItem )
@@ -98,7 +91,6 @@ private:
 
    /// Widget to modify the CAMAC crate settings
    dev::Editor*     m_devEdit;
-	net::NetworkEditor *m_netEdit;
    /// Name of the currently "opened" file
    QString          m_currFileName;
    /// Message logging object

@@ -17,9 +17,9 @@ TARGET   = cdacore
 
 # These are the header and source files:
 HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h \
-          cernlib/*.h common/*.h net/*.h
+          cernlib/*.h common/*.h
 SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx \
-          cmdl/*.cpp cernlib/*.cxx common/*.cxx net/*.cxx
+          cmdl/*.cpp cernlib/*.cxx common/*.cxx
 TRANSLATIONS = cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
@@ -128,23 +128,21 @@ unix:!mac {
    DESTDIR = ../lib
 
 }
-system(gfortran --version){
-	LIBS += -lgfortran
+system(g77 --version){
+	LIBS += -L/usr/lib/gcc/i386-redhat-linux/3.4.6 -lg2c -lgfortran
 } else{
-	!system(g77 --version){
-		warning(Could not determinate which fortran library to use)
+	!system(gfortran --version){
+		warning(Could not determine which fortran library to use)
 	}
-	LIBS += -lg2c
+	LIBS += -lgfortran
 }
 
 exists($$CERNLIB_PATH/lib/libpacklib_noshift.a){
 	LIBS += -lpacklib_noshift
 } else{
 	!exists($$CERNLIB_PATH/lib/libpacklib.a){
-		warning(Could not determinate the packlib library name)
+		warning(Could not determine the packlib library name)
 	}
 	
 	LIBS += -lpacklib
 }
-
-

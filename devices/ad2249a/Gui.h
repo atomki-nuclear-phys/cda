@@ -19,11 +19,21 @@
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QCheckBox )
+QT_FORWARD_DECLARE_CLASS( QScrollArea )
 
 namespace ad2249a {
 
    // Forward declaration(s):
    class ChannelGui;
+
+   //
+   // Make sure that the following Qt classes are available in the
+   // DEV namespace even if Qt has been built in an arbitrary
+   // namespace:
+   //
+   using QT_PREPEND_NAMESPACE( QLabel );
+   using QT_PREPEND_NAMESPACE( QCheckBox );
+   using QT_PREPEND_NAMESPACE( QScrollArea );
 
    /**
     *  @short Graphical repsesentation of the LeCroy 2249A
@@ -80,12 +90,16 @@ namespace ad2249a {
       /// Function "syncing" the configuration
       void sync();
 
+      QScrollArea* m_scrollArea; ///< Object providing the scrolling functions
+      QWidget*     m_scrollWidget; ///< Main widget that is scrolled
+
       QLabel*     m_topLabel; ///< Text label at the top
 
       QLabel*     m_nameLabel; ///< Label above channel names
       QLabel*     m_channelsLabel; ///< Label above histogram channels
       QLabel*     m_lowerBoundLabel; ///< Label above histogram lower bounds
       QLabel*     m_upperBoundLabel; ///< Label above histogram upper bounds
+
       /// The graphical channel representations
       ChannelGui* m_gchannels[ NUMBER_OF_SUBADDRESSES ];
 

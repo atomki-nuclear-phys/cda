@@ -45,37 +45,10 @@ namespace ev {
 
       // Start a new thread:
       m_address = address;
-      m_pipefd=-1;
-      start();
+      m_logger << msg::INFO << tr( "Listening for incoming events on %1:%2" )
+         .arg( m_address.getHost().toString() ).arg( m_address.getPort() )
+               << msg::endmsg;
 
-      return;
-
-   }
- /**
-    * This function starts the event reading thread. 
-    * The thread reading from a given filedescriptor. 
-    * Note that this function
-    * automatically stops the thread if it is running at calling time.
-    * However it needs to call the QThread::terminate() function for this,
-    * which is considered to be a dangerous function to use. So if possible,
-    * only call this function once for any given object.
-    *
-    * @param pipefd The filedescriptor on the server should read
-    */
-   void EventServer::listen( int pipefd ) {
-
-      // Stop the thread if it is running right now:
-      if( isRunning() ) {
-         m_logger << msg::WARNING
-                  << tr( "Restarting the event reading thread.\n"
-                         "This could be dangerous..." )
-                  << msg::endmsg;
-         quit();
-         wait();
-      }
-
-      // Start a new thread:
-      m_pipefd=pipefd;
       start();
 
       return;
@@ -115,9 +88,7 @@ namespace ev {
     * a QTcpServer and uses it to read events in a never ending loop.
     */
    void EventServer::run() {
-	QTcpSocket *readDev=NULL; //NEED FREE
-	if (m_pipefd==-1)
-	{
+
       //
       // Start the TCP server:
       //
@@ -135,9 +106,13 @@ namespace ev {
                   << msg::endmsg;
          return;
       }
+
       //
-      // Waiting for connection
+      // In order to handle broken connections (let's say because the event sender application
+      // is stopped), the connection handling is put into a loop:
       //
+      for( ; ; ) {
+
          //
          // Wait indefinitely for an incoming connection:
          //
@@ -156,66 +131,53 @@ namespace ev {
          // Get the TCP socket and wait until data becomes available
          // on it. (This function actually reads the data...)
          //
-         readDev = server.nextPendingConnection();
-	 if (!readDev) {
-	    m_logger << msg::ERROR
+         QTcpSocket* socket = server.nextPendingConnection();
+         if( ! socket ) {
+            m_logger << msg::ERROR
                      << tr( "There was a problem while accepting an "
                             "incoming connection" ) << msg::endmsg;
-	 } else
-	{
-		readDev->setParent(NULL);
-	}
-
-	} else //useing pipe
-	{
-		readDev=new QTcpSocket(this);
-		if (!readDev->setSocketDescriptor(m_pipefd,QAbstractSocket::ConnectedState,QIODevice::ReadOnly))
-		{
-			
-	    		m_logger << msg::ERROR
-                    	 << tr( "File descriptor is not valid") << msg::endmsg;
-		}
-	}
-      //
-      // Start a never-ending loop:
-      // Use sinals (for ex. SIGINT) to stop it.
-      //
-
-      Event event;
-      BinaryStream stream( readDev );
-      for( ; ; ) {
-
-         if( readDev->waitForReadyRead( -1 ) ) {
-            m_logger << msg::VERBOSE
-                     << tr( "Data is ready for readout" )
-                     << msg::endmsg;
-         } else {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem while waiting for "
-                            "incoming data" )
-                     << msg::endmsg;
             return;
          }
 
+         //
+         // Start a never-ending loop:
+         // Use sinals (for ex. SIGINT) to stop it.
+         //
+         Event event;
+         BinaryStream stream( socket );
+         for( ; ; ) {
+            if( socket->waitForReadyRead( -1 ) ) {
+               m_logger << msg::VERBOSE
+                        << tr( "Data is ready for readout" )
+                        << msg::endmsg;
+            } else {
+               m_logger << msg::INFO
+                        << tr( "Connection to event sender lost." )
+                        << msg::endmsg;
+               break;
+            }
 
-         //
-         // A little debugging message:
-         //
-         m_logger << msg::VERBOSE << "Bytes available: "
-                  << readDev->bytesAvailable() << msg::endmsg;
+            //
+            // A little debugging message:
+            //
+            m_logger << msg::VERBOSE << "Bytes available: "
+                     << socket->bytesAvailable() << msg::endmsg;
 
-         //
-         // Read the event from the socket:
-         //
-         stream >> event;
+            //
+            // Read the event from the socket:
+            //
+            stream >> event;
 
-         //
-         // Add the event to the internal buffer:
-         //
-         m_mutex.lock();
-         m_events.push_back( event );//copy
-         m_mutex.unlock();
+            //
+            // Add the event to the internal buffer:
+            //
+            m_mutex.lock();
+            m_events.push_back( event );//copy
+            m_mutex.unlock();
+         }
+
       }
+
 
       return;
 

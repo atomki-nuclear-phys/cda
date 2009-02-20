@@ -38,9 +38,8 @@ namespace ev {
    class Fragment {
 
    public:
-      /// Defailt constructor
+      /// Default constructor
       Fragment();
-      Fragment(int);
       /// Destructor
       ~Fragment();
 

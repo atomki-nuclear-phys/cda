@@ -63,7 +63,7 @@ namespace ad2249a {
     */
    ev::Fragment Readout::readEvent( camac::Crate& crate ) const {
  	
-      ev::Fragment fragment(m_number_of_channels); 
+      ev::Fragment fragment; 
       fragment.setModuleNumber( m_slot );
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {

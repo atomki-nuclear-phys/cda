@@ -13,7 +13,7 @@
 namespace ad2249a {
 
    const int ChannelGui::WIDTH  = 430;
-   const int ChannelGui::HEIGHT = 22;
+   const int ChannelGui::HEIGHT = 25;
 
    /**
     * The constructor sets up the look of the widget and connects up

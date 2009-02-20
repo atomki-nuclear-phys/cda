@@ -154,7 +154,7 @@ namespace dev {
    }
 
    template< class Device >
-   bool Crate< Device >::readConfig( const QDomElement& node ) {
+   bool Crate< Device >::readConfig( const QDomElement& element ) {
 
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
@@ -164,25 +164,17 @@ namespace dev {
 
       clear();
 
-      // The node has to be an element:
-      if( ! node.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
-      const QDomElement element = node.toElement();
+      for( int i = 0; i < element.childNodes().size(); ++i ) {
 
-      for( int i = 0; i < node.childNodes().size(); ++i ) {
+         if( ! element.childNodes().at( i ).isElement() ) continue;
 
-         if( ! node.childNodes().at( i ).isElement() ) continue;
-
-         QString type = node.childNodes().at( i ).nodeName();
+         QString type = element.childNodes().at( i ).nodeName();
 
          if( m_loader->isLoaded( type ) ) {
 
             Factory* factory = m_loader->getFactory( type );
             Device* device = ( factory->*m_factoryFncn )();
-            if( ! device->readConfig( node.childNodes().at( i ).toElement() ) ) {
+            if( ! device->readConfig( element.childNodes().at( i ).toElement() ) ) {
                m_logger << msg::ERROR << "There was a problem reading the "
                         << "configuration of one of the devices!"
                         << msg::endmsg;
@@ -224,31 +216,23 @@ namespace dev {
    }
 
    template< class Device >
-   bool Crate< Device >::writeConfig( QDomElement& node ) const {
+   bool Crate< Device >::writeConfig( QDomElement& element ) const {
 
       m_logger << msg::VERBOSE << "Writing configuration to XML output"
                << msg::endmsg;
-
-      // The node has to be an element:
-      if( ! node.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
-      QDomElement element = node.toElement();
 
       for( typename std::map< int, Device* >::const_iterator device_it =
               m_devices.begin(); device_it != m_devices.end();
            ++device_it ) {
 
          QDomElement dev_element =
-            node.ownerDocument().createElement( device_it->second->type() );
+            element.ownerDocument().createElement( device_it->second->type() );
          if( ! device_it->second->writeConfig( dev_element ) ) {
             m_logger << msg::ERROR << "There was a problem writing the "
                      << "configuration of a device" << msg::endmsg;
             return false;
          }
-         node.appendChild( dev_element );
+         element.appendChild( dev_element );
 
       }
 

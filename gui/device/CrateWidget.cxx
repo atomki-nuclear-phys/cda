@@ -108,14 +108,14 @@ namespace dev {
     * modules has to be connected to this object, and finally the crate has to
     * be redrawn.
     *
-    * @param node The XML node holding the CAMAC crate configuration
+    * @param element The XML node holding the CAMAC crate configuration
     */
-   bool CrateWidget::readConfig( const QDomNode& node ) {
+   bool CrateWidget::readConfig( const QDomElement& element ) {
 
       //
       // Read the configuration using the base class:
       //
-      if( ! Crate< dev::Gui >::readConfig( node.toElement() ) ) {
+      if( ! Crate< dev::Gui >::readConfig( element ) ) {
          return false;
       }
       //

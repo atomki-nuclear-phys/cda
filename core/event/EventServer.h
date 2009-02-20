@@ -64,7 +64,6 @@ namespace ev {
 
       /// Start listening on the specified address
       void listen( const Address& address );
-      void listen( int fd );
 
       /// Read one event from the server
       EventServer& operator>> ( Event& event );
@@ -76,7 +75,6 @@ namespace ev {
    private:
       QMutex m_mutex; ///< Object to serialise event buffer access
       Address m_address; ///< Address on which the server is listening
-      int m_pipefd; ///< socket which the server will use instead of listening
       std::vector< Event > m_events; ///< Internal event buffer
       mutable msg::Logger m_logger; ///< Message logging object
 

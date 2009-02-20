@@ -8,7 +8,7 @@
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
-#include <QTcpSocket>
+
 // CDA include(s):
 #include "../common/Address.h"
 #include "../msg/Logger.h"
@@ -16,7 +16,17 @@
 // Local include(s):
 #include "Event.h"
 
+// Forward declaration(s):
+QT_FORWARD_DECLARE_CLASS( QTcpSocket )
+
 namespace ev {
+
+   //
+   // Make sure that the following Qt classes are available in the
+   // ev namespace even if Qt has been built in an arbitrary
+   // namespace:
+   //
+   using QT_PREPEND_NAMESPACE( QTcpSocket );
 
    /**
     *  @short Class for sending events over the network
@@ -43,9 +53,7 @@ namespace ev {
       ~Sender();
 
       /// Add an address to the "recipient list"
-      void addSocket(QTcpSocket &socket);
       bool addSocket( const Address& address );
-      bool addSocket( const QHostAddress& address,const quint16 port);  
 
       /// Function for sending a message to the recipients
       bool send( const Event& event ) const;
@@ -53,7 +61,8 @@ namespace ev {
    private:
       /// Internal function for printing error messages
       void printError( const QTcpSocket& socket ) const;
-      std::list< QTcpSocket* > m_sockets;
+
+      std::list< QTcpSocket* > m_sockets; ///< List of sockets to send messages to
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Sender

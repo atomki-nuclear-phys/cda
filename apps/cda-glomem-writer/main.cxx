@@ -36,7 +36,6 @@
 #   include "cdacore/device/Loader.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/EventServer.h"
-#   include "cdacore/net/NetElements.h"
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
@@ -45,7 +44,6 @@
 #   include "fifo/Fifo.h"
 #   include "event/Event.h"
 #   include "event/EventServer.h"
-#   include "net/NetElements.h"
 #endif
 
 // Local include(s):
@@ -56,7 +54,7 @@ void shutDown( int );
 
 // Global variable(s):
 msg::Logger g_logger( "cda-glomem-writer" );
-NetElements g_NetElements(shutDown);
+
 // Description for the executable:
 static const char* description =
    "Program writing events which it receives, to a global memory\n"
@@ -74,15 +72,14 @@ int main( int argc, char* argv[] ) {
    CmdArgStr config( 'c', "config", "filename", "Name of an XML config file",
                      CmdArg::isREQ );
    CmdArgStr server( 's', "server", "hostname", "Host name of the message server" );
-   CmdArgInt port( 'p', "port", "number", "Port number of the message server" );   CmdArgInt pipefd( 'f', "fd", "number", "Use this file descriptor(pipe) insted of tcp listen" );
-   CmdLine cmd( *argv, &verbosity, &config, &server, &port,&pipefd, NULL );
+   CmdArgInt port( 'p', "port", "number", "Port number of the message server" );
+   CmdLine cmd( *argv, &verbosity, &config, &server, &port, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
    verbosity = 3;
    server = "127.0.0.1";
    port = 49700;
-   pipefd=-1;
    cmd.parse( arg_iter );
 
    //
@@ -140,39 +137,7 @@ int main( int argc, char* argv[] ) {
       g_logger << msg::DEBUG << "Successfully parsed: "
                << ( const char* ) config << msg::endmsg;
    }
-   QDomElement work,root=doc.documentElement();
-   QDomNodeList nl;
-   nl=root.elementsByTagName("Network");
-
-   if (nl.count()!=1)
-   {
-      g_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Network tag."
-               << msg::endmsg;
-	       return 1;
-   }
-   work=nl.item(0).toElement();
-   if (!work.isElement())
-   {
-      g_logger << msg::ERROR << "Failed to read configuration file!: Network tag, is not an Elment"
-               << msg::endmsg;
-	       return 1;
-   }
-   g_NetElements.parseNetwork(work);
-
-   nl=root.elementsByTagName("Camac");
-   if (nl.count()!=1)
-   {
-      g_logger << msg::ERROR << "Failed to read configuration file!: Missing or too many Camac tag."
-               << msg::endmsg;              
-               return 1;
-   }
-   work=nl.item(0).toElement();
-   if (!work.isElement())
-   {
-      g_logger << msg::ERROR << "Failed to read configuration file!: Camac tag, is not an Elment"
-               << msg::endmsg;
-               return 1;
-   }
+   QDomElement work = doc.documentElement();
 
    //
    // Try to load all available device plugins:

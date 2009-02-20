@@ -62,7 +62,7 @@ namespace dev {
       /// Extended configuration reading from binary file
       virtual bool readConfig( QIODevice* dev );
       /// Extended configuration reading from XML file
-      virtual bool readConfig( const QDomNode& node );
+      virtual bool readConfig( const QDomElement& element );
 
       /// Set a Loader to be used by the object
       void setLoader( const Loader* loader );
