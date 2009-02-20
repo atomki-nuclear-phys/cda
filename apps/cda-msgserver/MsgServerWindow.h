@@ -19,7 +19,6 @@ QT_FORWARD_DECLARE_CLASS( QCheckBox )
 QT_FORWARD_DECLARE_CLASS( QComboBox )
 namespace msg {
    class Server;
-   //   class TableView;
    class TextView;
 } // namespace msg
 
@@ -74,7 +73,6 @@ private:
    void createDockWidgets();
 
    msg::Server*    m_server; ///< The server listening for incoming messages
-   //   msg::TableView* m_view;   ///< The widget showing the messages
    msg::TextView*  m_view;   ///< The widget showing the messages
 
    QSpinBox*    m_portEdit; ///< TCP port modification widget
@@ -82,11 +80,6 @@ private:
 
    QSpinBox*    m_shownLinesEdit; ///< Maximum line number modification widget
    QDockWidget* m_shownLinesDock; ///< Dock widget for the maximum line modification
-
-   /*
-   QCheckBox*   m_timeOrderMessagesEdit;
-   QDockWidget* m_timeOrderMessagesDock;
-   */
 
    QComboBox*   m_minMsgLevelEdit; ///< Minimum level of shown messages
    QDockWidget* m_minMsgLevelDock; ///< Dock widget for the msg. level modifications
@@ -102,7 +95,6 @@ private:
    QAction* m_showPortDock;       ///< Action handling the port dock visibility
    QAction* m_showShownLinesDock; ///< Action handling the shown lines dock visibility
    QAction* m_showOutputFileDock; ///< Action handling the output file dock visibility
-   //   QAction* m_showOrderingDock;   ///< Action handling the ordering dock visibility
    QAction* m_showMsgLevelDock;   ///< Action handling the msg. level dock visibility
 
    QAction* m_aboutQtAction;        ///< Action showing a window about Qt

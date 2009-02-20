@@ -44,11 +44,10 @@ namespace msg {
       m_edit->setSizePolicy( QSizePolicy::Expanding,
                              QSizePolicy::Expanding );
       m_edit->setReadOnly( true );
+      m_edit->setFontFamily( "courier" );
 #ifdef Q_OS_DARWIN
-      m_edit->setFontFamily( "Courier" );
       //      m_edit->setFontPointSize( 12 );
 #else
-      m_edit->setFontFamily( "courier" );
       m_edit->setFontPointSize( 10 );
 #endif // Q_OS_MAC
       m_edit->setLineWrapMode( QTextEdit::NoWrap );

@@ -264,15 +264,6 @@ void MsgServerWindow::createMenus() {
    connect( m_outputFileDock, SIGNAL( visibilityChanged( bool ) ),
             m_showOutputFileDock, SLOT( setChecked( bool ) ) );
 
-   /*
-   m_showOrderingDock = prefMenu->addAction( "Show ordering setting" );
-   m_showOrderingDock->setCheckable( true );
-   connect( m_showOrderingDock, SIGNAL( toggled( bool ) ),
-            m_timeOrderMessagesDock, SLOT( setVisible( bool ) ) );
-   connect( m_timeOrderMessagesDock, SIGNAL( visibilityChanged( bool ) ),
-            m_showOrderingDock, SLOT( setChecked( bool ) ) );
-   */
-
    /////////////////////////////////////////////////////////////////
    //                                                             //
    //                    Create a "Help" menu                     //
@@ -371,33 +362,11 @@ void MsgServerWindow::createDockWidgets() {
 
    addDockWidget( Qt::TopDockWidgetArea, m_minMsgLevelDock );
 
-   /////////////////////////////////////////////////////////////////
-   //                                                             //
-   //        Create the widgets for the time ordering setting     //
-   //                                                             //
-   /////////////////////////////////////////////////////////////////
-
-   /*
-   m_timeOrderMessagesEdit = new QCheckBox( "Time order messages" );
-   m_timeOrderMessagesEdit->setTristate( false );
-   m_timeOrderMessagesEdit->setChecked( true );
-   connect( m_timeOrderMessagesEdit, SIGNAL( toggled( bool ) ),
-            m_view, SLOT( setSortByTime( bool ) ) );
-
-   m_timeOrderMessagesDock = new QDockWidget( "Time ordering", this );
-   m_timeOrderMessagesDock->setAllowedAreas( Qt::TopDockWidgetArea |
-                                             Qt::BottomDockWidgetArea );
-   m_timeOrderMessagesDock->setWidget( m_timeOrderMessagesEdit );
-
-   addDockWidget( Qt::TopDockWidgetArea, m_timeOrderMessagesDock );
-   */
-
    //
    // Make sure that none of the dock widgets are dwarfed by the others:
    //
    m_portDock->setMinimumWidth( width() / 3 );
    m_shownLinesDock->setMinimumWidth( width() / 3 );
-   //   m_timeOrderMessagesDock->setMinimumWidth( width() / 4 );
    m_minMsgLevelDock->setMinimumWidth( width() / 3 );
 
    /////////////////////////////////////////////////////////////////
