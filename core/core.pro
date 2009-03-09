@@ -16,10 +16,12 @@ VERSION  = 0.0.2
 TARGET   = cdacore
 
 # These are the header and source files:
-HEADERS = fifo/*.h msg/*.h event/*.h device/*.h camac/*.h cmdl/*.h \
-          cernlib/*.h common/*.h
-SOURCES = fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx \
-          cmdl/*.cpp cernlib/*.cxx common/*.cxx
+HEADERS = $$system(ls fifo/*.h) $$system(ls msg/*.h) $$system(ls event/*.h) \
+          $$system(ls device/*.h) $$system(ls device/*.icc) $$system(ls camac/*.h) \
+          $$system(ls cmdl/*.h) $$system(ls cernlib/*.h) $$system(ls common/*.h)
+SOURCES = $$system(ls fifo/*.cxx) $$system(ls msg/*.cxx) $$system(ls event/*.cxx) \
+          $$system(ls device/*.cxx) $$system(ls camac/*.cxx) $$system(ls cmdl/*.cpp) \
+          $$system(ls cernlib/*.cxx) $$system(ls common/*.cxx)
 TRANSLATIONS = cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:

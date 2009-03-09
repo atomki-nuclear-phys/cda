@@ -13,16 +13,16 @@ include(../cda_common.pri)
 # This will be a library with the name "cdagui":
 TEMPLATE = lib
 VERSION  = 0.0.1
-TARGET   = cdagui
+TARGET   = cdadaq
 
 # These are the header and source files:
-HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h)
-SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx)
-TRANSLATIONS = cdagui_hu.ts
+HEADERS = $$system(ls common/*.h) $$system(ls schema/*.h)
+SOURCES = $$system(ls common/*.cxx) $$system(ls schema/*.cxx)
+TRANSLATIONS = cdadaq_hu.ts
 
-# The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
+# The library uses the QtCore library:
 CONFIG += qt
-QT      = core network gui xml
+QT      = core
 
 # The place to put the intermediate build results:
 OBJECTS_DIR = ./.obj
@@ -34,7 +34,7 @@ MOC_DIR     = ./.obj
 #
 mac {
    message(*)
-   message(* Configuring to build the \"cdagui\" framework on Mac OS X)
+   message(* Configuring to build the \"cdadaq\" framework on Mac OS X)
    message(*)
 
    # We create a library bundle and create a file storing the dependencies
@@ -43,15 +43,15 @@ mac {
 
    # The headers are put in the framework in the same way as in the case of
    # the cdacore framework. See core/core.pro for details.
-   MSG_HEADERS.version = Versions
-   MSG_HEADERS.files = $$system(ls msg/*.h)
-   MSG_HEADERS.path = Headers/msg
-   QMAKE_BUNDLE_DATA += MSG_HEADERS
+   COMMON_HEADERS.version = Versions
+   COMMON_HEADERS.files = $$system(ls common/*.h)
+   COMMON_HEADERS.path = Headers/common
+   QMAKE_BUNDLE_DATA += COMMON_HEADERS
 
-   DEVICE_HEADERS.version = Versions
-   DEVICE_HEADERS.files = $$system(ls device/*.h)
-   DEVICE_HEADERS.path = Headers/device
-   QMAKE_BUNDLE_DATA += DEVICE_HEADERS
+   SCHEMA_HEADERS.version = Versions
+   SCHEMA_HEADERS.files = $$system(ls schema/*.h)
+   SCHEMA_HEADERS.path = Headers/schema
+   QMAKE_BUNDLE_DATA += SCHEMA_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =
@@ -64,7 +64,7 @@ mac {
 
    # Here we do the same trick as with cdacore. See core/core.pro for details.
    DESTDIR                     = /
-   QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdagui
+   QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdadaq
 }
 
 #
@@ -73,7 +73,7 @@ mac {
 #
 unix:!mac {
    message(*)
-   message(* Configuring to build the \"cdagui\" shared library on Linux)
+   message(* Configuring to build the \"cdadaq\" shared library on Linux)
    message(*)
 
    # Create a shared library and link it against the cdacore library:

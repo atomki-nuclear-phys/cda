@@ -17,8 +17,9 @@ VERSION  = 0.0.1
 TARGET   = t2228a
 
 # These are the header and source files:
-HEADERS = *.h
-SOURCES = *.cxx
+HEADERS = $$system(ls *.h)
+SOURCES = $$system(ls *.cxx)
+TRANSLATIONS = t2228a_hu.ts
 
 mac {
    message(*)

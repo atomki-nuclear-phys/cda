@@ -12,5 +12,4 @@
 include(../cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS  = msgserver msgclient fifowriter fiforeader pluginloader \
-           camacaccess
+SUBDIRS  = daqtest

@@ -22,9 +22,10 @@
  * $Revision$
  * $Date$
  */
-class Fifo : public QT_PREPEND_NAMESPACE( QFile ) {
+class Fifo : public QFile {
 
-   Q_DECLARE_TR_FUNCTIONS( Fifo )
+   Q_OBJECT
+//   Q_DECLARE_TR_FUNCTIONS( Fifo )
 
 public:
    /// Constructor with FIFO path and Qt parent

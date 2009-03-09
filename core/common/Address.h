@@ -5,11 +5,12 @@
 
 // Qt include(s):
 #include <QtCore/QString>
+#include <QtCore/QCoreApplication>
 #include <QtNetwork/QHostAddress>
 
 // Check the Qt version used for compilation:
 #if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::Address needs Qt >= 4.0.0"
+#  error "Address needs Qt >= 4.0.0"
 #endif
 
 /**
@@ -27,9 +28,11 @@
 class Address {
 
 public:
+   /// Constructor with combined hostname:port string
+   Address( const QString& address = "127.0.0.1:50000" );
    /// Constructor with host name and port
-   Address( const QString& host = "127.0.0.1",
-            quint16 port = 50000 );
+   Address( const QString& host,
+            quint16 port );
 
    /// Set the host name of the address
    void setHost( const QHostAddress& host );

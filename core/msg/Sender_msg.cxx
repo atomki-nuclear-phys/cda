@@ -122,6 +122,28 @@ namespace msg {
             socket.waitForDisconnected();
          }
 
+         //
+         // Print the message even if no servers have been defined yet:
+         //
+         if( ! m_addresses.size() ) {
+            //
+            // Print a single warning:
+            //
+            static bool firstcall = true;
+            if( firstcall ) {
+               std::cout << "* No message server set up yet." << std::endl;
+               std::cout << "* Messages that could not be sent will be" << std::endl;
+               std::cout << "* printed to the console." << std::endl << std::endl;
+               firstcall = false;
+            }
+
+            //
+            // Print the message to the standard output:
+            //
+            TextStream out( stdout );
+            out << message << "\n";
+         }
+
       }
 
       return;
