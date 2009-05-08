@@ -7,7 +7,8 @@
 echo "Setting up environment for compiling/running CDA"
 
 # Set the environment variables:
-export CDASYS=$PWD
+THIS=$(dirname ${BASH_ARGV[0]})
+export CDASYS=$(cd ${THIS};pwd)
 export PATH=$CDASYS/bin:$PATH
 if [ ! $LD_LIBRARY_PATH ]; then
     export LD_LIBRARY_PATH=$CDASYS/lib
