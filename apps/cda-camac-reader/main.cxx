@@ -71,22 +71,22 @@ int main( int argc, char* argv[] ) {
    CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
    CmdArgStr config( 'c', "config", "filename", "Name of an XML config file",
                      CmdArg::isREQ );
-   CmdArgStr server( 's', "server", "hostname", "Host name of the message server" );
-   CmdArgInt port( 'p', "port", "number", "Port number of the message server" ); 
-   CmdArgInt pipefd( 'f', "fd", "number", "Use this file descriptor(pipe) insted of tcp connect if possible" );
-   CmdLine cmd( *argv, &verbosity, &config, &server, &port,&pipefd, NULL );
+   CmdArgStrList msgservers( 'm', "msgservers", "addresses", "Addresses of message servers" );
+   CmdArgStrList clients( 'e', "clients", "addresses", "Addresses of event reader clients" );
+
+   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &clients, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
    verbosity = 3;
-   server = "127.0.0.1";
-   port = 49700;
    cmd.parse( arg_iter );
 
    //
    // Set the destination of the messages:
    //
-   msg::Sender::addAddress( Address( ( const char* ) server, port ) );
+   for( int i = 0; i < msgservers.count(); ++i ) {
+      msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+   }
 
    //
    // Translate the verbosity option:
@@ -194,8 +194,9 @@ int main( int argc, char* argv[] ) {
    // Open connections to all the event recepients:
    //
    ev::Sender sender;
-   sender.addSocket( Address( "127.0.0.1", 45000 ) );
-   sender.addSocket( Address( "127.0.0.1", 45100 ) );
+   for( int i = 0; i < clients.count(); ++i ) {
+      sender.addSocket( Address( ( const char* ) clients[ i ] ) );
+   }
 
    //
    // Connect the interrupt signal to the shutDown function:

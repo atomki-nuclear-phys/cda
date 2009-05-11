@@ -24,10 +24,10 @@
    }
    error(CDA has to be built with Qt version 4.4!)
 }
-!contains(QT_MINOR_VERSION,4) {
-   message(Your Qt version is $$QT_VERSION)
-   error(CDA has to be built with Qt version 4.4!)
-}
+#!contains(QT_MINOR_VERSION,4) {
+#   message(Your Qt version is $$QT_VERSION)
+#   error(CDA has to be built with Qt version 4.4!)
+#}
 
 #
 # CDA is only supported on Linux and Mac OS X (the two systems
@@ -67,7 +67,7 @@ DEFINES += CDASYS=\'\"$$CDASYS\"\'
 # Comment-out this setting when compiling the code on the data
 # acquisition computer.
 #
-#DEFINES += TESTING
+DEFINES += TESTING
 
 #
 # If we're not in TESTING mode, everything has to be linked against

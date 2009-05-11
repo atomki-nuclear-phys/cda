@@ -16,8 +16,8 @@ VERSION  = 0.0.1
 TARGET   = cdagui
 
 # These are the header and source files:
-HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h)
-SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx)
+HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h) $$system(ls simple_daq/*.h)
+SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx) $$system(ls simple_daq/*.cxx)
 TRANSLATIONS = cdagui_hu.ts
 
 # The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
@@ -53,6 +53,11 @@ mac {
    DEVICE_HEADERS.path = Headers/device
    QMAKE_BUNDLE_DATA += DEVICE_HEADERS
 
+   SIMPLE_DAQ_HEADERS.version = Version
+   SIMPLE_DAQ_HEADERS.files = $$system(ls simple_daq/*.h)
+   SIMPLE_DAQ_HEADERS.path = Headers/simple_daq
+   QMAKE_BUNDLE_DATA += SIMPLE_DAQ_HEADERS
+
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =
    DUMMY_HEADERS.path = Headers
@@ -60,7 +65,7 @@ mac {
 
    # This framework has to be linked against the cdacore framework:
    QMAKE_CXXFLAGS += -F../lib
-   LIBS           += -F../lib -framework cdacore
+   LIBS           += -F../lib -framework cdacore -framework cdadaq
 
    # Here we do the same trick as with cdacore. See core/core.pro for details.
    DESTDIR                     = /
@@ -78,8 +83,8 @@ unix:!mac {
 
    # Create a shared library and link it against the cdacore library:
    CONFIG      += shared
-   INCLUDEPATH += ../core
-   LIBS        += -L../lib -lcdacore
+   INCLUDEPATH += ../core ../daq
+   LIBS        += -L../lib -lcdacore -l cdadaq
 
    # Place the library in ../lib:
    DESTDIR      = ../lib

@@ -70,26 +70,25 @@ int main( int argc, char* argv[] ) {
    CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
    CmdArgStr config( 'c', "config", "filename", "Name of an XML config file",
                      CmdArg::isREQ );
-   CmdArgStr server( 's', "server", "hostname", "Host name of the message server" );
-   CmdArgInt port( 'p', "port", "number", "Port number of the message server" );
-   CmdArgInt fifofd( 'f', "fd", "number", "Use this file descriptor(fifo) insted of tcp listen" );
+   CmdArgStrList msgservers( 'm', "msgservers", "addresses", "Addresses of message servers" );
+   CmdArgStr evaddress( 'e', "evaddress", "address", "Address where to receive events",
+                        CmdArg::isREQ );
    CmdArgStr output( 'o', "output", "filename", "Name of HBOOK file",
                      CmdArg::isREQ );
 
-   CmdLine cmd( *argv, &verbosity, &config, &server, &port, &fifofd, &output, NULL );
+   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &evaddress, &output, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
    verbosity = 3;
-   server = "127.0.0.1";
-   port = 49700;
-   fifofd=-1;
    cmd.parse( arg_iter );
 
    //
    // Set the destination of the messages:
    //
-   msg::Sender::addAddress( Address( ( const char* ) server, port ) );
+   for( int i = 0; i < msgservers.count(); ++i ) {
+      msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+   }
 
    //
    // Translate the verbosity option:
@@ -183,10 +182,10 @@ int main( int argc, char* argv[] ) {
    }
 
    //
-   // Start an EventServer listening on "a" port:
+   // Start an EventServer listening on the specified port:
    //
    ev::EventServer evserver;
-   evserver.listen( Address( "127.0.0.1", 45100 ) );
+   evserver.listen( Address( ( const char* ) evaddress ) );
 
    //
    // Connect the interrupt signal to the shutDown function:

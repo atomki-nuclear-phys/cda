@@ -131,7 +131,7 @@ unix:!mac {
 
 }
 system(g77 --version){
-	LIBS += -L/usr/lib/gcc/i386-redhat-linux/3.4.6 -lg2c
+	LIBS += -L/usr/lib/gcc/i386-redhat-linux/3.4.6 -lg2c -lgfortran
 } else{
 	!system(gfortran --version){
 		warning(Could not determine which fortran library to use)
