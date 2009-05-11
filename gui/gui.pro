@@ -53,7 +53,7 @@ mac {
    DEVICE_HEADERS.path = Headers/device
    QMAKE_BUNDLE_DATA += DEVICE_HEADERS
 
-   SIMPLE_DAQ_HEADERS.version = Version
+   SIMPLE_DAQ_HEADERS.version = Versions
    SIMPLE_DAQ_HEADERS.files = $$system(ls simple_daq/*.h)
    SIMPLE_DAQ_HEADERS.path = Headers/simple_daq
    QMAKE_BUNDLE_DATA += SIMPLE_DAQ_HEADERS

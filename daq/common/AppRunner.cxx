@@ -8,6 +8,12 @@ extern "C" {
 #   include <signal.h>
 }
 
+#include <QtCore/QtGlobal>
+#ifdef Q_OS_DARWIN
+#include <crt_externs.h>
+#define environ ( *_NSGetEnviron() )
+#endif
+
 // Qt include(s):
 #include <QtCore/QStringList>
 

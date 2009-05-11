@@ -22,7 +22,7 @@ TRANSLATIONS = cdadaq_hu.ts
 
 # The library uses the QtCore library:
 CONFIG += qt
-QT      = core
+QT      = core xml network
 
 # The place to put the intermediate build results:
 OBJECTS_DIR = ./.obj

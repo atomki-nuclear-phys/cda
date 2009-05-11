@@ -6,6 +6,7 @@ extern "C" {
 }
 
 // CDA include(s):
+#include <QtCore/QtGlobal>
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
 #   include "cdacore/msg/Sender.h"

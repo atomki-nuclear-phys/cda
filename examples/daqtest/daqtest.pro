@@ -20,7 +20,7 @@ SOURCES = daqtest.cxx
 
 # The application uses the QtCore and QtNetwork libraries:
 CONFIG = qt debug warn_on
-QT     = core xml
+QT     = core xml network
 
 # The places to put the intermediate and final build results:
 OBJECTS_DIR = ./.obj
