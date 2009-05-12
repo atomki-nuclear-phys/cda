@@ -6,6 +6,7 @@ extern "C" {
 #   include <unistd.h>
 #   include <sys/types.h>
 #   include <signal.h>
+#   include <string.h>
 }
 
 #include <QtCore/QtGlobal>
@@ -107,11 +108,16 @@ namespace daq {
          // POSIX systems like it...
          //
          char* argv[ optionList.size() + 2 ];
-         argv[ 0 ] = reinterpret_cast< char* >( ::malloc( m_execName.size() ) );
-         ::sprintf( argv[ 0 ], "%s", m_execName.toLatin1().constData() );
+         argv[ 0 ] = reinterpret_cast< char* >( ::malloc( sizeof( char ) *
+                                                          ( m_execName.toLatin1().size() +
+                                                            1 ) ) );
+         ::strcpy( argv[ 0 ], m_execName.toLatin1().constData() );
          for( int i = 1; i < optionList.size() + 1; ++i ) {
-            argv[ i ] = reinterpret_cast< char* >( ::malloc( optionList.at( i - 1 ).size() ) );
-            ::sprintf( argv[ i ], "%s", optionList.at( i - 1 ).toLatin1().constData() );
+            argv[ i ] =
+               reinterpret_cast< char* >( ::malloc( sizeof( char ) *
+                                                    ( optionList.at( i - 1 ).toLatin1().size() +
+                                                      1 ) ) );
+            ::strcpy( argv[ i ], optionList.at( i - 1 ).toLatin1().constData() );
          }
          argv[ optionList.size() + 1 ] = '\0';
 
