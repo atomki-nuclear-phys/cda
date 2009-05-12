@@ -20,6 +20,7 @@ namespace msg {
    class TextView;
 } // namespace msg
 namespace simple_daq {
+   class Statistics;
    class CamacReaderRunner;
    class GlomemWriterRunner;
    class HBookWriterRunner;
@@ -40,6 +41,7 @@ private:
    msg::Server*   m_msgServer;
    msg::TextView* m_msgView;
 
+   simple_daq::Statistics*         m_statistics;
    simple_daq::CamacReaderRunner*  m_camacReader;
    simple_daq::GlomemWriterRunner* m_glomemWriter;
    simple_daq::HBookWriterRunner*  m_hbookWriter;

@@ -127,6 +127,25 @@ namespace simple_daq {
    }
 
    /**
+    * @param address The statistics server address to be used by the application
+    */
+   void CamacReaderRunner::setStatServerAddress( const QString& address ) {
+
+      m_statServerAddress = address;
+      return;
+
+   }
+
+   /**
+    * @returns The statistics server address to be used by the application
+    */
+   const QString& CamacReaderRunner::getStatServerAddress() const {
+
+      return m_statServerAddress;
+
+   }
+
+   /**
     * @param address The address where cda-hbook-writer waits for events
     */
    void CamacReaderRunner::setHBookWriterAddress( const QString& address ) {
@@ -216,6 +235,10 @@ namespace simple_daq {
          options += " -m " + m_msgServerAddress;
          options += " -c " + m_configFileName;
          options += " -v " + QString::number( m_level );
+
+         if( ! m_statServerAddress.isEmpty() ) {
+            options += " -s " + m_statServerAddress;
+         }
 
          //
          // Collect where the application should send events to:

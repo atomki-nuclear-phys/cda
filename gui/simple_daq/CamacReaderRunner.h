@@ -61,6 +61,11 @@ namespace simple_daq {
       /// Get the address of the message server(s)
       const QString& getMsgServerAddress() const;
 
+      /// Set the address of the statistics server(s)
+      void setStatServerAddress( const QString& address );
+      /// Get the address of the statistics server(s)
+      const QString& getStatServerAddress() const;
+
       /// Set the address where cda-hbook-writer listenes for events
       void setHBookWriterAddress( const QString& address );
       /// Get the address where cda-hbook-writer listenes for events
@@ -92,7 +97,8 @@ namespace simple_daq {
       QLabel*      m_processStatus; ///< Label giving feedback of the status
 
       QString m_configFileName;      ///< Name of the configuration file
-      QString m_msgServerAddress;    ///< Address of the message server(s)
+      QString m_msgServerAddress;    ///< Address of the message server
+      QString m_statServerAddress;   ///< Address of the statistics server
       QString m_hbookWriterAddress;  ///< Address of cda-hbook-writer
       QString m_glomemWriterAddress; ///< Address of cda-glomem-writer
       msg::Level m_level;            ///< Output level of cda-camac-reader

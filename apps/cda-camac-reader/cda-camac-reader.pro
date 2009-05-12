@@ -29,7 +29,7 @@ mac {
    message(*)
 
    QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore
+   LIBS           += -F../../lib -framework cdacore -framework cdadaq
 }
 
 #
@@ -41,6 +41,6 @@ unix:!mac {
    message(* Configuring to build the \"cda-camac-reader\" application on Linux)
    message(*)
 
-   INCLUDEPATH += ../../core
-   LIBS        += -L../../lib -lcdacore
+   INCLUDEPATH += ../../core ../../daq
+   LIBS        += -L../../lib -lcdacore -l cdadaq
 }

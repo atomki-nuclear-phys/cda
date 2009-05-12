@@ -9,6 +9,7 @@ extern "C" {
 #   include <string.h>
 }
 
+// Definition of "environ" for MacOS X:
 #include <QtCore/QtGlobal>
 #ifdef Q_OS_DARWIN
 #include <crt_externs.h>

@@ -37,6 +37,7 @@
 #   include "cdacore/camac/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/Sender.h"
+#   include "cdadaq/stat/Sender.h"
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
@@ -45,6 +46,7 @@
 #   include "camac/Crate.h"
 #   include "event/Event.h"
 #   include "event/Sender.h"
+#   include "stat/Sender.h"
 #endif
 
 // Local include(s):
@@ -73,8 +75,10 @@ int main( int argc, char* argv[] ) {
                      CmdArg::isREQ );
    CmdArgStrList msgservers( 'm', "msgservers", "addresses", "Addresses of message servers" );
    CmdArgStrList clients( 'e', "clients", "addresses", "Addresses of event reader clients" );
+   CmdArgStrList statistics( 's', "statistics", "addresses",
+                             "Addresses of statistics reader clients" );
 
-   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &clients, NULL );
+   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &clients, &statistics, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
@@ -193,9 +197,17 @@ int main( int argc, char* argv[] ) {
    //
    // Open connections to all the event recepients:
    //
-   ev::Sender sender;
+   ev::Sender ev_sender;
    for( int i = 0; i < clients.count(); ++i ) {
-      sender.addSocket( Address( ( const char* ) clients[ i ] ) );
+      ev_sender.addSocket( Address( ( const char* ) clients[ i ] ) );
+   }
+
+   //
+   // Open connections to all the statistics recepients:
+   //
+   stat::Sender stat_sender;
+   for( int i = 0; i < statistics.count(); ++i ) {
+      stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
    }
 
    //
@@ -211,14 +223,23 @@ int main( int argc, char* argv[] ) {
    //
    // Read events and send them on the opened FIFO in an endless loop.
    //
+   quint32 evcount = 0;
    for( ; ; ) {
 
       ev::Event event = crate.readEvent( *g_crate );
       crate.clear( *g_crate );
-      if( ! sender.send( event ) ) {
+      if( ! ev_sender.send( event ) ) {
          g_logger << msg::FATAL << "Failed to send event to all recepients.\n"
                   << "Event readout can not continue!" << msg::endmsg;
          shutDown( 0 );
+      }
+
+      ++evcount;
+      if( ! ( evcount % 20 ) ) {
+         if( ! stat_sender.send( stat::Statistics( evcount ) ) ) {
+            g_logger << msg::WARNING << "Failed to send statistics to all recepients"
+                     << msg::endmsg;
+         }
       }
 
    }

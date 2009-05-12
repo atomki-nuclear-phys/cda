@@ -7,46 +7,29 @@
 #include "Sender.h"
 #include "BinaryStream.h"
 
-namespace ev {
+namespace stat {
 
-   /**
-    * Like many other classes, this class doesn't do much in its constructor
-    * either.
-    */
    Sender::Sender()
-      :  m_sockets(), m_logger( "ev::Sender" ) {
+      : m_logger( "stat::Sender" ) {
 
       m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
 
    }
 
-   /**
-    * The destructor have to closes the connections
-    */
    Sender::~Sender() {
 
       for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
            socket != m_sockets.end(); ++socket ) {
-
-	   	( *socket )->disconnectFromHost();
+         ( *socket )->disconnectFromHost();
          ( *socket )->waitForDisconnected();
          delete ( *socket );
-	   }
+      }
 
       m_logger << msg::VERBOSE << tr( "Object deleted" ) << msg::endmsg;
 
    }
 
-   /**
-    * This function actually takes care of connecting to the event receiver.
-    * There is a little timeout allowed, but in general the event receiver
-    * application should already be running when this function is called.
-    *
-    * @param address Network address to connect to
-    * @returns <code>true</code> if the connection was successful,
-    *          <code>false</code> otherwise
-    */
-   bool Sender::addSocket( const Address& address ) {
+   bool Sender::addReceiver( const Address& address ) {
 
       // Create a new socket:
       QTcpSocket *socket = new QTcpSocket();
@@ -76,7 +59,7 @@ namespace ev {
       // Save the socket for later:
       //
       m_sockets.push_back( socket );
-      m_logger << msg::INFO << tr( "Connected to event receiver on %1:%2" )
+      m_logger << msg::INFO << tr( "Connected to statistics receiver on %1:%2" )
          .arg( address.getHost().toString() ).arg( address.getPort() )
                << msg::endmsg;
 
@@ -84,17 +67,7 @@ namespace ev {
 
    }
 
-
-   /**
-    * This is the main function of this class. It loops over all the
-    * network sockets that were specified to it, and tries to send
-    * the specified event to all the destinations.
-    *
-    * @param event The event that has to be sent
-    * @returns <code>true</code> if the event could be sent to all
-    *          destinations, <code>false</code> otherwise
-    */
-   bool Sender::send( const Event& event ) const {
+   bool Sender::send( const Statistics& stat ) const {
 
       //
       // Loop over all the specified addresses:
@@ -103,16 +76,16 @@ namespace ev {
            socket != m_sockets.end(); ++socket ) {
 
          //
-         // Send the event:
+         // Send the statistics object:
          //
          BinaryStream out( *socket );
-         out << event;
+         out << stat;
          ( *socket )->flush();
 
          //
          // A little debugging message:
          //
-         m_logger << msg::VERBOSE << "Bytes to write: " << (*socket)->bytesToWrite()
+         m_logger << msg::VERBOSE << "Bytes to write: " << ( *socket )->bytesToWrite()
                   << msg::endmsg;
 
       }
@@ -121,16 +94,10 @@ namespace ev {
 
    }
 
-   /**
-    * This function is used internally to signal when a network address
-    * can't be reached.
-    *
-    * @param address The address that couldn't be reached
-    */
    void Sender::printError( const QTcpSocket& socket ) const {
 
       m_logger << msg::ERROR
-               << tr( "Could not connect to event receiver on address \"%1\", "
+               << tr( "Could not connect to statistics receiver on address \"%1\", "
                       "port \"%2\"" ).arg( socket.peerAddress().toString() )
          .arg( socket.peerPort() ) << msg::endmsg;
 
@@ -138,4 +105,4 @@ namespace ev {
 
    }
 
-} // namespace ev
+} // namespace stat

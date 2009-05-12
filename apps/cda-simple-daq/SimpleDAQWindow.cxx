@@ -7,14 +7,18 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
+#   include "cdacore/common/Address.h"
 #   include "cdacore/msg/Server.h"
 #   include "cdagui/msg/TextView.h"
+#   include "cdagui/simple_daq/Statistics.h"
 #   include "cdagui/simple_daq/CamacReaderRunner.h"
 #   include "cdagui/simple_daq/GlomemWriterRunner.h"
 #   include "cdagui/simple_daq/HBookWriterRunner.h"
 #else
+#   include "common/Address.h"
 #   include "msg/Server.h"
 #   include "msg/TextView.h"
+#   include "simple_daq/Statistics.h"
 #   include "simple_daq/CamacReaderRunner.h"
 #   include "simple_daq/GlomemWriterRunner.h"
 #   include "simple_daq/HBookWriterRunner.h"
@@ -58,10 +62,15 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
                << msg::endmsg;
    }
 
+   m_statistics = new simple_daq::Statistics( m_centralWidget );
+   m_statistics->setGeometry( QRect( 5, 5, 300, 150 ) );
+   m_statistics->setStatAddress( Address( Const::STAT_SERVER_ADDRESS ) );
+
    m_camacReader = new simple_daq::CamacReaderRunner( m_centralWidget );
    m_camacReader->setGeometry( QRect( 310, 5, 300, 150 ) );
    m_camacReader->setConfigFileName( confFileName );
    m_camacReader->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
+   m_camacReader->setStatServerAddress( Const::STAT_SERVER_ADDRESS );
    m_camacReader->setHBookWriterAddress( Const::HBOOK_WRITER_ADDRESS );
    m_camacReader->setGlomemWriterAddress( Const::GLOMEM_WRITER_ADDRESS );
    m_camacReader->setVerbosity( verbosity );
@@ -90,6 +99,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
 
 SimpleDAQWindow::~SimpleDAQWindow() {
 
+   delete m_statistics;
    delete m_camacReader;
    delete m_msgServer;
    delete m_msgView;
