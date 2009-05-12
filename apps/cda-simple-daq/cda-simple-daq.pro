@@ -19,6 +19,9 @@ TARGET = cda-simple-daq
 HEADERS = *.h
 SOURCES = *.cxx
 
+# The application uses some Qt resources:
+RESOURCES = cda-simple-daq.qrc
+
 #
 # These are the specific configuration options for compiling the code
 # on Mac OS X.

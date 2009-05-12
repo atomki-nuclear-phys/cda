@@ -77,7 +77,7 @@ private:
    void writeXMLConfig( const QString& filename );
    /// Function writing a binary configuration file
    void writeBinaryConfig( const QString& filename );
-/// Configuration read error dialog, and log
+   /// Configuration read error dialog, and log
    void readErrorDlg();
    /// Widget holding all the shown widgets
    QWidget*         m_centralWidget;

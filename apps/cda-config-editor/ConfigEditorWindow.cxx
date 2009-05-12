@@ -88,8 +88,7 @@ ConfigEditorWindow::ConfigEditorWindow()
 
 }
 
-void ConfigEditorWindow::setupSelectActivated( QListWidgetItem * item )
-{
+void ConfigEditorWindow::setupSelectActivated( QListWidgetItem* ) {
 /*
 	if (m_deviceSetup==item)
 	{

@@ -37,8 +37,7 @@ int main( int argc, char* argv[] ) {
    // Read the rest of the command line arguments:
    //
    CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename", "Name of the XML configuration",
-                     CmdArg::isREQ );
+   CmdArgStr config( 'c', "config", "filename", "Name of the XML configuration" );
 
    CmdLine cmd( *argv, &verbosity, &config, NULL );
    cmd.description( description );

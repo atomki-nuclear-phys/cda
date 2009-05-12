@@ -26,16 +26,32 @@ namespace simple_daq {
    class HBookWriterRunner;
 } // namespace simple_daq
 
+/**
+ *  @short Main (and only) window of cda-simple-daq
+ *
+ * @suthor Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
 class SimpleDAQWindow : public QMainWindow {
 
    Q_OBJECT
 
 public:
-   SimpleDAQWindow( const QString& confFileName,
-                    msg::Level verbosity );
+   SimpleDAQWindow( const QString& confFileName = "",
+                    msg::Level verbosity = msg::INFO );
    ~SimpleDAQWindow();
 
+private slots:
+   void readConfigSlot();
+   void aboutQtSlot();
+   void aboutSimpleDAQSlot();
+   void aboutCDASlot();
+
 private:
+   void drawMenus();
+
    QWidget* m_centralWidget;
 
    msg::Server*   m_msgServer;
