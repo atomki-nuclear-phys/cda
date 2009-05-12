@@ -1,6 +1,7 @@
 // $Id$
 
 // CDA include(s):
+#include <QtCore/QtGlobal>
 #ifdef Q_OS_DARWIN
 #   include "cdacore/common/Socket.h"
 #else

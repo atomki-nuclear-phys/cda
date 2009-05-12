@@ -33,8 +33,7 @@ namespace simple_daq {
       Q_OBJECT
 
    public:
-      Statistics( const QString& iconPath, QWidget* parent = 0,
-                  Qt::WindowFlags flags = 0 );
+      Statistics( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       ~Statistics();
 
       void setStatAddress( const Address& address );
