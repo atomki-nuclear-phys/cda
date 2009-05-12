@@ -30,8 +30,6 @@ namespace simple_daq {
 
       m_mainBox = new QGroupBox( tr( "GloMem writing control" ), this );
       m_mainBox->setGeometry( QRect( 5, 5, 290, 140 ) );
-      m_mainBox->setFlat( true );
-      m_mainBox->setAlignment( Qt::AlignHCenter );
 
       m_processStatus = new QLabel( tr( "GloMem writer stopped" ), m_mainBox );
       m_processStatus->setGeometry( QRect( 0, 40, 290, 40 ) );

@@ -36,8 +36,6 @@ namespace simple_daq {
       //
       m_mainBox = new QGroupBox( tr( "Camac acquisition control" ), this );
       m_mainBox->setGeometry( QRect( 5, 5, 290, 140 ) );
-      m_mainBox->setFlat( true );
-      m_mainBox->setAlignment( Qt::AlignHCenter );
 
       //
       // Create the label showing if the application is running:
