@@ -32,7 +32,7 @@ namespace simple_daq {
       m_eventRateLabel->setGeometry( QRect( 10, 80, 140, 25 ) );
       m_eventRateLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
-      m_eventRate = new QLabel( tr( "n/a" ), m_mainBox );
+      m_eventRate = new QLabel( tr( "n/a Hz" ), m_mainBox );
       m_eventRate->setGeometry( QRect( 160, 80, 100, 25 ) );
       m_eventRate->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 
@@ -70,10 +70,16 @@ namespace simple_daq {
 
    void Statistics::updateStat( const stat::Statistics& stat ) {
 
+      //
+      // Show the number of processed events according to the last
+      // stat::Statistics object received, and calculate the event
+      // processing rate using the last statistics object:
+      //
       m_readEvents->setText( QString::number( stat.getProcessedEvents() ) );
       m_eventRate->setText( QString::number( static_cast< double >( stat.getProcessedEvents() -
                m_lastStat.getProcessedEvents() ) /
-               m_lastStat.getStatTime().msecsTo( stat.getStatTime() ) * 1000 ) ); 
+               m_lastStat.getStatTime().msecsTo( stat.getStatTime() ) * 1000 ) +
+                            " Hz" ); 
 
       m_lastStat = stat;
 
@@ -87,7 +93,7 @@ namespace simple_daq {
 
    void Statistics::updateStat() {
 
-      m_eventRate->setText( "0" );
+      m_eventRate->setText( "0 Hz" );
       m_lastStat.setStatTime( QTime::currentTime() );
 
       return;

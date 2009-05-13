@@ -121,6 +121,14 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
 
    drawMenus();
 
+   if( ! confFileName.isEmpty() ) {
+      m_logger << msg::INFO << "Using configuration file: "
+               << confFileName << msg::endmsg;
+   } else {
+      m_logger << msg::INFO << "Please open a configuration file before"
+               << " trying to start the DAQ system." << msg::endmsg;
+   }
+
 }
 
 SimpleDAQWindow::~SimpleDAQWindow() {
