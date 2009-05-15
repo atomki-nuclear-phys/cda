@@ -40,9 +40,9 @@ ConfigEditorWindow::ConfigEditorWindow()
    setMinimumSize( 645, 660 );
    setMaximumSize( 645, 660 );
 #else
-   resize( 645, 685 );
-   setMinimumSize( 645, 685 );
-   setMaximumSize( 645, 685 );
+   resize( 645, 690 );
+   setMinimumSize( 645, 690 );
+   setMaximumSize( 645, 690 );
 #endif
 
    //

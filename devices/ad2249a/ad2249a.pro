@@ -13,7 +13,7 @@ include(../../cda_common.pri)
 include(../devices.pri)
 
 # This will be a library with the name "ad2249a":
-VERSION  = 0.0.1
+VERSION  = 1.0.0
 TARGET   = ad2249a
 
 # These are the header and source files:

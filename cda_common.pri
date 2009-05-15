@@ -22,12 +22,8 @@
    } else {
       message(Your Qt version is $$QT_VERSION)
    }
-   error(CDA has to be built with Qt version 4.4!)
+   error(CDA has to be built with Qt version 4.X!)
 }
-#!contains(QT_MINOR_VERSION,4) {
-#   message(Your Qt version is $$QT_VERSION)
-#   error(CDA has to be built with Qt version 4.4!)
-#}
 
 #
 # CDA is only supported on Linux and Mac OS X (the two systems
@@ -42,9 +38,10 @@ QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline -W -Wall"
 #
 # During development the code is compiled in debug mode to make it easier
 # to find problems in it. But the programs used for real data acquisition
-# should not carry around the debug information...
+# should not carry around the debug information... (Add "debug" in the following
+# list if you want to debug the code!)
 #
-CONFIG += debug warn_on
+CONFIG += warn_on
 
 #
 # Check that the CDASYS environment variable exists. The value of

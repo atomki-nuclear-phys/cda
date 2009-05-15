@@ -96,11 +96,23 @@ namespace ev {
     */
    bool Sender::send( const Event& event ) const {
 
+      // Result of sending the event to all recepients:
+      bool result = true;
+
       //
       // Loop over all the specified addresses:
       //
       for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
            socket != m_sockets.end(); ++socket ) {
+
+         //
+         // Check the validity of the socket:
+         //
+         if( ! ( *socket )->isValid() ) {
+            printError( **socket );
+            result = false;
+            continue;
+         }
 
          //
          // Send the event:
@@ -117,7 +129,7 @@ namespace ev {
 
       }
 
-      return true;
+      return result;
 
    }
 
@@ -125,13 +137,13 @@ namespace ev {
     * This function is used internally to signal when a network address
     * can't be reached.
     *
-    * @param address The address that couldn't be reached
+    * @param socket The socket that couldn't be connected
     */
    void Sender::printError( const QTcpSocket& socket ) const {
 
       m_logger << msg::ERROR
                << tr( "Could not connect to event receiver on address \"%1\", "
-                      "port \"%2\"" ).arg( socket.peerAddress().toString() )
+                      "port \"%2\"" ).arg( socket.peerName() )
          .arg( socket.peerPort() ) << msg::endmsg;
 
       return;

@@ -12,7 +12,7 @@ include(../cda_common.pri)
 
 # This will be a library with the name "cdacore":
 TEMPLATE = lib
-VERSION  = 0.0.2
+VERSION  = 0.9.0
 TARGET   = cdacore
 
 # These are the header and source files:

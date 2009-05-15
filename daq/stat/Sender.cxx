@@ -3,6 +3,13 @@
 // Qt include(s):
 #include <QtNetwork/QTcpSocket>
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/Address.h"
+#else
+#   include "common/Address.h"
+#endif
+
 // Local include(s):
 #include "Sender.h"
 #include "BinaryStream.h"
@@ -16,6 +23,10 @@ namespace stat {
 
    }
 
+   /**
+    * The destructor has to close the connection with all the statistics recepients
+    * and delete all the objects created by this object.
+    */
    Sender::~Sender() {
 
       for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
@@ -29,6 +40,11 @@ namespace stat {
 
    }
 
+   /**
+    * @param address Network address to send statistics information to
+    * @returns <code>true</code> if the address could be connected to,
+    *          <code>false</code> otherwise
+    */
    bool Sender::addReceiver( const Address& address ) {
 
       // Create a new socket:
@@ -67,13 +83,30 @@ namespace stat {
 
    }
 
+   /**
+    * @param stat The statistics object that should be distributed
+    * @returns <code>true</code> if the operation was successful,
+    *          <code>false</code> otherwise
+    */
    bool Sender::send( const Statistics& stat ) const {
+
+      // Result of sending the statistics info to all recepients:
+      bool result = true;
 
       //
       // Loop over all the specified addresses:
       //
       for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
            socket != m_sockets.end(); ++socket ) {
+
+         //
+         // Check the validity of the socket:
+         //
+         if( ! ( *socket )->isValid() ) {
+            printError( **socket );
+            result = false;
+            continue;
+         }
 
          //
          // Send the statistics object:
@@ -90,15 +123,21 @@ namespace stat {
 
       }
 
-      return true;
+      return result;
 
    }
 
+   /**
+    * This function is used internally to signal when a network address
+    * can't be reached.
+    *
+    * @param socket The socket that couldn't be connected
+    */
    void Sender::printError( const QTcpSocket& socket ) const {
 
       m_logger << msg::ERROR
                << tr( "Could not connect to statistics receiver on address \"%1\", "
-                      "port \"%2\"" ).arg( socket.peerAddress().toString() )
+                      "port \"%2\"" ).arg( socket.peerName() )
          .arg( socket.peerPort() ) << msg::endmsg;
 
       return;

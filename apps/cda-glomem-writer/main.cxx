@@ -25,6 +25,7 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QFile>
 #include <QtCore/QString>
+#include <QtCore/QCoreApplication>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
@@ -36,6 +37,7 @@
 #   include "cdacore/device/Loader.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/EventServer.h"
+#   include "cdadaq/stat/Sender.h"
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
@@ -44,6 +46,7 @@
 #   include "fifo/Fifo.h"
 #   include "event/Event.h"
 #   include "event/EventServer.h"
+#   include "stat/Sender.h"
 #endif
 
 // Local include(s):
@@ -74,8 +77,11 @@ int main( int argc, char* argv[] ) {
    CmdArgStrList msgservers( 'm', "msgservers", "addresses", "Addresses of message servers" );
    CmdArgStr evaddress( 'e', "evaddress", "address", "Address where to receive events",
                         CmdArg::isREQ );
+   CmdArgStrList statistics( 's', "statistics", "addresses",
+                             "Addresses of statistics reader clients" );
 
-   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &evaddress, NULL );
+   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &evaddress,
+                &statistics, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
@@ -186,9 +192,27 @@ int main( int argc, char* argv[] ) {
    evserver.listen( Address( ( const char* ) evaddress ) );
 
    //
+   // Open connections to all the statistics recepients. (Ignore connection errors
+   // here, since statistics publishing is not a major concern...)
+   //
+   stat::Sender stat_sender;
+   for( int i = 0; i < statistics.count(); ++i ) {
+      stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
+   }
+
+   //
    // Connect the interrupt signal to the shutDown function:
    //
    signal( SIGINT, shutDown );
+
+   //
+   // Construct the source string of the statistics objects that are sent out
+   // during event processing:
+   //
+   QString statSource = "cda-glomem-writer:";
+   statSource += ( const char* ) config;
+   statSource += ":";
+   statSource += QString::number( QCoreApplication::applicationPid() );
 
    //
    // Let the user know what we're doing:
@@ -198,17 +222,25 @@ int main( int argc, char* argv[] ) {
    //
    // Read events and give them to the crate to display, in an endless loop.
    //
+   quint32 evcount = 0;
    for( ; ; ) {
 
       ev::Event event;
       evserver >> event;
 
       if( ! crate.displayEvent( event ) ) {
-
          g_logger << msg::FATAL << "There was a problem diplaying an event"
                   << msg::endmsg;
-         return 1;
+         shutDown( 0 );
+      }
 
+      // Send out statistics information after processing 20 events:
+      ++evcount;
+      if( ! ( evcount % 20 ) ) {
+         if( ! stat_sender.send( stat::Statistics( evcount, statSource ) ) ) {
+            g_logger << msg::WARNING << "Failed to send statistics to all recepients"
+                     << msg::endmsg;
+         }
       }
 
    }

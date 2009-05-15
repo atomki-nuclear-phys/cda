@@ -13,7 +13,7 @@ include(../../cda_common.pri)
 include(../devices.pri)
 
 # This will be a library with the name "t2228a":
-VERSION  = 0.0.1
+VERSION  = 1.0.0
 TARGET   = t2228a
 
 # These are the header and source files:

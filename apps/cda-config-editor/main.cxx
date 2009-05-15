@@ -29,10 +29,9 @@
 int main( int argc, char* argv[] ) {
 
    //
-   // Set the destination of the messages:
+   // Only display WARNING or more serious messages by this application:
    //
-   msg::Sender::addAddress( Address( "127.0.0.1", 49700 ) );
-   msg::Sender::instance()->setMinLevel( msg::INFO );
+   msg::Sender::instance()->setMinLevel( msg::WARNING );
 
    //
    // Instantiate the back-bone of the Qt graphical application:

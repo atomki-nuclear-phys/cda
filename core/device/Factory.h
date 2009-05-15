@@ -15,6 +15,7 @@ namespace dev {
    // namespace:
    //
    using QT_PREPEND_NAMESPACE( QString );
+   using QT_PREPEND_NAMESPACE( QObject );
 
    // Forward declaration(s):
    class Gui;
@@ -76,6 +77,8 @@ namespace dev {
 } // namespace dev
 
 // Declare the dev::Factory interface to Qt:
+QT_BEGIN_NAMESPACE
 Q_DECLARE_INTERFACE( dev::Factory, "hu.atomki.CDA.dev.Factory/0.0.1" )
+QT_END_NAMESPACE
 
 #endif // CDA_CORE_DEVICE_FACTORY_H

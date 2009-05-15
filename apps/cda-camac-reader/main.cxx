@@ -25,6 +25,7 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QFile>
 #include <QtCore/QString>
+#include <QtCore/QCoreApplication>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
@@ -199,11 +200,16 @@ int main( int argc, char* argv[] ) {
    //
    ev::Sender ev_sender;
    for( int i = 0; i < clients.count(); ++i ) {
-      ev_sender.addSocket( Address( ( const char* ) clients[ i ] ) );
+      if( ! ev_sender.addSocket( Address( ( const char* ) clients[ i ] ) ) ) {
+         g_logger << msg::FATAL << "Couldn't connect to event receiver: "
+                  << ( const char* ) clients[ i ] << msg::endmsg;
+         shutDown( 0 );
+      }
    }
 
    //
-   // Open connections to all the statistics recepients:
+   // Open connections to all the statistics recepients. (Ignore connection errors
+   // here, since statistics publishing is not a major concern...)
    //
    stat::Sender stat_sender;
    for( int i = 0; i < statistics.count(); ++i ) {
@@ -214,6 +220,15 @@ int main( int argc, char* argv[] ) {
    // Connect the interrupt signal to the shutDown function:
    //
    signal( SIGINT, shutDown );
+
+   //
+   // Construct the source string of the statistics objects that are sent out
+   // during event processing:
+   //
+   QString statSource = "cda-camac-reader:";
+   statSource += ( const char* ) config;
+   statSource += ":";
+   statSource += QString::number( QCoreApplication::applicationPid() );
 
    //
    // Let the user know what we're doing:
@@ -234,9 +249,10 @@ int main( int argc, char* argv[] ) {
          shutDown( 0 );
       }
 
+      // Send out statistics information after processing 20 events:
       ++evcount;
       if( ! ( evcount % 20 ) ) {
-         if( ! stat_sender.send( stat::Statistics( evcount ) ) ) {
+         if( ! stat_sender.send( stat::Statistics( evcount, statSource ) ) ) {
             g_logger << msg::WARNING << "Failed to send statistics to all recepients"
                      << msg::endmsg;
          }

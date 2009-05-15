@@ -1,4 +1,17 @@
 // $Id$
+/**
+ *   @file apps/cda-simple-daq/main.cxx
+ *  @short Main file for the cda-simple-daq application
+ *
+ *         This file stores the code that runs the cda-simple-daq application.
+ *         It is rather simple, it reads a few simple command line options,
+ *         then sets up SimpleDAQWindow to do the rest of the job.
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
 
 // Qt include(s):
 #include <QtGui/QApplication>
@@ -18,12 +31,11 @@
 #include "SimpleDAQWindow.h"
 #include "Constants.h"
 
+// Description for the executable:
 static const char* description =
    "Main DAQ program for running CDA on a single machine that does\n"
    "all the work. (Read from the CAMAC crate, write to the PAW global\n"
    "memory and write to an HBOOK file.)";
-
-msg::Logger g_logger( "cda-simple-daq" );
 
 int main( int argc, char* argv[] ) {
 
@@ -49,6 +61,9 @@ int main( int argc, char* argv[] ) {
    // Set the message server to a fixed address:
    msg::Sender::addAddress( Address( Const::MSG_SERVER_ADDRESS ) );
 
+   // Logger object used to print messages directly from this function:
+   msg::Logger logger( "cda-simple-daq" );
+
    //
    // Translate the verbosity option:
    //
@@ -63,16 +78,20 @@ int main( int argc, char* argv[] ) {
    if( v_map.find( verbosity ) != v_map.end() ) {
       msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
    } else {
-      g_logger << msg::FATAL << "Didn't recognise verbosity level setting"
-               << std::endl
-               << "Terminating..." << msg::endmsg;
+      logger << msg::FATAL << "Didn't recognise verbosity level setting"
+             << std::endl
+             << "Terminating..." << msg::endmsg;
       return 1;
    }
 
+   //
+   // Create and show the main window of the application:
+   //
    SimpleDAQWindow window( ( const char* ) config,
                            v_map.find( verbosity )->second );
    window.show();
 
+   // Run the main Qt event loop:
    return app.exec();
 
 }
