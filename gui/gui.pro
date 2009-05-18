@@ -16,8 +16,10 @@ VERSION  = 0.9.0
 TARGET   = cdagui
 
 # These are the header and source files:
-HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h) $$system(ls simple_daq/*.h)
-SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx) $$system(ls simple_daq/*.cxx)
+HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h) $$system(ls simple_daq/*.h) \
+          $$system(ls stat/*.h)
+SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx) $$system(ls simple_daq/*.cxx) \
+          $$system(ls stat/*.cxx)
 TRANSLATIONS = cdagui_hu.ts
 
 # The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
@@ -57,6 +59,11 @@ mac {
    SIMPLE_DAQ_HEADERS.files = $$system(ls simple_daq/*.h)
    SIMPLE_DAQ_HEADERS.path = Headers/simple_daq
    QMAKE_BUNDLE_DATA += SIMPLE_DAQ_HEADERS
+
+   STAT_HEADERS.version = Versions
+   STAT_HEADERS.files = $$system(ls stat/*.h)
+   STAT_HEADERS.path = Headers/stat
+   QMAKE_BUNDLE_DATA += STAT_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =
