@@ -1,8 +1,10 @@
 // $Id$
 
 // Qt include(s):
+#include <QtCore/QString>
 #include <QtCore/QTimer>
 #include <QtGui/QLabel>
+#include <QtGui/QCloseEvent>
 
 // Local include(s):
 #include "RateWindow.h"
@@ -21,27 +23,27 @@ namespace stat {
       m_rateWidget->setGeometry( QRect( 10, 10, 150, 180 ) );
 
       m_sourceNameLabel = new QLabel( tr( "Source:" ), this );
-      m_sourceNameLabel->setGeometry( QRect( 160, 40, 100, 25 ) );
+      m_sourceNameLabel->setGeometry( QRect( 160, 40, 60, 25 ) );
       m_sourceNameLabel->setAlignment( Qt::AlignRight );
 
       m_sourceName = new QLabel( tr( "n/a" ), this );
-      m_sourceName->setGeometry( QRect( 270, 40, 160, 25 ) );
+      m_sourceName->setGeometry( QRect( 230, 40, 220, 25 ) );
       m_sourceName->setAlignment( Qt::AlignLeft );
 
       m_processedEventsLabel = new QLabel( tr( "Processed events:" ), this );
-      m_processedEventsLabel->setGeometry( QRect( 160, 70, 150, 25 ) );
+      m_processedEventsLabel->setGeometry( QRect( 160, 70, 130, 25 ) );
       m_processedEventsLabel->setAlignment( Qt::AlignRight );
 
       m_processedEvents = new QLabel( tr( "n/a" ), this );
-      m_processedEvents->setGeometry( QRect( 320, 70, 130, 25 ) );
+      m_processedEvents->setGeometry( QRect( 300, 70, 150, 25 ) );
       m_processedEvents->setAlignment( Qt::AlignLeft );
 
       m_eventRateLabel = new QLabel( tr( "Event rate:" ), this );
-      m_eventRateLabel->setGeometry( QRect( 160, 100, 150, 25 ) );
+      m_eventRateLabel->setGeometry( QRect( 160, 100, 130, 25 ) );
       m_eventRateLabel->setAlignment( Qt::AlignRight );
 
       m_eventRate = new QLabel( tr( "n/a Hz" ), this );
-      m_eventRate->setGeometry( QRect( 320, 100, 130, 25 ) );
+      m_eventRate->setGeometry( QRect( 300, 100, 150, 25 ) );
       m_eventRate->setAlignment( Qt::AlignLeft );
 
       m_rateTimer = new QTimer( this );
@@ -65,6 +67,21 @@ namespace stat {
       delete m_sourceNameLabel; delete m_sourceName;
       delete m_processedEventsLabel; delete m_processedEvents;
       delete m_eventRateLabel; delete m_eventRate;
+
+   }
+
+   const QString& RateWindow::getSource() const {
+
+      return m_lastStat.getSource();
+
+   }
+
+   void RateWindow::closeEvent( QCloseEvent* event ) {
+
+      emit aboutToClose( m_lastStat.getSource() );
+      event->accept();
+
+      return;
 
    }
 
@@ -101,7 +118,7 @@ namespace stat {
 
    void RateWindow::updateRate() {
 
-      emit newRateAvailable( m_currentRate );
+      emit newRateAvailable( m_lastStat.getSource(), m_currentRate );
       m_rateWidget->setNewRate( m_currentRate );
 
       return;

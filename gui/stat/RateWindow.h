@@ -16,6 +16,7 @@
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QTimer )
+QT_FORWARD_DECLARE_CLASS( QString )
 
 namespace stat {
 
@@ -24,6 +25,7 @@ namespace stat {
 
    using QT_PREPEND_NAMESPACE( QLabel );
    using QT_PREPEND_NAMESPACE( QTimer );
+   using QT_PREPEND_NAMESPACE( QString );
 
    class RateWindow : public QWidget {
 
@@ -33,8 +35,14 @@ namespace stat {
       RateWindow( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       ~RateWindow();
 
+      const QString& getSource() const;
+
    signals:
-      void newRateAvailable( double rate );
+      void newRateAvailable( const QString& source, double rate );
+      void aboutToClose( const QString& source );
+
+   protected:
+      void closeEvent( QCloseEvent* event );
 
    public slots:
       void updateStatistics( const stat::Statistics& stat );

@@ -47,7 +47,7 @@ namespace stat {
       // Calculate the maximum rate, and the maximum on the Y axis:
       const double maximum =
          *( std::max_element( m_rateValues.begin(), m_rateValues.end() ) );
-      const double view_maximum = ( maximum > 0.0 ? maximum * 1.1 : 10.0 );
+      const double view_maximum = ( maximum > 0.0 ? maximum : 10.0 );
 
       // Print the maximum rate:
       painter.setBrush( Qt::black );
