@@ -5,17 +5,17 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdagui/stat/RateWindow.h"
+#   include "cdagui/stat/MDIView.h"
 #else
-#   include "stat/RateWindow.h"
+#   include "stat/MDIView.h"
 #endif
 
 int main( int argc, char* argv[] ) {
 
    QApplication app( argc, argv );
 
-   stat::RateWindow widget;
-   widget.show();
+   stat::MDIView window;
+   window.show();
 
    /*
    widget.setNewRate( 10.5 );

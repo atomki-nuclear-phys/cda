@@ -81,6 +81,7 @@ namespace stat {
       }
 
       m_sourceName->setText( stat.getSource() );
+      m_processedEvents->setText( QString::number( stat.getProcessedEvents() ) );
       m_lastStat = stat;
 
       m_resetTimer->start();
