@@ -1,4 +1,4 @@
-// $Id: Disk.cxx 40 2008-07-15 16:46:45Z krasznaa $
+// $Id$
 
 // Qt include(s):
 #include <QtCore/QtGlobal>

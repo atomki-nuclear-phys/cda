@@ -20,7 +20,7 @@ HEADERS = *.h
 SOURCES = *.cxx
 
 # The application uses some Qt resources:
-#RESOURCES = cda-simple-daq.qrc
+RESOURCES = cda-stat-server.qrc
 
 #
 # These are the specific configuration options for compiling the code

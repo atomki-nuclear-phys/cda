@@ -1,4 +1,4 @@
-// $Id: Device.cxx 30 2008-07-10 13:49:27Z krasznaa $
+// $Id$
 
 // Qt include(s):
 #include <QtCore/QIODevice>

@@ -1,7 +1,17 @@
 // $Id$
-
-// STL include(s):
-#include <iostream>
+/**
+ *   @file apps/cda-msgserver/main.cxx
+ *  @short Main file for the Message Server application
+ *
+ *         This file stores the code that runs the cda-msgserver application.
+ *         The file is very simple, it just creates one window and lets it do
+ *         everything else...
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
 
 // Qt include(s):
 #include <QtGui/QApplication>

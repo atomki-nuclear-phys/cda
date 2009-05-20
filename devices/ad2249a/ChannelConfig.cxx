@@ -1,4 +1,4 @@
-// $Id: ChannelConfig.cxx 25 2008-07-04 13:19:36Z krasznaa $
+// $Id$
 
 // Qt include(s):
 #include <QtCore/QIODevice>

@@ -1,5 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id: ChannelGui.h 32 2008-07-10 14:15:52Z krasznaa $
+// $Id$
 #ifndef CDA_DEVICES_AD2249A_CHANNELGUI_H
 #define CDA_DEVICES_AD2249A_CHANNELGUI_H
 
@@ -29,8 +29,8 @@ namespace ad2249a {
     *
     * @author Attila Krasznahorkay Jr.
     *
-    * $Revision: 32 $
-    * $Date: 2008-07-10 16:15:52 +0200 (Thu, 10 Jul 2008) $
+    * $Revision$
+    * $Date$
     */
    class ChannelGui : public QWidget {
 

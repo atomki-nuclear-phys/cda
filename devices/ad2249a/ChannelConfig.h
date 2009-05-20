@@ -1,5 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id: ChannelConfig.h 25 2008-07-04 13:19:36Z krasznaa $
+// $Id$
 #ifndef CDA_DEVICES_AD2249A_CHANNELCONFIG_H
 #define CDA_DEVICES_AD2249A_CHANNELCONFIG_H
 
@@ -25,8 +25,8 @@ namespace ad2249a {
     *
     * @author Attila Krasznahorkay Jr.
     *
-    * $Revision: 25 $
-    * $Date: 2008-07-04 15:19:36 +0200 (Fri, 04 Jul 2008) $
+    * $Revision$
+    * $Date$
     */
    class ChannelConfig : virtual public dev::Config {
 

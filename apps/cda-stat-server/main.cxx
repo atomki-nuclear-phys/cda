@@ -1,29 +1,36 @@
 // $Id$
+/**
+ *   @file apps/cda-stat-server/main.cxx
+ *  @short Main file for the Statistics Server application
+ *
+ *         This file stores the code that runs the cda-stat-server application.
+ *         The file is very simple, it just creates one window and lets it do
+ *         everything else...
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
 
 // Qt include(s):
 #include <QtGui/QApplication>
 
-// CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdagui/stat/MDIView.h"
-#else
-#   include "stat/MDIView.h"
-#endif
+// Local include(s):
+#include "StatServerWindow.h"
 
 int main( int argc, char* argv[] ) {
 
+   //
+   // Start a graphical Qt application:
+   //
    QApplication app( argc, argv );
 
-   stat::MDIView window;
+   //
+   // Create and show the statistics server window:
+   //
+   StatServerWindow window;
    window.show();
-
-   /*
-   widget.setNewRate( 10.5 );
-   widget.setNewRate( 11.5 );
-   widget.setNewRate( 12.5 );
-   widget.setNewRate( 13.5 );
-   widget.setNewRate( 14.5 );
-   */
 
    return app.exec();
 

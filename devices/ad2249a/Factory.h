@@ -28,8 +28,8 @@
  *
  * @author Attila Krasznahorkay Jr.
  *
- * $Revision: 39 $
- * $Date: 2008-07-14 19:15:52 +0200 (Mon, 14 Jul 2008) $
+ * $Revision$
+ * $Date$
  */
 namespace ad2249a {
 
@@ -49,8 +49,8 @@ namespace ad2249a {
     *
     * @author Attila Krasznahorkay Jr.
     *
-    * $Revision: 39 $
-    * $Date: 2008-07-14 19:15:52 +0200 (Mon, 14 Jul 2008) $
+    * $Revision$
+    * $Date$
     */
    class Factory : public QObject,
                    virtual public dev::Factory {

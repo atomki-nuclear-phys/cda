@@ -1,4 +1,4 @@
-// $Id: Readout.cxx 36 2008-07-14 13:32:32Z krasznaa $
+// $Id$
 
 // Qt include(s):
 #include <QtCore/QtGlobal>

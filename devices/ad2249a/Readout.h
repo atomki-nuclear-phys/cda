@@ -1,5 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id: Readout.h 35 2008-07-14 12:28:21Z krasznaa $
+// $Id$
 #ifndef CDA_CORE_DEVICES_AD2249A_READOUT_H
 #define CDA_CORE_DEVICES_AD2249A_READOUT_H
 
@@ -30,8 +30,8 @@ namespace ad2249a {
     *
     * @author Attila Krasznahorkay Jr.
     *
-    * $Revision: 35 $
-    * $Date: 2008-07-14 14:28:21 +0200 (Mon, 14 Jul 2008) $
+    * $Revision$
+    * $Date$
     */
    class Readout : virtual public dev::Readout,
                    virtual public Device {

@@ -14,22 +14,31 @@
 
 namespace stat {
 
+   //
+   // Specify the values of the constants:
+   //
    const quint32 RateWidget::MARK_HEIGHT = 10;
-   const quint32 RateWidget::RATE_HISTORY_LENGTH = 10;
+   const quint32 RateWidget::RATE_HISTORY_LENGTH = 20;
 
+   /**
+    * The constructor initialises the member variable(s) and sets the minimum and
+    * maximum allowed sizes of the widget.
+    */
    RateWidget::RateWidget( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        m_rateValues( RATE_HISTORY_LENGTH, 0 ) {
+        m_rateValues( RATE_HISTORY_LENGTH, 0.0 ) {
 
       setMinimumSize( 120, 100 );
       setMaximumSize( 1200, 1000 );
 
    }
 
-   RateWidget::~RateWidget() {
-
-   }
-
+   /**
+    * This function stores the new rate value, and throws away the oldest stored
+    * rate value. Then it asks for the widget to be re-drawn.
+    *
+    * @param rate The rate value that should be shown
+    */
    void RateWidget::setNewRate( double rate ) {
 
       m_rateValues.pop_front();
@@ -40,8 +49,13 @@ namespace stat {
 
    }
 
-   void RateWidget::paintEvent( QPaintEvent* /* event */ ) {
+   /**
+    * This function is responsible for drawing the widget. It uses basic Qt drawing
+    * techniques to do this.
+    */
+   void RateWidget::paintEvent( QPaintEvent* ) {
 
+      // Create a painter object for drawing the widget:
       QPainter painter( this );
 
       // Calculate the maximum rate, and the maximum on the Y axis:
@@ -78,7 +92,7 @@ namespace stat {
       painter.drawPolygon( edge1, 4 );
       painter.drawPolygon( edge2, 4 );
 
-      // Draw the corners:
+      // Draw the corner lines:
       painter.setPen( Qt::SolidLine );
       painter.drawLine( QLine( 0, 20, 5, 25 ) );
       painter.drawLine( QLine( width() - 5, height() - 5,
@@ -90,23 +104,24 @@ namespace stat {
       painter.drawRect( QRect( 5, 25, width() - 10, height() - 30 ) );
 
       // Calculate the size of the marks:
-      const int mark_width = ( width() - 10 ) / RATE_HISTORY_LENGTH;
-      const int mark_height = ( height() - 30 ) / ( ( height() - 30 ) / MARK_HEIGHT );
+      const qreal mark_width = static_cast< qreal >( width() - 10.0 ) / RATE_HISTORY_LENGTH;
+      const qreal mark_height = static_cast< qreal >( height() - 30.0 ) /
+         static_cast< int >( ( height() - 30 ) / MARK_HEIGHT );
 
       // Draw the marks themselves:
       painter.setPen( Qt::SolidLine );
       painter.setBrush( Qt::green );
       int column = 0;
-      for( std::list< double >::const_iterator it = m_rateValues.begin();
+      for( std::list< qreal >::const_iterator it = m_rateValues.begin();
            it != m_rateValues.end(); ++it, ++column ) {
          const int marks = ( ( height() - 30 ) / mark_height ) * ( *it / view_maximum );
          for( int mark = 0; mark < marks; ++mark ) {
-            const int rect_x = 5 + column * mark_width;
-            const int rect_y = ( height() - 5 - mark_height ) - ( mark * mark_height );
-            painter.drawRect( QRect( rect_x, rect_y,
-                                     ( column == RATE_HISTORY_LENGTH - 1 ?
-                                       width() - 5 - rect_x : mark_width ),
-                                     mark_height ) );
+            const qreal rect_x = 5 + column * mark_width;
+            const qreal rect_y = ( height() - 5 - mark_height ) - ( mark * mark_height );
+            painter.drawRect( QRectF( rect_x, rect_y,
+                                      ( column == RATE_HISTORY_LENGTH - 1 ?
+                                        width() - 5 - rect_x : mark_width ),
+                                      mark_height ) );
          }
       }
 

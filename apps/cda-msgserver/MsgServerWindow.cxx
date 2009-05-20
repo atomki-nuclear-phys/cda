@@ -46,7 +46,7 @@ MsgServerWindow::MsgServerWindow()
    // "virtual directory".
    //
    resize( 750, 500 );
-   setWindowTitle( "CDA Message Server" );
+   setWindowTitle( tr( "CDA Message Server" ) );
    setWindowIcon( QIcon( ":/img/logo.png" ) );
 
    //
@@ -79,13 +79,13 @@ MsgServerWindow::MsgServerWindow()
    // Start listening on port 49700 with all network interfaces:
    //
    if( ! m_server->listen( Address( "0.0.0.0", 49700 ) ) ) {
-      QMessageBox::critical( this, "Error starting server",
-                             "The TCP/IP message server could not be "
-                             "started on port 49700. Please select another "
-                             "port!" );
-      statusBar()->showMessage( "The server is stopped" );
+      QMessageBox::critical( this, tr( "Error starting server" ),
+                             tr( "The TCP/IP message server could not be "
+                                 "started on port %1. Please select another "
+                                 "port!" ).arg( 49700 ) );
+      statusBar()->showMessage( tr( "The server is stopped" ) );
    } else {
-      statusBar()->showMessage( "The server is running" );
+      statusBar()->showMessage( tr( "The server is running on port %1" ).arg( 49700 ) );
    }
 
 }
@@ -99,8 +99,8 @@ MsgServerWindow::~MsgServerWindow() {
    //
    // Only these two are not taken care of by Qt:
    //
-   delete m_view;
    delete m_server;
+   delete m_view;
 
 }
 
@@ -120,15 +120,13 @@ void MsgServerWindow::portChangedSlot() {
    }
    if( m_server->isListening() ) m_server->close();
    if( ! m_server->listen( Address( "0.0.0.0", port ) ) ) {
-      QString message;
-      message.sprintf( "The TCP/IP message server could not be "
-                       "started on port %i. Please select another "
-                       "port!", port );
-      QMessageBox::critical( this, "Error starting server",
-                             message );
-      statusBar()->showMessage( "The server is stopped" );
+      QMessageBox::critical( this, tr( "Error starting server" ),
+                             tr( "The TCP/IP message server could not be "
+                                 "started on port %1. Please select another "
+                                 "port!" ).arg( port ) );
+      statusBar()->showMessage( tr( "The server is stopped" ) );
    } else {
-      statusBar()->showMessage( "The server is running" );
+      statusBar()->showMessage( tr( "The server is running on port %1" ).arg( port ) );
    }
    return;
 
@@ -181,29 +179,29 @@ void MsgServerWindow::minMsgLevelChangedSlot( const QString& value ) {
 
 void MsgServerWindow::aboutQtSlot() {
 
-   QMessageBox::aboutQt( this, "CDA Message Server - built on Qt" );
+   QMessageBox::aboutQt( this, tr( "CDA Message Server - built on Qt" ) );
    return;
 
 }
 
 void MsgServerWindow::aboutCDASlot() {
 
-   QMessageBox::about( this, "CDA - CAMAC Data Acquisition",
-                       "CDA is an application suit built for the "
-                       "Experimental Nuclear Physics department of the "
-                       "Atomki. It is composed of multiple executables "
-                       "that work together in the data acquisition." );
+   QMessageBox::about( this, tr( "CDA - CAMAC Data Acquisition" ),
+                       tr( "CDA is an application suit built for the "
+                           "Experimental Nuclear Physics department of the "
+                           "Atomki. It is composed of multiple executables "
+                           "that work together in the data acquisition." ) );
    return;
 
 }
 
 void MsgServerWindow::aboutMsgServerSlot() {
 
-   QMessageBox::about( this, "CDA Message Server",
-                       "The CDA Message Server is an application in which "
-                       "all parts of CDA can be monitored. It listens for "
-                       "incoming messages from the various components and "
-                       "presents these to the user in a nice way." );
+   QMessageBox::about( this, tr( "CDA Message Server" ),
+                       tr( "The CDA Message Server is an application in which "
+                           "all parts of CDA can be monitored. It listens for "
+                           "incoming messages from the various components and "
+                           "presents these to the user in a nice way." ) );
    return;
 
 }
@@ -221,10 +219,10 @@ void MsgServerWindow::createMenus() {
    //                                                             //
    /////////////////////////////////////////////////////////////////
 
-   QMenu* fileMenu = menuBar()->addMenu( "File" );
+   QMenu* fileMenu = menuBar()->addMenu( tr( "File" ) );
 
    m_quitAction = fileMenu->addAction( QIcon( ":/img/warning.png" ),
-                                       "Quit" );
+                                       tr( "Quit" ) );
    connect( m_quitAction, SIGNAL( triggered() ),
             this, SLOT( close() ) );
 
@@ -234,30 +232,30 @@ void MsgServerWindow::createMenus() {
    //                                                             //
    /////////////////////////////////////////////////////////////////
 
-   QMenu* prefMenu = menuBar()->addMenu( "Preferences" );
+   QMenu* prefMenu = menuBar()->addMenu( tr( "Preferences" ) );
 
-   m_showPortDock = prefMenu->addAction( "Show port setting" );
+   m_showPortDock = prefMenu->addAction( tr( "Show port setting" ) );
    m_showPortDock->setCheckable( true );
    connect( m_showPortDock, SIGNAL( toggled( bool ) ),
             m_portDock, SLOT( setVisible( bool ) ) );
    connect( m_portDock, SIGNAL( visibilityChanged( bool ) ),
             m_showPortDock, SLOT( setChecked( bool ) ) );
 
-   m_showShownLinesDock = prefMenu->addAction( "Show shown lines setting" );
+   m_showShownLinesDock = prefMenu->addAction( tr( "Show shown lines setting" ) );
    m_showShownLinesDock->setCheckable( true );
    connect( m_showShownLinesDock, SIGNAL( toggled( bool ) ),
             m_shownLinesDock, SLOT( setVisible( bool ) ) );
    connect( m_shownLinesDock, SIGNAL( visibilityChanged( bool ) ),
             m_showShownLinesDock, SLOT( setChecked( bool ) ) );
 
-   m_showMsgLevelDock = prefMenu->addAction( "Show min. level setting" );
+   m_showMsgLevelDock = prefMenu->addAction( tr( "Show min. level setting" ) );
    m_showMsgLevelDock->setCheckable( true );
    connect( m_showMsgLevelDock, SIGNAL( toggled( bool ) ),
             m_minMsgLevelDock, SLOT( setVisible( bool ) ) );
    connect( m_minMsgLevelDock, SIGNAL( visibilityChanged( bool ) ),
             m_showMsgLevelDock, SLOT( setChecked( bool ) ) );
 
-   m_showOutputFileDock = prefMenu->addAction( "Show output file setting" );
+   m_showOutputFileDock = prefMenu->addAction( tr( "Show output file setting" ) );
    m_showOutputFileDock->setCheckable( true );
    connect( m_showOutputFileDock, SIGNAL( toggled( bool ) ),
             m_outputFileDock, SLOT( setVisible( bool ) ) );
@@ -271,18 +269,18 @@ void MsgServerWindow::createMenus() {
    /////////////////////////////////////////////////////////////////
 
    menuBar()->addSeparator();
-   QMenu* helpMenu = menuBar()->addMenu( "Help" );
+   QMenu* helpMenu = menuBar()->addMenu( tr( "Help" ) );
 
-   m_aboutQtAction = helpMenu->addAction( "About Qt" );
+   m_aboutQtAction = helpMenu->addAction( tr( "About Qt" ) );
    connect( m_aboutQtAction, SIGNAL( triggered() ),
             this, SLOT( aboutQtSlot() ) );
 
-   m_aboutMsgServerAction = helpMenu->addAction( "About Message Server" );
+   m_aboutMsgServerAction = helpMenu->addAction( tr( "About Message Server" ) );
    connect( m_aboutMsgServerAction, SIGNAL( triggered() ),
             this, SLOT( aboutMsgServerSlot() ) );
 
    m_aboutCDAAction = helpMenu->addAction( QIcon( ":/img/logo.png" ),
-                                           "About CDA" );
+                                           tr( "About CDA" ) );
    connect( m_aboutCDAAction, SIGNAL( triggered() ),
             this, SLOT( aboutCDASlot() ) );
 
@@ -311,7 +309,7 @@ void MsgServerWindow::createDockWidgets() {
    connect( m_portEdit, SIGNAL( editingFinished() ),
             this, SLOT( portChangedSlot() ) );
 
-   m_portDock = new QDockWidget( "Server port", this );
+   m_portDock = new QDockWidget( tr( "Server port" ), this );
    m_portDock->setAllowedAreas( Qt::TopDockWidgetArea |
                                 Qt::BottomDockWidgetArea );
    m_portDock->setWidget( m_portEdit );
@@ -331,7 +329,7 @@ void MsgServerWindow::createDockWidgets() {
    connect( m_shownLinesEdit, SIGNAL( editingFinished() ),
             this, SLOT( shownLinesChangedSlot() ) );
 
-   m_shownLinesDock = new QDockWidget( "Max. number of messages", this );
+   m_shownLinesDock = new QDockWidget( tr( "Max. number of messages" ), this );
    m_shownLinesDock->setAllowedAreas( Qt::TopDockWidgetArea |
                                       Qt::BottomDockWidgetArea );
    m_shownLinesDock->setWidget( m_shownLinesEdit );
@@ -355,7 +353,7 @@ void MsgServerWindow::createDockWidgets() {
    connect( m_minMsgLevelEdit, SIGNAL( currentIndexChanged( const QString& ) ),
             this, SLOT( minMsgLevelChangedSlot( const QString& ) ) );
 
-   m_minMsgLevelDock = new QDockWidget( "Min. message level", this );
+   m_minMsgLevelDock = new QDockWidget( tr( "Min. message level" ), this );
    m_minMsgLevelDock->setAllowedAreas( Qt::TopDockWidgetArea |
                                        Qt::BottomDockWidgetArea );
    m_minMsgLevelDock->setWidget( m_minMsgLevelEdit );
@@ -375,7 +373,7 @@ void MsgServerWindow::createDockWidgets() {
    //                                                             //
    /////////////////////////////////////////////////////////////////
 
-   m_outputFileBox = new QGroupBox( "Write output file" );
+   m_outputFileBox = new QGroupBox( tr( "Write output file" ) );
    m_outputFileBox->setCheckable( true );
    connect( m_outputFileBox, SIGNAL( toggled( bool ) ),
             this, SLOT( outputFileWritingChangedSlot( bool ) ) );
@@ -383,7 +381,7 @@ void MsgServerWindow::createDockWidgets() {
 
    m_outputFileLayout = new QHBoxLayout( m_outputFileBox );
 
-   m_outputFileLabel = new QLabel( "File name: " );
+   m_outputFileLabel = new QLabel( tr( "File name:" ) );
    m_outputFileLayout->addWidget( m_outputFileLabel );
 
    m_outputFileEdit = new QLineEdit( "messages.log" );
@@ -391,7 +389,7 @@ void MsgServerWindow::createDockWidgets() {
             this, SLOT( outputFileNameChangedSlot( const QString& ) ) );
    m_outputFileLayout->addWidget( m_outputFileEdit );
 
-   m_outputFileDock = new QDockWidget( "Output file", this );
+   m_outputFileDock = new QDockWidget( tr( "Output file" ), this );
    m_outputFileDock->setAllowedAreas( Qt::TopDockWidgetArea |
                                       Qt::BottomDockWidgetArea );
    m_outputFileDock->setWidget( m_outputFileBox );

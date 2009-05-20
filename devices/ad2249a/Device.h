@@ -1,5 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id: Device.h 30 2008-07-10 13:49:27Z krasznaa $
+// $Id$
 #ifndef CDA_DEVICES_AD2249A_DEVICE_H
 #define CDA_DEVICES_AD2249A_DEVICE_H
 

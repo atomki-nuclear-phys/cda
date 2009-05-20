@@ -1,4 +1,4 @@
-// $Id: Hist.cxx 39 2008-07-14 17:15:52Z krasznaa $
+// $Id$
 
 // System include(s):
 #include <cstdio>

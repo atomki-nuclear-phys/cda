@@ -1,5 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id: Gui.h 32 2008-07-10 14:15:52Z krasznaa $
+// $Id$
 #ifndef CDA_DEVICES_AD2249A_GUI_H
 #define CDA_DEVICES_AD2249A_GUI_H
 
@@ -50,8 +50,8 @@ namespace ad2249a {
     *
     * @author Attila Krasznahorkay Jr.
     *
-    * $Revision: 32 $
-    * $Date: 2008-07-10 16:15:52 +0200 (Thu, 10 Jul 2008) $
+    * $Revision$
+    * $Date$
     */
    class Gui : public virtual dev::Gui,
                public virtual Device {

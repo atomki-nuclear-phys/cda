@@ -1,4 +1,4 @@
-// $Id: ChannelGui.cxx 33 2008-07-10 20:52:58Z krasznaa $
+// $Id$
 
 // Qt include(s):
 #include <QtCore/QRect>
