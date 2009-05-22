@@ -39,7 +39,7 @@ namespace stat {
     *
     * @param rate The rate value that should be shown
     */
-   void RateWidget::setNewRate( double rate ) {
+   void RateWidget::setNewRate( qreal rate ) {
 
       m_rateValues.pop_front();
       m_rateValues.push_back( rate );

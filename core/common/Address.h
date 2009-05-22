@@ -1,5 +1,14 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
+/**
+ *   @file core/common/Address.h
+ *  @short Header file declaring the Address class
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision: 57$
+ * $Date$
+ */
 #ifndef CDA_CORE_COMMON_ADDRESS_H
 #define CDA_CORE_COMMON_ADDRESS_H
 

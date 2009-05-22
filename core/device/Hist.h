@@ -40,7 +40,7 @@ namespace dev {
        * to increment this variable by as much as many histograms it
        * created.
        *
-       * @param counter Counter where to start numbering histograms from
+       * @param hmgr Higtogram manager to be used for booking the histograms
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
@@ -51,6 +51,8 @@ namespace dev {
        * This is of course only a first guess of how this function
        * should look like.
        *
+       * @param fragment Event fragment that should be processed
+       * @param hmgr Histogram manager to fill the histograms with
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */

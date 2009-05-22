@@ -47,10 +47,7 @@ namespace dev {
        * Plus, the device object has to remember in which array element
        * to put which subaddress data.
        *
-       * @param counter Variable giving the array index of the next free
-       *                array block
-       * @param names Variable that should be filled with the names of the
-       *              subaddresses
+       * @param nmgr NTupleMgr object that can be used at the initialisation
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
@@ -63,7 +60,7 @@ namespace dev {
        * sets the appropriate members of the array given to the function.
        *
        * @param fragment Event fragment that should be processed
-       * @param data Array that should be filled with the event data
+       * @param nmgr NTupleMgr that should be filled with the data
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */

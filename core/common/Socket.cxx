@@ -1,4 +1,13 @@
 // $Id$
+/**
+ *   @file core/common/Socket.cxx
+ *  @short File implementing the Socket class
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
 
 // Local include(s):
 #include "Socket.h"

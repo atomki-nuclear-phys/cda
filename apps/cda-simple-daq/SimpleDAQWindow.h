@@ -34,7 +34,7 @@ namespace simple_daq {
  *         applications with the click of a button. It is even smart enough to start
  *         these applications with all the correct command line options.
  *
- * @suthor Attila Krasznahorkay Jr.
+ * @author Attila Krasznahorkay Jr.
  *
  * $Revision$
  * $Date$

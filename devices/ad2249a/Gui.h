@@ -43,11 +43,6 @@ namespace ad2249a {
     *         rules described in the dev::Gui and dev::CrateWidget
     *         classes.
     *
-    *         The configuration widget of the device looks something like
-    *         this on a Mac:
-    *
-    *         @image html ad2249a_Gui.png
-    *
     * @author Attila Krasznahorkay Jr.
     *
     * $Revision$

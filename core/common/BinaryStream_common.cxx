@@ -1,4 +1,13 @@
 // $Id$
+/**
+ *   @file core/common/BinaryStream_common.cxx
+ *  @short File implementing the BinaryStream class
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
 
 // Local include(s):
 #include "BinaryStream.h"

@@ -1,15 +1,19 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
+/**
+ *   @file core/common/Socket.h
+ *  @short Header file declaring the Socket class
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision$
+ * $Date$
+ */
 #ifndef CDA_CORE_COMMON_SOCKET_H
 #define CDA_CORE_COMMON_SOCKET_H
 
 // Qt include(s):
 #include <QtNetwork/QTcpSocket>
-
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::Socket needs Qt >= 4.0.0"
-#endif
 
 /**
  *  @short Network socket for transmitting data

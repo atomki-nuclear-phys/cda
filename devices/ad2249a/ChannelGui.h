@@ -25,7 +25,7 @@ namespace ad2249a {
     *         This is a fixed size widget that has a Qt widget for changing
     *         each property of a channel. It looks like this on a Mac:
     *
-    *         @image html ad2249a_ChannelGui.png
+    *         @image html t2228a_ChannelGui.png
     *
     * @author Attila Krasznahorkay Jr.
     *

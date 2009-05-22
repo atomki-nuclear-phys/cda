@@ -1,4 +1,13 @@
 // $Id$
+/**
+ *   @file core/common/Address.cxx
+ *  @short File implementing the Address class
+ *
+ * @author Attila Krasznahorkay Jr.
+ *
+ * $Revision: 57$
+ * $Date$
+ */
 
 // Qt include(s):
 #include <QtCore/QStringList>
