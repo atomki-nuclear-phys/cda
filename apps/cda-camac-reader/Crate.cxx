@@ -129,6 +129,7 @@ namespace reader {
 
       crate.clear();
 
+      /*
       for( std::map< int, dev::Readout* >::const_iterator device =
               m_devices.begin(); device != m_devices.end(); ++device ) {
 
@@ -141,6 +142,7 @@ namespace reader {
       }
 
       crate.clearLAM();
+      */
 
       m_logger << msg::VERBOSE << "Cleared crate" << msg::endmsg;
 

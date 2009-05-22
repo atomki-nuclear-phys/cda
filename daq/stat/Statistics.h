@@ -56,6 +56,9 @@ namespace stat {
       /// Get the moment when this object was created
       const QTime& getStatTime() const;
 
+      /// Operator checking the equality of two statistics objects
+      bool operator== ( const Statistics& stat ) const;
+
    private:
       quint32 m_processedEvents; ///< Number of processed events
       QString m_source;          ///< Source of the statistics

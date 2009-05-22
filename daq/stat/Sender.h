@@ -7,12 +7,15 @@
 #include <list>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
+#   include "cdacore/common/Address.h"
 #   include "cdacore/msg/Logger.h"
 #else
+#   include "common/Address.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -21,9 +24,6 @@
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QTcpSocket )
-namespace msg {
-   class Address;
-}
 
 namespace stat {
 
@@ -41,29 +41,35 @@ namespace stat {
     * $Revision$
     * $Date$
     */
-   class Sender {
+   class Sender : public QThread {
 
-      // To have the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( stat::Sender )
+      Q_OBJECT
 
    public:
       /// Constructor
-      Sender();
+      Sender( unsigned long updateTimeout = 2000, QObject* parent = 0 );
       /// Destructor
       ~Sender();
 
       /// Add an address where statistics information should be sent to
-      bool addReceiver( const Address& address );
+      void addReceiver( const Address& address );
 
-      /// Send statistics to all the configured receivers
-      bool send( const Statistics& stat ) const;
+      /// Update the statistics information that should be broadcast.
+      void update( const Statistics& stat );
+
+   protected:
+      /// Function running in the parallel thread
+      virtual void run();
 
    private:
       /// Print a connection error message
       void printError( const QTcpSocket& socket ) const;
 
-      std::list< QTcpSocket* > m_sockets; ///< List of sockets where statistics should be sent to
-      mutable msg::Logger m_logger;       ///< Private logger
+      QMutex m_mutex; ///< Mutex for locking the statistics object to be broadcast
+      const unsigned long m_updateTimeout; ///< Interval between statistics broadcasts
+      Statistics m_lastStat; ///< Current object to be broadcast
+      std::list< Address > m_addresses; ///< Addresses which are listening for statistics
+      mutable msg::Logger m_logger; ///< Private logger
 
    }; // class Sender
 

@@ -214,6 +214,11 @@ int main( int argc, char* argv[] ) {
    statSource += ":";
    statSource += QString::number( QCoreApplication::applicationPid() );
 
+   // Initialise the statistics information to something meaningful, then start
+   // the statistics sender object:
+   stat_sender.update( stat::Statistics( 0, statSource ) );
+   stat_sender.start();
+
    //
    // Let the user know what we're doing:
    //
@@ -234,13 +239,10 @@ int main( int argc, char* argv[] ) {
          shutDown( 0 );
       }
 
-      // Send out statistics information after processing 20 events:
+      // Update the statistics information after 10 events were received:
       ++evcount;
-      if( ! ( evcount % 20 ) ) {
-         if( ! stat_sender.send( stat::Statistics( evcount, statSource ) ) ) {
-            g_logger << msg::WARNING << "Failed to send statistics to all recepients"
-                     << msg::endmsg;
-         }
+      if( ! ( evcount %10 ) ) {
+         stat_sender.update( stat::Statistics( evcount, statSource ) );
       }
 
    }

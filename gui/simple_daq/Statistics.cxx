@@ -133,7 +133,7 @@ namespace simple_daq {
 
       // If we don't receive an update from cda-camac-reader in 15 seconds, let's
       // declare the rate zero:
-      m_rateTimer->start( 15000 );
+      m_rateTimer->start( 5000 );
 
       return;
 

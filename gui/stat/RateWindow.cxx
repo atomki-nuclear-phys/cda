@@ -131,9 +131,10 @@ namespace stat {
       // Calculate the event processing rate:
       //
       if( stat.getSource() == m_lastStat.getSource() ) {
-         m_currentRate = static_cast< qreal >( stat.getProcessedEvents() -
-                                               m_lastStat.getProcessedEvents() ) /
-            m_lastStat.getStatTime().msecsTo( stat.getStatTime() ) * 1000.0;
+         m_currentRate = ( stat == m_lastStat ? 0.0 :
+                           static_cast< qreal >( stat.getProcessedEvents() -
+                                                 m_lastStat.getProcessedEvents() ) /
+                           m_lastStat.getStatTime().msecsTo( stat.getStatTime() ) * 1000.0 );
          m_eventRate->setText( QString::number( m_currentRate ) + " Hz" );
       } else {
          m_currentRate = 0.0;

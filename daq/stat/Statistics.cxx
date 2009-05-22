@@ -69,4 +69,12 @@ namespace stat {
 
    }
 
+   bool Statistics::operator== ( const Statistics& stat ) const {
+
+      return ( ( m_processedEvents == stat.m_processedEvents ) &&
+               ( m_source == stat.m_source ) &&
+               ( m_statTime == stat.m_statTime ) );
+
+   }
+
 } // namespace stat
