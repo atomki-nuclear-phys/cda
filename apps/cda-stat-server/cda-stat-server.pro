@@ -34,7 +34,7 @@ mac {
    QMAKE_CXXFLAGS += -F../../lib
    LIBS           += -F../../lib -framework cdacore -framework cdadaq -framework cdagui
 
-#   ICON = ../../images/cda-simple-daq.icns
+   ICON = ../../images/cda-stat-server.icns
 }
 
 #
