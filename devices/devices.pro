@@ -12,4 +12,4 @@
 include(../cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS  = t2228a ad2249a
+SUBDIRS  = t2228a ad2249a t4300b
