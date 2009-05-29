@@ -66,6 +66,9 @@ static const char* description =
    "This executable should normally be started by CDA internally.\n"
    "You should only start it by hand for debugging purposes.";
 
+/// Number of events processed
+quint32 g_evcount = 0;
+
 int main( int argc, char* argv[] ) {
 
    //
@@ -227,7 +230,7 @@ int main( int argc, char* argv[] ) {
    //
    // Read events and give them to the crate to display, in an endless loop.
    //
-   quint32 evcount = 0;
+   g_evcount = 0;
    for( ; ; ) {
 
       ev::Event event;
@@ -240,9 +243,9 @@ int main( int argc, char* argv[] ) {
       }
 
       // Update the statistics information after 10 events were received:
-      ++evcount;
-      if( ! ( evcount %10 ) ) {
-         stat_sender.update( stat::Statistics( evcount, statSource ) );
+      ++g_evcount;
+      if( ! ( g_evcount %10 ) ) {
+         stat_sender.update( stat::Statistics( g_evcount, statSource ) );
       }
 
    }
@@ -262,6 +265,8 @@ int main( int argc, char* argv[] ) {
  */
 void shutDown( int ) {
 
+   g_logger << msg::INFO << "Total number of events processed: "
+            << g_evcount << msg::endmsg;
    g_logger << msg::INFO << "Terminating application..." << msg::endmsg;
    exit( 0 );
 

@@ -19,8 +19,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdagui/device/Editor.h"
+#   include "cdagui/common/aboutCDA.h"
 #else
 #   include "device/Editor.h"
+#   include "common/aboutCDA.h"
 #endif
 
 // Local include(s):
@@ -186,11 +188,7 @@ void ConfigEditorWindow::aboutQtSlot() {
 
 void ConfigEditorWindow::aboutCDASlot() {
 
-   QMessageBox::about( this, tr( "CDA - CAMAC Data Acquisition" ),
-                       tr( "CDA is an application suit built for the "
-                           "Experimental Nuclear Physics department of the "
-                           "Atomki. It is composed of multiple executables "
-                           "that work together in the data acquisition." ) );
+   aboutCDA( this );
    return;
 
 }

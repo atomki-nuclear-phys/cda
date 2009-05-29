@@ -15,10 +15,12 @@
 #   include "cdacore/common/Address.h"
 #   include "cdadaq/stat/Server.h"
 #   include "cdagui/stat/MDIView.h"
+#   include "cdagui/common/aboutCDA.h"
 #else
 #   include "common/Address.h"
 #   include "stat/Server.h"
 #   include "stat/MDIView.h"
+#   include "common/aboutCDA.h"
 #endif
 
 // Local include(s):
@@ -114,11 +116,7 @@ void StatServerWindow::aboutStatServerSlot() {
 
 void StatServerWindow::aboutCDASlot() {
 
-   QMessageBox::about( this, tr( "CDA - CAMAC Data Acquisition" ),
-                       tr( "CDA is an application suit built for the "
-                           "Experimental Nuclear Physics department of the "
-                           "Atomki. It is composed of multiple executables "
-                           "that work together in the data acquisition." ) );
+   aboutCDA( this );
    return;
 
 }

@@ -20,9 +20,11 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Server.h"
 #   include "cdagui/msg/TextView.h"
+#   include "cdagui/common/aboutCDA.h"
 #else
 #   include "msg/Server.h"
 #   include "msg/TextView.h"
+#   include "common/aboutCDA.h"
 #endif
 
 // Local include(s):
@@ -186,11 +188,7 @@ void MsgServerWindow::aboutQtSlot() {
 
 void MsgServerWindow::aboutCDASlot() {
 
-   QMessageBox::about( this, tr( "CDA - CAMAC Data Acquisition" ),
-                       tr( "CDA is an application suit built for the "
-                           "Experimental Nuclear Physics department of the "
-                           "Atomki. It is composed of multiple executables "
-                           "that work together in the data acquisition." ) );
+   aboutCDA( this );
    return;
 
 }

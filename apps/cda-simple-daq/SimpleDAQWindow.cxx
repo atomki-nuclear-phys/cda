@@ -18,6 +18,7 @@
 #   include "cdagui/simple_daq/CamacReaderRunner.h"
 #   include "cdagui/simple_daq/GlomemWriterRunner.h"
 #   include "cdagui/simple_daq/HBookWriterRunner.h"
+#   include "cdagui/common/aboutCDA.h"
 #else
 #   include "common/Address.h"
 #   include "msg/Server.h"
@@ -26,6 +27,7 @@
 #   include "simple_daq/CamacReaderRunner.h"
 #   include "simple_daq/GlomemWriterRunner.h"
 #   include "simple_daq/HBookWriterRunner.h"
+#   include "common/aboutCDA.h"
 #endif
 
 // Local include(s):
@@ -235,11 +237,7 @@ void SimpleDAQWindow::aboutSimpleDAQSlot() {
 
 void SimpleDAQWindow::aboutCDASlot() {
 
-   QMessageBox::about( this, tr( "CDA - CAMAC Data Acquisition" ),
-                       tr( "CDA is an application suit built for the "
-                           "Experimental Nuclear Physics department of the "
-                           "Atomki. It is composed of multiple executables "
-                           "that work together in the data acquisition." ) );
+   aboutCDA( this );
    return;
 
 }
