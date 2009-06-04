@@ -16,8 +16,10 @@ VERSION  = 0.9.0
 TARGET   = cdadaq
 
 # These are the header and source files:
-HEADERS = $$system(ls common/*.h) $$system(ls schema/*.h) $$system(ls stat/*.h)
-SOURCES = $$system(ls common/*.cxx) $$system(ls schema/*.cxx) $$system(ls stat/*.cxx)
+HEADERS = $$system(ls common/*.h) $$system(ls schema/*.h) $$system(ls stat/*.h) \
+          $$system(ls config/*.h)
+SOURCES = $$system(ls common/*.cxx) $$system(ls schema/*.cxx) $$system(ls stat/*.cxx) \
+          $$system(ls config/*.cxx)
 TRANSLATIONS = cdadaq_hu.ts
 
 # The library uses the QtCore library:
@@ -57,6 +59,11 @@ mac {
    STAT_HEADERS.files = $$system(ls stat/*.h)
    STAT_HEADERS.path = Headers/stat
    QMAKE_BUNDLE_DATA += STAT_HEADERS
+
+   CONFIG_HEADERS.version = Versions
+   CONFIG_HEADERS.files = config/ConfServer.h config/ConfReader.h
+   CONFIG_HEADERS.path = Headers/config
+   QMAKE_BUNDLE_DATA += CONFIG_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =

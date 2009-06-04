@@ -53,6 +53,9 @@ public:
    /// Get the port number of the address
    quint16             getPort() const;
 
+   /// Function checking if the specified string can be decoded into an address
+   static bool isAddress( const QString& address );
+
 private:
    QHostAddress m_host; ///< Host name of the address
    quint16      m_port; ///< Port number of the address

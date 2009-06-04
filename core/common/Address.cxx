@@ -121,3 +121,30 @@ quint16 Address::getPort() const {
    return m_port;
 
 }
+
+/**
+ * This function can be used to decide if a given string can be decoded
+ * into an Address object or not. The check is not too complicated, it
+ * just tests if the string is something like: "blabla:<unsigned int>"
+ *
+ * @returns <code>true</code> if the decoding seems possible,
+ *          <code>false</code> otherwise
+ */
+bool Address::isAddress( const QString& address ) {
+
+   // Split the string into an address and a port number:
+   QStringList split = address.split( ":", QString::SkipEmptyParts );
+   if( split.size() != 2 ) {
+      return false;
+   }
+
+   // Check if the second part of the string is indeed a number:
+   bool ok = false;
+   split.at( 1 ).toUInt( &ok );
+   if( ! ok ) {
+      return false;
+   }
+
+   return true;
+
+}
