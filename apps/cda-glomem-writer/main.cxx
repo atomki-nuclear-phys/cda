@@ -139,8 +139,14 @@ int main( int argc, char* argv[] ) {
    glomem::Crate crate;
    crate.setLoader( &loader );
 
+   //
+   // Decide how to read the configuration:
+   //
    if( Address::isAddress( ( const char* ) config ) ) {
 
+      //
+      // Read the configuration data from the specified address:
+      //
       conf::ConfReader reader;
       if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
          g_logger << msg::FATAL << "Couldn't read configuration from address: "
@@ -148,6 +154,9 @@ int main( int argc, char* argv[] ) {
          return 1;
       }
 
+      //
+      // Initialise the crate object from the buffer:
+      //
       if( ! crate.readConfig( reader.buffer() ) ) {
          g_logger << msg::FATAL << "Couldn't process configuration coming from address: "
                   << ( const char* ) config << msg::endmsg;
@@ -273,7 +282,7 @@ int main( int argc, char* argv[] ) {
 
       // Update the statistics information after 10 events were received:
       ++g_evcount;
-      if( ! ( g_evcount %10 ) ) {
+      if( ! ( g_evcount % 10 ) ) {
          stat_sender.update( stat::Statistics( g_evcount, statSource ) );
       }
 

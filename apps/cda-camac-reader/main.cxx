@@ -39,6 +39,7 @@
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/Sender.h"
 #   include "cdadaq/stat/Sender.h"
+#   include "cdadaq/config/ConfReader.h"
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
@@ -48,6 +49,7 @@
 #   include "event/Event.h"
 #   include "event/Sender.h"
 #   include "stat/Sender.h"
+#   include "config/ConfReader.h"
 #endif
 
 // Local include(s):
@@ -75,7 +77,8 @@ int main( int argc, char* argv[] ) {
    // Read the command line options:
    //
    CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename", "Name of an XML config file",
+   CmdArgStr config( 'c', "config", "filename/address",
+                     "Name of an XML config file or address of a config server",
                      CmdArg::isREQ );
    CmdArgStrList msgservers( 'm', "msgservers", "addresses", "Addresses of message servers" );
    CmdArgStrList clients( 'e', "clients", "addresses", "Addresses of event reader clients" );
@@ -117,37 +120,6 @@ int main( int argc, char* argv[] ) {
    }
 
    //
-   // Open the configuration file:
-   //
-   QFile config_file( ( const char* ) config );
-   if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-      g_logger << msg::FATAL << "The specified configuration file (\""
-               << ( ( const char* ) config ? ( const char* ) config : "" )
-               << "\")" << std::endl
-               << "could not be opened!" << msg::endmsg;
-      return 1;
-   }
-
-   //
-   // Read the file's contents into XML format:
-   //
-   QDomDocument doc;
-   QString errorMsg;
-   int errorLine, errorColumn;
-   if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
-                         &errorColumn ) ) {
-      g_logger << msg::FATAL << "Error in parsing \"" << ( const char* ) config
-               << "\"" << std::endl
-               << "  Error message: " << errorMsg << std::endl
-               << "  Error line   : " << errorLine << std::endl
-               << "  Error column : " << errorColumn << msg::endmsg;
-      return 1;
-   } else {
-      g_logger << msg::DEBUG << "Successfully parsed: "
-               << ( const char* ) config << msg::endmsg;
-   }
-
-   //
    // Try to load all available device plugins:
    //
    dev::Loader loader;
@@ -160,19 +132,84 @@ int main( int argc, char* argv[] ) {
    }
 
    //
-   // Initialise a Crate object with this configuration:
+   // Create the crate object:
    //
    reader::Crate crate;
    crate.setLoader( &loader );
 
-   QDomElement work = doc.documentElement();
-   if( ! crate.readConfig( work ) ) {
-      g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
-               << "See previous messages for more information..." << msg::endmsg;
-      return 1;
+   //
+   // Decide how to read the configuration:
+   //
+   if( Address::isAddress( ( const char* ) config ) ) {
+
+      //
+      // Read the configuration data from the specified address:
+      //
+      conf::ConfReader reader;
+      if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
+         g_logger << msg::FATAL << "Couldn't read configuration from address: "
+                  << ( const char* ) config << msg::endmsg;
+         return 1;
+      }
+
+      //
+      // Initialise the crate object from the buffer:
+      //
+      if( ! crate.readConfig( reader.buffer() ) ) {
+         g_logger << msg::FATAL << "Couldn't process configuration coming from address: "
+                  << ( const char* ) config << msg::endmsg;
+         return 1;
+      } else {
+         g_logger << msg::INFO << "Read the configuration from: "
+                  << ( const char* ) config << msg::endmsg;
+      }
+
    } else {
-      g_logger << msg::INFO << "Read the configuration from: "
-               << ( const char* ) config << msg::endmsg;
+
+      //
+      // Open the configuration file:
+      //
+      QFile config_file( ( const char* ) config );
+      if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
+         g_logger << msg::FATAL << "The specified configuration file (\""
+                  << ( ( const char* ) config ? ( const char* ) config : "" )
+                  << "\")" << std::endl
+                  << "could not be opened!" << msg::endmsg;
+         return 1;
+      }
+
+      //
+      // Read the file's contents into XML format:
+      //
+      QDomDocument doc;
+      QString errorMsg;
+      int errorLine, errorColumn;
+      if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
+                            &errorColumn ) ) {
+         g_logger << msg::FATAL << "Error in parsing \"" << ( const char* ) config
+                  << "\"" << std::endl
+                  << "  Error message: " << errorMsg << std::endl
+                  << "  Error line   : " << errorLine << std::endl
+                  << "  Error column : " << errorColumn << msg::endmsg;
+         return 1;
+      } else {
+         g_logger << msg::DEBUG << "Successfully parsed: "
+                  << ( const char* ) config << msg::endmsg;
+      }
+
+      //
+      // Initialise a Crate object with this configuration:
+      //
+      QDomElement work = doc.documentElement();
+      if( ! crate.readConfig( work ) ) {
+         g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
+                  << "See previous messages for more information..." << msg::endmsg;
+         return 1;
+      } else {
+         g_logger << msg::INFO << "Read the configuration from: "
+                  << ( const char* ) config << msg::endmsg;
+      }
+
    }
 
    //
@@ -259,7 +296,7 @@ int main( int argc, char* argv[] ) {
 
       // Update the statistics information after 10 events were sent out:
       ++g_evcount;
-      if( ! ( g_evcount %10 ) ) {
+      if( ! ( g_evcount % 10 ) ) {
          stat_sender.update( stat::Statistics( g_evcount, statSource ) );
       }
 

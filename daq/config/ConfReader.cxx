@@ -8,9 +8,15 @@
 
 namespace conf {
 
+   /**
+    * The constructor just needs to set up all the member variables.
+    */
    ConfReader::ConfReader()
       : m_logger( "conf::ConfReader" ) {
 
+      //
+      // Open the internal buffer for reading and writing:
+      //
       if( m_buffer.open( QBuffer::ReadWrite ) ) {
          m_logger << msg::VERBOSE << "Opened internal buffer in read/write mode"
                   << msg::endmsg;
@@ -21,8 +27,22 @@ namespace conf {
 
    }
 
+   /**
+    * This is the main function of the class. It connects to a host and reads the
+    * configuration data in a "blocking" way, which means that it doesn't need a
+    * Qt event loop to function.
+    *
+    * It's pretty much a rip off of the "blocking fortune client" example of the
+    * Qt documentation...
+    *
+    * @returns <code>true</code> if the data was retrieved successfully,
+    *          <code>false</code> otherwise
+    */
    bool ConfReader::readFrom( const Address& address ) {
 
+      //
+      // Create the socket used for the data retrieval:
+      //
       QTcpSocket socket;
       m_logger << msg::DEBUG << "Connecting to "
                << address.getHost().toString() << ":"
@@ -75,6 +95,16 @@ namespace conf {
 
    }
 
+   /**
+    * This function provides access to the buffer holding the configuration data.
+    * It can be used with something like:
+    *
+    *  <code>
+    *   myCrateObject->readConf( confReader.buffer() );
+    *  </code>
+    *
+    * @returns The cached configuration data
+    */
    QIODevice* ConfReader::buffer() {
 
       // Jump to the beginning of the buffer:

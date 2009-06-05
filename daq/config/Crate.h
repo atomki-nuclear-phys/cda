@@ -26,6 +26,8 @@ namespace conf {
     *         it in binary format, we need such a helper crate object
     *         to translate between these things.
     *
+    *         This class should not be used outside the conf:: namespace!
+    *
     * @author Attila Krasznahorkay Jr.
     *
     * $Revision$
