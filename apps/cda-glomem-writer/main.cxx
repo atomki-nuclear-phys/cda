@@ -58,7 +58,8 @@
 void shutDown( int );
 
 // Global variable(s):
-msg::Logger g_logger( "cda-glomem-writer" );
+static msg::Logger g_logger( "cda-glomem-writer" );
+static int g_evcount = 0; ///< Number of events processed
 
 // Description for the executable:
 static const char* description =
@@ -67,9 +68,6 @@ static const char* description =
    "from within PAW++ while the data acquisition is on-going.\n\n"
    "This executable should normally be started by CDA internally.\n"
    "You should only start it by hand for debugging purposes.";
-
-/// Number of events processed
-quint32 g_evcount = 0;
 
 int main( int argc, char* argv[] ) {
 
