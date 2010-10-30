@@ -9,6 +9,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
 #include <QtGui/QHBoxLayout>
+#include <QtGui/QVBoxLayout>
 #include <QtGui/QAction>
 #include <QtGui/QMessageBox>
 #include <QtGui/QIcon>
@@ -371,11 +372,16 @@ void MsgServerWindow::createDockWidgets() {
    //                                                             //
    /////////////////////////////////////////////////////////////////
 
+   m_outputFileWidget = new QWidget();
+
+   m_outputFileVLayout = new QVBoxLayout( m_outputFileWidget );
+
    m_outputFileBox = new QGroupBox( tr( "Write output file" ) );
    m_outputFileBox->setCheckable( true );
    connect( m_outputFileBox, SIGNAL( toggled( bool ) ),
             this, SLOT( outputFileWritingChangedSlot( bool ) ) );
    m_outputFileBox->setChecked( false );
+   m_outputFileVLayout->addWidget( m_outputFileBox );
 
    m_outputFileLayout = new QHBoxLayout( m_outputFileBox );
 
@@ -390,7 +396,7 @@ void MsgServerWindow::createDockWidgets() {
    m_outputFileDock = new QDockWidget( tr( "Output file" ), this );
    m_outputFileDock->setAllowedAreas( Qt::TopDockWidgetArea |
                                       Qt::BottomDockWidgetArea );
-   m_outputFileDock->setWidget( m_outputFileBox );
+   m_outputFileDock->setWidget( m_outputFileWidget );
 
    addDockWidget( Qt::BottomDockWidgetArea, m_outputFileDock );
 

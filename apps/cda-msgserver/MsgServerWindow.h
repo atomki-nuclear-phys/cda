@@ -8,9 +8,11 @@
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QDockWidget )
+QT_FORWARD_DECLARE_CLASS( QWidget )
 QT_FORWARD_DECLARE_CLASS( QSpinBox )
 QT_FORWARD_DECLARE_CLASS( QGroupBox )
 QT_FORWARD_DECLARE_CLASS( QHBoxLayout )
+QT_FORWARD_DECLARE_CLASS( QVBoxLayout )
 QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QLineEdit )
 QT_FORWARD_DECLARE_CLASS( QAction )
@@ -84,6 +86,8 @@ private:
    QComboBox*   m_minMsgLevelEdit; ///< Minimum level of shown messages
    QDockWidget* m_minMsgLevelDock; ///< Dock widget for the msg. level modifications
 
+   QWidget*     m_outputFileWidget; ///< Main widget for the output file dock item
+   QVBoxLayout* m_outputFileVLayout; ///< Vertical layout of the main widget
    QGroupBox*   m_outputFileBox;    ///< Box holding the output file related widgets
    QHBoxLayout* m_outputFileLayout; ///< Layout of the output file box
    QLabel*      m_outputFileLabel;  ///< A text label in the output file box
