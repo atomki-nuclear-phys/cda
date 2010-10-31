@@ -130,19 +130,24 @@ unix:!mac {
    DESTDIR = ../lib
 
 }
-system(g77 --version){
-	LIBS += -L/usr/lib/gcc/i386-redhat-linux/3.4.6 -lg2c -lgfortran
-} else{
-	!system(gfortran --version){
+system(g77 --version) {
+        system(gfortran --version) {
+                message(Both g77 and gfortran are available. Adding gfortran to link list...)
+                LIBS += -lgfortran
+        } else {
+	        LIBS += -lg2c
+	}
+} else {
+	!system(gfortran --version) {
 		warning(Could not determine which fortran library to use)
 	}
 	LIBS += -lgfortran
 }
 
-exists($$CERNLIB_PATH/lib/libpacklib_noshift.a){
+exists($$CERNLIB_PATH/lib/libpacklib_noshift.a) {
 	LIBS += -lpacklib_noshift
-} else{
-	!exists($$CERNLIB_PATH/lib/libpacklib.a){
+} else {
+	!exists($$CERNLIB_PATH/lib/libpacklib.a) {
 		warning(Could not determine the packlib library name)
 	}
 	
