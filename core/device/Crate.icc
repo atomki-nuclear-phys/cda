@@ -10,7 +10,6 @@
 #include <QtXml/QDomElement>
 
 // Local include(s):
-#include "Crate.h"
 #include "Loader.h"
 
 namespace dev {
@@ -52,7 +51,6 @@ namespace dev {
    Crate< Device >::~Crate() {
 
       clear();
-
    }
 
    template< class Device >
@@ -123,7 +121,6 @@ namespace dev {
       }
 
       return true;
-
    }
 
    template< class Device >
@@ -142,15 +139,16 @@ namespace dev {
 
          output << device_it->second->type();
          if( ! device_it->second->writeConfig( dev ) ) {
-            m_logger << msg::ERROR << "There was a problem writing the "
-                     << "configuration of a device" << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "There was a problem writing the "
+                            "configuration of a device" )
+                     << msg::endmsg;
             return false;
          }
 
       }
 
       return true;
-
    }
 
    template< class Device >
@@ -159,7 +157,7 @@ namespace dev {
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
 
-      m_logger << msg::VERBOSE << "Reading configuration from XML input"
+      m_logger << msg::VERBOSE << tr( "Reading configuration from XML input" )
                << msg::endmsg;
 
       clear();
@@ -175,8 +173,9 @@ namespace dev {
             Factory* factory = m_loader->getFactory( type );
             Device* device = ( factory->*m_factoryFncn )();
             if( ! device->readConfig( element.childNodes().at( i ).toElement() ) ) {
-               m_logger << msg::ERROR << "There was a problem reading the "
-                        << "configuration of one of the devices!"
+               m_logger << msg::ERROR
+                        << tr( "There was a problem reading the "
+                               "configuration of one of the devices!" )
                         << msg::endmsg;
                delete device;
                return false;
@@ -184,8 +183,9 @@ namespace dev {
 
             if( ! ( ( device->getSlot() > 0 ) &&
                     ( device->getSlot() <= NUMBER_OF_SLOTS ) ) ) {
-               m_logger << msg::ERROR << "There was a problem reading the "
-                        << "configuration of one of the devices!"
+               m_logger << msg::ERROR
+                        << tr( "There was a problem reading the "
+                               "configuration of one of the devices!" )
                         << msg::endmsg;
                delete device;
                return false;
@@ -194,17 +194,18 @@ namespace dev {
             typename std::map< int, Device* >::iterator it;
             if( ( it = m_devices.find( device->getSlot() ) ) !=
                 m_devices.end() ) {
-               m_logger << msg::WARNING << "Redefining the device in slot: "
-                        << device->getSlot() << msg::endmsg;
+               m_logger << msg::WARNING
+                        << tr( "Redefining the device in slot: %1" ).arg( device->getSlot() )
+                        << msg::endmsg;
                delete it->second;
             }
 
             m_devices[ device->getSlot() ] = device;
 
          } else {
-            m_logger << msg::ERROR << "Device type \"" << type
-                     << "\" unknown." << std::endl
-                     << "Check that you have all plugins available!"
+            m_logger << msg::ERROR
+                     << tr( "Device type \"%1\" unknown\n"
+                            "Check that you have all plugins available!" ).arg( type )
                      << msg::endmsg;
             return false;
          }
@@ -212,13 +213,12 @@ namespace dev {
       }
 
       return true;
-
    }
 
    template< class Device >
    bool Crate< Device >::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to XML output"
+      m_logger << msg::VERBOSE << tr( "Writing configuration to XML output" )
                << msg::endmsg;
 
       for( typename std::map< int, Device* >::const_iterator device_it =
@@ -228,8 +228,10 @@ namespace dev {
          QDomElement dev_element =
             element.ownerDocument().createElement( device_it->second->type() );
          if( ! device_it->second->writeConfig( dev_element ) ) {
-            m_logger << msg::ERROR << "There was a problem writing the "
-                     << "configuration of a device" << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "There was a problem writing the "
+                            "configuration of a device" )
+                     << msg::endmsg;
             return false;
          }
          element.appendChild( dev_element );
@@ -237,14 +239,12 @@ namespace dev {
       }
 
       return true;
-
    }
 
    template< class Device >
    Loader* Crate< Device >::getLoader() const {
 
       return m_loader;
-
    }
 
    /**
@@ -260,7 +260,6 @@ namespace dev {
 
       m_loader = loader;
       return;
-
    }
 
    /**
@@ -278,7 +277,6 @@ namespace dev {
       m_devices.clear();
 
       return;
-
    }
 
    /**
@@ -293,15 +291,14 @@ namespace dev {
    bool Crate< Device >::checkLoader() const {
 
       if( ! m_loader ) {
-         m_logger << msg::ERROR << "No functional dev::Loader object specified "
-                  << "yet" << std::endl
-                  << "Configuration reading is not possible like this!"
+         m_logger << msg::ERROR
+                  << tr( "No functional dev::Loader object specified yet\n"
+                         "Configuration reading is not possible like this!" )
                   << msg::endmsg;
          return false;
       }
 
       return true;
-
    }
 
 } // namespace dev

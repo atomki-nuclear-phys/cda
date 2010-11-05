@@ -32,8 +32,6 @@ namespace ev {
    public:
       /// Default constructor
       Event();
-      /// Destructor
-      ~Event();
 
       /// Get all the event fragments
       const std::vector< Fragment >& getFragments() const;

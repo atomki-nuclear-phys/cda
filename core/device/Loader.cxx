@@ -37,16 +37,17 @@ namespace dev {
          //
          char* env_path = getenv( "CDASYS" );
          if( ! env_path ) {
+            // In case CDASYS is not in the environment, try using the directory where
+            // the code was compiled:
             m_path = CDASYS;
             m_path.append( "/dev" );
-            m_logger << msg::DEBUG << "Setting device plugin directory "
-                     << "to: " << m_path << msg::endmsg;
          } else {
             m_path = env_path;
             m_path.append( "/dev" );
-            m_logger << msg::DEBUG << "Setting device plugin directory "
-                     << "to: " << m_path << msg::endmsg;
          }
+         m_logger << msg::DEBUG << tr( "Setting device plugin directory "
+                                       "to: %1" ).arg( m_path ) << msg::endmsg;
+
          //
          // Delete the return value of getenv():
          //
@@ -101,11 +102,13 @@ namespace dev {
       // First of all, load all the statically linked plugins:
       //
       if( ! loadStaticPlugins() ) {
-         m_logger << msg::ERROR << "There was a problem loading the static "
-                  << "plugins" << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "There was a problem loading the static plugins" )
+                  << msg::endmsg;
          return false;
       } else {
-         m_logger << msg::DEBUG << "Loaded the static plugins" << msg::endmsg;
+         m_logger << msg::DEBUG << tr( "Loaded the static plugins" )
+                  << msg::endmsg;
       }
 
       //
@@ -121,22 +124,25 @@ namespace dev {
       for( QStringList::const_iterator pname = files.begin();
            pname != files.end(); ++pname ) {
 
-         m_logger << msg::VERBOSE << "Evaluating: "
-                  << *pname << msg::endmsg;
+         m_logger << msg::VERBOSE
+                  << tr( "Evaluating: %1" ).arg( *pname )
+                  << msg::endmsg;
 
          //
          // Try to load the files that look like shared libraries:
          //
          if( QLibrary::isLibrary( *pname ) ) {
 
-            m_logger << msg::VERBOSE << "Trying to load plugin: "
-                     << *pname << msg::endmsg;
+            m_logger << msg::VERBOSE
+                     << tr( "Trying to load plugin: %1" ).arg( *pname )
+                     << msg::endmsg;
 
             if( this->load( *pname ) ) {
-               m_logger << msg::VERBOSE << *pname << " loaded"
+               m_logger << msg::VERBOSE << tr( "%1 loaded" ).arg( *pname )
                         << msg::endmsg;
             } else {
-               m_logger << msg::WARNING << *pname << " could not be loaded"
+               m_logger << msg::WARNING
+                        << tr( "%1 could not be loaded" ).arg( *pname )
                         << msg::endmsg;
             }
 
@@ -148,7 +154,6 @@ namespace dev {
       // Always return true:
       //
       return true;
-
    }
 
    /**
@@ -168,12 +173,14 @@ namespace dev {
       QPluginLoader ploader( m_path + "/" + plugin_name );
       QObject* plugin = ploader.instance();
       if( ! plugin ) {
-         m_logger << msg::ERROR << "Couldn't load plugin with name: "
-                  << plugin_name << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "Couldn't load plugin with name: %1" ).arg( plugin_name )
+                  << msg::endmsg;
          return false;
       } else {
-         m_logger << msg::DEBUG << "Loaded plugin with name: "
-                  << plugin_name << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Loaded plugin with name: %1" ).arg( plugin_name )
+                  << msg::endmsg;
       }
 
       //
@@ -181,13 +188,16 @@ namespace dev {
       //
       dev::Factory* factory = qobject_cast< dev::Factory* >( plugin );
       if( ! factory ) {
-         m_logger << msg::ERROR << plugin_name << " doesn't provide the "
-                  << "dev::Factory interface!" << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "%1 doesn't provide the "
+                         "dev::Factory interface!" ).arg( plugin_name )
+                  << msg::endmsg;
          delete factory;
          return false;
       } else {
-         m_logger << msg::DEBUG << "Accessed dev::Factory interface in plugin: "
-                  << plugin_name << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Accessed dev::Factory interface in plugin: %1" ).arg( plugin_name )
+                  << msg::endmsg;
       }
 
       //
@@ -195,11 +205,12 @@ namespace dev {
       // and report the successive plugin loading:
       //
       m_deviceMap[ factory->shortName() ] = factory;
-      m_logger << msg::INFO << "Loaded device \"" << factory->longName()
-               << "\" from plugin: " << plugin_name << msg::endmsg;
+      m_logger << msg::INFO
+               << tr( "Loaded device \"%1\" from "
+                      "plugin: %2" ).arg( factory->longName() ).arg( plugin_name )
+               << msg::endmsg;
 
       return true;
-
    }
 
    /**
@@ -231,13 +242,15 @@ namespace dev {
          //
          dev::Factory* factory = qobject_cast< dev::Factory* >( *plugin );
          if( ! factory ) {
-            m_logger << msg::ERROR << "Found a static plugin not providing "
-                     << "the needed interface" << msg::endmsg;
+            m_logger << msg::ERROR << tr( "Found a static plugin not providing "
+                                          "the needed interface" )
+                     << msg::endmsg;
             delete factory;
             return false;
          } else {
-            m_logger << msg::VERBOSE << "Accessed dev::Factory interface in "
-                     << "static plugin" << msg::endmsg;
+            m_logger << msg::VERBOSE << tr( "Accessed dev::Factory interface in "
+                                            "static plugin" )
+                     << msg::endmsg;
          }
 
          //
@@ -245,13 +258,14 @@ namespace dev {
          // and report the successive plugin loading:
          //
          m_deviceMap[ factory->shortName() ] = factory;
-         m_logger << msg::INFO << "Loaded device \"" << factory->longName()
-                  << "\" from static plugin" << msg::endmsg;
+         m_logger << msg::INFO
+                  << tr( "Loaded device \"%1\" from a static "
+                         "plugin" ).arg( factory->longName() )
+                  << msg::endmsg;
 
       }
 
       return true;
-
    }
 
    /**
@@ -268,7 +282,6 @@ namespace dev {
       }
 
       return nameList;
-
    }
 
    /**
@@ -278,8 +291,9 @@ namespace dev {
    Factory* Loader::getFactory( const QString& name ) const {
 
       if( ! isLoaded( name ) ) {
-         m_logger << msg::ERROR<< "No device with name \""
-                  << name << "\" currently loaded" << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "No device with name \"%1\" loaded currently" ).arg( name )
+                  << msg::endmsg;
          return 0;
       }
 
@@ -287,7 +301,6 @@ namespace dev {
          m_deviceMap.find( name );
 
       return it->second;
-
    }
 
 } // namespace dev

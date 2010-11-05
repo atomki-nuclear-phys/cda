@@ -36,6 +36,9 @@
  */
 class Address {
 
+   // To get the tr() function:
+   Q_DECLARE_TR_FUNCTIONS( Address )
+
 public:
    /// Constructor with combined hostname:port string
    Address( const QString& address = "127.0.0.1:50000" );

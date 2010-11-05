@@ -22,7 +22,7 @@ HEADERS = $$system(ls fifo/*.h) $$system(ls msg/*.h) $$system(ls event/*.h) \
 SOURCES = $$system(ls fifo/*.cxx) $$system(ls msg/*.cxx) $$system(ls event/*.cxx) \
           $$system(ls device/*.cxx) $$system(ls camac/*.cxx) $$system(ls cmdl/*.cpp) \
           $$system(ls cernlib/*.cxx) $$system(ls common/*.cxx)
-TRANSLATIONS = cdacore_hu.ts
+TRANSLATIONS = ../trans/cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
 CONFIG += qt

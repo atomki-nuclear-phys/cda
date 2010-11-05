@@ -22,6 +22,7 @@ namespace cernlib {
       : m_initialized( false ), m_counter( 0 ),
         m_logger( "cernlib::HistMgr" ) {
 
+      m_logger << msg::VERBOSE << tr( "Object constructed" ) << msg::endmsg;
    }
 
    /**
@@ -49,15 +50,13 @@ namespace cernlib {
          }
          HLIMAP( PAWC_SIZE, name );
          m_logger << msg::DEBUG
-                  << tr( "Created PAW global memory with name: \"%1\"" )
-            .arg( name )
+                  << tr( "Created PAW global memory with name: \"%1\"" ).arg( name )
                   << msg::endmsg;
          m_initialized = true;
 
       }
 
       return;
-
    }
 
    /**
@@ -93,7 +92,6 @@ namespace cernlib {
 
       // Return the ID of the histogram:
       return m_counter;
-
    }
 
    /**
@@ -134,7 +132,6 @@ namespace cernlib {
 
       // Return the ID of the histogram:
       return m_counter;
-
    }
 
    /**
@@ -155,7 +152,6 @@ namespace cernlib {
       HF1( id, data, weight );
 
       return;
-
    }
 
    /**
@@ -178,7 +174,6 @@ namespace cernlib {
       HF2( id, xdata, ydata, weight );
 
       return;
-
    }
 
    /**
@@ -199,7 +194,6 @@ namespace cernlib {
       }
 
       return true;
-
    }
 
 } // namespace cernlib

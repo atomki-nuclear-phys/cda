@@ -52,7 +52,6 @@ namespace ev {
       start();
 
       return;
-
    }
 
    /**
@@ -80,7 +79,6 @@ namespace ev {
       m_mutex.unlock();
 
       return *this;
-
    }
 
    /**
@@ -100,8 +98,8 @@ namespace ev {
                   << msg::endmsg;
       } else {
          m_logger << msg::ERROR
-                  << (tr( "Server could not be started on host \"%1\" and "
-                         "port \"%2\"" ))
+                  << tr( "Server could not be started on host \"%1\" and "
+                         "port \"%2\"" )
             .arg( m_address.getHost().toString() ).arg( m_address.getPort() )
                   << msg::endmsg;
          return;
@@ -160,8 +158,9 @@ namespace ev {
             //
             // A little debugging message:
             //
-            m_logger << msg::VERBOSE << "Bytes available: "
-                     << socket->bytesAvailable() << msg::endmsg;
+            m_logger << msg::VERBOSE
+                     << tr( "Bytes available: %1" ).arg( socket->bytesAvailable() )
+                     << msg::endmsg;
 
             //
             // Read the event from the socket:
@@ -178,9 +177,7 @@ namespace ev {
 
       }
 
-
       return;
-
    }
 
 }

@@ -34,7 +34,6 @@ BinaryStream& BinaryStream::operator<< ( const Address& address ) {
    ( * ( QDataStream* ) this ) << address.getPort();
 
    return *this;
-
 }
 
 BinaryStream& BinaryStream::operator>> ( Address& address ) {
@@ -50,5 +49,4 @@ BinaryStream& BinaryStream::operator>> ( Address& address ) {
    address.setPort( port );
 
    return *this;
-
 }

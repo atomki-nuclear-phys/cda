@@ -41,7 +41,6 @@ namespace msg {
 
       m_writeOutputFile = value;
       return;
-
    }
 
    /**
@@ -51,7 +50,6 @@ namespace msg {
 
       m_outputFileName = name;
       return;
-
    }
 
    /**
@@ -61,7 +59,6 @@ namespace msg {
    bool Server::getWriteOutputFile() const {
 
       return m_writeOutputFile;
-
    }
 
    /**
@@ -70,7 +67,6 @@ namespace msg {
    const QString& Server::getOutputFileName() const {
 
       return m_outputFileName;
-
    }
 
    /**
@@ -80,7 +76,6 @@ namespace msg {
    bool Server::listen( const Address& address ) {
 
       return QTcpServer::listen( address.getHost(), address.getPort() );
-
    }
 
    /**
@@ -117,7 +112,6 @@ namespace msg {
       emit messageAvailable( message );
 
       return;
-
    }
 
    /**
@@ -139,7 +133,6 @@ namespace msg {
                socket, SLOT( deleteLater() ) );
 
       return;
-
    }
 
 } // namespace msg

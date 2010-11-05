@@ -23,7 +23,6 @@ Socket::Socket( QObject* parent )
 
    connect( this, SIGNAL( readyRead() ),
             this, SLOT( handleDataReady() ) );
-
 }
 
 /**
@@ -40,5 +39,4 @@ void Socket::handleDataReady() {
 
    emit dataReady( this );
    return;
-
 }

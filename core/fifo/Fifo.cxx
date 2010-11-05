@@ -18,7 +18,6 @@ Fifo::Fifo( const QString& path, QObject* parent )
 Fifo::~Fifo() {
 
    close();
-
 }
 
 /**
@@ -43,5 +42,4 @@ bool Fifo::open() {
              << msg::endmsg;
       return false;
    }
-
 }

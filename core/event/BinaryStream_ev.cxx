@@ -22,10 +22,6 @@ namespace ev {
 
    }
 
-   BinaryStream::~BinaryStream() {
-
-   }
-
    /**
     * The serialisation of an event is pretty simple. First the
     * number of event fragments in written to the stream, then each
@@ -46,7 +42,6 @@ namespace ev {
       }
 
       return *this;
-
    }
 
    /**
@@ -73,7 +68,6 @@ namespace ev {
       }
 
       return *this;
-
    }
 
    /**
@@ -99,7 +93,6 @@ namespace ev {
       }
 
       return *this;
-
    }
 
    /**
@@ -134,7 +127,6 @@ namespace ev {
       }
 
       return *this;
-
    }
 
 } // namespace ev

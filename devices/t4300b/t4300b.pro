@@ -19,7 +19,7 @@ TARGET   = t4300b
 # These are the header and source files:
 HEADERS = $$system(ls *.h)
 SOURCES = $$system(ls *.cxx)
-TRANSLATIONS = t4300b_hu.ts
+TRANSLATIONS = ../../dev/t4300b_hu.ts
 
 mac {
    message(*)

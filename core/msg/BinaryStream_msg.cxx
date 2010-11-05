@@ -20,7 +20,6 @@ namespace msg {
 
       this->initMaps();
       setVersion( QDataStream::Qt_4_0 );
-
    }
 
    /**
@@ -34,7 +33,6 @@ namespace msg {
       : QDataStream( array, openMode ) {
 
       this->initMaps();
-
    }
 
    /**
@@ -74,7 +72,6 @@ namespace msg {
       ( * ( QDataStream* ) this ) << message.getTime().getTime();
 
       return *this;
-
    }
 
    /**
@@ -127,7 +124,6 @@ namespace msg {
       message.setTime( MsgTime( date, time ) );
 
       return *this;
-
    }
 
    /**
@@ -153,7 +149,6 @@ namespace msg {
       m_reverseMap[ 7 ] = ALWAYS;
 
       return;
-
    }
 
 } // namespace msg

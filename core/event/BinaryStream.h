@@ -46,8 +46,6 @@ namespace ev {
       /// Constructor operating on a byte-array
       BinaryStream( QByteArray* array,
                     QIODevice::OpenMode openMode = QIODevice::ReadWrite );
-      /// Destructor
-      ~BinaryStream();
 
       /// Operator "serialising" a full CAMAC event
       BinaryStream& operator<< ( const Event& event );

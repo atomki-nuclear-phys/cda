@@ -7,6 +7,7 @@
 #include <map>
 
 // Qt include(s):
+#include <QtCore/QCoreApplication>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
@@ -35,6 +36,9 @@ namespace dev {
     * $Date$
     */
    class Loader {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( dev::Loader )
 
    public:
       /// Constructor specifying the directory of the plugins

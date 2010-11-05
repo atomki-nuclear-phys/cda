@@ -12,7 +12,9 @@
 /**
  *  @short Namespace for the event classes
  *
- *         This namespace is just an idea for the moment...
+ *         This namespace holds all the classes which are used to
+ *         transmit the readout information from the CAMAC crate(s)
+ *         to the applications processing this data.
  *
  * @author Attila Krasznahorkay Jr.
  *
@@ -24,11 +26,12 @@ namespace ev {
    /**
     *  @short Basic data fragment coming from one CAMAC device
     *
-    *         This is nothing serious for the time being.
-    *         Just something to fill the space for now. My idea
-    *         is that events read from the CAMAC devices should
-    *         be placed in proper OO structures later on to be
-    *         able to pass them around between the executables.
+    *         Each CAMAC device is supposed to fill one such object.
+    *         The fragment can identify which slot (in which crate)
+    *         it was coming from, and carries a free-format vector
+    *         of data words. It's up to the device plugins to handle
+    *         the data words consistently. (The different devices
+    *         are allowed to use the data words completely differently.)
     *
     * @author Attila Krasznahorkay Jr.
     *
@@ -40,8 +43,6 @@ namespace ev {
    public:
       /// Default constructor
       Fragment();
-      /// Destructor
-      ~Fragment();
 
       /// Get the number of the crate in which the module is
       int getCrateNumber() const;

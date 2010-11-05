@@ -10,28 +10,21 @@ namespace ev {
 
    }
 
-   Event::~Event() {
-
-   }
-
    const std::vector< Fragment >& Event::getFragments() const {
 
       return m_fragments;
-
    }
 
    void Event::addFragment( const Fragment& fragment ) {
 
       m_fragments.push_back( fragment );
       return;
-
    }
 
    void Event::clear() {
 
       m_fragments.clear();
       return;
-
    }
 
 } // namespace ev

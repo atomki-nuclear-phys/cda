@@ -19,7 +19,7 @@ TARGET   = ad1000
 # These are the header and source files:
 HEADERS = $$system(ls *.h)
 SOURCES = $$system(ls *.cxx)
-TRANSLATIONS = ad1000_hu.ts
+TRANSLATIONS = ../../dev/ad1000_hu.ts
 
 mac {
    message(*)

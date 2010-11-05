@@ -31,7 +31,6 @@ namespace camac {
         m_logger( "camac::Crate" ) {
 
       m_logger << msg::VERBOSE << tr( "Device constructed" ) << msg::endmsg;
-
    }
 
    /**
@@ -42,7 +41,6 @@ namespace camac {
 
       close();
       m_logger << msg::VERBOSE << tr( "Device destructed" ) << msg::endmsg;
-
    }
 
    /**
@@ -68,8 +66,8 @@ namespace camac {
       int error;
       if( ( error = cc32_open( ( char* ) m_devicePath, &m_handle ) ) ) {
          m_logger << msg::ERROR << tr( "CAMAC crate could not be opened\n"
-                                       "with message: " )
-                  << strerror( error ) << msg::endmsg;
+                                       "with message: %1" ).arg( strerror( error ) )
+                  << msg::endmsg;
          return false;
       }
 #endif
@@ -80,7 +78,6 @@ namespace camac {
       m_isOpen = true;
 
       return true;
-
    }
 
    /**
@@ -100,8 +97,8 @@ namespace camac {
       int error;
       if( ( error = cc32_close( m_handle ) ) ) {
          m_logger << msg::ERROR << tr( "CAMAC crate closing failed\n"
-                                       "with message: " )
-                  << strerror( error ) << msg::endmsg;
+                                       "with message: %1" ).arg( strerror( error ) )
+                  << msg::endmsg;
          return false;
       }
 #endif
@@ -112,7 +109,6 @@ namespace camac {
       m_isOpen = false;
 
       return true;
-
    }
 
    /**
@@ -132,12 +128,11 @@ namespace camac {
       return cc32_read_word( m_handle, N, A, F );
 #else
       m_logger << msg::DEBUG
-               << tr( "readWord(...) called with: N = %1 A = %2 "
+               << tr( "readWord(...) called with: N = %1, A = %2, "
                       "F = %3" ).arg( N ).arg( A ).arg( F )
                << msg::endmsg;
       return ( A * 10 );
 #endif // TESTING
-
    }
 
    /**
@@ -157,12 +152,11 @@ namespace camac {
       return ( cc32_read_long( m_handle, N, A, F ) & 0xffffff );
 #else
       m_logger << msg::DEBUG
-               << tr( "readLong(...) called with: N = %1 A = %2 "
+               << tr( "readLong(...) called with: N = %1, A = %2, "
                       "F = %3" ).arg( N ).arg( A ).arg( F )
                << msg::endmsg;
       return ( A * 100 );
 #endif // TESTING
-
    }
 
    /**
@@ -188,14 +182,13 @@ namespace camac {
       return ( data & 0xffffff );
 #else
       m_logger << msg::DEBUG
-               << tr( "readLong(...) called with: N = %1 A = %2 "
+               << tr( "readLong(...) called with: N = %1, A = %2, "
                       "F = %3, Q, X" ).arg( N ).arg( A ).arg( F )
                << msg::endmsg;
       Q = false;
       X = false;
       return ( A * 100 );
 #endif // TESTING
-
    }
 
    /**
@@ -217,13 +210,12 @@ namespace camac {
       cc32_write_word( m_handle, N, A, F, data );
 #else
       m_logger << msg::DEBUG
-               << tr( "writeWord(...) called with: N = %1 A = %2 F = %3 "
+               << tr( "writeWord(...) called with: N = %1, A = %2, F = %3, "
                       "data = %4" ).arg( N ).arg( A ).arg( F ).arg( data )
                << msg::endmsg;
 #endif // TESTING
 
       return;
-
    }
 
    /**
@@ -244,13 +236,12 @@ namespace camac {
       cc32_write_long( m_handle, N, A, F, data );
 #else
       m_logger << msg::DEBUG
-               << tr( "writeLong(...) called with: N = %1 A = %2 F = %3 "
+               << tr( "writeLong(...) called with: N = %1, A = %2, F = %3, "
                       "data = %4" ).arg( N ).arg( A ).arg( F ).arg( data )
                << msg::endmsg;
 #endif // TESTING
 
       return;
-
    }
 
    /**
@@ -273,14 +264,13 @@ namespace camac {
                          "on device: %1" ).arg( m_devicePath ) << msg::endmsg;
          return false;
       }
-#else
+#endif // TESTING
+
       m_logger << msg::DEBUG
                << tr( "Interrupts enabled on device: %1" ).arg( m_devicePath )
                << msg::endmsg;
-#endif // TESTING
 
       return true;
-
    }
 
    /**
@@ -302,14 +292,13 @@ namespace camac {
                          "on device: %1" ).arg( m_devicePath ) << msg::endmsg;
          return false;
       }
-#else
+#endif // TESTING
+
       m_logger << msg::DEBUG
                << tr( "Interrupts disabled on device: %1" ).arg( m_devicePath )
                << msg::endmsg;
-#endif // TESTING
 
       return true;
-
    }
 
    void Crate::setInhibit() {
@@ -318,14 +307,13 @@ namespace camac {
 
 #ifndef TESTING
       cc32_write_word( m_handle, 27, 0, 16, 0 );
-#else
-      m_logger << msg::DEBUG
-               << tr( "Inhibit set on device: %1" ).arg( m_devicePath )
-               << msg::endmsg;
 #endif // TESTING
 
-      return;
+      m_logger << msg::VERBOSE
+               << tr( "Inhibit set on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
 
+      return;
    }
 
    void Crate::resetInhibit() {
@@ -334,14 +322,13 @@ namespace camac {
 
 #ifndef TESTING
       cc32_write_word( m_handle, 27, 1, 16, 0 );
-#else
-      m_logger << msg::DEBUG
-               << tr( "Inhibit reset on device: %1" ).arg( m_devicePath )
-               << msg::endmsg;
 #endif // TESTING
 
-      return;
+      m_logger << msg::VERBOSE
+               << tr( "Inhibit reset on device: %1" ).arg( m_devicePath )
+               << msg::endmsg;
 
+      return;
    }
 
    void Crate::initialize() {
@@ -357,7 +344,6 @@ namespace camac {
 #endif // TESTING
 
       return;
-
    }
 
    void Crate::clear() {
@@ -373,7 +359,6 @@ namespace camac {
 #endif // TESTING
 
       return;
-
    }
 
    void Crate::setLAMMask( uint32_t mask ) {
@@ -389,7 +374,6 @@ namespace camac {
 #endif // TESTING
 
       return;
-
    }
 
    /**
@@ -407,7 +391,6 @@ namespace camac {
       if( ! checkOpen() ) return false;
 
 #ifndef TESTING
-
       int timeout, lam;
       int error;
       if( ( error = cc32_wait_event( m_handle, &timeout, &lam ) ) ) {
@@ -425,12 +408,9 @@ namespace camac {
       tv.tv_sec = 0;
       tv.tv_usec = 100000;
       select( 0, NULL, NULL, NULL, &tv );
-
-      //      sleep( 1 );
 #endif // TESTING
 
       return true;
-
    }
 
    void Crate::clearLAM() {
@@ -446,7 +426,6 @@ namespace camac {
 #endif // TESTING
 
       return;
-
    }
 
    /**
@@ -468,7 +447,6 @@ namespace camac {
       }
 
       return true;
-
    }
 
 } // namespace camac

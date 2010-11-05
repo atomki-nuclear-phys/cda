@@ -20,7 +20,7 @@ HEADERS = $$system(ls common/*.h) $$system(ls schema/*.h) $$system(ls stat/*.h) 
           $$system(ls config/*.h)
 SOURCES = $$system(ls common/*.cxx) $$system(ls schema/*.cxx) $$system(ls stat/*.cxx) \
           $$system(ls config/*.cxx)
-TRANSLATIONS = cdadaq_hu.ts
+TRANSLATIONS = ../lib/cdadaq_hu.ts
 
 # The library uses the QtCore library:
 CONFIG += qt

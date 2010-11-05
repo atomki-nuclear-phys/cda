@@ -36,7 +36,6 @@ namespace msg {
       }
 
       return m_instance;
-
    }
 
    /**
@@ -46,7 +45,6 @@ namespace msg {
 
       m_addresses.push_back( address );
       return;
-
    }
 
    /**
@@ -55,7 +53,6 @@ namespace msg {
    const std::vector< Address >& Sender::getAddresses() {
 
       return m_addresses;
-
    }
 
    /**
@@ -64,7 +61,6 @@ namespace msg {
    Level Sender::getMinLevel() const {
 
       return m_minLevel;
-
    }
 
    /**
@@ -74,7 +70,6 @@ namespace msg {
 
       m_minLevel = level;
       return;
-
    }
 
    /**
@@ -131,9 +126,10 @@ namespace msg {
             //
             static bool firstcall = true;
             if( firstcall ) {
-               std::cout << "* No message server set up yet." << std::endl;
-               std::cout << "* Messages that could not be sent will be" << std::endl;
-               std::cout << "* printed to the console." << std::endl << std::endl;
+               std::cout << tr( "* No message server set up yet.\n"
+                                "* Messages that could not be sent will be\n"
+                                "* printed to the console."  ).toLatin1().constData()
+                         << std::endl << std::endl;
                firstcall = false;
             }
 
@@ -147,7 +143,6 @@ namespace msg {
       }
 
       return;
-
    }
 
    Sender::Sender()
@@ -165,9 +160,10 @@ namespace msg {
       //
       static bool firstcall = true;
       if( firstcall ) {
-         std::cout << "* A Message Server could not be contacted!" << std::endl;
-         std::cout << "* Messages that could not be sent will be" << std::endl;
-         std::cout << "* printed to the console." << std::endl << std::endl;
+         std::cout << tr( "* A Message Server could not be contacted!\n"
+                          "* Messages that could not be sent will be\n"
+                          "* printed to the console." ).toLatin1().constData()
+                   << std::endl << std::endl;
          firstcall = false;
       }
 
@@ -178,7 +174,6 @@ namespace msg {
       out << message << "\n";
 
       return;
-
    }
 
 } // namespace msg

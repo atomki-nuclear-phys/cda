@@ -38,7 +38,6 @@ namespace cernlib {
         m_events( 0 ), m_logger( "cernlib::NTupleMgr" ) {
 
       m_logger << msg::VERBOSE << tr( "Object constructed" ) << msg::endmsg;
-
    }
 
    /**
@@ -49,7 +48,6 @@ namespace cernlib {
 
       closeFile();
       m_logger << msg::VERBOSE << tr( "Object destructed" ) << msg::endmsg;
-
    }
 
    /**
@@ -80,7 +78,6 @@ namespace cernlib {
       m_varNames.push_back( name );
 
       return index;
-
    }
 
    /**
@@ -165,7 +162,6 @@ namespace cernlib {
       }
 
       return true;
-
    }
 
    /**
@@ -207,7 +203,6 @@ namespace cernlib {
       m_variables = 0;
 
       return;
-
    }
 
    /**
@@ -244,7 +239,6 @@ namespace cernlib {
       m_variables[ index ] = value;
 
       return true;
-
    }
 
    /**
@@ -273,7 +267,6 @@ namespace cernlib {
       ++m_events;
 
       return;
-
    }
 
    /**
@@ -287,7 +280,6 @@ namespace cernlib {
       m_events = 0;
 
       return;
-
    }
 
 } // namespace cernlib

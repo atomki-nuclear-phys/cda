@@ -19,7 +19,7 @@ TARGET   = ad2249a
 # These are the header and source files:
 HEADERS = $$system(ls *.h)
 SOURCES = $$system(ls *.cxx)
-TRANSLATIONS = ad2249a_hu.ts
+TRANSLATIONS = ../../dev/ad2249a_hu.ts
 
 mac {
    message(*)

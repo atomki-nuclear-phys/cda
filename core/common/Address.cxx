@@ -36,17 +36,18 @@ Address::Address( const QString& address )
    // Create a logger object and report what we're doing:
    //
    msg::Logger logger( "Address" );
-   logger << msg::VERBOSE << "Constructing address from string: \""
-          << address << "\"" << msg::endmsg;
+   logger << msg::VERBOSE
+          << tr( "Constructing address from string: \"%1\"" ).arg( address )
+          << msg::endmsg;
 
    //
    // Split the address string into a host name and a port number:
    //
    QStringList split = address.split( ":", QString::SkipEmptyParts );
    if( split.size() != 2 ) {
-      logger << msg::ERROR << "Couldn't decode address: \""
-             << address << "\"" << std::endl
-             << "Setting to 127.0.0.1:50000" << msg::endmsg;
+      logger << msg::ERROR << tr( "Couldn't decode address: \"%1\"\n"
+                                  "Setting to 127.0.0.1:50000" ).arg( address )
+             << msg::endmsg;
       m_host.setAddress( "127.0.0.1" );
       m_port = 50000;
       return;
@@ -55,8 +56,9 @@ Address::Address( const QString& address )
    //
    // Report what we've done:
    //
-   logger << msg::VERBOSE << "Decoded host name: " << split.at( 0 )
-          << " port: "  << split.at( 1 ) << msg::endmsg;
+   logger << msg::VERBOSE
+          << tr( "Decoded host name: %1, port: %2" ).arg( split.at( 0 ) ).arg( split.at( 1 ) )
+          << msg::endmsg;
 
    m_host.setAddress( split.at( 0 ) );
 
@@ -66,8 +68,9 @@ Address::Address( const QString& address )
    bool ok = false;
    m_port = split.at( 1 ).toUInt( &ok );
    if( ! ok ) {
-      logger << msg::ERROR << "Couldn't decode port: " << split.at( 1 ) << std::endl
-             << "Setting it to 50000" << msg::endmsg;
+      logger << msg::ERROR << tr( "Couldn't decode port: %1\n"
+                                  "Setting it to 50000" ).arg( split.at( 1 ) )
+             << msg::endmsg;
       m_port = 50000;
    }
 
@@ -91,7 +94,6 @@ void Address::setHost( const QHostAddress& host ) {
 
    m_host = host;
    return;
-
 }
 
 /**
@@ -101,7 +103,6 @@ void Address::setPort( quint16 port ) {
 
    m_port = port;
    return;
-
 }
 
 /**
@@ -110,7 +111,6 @@ void Address::setPort( quint16 port ) {
 const QHostAddress& Address::getHost() const {
 
    return m_host;
-
 }
 
 /**
@@ -119,7 +119,6 @@ const QHostAddress& Address::getHost() const {
 quint16 Address::getPort() const {
 
    return m_port;
-
 }
 
 /**
@@ -146,5 +145,4 @@ bool Address::isAddress( const QString& address ) {
    }
 
    return true;
-
 }

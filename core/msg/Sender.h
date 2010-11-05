@@ -6,6 +6,9 @@
 // STL include(s):
 #include <vector>
 
+// Qt include(s):
+#include <QtCore/QCoreApplication>
+
 // CDA include(s):
 #include "../common/Address.h"
 
@@ -42,6 +45,9 @@ namespace msg {
     * $Date$
     */
    class Sender {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( msg::Sender )
 
    public:
       /// Function to access the singleton instance with

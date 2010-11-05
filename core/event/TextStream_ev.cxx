@@ -4,6 +4,7 @@
 #include <QtCore/QIODevice>
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
+#include <QtCore/QCoreApplication>
 
 // Local include(s):
 #include "TextStream.h"
@@ -43,10 +44,11 @@ namespace ev {
     */
    TextStream& TextStream::operator<< ( const Event& event ) {
 
-      ( * ( QTextStream* ) this ) << "-------- Event record "
-                                  << "--------\n";
-      ( * ( QTextStream* ) this ) << " Number of fragments: "
-                                  << event.getFragments().size() << "\n\n";
+      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                      "-------- Event record --------\n" );
+      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                      " Number of fragments: %1\n\n" )
+         .arg( event.getFragments().size() );
 
       if( event.getFragments().size() ) {
          for( std::vector< Fragment >::const_iterator fragment =
@@ -55,14 +57,13 @@ namespace ev {
             *this << *fragment << "\n";
          }
       } else {
-         ( * ( QTextStream* ) this ) << " No event fragments!\n";
+         ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                         " No event fragments!\n" );
       }
 
-      ( * ( QTextStream* ) this ) << "----------------"
-                                  << "--------------";
+      ( * ( QTextStream* ) this ) << "------------------------------";
 
       return *this;
-
    }
 
    /**
@@ -75,29 +76,31 @@ namespace ev {
     */
    TextStream& TextStream::operator<< ( const Fragment& fragment ) {
 
-      ( * ( QTextStream* ) this ) << "  ---- Fragment record ----\n";
-      ( * ( QTextStream* ) this ) << "   Crate number : "
-                                  << fragment.getCrateNumber() << "\n";
-      ( * ( QTextStream* ) this ) << "   Module number: "
-                                  << fragment.getModuleNumber() << "\n\n";
+      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                      "  ---- Fragment record ----\n" );
+      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                      "   Crate number : %1\n" )
+         .arg( fragment.getCrateNumber() );
+      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                      "   Module number: %1\n\n" )
+         .arg( fragment.getModuleNumber() );
 
       if( fragment.getDataWords().size() ) {
-         setIntegerBase( 16 );
          for( std::vector< uint32_t >::const_iterator dword =
                  fragment.getDataWords().begin();
               dword != fragment.getDataWords().end(); ++dword ) {
-            ( * ( QTextStream* ) this ) << "   Data word: 0x"
-                                        << *dword << "\n";
+            ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                            "   Data word: 0x%1\n" )
+               .arg( QString::number( *dword, 16 ) );
          }
-         reset();
       } else {
-         ( * ( QTextStream* ) this ) << "   No data words!\n";
+         ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
+                                                         "   No data words!\n" );
       }
 
       ( * ( QTextStream* ) this ) << "  -------------------------";
 
       return *this;
-
    }
 
    /**
@@ -112,7 +115,6 @@ namespace ev {
 
       QTextStream::operator<<( text );
       return *this;
-
    }
 
 } // namespace ev

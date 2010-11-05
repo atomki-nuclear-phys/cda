@@ -14,7 +14,6 @@ namespace msg {
       : std::ostringstream(), m_sender( sender ), m_activeLevel( INFO ) {
 
       m_msgSender = Sender::instance();
-
    }
 
    /**
@@ -25,7 +24,6 @@ namespace msg {
         std::ostringstream() {
 
       *this = logger;
-
    }
 
    /**
@@ -39,7 +37,6 @@ namespace msg {
       m_msgSender   = logger.m_msgSender;
 
       return *this;
-
    }
 
    /**
@@ -50,7 +47,6 @@ namespace msg {
 
       m_activeLevel = level;
       return *this;
-
    }
 
    /**
@@ -61,7 +57,6 @@ namespace msg {
 
       *this << msg.toLatin1().constData();
       return *this;
-
    }
 
    /**
@@ -83,7 +78,6 @@ namespace msg {
       this->str( "" );
 
       return;
-
    }
 
    /**
@@ -98,7 +92,6 @@ namespace msg {
 
       logger.send();
       return logger;
-
    }
 
 } // namespace msg

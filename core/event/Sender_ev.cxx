@@ -17,7 +17,6 @@ namespace ev {
       :  m_sockets(), m_logger( "ev::Sender" ) {
 
       m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
-
    }
 
    /**
@@ -34,7 +33,6 @@ namespace ev {
 	   }
 
       m_logger << msg::VERBOSE << tr( "Object deleted" ) << msg::endmsg;
-
    }
 
    /**
@@ -81,7 +79,6 @@ namespace ev {
                << msg::endmsg;
 
       return true;
-
    }
 
 
@@ -124,13 +121,13 @@ namespace ev {
          //
          // A little debugging message:
          //
-         m_logger << msg::VERBOSE << "Bytes to write: " << (*socket)->bytesToWrite()
+         m_logger << msg::VERBOSE
+                  << tr( "Bytes to write: %1" ).arg( ( *socket )->bytesToWrite() )
                   << msg::endmsg;
 
       }
 
       return result;
-
    }
 
    /**
@@ -147,7 +144,6 @@ namespace ev {
          .arg( socket.peerPort() ) << msg::endmsg;
 
       return;
-
    }
 
 } // namespace ev
