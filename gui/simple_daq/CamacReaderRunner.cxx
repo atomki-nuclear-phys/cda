@@ -1,6 +1,7 @@
 // $Id$
 
 // Qt include(s):
+#include <QtCore/QTime>
 #include <QtGui/QGroupBox>
 #include <QtGui/QPushButton>
 #include <QtGui/QLabel>
@@ -41,7 +42,7 @@ namespace simple_daq {
       // Create the label showing if the application is running:
       //
       m_processStatus = new QLabel( tr( "Camac reader stopped" ), m_mainBox );
-      m_processStatus->setGeometry( QRect( 0, 40, 290, 40 ) );
+      m_processStatus->setGeometry( QRect( 0, 15, 290, 40 ) );
       m_processStatus->setAlignment( Qt::AlignCenter );
 
       QPalette palette( m_processStatus->palette() );
@@ -54,6 +55,28 @@ namespace simple_daq {
       QFont font( m_processStatus->font() );
       font.setPointSize( 14 );
       m_processStatus->setFont( font );
+
+      //
+      // Draw the "Start time" label:
+      //
+      m_startTimeLabel = new QLabel( tr( "Start time:" ), m_mainBox );
+      m_startTimeLabel->setGeometry( QRect( 10, 55, 140, 20 ) );
+      m_startTimeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+
+      m_startTime = new QLabel( tr( "N/A" ), m_mainBox );
+      m_startTime->setGeometry( QRect( 160, 55, 100, 20 ) );
+      m_startTime->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+
+      //
+      // Draw the "Stop time" label:
+      //
+      m_stopTimeLabel = new QLabel( tr( "Stop time:" ), m_mainBox );
+      m_stopTimeLabel->setGeometry( QRect( 10, 75, 140, 20 ) );
+      m_stopTimeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+
+      m_stopTime = new QLabel( tr( "N/A" ), m_mainBox );
+      m_stopTime->setGeometry( QRect( 160, 75, 100, 20 ) );
+      m_stopTime->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 
       //
       // Create the button starting and stopping the application:
@@ -73,6 +96,7 @@ namespace simple_daq {
       //
       // Reset the internal flags:
       //
+      m_hbookWriterUpdating = false;
       m_hbookWriterRunning = false;
       m_glomemWriterRunning = false;
 
@@ -80,10 +104,11 @@ namespace simple_daq {
 
    CamacReaderRunner::~CamacReaderRunner() {
 
+      delete m_stopTimeLabel; delete m_stopTime;
+      delete m_startTimeLabel; delete m_startTime;
       delete m_processStatus;
       delete m_starterButton;
       delete m_mainBox;
-
    }
 
    /**
@@ -93,7 +118,6 @@ namespace simple_daq {
 
       m_configFileName = fileName;
       return;
-
    }
 
    /**
@@ -102,7 +126,6 @@ namespace simple_daq {
    const QString& CamacReaderRunner::getConfigFileName() const {
 
       return m_configFileName;
-
    }
 
    /**
@@ -112,7 +135,6 @@ namespace simple_daq {
 
       m_msgServerAddress = address;
       return;
-
    }
 
    /**
@@ -121,7 +143,6 @@ namespace simple_daq {
    const QString& CamacReaderRunner::getMsgServerAddress() const {
 
       return m_msgServerAddress;
-
    }
 
    /**
@@ -131,7 +152,6 @@ namespace simple_daq {
 
       m_statServerAddress = address;
       return;
-
    }
 
    /**
@@ -140,7 +160,6 @@ namespace simple_daq {
    const QString& CamacReaderRunner::getStatServerAddress() const {
 
       return m_statServerAddress;
-
    }
 
    /**
@@ -150,7 +169,6 @@ namespace simple_daq {
 
       m_hbookWriterAddress = address;
       return;
-
    }
 
    /**
@@ -159,7 +177,6 @@ namespace simple_daq {
    const QString& CamacReaderRunner::getHBookWriterAddress() const {
 
       return m_hbookWriterAddress;
-
    }
 
    /**
@@ -169,7 +186,6 @@ namespace simple_daq {
 
       m_glomemWriterAddress = address;
       return;
-
    }
 
    /**
@@ -178,7 +194,6 @@ namespace simple_daq {
    const QString& CamacReaderRunner::getGlomemWriterAddress() const {
 
       return m_glomemWriterAddress;
-
    }
 
    /**
@@ -188,7 +203,6 @@ namespace simple_daq {
 
       m_level = verbosity;
       return;
-
    }
 
    /**
@@ -197,21 +211,62 @@ namespace simple_daq {
    msg::Level CamacReaderRunner::getVerbosity() const {
 
       return m_level;
-
    }
 
    void CamacReaderRunner::setHBookWriterRunning( bool running ) {
 
+      // Update the internal flag:
       m_hbookWriterRunning = running;
-      return;
 
+      //
+      // Halt the CAMAC reader as long as the HBOOK writer is updating its file name:
+      //
+      if( ( ! running ) && ( m_runner.isRunning() ) ) {
+         if( ! m_runner.stop() ) {
+            m_logger << msg::ERROR << tr( "Couldn't halt cda-camac-reader for the duration of the HBOOK "
+                                          "file name change!" ) << msg::endmsg;
+            m_processStatus->setText( tr( "ERROR" ) );
+            QPalette palette( m_processStatus->palette() );
+            palette.setColor( QPalette::Active, QPalette::Foreground,
+                              QColor( 150, 10, 10 ) );
+            palette.setColor( QPalette::Inactive, QPalette::Foreground,
+                              QColor( 150, 10, 10 ) );
+            m_processStatus->setPalette( palette );
+            return;
+         } else {
+            m_logger << msg::INFO << tr( "Temporarily halted cda-camac-reader" ) << msg::endmsg;
+         }
+         m_hbookWriterUpdating = true;
+      }
+
+      //
+      // Restart the CAMAC reader when the file name updating finished:
+      //
+      if( running && ( ! m_runner.isRunning() ) && m_hbookWriterUpdating ) {
+         m_hbookWriterUpdating = false;
+         if( ! m_runner.start() ) {
+            m_logger << msg::ERROR << tr( "Couldn't restart cda-camac-reader for the duration of the HBOOK "
+                                          "file name change!" ) << msg::endmsg;
+            m_processStatus->setText( tr( "ERROR" ) );
+            QPalette palette( m_processStatus->palette() );
+            palette.setColor( QPalette::Active, QPalette::Foreground,
+                              QColor( 150, 10, 10 ) );
+            palette.setColor( QPalette::Inactive, QPalette::Foreground,
+                              QColor( 150, 10, 10 ) );
+            m_processStatus->setPalette( palette );
+            return;
+         } else {
+            m_logger << msg::INFO << tr( "Re-started cda-camac-reader" ) << msg::endmsg;
+         }
+      }
+
+      return;
    }
 
    void CamacReaderRunner::setGlomemWriterRunning( bool running ) {
 
       m_glomemWriterRunning = running;
       return;
-
    }
 
    /**
@@ -254,11 +309,11 @@ namespace simple_daq {
          //
          // Set these options to the runner object:
          //
-         m_logger << msg::DEBUG << "Using options: " << options << msg::endmsg;
+         m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options ) << msg::endmsg;
          m_runner.setOptions( options );
 
          if( ! m_runner.start() ) {
-            m_logger << msg::ERROR << "Couldn't start camac reader!" << msg::endmsg;
+            m_logger << msg::ERROR << tr( "Couldn't start camac reader!" ) << msg::endmsg;
 
             //
             // Signal the error as much as possible:
@@ -274,7 +329,7 @@ namespace simple_daq {
             m_starterButton->setText( tr( "Reset" ) );
 
          } else {
-            m_logger << msg::INFO << "Camac reader started" << msg::endmsg;
+            m_logger << msg::INFO << tr( "Camac reader started" ) << msg::endmsg;
 
             //
             // Signal that the application is running:
@@ -287,6 +342,10 @@ namespace simple_daq {
                               QColor( 150, 10, 10 ) );
             m_processStatus->setPalette( palette );
 
+            // Set up the time label(s):
+            m_startTime->setText( QTime::currentTime().toString() );
+            m_stopTime->setText( tr( "N/A" ) );
+
             m_starterButton->setText( tr( "Stop camac reader" ) );
 
          }
@@ -294,8 +353,8 @@ namespace simple_daq {
       } else {
 
          if( ! m_runner.stop() ) {
-            m_logger << msg::ERROR << "The camac reader could not be stopped "
-                     << "successfully" << msg::endmsg;
+            m_logger << msg::ERROR << tr( "The camac reader could not be stopped "
+                                          "successfully" ) << msg::endmsg;
 
             //
             // Signal the error as much as possible:
@@ -309,7 +368,7 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
          } else {
-            m_logger << msg::INFO << "Camac reader stopped" << msg::endmsg;
+            m_logger << msg::INFO << tr( "Camac reader stopped" ) << msg::endmsg;
 
             //
             // Return the widgets to their "normal" state:
@@ -322,14 +381,15 @@ namespace simple_daq {
                               QColor( 10, 150, 10 ) );
             m_processStatus->setPalette( palette );
 
-            m_starterButton->setText( tr( "Start camac reader" ) );
+            // Set up the time label(s):
+            m_stopTime->setText( QTime::currentTime().toString() );
 
+            m_starterButton->setText( tr( "Start camac reader" ) );
          }
 
       }
 
       return;
-
    }
 
 } // namespace simple_daq

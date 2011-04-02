@@ -176,7 +176,6 @@ SimpleDAQWindow::~SimpleDAQWindow() {
    delete m_msgServer;
    delete m_msgView;
    delete m_centralWidget;
-
 }
 
 /**
@@ -212,14 +211,12 @@ void SimpleDAQWindow::readConfigSlot() {
             << fileName << msg::endmsg;
 
    return;
-
 }
 
 void SimpleDAQWindow::aboutQtSlot() {
 
    QMessageBox::aboutQt( this, tr( "CDA Simple DAQ - built on Qt" ) );
    return;
-
 }
 
 void SimpleDAQWindow::aboutSimpleDAQSlot() {
@@ -232,14 +229,12 @@ void SimpleDAQWindow::aboutSimpleDAQSlot() {
                            "applications on the local computer." ) );
 
    return;
-
 }
 
 void SimpleDAQWindow::aboutCDASlot() {
 
    aboutCDA( this );
    return;
-
 }
 
 /**
@@ -290,5 +285,4 @@ void SimpleDAQWindow::drawMenus() {
             this, SLOT( aboutCDASlot() ) );
 
    return;
-
 }

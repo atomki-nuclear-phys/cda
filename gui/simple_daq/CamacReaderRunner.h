@@ -92,9 +92,13 @@ namespace simple_daq {
       void startApp( bool start );
 
    private:
-      QGroupBox*   m_mainBox;       ///< Main box holding graphcal objects
-      QPushButton* m_starterButton; ///< Button starting the application
-      QLabel*      m_processStatus; ///< Label giving feedback of the status
+      QGroupBox*   m_mainBox;        ///< Main box holding graphcal objects
+      QPushButton* m_starterButton;  ///< Button starting the application
+      QLabel*      m_processStatus;  ///< Label giving feedback of the status
+      QLabel*      m_startTimeLabel; ///< "Start time" label
+      QLabel*      m_startTime;      ///< Label with the starting time
+      QLabel*      m_stopTimeLabel;  ///< "Stop time" label
+      QLabel*      m_stopTime;       ///< Label with the stopping time
 
       QString m_configFileName;      ///< Name of the configuration file
       QString m_msgServerAddress;    ///< Address of the message server
@@ -103,6 +107,7 @@ namespace simple_daq {
       QString m_glomemWriterAddress; ///< Address of cda-glomem-writer
       msg::Level m_level;            ///< Output level of cda-camac-reader
 
+      bool m_hbookWriterUpdating; ///< Flag showing if cda-hbook-writer is in the file name update process
       bool m_hbookWriterRunning;  ///< Flag showing if cda-hbook-writer is running
       bool m_glomemWriterRunning; ///< Flag showing if cda-glomem-writer is running
 

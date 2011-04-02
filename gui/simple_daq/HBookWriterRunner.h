@@ -21,6 +21,8 @@ QT_FORWARD_DECLARE_CLASS( QGroupBox )
 QT_FORWARD_DECLARE_CLASS( QPushButton )
 QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QLineEdit )
+QT_FORWARD_DECLARE_CLASS( QSpinBox )
+QT_FORWARD_DECLARE_CLASS( QTimer )
 
 namespace simple_daq {
 
@@ -29,6 +31,8 @@ namespace simple_daq {
    using QT_PREPEND_NAMESPACE( QPushButton );
    using QT_PREPEND_NAMESPACE( QLabel );
    using QT_PREPEND_NAMESPACE( QLineEdit );
+   using QT_PREPEND_NAMESPACE( QSpinBox );
+   using QT_PREPEND_NAMESPACE( QTimer );
 
    /**
     *  @short Widget for starting cda-hbook-writer on the local machine
@@ -80,13 +84,22 @@ namespace simple_daq {
    private slots:
       /// Internal function starting and stopping cda-hbook-writer
       void startApp( bool start );
+      /// Internal function updating the HBOOK file name
+      void updateFileName();
+      /// Internal slot that emits the running( true ) signal
+      void emitRunningTrue();
 
    private:
       QGroupBox*   m_mainBox;       ///< Main box holding graphcal objects
       QPushButton* m_starterButton; ///< Button starting the application
       QLabel*      m_processStatus; ///< Label giving feedback of the status
+      QLabel*      m_updateFrequencyLabel;
+      QSpinBox*    m_updateFrequency;
       QLabel*      m_fileNameLabel; ///< Label telling what the line edit is for
       QLineEdit*   m_fileNameEdit;  ///< Input field for the output file name
+
+      QTimer* m_updateTimer;
+      int     m_currentFileNumber;
 
       QString m_configFileName;   ///< Name of the configuration file
       QString m_msgServerAddress; ///< Address of the message server(s)

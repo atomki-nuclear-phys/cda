@@ -23,7 +23,7 @@ namespace simple_daq {
       //
       // Create the box into which everything else is put:
       //
-      m_mainBox = new QGroupBox( tr( "DAQ statistics" ), this );
+      m_mainBox = new QGroupBox( tr( "DAQ statistics (for current output file)" ), this );
       m_mainBox->setGeometry( QRect( 5, 5, 290, 140 ) );
 
       //
@@ -80,7 +80,6 @@ namespace simple_daq {
       delete m_readEventsLabel; delete m_readEvents;
       delete m_eventRateLabel; delete m_eventRate;
       delete m_mainBox;
-
    }
 
    /**
@@ -90,7 +89,6 @@ namespace simple_daq {
 
       m_server.listen( address );
       return;
-
    }
 
    /**
@@ -99,7 +97,6 @@ namespace simple_daq {
    Address Statistics::getStatAddress() const {
 
       return Address( m_server.serverAddress().toString(), m_server.serverPort() );
-
    }
 
    /**
@@ -136,7 +133,6 @@ namespace simple_daq {
       m_rateTimer->start( 5000 );
 
       return;
-
    }
 
    /**
@@ -149,7 +145,6 @@ namespace simple_daq {
       m_lastStat.setStatTime( QTime::currentTime() );
 
       return;
-
    }
 
 } // namespace simple_daq

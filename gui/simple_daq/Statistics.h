@@ -64,10 +64,10 @@ namespace simple_daq {
    private:
       QGroupBox* m_mainBox; ///< Box holding all other widgets
 
-      QLabel* m_readEventsLabel;
-      QLabel* m_readEvents;
-      QLabel* m_eventRateLabel;
-      QLabel* m_eventRate;
+      QLabel* m_readEventsLabel; ///< "Events processed" label
+      QLabel* m_readEvents; ///< Label showing the number of read events
+      QLabel* m_eventRateLabel; ///< "Event rate" label
+      QLabel* m_eventRate; ///< Label showing the current event rate
 
       QTimer* m_rateTimer; ///< Timer resetting the statistics if needed
 
