@@ -215,9 +215,10 @@ namespace ad413a {
       m_logger << level
                << tr( " - Subaddress        : %1\n"
                       " - Low level discr.  : %2\n"
-                      " - Lower bound       : %3\n"
-                      " - Upper bound       : %4\n"
-                      " - Name              : %5" )
+                      " - Number of channels: %3\n"
+                      " - Lower bound       : %4\n"
+                      " - Upper bound       : %5\n"
+                      " - Name              : %6" )
          .arg( m_subaddress ).arg( m_lld ).arg( m_numberOfChannels )
          .arg( m_lowerBound ).arg( m_upperBound ).arg( m_name )
                << msg::endmsg;

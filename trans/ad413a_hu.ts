@@ -103,10 +103,24 @@
         <location filename="../devices/ad413a/ChannelConfig.cxx" line="216"/>
         <source> - Subaddress        : %1
  - Low level discr.  : %2
+ - Number of channels: %3
+ - Lower bound       : %4
+ - Upper bound       : %5
+ - Name              : %6</source>
+        <translation> - Alcím                  : %1
+ - Alacsony szintü diszkr.: %2
+ - Csatornák száma        : %3
+ - Alsó korlát            : %4
+ - Felsö korlát           : %5
+ - Név                    : %6</translation>
+    </message>
+    <message>
+        <source> - Subaddress        : %1
+ - Low level discr.  : %2
  - Lower bound       : %3
  - Upper bound       : %4
  - Name              : %5</source>
-        <translation> - Alcím                  : %1
+        <translation type="obsolete"> - Alcím                  : %1
  - Alacsony szintü diszkr.: %2
  - Alsó korlát            : %3
  - Felsö korlát           : %4
