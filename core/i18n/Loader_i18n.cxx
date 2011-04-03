@@ -1,4 +1,4 @@
-// %Id%
+// $Id$
 
 // Qt include(s):
 #include <QtCore/QDir>
@@ -101,7 +101,7 @@ namespace i18n {
 
       }
 
-      m_logger << msg::INFO << tr( "Loaded all translations" ) << msg::endmsg;
+      m_logger << msg::DEBUG << tr( "Loaded all translations" ) << msg::endmsg;
       return true;
    }
 

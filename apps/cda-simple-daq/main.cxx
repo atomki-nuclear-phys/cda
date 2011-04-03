@@ -66,17 +66,19 @@ int main( int argc, char* argv[] ) {
    // Set the message server to a fixed address:
    msg::Sender::addAddress( Address( Const::MSG_SERVER_ADDRESS ) );
 
+   // Logger object used to print messages directly from this function:
+   msg::Logger logger( "cda-simple-daq" );
+
    //
    // Load all the available translations:
    //
    i18n::Loader trans_loader;
    if( ! trans_loader.loadTranslations() ) {
-      std::cerr << "Couldn't load the translations!" << std::endl;
+      logger << msg::FATAL << qApp->translate( "cda-simple-daq",
+                                               "Couldn't load the translations!" )
+             << msg::endmsg;
       return 1;
    }
-
-   // Logger object used to print messages directly from this function:
-   msg::Logger logger( "cda-simple-daq" );
 
    //
    // Translate the verbosity option:
@@ -92,9 +94,11 @@ int main( int argc, char* argv[] ) {
    if( v_map.find( verbosity ) != v_map.end() ) {
       msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
    } else {
-      logger << msg::FATAL << "Didn't recognise verbosity level setting"
-             << std::endl
-             << "Terminating..." << msg::endmsg;
+      logger << msg::FATAL
+             << qApp->translate( "cda-simple-daq",
+                                 "Didn't recognise verbosity level setting\n"
+                                 "Terminating..." )
+             << msg::endmsg;
       return 1;
    }
 
@@ -107,5 +111,4 @@ int main( int argc, char* argv[] ) {
 
    // Run the main Qt event loop:
    return app.exec();
-
 }

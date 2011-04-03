@@ -107,4 +107,19 @@
         <translation>A CDA-ról</translation>
     </message>
 </context>
+<context>
+    <name>cda-simple-daq</name>
+    <message>
+        <location filename="../apps/cda-simple-daq/main.cxx" line="77"/>
+        <source>Couldn&apos;t load the translations!</source>
+        <translation>Nem lehetett betölteni a fordításokat!</translation>
+    </message>
+    <message>
+        <location filename="../apps/cda-simple-daq/main.cxx" line="98"/>
+        <source>Didn&apos;t recognise verbosity level setting
+Terminating...</source>
+        <translation>Nem ismertem fel az üzenet kimeneti szintet
+Program leállítása...</translation>
+    </message>
+</context>
 </TS>
