@@ -297,8 +297,8 @@
     </message>
     <message>
         <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="40"/>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="236"/>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="238"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="242"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="244"/>
         <source>HBook writer stopped</source>
         <translation>A HBook írás leállítva</translation>
     </message>
@@ -308,77 +308,94 @@
         <translation>Frissítési gyak. [perc]:</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="71"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="67"/>
+        <source>Set the intervals at which a new output file should be opened</source>
+        <translation>Beállítja az időközöket aminként a kimeneti fájl nevét frissíteni kell</translation>
+    </message>
+    <message>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="73"/>
         <source>Output file:</source>
         <translation>Kimeneti fájl:</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="81"/>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="246"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="79"/>
+        <source>To activate automatic file name updating, put
+&quot;%1&quot; in the file name where a number should
+be filled in. To disable the automatic updating
+just don&apos;t put this symbol in the file name.</source>
+        <translation>Az automatikus fájl név frissítés aktiválásához
+tegyen egy &quot;%1&quot; jelet a fájl nevébe oda ahova egy
+számot kell a kódnak beillesztenie. Az automatikus
+frissítés kikapcsolásához egyszerűen csak ne tegyen
+ilyen szimbólumot a fájlnévbe.</translation>
+    </message>
+    <message>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="87"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="252"/>
         <source>Start hbook writer</source>
         <translation>HBook író elindítása</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="162"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="168"/>
         <source>File name will be updated every %1 minutes</source>
         <translation>A fájl név minden %1 percben frissítve lesz</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="179"/>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="303"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="185"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="309"/>
         <source>Using options: %1</source>
         <translation>&quot;%1&quot; opciók használata</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="184"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="190"/>
         <source>Couldn&apos;t start HBook writer!</source>
         <translation>Nem lehetett elindítani a HBook írót!</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="187"/>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="227"/>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="270"/>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="312"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="193"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="233"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="276"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="318"/>
         <source>ERROR</source>
         <translation>HIBA</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="195"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="201"/>
         <source>Reset</source>
         <translation>Újraindítás</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="198"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="204"/>
         <source>HBook writer started</source>
         <translation>A HBook író elindítva</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="201"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="207"/>
         <source>HBook writer running</source>
         <translation>A HBook író fut</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="209"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="215"/>
         <source>Stop hbook writer</source>
         <translation>HBook író leállítása</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="224"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="230"/>
         <source>The HBook writer could not be stopped successfully</source>
         <translation>A HBook írót nem lehetett sikeresen leállítani</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="268"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="274"/>
         <source>Couldn&apos;t stop cda-hbook-writer as part of the file name update!</source>
         <translation>Nem lehetett leállítani a cda-hbook-writer programot a fájl név frissítés részeként!</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="286"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="292"/>
         <source>File name not in the correct format! Put a &quot;%1&quot; where the file number should be!</source>
         <translation>A fájl név nem a megfelelö formátumú! Tegyen egy &quot;%1&quot; szimbólumot oda ahol a fájl sorszámának kell lennie!</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="310"/>
+        <location filename="../gui/simple_daq/HBookWriterRunner.cxx" line="316"/>
         <source>Couldn&apos;t restart cda-hbook-writer as part of the file name update!</source>
         <translation>Nem lehetett újraindítani a cda-hbook-writer programot a fájl név frissítés részeként!</translation>
     </message>

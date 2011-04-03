@@ -64,6 +64,8 @@ namespace simple_daq {
       m_updateFrequency->setMinimum( 1 );
       m_updateFrequency->setMaximum( 360 );
       m_updateFrequency->setValue( 120 );
+      m_updateFrequency->setToolTip( tr( "Set the intervals at which a new output "
+                                         "file should be opened" ) );
 
       //
       // Set up the widgets for the file name specification:
@@ -74,6 +76,10 @@ namespace simple_daq {
 
       m_fileNameEdit = new QLineEdit( m_mainBox );
       m_fileNameEdit->setGeometry( QRect( 100, 75, 170, 25 ) );
+      m_fileNameEdit->setToolTip( tr( "To activate automatic file name updating, put\n"
+                                      "\"\%1\" in the file name where a number should\n"
+                                      "be filled in. To disable the automatic updating\n"
+                                      "just don't put this symbol in the file name." ) );
 
       //
       // Set up the button starting the application:
