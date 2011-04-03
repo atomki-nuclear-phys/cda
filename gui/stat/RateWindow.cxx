@@ -78,7 +78,6 @@ namespace stat {
       m_resetTimer->setSingleShot( true );
       connect( m_resetTimer, SIGNAL( timeout() ),
                this, SLOT( resetStatistics() ) );
-
    }
 
    /**
@@ -91,7 +90,6 @@ namespace stat {
       delete m_processedEventsLabel; delete m_processedEvents;
       delete m_eventRateLabel; delete m_eventRate;
       delete m_rateTimer; delete m_resetTimer;
-
    }
 
    /**
@@ -100,7 +98,6 @@ namespace stat {
    const QString& RateWindow::getSource() const {
 
       return m_lastStat.getSource();
-
    }
 
    /**
@@ -116,7 +113,6 @@ namespace stat {
       event->accept();
 
       return;
-
    }
 
    /**
@@ -138,7 +134,7 @@ namespace stat {
          m_eventRate->setText( QString::number( m_currentRate ) + " Hz" );
       } else {
          m_currentRate = 0.0;
-         m_eventRate->setText( "n/a Hz" );
+         m_eventRate->setText( tr( "n/a Hz" ) );
       }
 
       //
@@ -154,7 +150,6 @@ namespace stat {
       m_resetTimer->start();
 
       return;
-
    }
 
    /**
@@ -168,7 +163,6 @@ namespace stat {
       m_lastStat.setStatTime( QTime::currentTime() );
 
       return;
-
    }
 
    /**
@@ -181,7 +175,6 @@ namespace stat {
       m_rateWidget->setNewRate( m_currentRate );
 
       return;
-
    }
 
 

@@ -19,7 +19,7 @@ TARGET   = ad413a
 # These are the header and source files:
 HEADERS = $$system(ls *.h)
 SOURCES = $$system(ls *.cxx)
-TRANSLATIONS = ../../dev/ad413a_hu.ts
+TRANSLATIONS = ../../trans/ad413a_hu.ts
 
 mac {
    message(*)

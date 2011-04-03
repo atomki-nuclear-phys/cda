@@ -13,6 +13,9 @@
  * $Date$
  */
 
+// STL include(s):
+#include <iostream>
+
 // Qt include(s):
 #include <QtGui/QApplication>
 
@@ -21,10 +24,12 @@
 #   include "cdacore/msg/Logger.h"
 #   include "cdacore/msg/Sender.h"
 #   include "cdacore/cmdl/cmdargs.h"
+#   include "cdacore/i18n/Loader.h"
 #else
 #   include "msg/Logger.h"
 #   include "msg/Sender.h"
 #   include "cmdl/cmdargs.h"
+#   include "i18n/Loader.h"
 #endif
 
 // Local include(s):
@@ -60,6 +65,15 @@ int main( int argc, char* argv[] ) {
 
    // Set the message server to a fixed address:
    msg::Sender::addAddress( Address( Const::MSG_SERVER_ADDRESS ) );
+
+   //
+   // Load all the available translations:
+   //
+   i18n::Loader trans_loader;
+   if( ! trans_loader.loadTranslations() ) {
+      std::cerr << "Couldn't load the translations!" << std::endl;
+      return 1;
+   }
 
    // Logger object used to print messages directly from this function:
    msg::Logger logger( "cda-simple-daq" );

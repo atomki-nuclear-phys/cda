@@ -98,11 +98,10 @@ namespace daq {
       // If we reached this point then we failed to find the file:
       //
       m_logger << msg::WARNING << tr( "Failed to find \"%1\" in environment: %2\n"
-                                      "Assuming that it's in \"%3\"" )
+                                      "Assuming that it's in \"%3/bin\"" )
          .arg( name ).arg( env ).arg( CDASYS ) << msg::endmsg;
 
-      return ( CDASYS + ( "/" + name ) );
-
+      return ( CDASYS + ( "/bin/" + name ) );
    }
 
 } // namepsace daq

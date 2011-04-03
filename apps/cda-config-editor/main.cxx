@@ -13,14 +13,19 @@
  * $Date$
  */
 
+// STL include(s):
+#include <iostream>
+
 // Qt include(s):
 #include <QtGui/QApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Sender.h"
+#   include "cdacore/i18n/Loader.h"
 #else
 #   include "msg/Sender.h"
+#   include "i18n/Loader.h"
 #endif
 
 // Local include(s):
@@ -39,6 +44,15 @@ int main( int argc, char* argv[] ) {
    QApplication app( argc, argv );
 
    //
+   // Load all the available translations:
+   //
+   i18n::Loader trans_loader;
+   if( ! trans_loader.loadTranslations() ) {
+      std::cerr << "Couldn't load the translations!" << std::endl;
+      return 1;
+   }
+
+   //
    // Create and show the configuration editor window:
    //
    ConfigEditorWindow editor;
@@ -48,5 +62,4 @@ int main( int argc, char* argv[] ) {
    // Run the application:
    //
    return app.exec();
-
 }

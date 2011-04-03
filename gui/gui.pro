@@ -20,7 +20,7 @@ HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h) $$system(ls simple_daq/*.
           $$system(ls stat/*.h) $$system(ls common/*.h)
 SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx) $$system(ls simple_daq/*.cxx) \
           $$system(ls stat/*.cxx) $$system(ls common/*.cxx)
-TRANSLATIONS = ../lib/cdagui_hu.ts
+TRANSLATIONS = ../trans/cdagui_hu.ts
 
 # The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
 CONFIG += qt

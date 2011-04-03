@@ -85,7 +85,7 @@ namespace stat {
       m_rateTable->verticalHeader()->hide();
 
       QStringList headerLabels;
-      headerLabels << "Source" << "Rate [Hz]";
+      headerLabels << tr( "Source" ) << tr( "Rate [Hz]" );
       m_rateTable->setHorizontalHeaderLabels( headerLabels );
 
       m_rateTable->setColumnWidth( 0, m_rateTable->viewport()->width() -
@@ -93,7 +93,6 @@ namespace stat {
       m_rateTable->setColumnWidth( 1, TABLE_RATE_COLUMN_WIDTH );
 
       m_splitter->addWidget( m_rateTable );
-
    }
 
    /**
@@ -105,7 +104,6 @@ namespace stat {
       delete m_rateTable;
       delete m_splitter;
       delete m_layout;
-
    }
 
    /**
@@ -155,7 +153,6 @@ namespace stat {
       }
 
       return;
-
    }
 
    /**
@@ -167,7 +164,6 @@ namespace stat {
 
       adjustTableColumns();
       return;
-
    }
 
    /**
@@ -179,7 +175,6 @@ namespace stat {
 
       adjustTableColumns();
       return;
-
    }
 
    /**
@@ -202,7 +197,6 @@ namespace stat {
       rate_item->setText( QString::number( rate ) );
 
       return;
-
    }
 
    /**
@@ -224,7 +218,6 @@ namespace stat {
       m_windowMap.remove( source );
 
       return;
-
    }
 
    /**
@@ -238,7 +231,6 @@ namespace stat {
       m_rateTable->setColumnWidth( 1, TABLE_RATE_COLUMN_WIDTH );
 
       return;
-
    }
 
 } // namespace stat

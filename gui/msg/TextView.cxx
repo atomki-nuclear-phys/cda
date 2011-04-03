@@ -25,7 +25,7 @@ namespace msg {
     * messages and sets it up to show the messages in a reasonable way.
     */
    TextView::TextView( QWidget* parent, Qt::WindowFlags flags )
-      : QWidget( parent, flags ), /*m_maxMessageCount( 100 ),*/
+      : QWidget( parent, flags ),
         m_minShownLevel( VERBOSE ) {
 
       // Init the internal maps:
@@ -54,14 +54,12 @@ namespace msg {
       m_edit->document()->setMaximumBlockCount( 100 );
 
       m_layout->addWidget( m_edit );
-
    }
 
    TextView::~TextView() {
 
       delete m_edit;
       delete m_layout;
-
    }
 
    /**
@@ -70,7 +68,6 @@ namespace msg {
    int TextView::getMaximumMessageCount() const {
 
       return m_edit->document()->maximumBlockCount();
-
    }
 
    /**
@@ -79,7 +76,6 @@ namespace msg {
    Level TextView::getMinimumShownLevel() const {
 
       return m_minShownLevel;
-
    }
 
    /**
@@ -128,21 +124,18 @@ namespace msg {
       m_edit->append( msg_text );
 
       return;
-
    }
 
    void TextView::setMaximumMessageCount( int count ) {
 
       m_edit->document()->setMaximumBlockCount( count );
       return;
-
    }
 
    void TextView::setMinimumShownLevel( Level level ) {
 
       m_minShownLevel = level;
       return;
-
    }
 
    /**
@@ -168,7 +161,6 @@ namespace msg {
       m_levelToForeground[ ALWAYS ]  = QColor( Qt::black );
 
       return;
-
    }
 
 } // namespace msg

@@ -18,6 +18,7 @@ TARGET = cda-simple-daq
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
+TRANSLATIONS = ../../trans/cda-simple-daq_hu.ts
 
 # The application uses some Qt resources:
 RESOURCES = cda-simple-daq.qrc

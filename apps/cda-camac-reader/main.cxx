@@ -38,6 +38,7 @@
 #   include "cdacore/camac/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/Sender.h"
+#   include "cdacore/i18n/Loader.h"
 #   include "cdadaq/stat/Sender.h"
 #   include "cdadaq/config/ConfReader.h"
 #else
@@ -48,6 +49,7 @@
 #   include "camac/Crate.h"
 #   include "event/Event.h"
 #   include "event/Sender.h"
+#   include "i18n/Loader.h"
 #   include "stat/Sender.h"
 #   include "config/ConfReader.h"
 #endif
@@ -58,8 +60,8 @@
 // Function forward declaration(s):
 void shutDown( int );
 // Global variable(s):
-msg::Logger   g_logger( "cda-camac-reader" );
-camac::Crate* g_crate = 0;
+static msg::Logger   g_logger( "cda-camac-reader" );
+static camac::Crate* g_crate = 0;
 
 // Description for the executable:
 static const char* description =
@@ -97,6 +99,16 @@ int main( int argc, char* argv[] ) {
    //
    for( int i = 0; i < msgservers.count(); ++i ) {
       msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+   }
+
+   //
+   // Load all the available translations:
+   //
+   QCoreApplication app( argc, argv );
+   i18n::Loader trans_loader;
+   if( ! trans_loader.loadTranslations() ) {
+      g_logger << msg::FATAL << "Couldn't load the translations!" << msg::endmsg;
+      return 1;
    }
 
    //

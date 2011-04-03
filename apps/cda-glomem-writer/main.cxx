@@ -37,6 +37,7 @@
 #   include "cdacore/device/Loader.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/EventServer.h"
+#   include "cdacore/i18n/Loader.h"
 #   include "cdadaq/stat/Sender.h"
 #   include "cdadaq/config/ConfReader.h"
 #else
@@ -47,6 +48,7 @@
 #   include "fifo/Fifo.h"
 #   include "event/Event.h"
 #   include "event/EventServer.h"
+#   include "i18n/Loader.h"
 #   include "stat/Sender.h"
 #   include "config/ConfReader.h"
 #endif
@@ -97,6 +99,16 @@ int main( int argc, char* argv[] ) {
    //
    for( int i = 0; i < msgservers.count(); ++i ) {
       msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+   }
+
+   //
+   // Load all the available translations:
+   //
+   QCoreApplication app( argc, argv );
+   i18n::Loader trans_loader;
+   if( ! trans_loader.loadTranslations() ) {
+      g_logger << msg::FATAL << "Couldn't load the translations!" << msg::endmsg;
+      return 1;
    }
 
    //

@@ -97,16 +97,6 @@ namespace simple_daq {
 
    }
 
-   HBookWriterRunner::~HBookWriterRunner() {
-
-      delete m_fileNameEdit; delete m_fileNameLabel;
-      delete m_updateFrequency; delete m_updateFrequencyLabel;
-      delete m_updateTimer;
-      delete m_processStatus;
-      delete m_starterButton;
-      delete m_mainBox;
-   }
-
    void HBookWriterRunner::setConfigFileName( const QString& fileName ) {
 
       m_configFileName = fileName;
@@ -186,11 +176,13 @@ namespace simple_daq {
          options += " -e " + m_eventAddress;
          options += " -o " + fileName;
 
-         m_logger << msg::DEBUG << "Using options: " << options << msg::endmsg;
+         m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options )
+                  << msg::endmsg;
          m_runner.setOptions( options );
 
          if( ! m_runner.start() ) {
-            m_logger << msg::ERROR << "Couldn't start HBook writer!" << msg::endmsg;
+            m_logger << msg::ERROR << tr( "Couldn't start HBook writer!" )
+                     << msg::endmsg;
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
@@ -203,7 +195,8 @@ namespace simple_daq {
             m_starterButton->setText( tr( "Reset" ) );
 
          } else {
-            m_logger << msg::INFO << "HBook writer started" << msg::endmsg;
+            m_logger << msg::INFO << tr( "HBook writer started" )
+                     << msg::endmsg;
 
             m_processStatus->setText( tr( "HBook writer running" ) );
             QPalette palette( m_processStatus->palette() );
@@ -227,8 +220,9 @@ namespace simple_daq {
          m_updateFrequency->setEnabled( true );
 
          if( ! m_runner.stop() ) {
-            m_logger << msg::ERROR << "The HBook writer could not be stopped "
-                     << "successfully" << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "The HBook writer could not be stopped "
+                            "successfully" ) << msg::endmsg;
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
@@ -239,7 +233,7 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
          } else {
-            m_logger << msg::INFO << "HBook writer stopped" << msg::endmsg;
+            m_logger << msg::INFO << tr( "HBook writer stopped" ) << msg::endmsg;
 
             m_processStatus->setText( tr( "HBook writer stopped" ) );
             QPalette palette( m_processStatus->palette() );

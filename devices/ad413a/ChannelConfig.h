@@ -5,6 +5,7 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -29,6 +30,9 @@ namespace ad413a {
     * $Date$
     */
    class ChannelConfig : virtual public dev::Config {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( ad413a::ChannelConfig )
 
    public:
       /// Constructor

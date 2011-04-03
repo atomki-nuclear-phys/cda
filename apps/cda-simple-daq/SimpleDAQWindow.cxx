@@ -153,11 +153,12 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    // Print some final log message:
    //
    if( ! confFileName.isEmpty() ) {
-      m_logger << msg::INFO << "Using configuration file: "
-               << confFileName << msg::endmsg;
+      m_logger << msg::INFO << tr( "Using configuration file: %1" ).arg( confFileName )
+               << msg::endmsg;
    } else {
-      m_logger << msg::INFO << "Please open a configuration file before"
-               << " trying to start the DAQ system." << msg::endmsg;
+      m_logger << msg::INFO << tr( "Please open a configuration file before"
+                                   " trying to start the DAQ system." )
+               << msg::endmsg;
    }
 
 }
@@ -173,6 +174,8 @@ SimpleDAQWindow::~SimpleDAQWindow() {
    //
    delete m_statistics;
    delete m_camacReader;
+   delete m_glomemWriter;
+   delete m_hbookWriter;
    delete m_msgServer;
    delete m_msgView;
    delete m_centralWidget;
@@ -192,7 +195,8 @@ void SimpleDAQWindow::readConfigSlot() {
 
    // If the user cancels the file selection, don't continue:
    if( fileName.isEmpty() ) {
-      m_logger << msg::INFO << "Configuration file selection cancelled" << msg::endmsg;
+      m_logger << msg::INFO << tr( "Configuration file selection cancelled" )
+               << msg::endmsg;
       return;
    }
 
@@ -207,8 +211,8 @@ void SimpleDAQWindow::readConfigSlot() {
    m_hbookWriter->setConfigFileName( fileName );
    m_hbookWriter->setEnabled( true );
 
-   m_logger << msg::INFO << "Using configuration file: "
-            << fileName << msg::endmsg;
+   m_logger << msg::INFO << tr( "Using configuration file: %1" ).arg( fileName )
+            << msg::endmsg;
 
    return;
 }

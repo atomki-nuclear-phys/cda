@@ -56,7 +56,6 @@ namespace dev {
       resize( WIDTH, HEIGHT );
       setMinimumSize( WIDTH, HEIGHT );
       setMaximumSize( WIDTH, HEIGHT );
-
    }
 
    /**
@@ -98,7 +97,6 @@ namespace dev {
       update();
 
       return true;
-
    }
 
    /**
@@ -132,7 +130,6 @@ namespace dev {
       update();
 
       return true;
-
    }
 
    /**
@@ -148,7 +145,6 @@ namespace dev {
       Crate< dev::Gui >::setLoader( loader );
 
       return;
-
    }
 
    /**
@@ -168,7 +164,6 @@ namespace dev {
       } else {
          return 0;
       }
-
    }
 
    /**
@@ -188,8 +183,9 @@ namespace dev {
       //
       std::map< int, Gui* >::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
-         m_logger << msg::WARNING << "Redefining device in slot "
-                  << slot << msg::endmsg;
+         m_logger << msg::WARNING
+                  << tr( "Redefining device in slot %1" ).arg( slot )
+                  << msg::endmsg;
          delete dev->second;
          dev->second = device;
       } else {
@@ -203,7 +199,6 @@ namespace dev {
       update();
 
       return;
-
    }
 
    /**
@@ -218,14 +213,15 @@ namespace dev {
     */
    void CrateWidget::createSlot( int slot, const QString& type ) {
 
-      m_logger << msg::VERBOSE << "\"" << type
-               <<"\" creation requested in slot " << slot << msg::endmsg;
+      m_logger << msg::VERBOSE
+               << tr( "\"%1\" creation requested in slot %2" ).arg( type ).arg( slot )
+               << msg::endmsg;
 
       //
       // Check that a Loader object is available:
       //
       if( ! m_loader ) {
-         m_logger << msg::ERROR << "No Loader object configured yet!"
+         m_logger << msg::ERROR << tr( "No Loader object configured yet!" )
                   << msg::endmsg;
          return;
       }
@@ -235,12 +231,14 @@ namespace dev {
       //
       Factory* factory = m_loader->getFactory( type );
       if( ! factory ) {
-         m_logger << msg::ERROR << "No factory found for device type \""
-                  << type << "\"" << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "No factory found for device type \"%1\"" ).arg( type )
+                  << msg::endmsg;
          return;
       } else {
-         m_logger << msg::VERBOSE << "Factory found for device type \""
-                  << type << "\"" << msg::endmsg;
+         m_logger << msg::VERBOSE
+                  << tr( "Factory found for device type \"%1\"" ).arg( type )
+                  << msg::endmsg;
       }
 
       //
@@ -248,12 +246,14 @@ namespace dev {
       //
       Gui* device = factory->createGui();
       if( ! device ) {
-         m_logger << msg::ERROR << "No GUI implemented by device \""
-                  << type << "\"" << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "No GUI implemented by device \"%1\"" ).arg( type )
+                  << msg::endmsg;
          return;
       } else {
-         m_logger << msg::VERBOSE << "GUI object created for device type \""
-                  << type << "\"" << msg::endmsg;
+         m_logger << msg::VERBOSE
+                  << tr( "GUI object created for device type \"%1\"" ).arg( type )
+                  << msg::endmsg;
       }
 
       //
@@ -264,7 +264,6 @@ namespace dev {
       emit doubleClicked( slot );
 
       return;
-
    }
 
    /**
@@ -277,19 +276,19 @@ namespace dev {
     */
    void CrateWidget::clearSlot( int slot ) {
 
-      m_logger << msg::VERBOSE << "Clearing slot " << slot << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Clearing slot %1" ).arg( slot )
+               << msg::endmsg;
 
       std::map< int, Gui* >::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
          m_devices.erase( dev );
          delete dev->second;
       } else {
-         m_logger << msg::DEBUG << "Slot was empty..." << msg::endmsg;
+         m_logger << msg::DEBUG << tr( "Slot was empty..." ) << msg::endmsg;
       }
       update();
 
       return;
-
    }
 
    /**
@@ -408,7 +407,6 @@ namespace dev {
       }
 
       return;
-
    }
 
    /**
@@ -489,7 +487,6 @@ namespace dev {
       }
 
       return;
-
    }
 
    /**
@@ -528,7 +525,6 @@ namespace dev {
       emit doubleClicked( slot );
 
       return;
-
    }
 
 } // namespace dev

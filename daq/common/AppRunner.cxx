@@ -129,8 +129,6 @@ namespace daq {
          //
          if( ( m_pid = ::fork() ) == 0 ) {
             if( ::execve( m_execName.toLatin1().constData(), argv, environ ) == -1 ) {
-               //               m_logger << msg::ERROR << tr( "There was a problem starting program: %1" )
-               //                  .arg( m_execName ) << msg::endmsg;
                exit( 255 );
                return false;
             }
@@ -149,7 +147,6 @@ namespace daq {
       }
 
       return true;
-
    }
 
    /**
@@ -189,7 +186,6 @@ namespace daq {
       }
 
       return false;
-
    }
 
 } // namespace daq

@@ -34,12 +34,16 @@ namespace ad413a {
 
       // Write control register 1:
       if( m_generateLam ) {
-         m_logger << msg::DEBUG << "Initialising AD413A ADC in slot "
-                  << m_slot << " to generate LAM" << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Initialising AD413A ADC in slot %1"
+                         " to generate LAM" ).arg( m_slot )
+                  << msg::endmsg;
          crate.writeWord( m_slot, 0, 16, 0xe300 );
       } else {
-         m_logger << msg::DEBUG << "Initialising AD413A ADC in slot "
-                  << m_slot << " NOT to generate LAM" << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Initialising AD413A ADC in slot %1"
+                         " NOT to generate LAM" ).arg( m_slot )
+                  << msg::endmsg;
          crate.writeWord( m_slot, 0, 16, 0xa300 );
       }
 
@@ -55,8 +59,8 @@ namespace ad413a {
       } else if( m_gate == 4 ) {
          crate.writeWord( m_slot, 1, 16, 0x17 );
       } else {
-         m_logger << msg::WARNING << "Gate value is " << m_gate << msg::endmsg;
-         m_logger << msg::WARNING << "Will enable all gates for now..." << msg::endmsg;
+         m_logger << msg::WARNING << tr( "Gate value is %1" ).arg( m_gate ) << msg::endmsg;
+         m_logger << msg::WARNING << tr( "Will enable all gates for now..." ) << msg::endmsg;
          crate.writeWord( m_slot, 1, 16, 0x0 );
       }
 
@@ -68,7 +72,6 @@ namespace ad413a {
       }
 
       return true;
-
    }
 
    /**
@@ -96,13 +99,10 @@ namespace ad413a {
             uint32_t channel = crate.readWord( m_slot, i, 2 );
             uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
             fragment.addDataWord( dword );
-            m_logger << msg::VERBOSE << "From subaddress " << i
-                     << " : " << channel << msg::endmsg;
          }
       }
 
       return fragment;
-
    }
 
    bool Readout::clear( camac::Crate& crate ) const {
@@ -112,10 +112,9 @@ namespace ad413a {
       //
       crate.writeWord( m_slot, 0, 10, 0 );
 
-      m_logger << msg::VERBOSE << "Cleared module" << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Cleared module" ) << msg::endmsg;
 
       return true;
-
    }
 
 } // namespace ad413a

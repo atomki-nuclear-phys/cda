@@ -46,7 +46,7 @@ namespace dev {
                this, SLOT( showDeviceSlot( int ) ) );
 
       // Create the box surrounding the device configuration:
-      m_deviceBox = new QGroupBox( "No slot selected", this );
+      m_deviceBox = new QGroupBox( tr( "No slot selected" ), this );
       m_deviceBox->setGeometry( QRect( 0, 270, 520, 370 ) );
 
       /// Create the widget showing the device configuration:
@@ -67,7 +67,6 @@ namespace dev {
       delete m_deviceWidget;
       delete m_deviceBox;
       delete m_loader;
-
    }
 
    /**
@@ -77,7 +76,6 @@ namespace dev {
    bool Editor::readConfig( QIODevice* dev ) {
 
       return m_crateView->readConfig( dev );
-
    }
 
    /**
@@ -87,7 +85,6 @@ namespace dev {
    bool Editor::writeConfig( QIODevice* dev ) const {
 
       return m_crateView->writeConfig( dev );
-
    }
 
    /**
@@ -97,7 +94,6 @@ namespace dev {
    bool Editor::readConfig( const QDomElement& node ) {
 
       return m_crateView->readConfig( node );
-
    }
 
    /**
@@ -107,7 +103,6 @@ namespace dev {
    bool Editor::writeConfig( QDomElement& node ) const {
 
       return m_crateView->writeConfig( node );
-
    }
 
    /**
@@ -119,7 +114,6 @@ namespace dev {
       m_crateView->clear();
       m_crateView->update();
       return;
-
    }
 
    /**
@@ -133,14 +127,15 @@ namespace dev {
       // Access the device:
       Gui* device = m_crateView->getDevice( slot );
       if( ! device ) {
-         m_logger << msg::DEBUG << "There is no device in slot "
-                  << slot << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "There is no device in slot %1" ).arg( slot )
+                  << msg::endmsg;
          return;
       }
 
       // Do nothing if it is being shown right now:
       if( device == m_deviceWidget->currentWidget() ) {
-         m_logger << msg::VERBOSE << "This device is shown right now..."
+         m_logger << msg::VERBOSE << tr( "This device is shown right now..." )
                   << msg::endmsg;
          return;
       }
@@ -155,10 +150,9 @@ namespace dev {
       // Show the device widget:
       m_deviceWidget->addWidget( device );
       m_deviceWidget->setCurrentWidget( device );
-      m_deviceBox->setTitle( "Slot " + QString::number( slot ) );
+      m_deviceBox->setTitle( tr( "Slot %1" ).arg( QString::number( slot ) ) );
 
       return;
-
    }
 
    /**
@@ -166,9 +160,8 @@ namespace dev {
     */
    void Editor::removeDeviceSlot( int /* slot */ ) {
 
-      m_deviceBox->setTitle( "No slot selected" );
+      m_deviceBox->setTitle( tr( "No slot selected" ) );
       return;
-
    }
 
 } // namespace dev

@@ -26,13 +26,13 @@ namespace ad413a {
         m_lowerBound( 0. ), m_upperBound( 100. ), m_name( "time" ),
         m_logger( "ad413a::ChannelConfig" ) {
 
-      m_logger << msg::VERBOSE << "Object created" << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
 
    }
 
    bool ChannelConfig::readConfig( QIODevice* dev ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from binary input"
+      m_logger << msg::VERBOSE << tr( "Reading configuration from binary input" )
                << msg::endmsg;
 
       clear();
@@ -49,12 +49,11 @@ namespace ad413a {
       printConfig( msg::VERBOSE );
 
       return true;
-
    }
 
    bool ChannelConfig::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to binary output"
+      m_logger << msg::VERBOSE << tr( "Writing configuration to binary output" )
                << msg::endmsg;
 
       QDataStream output( dev );
@@ -67,57 +66,55 @@ namespace ad413a {
       output << m_name;
 
       return true;
-
    }
 
    bool ChannelConfig::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from XML input"
+      m_logger << msg::VERBOSE << tr( "Reading configuration from XML input" )
                << msg::endmsg;
 
       clear();
 
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
       bool ok;
 
       m_subaddress = element.attribute( "Subaddress", "" ).toInt( &ok );
       if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"subaddress\" value" << msg::endmsg;
+         m_logger << msg::ERROR << tr( "There was a problem reading a "
+                                       "\"subaddress\" value" )
+                  << msg::endmsg;
          return false;
       }
 
       m_lld = element.attribute( "LowLevelDiscriminant", "0" ).toInt( &ok );
       if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"low level discriminant\" value" << msg::endmsg;
+         m_logger << msg::ERROR << tr( "There was a problem reading a "
+                                       "\"low level discriminant\" value" )
+                  << msg::endmsg;
          return false;
       }
 
       m_numberOfChannels = element.attribute( "NumberOfChannels",
                                               "100" ).toInt( &ok );
       if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"number of channels\" value" << msg::endmsg;
+         m_logger << msg::ERROR << tr( "There was a problem reading a "
+                                       "\"number of channels\" value" )
+                  << msg::endmsg;
          return false;
       }
 
       m_lowerBound = element.attribute( "LowerBound", "0." ).toDouble( &ok );
       if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"lower bound\" value" << msg::endmsg;
+         m_logger << msg::ERROR << tr( "There was a problem reading a "
+                                       "\"lower bound\" value" )
+                  << msg::endmsg;
          return false;
       }
 
       m_upperBound = element.attribute( "UpperBound", "100." ).toDouble( &ok );
       if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading an "
-                  << "\"upper bound\" value" << msg::endmsg;
+         m_logger << msg::ERROR << tr( "There was a problem reading an "
+                                       "\"upper bound\" value" )
+                  << msg::endmsg;
          return false;
       }
 
@@ -126,20 +123,12 @@ namespace ad413a {
       printConfig( msg::VERBOSE );
 
       return true;
-
    }
 
    bool ChannelConfig::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to XML output"
+      m_logger << msg::VERBOSE << tr( "Writing configuration to XML output" )
                << msg::endmsg;
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
 
       element.setAttribute( "Subaddress", m_subaddress );
       element.setAttribute( "LowLevelDiscriminant", m_lld );
@@ -149,85 +138,72 @@ namespace ad413a {
       element.setAttribute( "Name", m_name );
 
       return true;
-
    }
 
    int ChannelConfig::getSubaddress() const {
 
       return m_subaddress;
-
    }
 
    int ChannelConfig::getLowLevelDiscriminant() const {
 
       return m_lld;
-
    }
 
    int ChannelConfig::getNumberOfChannels() const {
 
       return m_numberOfChannels;
-
    }
 
    double ChannelConfig::getLowerBound() const {
 
       return m_lowerBound;
-
    }
 
    double ChannelConfig::getUpperBound() const {
 
       return m_upperBound;
-
    }
 
    const QString& ChannelConfig::getName() const {
 
       return m_name;
-
    }
 
    void ChannelConfig::setSubaddress( int value ) {
 
       m_subaddress = value;
       return;
-
    }
 
    void ChannelConfig::setLowLevelDiscriminant( int lld ) {
 
       m_lld = lld;
       return;
-
    }
 
    void ChannelConfig::setNumberOfChannels( int value ) {
 
       m_numberOfChannels = value;
       return;
-
    }
 
    void ChannelConfig::setLowerBound( double value ) {
 
       m_lowerBound = value;
       return;
-
    }
 
    void ChannelConfig::setUpperBound( double value ) {
 
       m_upperBound = value;
       return;
-
    }
 
    void ChannelConfig::setName( const QString& value ) {
 
       m_name = value;
       return;
-
    }
 
    /**
@@ -236,21 +212,17 @@ namespace ad413a {
     */
    void ChannelConfig::printConfig( msg::Level level ) const {
 
-      m_logger << level << " - Subaddress        : "
-               << m_subaddress << std::endl;
-      m_logger << " - Low level discr.  : "
-               << m_lld << std::endl;
-      m_logger << " - Number of channels: "
-               << m_numberOfChannels << std::endl;
-      m_logger << " - Lower bound       : "
-               << m_lowerBound << std::endl;
-      m_logger << " - Upper bound       : "
-               << m_upperBound << std::endl;
-      m_logger << " - Name              : "
-               << m_name << msg::endmsg;
+      m_logger << level
+               << tr( " - Subaddress        : %1\n"
+                      " - Low level discr.  : %2\n"
+                      " - Lower bound       : %3\n"
+                      " - Upper bound       : %4\n"
+                      " - Name              : %5" )
+         .arg( m_subaddress ).arg( m_lld ).arg( m_numberOfChannels )
+         .arg( m_lowerBound ).arg( m_upperBound ).arg( m_name )
+               << msg::endmsg;
 
       return;
-
    }
 
    void ChannelConfig::clear() {
@@ -263,7 +235,6 @@ namespace ad413a {
       m_name = "";
 
       return;
-
    }
 
 } // namespace ad413a

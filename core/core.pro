@@ -18,10 +18,11 @@ TARGET   = cdacore
 # These are the header and source files:
 HEADERS = $$system(ls fifo/*.h) $$system(ls msg/*.h) $$system(ls event/*.h) \
           $$system(ls device/*.h) $$system(ls device/*.icc) $$system(ls camac/*.h) \
-          $$system(ls cmdl/*.h) $$system(ls cernlib/*.h) $$system(ls common/*.h)
+          $$system(ls cmdl/*.h) $$system(ls cernlib/*.h) $$system(ls common/*.h) \
+          $$system(ls i18n/*.h)
 SOURCES = $$system(ls fifo/*.cxx) $$system(ls msg/*.cxx) $$system(ls event/*.cxx) \
           $$system(ls device/*.cxx) $$system(ls camac/*.cxx) $$system(ls cmdl/*.cpp) \
-          $$system(ls cernlib/*.cxx) $$system(ls common/*.cxx)
+          $$system(ls cernlib/*.cxx) $$system(ls common/*.cxx) $$system(ls i18n/*.cxx)
 TRANSLATIONS = ../trans/cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
@@ -95,6 +96,11 @@ mac {
    COMMON_HEADERS.files = $$system(ls common/*.h)
    COMMON_HEADERS.path = Headers/common
    QMAKE_BUNDLE_DATA += COMMON_HEADERS
+
+   I18N_HEADERS.version = Versions
+   I18N_HEADERS.files = $$system(ls i18n/*.h)
+   I18N_HEADERS.path = Headers/i18n
+   QMAKE_BUNDLE_DATA += I18N_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =

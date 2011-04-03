@@ -52,7 +52,7 @@ namespace dev {
        *          <code>false</code> otherwise
        */
       virtual bool initialize( cernlib::NTupleMgr& nmgr ) = 0;
-      /// Function filling the histograms
+      /// Function filling the ntuple
       /**
        * Write an event record to the output file. It should receive an
        * event fragment that was read out by the dev::Readout object.

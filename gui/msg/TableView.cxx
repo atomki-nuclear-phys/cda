@@ -80,7 +80,7 @@ namespace msg {
       // Set the names of the columns:
       //
       QStringList headerNames;
-      headerNames << "Time" << "Sender" << "Level" << "Message";
+      headerNames << tr( "Time" ) << tr( "Sender" ) << tr( "Level" ) << tr( "Message" );
       m_table->setHorizontalHeaderLabels( headerNames );
 
       //
@@ -101,7 +101,6 @@ namespace msg {
       // Finally add the table to the layout:
       //
       m_layout->addWidget( m_table );
-
    }
 
    TableView::~TableView() {
@@ -111,14 +110,12 @@ namespace msg {
       //
       delete m_table;
       delete m_layout;
-
    }
 
    void TableView::setMinimumShownLevel( Level level ) {
 
       m_minShownLevel = level;
       return;
-
    }
 
    /**
@@ -131,7 +128,6 @@ namespace msg {
          m_table->removeRow( 0 );
       }
       return;
-
    }
 
    /**
@@ -146,7 +142,6 @@ namespace msg {
          m_table->verticalHeader()->resizeSections( QHeaderView::ResizeToContents );
       }
       return;
-
    }
 
    /**
@@ -165,13 +160,11 @@ namespace msg {
    bool TableView::getSortByTime() const {
 
       return m_sortByTime;
-
    }
 
    Level TableView::getMinimumShownLevel() const {
 
       return m_minShownLevel;
-
    }
 
    /**
@@ -272,21 +265,18 @@ namespace msg {
       m_table->scrollToItem( m_table->item( row, 0 ) );
 
       return;
-
    }
 
    void TableView::showEvent( QShowEvent* ) {
 
       adjustColumns();
       return;
-
    }
 
    void TableView::resizeEvent( QResizeEvent* ) {
 
       adjustColumns();
       return;
-
    }
 
    /**
@@ -321,7 +311,6 @@ namespace msg {
       m_levelToForeground[ ALWAYS ]  = QBrush( Qt::black );
 
       return;
-
    }
 
    /**
@@ -346,7 +335,6 @@ namespace msg {
       }
 
       return;
-
    }
 
 } // namespace msg

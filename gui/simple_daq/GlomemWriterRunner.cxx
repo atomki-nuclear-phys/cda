@@ -54,7 +54,6 @@ namespace simple_daq {
 
       m_runner.setExecName( daq::PathResolver::resolve( "cda-glomem-writer",
                                                         "PATH" ) );
-
    }
 
    GlomemWriterRunner::~GlomemWriterRunner() {
@@ -62,59 +61,50 @@ namespace simple_daq {
       delete m_starterButton;
       delete m_processStatus;
       delete m_mainBox;
-
    }
 
    void GlomemWriterRunner::setConfigFileName( const QString& fileName ) {
 
       m_configFileName = fileName;
       return;
-
    }
 
    const QString& GlomemWriterRunner::getConfigFileName() const {
 
       return m_configFileName;
-
    }
 
    void GlomemWriterRunner::setMsgServerAddress( const QString& address ) {
 
       m_msgServerAddress = address;
       return;
-
    }
 
    const QString& GlomemWriterRunner::getMsgServerAddress() const {
 
       return m_msgServerAddress;
-
    }
 
    void GlomemWriterRunner::setEventAddress( const QString& address ) {
 
       m_eventAddress = address;
       return;
-
    }
 
    const QString& GlomemWriterRunner::getEventAddress() const {
 
       return m_eventAddress;
-
    }
 
    void GlomemWriterRunner::setVerbosity( msg::Level verbosity ) {
 
       m_level = verbosity;
       return;
-
    }
 
    msg::Level GlomemWriterRunner::getVerbosity() const {
 
       return m_level;
-
    }
 
    void GlomemWriterRunner::startApp( bool start ) {
@@ -127,11 +117,13 @@ namespace simple_daq {
          options += " -v " + QString::number( m_level );
          options += " -e " + m_eventAddress;
 
-         m_logger << msg::DEBUG << "Using options: " << options << msg::endmsg;
+         m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options )
+                  << msg::endmsg;
          m_runner.setOptions( options );
 
          if( ! m_runner.start() ) {
-            m_logger << msg::ERROR << "Couldn't start GloMem writer!" << msg::endmsg;
+            m_logger << msg::ERROR << tr( "Couldn't start GloMem writer!" )
+                     << msg::endmsg;
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
@@ -144,7 +136,8 @@ namespace simple_daq {
             m_starterButton->setText( tr( "Reset" ) );
 
          } else {
-            m_logger << msg::INFO << "GloMem writer started" << msg::endmsg;
+            m_logger << msg::INFO << tr( "GloMem writer started" )
+                     << msg::endmsg;
 
             m_processStatus->setText( tr( "GloMem writer running" ) );
             QPalette palette( m_processStatus->palette() );
@@ -163,8 +156,9 @@ namespace simple_daq {
       } else {
 
          if( ! m_runner.stop() ) {
-            m_logger << msg::ERROR << "The GloMem writer could not be stopped "
-                     << "successfully" << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "The GloMem writer could not be stopped "
+                            "successfully" ) << msg::endmsg;
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
@@ -175,7 +169,8 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
          } else {
-            m_logger << msg::INFO << "GloMem writer stopped" << msg::endmsg;
+            m_logger << msg::INFO << tr( "GloMem writer stopped" )
+                     << msg::endmsg;
 
             m_processStatus->setText( tr( "GloMem writer stopped" ) );
             QPalette palette( m_processStatus->palette() );
@@ -194,7 +189,6 @@ namespace simple_daq {
       }
 
       return;
-
    }
 
 } // namespace simple_daq

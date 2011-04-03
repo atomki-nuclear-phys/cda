@@ -5,6 +5,7 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -35,6 +36,8 @@ namespace ad413a {
     */
    class Readout : virtual public dev::Readout,
                    virtual public Device {
+
+      Q_DECLARE_TR_FUNCTIONS( ad2249a::Readout )
 
    public:
       /// Constructor

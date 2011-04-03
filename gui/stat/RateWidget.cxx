@@ -30,7 +30,6 @@ namespace stat {
 
       setMinimumSize( 120, 100 );
       setMaximumSize( 1200, 1000 );
-
    }
 
    /**
@@ -46,7 +45,6 @@ namespace stat {
       update();
 
       return;
-
    }
 
    /**
@@ -66,8 +64,7 @@ namespace stat {
       // Print the maximum rate:
       painter.setBrush( Qt::black );
       painter.drawText( QRect( 0, 0, width(), 20 ),
-                        Qt::AlignCenter, tr( "Peak: " ) + QString::number( maximum ) +
-                        " Hz" );
+                        Qt::AlignCenter, tr( "Peak: %1 Hz" ).arg( QString::number( maximum ) ) );
 
       // Draw the background rectangle:
       painter.setPen( Qt::SolidLine );
@@ -126,7 +123,6 @@ namespace stat {
       }
 
       return;
-
    }
 
 } // namespace stat

@@ -15,6 +15,11 @@
 
 namespace dev {
 
+   // Make sure that the Qt classes are in scope:
+   using QT_PREPEND_NAMESPACE( QPluginLoader );
+   using QT_PREPEND_NAMESPACE( QDir );
+   using QT_PREPEND_NAMESPACE( QLibrary );
+
    /**
     * You can either specify a concrete directory path under which
     * device plugins should be searched for, or the class can try

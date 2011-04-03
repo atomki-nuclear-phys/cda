@@ -138,6 +138,7 @@ namespace ad413a {
       delete m_topLabel;
 
       delete m_nameLabel;
+      delete m_lldLabel;
       delete m_channelsLabel;
       delete m_lowerBoundLabel;
       delete m_upperBoundLabel;
@@ -147,11 +148,11 @@ namespace ad413a {
       }
 
       delete m_generateLamEdit;
+      delete m_gateLabel;
       delete m_gateEdit;
 
       delete m_scrollWidget;
       delete m_scrollArea;
-
    }
 
    /**
@@ -166,7 +167,6 @@ namespace ad413a {
       }
       sync();
       return true;
-
    }
 
    /**
@@ -181,7 +181,6 @@ namespace ad413a {
       }
       sync();
       return true;
-
    }
 
    /**
@@ -307,7 +306,6 @@ namespace ad413a {
       }
 
       return;
-
    }
 
    void Gui::channelEnabledSlot( int subaddress, bool on ) {
@@ -322,42 +320,36 @@ namespace ad413a {
 
       emit redrawModule();
       return;
-
    }
 
    void Gui::nameChangedSlot( int subaddress, const QString& text ) {
 
       m_channels[ subaddress ]->setName( text );
       return;
-
    }
 
    void Gui::lldChangedSlot( int subaddress, int lld ) {
 
       m_channels[ subaddress ]->setLowLevelDiscriminant( lld );
       return;
-
    }
 
    void Gui::channelsChangedSlot( int subaddress, int channels ) {
 
       m_channels[ subaddress ]->setNumberOfChannels( channels );
       return;
-
    }
 
    void Gui::lowerBoundChangedSlot( int subaddress, double value ) {
 
       m_channels[ subaddress ]->setLowerBound( value );
       return;
-
    }
 
    void Gui::upperBoundChangedSlot( int subaddress, double value ) {
 
       m_channels[ subaddress ]->setUpperBound( value );
       return;
-
    }
 
    void Gui::generateLamChangedSlot( bool on ) {
@@ -365,7 +357,6 @@ namespace ad413a {
       m_generateLam = on;
       emit redrawModule();
       return;
-
    }
 
    void Gui::gateChangedSlot( int gate ) {
@@ -373,7 +364,6 @@ namespace ad413a {
       m_gate = gate;
       emit redrawModule();
       return;
-
    }
 
    /**
@@ -408,7 +398,6 @@ namespace ad413a {
       m_gateEdit->setValue( m_gate );
 
       return;
-
    }
 
 } // namespace ad413a

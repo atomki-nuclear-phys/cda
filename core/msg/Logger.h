@@ -111,7 +111,6 @@ namespace msg {
          ( _f )( *this );
       }
       return *this;
-
    }
 
    inline Logger& Logger::operator<<( std::ostream& ( *_f )( std::ostream& ) ) {
@@ -120,7 +119,6 @@ namespace msg {
          ( _f )( *this );
       }
       return *this;
-
    }
 
    inline Logger& Logger::operator<<( std::ios& ( *_f )( std::ios& ) ) {
@@ -129,7 +127,6 @@ namespace msg {
          ( _f )( *this );
       }
       return *this;
-
    }
 
    /// Stream modifier that sends off a message to the server

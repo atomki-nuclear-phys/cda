@@ -19,6 +19,10 @@ namespace dev {
    // Forward declaration(s):
    class Factory;
 
+   // Make sure that the Qt classes are in scope:
+   using QT_PREPEND_NAMESPACE( QString );
+   using QT_PREPEND_NAMESPACE( QStringList );
+
    /**
     *  @short Device plugin loader
     *

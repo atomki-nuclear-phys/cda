@@ -13,9 +13,19 @@
  * $Date$
  */
 
+// STL include(s):
+#include <iostream>
+
 // Qt include(s):
 #include <QtGui/QApplication>
 #include <QtGui/QFont>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/i18n/Loader.h"
+#else
+#   include "i18n/Loader.h"
+#endif
 
 // Local include(s):
 #include "MsgServerWindow.h"
@@ -26,6 +36,15 @@ int main( int argc, char* argv[] ) {
    // Start a graphical Qt application:
    //
    QApplication app( argc, argv );
+
+   //
+   // Load all the available translations:
+   //
+   i18n::Loader trans_loader;
+   if( ! trans_loader.loadTranslations() ) {
+      std::cerr << "Couldn't load the translations!" << std::endl;
+      return 1;
+   }
 
    //
    // Set the default application font size. Different font sizes look

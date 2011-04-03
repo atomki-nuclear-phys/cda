@@ -19,37 +19,31 @@ namespace ad413a {
    QString Factory::shortName() const {
 
       return "AD413A";
-
    }
 
    QString Factory::longName() const {
 
       return "ORTEC AD413A Quad 8k ADC";
-
    }
 
    dev::Gui* Factory::createGui() const {
 
       return new Gui();
-
    }
 
    dev::Readout* Factory::createReadout() const {
 
       return new Readout();
-
    }
 
    dev::Hist* Factory::createHist() const {
 
       return new Hist();
-
    }
 
    dev::Disk* Factory::createDisk() const {
 
       return new Disk();
-
    }
 
 } // namespace ad413a

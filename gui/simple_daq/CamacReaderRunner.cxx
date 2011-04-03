@@ -84,6 +84,7 @@ namespace simple_daq {
       m_starterButton = new QPushButton( tr( "Start camac reader" ), m_mainBox );
       m_starterButton->setGeometry( QRect( 20, 100, 250, 35 ) );
       m_starterButton->setCheckable( true );
+      m_starterButton->setEnabled( false );
       connect( m_starterButton, SIGNAL( clicked( bool ) ),
                this, SLOT( startApp( bool ) ) );
 
@@ -99,7 +100,6 @@ namespace simple_daq {
       m_hbookWriterUpdating = false;
       m_hbookWriterRunning = false;
       m_glomemWriterRunning = false;
-
    }
 
    CamacReaderRunner::~CamacReaderRunner() {
@@ -217,6 +217,11 @@ namespace simple_daq {
 
       // Update the internal flag:
       m_hbookWriterRunning = running;
+      if( m_hbookWriterRunning && m_glomemWriterRunning ) {
+         m_starterButton->setEnabled( true );
+      } else {
+         m_starterButton->setEnabled( false );
+      }
 
       //
       // Halt the CAMAC reader as long as the HBOOK writer is updating its file name:
@@ -266,6 +271,12 @@ namespace simple_daq {
    void CamacReaderRunner::setGlomemWriterRunning( bool running ) {
 
       m_glomemWriterRunning = running;
+      if( m_hbookWriterRunning && m_glomemWriterRunning ) {
+         m_starterButton->setEnabled( true );
+      } else {
+         m_starterButton->setEnabled( false );
+      }
+
       return;
    }
 
@@ -309,11 +320,13 @@ namespace simple_daq {
          //
          // Set these options to the runner object:
          //
-         m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options ) << msg::endmsg;
+         m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options )
+                  << msg::endmsg;
          m_runner.setOptions( options );
 
          if( ! m_runner.start() ) {
-            m_logger << msg::ERROR << tr( "Couldn't start camac reader!" ) << msg::endmsg;
+            m_logger << msg::ERROR << tr( "Couldn't start camac reader!" )
+                     << msg::endmsg;
 
             //
             // Signal the error as much as possible:
@@ -329,7 +342,8 @@ namespace simple_daq {
             m_starterButton->setText( tr( "Reset" ) );
 
          } else {
-            m_logger << msg::INFO << tr( "Camac reader started" ) << msg::endmsg;
+            m_logger << msg::INFO << tr( "Camac reader started" )
+                     << msg::endmsg;
 
             //
             // Signal that the application is running:
@@ -353,8 +367,9 @@ namespace simple_daq {
       } else {
 
          if( ! m_runner.stop() ) {
-            m_logger << msg::ERROR << tr( "The camac reader could not be stopped "
-                                          "successfully" ) << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "The camac reader could not be stopped "
+                            "successfully" ) << msg::endmsg;
 
             //
             // Signal the error as much as possible:
@@ -368,7 +383,8 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
          } else {
-            m_logger << msg::INFO << tr( "Camac reader stopped" ) << msg::endmsg;
+            m_logger << msg::INFO << tr( "Camac reader stopped" )
+                     << msg::endmsg;
 
             //
             // Return the widgets to their "normal" state:

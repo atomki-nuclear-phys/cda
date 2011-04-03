@@ -30,7 +30,7 @@ namespace ad413a {
 
    bool Hist::initialize( cernlib::HistMgr& hmgr ) {
 
-      m_logger << msg::DEBUG << "Initialising histograms" << msg::endmsg;
+      m_logger << msg::DEBUG << tr( "Initialising histograms" ) << msg::endmsg;
 
       // Loop over all configured subaddresses:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
@@ -57,7 +57,6 @@ namespace ad413a {
       }
 
       return true;
-
    }
 
    bool Hist::displayEvent( const ev::Fragment& fragment,
@@ -81,7 +80,7 @@ namespace ad413a {
             hmgr.fill_1d( m_histTable[ subaddress ], data, 1. );
 
          } else {
-            m_logger << msg::ERROR << "Received data word from unknown channel"
+            m_logger << msg::ERROR << tr( "Received data word from unknown channel" )
                      << msg::endmsg;
             return false;
          }
@@ -89,7 +88,6 @@ namespace ad413a {
       }
 
       return true;
-
    }
 
 } // namespace ad413a

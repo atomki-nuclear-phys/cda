@@ -5,6 +5,7 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -28,6 +29,9 @@ namespace ad413a {
     *         in all the necessary formats.
     */
    class Device : virtual public dev::Device {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( ad413a::Device )
 
    public:
       /// Constructor
@@ -60,9 +64,9 @@ namespace ad413a {
       /// Number of inputs on the device
       static const int NUMBER_OF_SUBADDRESSES = 4;
 
-      int            m_slot; ///< Slot of the device in the CAMAC crate
-      bool           m_generateLam; ///< Generate LAM signal at readout
-      short          m_gate; ///< Type of gate that should be used
+      int   m_slot; ///< Slot of the device in the CAMAC crate
+      bool  m_generateLam; ///< Generate LAM signal at readout
+      short m_gate; ///< Type of gate that should be used
 
       /// Configuration of the input channels of the device
       ChannelConfig* m_channels[ NUMBER_OF_SUBADDRESSES ];
