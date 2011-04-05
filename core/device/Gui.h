@@ -56,6 +56,14 @@ namespace dev {
        */
       virtual void drawModule( QPainter& painter ) const = 0;
 
+      /// Width of the device in units of crate slots
+      /**
+       * Most of the CAMAC devices are just 1 slot wide. But some of them
+       * are actually 2 slots wide. The configuration application has to
+       * be able to handle this.
+       */
+      virtual int deviceWidth() const = 0;
+
       /// Fixed width of a device
       static const int WIDGET_WIDTH;
       /// Fixed height of a device

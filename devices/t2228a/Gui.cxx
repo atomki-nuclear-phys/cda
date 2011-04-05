@@ -111,7 +111,6 @@ namespace t2228a {
       }
 
       delete m_generateLamEdit;
-
    }
 
    /**
@@ -126,7 +125,6 @@ namespace t2228a {
       }
       sync();
       return true;
-
    }
 
    /**
@@ -141,7 +139,6 @@ namespace t2228a {
       }
       sync();
       return true;
-
    }
 
    /**
@@ -222,7 +219,11 @@ namespace t2228a {
       }
 
       return;
+   }
 
+   int Gui::deviceWidth() const {
+
+      return 1;
    }
 
    void Gui::channelEnabledSlot( int subaddress, bool on ) {
@@ -237,35 +238,30 @@ namespace t2228a {
 
       emit redrawModule();
       return;
-
    }
 
    void Gui::nameChangedSlot( int subaddress, const QString& text ) {
 
       m_channels[ subaddress ]->setName( text );
       return;
-
    }
 
    void Gui::channelsChangedSlot( int subaddress, int channels ) {
 
       m_channels[ subaddress ]->setNumberOfChannels( channels );
       return;
-
    }
 
    void Gui::lowerBoundChangedSlot( int subaddress, double value ) {
 
       m_channels[ subaddress ]->setLowerBound( value );
       return;
-
    }
 
    void Gui::upperBoundChangedSlot( int subaddress, double value ) {
 
       m_channels[ subaddress ]->setUpperBound( value );
       return;
-
    }
 
    void Gui::generateLamChangedSlot( bool on ) {
@@ -273,7 +269,6 @@ namespace t2228a {
       m_generateLam = on;
       emit redrawModule();
       return;
-
    }
 
    /**
@@ -306,7 +301,6 @@ namespace t2228a {
       m_generateLamEdit->setChecked( m_generateLam );
 
       return;
-
    }
 
 } // namespace t2228a

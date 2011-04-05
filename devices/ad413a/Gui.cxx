@@ -308,6 +308,11 @@ namespace ad413a {
       return;
    }
 
+   int Gui::deviceWidth() const {
+
+      return 2;
+   }
+
    void Gui::channelEnabledSlot( int subaddress, bool on ) {
 
       if( on ) {

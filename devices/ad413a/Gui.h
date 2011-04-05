@@ -68,6 +68,8 @@ namespace ad413a {
 
       /// Draw a graphical representation of the module
       virtual void drawModule( QPainter& painter ) const;
+      /// Width of the device in units of crate slots
+      virtual int deviceWidth() const;
 
    private slots:
       /// Slot handling changes to channel enablement

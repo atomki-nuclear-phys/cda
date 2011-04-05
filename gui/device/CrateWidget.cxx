@@ -461,6 +461,30 @@ namespace dev {
             for( QStringList::const_iterator dev = devices.begin();
                  dev != devices.end(); ++dev ) {
 
+               //
+               // Check if this particular device could be inserted into this
+               // crate slot:
+               //
+               Gui* device = m_loader->getFactory( *dev )->createGui();
+               bool offerDevice = true;
+               // Check if it has enough space from the side of the crate:
+               if( device->deviceWidth() > slot ) {
+                  offerDevice = false;
+               }
+               // Check if there's another module in its way:
+               for( int i = 0; i < device->deviceWidth(); ++i ) {
+                  if( getDevice( slot - i ) ) {
+                     offerDevice = false;
+                     break;
+                  }
+               }
+               // We don't need the device anymore:
+               delete device;
+               // Skip this offer if the device can't be put into this slot:
+               if( ! offerDevice ) {
+                  continue;
+               }
+
                QString name = m_loader->getFactory( *dev )->longName();
 
                CreateAction* ac = new CreateAction( name, slot, *dev, this );

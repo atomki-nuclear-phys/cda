@@ -191,6 +191,11 @@ namespace ad1000 {
       return;
    }
 
+   int Gui::deviceWidth() const {
+
+      return 1;
+   }
+
    void Gui::nameChangedSlot( const QString& text ) {
 
       m_channel.setName( text );
