@@ -390,7 +390,7 @@ Ez elég veszélyes lehet...</translation>
     <message>
         <location filename="../core/event/EventServer.cxx" line="48"/>
         <source>Listening for incoming events on %1:%2</source>
-        <translation>Bejövö események várása a %1:%2 címen</translation>
+        <translation>Bejövö események várása a(z) %1:%2 címen</translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="96"/>

@@ -73,6 +73,7 @@ namespace msg {
       /// Tells you the name of the output file
       const QString& getOutputFileName() const;
 
+      /// Start listening for incoming messages on the specified address
       bool listen( const Address& address );
 
    signals:

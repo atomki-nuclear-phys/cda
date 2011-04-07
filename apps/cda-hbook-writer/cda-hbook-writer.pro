@@ -18,6 +18,7 @@ TARGET   = cda-hbook-writer
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
+TRANSLATIONS = ../../trans/cda-hbook-writer_hu.ts
 
 #
 # These are the specific configuration options for compiling the code

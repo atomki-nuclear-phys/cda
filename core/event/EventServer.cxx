@@ -15,8 +15,9 @@ namespace ev {
     * The constructor just sets sensible default values to the member
     * variables but it doesn't start anything.
     */
-   EventServer::EventServer( QObject* parent )
-      : QThread( parent ), m_mutex(), m_address(),
+   EventServer::EventServer( size_t bufferSize, QObject* parent )
+      : QThread( parent ), m_mutex(), m_address(), m_events(),
+        m_bufferSize( bufferSize ), m_warningTime( QTime::currentTime() ),
         m_logger( "ev::EventServer" ) {
 
    }
@@ -52,6 +53,14 @@ namespace ev {
       start();
 
       return;
+   }
+
+   /**
+    * @returns The content of the internal event buffer
+    */
+   size_t EventServer::bufferSize() const {
+
+      return m_events.size();
    }
 
    /**
@@ -170,9 +179,22 @@ namespace ev {
             //
             // Add the event to the internal buffer:
             //
-            m_mutex.lock();
-            m_events.push_back( event );//copy
-            m_mutex.unlock();
+            if( m_events.size() < m_bufferSize ) {
+               m_mutex.lock();
+               m_events.push_back( event );//copy
+               m_mutex.unlock();
+            } else {
+               if( m_warningTime.secsTo( QTime::currentTime() ) > 2 ) {
+                  m_warningTime = QTime::currentTime();
+                  m_logger << msg::WARNING
+                           << tr( "Can't store any more events in internal buffer\n"
+                                  "Throwing away incoming event!" )
+                           << msg::endmsg;
+               }
+            }
+
+            // Tell the listeners that new events are available:
+            emit eventAvailable();
          }
 
       }

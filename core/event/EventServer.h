@@ -9,6 +9,7 @@
 // Qt include(s):
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
+#include <QtCore/QTime>
 
 // CDA include(s):
 #include "../common/Address.h"
@@ -18,6 +19,11 @@
 #include "Event.h"
 
 namespace ev {
+
+   // Make sure the Qt classes are in scope:
+   using QT_PREPEND_NAMESPACE( QThread );
+   using QT_PREPEND_NAMESPACE( QMutex );
+   using QT_PREPEND_NAMESPACE( QTime );
 
    /**
     *  @short Server for receiving events over the network
@@ -60,13 +66,20 @@ namespace ev {
 
    public:
       /// Constructor
-      EventServer( QObject* parent = 0 );
+      EventServer( size_t bufferSize = 100000, QObject* parent = 0 );
 
       /// Start listening on the specified address
       void listen( const Address& address );
 
+      /// Get the number of currently held events
+      size_t bufferSize() const;
+
       /// Read one event from the server
       EventServer& operator>> ( Event& event );
+
+   signals:
+      /// Signal emitted when new events are available
+      void eventAvailable();
 
    protected:
       /// Main function of the reading thread
@@ -76,6 +89,8 @@ namespace ev {
       QMutex m_mutex; ///< Object to serialise event buffer access
       Address m_address; ///< Address on which the server is listening
       std::vector< Event > m_events; ///< Internal event buffer
+      const size_t m_bufferSize; ///< Maximal size for the internal buffer
+      QTime m_warningTime; ///< Last time a warning was printed
       mutable msg::Logger m_logger; ///< Message logging object
 
    }; // class Server

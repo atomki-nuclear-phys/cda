@@ -24,7 +24,6 @@ namespace hbook {
    Crate::~Crate() {
 
       m_nmgr.closeFile();
-
    }
 
    bool Crate::initialize( const QString& fileName ) {
@@ -35,54 +34,64 @@ namespace hbook {
            device != m_devices.end(); ++device ) {
 
          if( ! device->second->initialize( m_nmgr ) ) {
-            m_logger << msg::ERROR << "There was a problem initializing one of "
-                     << "the devices" << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "There was a problem initializing one of "
+                            "the devices" ) << msg::endmsg;
             return false;
          }
 
       }
 
       if( ! m_nmgr.openFile( fileName ) ) {
-         m_logger << msg::ERROR << "The output file couldn't be opened"
+         m_logger << msg::ERROR
+                  << tr( "The output file couldn't be opened" )
                   << msg::endmsg;
          return false;
       } else {
-         m_logger << msg::DEBUG << "The output file was opened"
+         m_logger << msg::DEBUG << tr( "The output file was opened" )
                   << msg::endmsg;
       }
 
       return true;
-
    }
 
    bool Crate::writeEvent( const ev::Event& event ) {
 
+      // Access the fragments coming from the different modules that
+      // are used in data acquisition:
       const std::vector< ev::Fragment >& fragments = event.getFragments();
 
-      for( std::vector< ev::Fragment >::const_iterator fragment =
-              fragments.begin(); fragment != fragments.end(); ++fragment ) {
+      // Loop over the fragments:
+      std::vector< ev::Fragment >::const_iterator fragment_itr = fragments.begin();
+      std::vector< ev::Fragment >::const_iterator fragment_end = fragments.end();
+      for( ; fragment_itr != fragment_end; ++fragment_itr ) {
 
+         // Find the device that is expecting this event fragment:
          std::map< int, dev::Disk* >::iterator device =
-            m_devices.find( fragment->getModuleNumber() );
+            m_devices.find( fragment_itr->getModuleNumber() );
          if( device == m_devices.end() ) {
-            m_logger << msg::ERROR << "Failed to assign fragment with "
-                     << "module number: " << fragment->getModuleNumber()
+            m_logger << msg::ERROR
+                     << tr( "Failed to assign fragment with "
+                            "module number: %1" ).arg( fragment_itr->getModuleNumber() )
                      << msg::endmsg;
             return false;
          }
 
-         if( ! device->second->writeEvent( *fragment, m_nmgr ) ) {
-            m_logger << msg::ERROR << "There was a problem writing the data "
-                     << "from a device" << msg::endmsg;
+         // Give this fragment to the device that we just found:
+         if( ! device->second->writeEvent( *fragment_itr, m_nmgr ) ) {
+            m_logger << msg::ERROR
+                     << tr( "There was a problem writing the data "
+                            "from device in slot: %1" ).arg( fragment_itr->getModuleNumber() )
+                     << msg::endmsg;
             return false;
          }
 
       }
 
+      // Persistify the current event:
       m_nmgr.saveEvent();
 
       return true;
-
    }
 
    bool Crate::finalize() {
@@ -90,7 +99,6 @@ namespace hbook {
       m_nmgr.closeFile();
 
       return true;
-
    }
 
-}
+} // namespace hbook
