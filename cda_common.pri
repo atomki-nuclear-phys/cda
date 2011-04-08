@@ -30,7 +30,7 @@
 # I use for development). This code snippet doesn't allow to
 # compile it on Windows:
 #
-QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline -W -Wall"
+#QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline -W -Wall"
 !unix:!mac {
    error(CDA is only supported on Linux and Mac OS X!)
 }
@@ -41,7 +41,7 @@ QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline -W -Wall"
 # should not carry around the debug information... (Add "debug" in the following
 # list if you want to debug the code!)
 #
-CONFIG += warn_on debug
+CONFIG += warn_on release
 
 #
 # Check that the CDASYS environment variable exists. The value of

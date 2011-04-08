@@ -34,7 +34,7 @@ LIBS   += -L$$CERNLIB_PATH/lib
 OBJECTS_DIR = ./.obj
 MOC_DIR     = ./.obj
 
-# The following is needed to compiled the cmdl code:
+# The following is needed to compile the cmdl code:
 DEFINES += unix_style
 
 #

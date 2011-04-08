@@ -12,7 +12,7 @@
 TEMPLATE = lib
 
 # The plugins use the QtCore, QtGui and QtXml libraries:
-CONFIG += qt debug warn_on plugin
+CONFIG += qt plugin
 QT      = core gui xml
 
 # The place to put the intermediate and final build results:
