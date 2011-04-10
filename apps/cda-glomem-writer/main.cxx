@@ -55,13 +55,14 @@
 
 // Local include(s):
 #include "Crate.h"
+#include "GlomemWriter.h"
 
 // Function forward declaration(s):
 void shutDown( int );
 
 // Global variable(s):
-static msg::Logger g_logger( "cda-glomem-writer" );
-static int g_evcount = 0; ///< Number of events processed
+static msg::Logger g_logger( "cda-glomem-writer" ); ///< Log writer object
+static glomem::GlomemWriter* g_gwriter = 0; ///< Global memory writer object
 
 // Description for the executable:
 static const char* description =
@@ -97,7 +98,7 @@ int main( int argc, char* argv[] ) {
    //
    // Set the destination of the messages:
    //
-   for( int i = 0; i < msgservers.count(); ++i ) {
+   for( unsigned int i = 0; i < msgservers.count(); ++i ) {
       msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
    }
 
@@ -107,7 +108,10 @@ int main( int argc, char* argv[] ) {
    QCoreApplication app( argc, argv );
    i18n::Loader trans_loader;
    if( ! trans_loader.loadTranslations() ) {
-      g_logger << msg::FATAL << "Couldn't load the translations!" << msg::endmsg;
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-glomem-writer",
+                                   "Couldn't load the translations!" )
+               << msg::endmsg;
       return 1;
    }
 
@@ -125,9 +129,11 @@ int main( int argc, char* argv[] ) {
    if( v_map.find( verbosity ) != v_map.end() ) {
       msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
    } else {
-      g_logger << msg::FATAL << "Didn't recognise verbosity level setting"
-               << std::endl
-               << "Terminating..." << msg::endmsg;
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-glomem-writer",
+                                   "Didn't recognise verbosity level setting\n"
+                                   "Terminating..." )
+               << msg::endmsg;
       return 1;
    }
 
@@ -136,10 +142,14 @@ int main( int argc, char* argv[] ) {
    //
    dev::Loader loader;
    if( loader.loadAll() ) {
-      g_logger << msg::INFO << "Successfully loaded all available devices"
+      g_logger << msg::INFO
+               << qApp->translate( "cda-glomem-writer",
+                                   "Successfully loaded all available devices" )
                << msg::endmsg;
    } else {
-      g_logger << msg::FATAL << "There was an error loading the devices"
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-glomem-writer",
+                                   "There was an error loading the devices" )
                << msg::endmsg;
    }
 
@@ -159,8 +169,11 @@ int main( int argc, char* argv[] ) {
       //
       conf::ConfReader reader;
       if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
-         g_logger << msg::FATAL << "Couldn't read configuration from address: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-glomem-writer",
+                                      "Couldn't read configuration from address: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
          return 1;
       }
 
@@ -168,12 +181,18 @@ int main( int argc, char* argv[] ) {
       // Initialise the crate object from the buffer:
       //
       if( ! crate.readConfig( reader.buffer() ) ) {
-         g_logger << msg::FATAL << "Couldn't process configuration coming from address: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-glomem-writer",
+                                      "Couldn't process configuration coming from address: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
          return 1;
       } else {
-         g_logger << msg::INFO << "Read the configuration from: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::INFO
+                  << qApp->translate( "cda-glomem-writer",
+                                      "Read the configuration from: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
       }
 
    } else {
@@ -183,10 +202,12 @@ int main( int argc, char* argv[] ) {
       //
       QFile config_file( ( const char* ) config );
       if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-         g_logger << msg::FATAL << "The specified configuration file (\""
-                  << ( ( const char* ) config ? ( const char* ) config : "" )
-                  << "\")" << std::endl
-                  << "could not be opened!" << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-glomem-writer",
+                                      "The specified configuration file (\"%1\")\n"
+                                      "could not be opened!" )
+            .arg( ( const char* ) config ? ( const char* ) config : "" )
+                  << msg::endmsg;
          return 1;
       }
 
@@ -198,15 +219,22 @@ int main( int argc, char* argv[] ) {
       int errorLine, errorColumn;
       if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
                             &errorColumn ) ) {
-         g_logger << msg::FATAL << "Error in parsing \"" << ( const char* ) config
-                  << "\"" << std::endl
-                  << "  Error message: " << errorMsg << std::endl
-                  << "  Error line   : " << errorLine << std::endl
-                  << "  Error column : " << errorColumn << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-glomem-writer",
+                                      "Error in parsing \"%1\"\n"
+                                      "  Error message: %2\n"
+                                      "  Error line   : %3\n"
+                                      "  Error column : %4" )
+            .arg( ( const char* ) config ).arg( errorMsg )
+            .arg( errorLine ).arg( errorColumn )
+                  << msg::endmsg;
          return 1;
       } else {
-         g_logger << msg::DEBUG << "Successfully parsed: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::DEBUG
+                  << qApp->translate( "cda-glomem-writer",
+                                      "Successfully parsed: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
       }
       QDomElement work = doc.documentElement();
 
@@ -214,12 +242,18 @@ int main( int argc, char* argv[] ) {
       // Initialise a Crate object with this configuration:
       //
       if( ! crate.readConfig( work ) ) {
-         g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
-                  << "See previous messages for more information..." << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-glomem-writer",
+                                      "Failed to read configuration file!\n"
+                                      "See previous messages for more information..." )
+                  << msg::endmsg;
          return 1;
       } else {
-         g_logger << msg::INFO << "Read the configuration from: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::INFO
+                  << qApp->translate( "cda-glomem-writer",
+                                      "Read the configuration from: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
       }
 
    }
@@ -228,11 +262,16 @@ int main( int argc, char* argv[] ) {
    // Initialise the monitoring histograms:
    //
    if( ! crate.initialize() ) {
-      g_logger << msg::FATAL << "Failed to initialise histograms for data "
-               << "acquisition" << msg::endmsg;
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-glomem-writer",
+                                   "Failed to initialise histograms for data "
+                                   "acquisition" )
+               << msg::endmsg;
       return 1;
    } else {
-      g_logger << msg::DEBUG << "Initialised histograms for data acquisition"
+      g_logger << msg::DEBUG
+               << qApp->translate( "cda-glomem-writer",
+                                   "Initialised histograms for data acquisition" )
                << msg::endmsg;
    }
 
@@ -247,7 +286,7 @@ int main( int argc, char* argv[] ) {
    // here, since statistics publishing is not a major concern...)
    //
    stat::Sender stat_sender;
-   for( int i = 0; i < statistics.count(); ++i ) {
+   for( unsigned int i = 0; i < statistics.count(); ++i ) {
       stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
    }
 
@@ -273,29 +312,37 @@ int main( int argc, char* argv[] ) {
    //
    // Let the user know what we're doing:
    //
-   g_logger << msg::INFO << "Histogram writing running..." << msg::endmsg;
+   g_logger << msg::INFO
+            << qApp->translate( "cda-glomem-writer",
+                                "Histogram writing running..." )
+            << msg::endmsg;
 
    //
-   // Read events and give them to the crate to display, in an endless loop.
+   // Create the thread that will take care of writing the monitoring histograms:
    //
-   g_evcount = 0;
+   g_gwriter = new glomem::GlomemWriter( evserver, crate );
+
+   //
+   // Start the histogram writing and monitoring (this) threads:
+   //
+   g_gwriter->start();
    for( ; ; ) {
 
-      ev::Event event;
-      evserver >> event;
-
-      if( ! crate.displayEvent( event ) ) {
-         g_logger << msg::FATAL << "There was a problem diplaying an event"
+      // Check if the file writing thread is still running:
+      if( ! g_gwriter->isRunning() ) {
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-glomem-writer",
+                                      "The histogram writing thread unexpectedly died" )
                   << msg::endmsg;
          shutDown( 0 );
       }
 
-      // Update the statistics information after 10 events were received:
-      ++g_evcount;
-      if( ! ( g_evcount % 10 ) ) {
-         stat_sender.update( stat::Statistics( g_evcount, statSource ) );
-      }
+      // Update the statistics receivers:
+      stat_sender.update( stat::Statistics( g_gwriter->processedEvents(),
+                                            statSource ) );
 
+      // Sleep for 2 seconds:
+      sleep( 2 );
    }
 
    //
@@ -307,17 +354,29 @@ int main( int argc, char* argv[] ) {
 }
 
 /**
- * In the case of this application having this shutdown function is a bit of
- * an overkill. But it's nice to have all the CDA applications behaving the
- * same way...
+ * This function is called when the application receives an interrupt
+ * signal. It stops the event reading thread, displays some summary
+ * information about the event processing, and then quits.
  */
 void shutDown( int ) {
 
-   g_logger << msg::INFO << "Total number of events processed: "
-            << g_evcount << msg::endmsg;
-   g_logger << msg::INFO << "Terminating application..." << msg::endmsg;
+   // Stop the event processing thread:
+   g_gwriter->stopProcessing();
+
+   g_logger << msg::INFO
+            << qApp->translate( "cda-glomem-writer",
+                                "Total number of events processed: %1" )
+      .arg( g_gwriter->processedEvents() )
+            << msg::endmsg;
+   g_logger << msg::INFO
+            << qApp->translate( "cda-glomem-writer",
+                                "Terminating application..." )
+            << msg::endmsg;
+
+   // Clean up after ourselves:
+   delete g_gwriter;
+
    exit( 0 );
 
    return;
-
 }

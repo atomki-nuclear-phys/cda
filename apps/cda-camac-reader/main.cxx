@@ -97,7 +97,7 @@ int main( int argc, char* argv[] ) {
    //
    // Set the destination of the messages:
    //
-   for( int i = 0; i < msgservers.count(); ++i ) {
+   for( unsigned int i = 0; i < msgservers.count(); ++i ) {
       msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
    }
 
@@ -251,7 +251,7 @@ int main( int argc, char* argv[] ) {
    // Open connections to all the event recepients:
    //
    ev::Sender ev_sender;
-   for( int i = 0; i < clients.count(); ++i ) {
+   for( unsigned int i = 0; i < clients.count(); ++i ) {
       if( ! ev_sender.addSocket( Address( ( const char* ) clients[ i ] ) ) ) {
          g_logger << msg::FATAL << "Couldn't connect to event receiver: "
                   << ( const char* ) clients[ i ] << msg::endmsg;
@@ -264,7 +264,7 @@ int main( int argc, char* argv[] ) {
    // here, since statistics publishing is not a major concern...)
    //
    stat::Sender stat_sender;
-   for( int i = 0; i < statistics.count(); ++i ) {
+   for( unsigned int i = 0; i < statistics.count(); ++i ) {
       stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
    }
 

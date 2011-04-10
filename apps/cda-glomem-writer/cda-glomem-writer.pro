@@ -18,6 +18,7 @@ TARGET   = cda-glomem-writer
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
+TRANSLATIONS = ../../trans/cda-glomem-writer_hu.ts
 
 #
 # These are the specific configuration options for compiling the code

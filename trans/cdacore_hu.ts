@@ -381,56 +381,63 @@ kimeneti fájl már meg van nyitva!</translation>
 <context>
     <name>ev::EventServer</name>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="39"/>
+        <location filename="../core/event/EventServer.cxx" line="40"/>
         <source>Restarting the event reading thread.
 This could be dangerous...</source>
         <translation>Az esemény-olvasó programszál újraindítása.
 Ez elég veszélyes lehet...</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="48"/>
+        <location filename="../core/event/EventServer.cxx" line="49"/>
         <source>Listening for incoming events on %1:%2</source>
         <translation>Bejövö események várása a(z) %1:%2 címen</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="96"/>
+        <location filename="../core/event/EventServer.cxx" line="105"/>
         <source>Server is listening on host &quot;%1&quot; and port %2</source>
         <translation>A szerver a &quot;%1&quot; néven és %2 port-on figyel</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="101"/>
+        <location filename="../core/event/EventServer.cxx" line="110"/>
         <source>Server could not be started on host &quot;%1&quot; and port &quot;%2&quot;</source>
         <translation>A szervert nem lehetett elindítani a &quot;%1&quot; címen és &quot;%2&quot; port-on</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="119"/>
+        <location filename="../core/event/EventServer.cxx" line="128"/>
         <source>Received new incoming connection</source>
         <translation>Új beérkezö kapcsolat érzékelése</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="123"/>
+        <location filename="../core/event/EventServer.cxx" line="132"/>
         <source>There was a problem while waiting for an incoming connection</source>
         <translation>Hiba történt bejövö kapcsolatra várakozás közben</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="135"/>
+        <location filename="../core/event/EventServer.cxx" line="144"/>
         <source>There was a problem while accepting an incoming connection</source>
         <translation>Hiba történt egy bejövö kapcsolat felépítése közben</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="149"/>
+        <location filename="../core/event/EventServer.cxx" line="158"/>
         <source>Data is ready for readout</source>
         <translation>Adatok állnak készen kiolvasásra</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="153"/>
+        <location filename="../core/event/EventServer.cxx" line="162"/>
         <source>Connection to event sender lost.</source>
         <translation>Kapcsolat megszakadt az esemény-küldövel.</translation>
     </message>
     <message>
-        <location filename="../core/event/EventServer.cxx" line="162"/>
+        <location filename="../core/event/EventServer.cxx" line="171"/>
         <source>Bytes available: %1</source>
         <translation>%1 bájt elérhetö</translation>
+    </message>
+    <message>
+        <location filename="../core/event/EventServer.cxx" line="190"/>
+        <source>Can&apos;t store any more events in internal buffer
+Throwing away incoming event!</source>
+        <translation>Nem lehet több eseményt rögzíteni a belsö bufferben
+Eldobom a bejövö eseményt!</translation>
     </message>
 </context>
 <context>

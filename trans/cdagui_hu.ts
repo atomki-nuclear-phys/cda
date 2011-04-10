@@ -68,12 +68,12 @@
         <translation>Eszköz hozzáadása</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="473"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="497"/>
         <source>No dev::Loader received...</source>
         <translation>Nincsen dev::Loader beállítva...</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="478"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="502"/>
         <source>Clear slot</source>
         <translation>Aljzat kiürítése</translation>
     </message>
