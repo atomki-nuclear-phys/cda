@@ -30,7 +30,7 @@ Fifo::~Fifo() {
  * @returns <code>true</code> if the operation was successful,
  *          <code>false</code> otherwise
  */
-bool Fifo::open() {
+bool Fifo::open( QIODevice::OpenMode ) {
 
    msg::Logger logger( "Fifo::open()" );
    if( exists() ) {

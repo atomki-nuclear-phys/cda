@@ -33,7 +33,7 @@ public:
    virtual ~Fifo();
 
    /// Simplified open function not expecting any parameters
-   bool open();
+   virtual bool open( QIODevice::OpenMode );
 
 }; // class Fifo
 
