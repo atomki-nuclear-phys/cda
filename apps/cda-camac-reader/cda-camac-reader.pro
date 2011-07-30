@@ -18,6 +18,7 @@ TARGET   = cda-camac-reader
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
+TRANSLATIONS = ../../trans/cda-camac-reader_hu.ts
 
 #
 # These are the specific configuration options for compiling the code

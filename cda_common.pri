@@ -14,7 +14,7 @@
 
 #
 # Check the version of Qt. The code currently only supports
-# Qt 4.4.
+# Qt 4.X.
 #
 !contains(QT_MAJOR_VERSION,4) {
    isEmpty($$QT_VERSION) {
@@ -84,16 +84,10 @@ DEFINES += TESTING
 # tweaked.
 #
 #mac {
-#   QMAKE_CC         = gcc-4.2
-#   QMAKE_CXX        = g++-4.2
-#   QMAKE_LINK       = g++-4.2
-#   QMAKE_LINK_SHLIB = g++-4.2
-#}
-#unix:!mac {
-#   QMAKE_CC         = gcc
-#   QMAKE_CXX        = g++
-#   QMAKE_LINK       = g++
-#   QMAKE_LINK_SHLIB = g++
+#   QMAKE_CC         = gcc-4
+#   QMAKE_CXX        = g++-4
+#   QMAKE_LINK       = g++-4
+#   QMAKE_LINK_SHLIB = g++-4
 #}
 
 #
@@ -101,15 +95,17 @@ DEFINES += TESTING
 # these settings set the variable according to the platform.
 #
 #DEFINES += HAVE_CERNLIB
-mac {
-   CERNLIB_PATH = /sw
-}
-unix:!mac {
-   exists(/cern/pro){
-      CERNLIB_PATH = /cern/pro
-   } else {
-      CERNLIB_PATH = /usr
+contains(DEFINES,HAVE_CERNLIB) {
+   mac {
+      CERNLIB_PATH = /sw
    }
+   unix:!mac {
+      exists(/cern/pro){
+         CERNLIB_PATH = /cern/pro
+      } else {
+         CERNLIB_PATH = /usr
+      }
+   }
+   DEFINES     += LINUX f2cFortran
+   INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran
 }
-DEFINES     += LINUX f2cFortran
-INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran

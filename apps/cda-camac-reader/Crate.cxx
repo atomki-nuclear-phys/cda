@@ -30,8 +30,7 @@ namespace reader {
       : dev::Crate< dev::Readout >( &dev::Factory::createReadout ),
         m_logger( "reader::Crate" ) {
 
-      m_logger << msg::VERBOSE << "Object constructed" << msg::endmsg;
-
+      m_logger << msg::VERBOSE << tr( "Object constructed" ) << msg::endmsg;
    }
 
    /**
@@ -39,8 +38,7 @@ namespace reader {
     */
    Crate::~Crate() {
 
-      m_logger << msg::VERBOSE << "Object destructed" << msg::endmsg;
-
+      m_logger << msg::VERBOSE << tr( "Object destructed" ) << msg::endmsg;
    }
 
    /**
@@ -54,7 +52,7 @@ namespace reader {
     */
    bool Crate::initialize( camac::Crate& crate ) const {
 
-      m_logger << msg::INFO << "Initializing CAMAC devices" << msg::endmsg;
+      m_logger << msg::INFO << tr( "Initializing CAMAC devices" ) << msg::endmsg;
 
       crate.initialize();
       crate.clear();
@@ -63,8 +61,10 @@ namespace reader {
               m_devices.begin(); device != m_devices.end(); ++device ) {
 
          if( ! device->second->initialize( crate ) ) {
-            m_logger << msg::ERROR << "There was a problem initializing one "
-                     << "of the devices" << msg::endmsg;
+            m_logger << msg::ERROR
+                     << tr( "There was a problem initializing one "
+                            "of the devices" )
+                     << msg::endmsg;
             return false;
          }
 
@@ -75,7 +75,6 @@ namespace reader {
       crate.setLAMMask( 0xffffff );
 
       return true;
-
    }
 
    /**
@@ -91,9 +90,10 @@ namespace reader {
       ev::Event event;
 
       if( ! crate.enableInterrupt() ) {
-         m_logger << msg::ERROR << "There was a problem enabling interrupts"
-                  << std::endl
-                  << "for the CAMAC crate." << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "There was a problem enabling interrupts\n"
+                         "for the CAMAC crate" )
+                  << msg::endmsg;
          return event;
       }
 
@@ -103,12 +103,14 @@ namespace reader {
       // Wait for LAM signal:
       //
       if( ! crate.waitForLAM() ) {
-         m_logger << msg::ERROR << "There was a problem while waiting for LAM"
-                  << std::endl
-                  << "Returning empty event..." << msg::endmsg;
+         m_logger << msg::ERROR
+                  << tr( "There was a problem while waiting for LAM\n"
+                         "Returning empty event..." )
+                  << msg::endmsg;
          return event;
       } else {
-         m_logger << msg::VERBOSE << "Received LAM signal" << msg::endmsg;
+         m_logger << msg::VERBOSE << tr( "Received LAM signal" )
+                  << msg::endmsg;
       }
 
       //
@@ -118,11 +120,9 @@ namespace reader {
               m_devices.begin(); device != m_devices.end(); ++device ) {
 
          event.addFragment( device->second->readEvent( crate ) );
-
       }
 
       return event;
-
    }
 
    bool Crate::clear( camac::Crate& crate ) const {
@@ -144,10 +144,9 @@ namespace reader {
       crate.clearLAM();
       */
 
-      m_logger << msg::VERBOSE << "Cleared crate" << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Cleared crate" ) << msg::endmsg;
 
       return true;
-
    }
 
 } // namespace reader

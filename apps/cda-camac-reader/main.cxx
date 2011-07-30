@@ -107,7 +107,10 @@ int main( int argc, char* argv[] ) {
    QCoreApplication app( argc, argv );
    i18n::Loader trans_loader;
    if( ! trans_loader.loadTranslations() ) {
-      g_logger << msg::FATAL << "Couldn't load the translations!" << msg::endmsg;
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-camac-reader",
+                                   "Couldn't load the translations!" )
+               << msg::endmsg;
       return 1;
    }
 
@@ -125,9 +128,11 @@ int main( int argc, char* argv[] ) {
    if( v_map.find( verbosity ) != v_map.end() ) {
       msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
    } else {
-      g_logger << msg::FATAL << "Didn't recognise verbosity level setting"
-               << std::endl
-               << "Terminating..." << msg::endmsg;
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-camac-reader",
+                                   "Didn't recognise verbosity level setting\n"
+                                   "Terminating..." )
+               << msg::endmsg;
       return 1;
    }
 
@@ -136,10 +141,14 @@ int main( int argc, char* argv[] ) {
    //
    dev::Loader loader;
    if( loader.loadAll() ) {
-      g_logger << msg::INFO << "Successfully loaded all available devices"
+      g_logger << msg::INFO
+               << qApp->translate( "cda-camac-reader",
+                                   "Successfully loaded all available devices" )
                << msg::endmsg;
    } else {
-      g_logger << msg::FATAL << "There was an error loading the devices"
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-camac-reader",
+                                   "There was an error loading the devices" )
                << msg::endmsg;
    }
 
@@ -159,8 +168,11 @@ int main( int argc, char* argv[] ) {
       //
       conf::ConfReader reader;
       if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
-         g_logger << msg::FATAL << "Couldn't read configuration from address: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-camac-reader",
+                                      "Couldn't read configuration from address: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
          return 1;
       }
 
@@ -168,12 +180,18 @@ int main( int argc, char* argv[] ) {
       // Initialise the crate object from the buffer:
       //
       if( ! crate.readConfig( reader.buffer() ) ) {
-         g_logger << msg::FATAL << "Couldn't process configuration coming from address: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-camac-reader",
+                                      "Couldn't process configuration coming from address: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
          return 1;
       } else {
-         g_logger << msg::INFO << "Read the configuration from: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::INFO
+                  << qApp->translate( "cda-camac-reader",
+                                      "Read the configuration from: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
       }
 
    } else {
@@ -183,10 +201,12 @@ int main( int argc, char* argv[] ) {
       //
       QFile config_file( ( const char* ) config );
       if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-         g_logger << msg::FATAL << "The specified configuration file (\""
-                  << ( ( const char* ) config ? ( const char* ) config : "" )
-                  << "\")" << std::endl
-                  << "could not be opened!" << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-camac-reader",
+                                      "The specified configuration file (\"%1\")\n"
+                                      "could not be opened!" )
+            .arg( ( const char* ) config ? ( const char* ) config : "" )
+                  << msg::endmsg;
          return 1;
       }
 
@@ -198,15 +218,22 @@ int main( int argc, char* argv[] ) {
       int errorLine, errorColumn;
       if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
                             &errorColumn ) ) {
-         g_logger << msg::FATAL << "Error in parsing \"" << ( const char* ) config
-                  << "\"" << std::endl
-                  << "  Error message: " << errorMsg << std::endl
-                  << "  Error line   : " << errorLine << std::endl
-                  << "  Error column : " << errorColumn << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-camac-reader",
+                                      "Error in parsing \"%1\"\n"
+                                      "  Error message: %2\n"
+                                      "  Error line   : %3\n"
+                                      "  Error column : %4" )
+            .arg( ( const char* ) config ).arg( errorMsg )
+            .arg( errorLine ).arg( errorColumn )
+                  << msg::endmsg;
          return 1;
       } else {
-         g_logger << msg::DEBUG << "Successfully parsed: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::DEBUG
+                  << qApp->translate( "cda-camac-reader",
+                                      "Successfully parsed: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
       }
 
       //
@@ -214,12 +241,18 @@ int main( int argc, char* argv[] ) {
       //
       QDomElement work = doc.documentElement();
       if( ! crate.readConfig( work ) ) {
-         g_logger << msg::FATAL << "Failed to read configuration file!" << std::endl
-                  << "See previous messages for more information..." << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-camac-reader",
+                                      "Failed to read configuration file!\n"
+                                      "See previous messages for more information..." )
+                  << msg::endmsg;
          return 1;
       } else {
-         g_logger << msg::INFO << "Read the configuration from: "
-                  << ( const char* ) config << msg::endmsg;
+         g_logger << msg::INFO
+                  << qApp->translate( "cda-camac-reader",
+                                      "Read the configuration from: %1" )
+            .arg( ( const char* ) config )
+                  << msg::endmsg;
       }
 
    }
@@ -229,21 +262,32 @@ int main( int argc, char* argv[] ) {
    //
    g_crate = new camac::Crate();
    if( ! g_crate->open() ) {
-      g_logger << msg::FATAL << "Failed to open CAMAC crate" << msg::endmsg;
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-camac-reader",
+                                   "Failed to open CAMAC crate" )
+               << msg::endmsg;
       return 1;
    } else {
-      g_logger << msg::INFO << "Opened the CAMAC crate" << msg::endmsg;
+      g_logger << msg::INFO
+               << qApp->translate( "cda-camac-reader",
+                                   "Opened the CAMAC crate" )
+               << msg::endmsg;
    }
 
    //
    // Initialize the CAMAC devices for data acquisition:
    //
    if( ! crate.initialize( *g_crate ) ) {
-      g_logger << msg::FATAL << "Failed to initialise devices for data "
-               << "acquisition" << msg::endmsg;
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-camac-reader",
+                                   "Failed to initialise devices for data "
+                                   "acquisition" )
+               << msg::endmsg;
       return 1;
    } else {
-      g_logger << msg::DEBUG << "Initialised devices for data acquisition"
+      g_logger << msg::DEBUG
+               << qApp->translate( "cda-camac-reader",
+                                   "Initialised devices for data acquisition" )
                << msg::endmsg;
    }
 
@@ -253,8 +297,11 @@ int main( int argc, char* argv[] ) {
    ev::Sender ev_sender;
    for( unsigned int i = 0; i < clients.count(); ++i ) {
       if( ! ev_sender.addSocket( Address( ( const char* ) clients[ i ] ) ) ) {
-         g_logger << msg::FATAL << "Couldn't connect to event receiver: "
-                  << ( const char* ) clients[ i ] << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-camac-reader",
+                                      "Couldn't connect to event receiver: %1" )
+            .arg( ( const char* ) clients[ i ] )
+                  << msg::endmsg;
          shutDown( 0 );
       }
    }
@@ -290,7 +337,10 @@ int main( int argc, char* argv[] ) {
    //
    // Let the user know what we're doing:
    //
-   g_logger << msg::INFO << "CAMAC readout running..." << msg::endmsg;
+   g_logger << msg::INFO
+            << qApp->translate( "cda-camac-reader",
+                                "CAMAC readout running..." )
+            << msg::endmsg;
 
    //
    // Read events and send them on the opened FIFO in an endless loop.
@@ -301,8 +351,11 @@ int main( int argc, char* argv[] ) {
       ev::Event event = crate.readEvent( *g_crate );
       crate.clear( *g_crate );
       if( ! ev_sender.send( event ) ) {
-         g_logger << msg::FATAL << "Failed to send event to all recepients.\n"
-                  << "Event readout can not continue!" << msg::endmsg;
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-camac-reader",
+                                      "Failed to send event to all recepients.\n"
+                                      "Event readout can not continue!" )
+                  << msg::endmsg;
          shutDown( 0 );
       }
 
@@ -319,7 +372,6 @@ int main( int argc, char* argv[] ) {
    // to have the compiler satisfied...
    //
    return 0;
-
 }
 
 /**
@@ -337,18 +389,28 @@ void shutDown( int ) {
    // stop anyway. (GDB is our friend...)
    //
    if( ! g_crate->close() ) {
-      g_logger << msg::ERROR << "Failed to close CAMAC crate" << msg::endmsg;
+      g_logger << msg::ERROR
+               << qApp->translate( "cda-camac-reader",
+                                   "Failed to close CAMAC crate" )
+               << msg::endmsg;
    } else {
-      g_logger << msg::DEBUG << "Successfully closed CAMAC crate"
+      g_logger << msg::DEBUG
+               << qApp->translate( "cda-camac-reader",
+                                   "Successfully closed CAMAC crate" )
                << msg::endmsg;
    }
    delete g_crate;
 
-   g_logger << msg::INFO << "Total number of events read: " << g_evcount
+   g_logger << msg::INFO
+            << qApp->translate( "cda-camac-reader",
+                                "Total number of events read: %1" )
+      .arg( g_evcount )
             << msg::endmsg;
-   g_logger << msg::INFO << "Terminating application..." << msg::endmsg;
+   g_logger << msg::INFO
+            << qApp->translate( "cda-camac-reader",
+                                "Terminating application..." )
+            << msg::endmsg;
    exit( 0 );
 
    return;
-
 }
