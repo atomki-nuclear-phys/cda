@@ -134,28 +134,31 @@ unix:!mac {
 
    CONFIG += shared
    DESTDIR = ../lib
-
-}
-system(g77 --version) {
-        system(gfortran --version) {
-                message(Both g77 and gfortran are available. Adding gfortran to link list...)
-                LIBS += -lgfortran
-        } else {
-	        LIBS += -lg2c
-	}
-} else {
-	!system(gfortran --version) {
-		warning(Could not determine which fortran library to use)
-	}
-	LIBS += -lgfortran
 }
 
-exists($$CERNLIB_PATH/lib/libpacklib_noshift.a) {
-	LIBS += -lpacklib_noshift
-} else {
-	!exists($$CERNLIB_PATH/lib/libpacklib.a) {
-		warning(Could not determine the packlib library name)
-	}
-	
-	LIBS += -lpacklib
+#
+# Decide whether to link the library again CERNLIB, and if yes, how:
+#
+contains(DEFINES,HAVE_CERNLIB) {
+   system(g77 --version) {
+      system(gfortran --version) {
+         message(Both g77 and gfortran are available. Adding gfortran to link list...)
+         LIBS += -lgfortran
+      } else {
+	      LIBS += -lg2c
+	   }
+   } else {
+      !system(gfortran --version) {
+         warning(Could not determine which fortran library to use)
+      }
+      LIBS += -lgfortran
+   }
+   exists($$CERNLIB_PATH/lib/libpacklib_noshift.a) {
+      LIBS += -lpacklib_noshift
+   } else {
+      !exists($$CERNLIB_PATH/lib/libpacklib.a) {
+         warning(Could not determine the packlib library name)
+      }
+      LIBS += -lpacklib
+   }
 }

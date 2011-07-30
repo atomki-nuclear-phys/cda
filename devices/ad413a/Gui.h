@@ -50,7 +50,7 @@ namespace ad413a {
     * $Revision$
     * $Date$
     */
-   class Gui : public virtual dev::Gui,
+   class Gui : public dev::Gui,
                public virtual Device {
 
       Q_OBJECT

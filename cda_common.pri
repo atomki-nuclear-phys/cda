@@ -83,32 +83,33 @@ DEFINES += TESTING
 # linux is only here for completeness, normally it shouldn't be
 # tweaked.
 #
-mac {
-   QMAKE_CC         = gcc-4
-   QMAKE_CXX        = g++-4
-   QMAKE_LINK       = g++-4
-   QMAKE_LINK_SHLIB = g++-4
-}
-unix:!mac {
-   QMAKE_CC         = gcc
-   QMAKE_CXX        = g++
-   QMAKE_LINK       = g++
-   QMAKE_LINK_SHLIB = g++
-}
+#mac {
+#   QMAKE_CC         = gcc-4.2
+#   QMAKE_CXX        = g++-4.2
+#   QMAKE_LINK       = g++-4.2
+#   QMAKE_LINK_SHLIB = g++-4.2
+#}
+#unix:!mac {
+#   QMAKE_CC         = gcc
+#   QMAKE_CXX        = g++
+#   QMAKE_LINK       = g++
+#   QMAKE_LINK_SHLIB = g++
+#}
 
 #
 # Path to CERNLIB. CERNLIB can be installed practically anywhere,
 # these settings set the variable according to the platform.
 #
+#DEFINES += HAVE_CERNLIB
 mac {
    CERNLIB_PATH = /sw
 }
 unix:!mac {
-exists(/cern/pro){
-	CERNLIB_PATH = /cern/pro
-} else {
-	CERNLIB_PATH = /usr
-}
+   exists(/cern/pro){
+      CERNLIB_PATH = /cern/pro
+   } else {
+      CERNLIB_PATH = /usr
+   }
 }
 DEFINES     += LINUX f2cFortran
 INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran

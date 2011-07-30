@@ -4,10 +4,12 @@
 #include <cstdio>
 
 // CERNLIB include(s):
+#ifdef HAVE_CERNLIB
 extern "C" {
 #   include <cfortran/cfortran.h>
 #   include <hbook.h>
 }
+#endif // HAVE_CERNLIB
 
 // Local include(s):
 #include "NTupleMgr.h"
@@ -15,10 +17,12 @@ extern "C" {
 //
 // Some CERNLIB definitions:
 //
+#ifdef HAVE_CERNLIB
 #define PAWC_SIZE 500000
 typedef struct { float PAW[ PAWC_SIZE ]; } PAWC_DEF;
 #define PAWC COMMON_BLOCK( PAWC, pawc )
 COMMON_BLOCK_DEF( PAWC_DEF, PAWC );
+#endif // HAVE_CERNLIB
 
 namespace cernlib {
 
@@ -64,6 +68,11 @@ namespace cernlib {
     */
    int NTupleMgr::addVar( const QString& name ) {
 
+// Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return -1;
+#endif // HAVE_CERNLIB
+
       // Check that the file is not yet open:
       if( m_fileOpen ) {
          m_logger << msg::ERROR
@@ -90,6 +99,11 @@ namespace cernlib {
     *          <code>false</code> otherwise
     */
    bool NTupleMgr::openFile( const QString& fileName ) {
+
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return false;
+#endif // HAVE_CERNLIB
 
       // Only one HBOOK file can be open at a time. (It's not a restriction
       // of CERNLIB, we just don't need to be able to open multiple output
@@ -132,6 +146,7 @@ namespace cernlib {
       // Some additionally needed variables for the CERNLIB functions:
       int istat = 0, record_size = 1024;
 
+#ifdef HAVE_CERNLIB
       // Create the HBOOK common block(s):
       HLIMIT( PAWC_SIZE );
 
@@ -150,6 +165,7 @@ namespace cernlib {
       // Create the ntuple for the data:
       HBOOKN( NTUPLE_ID, data, m_varNames.size(), aq, 5000,
               varNames );
+#endif // HAVE_CERNLIB
 
       m_logger << msg::DEBUG << tr( "NTuple created" ) << msg::endmsg;
       m_fileOpen = true;
@@ -170,6 +186,11 @@ namespace cernlib {
     */
    void NTupleMgr::closeFile() {
 
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return;
+#endif // HAVE_CERNLIB
+
       // Don't do anything if there is no output file open:
       if( ! m_fileOpen ) {
          m_logger << msg::DEBUG << tr( "No output file is open" )
@@ -185,6 +206,7 @@ namespace cernlib {
       // Additional variable(s) needed by CERNLIB:
       int icycle;
 
+#ifdef HAVE_CERNLIB
       // Flush the memory buffers:
       HROUT( 0, icycle, t );
 
@@ -194,6 +216,7 @@ namespace cernlib {
 
       // Close the file:
       HREND( aq );
+#endif // HAVE_CERNLIB
 
       m_logger << msg::INFO << tr( "Output file closed" ) << msg::endmsg;
       m_fileOpen = false;
@@ -218,6 +241,11 @@ namespace cernlib {
     *          <code>false</code> otherwise
     */
    bool NTupleMgr::setVar( int index, float value ) {
+
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return false;
+#endif // HAVE_CERNLIB
 
       // Check that the file is already open:
       if( ! m_fileOpen ) {
@@ -248,6 +276,11 @@ namespace cernlib {
     */
    void NTupleMgr::saveEvent() {
 
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return;
+#endif // HAVE_CERNLIB
+
       // Check that the output file is open:
       if( ! m_fileOpen ) {
          m_logger << msg::ERROR
@@ -257,7 +290,9 @@ namespace cernlib {
       }
 
       // Fill the ntuple with the event:
+#ifdef HAVE_CERNLIB
       HFN( NTUPLE_ID, m_variables );
+#endif // HAVE_CERNLIB
 
       // Clear the event buffer:
       for( unsigned int i = 0; i < m_varNames.size(); ++i ) {

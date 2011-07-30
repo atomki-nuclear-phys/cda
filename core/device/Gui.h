@@ -34,7 +34,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Gui : virtual public QWidget,
+   class Gui : public QWidget,
                virtual public Device {
 
       Q_OBJECT

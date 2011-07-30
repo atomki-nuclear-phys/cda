@@ -1,10 +1,12 @@
 // $Id$
 
 // CERNLIB include(s):
+#ifdef HAVE_CERNLIB
 extern "C" {
 #   include <cfortran/cfortran.h>
 #   include <hbook.h>
 }
+#endif // HAVE_CERNLIB
 
 // Local include(s):
 #include "HistMgr.h"
@@ -35,6 +37,11 @@ namespace cernlib {
     */
    void HistMgr::initialize( const char* gname ) {
 
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return;
+#endif // HAVE_CERNLIB
+
       m_counter = 0;
 
       if( ! m_initialized ) {
@@ -48,7 +55,9 @@ namespace cernlib {
                      << msg::endmsg;
             return;
          }
+#ifdef HAVE_CERNLIB
          HLIMAP( PAWC_SIZE, name );
+#endif // HAVE_CERNLIB
          m_logger << msg::DEBUG
                   << tr( "Created PAW global memory with name: \"%1\"" ).arg( name )
                   << msg::endmsg;
@@ -72,6 +81,11 @@ namespace cernlib {
    int HistMgr::book_1d( const char* name, int channels,
                          double lowerBound, double upperBound ) {
 
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return -1;
+#endif // HAVE_CERNLIB
+
       // Check that the global memory is available:
       if( ! checkInit() ) return -1;
 
@@ -88,7 +102,9 @@ namespace cernlib {
       ++m_counter;
 
       // Book the histogram:
+#ifdef HAVE_CERNLIB
       HBOOK1( m_counter, lname, channels, lowerBound, upperBound, 0. );
+#endif // HAVE_CERNLIB
 
       // Return the ID of the histogram:
       return m_counter;
@@ -111,6 +127,11 @@ namespace cernlib {
                          double xlow, double xup, int ychannels,
                          double ylow, double yup ) {
 
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return -1;
+#endif // HAVE_CERNLIB
+
       // Check that the global memory is available:
       if( ! checkInit() ) return -1;
 
@@ -127,8 +148,10 @@ namespace cernlib {
       ++m_counter;
 
       // Book the histogram:
+#ifdef HAVE_CERNLIB
       HBOOK2( m_counter, lname, xchannels, xlow, xup, ychannels,
               ylow, yup, 0. );
+#endif // HAVE_CERNLIB
 
       // Return the ID of the histogram:
       return m_counter;
@@ -145,11 +168,18 @@ namespace cernlib {
     */
    void HistMgr::fill_1d( int id, double data, double weight ) const {
 
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return;
+#endif // HAVE_CERNLIB
+
       // Check that the global memory is available:
       if( ! checkInit() ) return;
 
       // Fill the histogram:
+#ifdef HAVE_CERNLIB
       HF1( id, data, weight );
+#endif // HAVE_CERNLIB
 
       return;
    }
@@ -167,11 +197,18 @@ namespace cernlib {
    void HistMgr::fill_2d( int id, double xdata, double ydata,
                           double weight ) const {
 
+      // Return right away if CERNLIB is not available:
+#ifndef HAVE_CERNLIB
+      return;
+#endif // HAVE_CERNLIB
+
       // Check that the global memory is available:
       if( ! checkInit() ) return;
 
       // Fill the histogram:
+#ifdef HAVE_CERNLIB
       HF2( id, xdata, ydata, weight );
+#endif // HAVE_CERNLIB
 
       return;
    }
