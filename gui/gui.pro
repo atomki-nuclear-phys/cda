@@ -17,9 +17,9 @@ TARGET   = cdagui
 
 # These are the header and source files:
 HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h) $$system(ls simple_daq/*.h) \
-          $$system(ls stat/*.h) $$system(ls common/*.h)
+          $$system(ls stat/*.h) $$system(ls common/*.h) $$system(ls moni/*.h)
 SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx) $$system(ls simple_daq/*.cxx) \
-          $$system(ls stat/*.cxx) $$system(ls common/*.cxx)
+          $$system(ls stat/*.cxx) $$system(ls common/*.cxx) $$system(ls moni/*.cxx)
 TRANSLATIONS = ../trans/cdagui_hu.ts
 
 # The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
@@ -69,6 +69,11 @@ mac {
    COMMON_HEADERS.files = $$system(ls common/*.h)
    COMMON_HEADERS.path = Headers/common
    QMAKE_BUNDLE_DATA += COMMON_HEADERS
+
+   MONI_HEADERS.version = Versions
+   MONI_HEADERS.files = $$system(ls moni/*.h)
+   MONI_HEADERS.path = Headers/moni
+   QMAKE_BUNDLE_DATA += MONI_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =

@@ -2,7 +2,6 @@
 
 // STL include(s):
 #include <algorithm>
-#include <iostream>
 
 // Qt include(s):
 #include <QtCore/QPoint>

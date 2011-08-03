@@ -12,4 +12,4 @@
 include(../cda_common.pri)
 
 TEMPLATE = subdirs
-SUBDIRS  = confserver
+SUBDIRS  = confserver histogram
