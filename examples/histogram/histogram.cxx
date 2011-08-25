@@ -9,13 +9,21 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/i18n/Loader.h"
+#   include "cdacore/msg/Sender.h"
+#   include "cdacore/common/Address.h"
 #   include "cdagui/moni/Histogram.h"
 #else
 #   include "i18n/Loader.h"
+#   include "msg/Sender.h"
+#   include "common/Address.h"
 #   include "moni/Histogram.h"
 #endif // Q_OS_DARWIN
 
 int main( int argc, char* argv[] ) {
+
+   // Set the destination of the messages:
+   msg::Sender::addAddress( Address( "127.0.0.1", 49700 ) );
+   msg::Sender::instance()->setMinLevel( msg::VERBOSE );
 
    //
    // Instantiate the back-bone of the Qt graphical application:
@@ -34,8 +42,10 @@ int main( int argc, char* argv[] ) {
    //
    // Create and show the configuration editor window:
    //
-   moni::Histogram hist( "Test histogram", 50, 0.0, 50.0 );
-   hist.fill( 18.0, 12.4 );
+   moni::Histogram hist( "Test histogram", 50, 2.0, 52.5 );
+   //   hist.setXAxisStyle( moni::Histogram::Linear );
+   hist.setYAxisStyle( moni::Histogram::Logarithmic );
+   hist.fill( 18.0, 12010.4 );
    hist.fill( 30.5, 5.3 );
    hist.show();
 

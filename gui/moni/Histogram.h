@@ -65,7 +65,7 @@ namespace moni {
       /// Get the title of the histogram
       const QString& getTitle() const;
       /// Get the number of channels of the histogram
-      int getBins() const;
+      int getNBins() const;
       /// Get the lower bound of the hisrogram
       double getLowerBound() const;
       /// Get the upper bound of the historgam
@@ -86,16 +86,16 @@ namespace moni {
       /// Set the title of the histogram
       void setTitle( const QString& title );
       /// Set the number of channels of the histogram
-      void setBins( int bins );
+      void setNBins( int bins );
       /// Set the lower bound of the hisrogram
       void setLowerBound( double low );
       /// Set the upper bound of the hisrogram
       void setUpperBound( double up );
 
       /// Set the "style" of the X axis
-      void setXAxisStyle( AxisStyle style );
+      void setXAxisStyle( Histogram::AxisStyle style );
       /// Set the "style" of the Y axis
-      void setYAxisStyle( AxisStyle style );
+      void setYAxisStyle( Histogram::AxisStyle style );
 
       /// Reset the contents of the histogram
       void reset();
@@ -106,52 +106,121 @@ namespace moni {
    protected:
       /// Re-implemented function, used to draw the histogram
       virtual void paintEvent( QPaintEvent* event );
+      /// Re-implemented function, used to draw the pop-up menu
+      virtual void mousePressEvent( QMouseEvent* event );
 
    private:
-      /// Structure describing the visual binning of the axes
-      struct AxisBinning {
-         int n_major_ticks; ///< Number of "major" ticks on the axis
-         int n_minor_ticks; ///< Number of "minor" ticks on the axis
-         double tick_major_offset; ///< Offset of the first "major" tick
-         double tick_minor_offset; ///< Offset of the first "minor" tick
-         double tick_major_unit; ///< Distance of "major" ticks in axis units
-         double tick_minor_unit; ///< Distance of "minor" ticks in axis units
-         double tick_major_draw_unit; ///< Distance of "major" ticks in pixels
-         double tick_minor_draw_unit; ///< Distance of "minor" ticks in pixels
-         double first_major_tick_value; ///< Value of the first "major" tick
+      /**
+       *  @short Internal class used in displaying the axis binning
+       *
+       *         Figuring out how to properly display an axis is not that trivial
+       *         as it turns out. This class is used in the Histogram class internally
+       *         to store how the binning should be done for a particular axis.
+       *
+       * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+       *
+       * $Revision$
+       * $Date$
+       */
+      class AxisBinning {
+
+      public:
+         /// Type of the tick positions (in pixels)
+         typedef double tick_position;
+         /// Typedef for the tick values
+         typedef double tick_value;
+
+         /// The properties of one "major" tick
+         class MajorTick {
+         public:
+            /// Constructor with a position and an associated value
+            MajorTick( tick_position position, tick_value value );
+            /// Get the position of this tick
+            tick_position position() const;
+            /// Get the value associated with this tick
+            tick_value value() const;
+         private:
+            tick_position m_position; ///< Tick position
+            tick_value m_value; ///< Tick value
+         }; // class MajorTick
+
+         /// The properties of one "minor" tick
+         class MinorTick {
+         public:
+            /// Constructor with a position
+            MinorTick( tick_position position );
+            /// Get the position of this tick
+            tick_position position() const;
+         private:
+            tick_position m_position; ///< Tick position
+         }; // class MinorTick
+
+         /// Default constructor
+         AxisBinning( AxisStyle style = Linear, double low = 0.0, double up = 100.0,
+                      double alength = 100.0 );
+
+         /// Add one "major" tick to the axis view
+         void addMajorTick( const MajorTick& tick );
+         /// Add one "minor" tick to the axis view
+         void addMinorTick( const MinorTick& tick );
+
+         /// Get all the "major" tick information
+         const std::vector< MajorTick >& majors() const;
+         /// Get all the "minor" tick information
+         const std::vector< MinorTick >& minors() const;
+
+         /// Get the "style" of the axis
+         AxisStyle getStyle() const;
+
+         /// Get the position of where to draw a given value
+         double getDrawPosition( double pos ) const;
+
+      private:
+         std::vector< MajorTick > m_majors; ///< Description of the "major" ticks
+         std::vector< MinorTick > m_minors; ///< Description of the "minor" ticks
+         const AxisStyle m_style; ///< "Style" of the axis
+         const double m_low; ///< Value belonging to the lower edge of the axis
+         const double m_up; ///< Value belonging to the upper edge of the axis
+         const double m_alength; ///< Length of the virtual axis
       }; // class AxisBinning
 
       /// Get the bin representing this value
       size_t getBin( double value ) const;
       /// Draw the X axis
-      void drawXAxis( QPainter& painter );
+      void drawXAxis( QPainter& painter ) const;
       /// Draw the Y axis
-      void drawYAxis( QPainter& painter );
+      void drawYAxis( QPainter& painter ) const;
       /// Draw the histogram itself
-      void drawHist( QPainter& painter );
+      void drawHist( QPainter& painter ) const;
       /// Draw some statistics on top of the histogram
-      void drawStat( QPainter& painter );
+      void drawStat( QPainter& painter ) const;
       /// Function determining the visual binning for a linear axis
       AxisBinning getLinearAxisBinning( double low, double up, double alength ) const;
       /// Function determining the visual binning for a logarithmic axis
       AxisBinning getLogarithmicAxisBinning( double low, double up, double alength ) const;
       /// Get the minimum and maximum for the Y axis
       std::pair< double, double > getYAxisLimits() const;
+      /// Get the binning for the X axis
+      AxisBinning getXAxisBinning() const;
+      /// Get the binning for the Y axis
+      AxisBinning getYAxisBinning() const;
+      /// Get a possible exponent that should be used for displaying an axis
+      std::pair< bool, int > getExponent( const AxisBinning& abin ) const;
 
       /// Length of the ticks that have values associated to them
-      static const quint32 TICK_LENGTH_MAJOR;
+      static const int TICK_LENGTH_MAJOR;
       /// Length of the minor ticks
-      static const quint32 TICK_LENGTH_MINOR;
+      static const int TICK_LENGTH_MINOR;
       /// Minimal distance between the major ticks
-      static const quint32 MIN_TICK_DISTANCE;
+      static const int MIN_TICK_DISTANCE;
 
       /// Space left under the X axis
-      static const quint32 X_AXIS_SPACING;
+      static const int X_AXIS_SPACING;
       /// Space left on the side of the Y axis
-      static const quint32 Y_AXIS_SPACING;
+      static const int Y_AXIS_SPACING;
 
       QString m_title; ///< The title of the histogram
-      int m_bins; ///< The number of channels
+      int m_nbins; ///< The number of channels
       double m_low; ///< The lower bound of the histogram
       double m_up; ///< The upper bound of the histogram
 
