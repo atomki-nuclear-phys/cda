@@ -14,16 +14,16 @@
 #endif
 
 // Local include(s):
-#include "Hist.h"
+#include "CernlibHist.h"
 
 namespace ad1000 {
 
-   Hist::Hist()
-      : m_histNumber( 0 ), m_logger( "ad1000::Hist" ) {
+   CernlibHist::CernlibHist()
+      : m_histNumber( 0 ), m_logger( "ad1000::CernlibHist" ) {
 
    }
 
-   bool Hist::initialize( cernlib::HistMgr& hmgr ) {
+   bool CernlibHist::initialize( cernlib::HistMgr& hmgr ) {
 
       m_logger << msg::DEBUG << tr( "Initialising histogram(s)" ) << msg::endmsg;
 
@@ -31,7 +31,7 @@ namespace ad1000 {
       char name[ 80 ];
       sprintf( name, "%s (%s slot %i)",
                m_channel.getName().toLatin1().constData(),
-               type().toLatin1().constData(), getSlot() );
+               deviceName().toLatin1().constData(), getID() );
 
       // Book the histogram and remember its ID:
       m_histNumber = hmgr.book_1d( name,
@@ -47,8 +47,8 @@ namespace ad1000 {
       return true;
    }
 
-   bool Hist::displayEvent( const ev::Fragment& fragment,
-                            const cernlib::HistMgr& hmgr ) const {
+   bool CernlibHist::displayEvent( const ev::Fragment& fragment,
+                                   const cernlib::HistMgr& hmgr ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 

@@ -81,7 +81,8 @@ int main( int argc, char* argv[] ) {
    CmdArgStr config( 'c', "config", "filename/address",
                      "Name of an XML config file or address of a config server",
                      CmdArg::isREQ );
-   CmdArgStrList msgservers( 'm', "msgservers", "addresses", "Addresses of message servers" );
+   CmdArgStrList msgservers( 'm', "msgservers", "addresses",
+                             "Addresses of message servers" );
    CmdArgStr evaddress( 'e', "evaddress", "address", "Address where to receive events",
                         CmdArg::isREQ );
    CmdArgStrList statistics( 's', "statistics", "addresses",

@@ -163,12 +163,12 @@ namespace ad1000 {
       return true;
    }
 
-   int Device::getSlot() const {
+   unsigned int Device::getID() const {
 
       return m_slot;
    }
 
-   void Device::setSlot( int value ) {
+   void Device::setID( unsigned int value ) {
 
       m_slot = value;
       return;
@@ -176,7 +176,7 @@ namespace ad1000 {
 
    void Device::clear() {
 
-      m_slot = -1;
+      m_slot = 0;
       m_generateLam = false;
       m_channel.clear();
 

@@ -47,14 +47,14 @@ namespace ev {
       /// Get the number of the crate in which the module is
       int getCrateNumber() const;
       /// Get the crate slot in which the module is put
-      int getModuleNumber() const;
+      int getModuleID() const;
       /// Get the data payload of the module
       const std::vector< uint32_t >& getDataWords() const;
 
       /// Set the numner of the crate in which the module is
       void setCrateNumber( int value );
       /// Set the crate slot in which the module is put
-      void setModuleNumber( int value );
+      void setModuleID( int value );
       /// Add a 32-bit data word (information from one channel)
       void addDataWord( uint32_t dataWord );
 

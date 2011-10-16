@@ -26,6 +26,11 @@ namespace ad2249a {
     *         This class stores the configuration of a AD2249A CAMAC device
     *         and takes care of reading and writing this configuration
     *         in all the necessary formats.
+    *
+    * @author Attila Krasznahorkay Jr.
+    *
+    * $Revision$
+    * $Date$
     */
    class Device : virtual public dev::Device {
 
@@ -46,12 +51,12 @@ namespace ad2249a {
       virtual bool writeConfig( QDomElement& node ) const;
 
       /// The type of the child class
-      virtual QString type() const { return "AD2249A"; }
+      virtual QString deviceName() const { return "AD2249A"; }
 
       /// Get the slot of the device in the CAMAC crate
-      virtual int getSlot() const;
+      virtual unsigned int getID() const;
       /// Set the slot of the device in the CAMAC crate
-      virtual void setSlot( int value );
+      virtual void setID( unsigned int value );
 
    protected:
       /// Clear the configuration of the device
@@ -60,7 +65,7 @@ namespace ad2249a {
       /// Number of inputs on the device
       static const int NUMBER_OF_SUBADDRESSES = 12;
 
-      int            m_slot; ///< Slot of the device in the CAMAC crate
+      unsigned int   m_slot; ///< Slot of the device in the CAMAC crate
       bool           m_generateLam; ///< Generate LAM signal at readout
 
       /// Configuration of the input channels of the device

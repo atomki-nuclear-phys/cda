@@ -54,7 +54,7 @@ namespace ad1000 {
    ev::Fragment Readout::readEvent( camac::Crate& crate ) const {
 
       ev::Fragment fragment;
-      fragment.setModuleNumber( m_slot );
+      fragment.setModuleID( m_slot );
 
       // Read the channel data:
       crate.writeWord( m_slot, 0, 16, 0 ); // I think this command initiates the data conversion...

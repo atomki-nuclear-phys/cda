@@ -20,11 +20,11 @@ namespace glomem {
     * this, it doesn't have to do much.
     */
    Crate::Crate()
-      : dev::Crate< dev::Hist >( &dev::Factory::createHist ),
+      : dev::Crate< dev::CernlibHist >(),
         m_hmgr(), m_logger( "glomem::Crate" ) {
 
-      m_logger << msg::VERBOSE << "Object constructed" << msg::endmsg;
-
+      m_logger << msg::VERBOSE << tr( "Object constructed" )
+               << msg::endmsg;
    }
 
    /**
@@ -32,8 +32,8 @@ namespace glomem {
     */
    Crate::~Crate() {
 
-      m_logger << msg::VERBOSE << "Object destructed" << msg::endmsg;
-
+      m_logger << msg::VERBOSE << tr( "Object destructed" )
+               << msg::endmsg;
    }
 
    /**
@@ -48,7 +48,8 @@ namespace glomem {
     */
    bool Crate::initialize() {
 
-      m_logger << msg::INFO << "Initializing histograms in global memory"
+      m_logger << msg::INFO
+               << tr( "Initializing histograms in global memory" )
                << msg::endmsg;
 
       //
@@ -59,19 +60,23 @@ namespace glomem {
       //
       // Let the devices create their own monitoring histograms:
       //
-      for( std::map< int, dev::Hist* >::iterator device = m_devices.begin();
-           device != m_devices.end(); ++device ) {
+      std::map< unsigned int, dev::CernlibHist* >::const_iterator dev_itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CernlibHist* >::const_iterator dev_end =
+         m_devices.end();
+      for( ; dev_itr != dev_end; ++dev_itr ) {
 
-         if( ! device->second->initialize( m_hmgr ) ) {
-            m_logger << msg::ERROR << "There was a problem initializing one of "
-                     << "the devices" << msg::endmsg;
+         if( ! dev_itr->second->initialize( m_hmgr ) ) {
+            m_logger << msg::ERROR
+                     << tr( "There was a problem initializing one of "
+                            "the devices" )
+                     << msg::endmsg;
             return false;
          }
 
       }
 
       return true;
-
    }
 
    /**
@@ -88,28 +93,37 @@ namespace glomem {
     */
    bool Crate::displayEvent( const ev::Event& event ) {
 
-      m_logger << msg::VERBOSE << "Received new event" << msg::endmsg;
+      m_logger << msg::VERBOSE << tr( "Received new event" )
+               << msg::endmsg;
 
       const std::vector< ev::Fragment >& fragments = event.getFragments();
 
-      for( std::vector< ev::Fragment >::const_iterator fragment =
-              fragments.begin(); fragment != fragments.end(); ++fragment ) {
+      std::vector< ev::Fragment >::const_iterator frag_itr = fragments.begin();
+      std::vector< ev::Fragment >::const_iterator frag_end = fragments.end();
+      for( ; frag_itr != frag_end; ++frag_itr ) {
 
-         std::map< int, dev::Hist* >::iterator device =
-            m_devices.find( fragment->getModuleNumber() );
+         std::map< unsigned int, dev::CernlibHist* >::iterator device =
+            m_devices.find( frag_itr->getModuleID() );
          if( device == m_devices.end() ) {
-            m_logger << msg::ERROR << "Failed to assign fragment with "
-                     << "module number: " << fragment->getModuleNumber()
+            m_logger << msg::ERROR
+                     << tr( "Failed to assign fragment with "
+                            "module ID: %1" ).arg( frag_itr->getModuleID() )
                      << msg::endmsg;
             return false;
          }
 
-         device->second->displayEvent( *fragment, m_hmgr );
+         if( ! device->second->displayEvent( *frag_itr, m_hmgr ) ) {
+            m_logger << msg::ERROR
+                     << tr( "There was a problem displaying the data "
+                            "from device with ID: %1" )
+               .arg( frag_itr->getModuleID() )
+                     << msg::endmsg;
+            return false;
+         }
 
       }
 
       return true;
-
    }
 
 } // namespace glomem

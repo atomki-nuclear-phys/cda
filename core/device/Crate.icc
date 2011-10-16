@@ -36,9 +36,9 @@ namespace dev {
     *
     * @param factoryFncn Function pointer to one of dev::Factory's functions
     */
-   template< class Device >
-   Crate< Device >::Crate( Device* ( dev::Factory::*factoryFncn )( void ) const )
-      : m_devices(), m_factoryFncn( factoryFncn ), m_loader( 0 ),
+   template< class DEVICE >
+   Crate< DEVICE >::Crate()
+      : m_devices(), m_loader( 0 ),
         m_logger( "dev::Crate" ) {
 
    }
@@ -47,14 +47,14 @@ namespace dev {
     * The destructor clears the configuration before destroying the object,
     * so the handled devices wouldn't be leaked.
     */
-   template< class Device >
-   Crate< Device >::~Crate() {
+   template< class DEVICE >
+   Crate< DEVICE >::~Crate() {
 
       clear();
    }
 
-   template< class Device >
-   bool Crate< Device >::readConfig( QIODevice* dev ) {
+   template< class DEVICE >
+   bool Crate< DEVICE >::readConfig( QIODevice* dev ) {
 
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
@@ -79,7 +79,8 @@ namespace dev {
          if( m_loader->isLoaded( type ) ) {
 
             Factory* factory = m_loader->getFactory( type );
-            Device* device = ( factory->*m_factoryFncn )();
+            DEVICE* device = factory->createDevice< DEVICE >();
+            if( ! device ) continue;
             if( ! device->readConfig( dev ) ) {
                m_logger << msg::ERROR
                         << tr( "There was a problem reading the "
@@ -89,6 +90,7 @@ namespace dev {
                return false;
             }
 
+            /*
             if( ! ( ( device->getSlot() > 0 ) &&
                     ( device->getSlot() <= NUMBER_OF_SLOTS ) ) ) {
                m_logger << msg::ERROR
@@ -98,17 +100,18 @@ namespace dev {
                delete device;
                return false;
             }
+            */
 
-            typename std::map< int, Device* >::iterator it;
-            if( ( it = m_devices.find( device->getSlot() ) ) !=
+            typename std::map< unsigned int, DEVICE* >::iterator it;
+            if( ( it = m_devices.find( device->getID() ) ) !=
                 m_devices.end() ) {
                m_logger << msg::WARNING
-                        << tr( "Redefining the device in slot: %1" )
-                  .arg( device->getSlot() ) << msg::endmsg;
+                        << tr( "Redefining the device with 'id': %1" )
+                  .arg( device->getID() ) << msg::endmsg;
                delete it->second;
             }
 
-            m_devices[ device->getSlot() ] = device;
+            m_devices[ device->getID() ] = device;
 
          } else {
             m_logger << msg::ERROR
@@ -123,8 +126,8 @@ namespace dev {
       return true;
    }
 
-   template< class Device >
-   bool Crate< Device >::writeConfig( QIODevice* dev ) const {
+   template< class DEVICE >
+   bool Crate< DEVICE >::writeConfig( QIODevice* dev ) const {
 
       m_logger << msg::VERBOSE << tr( "Writing configuration to binary output" )
                << msg::endmsg;
@@ -133,11 +136,11 @@ namespace dev {
       output.setVersion( QDataStream::Qt_4_0 );
       output << ( quint32 ) m_devices.size();
 
-      for( typename std::map< int, Device* >::const_iterator device_it =
+      for( typename std::map< unsigned int, DEVICE* >::const_iterator device_it =
               m_devices.begin(); device_it != m_devices.end();
            ++device_it ) {
 
-         output << device_it->second->type();
+         output << device_it->second->deviceName();
          if( ! device_it->second->writeConfig( dev ) ) {
             m_logger << msg::ERROR
                      << tr( "There was a problem writing the "
@@ -151,8 +154,8 @@ namespace dev {
       return true;
    }
 
-   template< class Device >
-   bool Crate< Device >::readConfig( const QDomElement& element ) {
+   template< class DEVICE >
+   bool Crate< DEVICE >::readConfig( const QDomElement& element ) {
 
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
@@ -171,7 +174,7 @@ namespace dev {
          if( m_loader->isLoaded( type ) ) {
 
             Factory* factory = m_loader->getFactory( type );
-            Device* device = ( factory->*m_factoryFncn )();
+            DEVICE* device = factory->createDevice< DEVICE >();
             if( ! device->readConfig( element.childNodes().at( i ).toElement() ) ) {
                m_logger << msg::ERROR
                         << tr( "There was a problem reading the "
@@ -181,6 +184,7 @@ namespace dev {
                return false;
             }
 
+            /*
             if( ! ( ( device->getSlot() > 0 ) &&
                     ( device->getSlot() <= NUMBER_OF_SLOTS ) ) ) {
                m_logger << msg::ERROR
@@ -190,22 +194,25 @@ namespace dev {
                delete device;
                return false;
             }
+            */
 
-            typename std::map< int, Device* >::iterator it;
-            if( ( it = m_devices.find( device->getSlot() ) ) !=
+            typename std::map< unsigned int, DEVICE* >::iterator it;
+            if( ( it = m_devices.find( device->getID() ) ) !=
                 m_devices.end() ) {
                m_logger << msg::WARNING
-                        << tr( "Redefining the device in slot: %1" ).arg( device->getSlot() )
+                        << tr( "Redefining the device with 'id': %1" )
+                  .arg( device->getID() )
                         << msg::endmsg;
                delete it->second;
             }
 
-            m_devices[ device->getSlot() ] = device;
+            m_devices[ device->getID() ] = device;
 
          } else {
             m_logger << msg::ERROR
                      << tr( "Device type \"%1\" unknown\n"
-                            "Check that you have all plugins available!" ).arg( type )
+                            "Check that you have all plugins available!" )
+               .arg( type )
                      << msg::endmsg;
             return false;
          }
@@ -215,18 +222,18 @@ namespace dev {
       return true;
    }
 
-   template< class Device >
-   bool Crate< Device >::writeConfig( QDomElement& element ) const {
+   template< class DEVICE >
+   bool Crate< DEVICE >::writeConfig( QDomElement& element ) const {
 
       m_logger << msg::VERBOSE << tr( "Writing configuration to XML output" )
                << msg::endmsg;
 
-      for( typename std::map< int, Device* >::const_iterator device_it =
+      for( typename std::map< unsigned int, DEVICE* >::const_iterator device_it =
               m_devices.begin(); device_it != m_devices.end();
            ++device_it ) {
 
          QDomElement dev_element =
-            element.ownerDocument().createElement( device_it->second->type() );
+            element.ownerDocument().createElement( device_it->second->deviceName() );
          if( ! device_it->second->writeConfig( dev_element ) ) {
             m_logger << msg::ERROR
                      << tr( "There was a problem writing the "
@@ -241,8 +248,8 @@ namespace dev {
       return true;
    }
 
-   template< class Device >
-   Loader* Crate< Device >::getLoader() const {
+   template< class DEVICE >
+   Loader* Crate< DEVICE >::getLoader() const {
 
       return m_loader;
    }
@@ -255,8 +262,8 @@ namespace dev {
     *
     * @param loader Pointer to a correctly configured dev::Loader object
     */
-   template< class Device >
-   void Crate< Device >::setLoader( const Loader* loader ) {
+   template< class DEVICE >
+   void Crate< DEVICE >::setLoader( const Loader* loader ) {
 
       m_loader = loader;
       return;
@@ -266,10 +273,10 @@ namespace dev {
     * The function deletes all the device objects and resets the map storing
     * them.
     */
-   template< class Device >
-   void Crate< Device >::clear() {
+   template< class DEVICE >
+   void Crate< DEVICE >::clear() {
 
-      for( typename std::map< int, Device* >::iterator device_it =
+      for( typename std::map< unsigned int, DEVICE* >::iterator device_it =
               m_devices.begin(); device_it != m_devices.end();
            ++device_it ) {
          delete device_it->second;
@@ -287,8 +294,8 @@ namespace dev {
     * @returns <code>true</code> if a correct dev::Loader is set,
     *          <code>false</code> otherwise
     */
-   template< class Device >
-   bool Crate< Device >::checkLoader() const {
+   template< class DEVICE >
+   bool Crate< DEVICE >::checkLoader() const {
 
       if( ! m_loader ) {
          m_logger << msg::ERROR

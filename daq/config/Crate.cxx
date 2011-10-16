@@ -22,7 +22,7 @@ namespace conf {
     * function to create these devices when reading a configuration.
     */
    Crate::Crate()
-      : dev::Crate< dev::Readout >( &dev::Factory::createReadout ) {
+      : dev::Crate< dev::CernlibHist >() {
 
    }
 

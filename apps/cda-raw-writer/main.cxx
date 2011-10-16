@@ -85,7 +85,8 @@ int main( int argc, char* argv[] ) {
                      CmdArg::isREQ );
    CmdArgStrList msgservers( 'm', "msgservers", "addresses",
                              "Addresses of message servers" );
-   CmdArgStr evaddress( 'e', "evaddress", "address", "Address where to receive events",
+   CmdArgStr evaddress( 'e', "evaddress", "address",
+                        "Address where to receive events",
                         CmdArg::isREQ );
    CmdArgStr output( 'o', "output", "filename", "Name of the RAW file",
                      CmdArg::isREQ );
@@ -179,7 +180,8 @@ int main( int argc, char* argv[] ) {
       if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-raw-writer",
-                                      "Couldn't read configuration from address: %1" )
+                                      "Couldn't read configuration from "
+                                      "address: %1" )
             .arg( ( const char* ) config )
                   << msg::endmsg;
          return 1;
@@ -191,7 +193,8 @@ int main( int argc, char* argv[] ) {
       if( ! g_crate->readConfig( reader.buffer() ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-raw-writer",
-                                      "Couldn't process configuration coming from address: %1" )
+                                      "Couldn't process configuration coming "
+                                      "from address: %1" )
             .arg( ( const char* ) config )
                   << msg::endmsg;
          return 1;
@@ -254,7 +257,8 @@ int main( int argc, char* argv[] ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-raw-writer",
                                       "Failed to read configuration file!\n"
-                                      "See previous messages for more information..." )
+                                      "See previous messages for more "
+                                      "information..." )
                   << msg::endmsg;
          return 1;
       } else {
@@ -348,13 +352,15 @@ int main( int argc, char* argv[] ) {
          if( ! g_fwriter->isRunning() ) {
             g_logger << msg::FATAL
                      << qApp->translate( "cda-raw-writer",
-                                         "The file writing thread unexpectedly died" )
+                                         "The file writing thread "
+                                         "unexpectedly died" )
                      << msg::endmsg;
             shutDown( 0 );
          }
 
          // Update the statistics receivers:
-         stat_sender.update( stat::Statistics( g_evcount + g_fwriter->processedEvents(),
+         stat_sender.update( stat::Statistics( g_evcount +
+                                               g_fwriter->processedEvents(),
                                                statSource ) );
 
          // If it's time to open a new file, let's do it:
@@ -369,18 +375,20 @@ int main( int argc, char* argv[] ) {
             g_crate->finalize();
             // Open a new file:
             ++filecounter;
-            if( ! g_crate->initialize( fileName.arg( filecounter, ( int ) 3, ( int ) 10,
+            if( ! g_crate->initialize( fileName.arg( filecounter, ( int ) 3,
+                                                     ( int ) 10,
                                                      QLatin1Char( '0' ) ) ) ) {
                g_logger << msg::FATAL
                         << qApp->translate( "cda-raw-writer",
-                                            "Failed to initialise RAW file for data "
-                                            "acquisition" )
+                                            "Failed to initialise RAW file "
+                                            "for data acquisition" )
                         << msg::endmsg;
                return 1;
             } else {
                g_logger << msg::DEBUG
                         << qApp->translate( "cda-raw-writer",
-                                            "Initialised RAW file for data acquisition" )
+                                            "Initialised RAW file for data "
+                                            "acquisition" )
                         << msg::endmsg;
             }
             // Start the file writing thread once more:
@@ -417,7 +425,8 @@ int main( int argc, char* argv[] ) {
          if( ! g_fwriter->isRunning() ) {
             g_logger << msg::FATAL
                      << qApp->translate( "cda-raw-writer",
-                                         "The file writing thread unexpectedly died" )
+                                         "The file writing thread unexpectedly "
+                                         "died" )
                      << msg::endmsg;
             shutDown( 0 );
          }

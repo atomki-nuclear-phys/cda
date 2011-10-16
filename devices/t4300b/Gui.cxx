@@ -23,7 +23,7 @@ namespace t4300b {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::Gui( parent, flags ) {
+      : dev::CamacGui( parent, flags ) {
 
       //
       // Create the widget that will hold all the configuration widgets:

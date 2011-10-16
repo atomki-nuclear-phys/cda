@@ -8,12 +8,12 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Readout.h"
+#   include "cdacore/device/CamacReadout.h"
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/Readout.h"
+#   include "device/CamacReadout.h"
 #   include "device/Crate.h"
 #   include "event/Event.h"
 #   include "msg/Logger.h"
@@ -52,7 +52,7 @@ namespace reader {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::Readout > {
+   class Crate : public dev::Crate< dev::CamacReadout > {
 
    public:
       /// Constructor

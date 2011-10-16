@@ -22,9 +22,9 @@ namespace dev {
    class Loader;
 
    /**
-    *  @short Base class for all CAMAC crate classes
+    *  @short Base class for all CAMAC/VME crate classes
     *
-    *         All the CDA applications have to handle a crate of CAMAC
+    *         All the CDA applications have to handle a crate of CAMAC/VME
     *         devices. The configuration of these devices is always
     *         read and written in the same way, so it makes sense to only
     *         code it once. The situation is complicated a bit by the
@@ -45,14 +45,14 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   template< class Device >
+   template< class DEVICE >
    class Crate : public virtual Config {
 
       Q_DECLARE_TR_FUNCTIONS( dev::Crate )
 
    public:
       /// Constructor
-      Crate( Device* ( dev::Factory::*factoryFncn )( void ) const );
+      Crate();
       /// Destructor
       ~Crate();
 
@@ -72,28 +72,24 @@ namespace dev {
       void setLoader( const Loader* loader );
 
       /// Clear the configuration of the crate
-      void clear();
+      virtual void clear();
 
    protected:
-      /// Maximal number of slots the devices can use
-      static const int NUMBER_OF_SLOTS = 24;
+      /// Check that a usable dev::Loader is set
+      virtual bool checkLoader() const;
+
       /// Container for the devices
       /**
        * I'm not yet sure about this std::map... A simple array of
        * Device pointers could be used just as well I guess. It works
        * for the moment, but might be considered too fancy later on.
        */
-      std::map< int, Device* > m_devices;
+      std::map< unsigned int, DEVICE* > m_devices;
 
-   private:
-      /// Check that a usable dev::Loader is set
-      bool checkLoader() const;
-
-      /// Function in dev::Factory that is used to create new devices
-      Device* ( dev::Factory::*m_factoryFncn )( void ) const;
       /// The dev::Loader class used by the class
       const Loader* m_loader;
 
+   private:
       /// Message logging object
       mutable msg::Logger m_logger;
 

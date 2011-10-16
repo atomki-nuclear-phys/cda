@@ -15,7 +15,7 @@ namespace ev {
       return m_crateNumber;
    }
 
-   int Fragment::getModuleNumber() const {
+   int Fragment::getModuleID() const {
 
       return m_moduleNumber;
    }
@@ -31,7 +31,7 @@ namespace ev {
       return;
    }
 
-   void Fragment::setModuleNumber( int value ) {
+   void Fragment::setModuleID( int value ) {
 
       m_moduleNumber = value;
       return;

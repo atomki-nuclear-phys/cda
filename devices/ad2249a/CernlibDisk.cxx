@@ -11,20 +11,19 @@
 #endif
 
 // Local include(s):
-#include "Disk.h"
+#include "CernlibDisk.h"
 
 namespace ad2249a {
 
-   Disk::Disk()
-      : m_logger( "ad2249a::Disk" ) {
+   CernlibDisk::CernlibDisk()
+      : m_logger( "ad2249a::CernlibDisk" ) {
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          m_ntupleTable[ i ] = 0;
       }
-
    }
 
-   bool Disk::initialize( cernlib::NTupleMgr& nmgr ) {
+   bool CernlibDisk::initialize( cernlib::NTupleMgr& nmgr ) {
 
       m_logger << msg::DEBUG << "Initialising ntuple output" << msg::endmsg;
 
@@ -38,11 +37,10 @@ namespace ad2249a {
       }
 
       return true;
-
    }
 
-   bool Disk::writeEvent( const ev::Fragment& fragment,
-                          cernlib::NTupleMgr& nmgr ) const {
+   bool CernlibDisk::writeEvent( const ev::Fragment& fragment,
+                                 cernlib::NTupleMgr& nmgr ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 
@@ -75,7 +73,6 @@ namespace ad2249a {
       }
 
       return true;
-
    }
 
 } // namespace ad2248a

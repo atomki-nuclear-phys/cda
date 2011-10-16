@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_READOUT_H
-#define CDA_CORE_DEVICE_READOUT_H
+#ifndef CDA_CORE_DEVICE_CAMACREADOUT_H
+#define CDA_CORE_DEVICE_CAMACREADOUT_H
 
 // CDA include(s):
 #include "../event/Fragment.h"
@@ -29,7 +29,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Readout : virtual public Device {
+   class CamacReadout : virtual public Device {
 
    public:
       /// Function initializing the device
@@ -66,8 +66,8 @@ namespace dev {
        */
       virtual bool clear( camac::Crate& crate ) const = 0;
 
-   }; // class Readout
+   }; // class CamacReadout
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_READOUT_H
+#endif // CDA_CORE_DEVICE_CAMACREADOUT_H

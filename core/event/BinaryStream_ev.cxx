@@ -83,7 +83,7 @@ namespace ev {
       setVersion( QDataStream::Qt_4_0 );
 
       ( * ( QDataStream* ) this ) << fragment.getCrateNumber();
-      ( * ( QDataStream* ) this ) << fragment.getModuleNumber();
+      ( * ( QDataStream* ) this ) << fragment.getModuleID();
       ( * ( QDataStream* ) this ) << ( quint32 ) fragment.getDataWords().size();
 
       for( std::vector< uint32_t >::const_iterator it =
@@ -110,15 +110,15 @@ namespace ev {
       setVersion( QDataStream::Qt_4_0 );
 
       int crateNumber;
-      int moduleNumber;
+      int moduleID;
       quint32 nDataWords;
 
       ( * ( QDataStream* ) this ) >> crateNumber;
-      ( * ( QDataStream* ) this ) >> moduleNumber;
+      ( * ( QDataStream* ) this ) >> moduleID;
       ( * ( QDataStream* ) this ) >> nDataWords;
 
       fragment.setCrateNumber( crateNumber );
-      fragment.setModuleNumber( moduleNumber );
+      fragment.setModuleID( moduleID );
 
       uint32_t dataWord;
       for( quint32 i = 0; i < nDataWords; ++i ) {

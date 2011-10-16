@@ -11,12 +11,12 @@
 #endif
 
 // Local include(s):
-#include "Disk.h"
+#include "CernlibDisk.h"
 
 namespace t2228a {
 
-   Disk::Disk()
-      : m_logger( "t2228a::Disk" ) {
+   CernlibDisk::CernlibDisk()
+      : m_logger( "t2228a::CernlibDisk" ) {
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          m_ntupleTable[ i ] = 0;
@@ -24,7 +24,7 @@ namespace t2228a {
 
    }
 
-   bool Disk::initialize( cernlib::NTupleMgr& nmgr ) {
+   bool CernlibDisk::initialize( cernlib::NTupleMgr& nmgr ) {
 
       m_logger << msg::DEBUG << "Initialising ntuple output" << msg::endmsg;
 
@@ -41,8 +41,8 @@ namespace t2228a {
 
    }
 
-   bool Disk::writeEvent( const ev::Fragment& fragment,
-                          cernlib::NTupleMgr& nmgr ) const {
+   bool CernlibDisk::writeEvent( const ev::Fragment& fragment,
+                                 cernlib::NTupleMgr& nmgr ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 

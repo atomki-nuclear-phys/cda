@@ -11,16 +11,16 @@
 #endif
 
 // Local include(s):
-#include "Disk.h"
+#include "CernlibDisk.h"
 
 namespace ad1000 {
 
-   Disk::Disk()
-      : m_ntupleNumber( 0 ), m_logger( "ad1000::Disk" ) {
+   CernlibDisk::CernlibDisk()
+      : m_ntupleNumber( 0 ), m_logger( "ad1000::CernlibDisk" ) {
 
    }
 
-   bool Disk::initialize( cernlib::NTupleMgr& nmgr ) {
+   bool CernlibDisk::initialize( cernlib::NTupleMgr& nmgr ) {
 
       m_logger << msg::DEBUG << "Initialising ntuple output" << msg::endmsg;
 
@@ -30,8 +30,8 @@ namespace ad1000 {
       return true;
    }
 
-   bool Disk::writeEvent( const ev::Fragment& fragment,
-                          cernlib::NTupleMgr& nmgr ) const {
+   bool CernlibDisk::writeEvent( const ev::Fragment& fragment,
+                                 cernlib::NTupleMgr& nmgr ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 

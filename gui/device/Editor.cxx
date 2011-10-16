@@ -8,10 +8,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Loader.h"
-#   include "cdacore/device/Gui.h"
+#   include "cdacore/device/CamacGui.h"
 #else
 #   include "device/Loader.h"
-#   include "device/Gui.h"
+#   include "device/CamacGui.h"
 #endif
 
 // Local include(s):
@@ -51,8 +51,8 @@ namespace dev {
 
       /// Create the widget showing the device configuration:
       m_deviceWidget = new QStackedWidget( m_deviceBox );
-      m_deviceWidget->setGeometry( QRect( 10, 10, Gui::WIDGET_WIDTH,
-                                          Gui::WIDGET_HEIGHT ) );
+      m_deviceWidget->setGeometry( QRect( 10, 10, CamacGui::WIDGET_WIDTH,
+                                          CamacGui::WIDGET_HEIGHT ) );
       connect( m_deviceWidget, SIGNAL( widgetRemoved( int ) ),
                this, SLOT( removeDeviceSlot( int ) ) );
 
@@ -125,7 +125,7 @@ namespace dev {
    void Editor::showDeviceSlot( int slot ) {
 
       // Access the device:
-      Gui* device = m_crateView->getDevice( slot );
+      CamacGui* device = m_crateView->getDevice( slot );
       if( ! device ) {
          m_logger << msg::DEBUG
                   << tr( "There is no device in slot %1" ).arg( slot )

@@ -1,0 +1,32 @@
+// Dear emacs, this is -*- c++ -*-
+// $Id$
+#ifndef CDA_CORE_DEVICE_FACTORY_ICC
+#define CDA_CORE_DEVICE_FACTORY_ICC
+
+namespace dev {
+
+    /**
+     * This function is the "user interface" for this factory
+     * interface. It uses the virtual createDevice function to
+     * create a device object.
+     *
+     * @returns A device object of the requested type, or <code>0</code>
+     *          if the plugin doesn't support this device
+     */
+   template< class Type >
+   Type* Factory::createDevice() const {
+
+      // Ask for the creation of the new device:
+      void* ret = createDevice( typeid( Type ) );
+
+      // Only try the casting if an object was created:
+      if( ret ) {
+         return reinterpret_cast< Type* >( ret );
+      } else {
+         return 0;
+      }
+   }
+
+} // namespace dev
+
+#endif // CDA_CORE_DEVICE_FACTORY_ICC

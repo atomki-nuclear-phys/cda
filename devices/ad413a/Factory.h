@@ -60,15 +60,16 @@ namespace ad413a {
       Q_INTERFACES( dev::Factory )
 
    public:
-      Factory();
-
+      /// Give the short name of the device implemented in the plug-in
       virtual QString shortName() const;
+      /// Give the long name of the device implemented in the plug-in
       virtual QString longName() const;
 
-      virtual dev::Gui*     createGui() const;
-      virtual dev::Readout* createReadout() const;
-      virtual dev::Hist*    createHist() const;
-      virtual dev::Disk*    createDisk() const;
+      /// Give the type of the device implemented in the plug-in
+      virtual DeviceType type() const;
+
+      /// Universal function for creating a device object of this type
+      virtual void* createDevice( const std::type_info& ti ) const;
 
    }; // class Factory
 

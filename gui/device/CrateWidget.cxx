@@ -30,12 +30,14 @@ namespace dev {
    //
    // Initialise the class constants:
    //
+   const int CrateWidget::NUMBER_OF_SLOTS = 24;
+
    const int CrateWidget::SLOT_WIDTH  = 20;
    const int CrateWidget::SLOT_HEIGHT = 200;
    const int CrateWidget::BORDER_SIZE = 10;
 
    const int CrateWidget::WIDTH  =
-      ( Crate< dev::Gui >::NUMBER_OF_SLOTS + 1 ) * CrateWidget::SLOT_WIDTH +
+      ( CrateWidget::NUMBER_OF_SLOTS + 1 ) * CrateWidget::SLOT_WIDTH +
       2 * CrateWidget::BORDER_SIZE;
    const int CrateWidget::HEIGHT = CrateWidget::SLOT_HEIGHT +
       2 * CrateWidget::BORDER_SIZE + 30;
@@ -50,8 +52,8 @@ namespace dev {
     */
    CrateWidget::CrateWidget( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        Crate< dev::Gui >( &dev::Factory::createGui ),
-        m_loader( 0 ), m_logger( "dev::CrateWidget" ) {
+        Crate< dev::CamacGui >(),
+        m_logger( "dev::CrateWidget" ) {
 
       resize( WIDTH, HEIGHT );
       setMinimumSize( WIDTH, HEIGHT );
@@ -80,15 +82,18 @@ namespace dev {
       //
       // Read the configuration using the base class:
       //
-      if( ! Crate< dev::Gui >::readConfig( dev ) ) {
+      if( ! Crate< dev::CamacGui >::readConfig( dev ) ) {
          return false;
       }
       //
       // Connect the signals coming from the configured modules:
       //
-      for( std::map< int, Gui* >::const_iterator dev = m_devices.begin();
-           dev != m_devices.end(); ++dev ) {
-         connect( dev->second, SIGNAL( redrawModule() ),
+      std::map< unsigned int, CamacGui* >::const_iterator dev_itr =
+         m_devices.begin();
+      std::map< unsigned int, CamacGui* >::const_iterator dev_end =
+         m_devices.end();
+      for( ; dev_itr != dev_end; ++dev_itr ) {
+         connect( dev_itr->second, SIGNAL( redrawModule() ),
                   this, SLOT( update() ) );
       }
       //
@@ -113,15 +118,18 @@ namespace dev {
       //
       // Read the configuration using the base class:
       //
-      if( ! Crate< dev::Gui >::readConfig( element ) ) {
+      if( ! Crate< dev::CamacGui >::readConfig( element ) ) {
          return false;
       }
       //
       // Connect the signals coming from the configured modules:
       //
-      for( std::map< int, Gui* >::const_iterator dev = m_devices.begin();
-           dev != m_devices.end(); ++dev ) {
-         connect( dev->second, SIGNAL( redrawModule() ),
+      std::map< unsigned int, CamacGui* >::const_iterator dev_itr =
+         m_devices.begin();
+      std::map< unsigned int, CamacGui* >::const_iterator dev_end =
+         m_devices.end();
+      for( ; dev_itr != dev_end; ++dev_itr ) {
+         connect( dev_itr->second, SIGNAL( redrawModule() ),
                   this, SLOT( update() ) );
       }
       //
@@ -133,21 +141,6 @@ namespace dev {
    }
 
    /**
-    * Both this class and its base class need to have a Loader object
-    * to function. This function saves the pointer for itself first, then
-    * calls the dev::Crate::setLoader function.
-    *
-    * @param loader Pointer to a correctly configured Loader object
-    */
-   void CrateWidget::setLoader( const Loader* loader ) {
-
-      m_loader = loader;
-      Crate< dev::Gui >::setLoader( loader );
-
-      return;
-   }
-
-   /**
     * This function can be used to get direct access to one of the CAMAC
     * devices in the crate. Direct access is necessary, as this object
     * doesn't show the detailed configuration of the devices. Those have
@@ -156,9 +149,9 @@ namespace dev {
     * @param slot The crate slot
     * @returns The pointer to the module, or 0 if the slot is empty
     */
-   Gui* CrateWidget::getDevice( int slot ) {
+   CamacGui* CrateWidget::getDevice( int slot ) {
 
-      std::map< int, Gui* >::iterator dev = m_devices.find( slot );
+      std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
          return dev->second;
       } else {
@@ -176,12 +169,12 @@ namespace dev {
     * @param slot The crate slot to configure
     * @param device Pointer to the device that we now want to use
     */
-   void CrateWidget::setDevice( int slot, Gui* device ) {
+   void CrateWidget::setDevice( int slot, CamacGui* device ) {
 
       //
       // Save the pointer to the new device:
       //
-      std::map< int, Gui* >::iterator dev = m_devices.find( slot );
+      std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
          m_logger << msg::WARNING
                   << tr( "Redefining device in slot %1" ).arg( slot )
@@ -213,8 +206,12 @@ namespace dev {
     */
    void CrateWidget::createSlot( int slot, const QString& type ) {
 
+      // A security check:
+      if( ! checkLoader() ) return;
+
       m_logger << msg::VERBOSE
-               << tr( "\"%1\" creation requested in slot %2" ).arg( type ).arg( slot )
+               << tr( "\"%1\" creation requested in slot %2" )
+         .arg( type ).arg( slot )
                << msg::endmsg;
 
       //
@@ -244,7 +241,7 @@ namespace dev {
       //
       // Try to create the new device:
       //
-      Gui* device = factory->createGui();
+      CamacGui* device = factory->createDevice< CamacGui >();
       if( ! device ) {
          m_logger << msg::ERROR
                   << tr( "No GUI implemented by device \"%1\"" ).arg( type )
@@ -259,7 +256,7 @@ namespace dev {
       //
       // Configure and register the new device:
       //
-      device->setSlot( slot );
+      device->setID( slot );
       setDevice( slot, device );
       emit doubleClicked( slot );
 
@@ -279,7 +276,7 @@ namespace dev {
       m_logger << msg::VERBOSE << tr( "Clearing slot %1" ).arg( slot )
                << msg::endmsg;
 
-      std::map< int, Gui* >::iterator dev = m_devices.find( slot );
+      std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
          m_devices.erase( dev );
          delete dev->second;
@@ -295,7 +292,7 @@ namespace dev {
     * This function takes care of drawing the widget. For this it uses
     * a QPainter object. The CAMAC crate is drawn in a sylized fashion
     * out of basic shapes (lines, rectangles, circles). This is the function
-    * calling the dev::Gui::drawModule functions for all the CAMAC devices.
+    * calling the dev::CamacGui::drawModule functions for all the CAMAC devices.
     *
     * The result should look something like this:
     *
@@ -383,13 +380,18 @@ namespace dev {
       //
       // Draw the CAMAC devices:
       //
-      for( std::map< int, Gui* >::const_iterator dev = m_devices.begin();
+      for( std::map< unsigned int, CamacGui* >::const_iterator dev =
+              m_devices.begin();
            dev != m_devices.end(); ++dev ) {
 
-         painter.translate( BORDER_SIZE + ( dev->first - 1 ) * SLOT_WIDTH,
+         painter.translate( BORDER_SIZE +
+                            ( static_cast< int >( dev->first ) - 1 ) *
+                            SLOT_WIDTH,
                             BORDER_SIZE );
          dev->second->drawModule( painter );
-         painter.translate( - ( BORDER_SIZE + ( dev->first - 1 ) * SLOT_WIDTH ),
+         painter.translate( - ( BORDER_SIZE +
+                                ( static_cast< int >( dev->first ) - 1 ) *
+                                SLOT_WIDTH ),
                             - BORDER_SIZE );
 
       }
@@ -398,6 +400,7 @@ namespace dev {
       // Draw the lines separating the crate slots:
       //
       painter.setPen( Qt::DotLine );
+      painter.setBrush( Qt::black );
       for( int i = 0; i < NUMBER_OF_SLOTS - 1; ++i ) {
          painter.drawLine( QLine( BORDER_SIZE + SLOT_WIDTH +
                                   i * SLOT_WIDTH, BORDER_SIZE,
@@ -465,7 +468,12 @@ namespace dev {
                // Check if this particular device could be inserted into this
                // crate slot:
                //
-               Gui* device = m_loader->getFactory( *dev )->createGui();
+               CamacGui* device =
+                  m_loader->getFactory( *dev )->createDevice< CamacGui >();
+               // Check if this is a CAMAC device:
+               if( ! device ) {
+                  continue;
+               }
                bool offerDevice = true;
                // Check if it has enough space from the side of the crate:
                if( device->deviceWidth() > slot ) {

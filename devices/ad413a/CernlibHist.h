@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_AD1000_HIST_H
-#define CDA_DEVICES_AD1000_HIST_H
+#ifndef CDA_DEVICES_AD413A_CERNLIBHIST_H
+#define CDA_DEVICES_AD413A_CERNLIBHIST_H
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
@@ -10,24 +10,24 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/cernlib/HistMgr.h"
-#   include "cdacore/device/Hist.h"
+#   include "cdacore/device/CernlibHist.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "cernlib/HistMgr.h"
-#   include "device/Hist.h"
+#   include "device/CernlibHist.h"
 #   include "msg/Logger.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
 
-namespace ad1000 {
+namespace ad413a {
 
    /**
-    *  @short AD1000 monitoring histogram producer
+    *  @short AD413A monitoring histogram producer
     *
     *         This class can be used to create and fill monitoring
-    *         histograms with the data read out from an AD1000 CAMAC
+    *         histograms with the data read out from a AD413A CAMAC
     *         ADC device. It uses CERNLIB for allocating and filling
     *         the histograms.
     *
@@ -36,14 +36,14 @@ namespace ad1000 {
     * $Revision$
     * $Date$
     */
-   class Hist : public virtual dev::Hist,
-                public virtual Device {
+   class CernlibHist : public virtual dev::CernlibHist,
+                       public virtual Device {
 
-      Q_DECLARE_TR_FUNCTIONS( ad1000::Hist )
+      Q_DECLARE_TR_FUNCTIONS( ad2249a::CernlibHist )
 
    public:
       /// Constructor
-      Hist();
+      CernlibHist();
 
       /// Initialise the monitoring histograms
       virtual bool initialize( cernlib::HistMgr& hmgr );
@@ -55,15 +55,16 @@ namespace ad1000 {
       /// Histogram ID "dictionary"
       /**
        * In CERNLIB the histograms are identified by a single number.
-       * This number represents the histogram created for this device.
-       * It is filled in the initialize() function.
+       * This table creates a simple dictionary between the subaddress
+       * numbers of this device and the histogram numbers belonging
+       * to them. It is filled in the initialize() function.
        */
-      int m_histNumber;
+      int m_histTable[ NUMBER_OF_SUBADDRESSES ];
 
       mutable msg::Logger m_logger; ///< Object for logging messages
 
-   }; // class Hist
+   }; // class CernlibHist
 
-} // namespace ad1000
+} // namespace ad413a
 
-#endif // CDA_DEVICES_AD1000_HIST_H
+#endif // CDA_DEVICES_AD413A_CERNLIBHIST_H

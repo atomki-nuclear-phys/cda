@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_AD413A_DISK_H
-#define CDA_DEVICES_AD413A_DISK_H
+#ifndef CDA_DEVICES_AD413A_CERNLIBDISK_H
+#define CDA_DEVICES_AD413A_CERNLIBDISK_H
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
@@ -9,11 +9,11 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Disk.h"
+#   include "cdacore/device/CernlibDisk.h"
 #   include "cdacore/msg/Logger.h"
 #   include "cdacore/cernlib/NTupleMgr.h"
 #else
-#   include "device/Disk.h"
+#   include "device/CernlibDisk.h"
 #   include "msg/Logger.h"
 #   include "cernlib/NTupleMgr.h"
 #endif
@@ -24,7 +24,7 @@
 namespace ad413a {
 
    /**
-    *  @short Class capable of writing HBOOK files with info coming from an AD413A device
+    *  @short Class capable of writing HBOOK files with info coming from the device
     *
     *         This class is used to write information coming from an AD413A device
     *         to disk.
@@ -34,15 +34,15 @@ namespace ad413a {
     * $Revision$
     * $Date$
     */
-   class Disk : public virtual dev::Disk,
-                public virtual Device {
+   class CernlibDisk : public virtual dev::CernlibDisk,
+                       public virtual Device {
 
       // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( ad413a::Disk )
+      Q_DECLARE_TR_FUNCTIONS( ad413a::CernlibDisk )
 
    public:
       /// Constructor
-      Disk();
+      CernlibDisk();
 
       /// Function initializing the device
       virtual bool initialize( cernlib::NTupleMgr& nmgr );
@@ -56,8 +56,8 @@ namespace ad413a {
 
       mutable msg::Logger m_logger; ///< Message logging object
 
-   }; // class Disk
+   }; // class CernlibDisk
 
 } // namespace ad413a
 
-#endif // CDA_DEVICES_AD413A_DISK_H
+#endif // CDA_DEVICES_AD413A_CERNLIBDISK_H

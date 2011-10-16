@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_AD413A_HIST_H
-#define CDA_DEVICES_AD413A_HIST_H
+#ifndef CDA_DEVICES_T4300B_CERNLIBHIST_H
+#define CDA_DEVICES_T4300B_CERNLIBHIST_H
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
@@ -10,25 +10,25 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/cernlib/HistMgr.h"
-#   include "cdacore/device/Hist.h"
+#   include "cdacore/device/CernlibHist.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "cernlib/HistMgr.h"
-#   include "device/Hist.h"
+#   include "device/CernlibHist.h"
 #   include "msg/Logger.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
 
-namespace ad413a {
+namespace t4300b {
 
    /**
-    *  @short AD413A monitoring histogram producer
+    *  @short T4300B monitoring histogram producer
     *
     *         This class can be used to create and fill monitoring
-    *         histograms with the data read out from a AD413A CAMAC
-    *         ADC device. It uses CERNLIB for allocating and filling
+    *         histograms with the data read out from a T4300B CAMAC
+    *         QDC device. It uses CERNLIB for allocating and filling
     *         the histograms.
     *
     * @author Attila Krasznahorkay Jr.
@@ -36,14 +36,14 @@ namespace ad413a {
     * $Revision$
     * $Date$
     */
-   class Hist : public virtual dev::Hist,
-                public virtual Device {
+   class CernlibHist : public virtual dev::CernlibHist,
+                       public virtual Device {
 
-      Q_DECLARE_TR_FUNCTIONS( ad2249a::Hist )
+      Q_DECLARE_TR_FUNCTIONS( t2228a::CernlibHist )
 
    public:
       /// Constructor
-      Hist();
+      CernlibHist();
 
       /// Initialise the monitoring histograms
       virtual bool initialize( cernlib::HistMgr& hmgr );
@@ -63,8 +63,8 @@ namespace ad413a {
 
       mutable msg::Logger m_logger; ///< Object for logging messages
 
-   }; // class Hist
+   }; // class CernlibHist
 
-} // namespace ad413a
+} // namespace t4300b
 
-#endif // CDA_DEVICES_AD413A_HIST_H
+#endif // CDA_DEVICES_T4300B_CERNLIBHIST_H

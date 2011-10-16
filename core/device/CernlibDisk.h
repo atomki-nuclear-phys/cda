@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_DISK_H
-#define CDA_CORE_DEVICE_DISK_H
+#ifndef CDA_CORE_DEVICE_CERNLIBDISK_H
+#define CDA_CORE_DEVICE_CERNLIBDISK_H
 
 // STL include(s):
 #include <vector>
@@ -36,7 +36,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Disk : virtual public Device {
+   class CernlibDisk : virtual public Device {
 
    public:
       /// Function initializing the device
@@ -67,8 +67,8 @@ namespace dev {
       virtual bool writeEvent( const ev::Fragment& fragment,
                                cernlib::NTupleMgr& nmgr ) const = 0;
 
-   }; // class Disk
+   }; // class CernlibDisk
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_DISK_H
+#endif // CDA_CORE_DEVICE_CERNLIBDISK_H

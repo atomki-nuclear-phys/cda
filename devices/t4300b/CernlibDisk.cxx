@@ -11,12 +11,12 @@
 #endif
 
 // Local include(s):
-#include "Disk.h"
+#include "CernlibDisk.h"
 
-namespace ad413a {
+namespace t4300b {
 
-   Disk::Disk()
-      : m_logger( "ad413a::Disk" ) {
+   CernlibDisk::CernlibDisk()
+      : m_logger( "t4300b::CernlibDisk" ) {
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          m_ntupleTable[ i ] = 0;
@@ -24,9 +24,9 @@ namespace ad413a {
 
    }
 
-   bool Disk::initialize( cernlib::NTupleMgr& nmgr ) {
+   bool CernlibDisk::initialize( cernlib::NTupleMgr& nmgr ) {
 
-      m_logger << msg::DEBUG << tr( "Initialising ntuple output" ) << msg::endmsg;
+      m_logger << msg::DEBUG << "Initialising ntuple output" << msg::endmsg;
 
       // Loop over all configured subaddresses:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
@@ -40,8 +40,8 @@ namespace ad413a {
       return true;
    }
 
-   bool Disk::writeEvent( const ev::Fragment& fragment,
-                          cernlib::NTupleMgr& nmgr ) const {
+   bool CernlibDisk::writeEvent( const ev::Fragment& fragment,
+                                 cernlib::NTupleMgr& nmgr ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 
@@ -60,14 +60,13 @@ namespace ad413a {
             // Fill the subaddress data in the ntuple manager:
             if( ! nmgr.setVar( m_ntupleTable[ subaddress ],
                                ( float ) chdata ) ) {
-               m_logger << msg::ERROR << tr( "There was a problem filling one of "
-                                             "the variables" )
-                        << msg::endmsg;
+               m_logger << msg::ERROR << "There was a problem filling one of "
+                        << "the variables" << msg::endmsg;
                return false;
             }
 
          } else {
-            m_logger << msg::ERROR << tr( "Received data word from unknown channel" )
+            m_logger << msg::ERROR << "Received data word from unknown channel"
                      << msg::endmsg;
             return false;
          }
@@ -77,4 +76,4 @@ namespace ad413a {
       return true;
    }
 
-} // namespace ad413a
+} // namespace t4300b

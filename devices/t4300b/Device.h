@@ -51,12 +51,12 @@ namespace t4300b {
       virtual bool writeConfig( QDomElement& node ) const;
 
       /// The type of the child class
-      virtual QString type() const { return "T4300B"; }
+      virtual QString deviceName() const { return "T4300B"; }
 
       /// Get the slot of the device in the CAMAC crate
-      virtual int getSlot() const;
+      virtual unsigned int getID() const;
       /// Set the slot of the device in the CAMAC crate
-      virtual void setSlot( int value );
+      virtual void setID( unsigned int value );
 
    protected:
       /// Clear the configuration of the device
@@ -65,7 +65,7 @@ namespace t4300b {
       /// Number of inputs on the device
       static const int NUMBER_OF_SUBADDRESSES = 16;
 
-      int            m_slot; ///< Slot of the device in the CAMAC crate
+      unsigned int   m_slot; ///< Slot of the device in the CAMAC crate
       bool           m_generateLam; ///< Generate LAM signal at readout
       /// Configuration of the input channels of the device
       ChannelConfig* m_channels[ NUMBER_OF_SUBADDRESSES ];

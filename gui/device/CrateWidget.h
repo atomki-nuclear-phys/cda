@@ -9,11 +9,11 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Crate.h"
-#   include "cdacore/device/Gui.h"
+#   include "cdacore/device/CamacGui.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Crate.h"
-#   include "device/Gui.h"
+#   include "device/CamacGui.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -49,7 +49,7 @@ namespace dev {
     * $Date$
     */
    class CrateWidget : public QWidget,
-                       public Crate< dev::Gui > {
+                       public Crate< dev::CamacGui > {
 
       Q_OBJECT
 
@@ -64,13 +64,11 @@ namespace dev {
       /// Extended configuration reading from XML file
       virtual bool readConfig( const QDomElement& element );
 
-      /// Set a Loader to be used by the object
-      void setLoader( const Loader* loader );
-      /// Get the current Loader used by the object
-      const Loader* getLoader() const;
-
       /// Get the CAMAC device in a given slot
-      Gui* getDevice( int slot );
+      CamacGui* getDevice( int slot );
+
+      /// Maximal number of slots the devices can use
+      static const int NUMBER_OF_SLOTS;
 
       /// Width of a crate slot
       static const int SLOT_WIDTH;
@@ -105,7 +103,7 @@ namespace dev {
 
    public slots:
       /// Set the device in a given slot
-      void setDevice( int slot, Gui* device );
+      void setDevice( int slot, CamacGui* device );
 
    private slots:
       /// Create a new device in a given slot
@@ -122,7 +120,6 @@ namespace dev {
       virtual void mouseDoubleClickEvent( QMouseEvent* event );
 
    private:
-      const Loader*       m_loader; ///< Object for creating CAMAC modules
       mutable msg::Logger m_logger; ///< Message logging object
 
    }; // class CrateWidget

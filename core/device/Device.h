@@ -33,23 +33,25 @@ namespace dev {
        * ID for the object in question. This should be the same as the
        * value returned by Factory::deviceName().
        */
-      virtual QString type() const = 0;
+      virtual QString deviceName() const = 0;
 
-      /// Get the slot of the device in the CAMAC crate
+      /// Get the slot of the device in the CAMAC crate, or address of a VME device
       /**
-       * The slot numbering starts from 1, it should be the same at the
+       * The CAMAC slot numbering starts from 1, it should be the same at the
        * value that you see on the front of the CAMAC crate under the
        * module.
        *
-       * @returns The slot of the CAMAC module
+       * For VME devices this value is used as the base address of the device.
+       *
+       * @returns The slot of the CAMAC module, or address of the VME decice
        */
-      virtual int getSlot() const = 0;
-      /// Set the slot of the device in the CAMAC crate
+      virtual unsigned int getID() const = 0;
+      /// Set the slot of the device in the CAMAC crate, or address of the VME device
       /**
-       * @see dev::Device::setSlot()
-       * @param value The slot of the CAMAC module
+       * @see dev::Device::getID()
+       * @param value The slot of the CAMAC module, or address of the VME device
        */
-      virtual void setSlot( int value ) = 0;
+      virtual void setID( unsigned int value ) = 0;
 
    }; // class Device
 

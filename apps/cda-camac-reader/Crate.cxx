@@ -27,7 +27,7 @@ namespace reader {
     * function to create these devices when reading a configuration.
     */
    Crate::Crate()
-      : dev::Crate< dev::Readout >( &dev::Factory::createReadout ),
+      : dev::Crate< dev::CamacReadout >(),
         m_logger( "reader::Crate" ) {
 
       m_logger << msg::VERBOSE << tr( "Object constructed" ) << msg::endmsg;
@@ -57,10 +57,13 @@ namespace reader {
       crate.initialize();
       crate.clear();
 
-      for( std::map< int, dev::Readout* >::const_iterator device =
-              m_devices.begin(); device != m_devices.end(); ++device ) {
+      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_end =
+         m_devices.end();
+      for( ; dev_itr != dev_end; ++dev_itr ) {
 
-         if( ! device->second->initialize( crate ) ) {
+         if( ! dev_itr->second->initialize( crate ) ) {
             m_logger << msg::ERROR
                      << tr( "There was a problem initializing one "
                             "of the devices" )
@@ -116,10 +119,13 @@ namespace reader {
       //
       // Read out the event fragments from all the devices:
       //
-      for( std::map< int, dev::Readout* >::const_iterator device =
-              m_devices.begin(); device != m_devices.end(); ++device ) {
+      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_end =
+         m_devices.end();
+      for( ; dev_itr != dev_end; ++dev_itr ) {
 
-         event.addFragment( device->second->readEvent( crate ) );
+         event.addFragment( dev_itr->second->readEvent( crate ) );
       }
 
       return event;
@@ -130,7 +136,7 @@ namespace reader {
       crate.clear();
 
       /*
-      for( std::map< int, dev::Readout* >::const_iterator device =
+      for( std::map< unsigned int, dev::CamacReadout* >::const_iterator device =
               m_devices.begin(); device != m_devices.end(); ++device ) {
 
          if( ! device->second->clear( crate ) ) {

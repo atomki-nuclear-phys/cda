@@ -79,11 +79,11 @@ namespace ev {
       ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
                                                       "  ---- Fragment record ----\n" );
       ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                      "   Crate number : %1\n" )
+                                                      "   Crate number: %1\n" )
          .arg( fragment.getCrateNumber() );
       ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                      "   Module number: %1\n\n" )
-         .arg( fragment.getModuleNumber() );
+                                                      "   Module ID   : %1\n\n" )
+         .arg( fragment.getModuleID() );
 
       if( fragment.getDataWords().size() ) {
          for( std::vector< uint32_t >::const_iterator dword =

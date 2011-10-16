@@ -59,15 +59,18 @@ namespace ad413a {
       } else if( m_gate == 4 ) {
          crate.writeWord( m_slot, 1, 16, 0x17 );
       } else {
-         m_logger << msg::WARNING << tr( "Gate value is %1" ).arg( m_gate ) << msg::endmsg;
-         m_logger << msg::WARNING << tr( "Will enable all gates for now..." ) << msg::endmsg;
+         m_logger << msg::WARNING << tr( "Gate value is %1" ).arg( m_gate )
+                  << msg::endmsg;
+         m_logger << msg::WARNING << tr( "Will enable all gates for now..." )
+                  << msg::endmsg;
          crate.writeWord( m_slot, 1, 16, 0x0 );
       }
 
       // Set the channel LLD values:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-            crate.writeWord( m_slot, i, 17, m_channels[ i ]->getLowLevelDiscriminant() );
+            crate.writeWord( m_slot, i, 17,
+                             m_channels[ i ]->getLowLevelDiscriminant() );
          }
       }
 
@@ -92,7 +95,7 @@ namespace ad413a {
    ev::Fragment Readout::readEvent( camac::Crate& crate ) const {
  	
       ev::Fragment fragment; 
-      fragment.setModuleNumber( m_slot );
+      fragment.setModuleID( m_slot );
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {

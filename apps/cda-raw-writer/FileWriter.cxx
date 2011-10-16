@@ -39,7 +39,8 @@ namespace raw {
 
       // Print some info of what happened:
       m_logger << msg::INFO
-               << tr( "Stopping thread after processing %1 events" ).arg( m_processedEvents )
+               << tr( "Stopping thread after processing %1 events" )
+         .arg( m_processedEvents )
                << msg::endmsg;
 
       return;

@@ -38,7 +38,6 @@ namespace t4300b {
       }
 
       return true;
-
    }
 
    /**
@@ -55,7 +54,7 @@ namespace t4300b {
    ev::Fragment Readout::readEvent( camac::Crate& crate ) const {
 
       ev::Fragment fragment;
-      fragment.setModuleNumber( m_slot );
+      fragment.setModuleID( m_slot );
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
@@ -68,7 +67,6 @@ namespace t4300b {
       }
 
       return fragment;
-
    }
 
    bool Readout::clear( camac::Crate& crate ) const {
@@ -81,7 +79,6 @@ namespace t4300b {
       m_logger << msg::VERBOSE << "Cleared module" << msg::endmsg;
 
       return true;
-
    }
 
 } // namespace t4300b

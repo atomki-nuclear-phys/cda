@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_HIST_H
-#define CDA_CORE_DEVICE_HIST_H
+#ifndef CDA_CORE_DEVICE_CERNLIBHIST_H
+#define CDA_CORE_DEVICE_CERNLIBHIST_H
 
 // Local include(s):
 #include "Device.h"
@@ -27,7 +27,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Hist : virtual public Device {
+   class CernlibHist : virtual public Device {
 
    public:
       /// Function initializing the device
@@ -59,8 +59,8 @@ namespace dev {
       virtual bool displayEvent( const ev::Fragment& fragment,
                                  const cernlib::HistMgr& hmgr ) const = 0;
 
-   }; // class Hist
+   }; // class CernlibHist
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_HIST_H
+#endif // CDA_CORE_DEVICE_CERNLIBHIST_H

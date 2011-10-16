@@ -94,7 +94,7 @@ DEFINES += TESTING
 # Path to CERNLIB. CERNLIB can be installed practically anywhere,
 # these settings set the variable according to the platform.
 #
-#DEFINES += HAVE_CERNLIB
+DEFINES += HAVE_CERNLIB
 contains(DEFINES,HAVE_CERNLIB) {
    mac {
       CERNLIB_PATH = /sw

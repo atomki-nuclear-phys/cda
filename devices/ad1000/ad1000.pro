@@ -17,8 +17,8 @@ VERSION  = 1.0.0
 TARGET   = ad1000
 
 # These are the header and source files:
-HEADERS = $$system(ls *.h)
-SOURCES = $$system(ls *.cxx)
+HEADERS = *.h
+SOURCES = *.cxx
 TRANSLATIONS = ../../dev/ad1000_hu.ts
 
 mac {

@@ -10,13 +10,13 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Crate.h"
-#   include "cdacore/device/Disk.h"
+#   include "cdacore/device/CernlibDisk.h"
 #   include "cdacore/cernlib/NTupleMgr.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Crate.h"
-#   include "device/Disk.h"
+#   include "device/CernlibDisk.h"
 #   include "cernlib/NTupleMgr.h"
 #   include "event/Event.h"
 #   include "msg/Logger.h"
@@ -48,7 +48,7 @@ namespace hbook {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::Disk > {
+   class Crate : public dev::Crate< dev::CernlibDisk > {
 
       Q_DECLARE_TR_FUNCTIONS( hbook::Crate )
 

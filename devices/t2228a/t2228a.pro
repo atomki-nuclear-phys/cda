@@ -17,8 +17,8 @@ VERSION  = 1.0.0
 TARGET   = t2228a
 
 # These are the header and source files:
-HEADERS = $$system(ls *.h)
-SOURCES = $$system(ls *.cxx)
+HEADERS = *.h
+SOURCES = *.cxx
 TRANSLATIONS = ../../dev/t2228a_hu.ts
 
 mac {

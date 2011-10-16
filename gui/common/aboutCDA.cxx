@@ -17,7 +17,7 @@
 void aboutCDA( QT_PREPEND_NAMESPACE( QWidget )* parent ) {
 
    QMessageBox::about( parent, QCoreApplication::translate( "aboutCDA",
-                                                            "CDA - CAMAC Data Acquisition" ),
+                                                            "CDA - Common Data Acquisition" ),
                        QCoreApplication::translate( "aboutCDA", "CDA is an application "
                                                     "suite built for the Experimental Nuclear "
                                                     "Physics department of the Atomki. It is "

@@ -16,7 +16,7 @@
 namespace hbook {
 
    Crate::Crate()
-      : dev::Crate< dev::Disk >( &dev::Factory::createDisk ),
+      : dev::Crate< dev::CernlibDisk >(),
         m_nmgr(), m_logger( "hbook::Crate" ) {
 
    }
@@ -30,10 +30,13 @@ namespace hbook {
 
       m_nmgr.clear();
 
-      for( std::map< int, dev::Disk* >::iterator device = m_devices.begin();
-           device != m_devices.end(); ++device ) {
+      std::map< unsigned int, dev::CernlibDisk* >::const_iterator dev_itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CernlibDisk* >::const_iterator dev_end =
+         m_devices.end();
+      for( ; dev_itr != dev_end; ++dev_itr ) {
 
-         if( ! device->second->initialize( m_nmgr ) ) {
+         if( ! dev_itr->second->initialize( m_nmgr ) ) {
             m_logger << msg::ERROR
                      << tr( "There was a problem initializing one of "
                             "the devices" ) << msg::endmsg;
@@ -67,12 +70,13 @@ namespace hbook {
       for( ; fragment_itr != fragment_end; ++fragment_itr ) {
 
          // Find the device that is expecting this event fragment:
-         std::map< int, dev::Disk* >::iterator device =
-            m_devices.find( fragment_itr->getModuleNumber() );
+         std::map< unsigned int, dev::CernlibDisk* >::iterator device =
+            m_devices.find( fragment_itr->getModuleID() );
          if( device == m_devices.end() ) {
             m_logger << msg::ERROR
                      << tr( "Failed to assign fragment with "
-                            "module number: %1" ).arg( fragment_itr->getModuleNumber() )
+                            "module ID: %1" )
+               .arg( fragment_itr->getModuleID() )
                      << msg::endmsg;
             return false;
          }
@@ -81,7 +85,8 @@ namespace hbook {
          if( ! device->second->writeEvent( *fragment_itr, m_nmgr ) ) {
             m_logger << msg::ERROR
                      << tr( "There was a problem writing the data "
-                            "from device in slot: %1" ).arg( fragment_itr->getModuleNumber() )
+                            "from device with ID: %1" )
+               .arg( fragment_itr->getModuleID() )
                      << msg::endmsg;
             return false;
          }

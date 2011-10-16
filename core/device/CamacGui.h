@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_GUI_H
-#define CDA_CORE_DEVICE_GUI_H
+#ifndef CDA_CORE_DEVICE_CAMACGUI_H
+#define CDA_CORE_DEVICE_CAMACGUI_H
 
 // Qt include(s):
 #include <QtGui/QWidget>
@@ -34,16 +34,16 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Gui : public QWidget,
-               virtual public Device {
+   class CamacGui : public QWidget,
+                    virtual public Device {
 
       Q_OBJECT
 
    public:
       /// Standard QWidget style constructor
-      Gui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CamacGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       /// Destructor
-      virtual ~Gui();
+      virtual ~CamacGui();
 
       /// Draw an illustration of the module
       /**
@@ -80,8 +80,8 @@ namespace dev {
        */
       void redrawModule();
 
-   }; // class Gui
+   }; // class CamacGui
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_GUI_H
+#endif // CDA_CORE_DEVICE_CAMACGUI_H

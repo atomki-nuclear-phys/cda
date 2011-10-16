@@ -43,7 +43,6 @@ namespace t2228a {
       }
 
       return true;
-
    }
 
    /**
@@ -64,7 +63,7 @@ namespace t2228a {
    ev::Fragment Readout::readEvent( camac::Crate& crate ) const {
 
       ev::Fragment fragment;
-      fragment.setModuleNumber( m_slot );
+      fragment.setModuleID( m_slot );
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
@@ -77,7 +76,6 @@ namespace t2228a {
       }
 
       return fragment;
-
    }
 
    bool Readout::clear( camac::Crate& crate ) const {
@@ -90,7 +88,6 @@ namespace t2228a {
       m_logger << msg::VERBOSE << "Cleared module" << msg::endmsg;
 
       return true;
-
    }
 
 } // namespace t2228a

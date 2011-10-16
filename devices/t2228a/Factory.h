@@ -61,13 +61,31 @@ namespace t2228a {
    public:
       Factory();
 
+      /// Give the short name of the device implemented in the plug-in
+      /**
+       * Each device type has to provide a short, unique string that
+       * identifies it. This text is used in the configuration files
+       * (both binary and XML) to identify the devices.
+       *
+       * @returns The short name of the device
+       */
       virtual QString shortName() const;
+      /// Give the long name of the device implemented in the plug-in
+      /**
+       * Besides the short names, the devices should also provide a longer,
+       * more descriptive name for the devices. These are only used to
+       * print messages and in GUIs, so they don't have to be too compact,
+       * or contain only one word.
+       *
+       * @returns The long name of the device
+       */
       virtual QString longName() const;
 
-      virtual dev::Gui*     createGui() const;
-      virtual dev::Readout* createReadout() const;
-      virtual dev::Hist*    createHist() const;
-      virtual dev::Disk*    createDisk() const;
+      /// Give the type of the device implemented in the plug-in
+      virtual DeviceType type() const;
+
+      /// Universal function for creating a device object of this type
+      virtual void* createDevice( const std::type_info& ti ) const;
 
    }; // class Factory
 

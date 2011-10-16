@@ -240,10 +240,13 @@ namespace moni {
 
       // Sub-menu for changing the X axis style:
       QMenu* xAxisMenu = menu->addMenu( tr( "Set X axis style" ) );
-      AxisStyleAction* xLinAction = new AxisStyleAction( Linear, tr( "Linear" ), xAxisMenu );
+      AxisStyleAction* xLinAction = new AxisStyleAction( Linear, tr( "Linear" ),
+                                                         xAxisMenu );
       connect( xLinAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
                this, SLOT( setXAxisStyle( Histogram::AxisStyle ) ) );
-      AxisStyleAction* xLogAction = new AxisStyleAction( Logarithmic, tr( "Logarithmic" ), xAxisMenu );
+      AxisStyleAction* xLogAction = new AxisStyleAction( Logarithmic,
+                                                         tr( "Logarithmic" ),
+                                                         xAxisMenu );
       connect( xLogAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
                this, SLOT( setXAxisStyle( Histogram::AxisStyle ) ) );
 
@@ -263,10 +266,13 @@ namespace moni {
 
       // Sub-menu for changing the Y axis style:
       QMenu* yAxisMenu = menu->addMenu( tr( "Set Y axis style" ) );
-      AxisStyleAction* yLinAction = new AxisStyleAction( Linear, tr( "Linear" ), yAxisMenu );
+      AxisStyleAction* yLinAction = new AxisStyleAction( Linear, tr( "Linear" ),
+                                                         yAxisMenu );
       connect( yLinAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
                this, SLOT( setYAxisStyle( Histogram::AxisStyle ) ) );
-      AxisStyleAction* yLogAction = new AxisStyleAction( Logarithmic, tr( "Logarithmic" ), yAxisMenu );
+      AxisStyleAction* yLogAction = new AxisStyleAction( Logarithmic,
+                                                         tr( "Logarithmic" ),
+                                                         yAxisMenu );
       connect( yLogAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
                this, SLOT( setYAxisStyle( Histogram::AxisStyle ) ) );
 
@@ -329,18 +335,22 @@ namespace moni {
       const std::pair< bool, int > exp = getExponent( abin );
 
       // Draw the "major ticks" together with the labels:
-      std::vector< AxisBinning::MajorTick >::const_iterator major_itr = abin.majors().begin();
-      std::vector< AxisBinning::MajorTick >::const_iterator major_end = abin.majors().end();
+      std::vector< AxisBinning::MajorTick >::const_iterator major_itr =
+         abin.majors().begin();
+      std::vector< AxisBinning::MajorTick >::const_iterator major_end =
+         abin.majors().end();
       for( ; major_itr != major_end; ++major_itr ) {
 
          // Calculate the position of the tick:
          const int tick_location = axis_start + major_itr->position();
-         if( ( tick_location < axis_start ) || ( tick_location > ( width() - 20 ) ) ) continue;
+         if( ( tick_location < axis_start ) ||
+             ( tick_location > ( width() - 20 ) ) ) continue;
 
          // Draw the line of the tick:
          painter.setPen( Qt::SolidLine );
          painter.drawLine( QLine( tick_location, height() - X_AXIS_SPACING,
-                                  tick_location, height() - X_AXIS_SPACING + TICK_LENGTH_MAJOR ) );
+                                  tick_location, height() - X_AXIS_SPACING +
+                                  TICK_LENGTH_MAJOR ) );
 
          // Construct the proper tick value:
          double tick_value = major_itr->value();
@@ -370,13 +380,17 @@ namespace moni {
 
       // Draw the "minor ticks":
       painter.setPen( Qt::SolidLine );
-      std::vector< AxisBinning::MinorTick >::const_iterator minor_itr = abin.minors().begin();
-      std::vector< AxisBinning::MinorTick >::const_iterator minor_end = abin.minors().end();
+      std::vector< AxisBinning::MinorTick >::const_iterator minor_itr =
+         abin.minors().begin();
+      std::vector< AxisBinning::MinorTick >::const_iterator minor_end =
+         abin.minors().end();
       for( ; minor_itr != minor_end; ++minor_itr ) {
          const int tick_location = axis_start + minor_itr->position();
-         if( ( tick_location < axis_start ) || ( tick_location > ( width() - 20 ) ) ) continue;
+         if( ( tick_location < axis_start ) ||
+             ( tick_location > ( width() - 20 ) ) ) continue;
          painter.drawLine( QLine( tick_location, height() - X_AXIS_SPACING,
-                                  tick_location, height() - X_AXIS_SPACING + TICK_LENGTH_MINOR ) );
+                                  tick_location, height() - X_AXIS_SPACING +
+                                  TICK_LENGTH_MINOR ) );
       }
 
       return;
@@ -400,8 +414,10 @@ namespace moni {
       const std::pair< bool, int > exp = getExponent( abin );
 
       // Draw the "major ticks" together with the labels:
-      std::vector< AxisBinning::MajorTick >::const_iterator major_itr = abin.majors().begin();
-      std::vector< AxisBinning::MajorTick >::const_iterator major_end = abin.majors().end();
+      std::vector< AxisBinning::MajorTick >::const_iterator major_itr =
+         abin.majors().begin();
+      std::vector< AxisBinning::MajorTick >::const_iterator major_end =
+         abin.majors().end();
       for( ; major_itr != major_end; ++major_itr ) {
 
          // Calculate the position of the tick:
@@ -440,8 +456,10 @@ namespace moni {
 
       // Draw the "minor ticks":
       painter.setPen( Qt::SolidLine );
-      std::vector< AxisBinning::MinorTick >::const_iterator minor_itr = abin.minors().begin();
-      std::vector< AxisBinning::MinorTick >::const_iterator minor_end = abin.minors().end();
+      std::vector< AxisBinning::MinorTick >::const_iterator minor_itr =
+         abin.minors().begin();
+      std::vector< AxisBinning::MinorTick >::const_iterator minor_end =
+         abin.minors().end();
       for( ; minor_itr != minor_end; ++minor_itr ) {
          const int tick_location = axis_start - minor_itr->position();
          if( ( tick_location < 20 ) || ( tick_location > axis_start ) ) continue;
@@ -499,7 +517,8 @@ namespace moni {
                                   x_axis_start + x_bin_up_pos, y_bin_pos ) );
          painter.setBrush( QBrush( Qt::darkRed, Qt::DiagCrossPattern ) );
          painter.drawRect( QRect( x_axis_start + x_bin_low_pos, y_bin_pos,
-                                  x_bin_up_pos - x_bin_low_pos, height() - y_bin_pos - X_AXIS_SPACING ) );
+                                  x_bin_up_pos - x_bin_low_pos,
+                                  height() - y_bin_pos - X_AXIS_SPACING ) );
       }
 
       // Reset the painter settings:
@@ -558,7 +577,8 @@ namespace moni {
       //
       // The major tick distance in the axis units:
       //
-      double tick_major_unit = std::pow( 10.0, std::ceil( std::log10( up - low ) ) - 1.0 );
+      double tick_major_unit = std::pow( 10.0, std::ceil( std::log10( up - low ) ) -
+                                         1.0 );
       while( tick_major_unit * axis_unit < MIN_TICK_DISTANCE ) {
          tick_major_unit *= 2.0;
       }
@@ -586,8 +606,10 @@ namespace moni {
       //
       // Offsets of the first major and minor tick marks:
       //
-      const double tick_major_offset = std::fmod( -1.0 * low, tick_major_unit ) * axis_unit;
-      const double tick_minor_offset = std::fmod( -1.0 * low, tick_minor_unit ) * axis_unit;
+      const double tick_major_offset = std::fmod( -1.0 * low, tick_major_unit ) *
+         axis_unit;
+      const double tick_minor_offset = std::fmod( -1.0 * low, tick_minor_unit ) *
+         axis_unit;
 
       //
       // The value associated with the first major tick mark:
@@ -611,7 +633,8 @@ namespace moni {
          const double position = tick_major_offset + i * tick_major_draw_unit;
          if( ( position < 0.0 ) || ( position > alength ) ) continue;
          result.addMajorTick( AxisBinning::MajorTick( position,
-                                                      first_major_tick_value + i * tick_major_unit ) );
+                                                      first_major_tick_value +
+                                                      i * tick_major_unit ) );
       }
       for( int i = 0; i < n_minor_ticks; ++i ) {
          const double position = tick_minor_offset + i * tick_minor_draw_unit;
@@ -653,8 +676,9 @@ namespace moni {
       //
       // The major tick distance in the axis units:
       //
-      double tick_major_exponent_unit = std::pow( 10.0, std::ceil( std::log10( up_log -
-                                                                               low_log ) ) - 1.0 );
+      double tick_major_exponent_unit =
+         std::pow( 10.0, std::ceil( std::log10( up_log -
+                                                low_log ) ) - 1.0 );
       while( tick_major_exponent_unit * axis_unit < MIN_TICK_DISTANCE ) {
          tick_major_exponent_unit *= 2.0;
       }
@@ -670,17 +694,20 @@ namespace moni {
       //
       // Number of ticks for the axis:
       //
-      const int n_major_ticks = std::ceil( ( up_log - low_log ) / tick_major_exponent_unit ) + 1.0;
+      const int n_major_ticks =
+         std::ceil( ( up_log - low_log ) / tick_major_exponent_unit ) + 1.0;
 
       //
       // Offset of the first major tick mark:
       //
-      const double tick_major_offset = std::fmod( std::abs( low_log ), tick_major_exponent_unit ) * axis_unit;
+      const double tick_major_offset =
+         std::fmod( std::abs( low_log ), tick_major_exponent_unit ) * axis_unit;
 
       //
       // The value associated with the first major tick mark:
       //
-      const double first_major_tick_value = std::fmod( std::abs( low_log ), tick_major_exponent_unit ) + low_log;
+      const double first_major_tick_value =
+         std::fmod( std::abs( low_log ), tick_major_exponent_unit ) + low_log;
 
       // Create the result structure:
       AxisBinning result( Logarithmic, low, up, alength );
@@ -689,13 +716,18 @@ namespace moni {
       for( int i = 0; i < n_major_ticks; ++i ) {
          const double position = tick_major_offset + i * tick_major_draw_unit;
          if( ( position < 0.0 ) || ( position > alength ) ) continue;
-         result.addMajorTick( AxisBinning::MajorTick( tick_major_offset + i * tick_major_draw_unit,
-                                                      std::pow( 10.0, first_major_tick_value +
+         result.addMajorTick( AxisBinning::MajorTick( tick_major_offset +
+                                                      i * tick_major_draw_unit,
+                                                      std::pow( 10.0,
+                                                                first_major_tick_value +
                                                                 i * tick_major_exponent_unit ) ) );
       }
       for( int i = 0; i < n_major_ticks + 1; ++i ) {
-         const double previous = std::pow( 10.0, first_major_tick_value + ( i - 1 ) * tick_major_exponent_unit );
-         const double current  = std::pow( 10.0, first_major_tick_value + i * tick_major_exponent_unit );
+         const double previous =
+            std::pow( 10.0, first_major_tick_value +
+                      ( i - 1 ) * tick_major_exponent_unit );
+         const double current  =
+            std::pow( 10.0, first_major_tick_value + i * tick_major_exponent_unit );
          for( int j = 0; j < 9; ++j ) {
             const double value = previous + j * ( current - previous ) / 9.0;
             if( ( value < low ) || ( value > up ) ) continue;
@@ -797,8 +829,9 @@ namespace moni {
          if( ( abin.majors().front().value() < -1000.0 ) ||
              ( abin.majors().back().value() > 1000.0 ) ) {
             // Decide on the exponent based on the largest major tick:
-            int exponent = static_cast< int >( std::floor( std::log10( std::max( std::abs( abin.majors().front().value() ),
-                                                                                 std::abs( abin.majors().back().value() ) ) ) ) );
+            int exponent =
+               static_cast< int >( std::floor( std::log10( std::max( std::abs( abin.majors().front().value() ),
+                                                                     std::abs( abin.majors().back().value() ) ) ) ) );
             return std::make_pair( true, exponent );
          } else {
             return std::make_pair( false, -1 );
@@ -807,8 +840,10 @@ namespace moni {
          if( abin.majors().back().value() > 1000.0 ) {
             // Take an average of the exponents:
             int exponent = 0.0;
-            std::vector< AxisBinning::MajorTick >::const_iterator itr = abin.majors().begin();
-            std::vector< AxisBinning::MajorTick >::const_iterator end = abin.majors().end();
+            std::vector< AxisBinning::MajorTick >::const_iterator itr =
+               abin.majors().begin();
+            std::vector< AxisBinning::MajorTick >::const_iterator end =
+               abin.majors().end();
             for( ; itr != end; ++itr ) {
                exponent += std::floor( std::log10( itr->value() ) );
             }
@@ -823,7 +858,8 @@ namespace moni {
       }
    }
 
-   Histogram::AxisBinning::MajorTick::MajorTick( tick_position position, tick_value value )
+   Histogram::AxisBinning::MajorTick::MajorTick( tick_position position,
+                                                 tick_value value )
       : m_position( position ), m_value( value ) {
 
    }
@@ -851,20 +887,22 @@ namespace moni {
       return m_position;
    }
 
-   Histogram::AxisBinning::AxisBinning( Histogram::AxisStyle style, double low, double up,
-                                        double alength )
+   Histogram::AxisBinning::AxisBinning( Histogram::AxisStyle style, double low,
+                                        double up, double alength )
       : m_majors(), m_minors(), m_style( style ), m_low( low ), m_up( up ),
         m_alength( alength ) {
 
    }
 
-   void Histogram::AxisBinning::addMajorTick( const Histogram::AxisBinning::MajorTick& tick ) {
+   void Histogram::AxisBinning::
+   addMajorTick( const Histogram::AxisBinning::MajorTick& tick ) {
 
       m_majors.push_back( tick );
       return;
    }
 
-   void Histogram::AxisBinning::addMinorTick( const Histogram::AxisBinning::MinorTick& tick ) {
+   void Histogram::AxisBinning::
+   addMinorTick( const Histogram::AxisBinning::MinorTick& tick ) {
 
       m_minors.push_back( tick );
       return;

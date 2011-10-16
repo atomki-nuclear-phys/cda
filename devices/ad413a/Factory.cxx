@@ -7,14 +7,10 @@
 #include "Factory.h"
 #include "Gui.h"
 #include "Readout.h"
-#include "Hist.h"
-#include "Disk.h"
+#include "CernlibHist.h"
+#include "CernlibDisk.h"
 
 namespace ad413a {
-
-   Factory::Factory() {
-
-   }
 
    QString Factory::shortName() const {
 
@@ -26,24 +22,32 @@ namespace ad413a {
       return "ORTEC AD413A Quad 8k ADC";
    }
 
-   dev::Gui* Factory::createGui() const {
+   dev::Factory::DeviceType Factory::type() const {
 
-      return new Gui();
+      return CAMAC;
    }
 
-   dev::Readout* Factory::createReadout() const {
+   void* Factory::createDevice( const std::type_info& ti ) const {
 
-      return new Readout();
-   }
+      if( ti == typeid( dev::CamacGui ) ) {
 
-   dev::Hist* Factory::createHist() const {
+         return dynamic_cast< dev::CamacGui* >( new Gui() );
 
-      return new Hist();
-   }
+      } else if( ti == typeid( dev::CamacReadout ) ) {
 
-   dev::Disk* Factory::createDisk() const {
+         return dynamic_cast< dev::CamacReadout* >( new Readout() );
 
-      return new Disk();
+      } else if( ti == typeid( dev::CernlibHist ) ) {
+
+         return dynamic_cast< dev::CernlibHist* >( new CernlibHist() );
+
+      } else if( ti == typeid( dev::CernlibDisk ) ) {
+
+         return dynamic_cast< dev::CernlibDisk* >( new CernlibDisk() );
+
+      }
+
+      return 0;
    }
 
 } // namespace ad413a

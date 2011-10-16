@@ -65,14 +65,11 @@ namespace ad1000 {
       /// Get the long name of the device
       virtual QString longName() const;
 
-      /// Create a graphical CAMAC object
-      virtual dev::Gui*     createGui() const;
-      /// Create an object used to read out the CAMAC device
-      virtual dev::Readout* createReadout() const;
-      /// Create an object used to monitor the CAMAC device
-      virtual dev::Hist*    createHist() const;
-      /// Create an object used to save the data of the CAMAC device
-      virtual dev::Disk*    createDisk() const;
+      /// Give the type of the device implemented in the plug-in
+      virtual DeviceType type() const;
+
+      /// Universal function for creating a device object of this type
+      virtual void* createDevice( const std::type_info& ti ) const;
 
    }; // class Factory
 

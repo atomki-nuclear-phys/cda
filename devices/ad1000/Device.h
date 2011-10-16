@@ -49,18 +49,18 @@ namespace ad1000 {
       virtual bool writeConfig( QDomElement& node ) const;
 
       /// The type of the child class
-      virtual QString type() const { return "AD1000"; }
+      virtual QString deviceName() const { return "AD1000"; }
 
       /// Get the slot of the device in the CAMAC crate
-      virtual int getSlot() const;
+      virtual unsigned int getID() const;
       /// Set the slot of the device in the CAMAC crate
-      virtual void setSlot( int value );
+      virtual void setID( unsigned int value );
 
    protected:
       /// Clear the configuration of the device
       void clear();
 
-      int           m_slot; ///< Slot of the device in the CAMAC crate
+      unsigned int  m_slot; ///< Slot of the device in the CAMAC crate
       bool          m_generateLam; ///< Generate LAM signal at readout
       /// Configuration of the one input channel of the device
       ChannelConfig m_channel;

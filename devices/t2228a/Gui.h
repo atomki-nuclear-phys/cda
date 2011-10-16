@@ -8,9 +8,9 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Gui.h"
+#   include "cdacore/device/CamacGui.h"
 #else
-#   include "device/Gui.h"
+#   include "device/CamacGui.h"
 #endif
 
 // Local include(s):
@@ -43,7 +43,7 @@ namespace t2228a {
     * $Revision$
     * $Date$
     */
-   class Gui : public dev::Gui,
+   class Gui : public dev::CamacGui,
                public virtual Device {
 
       Q_OBJECT

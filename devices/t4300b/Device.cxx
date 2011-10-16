@@ -29,13 +29,11 @@ namespace t4300b {
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          m_channels[ i ] = 0;
       }
-
    }
 
    Device::~Device() {
 
       clear();
-
    }
 
    bool Device::readConfig( QIODevice* dev ) {
@@ -81,7 +79,6 @@ namespace t4300b {
       }
 
       return true;
-
    }
 
    bool Device::writeConfig( QIODevice* dev ) const {
@@ -115,7 +112,6 @@ namespace t4300b {
       }
 
       return true;
-
    }
 
    bool Device::readConfig( const QDomElement& element ) {
@@ -181,7 +177,6 @@ namespace t4300b {
       }
 
       return true;
-
    }
 
    bool Device::writeConfig( QDomElement& element ) const {
@@ -218,25 +213,22 @@ namespace t4300b {
       }
 
       return true;
-
    }
 
-   int Device::getSlot() const {
+   unsigned int Device::getID() const {
 
       return m_slot;
-
    }
 
-   void Device::setSlot( int value ) {
+   void Device::setID( unsigned int value ) {
 
       m_slot = value;
       return;
-
    }
 
    void Device::clear() {
 
-      m_slot = -1;
+      m_slot = 0;
       m_generateLam = false;
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) delete m_channels[ i ];
@@ -244,7 +236,6 @@ namespace t4300b {
       }
 
       return;
-
    }
 
 } // namespace t4300b

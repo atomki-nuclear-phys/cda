@@ -1,15 +1,15 @@
 // $Id$
 
 // Local include(s):
-#include "Gui.h"
+#include "CamacGui.h"
 
 namespace dev {
 
    //
    // Give values to the constants:
    //
-   const int Gui::WIDGET_WIDTH  = 500;
-   const int Gui::WIDGET_HEIGHT = 350;
+   const int CamacGui::WIDGET_WIDTH  = 500;
+   const int CamacGui::WIDGET_HEIGHT = 350;
 
    /**
     * The constructor sets the size of the widget in which the
@@ -17,7 +17,7 @@ namespace dev {
     * after this as the program will only provide a viewing area
     * WIDGET_WIDTH wide and WIDGET_HEIGHT high.
     */
-   Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
+   CamacGui::CamacGui( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ) {
 
       this->resize( WIDGET_WIDTH, WIDGET_HEIGHT );
@@ -26,7 +26,7 @@ namespace dev {
 
    }
 
-   Gui::~Gui() {
+   CamacGui::~CamacGui() {
 
    }
 

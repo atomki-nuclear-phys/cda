@@ -14,12 +14,12 @@
 #endif
 
 // Local include(s):
-#include "Hist.h"
+#include "CernlibHist.h"
 
-namespace ad2249a {
+namespace t4300b {
 
-   Hist::Hist()
-      : m_logger( "ad2249a::Hist" ) {
+   CernlibHist::CernlibHist()
+      : m_logger( "t4300b::CernlibHist" ) {
 
       // Clear the histogram table:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
@@ -28,7 +28,7 @@ namespace ad2249a {
 
    }
 
-   bool Hist::initialize( cernlib::HistMgr& hmgr ) {
+   bool CernlibHist::initialize( cernlib::HistMgr& hmgr ) {
 
       m_logger << msg::DEBUG << "Initialising histograms" << msg::endmsg;
 
@@ -40,7 +40,7 @@ namespace ad2249a {
             char name[ 80 ];
             sprintf( name, "%s (%s slot %i channel %i)",
                      m_channels[ i ]->getName().toLatin1().constData(),
-                     type().toLatin1().constData(), getSlot(), i );
+                     deviceName().toLatin1().constData(), getID(), i );
 
             // Book the histogram and register it in the ID table:
             m_histTable[ i ] = hmgr.book_1d( name,
@@ -57,11 +57,10 @@ namespace ad2249a {
       }
 
       return true;
-
    }
 
-   bool Hist::displayEvent( const ev::Fragment& fragment,
-                            const cernlib::HistMgr& hmgr ) const {
+   bool CernlibHist::displayEvent( const ev::Fragment& fragment,
+                                   const cernlib::HistMgr& hmgr ) const {
 
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 
@@ -89,7 +88,6 @@ namespace ad2249a {
       }
 
       return true;
-
    }
 
-} // namespace ad2249a
+} // namespace t4300b

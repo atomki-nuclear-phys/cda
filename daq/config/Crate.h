@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Readout.h"
+#   include "cdacore/device/CernlibHist.h"
 #   include "cdacore/device/Crate.h"
 #else
-#   include "device/Readout.h"
+#   include "device/CernlibHist.h"
 #   include "device/Crate.h"
 #endif
 
@@ -33,7 +33,7 @@ namespace conf {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::Readout > {
+   class Crate : public dev::Crate< dev::CernlibHist > {
 
    public:
       /// Constructor

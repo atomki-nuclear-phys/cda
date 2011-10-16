@@ -16,13 +16,14 @@ VERSION  = 0.9.0
 TARGET   = cdacore
 
 # These are the header and source files:
-HEADERS = $$system(ls fifo/*.h) $$system(ls msg/*.h) $$system(ls event/*.h) \
-          $$system(ls device/*.h) $$system(ls device/*.icc) $$system(ls camac/*.h) \
-          $$system(ls cmdl/*.h) $$system(ls cernlib/*.h) $$system(ls common/*.h) \
-          $$system(ls i18n/*.h)
-SOURCES = $$system(ls fifo/*.cxx) $$system(ls msg/*.cxx) $$system(ls event/*.cxx) \
-          $$system(ls device/*.cxx) $$system(ls camac/*.cxx) $$system(ls cmdl/*.cpp) \
-          $$system(ls cernlib/*.cxx) $$system(ls common/*.cxx) $$system(ls i18n/*.cxx)
+HEADERS = $$files(fifo/*.h) $$files(msg/*.h) $$files(event/*.h) \
+          $$files(device/*.h) $$files(device/*.icc) $$files(camac/*.h) \
+          $$files(cmdl/*.h) $$files(cernlib/*.h) $$files(common/*.h) \
+          $$files(i18n/*.h) $$files(vme/*.h)
+SOURCES = $$files(fifo/*.cxx) $$files(msg/*.cxx) $$files(event/*.cxx) \
+          $$files(device/*.cxx) $$files(camac/*.cxx) $$files(cmdl/*.cpp) \
+          $$files(cernlib/*.cxx) $$files(common/*.cxx) $$files(i18n/*.cxx) \
+          $$files(vme/*.cxx)
 TRANSLATIONS = ../trans/cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
@@ -58,29 +59,34 @@ mac {
    # framework's layout correct.
 
    DEVICE_HEADERS.version = Versions
-   DEVICE_HEADERS.files = $$system(ls device/*.h device/*.icc)
+   DEVICE_HEADERS.files = $$files(device/*.h) $$files(device/*.icc)
    DEVICE_HEADERS.path = Headers/device
    QMAKE_BUNDLE_DATA += DEVICE_HEADERS
 
    EVENT_HEADERS.version = Versions
-   EVENT_HEADERS.files = $$system(ls event/*.h)
+   EVENT_HEADERS.files = $$files(event/*.h)
    EVENT_HEADERS.path = Headers/event
    QMAKE_BUNDLE_DATA += EVENT_HEADERS
 
    FIFO_HEADERS.version = Versions
-   FIFO_HEADERS.files = $$system(ls fifo/*.h)
+   FIFO_HEADERS.files = $$files(fifo/*.h)
    FIFO_HEADERS.path = Headers/fifo
    QMAKE_BUNDLE_DATA += FIFO_HEADERS
 
    MSG_HEADERS.version = Versions
-   MSG_HEADERS.files = $$system(ls msg/*.h)
+   MSG_HEADERS.files = $$files(msg/*.h)
    MSG_HEADERS.path = Headers/msg
    QMAKE_BUNDLE_DATA += MSG_HEADERS
 
    CAMAC_HEADERS.version = Versions
-   CAMAC_HEADERS.files = $$system(ls camac/*.h)
+   CAMAC_HEADERS.files = $$files(camac/*.h)
    CAMAC_HEADERS.path = Headers/camac
    QMAKE_BUNDLE_DATA += CAMAC_HEADERS
+
+   VME_HEADERS.version = Versions
+   VME_HEADERS.files = $$files(vme/*.h)
+   VME_HEADERS.path = Headers/vme
+   QMAKE_BUNDLE_DATA += VME_HEADERS
 
    CMDL_HEADERS.version = Versions
    CMDL_HEADERS.files = cmdl/cmdargs.h cmdl/cmdline.h
@@ -88,17 +94,17 @@ mac {
    QMAKE_BUNDLE_DATA += CMDL_HEADERS
 
    CERNLIB_HEADERS.version = Versions
-   CERNLIB_HEADERS.files = $$system(ls cernlib/*.h)
+   CERNLIB_HEADERS.files = $$files(cernlib/*.h)
    CERNLIB_HEADERS.path = Headers/cernlib
    QMAKE_BUNDLE_DATA += CERNLIB_HEADERS
 
    COMMON_HEADERS.version = Versions
-   COMMON_HEADERS.files = $$system(ls common/*.h)
+   COMMON_HEADERS.files = $$files(common/*.h)
    COMMON_HEADERS.path = Headers/common
    QMAKE_BUNDLE_DATA += COMMON_HEADERS
 
    I18N_HEADERS.version = Versions
-   I18N_HEADERS.files = $$system(ls i18n/*.h)
+   I18N_HEADERS.files = $$files(i18n/*.h)
    I18N_HEADERS.path = Headers/i18n
    QMAKE_BUNDLE_DATA += I18N_HEADERS
 

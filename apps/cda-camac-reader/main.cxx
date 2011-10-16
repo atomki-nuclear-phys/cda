@@ -65,7 +65,7 @@ static camac::Crate* g_crate = 0;
 
 // Description for the executable:
 static const char* description =
-   "Program reading events from the CAMAC crate for the CDA\n"
+   "Program reading events from a CAMAC crate for the CDA\n"
    "application suit.\n\n"
    "This executable should normally be started by CDA internally.\n"
    "You should only start it by hand for debugging purposes.";
@@ -82,12 +82,15 @@ int main( int argc, char* argv[] ) {
    CmdArgStr config( 'c', "config", "filename/address",
                      "Name of an XML config file or address of a config server",
                      CmdArg::isREQ );
-   CmdArgStrList msgservers( 'm', "msgservers", "addresses", "Addresses of message servers" );
-   CmdArgStrList clients( 'e', "clients", "addresses", "Addresses of event reader clients" );
+   CmdArgStrList msgservers( 'm', "msgservers", "addresses",
+                             "Addresses of message servers" );
+   CmdArgStrList clients( 'e', "clients", "addresses",
+                          "Addresses of event reader clients" );
    CmdArgStrList statistics( 's', "statistics", "addresses",
                              "Addresses of statistics reader clients" );
 
-   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &clients, &statistics, NULL );
+   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &clients,
+                &statistics, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
@@ -170,7 +173,8 @@ int main( int argc, char* argv[] ) {
       if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-camac-reader",
-                                      "Couldn't read configuration from address: %1" )
+                                      "Couldn't read configuration from "
+                                      "address: %1" )
             .arg( ( const char* ) config )
                   << msg::endmsg;
          return 1;
@@ -182,7 +186,8 @@ int main( int argc, char* argv[] ) {
       if( ! crate.readConfig( reader.buffer() ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-camac-reader",
-                                      "Couldn't process configuration coming from address: %1" )
+                                      "Couldn't process configuration "
+                                      "coming from address: %1" )
             .arg( ( const char* ) config )
                   << msg::endmsg;
          return 1;
@@ -244,7 +249,8 @@ int main( int argc, char* argv[] ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-camac-reader",
                                       "Failed to read configuration file!\n"
-                                      "See previous messages for more information..." )
+                                      "See previous messages for more "
+                                      "information..." )
                   << msg::endmsg;
          return 1;
       } else {

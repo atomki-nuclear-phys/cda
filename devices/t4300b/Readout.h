@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Readout.h"
+#   include "cdacore/device/CamacReadout.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/Readout.h"
+#   include "device/CamacReadout.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -33,7 +33,7 @@ namespace t4300b {
     * $Revision$
     * $Date$
     */
-   class Readout : virtual public dev::Readout,
+   class Readout : virtual public dev::CamacReadout,
                    virtual public Device {
 
    public:

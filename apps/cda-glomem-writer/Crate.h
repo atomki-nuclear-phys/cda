@@ -1,20 +1,20 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_APPS_CDA_GLOMEM_WRITER_CREATE_H
-#define CDA_APPS_CDA_GLOMEM_WRITER_CREATE_H
+#ifndef CDA_APPS_CDA_GLOMEM_WRITER_CRATE_H
+#define CDA_APPS_CDA_GLOMEM_WRITER_CRATE_H
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Hist.h"
+#   include "cdacore/device/CernlibHist.h"
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/cernlib/HistMgr.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/Hist.h"
+#   include "device/CernlibHist.h"
 #   include "device/Crate.h"
 #   include "event/Event.h"
 #   include "cernlib/HistMgr.h"
@@ -47,7 +47,9 @@ namespace glomem {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::Hist > {
+   class Crate : public dev::Crate< dev::CernlibHist > {
+
+      Q_DECLARE_TR_FUNCTIONS( glomem::Crate )
 
    public:
       /// Constructor
@@ -68,4 +70,4 @@ namespace glomem {
 
 } // namespace glomem
 
-#endif // CDA_APPS_CDA_GLOMEM_WRITER_CREATE_H
+#endif // CDA_APPS_CDA_GLOMEM_WRITER_CRATE_H

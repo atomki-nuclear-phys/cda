@@ -1,18 +1,18 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_AD1000_DISK_H
-#define CDA_DEVICES_AD1000_DISK_H
+#ifndef CDA_DEVICES_AD1000_CERNLIBDISK_H
+#define CDA_DEVICES_AD1000_CERNLIBDISK_H
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Disk.h"
+#   include "cdacore/device/CernlibDisk.h"
 #   include "cdacore/msg/Logger.h"
 #   include "cdacore/cernlib/NTupleMgr.h"
 #else
-#   include "device/Disk.h"
+#   include "device/CernlibDisk.h"
 #   include "msg/Logger.h"
 #   include "cernlib/NTupleMgr.h"
 #endif
@@ -33,12 +33,12 @@ namespace ad1000 {
     * $Revision$
     * $Date$
     */
-   class Disk : public virtual dev::Disk,
-                public virtual Device {
+   class CernlibDisk : public virtual dev::CernlibDisk,
+                       public virtual Device {
 
    public:
       /// Constructor
-      Disk();
+      CernlibDisk();
 
       /// Initialize the ntuple
       virtual bool initialize( cernlib::NTupleMgr& nmgr );
@@ -52,8 +52,8 @@ namespace ad1000 {
 
       mutable msg::Logger m_logger; ///< Message logging object
 
-   }; // class Disk
+   }; // class CernlibDisk
 
 } // namespace ad1000
 
-#endif // CDA_DEVICES_AD1000_DISK_H
+#endif // CDA_DEVICES_AD1000_CERNLIBDISK_H

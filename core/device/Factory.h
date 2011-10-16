@@ -3,6 +3,9 @@
 #ifndef CDA_CORE_DEVICE_FACTORY_H
 #define CDA_CORE_DEVICE_FACTORY_H
 
+// System include(s):
+#include <typeinfo>
+
 // Qt include(s):
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -16,12 +19,6 @@ namespace dev {
    //
    using QT_PREPEND_NAMESPACE( QString );
    using QT_PREPEND_NAMESPACE( QObject );
-
-   // Forward declaration(s):
-   class Gui;
-   class Readout;
-   class Hist;
-   class Disk;
 
    /**
     *  @short Factory that creates all kinds of objects for a device type
@@ -63,22 +60,43 @@ namespace dev {
        */
       virtual QString longName() const = 0;
 
-      /// Create a graphical class describing the device
-      virtual Gui*     createGui() const = 0;
-      /// Create a readout class handling the device
-      virtual Readout* createReadout() const = 0;
-      /// Create an object writing histograms with the device's data
-      virtual Hist*    createHist() const = 0;
-      /// Create an object writing an event file with the device's data
-      virtual Disk*    createDisk() const = 0;
+      /// Type of the device for which the plugin is designed
+      /**
+       * The system can now handle both Camac and VME devices. This
+       * enumeration is used to differentiate between such devices.
+       */
+      enum DeviceType {
+         CAMAC = 0, ///< Flag telling that this is a Camac device
+         VME   = 1  ///< Flag telling that this is a VME device
+      }; // enum DeviceType
+
+      /// Give the type of the device implemented in the plug-in
+      virtual DeviceType type() const = 0;
+
+      /// Helper function for creating a new device of a given type
+      template< class Type >
+      Type* createDevice() const;
+
+      /// Universal function for creating a device object of this type
+      /**
+       * All the plugins are supposed to provide their different device
+       * objects through this single interface now.
+       *
+       * @param ti The type info of the device being requested
+       * @returns A typeless pointer to one object of the requested type
+       */
+      virtual void* createDevice( const std::type_info& ti ) const = 0;
 
    }; // class Factory
 
 } // namespace dev
 
+// Include the template implementation(s):
+#include "Factory.icc"
+
 // Declare the dev::Factory interface to Qt:
 QT_BEGIN_NAMESPACE
-Q_DECLARE_INTERFACE( dev::Factory, "hu.atomki.CDA.dev.Factory/0.0.1" )
+Q_DECLARE_INTERFACE( dev::Factory, "hu.atomki.CDA.dev.Factory/0.1.0" )
 QT_END_NAMESPACE
 
 #endif // CDA_CORE_DEVICE_FACTORY_H

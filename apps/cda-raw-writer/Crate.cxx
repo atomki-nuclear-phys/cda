@@ -19,7 +19,7 @@
 namespace raw {
 
    Crate::Crate()
-      : dev::Crate< dev::Disk >( &dev::Factory::createDisk ),
+      : dev::Crate< dev::CernlibDisk >(),
         m_file( 0 ), m_stream( 0 ), m_evCounter( 0 ),
         m_logger( "hbook::Crate" ) {
 
@@ -129,7 +129,8 @@ namespace raw {
       if( m_file ) {
          if( ! m_file->flush() ) {
             m_logger << msg::ERROR
-                     << tr( "There was an error flushing the output file before closing it" )
+                     << tr( "There was an error flushing the output file "
+                            "before closing it" )
                      << msg::endmsg;
             return false;
          }
