@@ -82,7 +82,6 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      ( * ( QDataStream* ) this ) << fragment.getCrateNumber();
       ( * ( QDataStream* ) this ) << fragment.getModuleID();
       ( * ( QDataStream* ) this ) << ( quint32 ) fragment.getDataWords().size();
 
@@ -109,15 +108,12 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      int crateNumber;
       int moduleID;
       quint32 nDataWords;
 
-      ( * ( QDataStream* ) this ) >> crateNumber;
       ( * ( QDataStream* ) this ) >> moduleID;
       ( * ( QDataStream* ) this ) >> nDataWords;
 
-      fragment.setCrateNumber( crateNumber );
       fragment.setModuleID( moduleID );
 
       uint32_t dataWord;

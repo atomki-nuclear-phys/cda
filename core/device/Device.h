@@ -23,9 +23,6 @@ namespace dev {
    class Device : public virtual Config {
 
    public:
-      /// Destructor
-      virtual ~Device() {}
-
       /// The type of the device
       /**
        * When reading and writing the configuration of a whole crate of

@@ -180,28 +180,28 @@ Használja a Crate::open(...) függvényt!</translation>
 <context>
     <name>cernlib::HistMgr</name>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="25"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="27"/>
         <source>Object constructed</source>
         <translation>Objektum létrehozva</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="47"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="54"/>
         <source>Couldn&apos;t const_cast specified global memory name</source>
         <translation>Nem lehetett const_cast-olni a megadott globális memória nevet</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="53"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="62"/>
         <source>Created PAW global memory with name: &quot;%1&quot;</source>
         <translation>PAW globális memória létrehozva &quot;%1&quot; névvel</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="82"/>
-        <location filename="../core/cernlib/HistMgr.cxx" line="121"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="96"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="142"/>
         <source>Couldn&apos;t const_cast specified histogram name</source>
         <translation>Nem lehetett const_cast-olni a megadott hisztogram nevet</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="190"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="227"/>
         <source>Trying to create/access histograms without
 initializing the global memory first</source>
         <translatorcomment>Using &quot;ö&quot; instead of &quot;ő&quot; because the latter is not supported by the text encoding</translatorcomment>
@@ -212,81 +212,81 @@ globális memória inicializációja elött</translation>
 <context>
     <name>cernlib::NTupleMgr</name>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="40"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="44"/>
         <source>Object constructed</source>
         <translation>Objektum létrehozva</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="50"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="54"/>
         <source>Object destructed</source>
         <translation>Objektum törölve</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="70"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="79"/>
         <source>You can&apos;t add new variables when the output file
 is already open!</source>
         <translation>Nem lehet új változókat megadni amikor a kimeneti fájl
 már meg van nyitva!</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="98"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="112"/>
         <source>The output file is already open</source>
         <translation>A kimeneti fájl már meg van nyitva</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="112"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="126"/>
         <source>Variable name &quot;%1&quot; too long. It was shortened to &quot;%2&quot;</source>
         <translation>A &quot;%1&quot; változó név túl hosszú. Le lett rövidítve &quot;%2&quot;-re</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="127"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="141"/>
         <source>Output file name too long. File not opened!</source>
         <translation>A kimeneti fájlnév túl hosszú. A fájl nem lett megnyitva!</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="142"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="157"/>
         <source>There was a problem opening: %1</source>
         <translation>Hiba történt a(z) %1 megnyitásával</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="146"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="161"/>
         <source>&quot;%1&quot; opened</source>
         <translation>&quot;%1&quot; megnyitva</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="154"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="170"/>
         <source>NTuple created</source>
         <translation>NTuple létrehozva</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="175"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="196"/>
         <source>No output file is open</source>
         <translation>Nincsen kimeneti fájl megnyitva</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="192"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="214"/>
         <source>A total of %1 events written to the ntuple</source>
         <translation>Összesen %1 esemény kiírva az ntuple-ba</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="198"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="221"/>
         <source>Output file closed</source>
         <translation>Kimeneti fájl lezárva</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="225"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="253"/>
         <source>You should not be setting variables before opening
 an output file!</source>
         <translation>Nem lehet a változó értékeket beállítani egy kimeneti
 fájl megnyitása előtt!</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="233"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="261"/>
         <source>Index %1 is not defined in the ntuple!</source>
         <translation>A(z) %1 index nincs definiálva az ntuple-ban!</translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="254"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="287"/>
         <source>saveEvent() should only be called when an output
 file is already open!</source>
         <translation>A saveEvent() függvényt csak akkor lehet meghívni amikor egy
@@ -507,28 +507,33 @@ Eldobom a bejövö eseményt!</translation>
     </message>
     <message>
         <location filename="../core/event/TextStream_ev.cxx" line="81"/>
+        <source>   Module ID   : %1
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>   Crate number : %1
 </source>
-        <translation>   Keret száma: %1
+        <translation type="obsolete">   Keret száma: %1
 </translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="84"/>
         <source>   Module number: %1
 
 </source>
-        <translation>   Modul száma: %1
+        <translation type="obsolete">   Modul száma: %1
 </translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="92"/>
+        <location filename="../core/event/TextStream_ev.cxx" line="89"/>
         <source>   Data word: 0x%1
 </source>
         <translation>   Adat: 0x%1
 </translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="97"/>
+        <location filename="../core/event/TextStream_ev.cxx" line="94"/>
         <source>   No data words!
 </source>
         <translation>   Nem tartalmaz adatot!
@@ -577,6 +582,56 @@ Eldobom a bejövö eseményt!</translation>
         <translation>* Nem lehetett elérni az egyik üzenet szervert!
 * Az üzenetek amiket nem lehetett elküldeni,
 * a konzolra lesznek kiírva.</translation>
+    </message>
+</context>
+<context>
+    <name>vme::VmeBus</name>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="35"/>
+        <source>Creating object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="65"/>
+        <source>The VME bus is already open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="76"/>
+        <source>The PCIVME driver could not be opened</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="148"/>
+        <location filename="../core/vme/VmeBus.cxx" line="177"/>
+        <location filename="../core/vme/VmeBus.cxx" line="206"/>
+        <location filename="../core/vme/VmeBus.cxx" line="238"/>
+        <location filename="../core/vme/VmeBus.cxx" line="267"/>
+        <location filename="../core/vme/VmeBus.cxx" line="293"/>
+        <location filename="../core/vme/VmeBus.cxx" line="319"/>
+        <location filename="../core/vme/VmeBus.cxx" line="357"/>
+        <source>VME bus not open yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="157"/>
+        <source>8bit write &gt; Address: 0x%1; Data: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="186"/>
+        <source>16bit write &gt; Address: 0x%1; Data: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="215"/>
+        <source>32bit write &gt; Address: 0x%1; Data: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/vme/VmeBus.cxx" line="247"/>
+        <source>Unknown length write &gt; Address: 0x%1; length: %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

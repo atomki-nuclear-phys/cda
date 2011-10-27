@@ -59,8 +59,6 @@ namespace t2228a {
       Q_INTERFACES( dev::Factory )
 
    public:
-      Factory();
-
       /// Give the short name of the device implemented in the plug-in
       /**
        * Each device type has to provide a short, unique string that
@@ -80,9 +78,6 @@ namespace t2228a {
        * @returns The long name of the device
        */
       virtual QString longName() const;
-
-      /// Give the type of the device implemented in the plug-in
-      virtual DeviceType type() const;
 
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;

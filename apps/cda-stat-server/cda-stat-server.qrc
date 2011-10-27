@@ -1,6 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/img">
-   <file alias="logo.png">../../images/logo.png</file>
+   <file alias="cda-stat-server.png">../../images/cda-stat-server.png</file>
    <file alias="warning.png">../../images/warning.png</file>
 </qresource>
 </RCC>

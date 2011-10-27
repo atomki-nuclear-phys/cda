@@ -4,10 +4,14 @@
 <context>
     <name>aboutCDA</name>
     <message>
-        <location filename="../gui/common/aboutCDA.cxx" line="19"/>
         <source>CDA - CAMAC Data Acquisition</source>
         <translatorcomment>Replaced &quot;ű&quot; and &quot;ő&quot; with &quot;ü&quot; and &quot;ö&quot; to be able to display the text in all encodings...</translatorcomment>
-        <translation>CDA - CAMAC Adat Gyüjtö</translation>
+        <translation type="obsolete">CDA - CAMAC Adat Gyüjtö</translation>
+    </message>
+    <message>
+        <location filename="../gui/common/aboutCDA.cxx" line="19"/>
+        <source>CDA - Common Data Acquisition</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/common/aboutCDA.cxx" line="21"/>
@@ -18,62 +22,62 @@
 <context>
     <name>dev::CrateWidget</name>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="187"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="180"/>
         <source>Redefining device in slot %1</source>
         <translation>Eszköz újradefiniálása a %1 aljzatban</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="217"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="213"/>
         <source>&quot;%1&quot; creation requested in slot %2</source>
         <translation>&quot;%1&quot; létrehozása kérelmezve a %2 aljzatba</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="224"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="221"/>
         <source>No Loader object configured yet!</source>
         <translation>Nincs Loader objektum configurálva még!</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="235"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="232"/>
         <source>No factory found for device type &quot;%1&quot;</source>
         <translation>Nem lehetett gyárat találni a &quot;%1&quot; eszköz típushoz</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="240"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="237"/>
         <source>Factory found for device type &quot;%1&quot;</source>
         <translation>Gyár megtalálva a &quot;%1&quot; eszköz típushoz</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="250"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="247"/>
         <source>No GUI implemented by device &quot;%1&quot;</source>
         <translation>A(z) &quot;%1&quot; eszköz nem szolgáltat grafikus felületet</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="255"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="252"/>
         <source>GUI object created for device type &quot;%1&quot;</source>
         <translation>Grafikus objektum létrehozva a &quot;%1&quot; eszköz típushoz</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="279"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="276"/>
         <source>Clearing slot %1</source>
         <translation>%1 aljzat törlése</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="287"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="284"/>
         <source>Slot was empty...</source>
         <translation>Az aljzat üres volt...</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="458"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="461"/>
         <source>Add device</source>
         <translation>Eszköz hozzáadása</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="497"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="505"/>
         <source>No dev::Loader received...</source>
         <translation>Nincsen dev::Loader beállítva...</translation>
     </message>
     <message>
-        <location filename="../gui/device/CrateWidget.cxx" line="502"/>
+        <location filename="../gui/device/CrateWidget.cxx" line="510"/>
         <source>Clear slot</source>
         <translation>Aljzat kiürítése</translation>
     </message>
@@ -100,6 +104,43 @@
         <location filename="../gui/device/Editor.cxx" line="153"/>
         <source>Slot %1</source>
         <translation>%1. aljzat</translation>
+    </message>
+</context>
+<context>
+    <name>moni::Histogram</name>
+    <message>
+        <location filename="../gui/moni/Histogram.cxx" line="242"/>
+        <source>Set X axis style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/moni/Histogram.cxx" line="243"/>
+        <location filename="../gui/moni/Histogram.cxx" line="269"/>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/moni/Histogram.cxx" line="248"/>
+        <location filename="../gui/moni/Histogram.cxx" line="274"/>
+        <source>Logarithmic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/moni/Histogram.cxx" line="268"/>
+        <source>Set Y axis style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/moni/Histogram.cxx" line="294"/>
+        <source>Clear histogram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/moni/Histogram.cxx" line="553"/>
+        <source>Entries: %1
+Underflows: %2
+Overflows: %3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -448,7 +489,7 @@ ilyen szimbólumot a fájlnévbe.</translation>
 <context>
     <name>stat::RateWidget</name>
     <message>
-        <location filename="../gui/stat/RateWidget.cxx" line="67"/>
+        <location filename="../gui/stat/RateWidget.cxx" line="66"/>
         <source>Peak: %1 Hz</source>
         <translation>Csúcs: %1 Hz</translation>
     </message>

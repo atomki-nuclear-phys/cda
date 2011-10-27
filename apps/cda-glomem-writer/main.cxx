@@ -66,10 +66,10 @@ static glomem::GlomemWriter* g_gwriter = 0; ///< Global memory writer object
 
 // Description for the executable:
 static const char* description =
-   "Program writing events which it receives, to a global memory\n"
-   "block of PAW. This makes it possible to monitor the data-taking\n"
+   "Program writing events which it receives, to a global memory "
+   "block of PAW. This makes it possible to monitor the data-taking "
    "from within PAW++ while the data acquisition is on-going.\n\n"
-   "This executable should normally be started by CDA internally.\n"
+   "This executable should normally be started by CDA internally. "
    "You should only start it by hand for debugging purposes.";
 
 int main( int argc, char* argv[] ) {

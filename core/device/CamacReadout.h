@@ -36,8 +36,7 @@ namespace dev {
       /**
        * This function should be called before starting the data readout
        * from the device. It should reset the device and prepare it for
-       * the data acquisition. Probably should receive a pointer/reference
-       * to some class with which it can access the CAMAC crate...
+       * the data acquisition.
        *
        * @param crate The object to access the CAMAC crate with
        * @returns <code>true</code> if the operation was successful,
@@ -51,7 +50,7 @@ namespace dev {
        * between the processes. (Through a fifo or whatever...)
        *
        * @param crate The object to access the CAMAC crate with
-       * @returns The event fragment coming from this device?
+       * @returns The event fragment coming from this device
        */
       virtual ev::Fragment readEvent( camac::Crate& crate ) const = 0;
       /// Clear the module to receive a new event

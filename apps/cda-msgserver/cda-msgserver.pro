@@ -21,6 +21,9 @@ SOURCES = *.cxx
 # The application uses some resources:
 RESOURCES = cda-msgserver.qrc
 
+# The translations:
+TRANSLATIONS = ../../trans/cda-msgserver_hu.ts
+
 #
 # These are the specific configuration options for compiling the code
 # on Mac OS X.

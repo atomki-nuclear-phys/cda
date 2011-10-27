@@ -22,11 +22,6 @@ namespace t4300b {
       return "LeCroy 4300B FERA QDC";
    }
 
-   dev::Factory::DeviceType Factory::type() const {
-
-      return CAMAC;
-   }
-
    void* Factory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::CamacGui ) ) {

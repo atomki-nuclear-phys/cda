@@ -12,10 +12,6 @@
 
 namespace t2228a {
 
-   Factory::Factory() {
-
-   }
-
    QString Factory::shortName() const {
 
       return "T2228A";
@@ -24,11 +20,6 @@ namespace t2228a {
    QString Factory::longName() const {
 
       return "LeCroy 2228A TDC";
-   }
-
-   dev::Factory::DeviceType Factory::type() const {
-
-      return CAMAC;
    }
 
    void* Factory::createDevice( const std::type_info& ti ) const {

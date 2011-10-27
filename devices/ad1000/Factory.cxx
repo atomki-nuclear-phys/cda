@@ -22,11 +22,6 @@ namespace ad1000 {
       return "Atomki AD1000 ADC";
    }
 
-   dev::Factory::DeviceType Factory::type() const {
-
-      return CAMAC;
-   }
-
    void* Factory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::CamacGui ) ) {

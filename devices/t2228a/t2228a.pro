@@ -19,7 +19,7 @@ TARGET   = t2228a
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
-TRANSLATIONS = ../../dev/t2228a_hu.ts
+TRANSLATIONS = ../../trans/t2228a_hu.ts
 
 mac {
    message(*)

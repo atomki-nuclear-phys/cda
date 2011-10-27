@@ -68,10 +68,10 @@ quint32 g_evcount = 0;
 
 /// Description printed to the console
 static const char* description =
-   "Program writing events which it receives, to a RAW format file.\n"
-   "The output file contains the events in the binary format that is\n"
+   "Program writing events which it receives, to a RAW format file. "
+   "The output file contains the events in the binary format that is "
    "used for sending the data between the applications.\n\n"
-   "This executable should normally be started by CDA internally.\n"
+   "This executable should normally be started by CDA internally. "
    "You should only start it by hand for debugging purposes.";
 
 int main( int argc, char* argv[] ) {

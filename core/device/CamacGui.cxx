@@ -26,8 +26,4 @@ namespace dev {
 
    }
 
-   CamacGui::~CamacGui() {
-
-   }
-
 } // namespace dev

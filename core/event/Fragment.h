@@ -44,15 +44,11 @@ namespace ev {
       /// Default constructor
       Fragment();
 
-      /// Get the number of the crate in which the module is
-      int getCrateNumber() const;
       /// Get the crate slot in which the module is put
       int getModuleID() const;
       /// Get the data payload of the module
       const std::vector< uint32_t >& getDataWords() const;
 
-      /// Set the numner of the crate in which the module is
-      void setCrateNumber( int value );
       /// Set the crate slot in which the module is put
       void setModuleID( int value );
       /// Add a 32-bit data word (information from one channel)
@@ -62,7 +58,6 @@ namespace ev {
       void clear();
 
    private:
-      int m_crateNumber; ///< CAMAC crate number
       int m_moduleNumber; ///< Module number in the CAMAC crate
       std::vector< uint32_t > m_dataWords; ///< Data from the module
 

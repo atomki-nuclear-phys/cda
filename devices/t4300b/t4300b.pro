@@ -17,9 +17,9 @@ VERSION  = 1.0.0
 TARGET   = t4300b
 
 # These are the header and source files:
-HEADERS = $$system(ls *.h)
-SOURCES = $$system(ls *.cxx)
-TRANSLATIONS = ../../dev/t4300b_hu.ts
+HEADERS = *.h
+SOURCES = *.cxx
+TRANSLATIONS = ../../trans/t4300b_hu.ts
 
 mac {
    message(*)

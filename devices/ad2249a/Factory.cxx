@@ -11,10 +11,6 @@
 
 namespace ad2249a {
 
-   Factory::Factory() {
-
-   }
-
    QString Factory::shortName() const {
 
       return "AD2249A";
@@ -23,11 +19,6 @@ namespace ad2249a {
    QString Factory::longName() const {
 
       return "LeCroy 2249A ADC";
-   }
-
-   dev::Factory::DeviceType Factory::type() const {
-
-      return CAMAC;
    }
 
    void* Factory::createDevice( const std::type_info& ti ) const {

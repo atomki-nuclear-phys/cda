@@ -22,11 +22,6 @@ namespace ad413a {
       return "ORTEC AD413A Quad 8k ADC";
    }
 
-   dev::Factory::DeviceType Factory::type() const {
-
-      return CAMAC;
-   }
-
    void* Factory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::CamacGui ) ) {

@@ -22,6 +22,9 @@ SOURCES = *.cxx
 # The application uses some Qt resources:
 RESOURCES = cda-stat-server.qrc
 
+# The translation file:
+TRANSLATIONS = ../../trans/cda-stat-server_hu.ts
+
 #
 # These are the specific configuration options for compiling the code
 # on Mac OS X.

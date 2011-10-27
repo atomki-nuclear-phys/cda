@@ -68,10 +68,10 @@ quint32 g_evcount = 0;
 
 /// Description printed to the console
 static const char* description =
-   "Program writing events which it receives, to a HBOOK format file.\n"
-   "The output file contains one ntuple with all the variables defined\n"
+   "Program writing events which it receives, to a HBOOK format file. "
+   "The output file contains one ntuple with all the variables defined "
    "in the data acquisition setup.\n\n"
-   "This executable should normally be started by CDA internally.\n"
+   "This executable should normally be started by CDA internally. "
    "You should only start it by hand for debugging purposes.";
 
 int main( int argc, char* argv[] ) {

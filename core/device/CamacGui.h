@@ -42,8 +42,6 @@ namespace dev {
    public:
       /// Standard QWidget style constructor
       CamacGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      virtual ~CamacGui();
 
       /// Draw an illustration of the module
       /**

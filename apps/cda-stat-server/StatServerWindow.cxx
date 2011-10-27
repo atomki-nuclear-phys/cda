@@ -40,7 +40,7 @@ StatServerWindow::StatServerWindow()
    //
    resize( 750, 500 );
    setWindowTitle( tr( "CDA Statistics Server" ) );
-   setWindowIcon( QIcon( ":/img/logo.png" ) );
+   setWindowIcon( QIcon( ":/img/cda-stat-server.png" ) );
 
    //
    // Create the objects doing most of the work:

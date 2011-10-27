@@ -60,19 +60,6 @@ namespace dev {
        */
       virtual QString longName() const = 0;
 
-      /// Type of the device for which the plugin is designed
-      /**
-       * The system can now handle both Camac and VME devices. This
-       * enumeration is used to differentiate between such devices.
-       */
-      enum DeviceType {
-         CAMAC = 0, ///< Flag telling that this is a Camac device
-         VME   = 1  ///< Flag telling that this is a VME device
-      }; // enum DeviceType
-
-      /// Give the type of the device implemented in the plug-in
-      virtual DeviceType type() const = 0;
-
       /// Helper function for creating a new device of a given type
       template< class Type >
       Type* createDevice() const;

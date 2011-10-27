@@ -114,29 +114,37 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
 <context>
     <name>hbook::Crate</name>
     <message>
-        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="38"/>
+        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="41"/>
         <source>There was a problem initializing one of the devices</source>
         <translation>Probléma történt az egyik eszköz inicializálása közben</translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="47"/>
+        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="50"/>
         <source>The output file couldn&apos;t be opened</source>
         <translation>A kimeneti fájlt nem lehetett megnyitni</translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="51"/>
+        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="54"/>
         <source>The output file was opened</source>
         <translation>A kimeneti fájl megnyitva</translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="74"/>
-        <source>Failed to assign fragment with module number: %1</source>
-        <translation>Nem lehetett a %1 modul számú fragmentumot eszközhöz rendelni</translation>
+        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="77"/>
+        <source>Failed to assign fragment with module ID: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="83"/>
+        <location filename="../apps/cda-hbook-writer/Crate.cxx" line="87"/>
+        <source>There was a problem writing the data from device with ID: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to assign fragment with module number: %1</source>
+        <translation type="obsolete">Nem lehetett a %1 modul számú fragmentumot eszközhöz rendelni</translation>
+    </message>
+    <message>
         <source>There was a problem writing the data from device in slot: %1</source>
-        <translation>Probléma történt a %1 foglalatban levö eszköz adatainak írásakor</translation>
+        <translation type="obsolete">Probléma történt a %1 foglalatban levö eszköz adatainak írásakor</translation>
     </message>
 </context>
 <context>
@@ -147,12 +155,12 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
         <translation>Végrehajtási szál leállítása %1 esemény feldolgozása után</translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="64"/>
+        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="65"/>
         <source>Thread exited with return code: %1</source>
         <translation>A végrehajtási szál %1 értékkel tért vissza</translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="84"/>
+        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="85"/>
         <source>There was a problem writing an event</source>
         <translation>Probléma történt az egyik esemény kiírásával</translation>
     </message>

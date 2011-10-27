@@ -51,7 +51,7 @@ ConfigEditorWindow::ConfigEditorWindow()
    // Set the main window properties:
    //
    setWindowTitle( tr( "CDA configuration editor - Untitled.cxml" ) );
-   setWindowIcon( QIcon( ":/img/logo.png" ) );
+   setWindowIcon( QIcon( ":/img/cda-config-editor.png" ) );
 
    //
    // Create a central widget for the window:

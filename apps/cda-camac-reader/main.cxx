@@ -65,9 +65,9 @@ static camac::Crate* g_crate = 0;
 
 // Description for the executable:
 static const char* description =
-   "Program reading events from a CAMAC crate for the CDA\n"
-   "application suit.\n\n"
-   "This executable should normally be started by CDA internally.\n"
+   "Program reading events from a CAMAC crate for the CDA "
+   "application suite.\n\n"
+   "This executable should normally be started by CDA internally. "
    "You should only start it by hand for debugging purposes.";
 
 /// Number of events processed

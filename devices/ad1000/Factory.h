@@ -65,9 +65,6 @@ namespace ad1000 {
       /// Get the long name of the device
       virtual QString longName() const;
 
-      /// Give the type of the device implemented in the plug-in
-      virtual DeviceType type() const;
-
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 

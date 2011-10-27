@@ -14,7 +14,7 @@ TEMPLATE = subdirs
 
 # These are the applications that only depend on Qt:
 SUBDIRS  = cda-msgserver cda-camac-reader cda-config-editor \
-           cda-stat-server cda-raw-writer
+           cda-stat-server cda-raw-writer cda-config-server
 
 # Only compile the applications needing CERNLIB if that is in fact
 # available:

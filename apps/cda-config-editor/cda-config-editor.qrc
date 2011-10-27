@@ -1,6 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/img">
-   <file alias="logo.png">../../images/logo.png</file>
+   <file alias="cda-config-editor.png">../../images/cda-config-editor.png</file>
    <file alias="crate-settings.png">../../images/crate-settings.png</file>
    <file alias="network.png">../../images/network.png</file>
    <file alias="filenew.png">../../images/filenew.png</file>

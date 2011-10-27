@@ -50,7 +50,7 @@ MsgServerWindow::MsgServerWindow()
    //
    resize( 750, 500 );
    setWindowTitle( tr( "CDA Message Server" ) );
-   setWindowIcon( QIcon( ":/img/logo.png" ) );
+   setWindowIcon( QIcon( ":/img/cda-msgserver.png" ) );
 
    //
    // Create the objects doing most of the work:

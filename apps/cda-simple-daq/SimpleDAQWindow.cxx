@@ -62,7 +62,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    } else {
       setWindowTitle( tr( "CDA Simple DAQ" ) );
    }
-   setWindowIcon( QIcon( ":/img/logo.png" ) );
+   setWindowIcon( QIcon( ":/img/cda-simple-daq.png" ) );
 
    //
    // Create the central widget. This is the one on which all other widgets are placed:

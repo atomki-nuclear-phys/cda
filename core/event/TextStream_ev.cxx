@@ -79,9 +79,6 @@ namespace ev {
       ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
                                                       "  ---- Fragment record ----\n" );
       ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                      "   Crate number: %1\n" )
-         .arg( fragment.getCrateNumber() );
-      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
                                                       "   Module ID   : %1\n\n" )
          .arg( fragment.getModuleID() );
 
