@@ -34,7 +34,7 @@ mac {
    message(*)
 
    QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore -framework cdagui
+   LIBS           += -F../../lib -framework cdacore -framework cdadaq -framework cdagui
 
    ICON = ../../images/cda-msgserver.icns
 }
@@ -49,5 +49,5 @@ unix:!mac {
    message(*)
 
    INCLUDEPATH += ../../core ../../gui
-   LIBS        += -L../../lib -lcdacore -lcdagui
+   LIBS        += -L../../lib -lcdacore -lcdadaq -lcdagui
 }

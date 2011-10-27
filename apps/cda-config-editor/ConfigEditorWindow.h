@@ -65,7 +65,7 @@ private slots:
    void aboutCDASlot();
    /// Slot showing a window about this application
    void aboutConfigEditorSlot();
-   void setupSelectActivated( QListWidgetItem * item );
+
 private:
    /// Function creating the application menus
    void createMenus();
@@ -77,8 +77,7 @@ private:
    void writeXMLConfig( const QString& filename );
    /// Function writing a binary configuration file
    void writeBinaryConfig( const QString& filename );
-   /// Configuration read error dialog, and log
-   void readErrorDlg();
+
    /// Widget holding all the shown widgets
    QWidget*         m_centralWidget;
    /// Widget holding the icons

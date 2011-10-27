@@ -90,26 +90,12 @@ ConfigEditorWindow::ConfigEditorWindow()
 
 }
 
-void ConfigEditorWindow::setupSelectActivated( QListWidgetItem* ) {
-/*
-	if (m_deviceSetup==item)
-	{
-			m_devEdit->show();
-			m_netEdit->hide();
-	} else if  (m_networkSetup==item)
-	{
-			m_devEdit->hide();
-			m_netEdit->show();
-	}
-	*/
-}
-
 void ConfigEditorWindow::newConfigSlot() {
 
    m_devEdit->clear();
    setWindowTitle( tr( "CDA configuration editor - Untitled.cxml" ) );
-   return;
 
+   return;
 }
 
 void ConfigEditorWindow::readConfigSlot() {
@@ -135,7 +121,6 @@ void ConfigEditorWindow::readConfigSlot() {
    }
 
    return;
-
 }
 
 void ConfigEditorWindow::writeConfigSlot() {
@@ -152,7 +137,6 @@ void ConfigEditorWindow::writeConfigSlot() {
    }
 
    return;
-
 }
 
 void ConfigEditorWindow::writeConfigAsSlot() {
@@ -176,21 +160,18 @@ void ConfigEditorWindow::writeConfigAsSlot() {
    }
 
    return;
-
 }
 
 void ConfigEditorWindow::aboutQtSlot() {
 
    QMessageBox::aboutQt( this, tr( "CDA Configuration Editor - built on Qt" ) );
    return;
-
 }
 
 void ConfigEditorWindow::aboutCDASlot() {
 
    aboutCDA( this );
    return;
-
 }
 
 void ConfigEditorWindow::aboutConfigEditorSlot() {
@@ -201,7 +182,6 @@ void ConfigEditorWindow::aboutConfigEditorSlot() {
                            "The files can be read and saved in both binary "
                            "and XML format." ) );
    return;
-
 }
 
 void ConfigEditorWindow::createMenus() {
@@ -264,14 +244,6 @@ void ConfigEditorWindow::createMenus() {
             this, SLOT( aboutCDASlot() ) );
 
    return;
-
-}
-
-inline void  ConfigEditorWindow::readErrorDlg()
-{
-	QMessageBox::critical( this, tr( "Configuration reading error" ),
-                             tr( "The configuration could not be read. See "
-                                 "the application messages for more information" ) );
 }
 
 void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
@@ -281,15 +253,16 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    //
    QFile config_file( filename );
    if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-      m_logger << msg::ERROR << tr( "The specified configuration file (\"" )
-               << filename << "\")" << std::endl
-               << "could not be opened!" << msg::endmsg;
+      m_logger << msg::ERROR
+               << tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename )
+               << msg::endmsg;
       QMessageBox::critical( this, tr( "File not opened" ),
-                             tr( "The specified XML file (\"" ) + filename +
-                             tr( "\") could not be opened!" ) );
+                             tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename ) );
       return;
    } else {
-      m_logger << msg::VERBOSE << "Opened file: " << filename << msg::endmsg;
+      m_logger << msg::VERBOSE
+               << tr( "Opened file: %1" ).arg( filename )
+               << msg::endmsg;
    }
 
    //
@@ -300,21 +273,24 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    int errorLine, errorColumn;
    if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
                          &errorColumn ) ) {
-      m_logger << msg::ERROR << "Error in parsing \"" << filename
-               << "\"" << std::endl
-               << "  Error message: " << errorMsg << std::endl
-               << "  Error line   : " << errorLine << std::endl
-               << "  Error column : " << errorColumn << msg::endmsg;
+      m_logger << msg::ERROR
+               << tr( "Error in parsing \"%1\"\n"
+                      "  Error message: %2\n"
+                      "  Error line   : %3\n"
+                      "  Error column : %4" )
+                  .arg( filename ).arg( errorMsg ).arg( errorLine ).arg( errorColumn )
+               << msg::endmsg;
       QMessageBox::critical( this, tr( "XML error" ),
                              tr( "There is some problem with the format of the "
-                                 "input file.\n\n " ) +
-                             tr( "Error message: " ) + errorMsg + "\n " +
-                             tr( "Error line: " ) + QString::number( errorLine ) + "\n " +
-                             tr( "Error column: " ) + QString::number( errorColumn ) );
+                                 "input file.\n\n "
+                                 "Error message: %1\n"
+                                 "Error line: %2\n"
+                                 "Error column: %3" ).arg( errorMsg ).arg( errorLine ).arg( errorColumn ) );
       return;
    } else {
-      m_logger << msg::DEBUG << "Successfully parsed: "
-               << filename << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "Successfully parsed: %1" ).arg( filename )
+               << msg::endmsg;
    }
 
    //
@@ -323,7 +299,8 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    QDomElement work = doc.documentElement();
 
    if( ! m_devEdit->readConfig( work ) ) { 
-      m_logger << msg::ERROR << "Failed to read configuration file!"
+      m_logger << msg::ERROR
+               << tr( "Failed to read configuration file!" )
                << msg::endmsg;
       return;
    } 
@@ -332,10 +309,9 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
+   setWindowTitle( tr( "CDA configuration editor - %1" ).arg( filePath.back() ) );
 
    return;
-
 }
 
 void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
@@ -345,29 +321,33 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    //
    QFile input_file( filename );
    if( ! input_file.open( QFile::ReadOnly ) ) {
-      m_logger << msg::ERROR << filename << " couldn't be opened "
-               << "for reading" << msg::endmsg;
+       m_logger << msg::ERROR
+                << tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename )
+                << msg::endmsg;
       QMessageBox::critical( this, tr( "File reading error" ),
-                             tr( "The selected file could not be opened for "
-                                 "reading. Check the file name!" ) );
+                             tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename ) );
       return;
    } else {
-      m_logger << msg::DEBUG << filename << " opened for reading"
-               << msg::endmsg;
+       m_logger << msg::VERBOSE
+                << tr( "Opened file: %1" ).arg( filename )
+                << msg::endmsg;
    }
 
    //
    // Read the configuration from this file:
    //
    if( ! m_devEdit->readConfig( &input_file ) ) {
-      m_logger << msg::ERROR << "Some error happened while reading the "
-               << "binary configuration" << msg::endmsg;
+      m_logger << msg::ERROR
+               << tr( "Some error happened while reading the "
+                      "binary configuration" )
+               << msg::endmsg;
       QMessageBox::critical( this, tr( "Configuration reading error" ),
                              tr( "The configuration could not be read. See "
                                  "the application messages for more information" ) );
       return;
    } else {
-      m_logger << msg::VERBOSE << "Configuration read in binary format"
+      m_logger << msg::VERBOSE
+               << tr( "Configuration read in binary format" )
                << msg::endmsg;
    }
 
@@ -375,13 +355,11 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
+   setWindowTitle( tr( "CDA configuration editor - %1" ).arg( filePath.back() ) );
 
    return;
-
 }
 
-/* Warning looks like is called twice instead one, but why */
 void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
 
    //
@@ -397,14 +375,17 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    //
    QDomElement elem = doc.documentElement();
    if( ! m_devEdit->writeConfig( elem ) ) {
-      m_logger << msg::ERROR << "Some error happened while creating the "
-               << "XML configuration" << msg::endmsg;
+      m_logger << msg::ERROR
+               << tr( "Some error happened while creating the "
+                      "XML configuration" )
+               << msg::endmsg;
       QMessageBox::critical( this, tr( "Configuration writing error" ),
                              tr( "The configuration could not be written. See "
                                  "the application messages for more information." ) );
       return;
    } else {
-      m_logger << msg::VERBOSE << "Configuration translated to XML format"
+      m_logger << msg::VERBOSE
+               << tr( "Configuration translated to XML format" )
                << msg::endmsg;
    }
 
@@ -413,14 +394,17 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    //
    QFile output_file( filename );
    if( ! output_file.open( QFile::WriteOnly | QFile::Truncate ) ) {
-      m_logger << msg::ERROR << filename << " couldn't be opened "
-               << "for writing" << msg::endmsg;
+      m_logger << msg::ERROR
+               << tr( "%1 couldn't be opened "
+                      "for writing" ).arg( filename )
+               << msg::endmsg;
       QMessageBox::critical( this, tr( "File writing error" ),
                              tr( "The selected file could not be opened for "
                                  "writing. Check permissions!" ) );
       return;
    } else {
-      m_logger << msg::DEBUG << filename << " opened for writing"
+      m_logger << msg::DEBUG
+               << tr( "%1 opened for writing" ).arg( filename )
                << msg::endmsg;
    }
 
@@ -431,10 +415,9 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
+   setWindowTitle( tr( "CDA configuration editor - %1" ).arg( filePath.back() ) );
 
    return;
-
 }
 
 void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
@@ -444,14 +427,17 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    //
    QFile output_file( filename );
    if( ! output_file.open( QFile::WriteOnly | QFile::Truncate ) ) {
-      m_logger << msg::ERROR << filename << " couldn't be opened "
-               << "for writing" << msg::endmsg;
+       m_logger << msg::ERROR
+                << tr( "%1 couldn't be opened "
+                       "for writing" ).arg( filename )
+                << msg::endmsg;
       QMessageBox::critical( this, tr( "File writing error" ),
                              tr( "The selected file could not be opened for "
                                  "writing. Check permissions!" ) );
       return;
    } else {
-      m_logger << msg::DEBUG << filename << " opened for writing"
+      m_logger << msg::DEBUG
+               << tr( "%1 opened for writing" ).arg( filename )
                << msg::endmsg;
    }
 
@@ -459,14 +445,17 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    // Write the configuration to this file:
    //
    if( ! m_devEdit->writeConfig( &output_file ) ) {
-      m_logger << msg::ERROR << "Some error happened while creating the "
-               << "binary configuration" << msg::endmsg;
+      m_logger << msg::ERROR
+               << tr( "Some error happened while creating the "
+                      "binary configuration" )
+               << msg::endmsg;
       QMessageBox::critical( this, tr( "Configuration writing error" ),
                              tr( "The configuration could not be written. See "
                                  "the application messages for more information." ) );
       return;
    } else {
-      m_logger << msg::VERBOSE << "Configuration written in binary format"
+      m_logger << msg::VERBOSE
+               << tr( "Configuration written in binary format" )
                << msg::endmsg;
    }
 
@@ -477,5 +466,4 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    setWindowTitle( tr( "CDA configuration editor - " ) + filePath.back() );
 
    return;
-
 }
