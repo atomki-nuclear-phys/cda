@@ -153,6 +153,7 @@ int main( int argc, char* argv[] ) {
                << qApp->translate( "cda-camac-reader",
                                    "There was an error loading the devices" )
                << msg::endmsg;
+      return 1;
    }
 
    //

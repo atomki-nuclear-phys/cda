@@ -10,7 +10,7 @@
 #include <QtCore/QCoreApplication>
 
 // CAMAC library include(s):
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
 #   include "libcc32.h"
 #endif
 
@@ -108,7 +108,7 @@ namespace camac {
       bool checkOpen() const;
 
       const char* m_devicePath; ///< Path to the CAMAC device
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       CC32_HANDLE m_handle;     ///< Handle used by the pcicc32 library
 #endif
       bool        m_isOpen;     ///< Flag showing if the crate is open

@@ -8,21 +8,21 @@ extern "C" {
 #   include <unistd.h>
 }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
 #include "pcivme_ni.h"
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
 // Local include(s):
 #include "VmeBus.h"
 
 namespace vme {
 
-#ifdef TESTING
+#ifndef HAVE_VME_LIB
    // These are some variables that are used when simulating VME bus access.
    static const unsigned int fifoEmty = 0x7fffffff;
    static const unsigned int eEvent = 0x80000000;
    static int eventCounter = 0;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
    /**
     * Constructor for the class. It just sets some variables to their
@@ -46,7 +46,7 @@ namespace vme {
    }
 
    /**
-    * Opens the VME bus. In TESTING mode, it assigns 1 to vmeFD.
+    * Opens the VME bus. In testing mode, it assigns 1 to vmeFD.
     * Failure to open the bus is signalled by a non-zero return value.
     *
     * @returns <code>0</code> if the opening was successful,
@@ -67,8 +67,8 @@ namespace vme {
          return 0;
       }
 
-#ifndef TESTING
-      if( ! VMEopen( m_path.toLatin1().Data(), m_addressModifier,
+#ifdef HAVE_VME_LIB
+      if( ! VMEopen( dev_path, m_addressModifier,
                      &m_vmeFD ) ) {
          m_opened = true;
       } else {
@@ -80,7 +80,7 @@ namespace vme {
 #else
       m_opened = true;
       m_vmeFD = 1;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -100,14 +100,14 @@ namespace vme {
          return 0;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       if( VMEclose( m_vmeFD ) ) {
          m_logger << msg::ERROR
                   << "Failed to close the PCIVME driver"
                   << msg::endmsg;
          return 1;
       }
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       m_opened = false;
 
@@ -150,14 +150,14 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( char ), 1, &data );
 #else
       m_logger << msg::VERBOSE
                << tr( "8bit write > Address: 0x%1; Data: %2" )
          .arg( address ).arg( data )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -179,14 +179,14 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( int16_t ), 1, &data );
 #else
       m_logger << msg::VERBOSE
                << tr( "16bit write > Address: 0x%1; Data: %2" )
          .arg( address ).arg( data )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -208,14 +208,14 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( int32_t ), 1, &data );
 #else
       m_logger << msg::VERBOSE
                << tr( "32bit write > Address: 0x%1; Data: %2" )
          .arg( address ).arg( data )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -240,14 +240,14 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( char ), length, data );
 #else
       m_logger << msg::VERBOSE
                << tr( "Unknown length write > Address: 0x%1; length: %2" )
          .arg( address ).arg( length )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -269,11 +269,11 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( char ), 1, data );
 #else
       *data = 100;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -295,11 +295,11 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( int16_t ), 1, data );
 #else
       *data = 1000;
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -321,7 +321,7 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( int32_t ), 1, data );
 #else
       if( ( eventCounter >= 0 ) && ( eventCounter < 32 ) ) {
@@ -335,7 +335,7 @@ namespace vme {
          *data = eEvent;
          ++eventCounter;
       }
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }
@@ -359,9 +359,9 @@ namespace vme {
          return 1;
       }
 
-#ifndef TESTING
+#ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( char ), length, data );
-#endif // TESTING
+#endif // HAVE_VME_LIB
 
       return 0;
    }

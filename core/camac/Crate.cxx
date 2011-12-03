@@ -7,9 +7,6 @@ extern "C" {
 #   include <unistd.h>
 }
 
-// STL include(s):
-#include <iostream>
-
 // Local include(s):
 #include "Crate.h"
 
@@ -24,9 +21,9 @@ namespace camac {
     */
    Crate::Crate( const char* dev_path )
       : m_devicePath( dev_path ),
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
         m_handle( 0 ),
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
         m_isOpen( false ),
         m_logger( "camac::Crate" ) {
 
@@ -62,7 +59,7 @@ namespace camac {
          close();
       }
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       int error;
       if( ( error = cc32_open( ( char* ) m_devicePath, &m_handle ) ) ) {
          m_logger << msg::ERROR << tr( "CAMAC crate could not be opened\n"
@@ -93,7 +90,7 @@ namespace camac {
          return true;
       }
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       int error;
       if( ( error = cc32_close( m_handle ) ) ) {
          m_logger << msg::ERROR << tr( "CAMAC crate closing failed\n"
@@ -124,7 +121,7 @@ namespace camac {
 
       if( ! checkOpen() ) return 0;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       return cc32_read_word( m_handle, N, A, F );
 #else
       m_logger << msg::DEBUG
@@ -132,7 +129,7 @@ namespace camac {
                       "F = %3" ).arg( N ).arg( A ).arg( F )
                << msg::endmsg;
       return ( A * 10 );
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
    }
 
    /**
@@ -148,7 +145,7 @@ namespace camac {
 
       if( ! checkOpen() ) return 0;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       return ( cc32_read_long( m_handle, N, A, F ) & 0xffffff );
 #else
       m_logger << msg::DEBUG
@@ -156,7 +153,7 @@ namespace camac {
                       "F = %3" ).arg( N ).arg( A ).arg( F )
                << msg::endmsg;
       return ( A * 100 );
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
    }
 
    /**
@@ -175,7 +172,7 @@ namespace camac {
 
       if( ! checkOpen() ) return 0;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       uint32_t data = cc32_read_long( m_handle, N, A, F );
       Q = ( data & 0x80000000 ) ? true : false;
       X = ( data & 0x40000000 ) ? true : false;
@@ -188,7 +185,7 @@ namespace camac {
       Q = false;
       X = false;
       return ( A * 100 );
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
    }
 
    /**
@@ -206,14 +203,14 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_word( m_handle, N, A, F, data );
 #else
       m_logger << msg::DEBUG
                << tr( "writeWord(...) called with: N = %1, A = %2, F = %3, "
                       "data = %4" ).arg( N ).arg( A ).arg( F ).arg( data )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       return;
    }
@@ -232,14 +229,14 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_long( m_handle, N, A, F, data );
 #else
       m_logger << msg::DEBUG
                << tr( "writeLong(...) called with: N = %1, A = %2, F = %3, "
                       "data = %4" ).arg( N ).arg( A ).arg( F ).arg( data )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       return;
    }
@@ -256,7 +253,7 @@ namespace camac {
 
       if( ! checkOpen() ) return false;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       int error;
       if( ( error = cc32_interrupt_enable( m_handle ) ) ) {
          m_logger << msg::ERROR
@@ -264,7 +261,7 @@ namespace camac {
                          "on device: %1" ).arg( m_devicePath ) << msg::endmsg;
          return false;
       }
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       m_logger << msg::DEBUG
                << tr( "Interrupts enabled on device: %1" ).arg( m_devicePath )
@@ -284,7 +281,7 @@ namespace camac {
 
       if( ! checkOpen() ) return false;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       int error;
       if( ( error = cc32_interrupt_disable( m_handle ) ) ) {
          m_logger << msg::ERROR
@@ -292,7 +289,7 @@ namespace camac {
                          "on device: %1" ).arg( m_devicePath ) << msg::endmsg;
          return false;
       }
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       m_logger << msg::DEBUG
                << tr( "Interrupts disabled on device: %1" ).arg( m_devicePath )
@@ -305,9 +302,9 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_word( m_handle, 27, 0, 16, 0 );
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       m_logger << msg::VERBOSE
                << tr( "Inhibit set on device: %1" ).arg( m_devicePath )
@@ -320,9 +317,9 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_word( m_handle, 27, 1, 16, 0 );
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       m_logger << msg::VERBOSE
                << tr( "Inhibit reset on device: %1" ).arg( m_devicePath )
@@ -335,13 +332,13 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_word( m_handle, 0, 1, 16, 0 );
 #else
       m_logger << msg::DEBUG
                << tr( "Initialize called on device: %1" ).arg( m_devicePath )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       return;
    }
@@ -350,13 +347,13 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_word( m_handle, 0, 0, 16, 0 );
 #else
       m_logger << msg::DEBUG
                << tr( "Clear called on device: %1" ).arg( m_devicePath )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       return;
    }
@@ -365,13 +362,13 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_long( m_handle, 28, 1, 16, mask );
 #else
       m_logger << msg::DEBUG
                << tr( "LAM mask set to: 0x%1" ).arg( QString::number( mask, 16 ) )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       return;
    }
@@ -390,7 +387,7 @@ namespace camac {
 
       if( ! checkOpen() ) return false;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       int timeout, lam;
       int error;
       if( ( error = cc32_wait_event( m_handle, &timeout, &lam ) ) ) {
@@ -403,12 +400,12 @@ namespace camac {
       m_logger << msg::VERBOSE << tr( "Waiting for LAM" ) << msg::endmsg;
 
       // Wait for a 100 miliseconds before returning. This is a good way
-      // to produce an eco-friendly 10 Hz readout rate in TESTING mode.
+      // to produce an eco-friendly 10 Hz readout rate without CAMAC access.
       struct timeval tv;
       tv.tv_sec = 0;
       tv.tv_usec = 100000;
       select( 0, NULL, NULL, NULL, &tv );
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       return true;
    }
@@ -417,13 +414,13 @@ namespace camac {
 
       if( ! checkOpen() ) return;
 
-#ifndef TESTING
+#ifdef HAVE_CAMAC_LIB
       cc32_write_word( m_handle, 28, 0, 16, 0 );
 #else
       m_logger << msg::DEBUG
                << tr( "LAM cleared on device: %1" ).arg( m_devicePath )
                << msg::endmsg;
-#endif // TESTING
+#endif // HAVE_CAMAC_LIB
 
       return;
    }

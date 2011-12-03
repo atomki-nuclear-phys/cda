@@ -57,22 +57,28 @@ isEmpty(CDASYS) {
 DEFINES += CDASYS=\'\"$$CDASYS\"\'
 
 #
-# Set the compilation to "TESTING" mode. In this mode the CAMAC
-# crate access is disabled and the code simulates a functioning
-# CAMAC crate. Useful for developing the code "off-line".
+# Uncomment the following if you have the CAMAC library on your
+# system:
 #
-# Comment-out this setting when compiling the code on the data
-# acquisition computer.
-#
-DEFINES += TESTING
+#DEFINES += HAVE_CAMAC_LIB
 
 #
-# If we're not in TESTING mode, everything has to be linked against
-# the CAMAC library (libcc32.so):
+# Uncomment the following if you have the CAEN libraries installed
+# on your system.
 #
-!contains(DEFINES,TESTING) {
-   LIBS += -lcc32
-}
+#DEFINES += HAVE_CAEN_LIBS
+
+#
+# Uncomment the following if you have the VME library installed
+# on your system.
+#
+#DEFINES += HAVE_VME_LIB
+
+#
+# Uncomment the following if you have CERNLIB installed on your
+# system.
+#
+#DEFINES += HAVE_CERNLIB
 
 #
 # Compiler settings. In order to be able to link against CERNLIB on
@@ -83,29 +89,7 @@ DEFINES += TESTING
 # linux is only here for completeness, normally it shouldn't be
 # tweaked.
 #
-#mac {
-#   QMAKE_CC         = gcc-4
-#   QMAKE_CXX        = g++-4
-#   QMAKE_LINK       = g++-4
-#   QMAKE_LINK_SHLIB = g++-4
-#}
-
-#
-# Path to CERNLIB. CERNLIB can be installed practically anywhere,
-# these settings set the variable according to the platform.
-#
-DEFINES += HAVE_CERNLIB
-contains(DEFINES,HAVE_CERNLIB) {
-   mac {
-      CERNLIB_PATH = /sw
-   }
-   unix:!mac {
-      exists(/cern/pro){
-         CERNLIB_PATH = /cern/pro
-      } else {
-         CERNLIB_PATH = /usr
-      }
-   }
-   DEFINES     += LINUX f2cFortran
-   INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran
-}
+#QMAKE_CC         = gcc-4
+#QMAKE_CXX        = g++-4
+#QMAKE_LINK       = g++-4
+#QMAKE_LINK_SHLIB = g++-4

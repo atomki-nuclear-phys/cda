@@ -19,11 +19,11 @@ TARGET   = cdacore
 HEADERS = $$files(fifo/*.h) $$files(msg/*.h) $$files(event/*.h) \
           $$files(device/*.h) $$files(device/*.icc) $$files(camac/*.h) \
           $$files(cmdl/*.h) $$files(cernlib/*.h) $$files(common/*.h) \
-          $$files(i18n/*.h) $$files(vme/*.h)
+          $$files(i18n/*.h) $$files(vme/*.h) $$files(caen/*.h)
 SOURCES = $$files(fifo/*.cxx) $$files(msg/*.cxx) $$files(event/*.cxx) \
           $$files(device/*.cxx) $$files(camac/*.cxx) $$files(cmdl/*.cpp) \
           $$files(cernlib/*.cxx) $$files(common/*.cxx) $$files(i18n/*.cxx) \
-          $$files(vme/*.cxx)
+          $$files(vme/*.cxx) $$files(caen/*.cxx)
 TRANSLATIONS = ../trans/cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
@@ -88,6 +88,11 @@ mac {
    VME_HEADERS.path = Headers/vme
    QMAKE_BUNDLE_DATA += VME_HEADERS
 
+   CAEN_HEADERS.version = Versions
+   CAEN_HEADERS.files = $$files(caen/*.h)
+   CAEN_HEADERS.path = Headers/caen
+   QMAKE_BUNDLE_DATA += CAEN_HEADERS
+
    CMDL_HEADERS.version = Versions
    CMDL_HEADERS.files = cmdl/cmdargs.h cmdl/cmdline.h
    CMDL_HEADERS.path = Headers/cmdl
@@ -146,6 +151,19 @@ unix:!mac {
 # Decide whether to link the library again CERNLIB, and if yes, how:
 #
 contains(DEFINES,HAVE_CERNLIB) {
+   mac {
+      CERNLIB_PATH = /sw
+   }
+   unix:!mac {
+      exists(/cern/pro){
+         CERNLIB_PATH = /cern/pro
+      } else {
+         CERNLIB_PATH = /usr
+      }
+   }
+   DEFINES     += LINUX f2cFortran
+   INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran
+
    system(g77 --version) {
       system(gfortran --version) {
          message(Both g77 and gfortran are available. Adding gfortran to link list...)
@@ -167,4 +185,25 @@ contains(DEFINES,HAVE_CERNLIB) {
       }
       LIBS += -lpacklib
    }
+}
+
+#
+# Decide whether to link the library against the CAMAC library:
+#
+contains(DEFINES,HAVE_CAMAC_LIB) {
+   LIBS += -lcc32
+}
+
+#
+# Decide whether to link the library against the CAEN libraries:
+#
+contains(DEFINES,HAVE_CAEN_LIBS) {
+   LIBS += -lCAENVME -lCAENComm -lCAENDigitizer
+}
+
+#
+# Decide whether to link the library against the VME library:
+#
+contains(DEFINES,HAVE_VME_LIB) {
+   LIBS += -lpcivme
 }
