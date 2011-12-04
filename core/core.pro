@@ -89,7 +89,7 @@ mac {
    QMAKE_BUNDLE_DATA += VME_HEADERS
 
    CAEN_HEADERS.version = Versions
-   CAEN_HEADERS.files = $$files(caen/*.h)
+   CAEN_HEADERS.files = $$files(caen/*.h) $$files(caen/*.icc)
    CAEN_HEADERS.path = Headers/caen
    QMAKE_BUNDLE_DATA += CAEN_HEADERS
 

@@ -7,6 +7,7 @@
 #include <QtCore/QString>
 
 // Local include(s):
+#include "Digitizer.h"
 #include "../device/Crate.h"
 
 namespace caen {

@@ -1,5 +1,8 @@
 // $Id$
 
+// Qt include(s):
+#include <QtCore/QtGlobal>
+
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/caen/Digitizer.h"
