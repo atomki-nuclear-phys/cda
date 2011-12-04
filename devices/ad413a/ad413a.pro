@@ -41,3 +41,13 @@ unix:!mac {
    INCLUDEPATH += ../../core
    LIBS         = -L../../lib -lcdacore
 }
+
+win32 {
+   message(*)
+   message(* Configuring to build the \"ad413a\" plugin on Windows)
+   message(*)
+
+   # The plugin has to be linked against the cdacore library:
+   INCLUDEPATH += ../../core
+   LIBS         = ../../bin/libcdacore0.a
+}

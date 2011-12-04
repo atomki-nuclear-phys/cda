@@ -51,3 +51,18 @@ unix:!mac {
    INCLUDEPATH += ../../core ../../gui
    LIBS        += -L../../lib -lcdacore -lcdadaq -lcdagui
 }
+
+#
+# These are the specific configuration options for compiling the code
+# on Windows.
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cda-config-editor\" application on Windows)
+   message(*)
+
+   INCLUDEPATH += ../../core ../../gui
+   LIBS        += ../../bin/libcdacore0.a ../../bin/libcdadaq0.a ../../bin/libcdagui0.a
+#                  ../../dev/libad413a1.a ../../dev/libad10001.a ../../dev/libad22491.a \
+#                  ../../dev/libt2228a1.a ../../dev/libt4300b1.a ../../dev/libs9418t1.a
+}

@@ -4,7 +4,7 @@
 #include "BinaryStream.h"
 #include "Statistics.h"
 
-namespace stat {
+namespace cdastat {
 
    BinaryStream::BinaryStream( QIODevice* device )
       : QDataStream( device ) {
@@ -67,4 +67,4 @@ namespace stat {
 
    }
 
-} // namespace stat
+} // namespace cdastat

@@ -25,7 +25,7 @@
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QTcpSocket )
 
-namespace stat {
+namespace cdastat {
 
    // Bring the Qt class(es) into this namespace:
    using QT_PREPEND_NAMESPACE( QTcpSocket );
@@ -73,6 +73,6 @@ namespace stat {
 
    }; // class Sender
 
-} // namespace stat
+} // namespace cdastat
 
 #endif // CDA_DAQ_STAT_SENDER_H

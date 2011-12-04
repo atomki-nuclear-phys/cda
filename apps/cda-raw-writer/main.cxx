@@ -281,7 +281,7 @@ int main( int argc, char* argv[] ) {
    // Open connections to all the statistics recepients. (Ignore connection errors
    // here, since statistics publishing is not a major concern...)
    //
-   stat::Sender stat_sender;
+   cdastat::Sender stat_sender;
    for( unsigned int i = 0; i < statistics.count(); ++i ) {
       stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
    }
@@ -302,7 +302,7 @@ int main( int argc, char* argv[] ) {
 
    // Initialise the statistics information to something meaningful, then start
    // the statistics sender object:
-   stat_sender.update( stat::Statistics( 0, statSource ) );
+   stat_sender.update( cdastat::Statistics( 0, statSource ) );
    stat_sender.start();
 
    //
@@ -359,7 +359,7 @@ int main( int argc, char* argv[] ) {
          }
 
          // Update the statistics receivers:
-         stat_sender.update( stat::Statistics( g_evcount +
+         stat_sender.update( cdastat::Statistics( g_evcount +
                                                g_fwriter->processedEvents(),
                                                statSource ) );
 
@@ -396,7 +396,11 @@ int main( int argc, char* argv[] ) {
          }
 
          // Sleep for 2 seconds:
+#ifdef Q_WS_WIN32
+         _sleep( 2 );
+#else
          sleep( 2 );
+#endif // Q_WS_WIN
       }
    } else {
       //
@@ -432,11 +436,15 @@ int main( int argc, char* argv[] ) {
          }
 
          // Update the statistics receivers:
-         stat_sender.update( stat::Statistics( g_fwriter->processedEvents(),
+         stat_sender.update( cdastat::Statistics( g_fwriter->processedEvents(),
                                                statSource ) );
 
          // Sleep for 2 seconds:
+#ifdef Q_WS_WIN32
+         _sleep( 2 );
+#else
          sleep( 2 );
+#endif // Q_WS_WIN
       }
    }
 

@@ -6,7 +6,7 @@
 // Qt include(s):
 #include <QtCore/QDataStream>
 
-namespace stat {
+namespace cdastat {
 
    // Forward declaration(s):
    class Statistics;
@@ -39,6 +39,6 @@ namespace stat {
 
    }; // class BinaryStream
 
-} // namespace stat
+} // namespace cdastat
 
 #endif // CDA_DAQ_STAT_BINARYSTREAM_H

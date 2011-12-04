@@ -13,6 +13,13 @@
 #include "Loader.h"
 #include "Factory.h"
 
+// Found these definitions with Google. They make it possible
+// to pass the CDASYS variable as a string to the code on all
+// platforms.
+#define CDASYS1_(x) #x
+#define CDASYS_(x) CDASYS1_(x)
+#define CDASYS_PATH CDASYS_(CDASYS)
+
 namespace dev {
 
    // Make sure that the Qt classes are in scope:
@@ -44,7 +51,7 @@ namespace dev {
          if( ! env_path ) {
             // In case CDASYS is not in the environment, try using the directory where
             // the code was compiled:
-            m_path = CDASYS;
+            m_path = CDASYS_PATH;
             m_path.append( "/dev" );
          } else {
             m_path = env_path;

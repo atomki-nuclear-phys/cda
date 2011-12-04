@@ -31,9 +31,9 @@
 # compile it on Windows:
 #
 #QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline -W -Wall"
-!unix:!mac {
-   error(CDA is only supported on Linux and Mac OS X!)
-}
+#!unix:!mac {
+#   error(CDA is only supported on Linux and Mac OS X!)
+#}
 
 #
 # During development the code is compiled in debug mode to make it easier
@@ -50,11 +50,16 @@ CONFIG += warn_on release
 # this variable is heavily used when compiling the code on
 # Mac OS X. All in all, compilation can't commence without it.
 #
-CDASYS = $$system(echo $CDASYS)
-isEmpty(CDASYS) {
-   error(CDASYS not defined. Please source one of the setup scripts!)
+unix {
+   CDASYS = $$system(echo $CDASYS)
+   isEmpty(CDASYS) {
+      error(CDASYS not defined. Please source one of the setup scripts!)
+   }
+   DEFINES += CDASYS=\'\"$$CDASYS\"\'
 }
-DEFINES += CDASYS=\'\"$$CDASYS\"\'
+win32 {
+   DEFINES += CDASYS=$$PWD
+}
 
 #
 # Uncomment the following if you have the CAMAC library on your

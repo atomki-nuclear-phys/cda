@@ -34,12 +34,18 @@ namespace dev {
 
    public:
       /// Standard QWidget style constructor
-      VmeGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      VmeGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 )
+         : QWidget( parent, flags ) {
+
+         this->resize( WIDGET_WIDTH, WIDGET_HEIGHT );
+         this->setMinimumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
+         this->setMaximumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
+       }
 
       /// Fixed width of the widget
-      static const int WIDGET_WIDTH;
+      static const int WIDGET_WIDTH = 500;
       /// Fixed height of the widget
-      static const int WIDGET_HEIGHT;
+      static const int WIDGET_HEIGHT = 350;
 
    }; // class VmeGui
 

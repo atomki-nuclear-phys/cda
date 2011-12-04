@@ -11,7 +11,7 @@
 // Local include(s):
 #include "RateWidget.h"
 
-namespace stat {
+namespace cdastat {
 
    //
    // Specify the values of the constants:
@@ -124,4 +124,4 @@ namespace stat {
       return;
    }
 
-} // namespace stat
+} // namespace cdastat

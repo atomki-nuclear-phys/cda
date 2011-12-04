@@ -13,7 +13,7 @@
 class Address;
 class Socket;
 
-namespace stat {
+namespace cdastat {
 
    /**
     *  @short Statistics server, listening to incoming statistics info
@@ -42,7 +42,7 @@ namespace stat {
 
    signals:
       /// Signal emitted when statistic info is available
-      void statAvailable( const stat::Statistics& stat );
+      void statAvailable( const cdastat::Statistics& stat );
 
    protected slots:
       /// Slot reading the statistics information
@@ -54,6 +54,6 @@ namespace stat {
 
    }; // class Server
 
-} // namespace stat
+} // namespace cdastat
 
 #endif // CDA_DAQ_STAT_SERVER_H

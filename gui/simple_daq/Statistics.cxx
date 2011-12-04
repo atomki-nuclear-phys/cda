@@ -57,8 +57,8 @@ namespace simple_daq {
       //
       // Set up statistics updates:
       //
-      connect( &m_server, SIGNAL( statAvailable( const stat::Statistics& ) ),
-               this, SLOT( updateStat( const stat::Statistics& ) ) );
+      connect( &m_server, SIGNAL( statAvailable( const cdastat::Statistics& ) ),
+               this, SLOT( updateStat( const cdastat::Statistics& ) ) );
 
       //
       // Set up the timer that resets the statistics when a new stat information
@@ -105,11 +105,11 @@ namespace simple_daq {
     *
     * @param stat The latest statistics object
     */
-   void Statistics::updateStat( const stat::Statistics& stat ) {
+   void Statistics::updateStat( const cdastat::Statistics& stat ) {
 
       //
       // Show the number of processed events according to the last
-      // stat::Statistics object received, and calculate the event
+      // cdastat::Statistics object received, and calculate the event
       // processing rate using the last statistics object:
       //
       m_readEvents->setText( QString::number( stat.getProcessedEvents() ) );

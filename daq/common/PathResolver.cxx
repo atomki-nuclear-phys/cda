@@ -13,6 +13,13 @@ extern "C" {
 // Local include(s):
 #include "PathResolver.h"
 
+// Found these definitions with Google. They make it possible
+// to pass the CDASYS variable as a string to the code on all
+// platforms.
+#define CDASYS1_(x) #x
+#define CDASYS_(x) CDASYS1_(x)
+#define CDASYS_PATH CDASYS_(CDASYS)
+
 namespace daq {
 
    //
@@ -99,9 +106,9 @@ namespace daq {
       //
       m_logger << msg::WARNING << tr( "Failed to find \"%1\" in environment: %2\n"
                                       "Assuming that it's in \"%3/bin\"" )
-         .arg( name ).arg( env ).arg( CDASYS ) << msg::endmsg;
+         .arg( name ).arg( env ).arg( CDASYS_PATH ) << msg::endmsg;
 
-      return ( CDASYS + ( "/bin/" + name ) );
+      return ( CDASYS_PATH + ( "/bin/" + name ) );
    }
 
 } // namepsace daq

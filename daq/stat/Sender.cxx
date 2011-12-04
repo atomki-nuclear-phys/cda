@@ -7,7 +7,7 @@
 #include "Sender.h"
 #include "BinaryStream.h"
 
-namespace stat {
+namespace cdastat {
 
    /**
     * @param updateTimeout The time in miliseconds between sending two reports
@@ -157,4 +157,4 @@ namespace stat {
 
    }
 
-} // namespace stat
+} // namespace cdastat

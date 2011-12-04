@@ -41,7 +41,13 @@ namespace dev {
 
    public:
       /// Standard QWidget style constructor
-      CamacGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CamacGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 )
+         : QWidget( parent, flags ) {
+
+         this->resize( WIDGET_WIDTH, WIDGET_HEIGHT );
+         this->setMinimumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
+         this->setMaximumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
+      }
 
       /// Draw an illustration of the module
       /**
@@ -63,9 +69,9 @@ namespace dev {
       virtual int deviceWidth() const = 0;
 
       /// Fixed width of a device
-      static const int WIDGET_WIDTH;
+      static const int WIDGET_WIDTH = 500;
       /// Fixed height of a device
-      static const int WIDGET_HEIGHT;
+      static const int WIDGET_HEIGHT = 350;
 
    signals:
       /// Request the redrawing of the module illustration

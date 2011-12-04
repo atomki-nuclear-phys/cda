@@ -26,7 +26,7 @@
 #include "MDIView.h"
 #include "RateWindow.h"
 
-namespace stat {
+namespace cdastat {
 
    // Bring the Qt class definitions into this namespace:
    using QT_PREPEND_NAMESPACE( QStringList );
@@ -233,4 +233,4 @@ namespace stat {
       return;
    }
 
-} // namespace stat
+} // namespace cdastat

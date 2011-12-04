@@ -18,7 +18,7 @@
  * $Revision$
  * $Date$
  */
-namespace stat {
+namespace cdastat {
 
    /**
     *  @short Class holding information about the status of the DAQ system
@@ -66,6 +66,6 @@ namespace stat {
 
    }; // class Statistics
 
-} // namespace stat
+} // namespace cdastat
 
 #endif // CDA_DAQ_STAT_STATISTICS_H

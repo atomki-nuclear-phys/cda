@@ -148,6 +148,18 @@ unix:!mac {
 }
 
 #
+# These are the configuration options for compiling the code on Windows:
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cdacore\" static library on Windows)
+   message(*)
+
+   CONFIG += shared
+   DESTDIR = ../bin
+}
+
+#
 # Decide whether to link the library again CERNLIB, and if yes, how:
 #
 contains(DEFINES,HAVE_CERNLIB) {
@@ -207,3 +219,6 @@ contains(DEFINES,HAVE_CAEN_LIBS) {
 contains(DEFINES,HAVE_VME_LIB) {
    LIBS += -lpcivme
 }
+
+
+

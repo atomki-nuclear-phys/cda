@@ -10,7 +10,7 @@
 #include "RateWindow.h"
 #include "RateWidget.h"
 
-namespace stat {
+namespace cdastat {
 
    //
    // Specify the value(s) of the constant(s):
@@ -178,4 +178,4 @@ namespace stat {
    }
 
 
-} // namespace stat
+} // namespace cdastat

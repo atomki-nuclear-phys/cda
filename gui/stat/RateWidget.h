@@ -9,7 +9,7 @@
 // Qt include(s):
 #include <QtGui/QWidget>
 
-namespace stat {
+namespace cdastat {
 
    // Bring the Qt objects into this namespace:
    using QT_PREPEND_NAMESPACE( QWidget );
@@ -74,6 +74,6 @@ namespace stat {
 
    }; // class RateWidget
 
-} // namespace stat
+} // namespace cdastat
 
 #endif // CDA_GUI_STAT_RATEWIDGET_H

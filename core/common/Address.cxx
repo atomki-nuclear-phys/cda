@@ -13,7 +13,7 @@
 #include <QtCore/QStringList>
 
 // CDA include(s):
-#include "msg/Logger.h"
+#include "../msg/Logger.h"
 
 // Local include(s):
 #include "Address.h"

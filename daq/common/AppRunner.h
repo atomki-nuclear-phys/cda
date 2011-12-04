@@ -6,6 +6,7 @@
 // Qt include(s):
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QProcess>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -65,8 +66,7 @@ namespace daq {
       QString m_execName; ///< Path to the executable
       QString m_options; ///< Command line options
 
-      int m_pid; ///< Process ID of the running executable
-      bool m_running; ///< Flag showing if the process is running
+      QProcess m_process; ///< Object responsible for running the process
 
       mutable msg::Logger m_logger; ///< Logger for the class
 

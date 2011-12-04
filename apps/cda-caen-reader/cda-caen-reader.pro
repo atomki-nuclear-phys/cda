@@ -45,3 +45,16 @@ unix:!mac {
    INCLUDEPATH += ../../core ../../daq
    LIBS        += -L../../lib -lcdacore -lcdadaq
 }
+
+#
+# These are the specific configuration options for compiling the code
+# on Windows.
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cda-caen-reader\" application on Windows)
+   message(*)
+
+   INCLUDEPATH += ../../core ../../daq
+   LIBS        += ../../bin/libcdacore0.a ../../bin/libcdadaq0.a
+}

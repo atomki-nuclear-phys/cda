@@ -16,10 +16,10 @@ VERSION  = 0.9.0
 TARGET   = cdagui
 
 # These are the header and source files:
-HEADERS = $$system(ls msg/*.h) $$system(ls device/*.h) $$system(ls simple_daq/*.h) \
-          $$system(ls stat/*.h) $$system(ls common/*.h) $$system(ls moni/*.h)
-SOURCES = $$system(ls msg/*.cxx) $$system(ls device/*.cxx) $$system(ls simple_daq/*.cxx) \
-          $$system(ls stat/*.cxx) $$system(ls common/*.cxx) $$system(ls moni/*.cxx)
+HEADERS = $$files(msg/*.h) $$files(device/*.h) $$files(simple_daq/*.h) \
+          $$files(stat/*.h) $$files(common/*.h) $$files(moni/*.h)
+SOURCES = $$files(msg/*.cxx) $$files(device/*.cxx) $$files(simple_daq/*.cxx) \
+          $$files(stat/*.cxx) $$files(common/*.cxx) $$files(moni/*.cxx)
 TRANSLATIONS = ../trans/cdagui_hu.ts
 
 # The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
@@ -101,8 +101,25 @@ unix:!mac {
    # Create a shared library and link it against the cdacore library:
    CONFIG      += shared
    INCLUDEPATH += ../core ../daq
-   LIBS        += -L../lib -lcdacore -l cdadaq
+   LIBS        += -L../lib -lcdacore -lcdadaq
 
    # Place the library in ../lib:
    DESTDIR      = ../lib
+}
+
+#
+# These are the configuration options for compiling the code on Windows:
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cdagui\" static library on Windows)
+   message(*)
+
+   # Create a static library and link it against the cdacore library:
+   CONFIG      += shared
+   INCLUDEPATH += ../core ../daq
+   LIBS        += -L../bin -lcdacore0 -lcdadaq0
+
+   # Place the library in ../bin:
+   DESTDIR      = ../bin
 }

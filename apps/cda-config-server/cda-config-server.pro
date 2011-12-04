@@ -46,3 +46,16 @@ unix:!mac {
    INCLUDEPATH += ../../core ../../daq
    LIBS        += -L../../lib -lcdacore -l cdadaq
 }
+
+#
+# These are the specific configuration options for compiling the code
+# on Windows.
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cda-config-server\" application on Windows)
+   message(*)
+
+   INCLUDEPATH += ../../core ../../daq
+   LIBS        += ../../bin/libcdacore0.a ../../bin/libcdadaq0.a
+}

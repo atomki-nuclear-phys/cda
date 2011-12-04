@@ -372,10 +372,14 @@ namespace vme {
     */
    void VmeBus::wait( int usec ) {
 
+#ifndef Q_WS_WIN
       struct timeval tv;
       tv.tv_sec = 0;
       tv.tv_usec = usec;
       ::select( 0, NULL, NULL, NULL, &tv );
+#else
+       _sleep( 1 );
+#endif // Q_WS_WIN
 
       return;
    }

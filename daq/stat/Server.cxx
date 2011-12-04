@@ -14,7 +14,7 @@
 #include "Server.h"
 #include "BinaryStream.h"
 
-namespace stat {
+namespace cdastat {
 
    /**
     * @param parent Qt parent of this object
@@ -76,4 +76,4 @@ namespace stat {
 
    }
 
-} // namespace stat
+} // namespace cdastat

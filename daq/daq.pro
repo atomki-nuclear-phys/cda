@@ -16,10 +16,10 @@ VERSION  = 0.9.0
 TARGET   = cdadaq
 
 # These are the header and source files:
-HEADERS = $$system(ls common/*.h) $$system(ls schema/*.h) $$system(ls stat/*.h) \
-          $$system(ls config/*.h)
-SOURCES = $$system(ls common/*.cxx) $$system(ls schema/*.cxx) $$system(ls stat/*.cxx) \
-          $$system(ls config/*.cxx)
+HEADERS = $$files(common/*.h) $$files(schema/*.h) $$files(stat/*.h) \
+          $$files(config/*.h)
+SOURCES = $$files(common/*.cxx) $$files(schema/*.cxx) $$files(stat/*.cxx) \
+          $$files(config/*.cxx)
 TRANSLATIONS = ../trans/cdadaq_hu.ts
 
 # The library uses the QtCore library:
@@ -46,17 +46,17 @@ mac {
    # The headers are put in the framework in the same way as in the case of
    # the cdacore framework. See core/core.pro for details.
    COMMON_HEADERS.version = Versions
-   COMMON_HEADERS.files = $$system(ls common/*.h)
+   COMMON_HEADERS.files = $$files(common/*.h)
    COMMON_HEADERS.path = Headers/common
    QMAKE_BUNDLE_DATA += COMMON_HEADERS
 
    SCHEMA_HEADERS.version = Versions
-   SCHEMA_HEADERS.files = $$system(ls schema/*.h)
+   SCHEMA_HEADERS.files = $$files(schema/*.h)
    SCHEMA_HEADERS.path = Headers/schema
    QMAKE_BUNDLE_DATA += SCHEMA_HEADERS
 
    STAT_HEADERS.version = Versions
-   STAT_HEADERS.files = $$system(ls stat/*.h)
+   STAT_HEADERS.files = $$files(stat/*.h)
    STAT_HEADERS.path = Headers/stat
    QMAKE_BUNDLE_DATA += STAT_HEADERS
 
@@ -95,4 +95,21 @@ unix:!mac {
 
    # Place the library in ../lib:
    DESTDIR      = ../lib
+}
+
+#
+# These are the configuration options for compiling the code on Windows:
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cdadaq\" static library on Windows)
+   message(*)
+
+   # Create a static library and link it against the cdacore library:
+   CONFIG      += shared
+   INCLUDEPATH += ../core
+   LIBS        += -L../bin -lcdacore0
+
+   # Place the library in ../bin:
+   DESTDIR      = ../bin
 }

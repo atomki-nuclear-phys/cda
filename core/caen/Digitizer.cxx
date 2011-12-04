@@ -570,11 +570,15 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_IRQWait( m_handle, timeout ) );
 #else
+#ifndef Q_WS_WIN
       // Wait for 100 miliseconds:
       struct timeval tv;
       tv.tv_sec = 0;
       tv.tv_usec = 100000;
       select( 0, NULL, NULL, NULL, &tv );
+#else
+       _sleep( 1 );
+#endif // Q_WS_WIN
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:

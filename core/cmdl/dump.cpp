@@ -15,7 +15,7 @@
 //    - Added cmd_description field to CmdLine
 //-^^---------------------------------------------------------------------
 
-#include "cmdl/cmdline.h"
+#include "cmdline.h"
 
 #ifdef DEBUG_CMDLINE
 # include  <iostream>

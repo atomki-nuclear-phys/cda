@@ -45,15 +45,15 @@ StatServerWindow::StatServerWindow()
    //
    // Create the objects doing most of the work:
    //
-   m_server = new stat::Server( this );
-   m_view = new stat::MDIView();
+   m_server = new cdastat::Server( this );
+   m_view = new cdastat::MDIView();
    setCentralWidget( m_view );
 
    //
    // Connect up these two objects:
    //
-   connect( m_server, SIGNAL( statAvailable( const stat::Statistics& ) ),
-            m_view, SLOT( handleStatistics( const stat::Statistics& ) ) );
+   connect( m_server, SIGNAL( statAvailable( const cdastat::Statistics& ) ),
+            m_view, SLOT( handleStatistics( const cdastat::Statistics& ) ) );
 
    //
    // Create the dock widgets and the menus:

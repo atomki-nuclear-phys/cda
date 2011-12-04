@@ -18,7 +18,7 @@ QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QTimer )
 QT_FORWARD_DECLARE_CLASS( QString )
 
-namespace stat {
+namespace cdastat {
 
    // Forward declaration(s):
    class RateWidget;
@@ -72,7 +72,7 @@ namespace stat {
 
    public slots:
       /// Function updating the window with the new statistics information
-      void updateStatistics( const stat::Statistics& stat );
+      void updateStatistics( const cdastat::Statistics& stat );
       /// Function resetting the displayed statistics
       void resetStatistics();
 
@@ -95,7 +95,7 @@ namespace stat {
        */
       static const quint32 RATE_RESET_TIMEOUT;
 
-      stat::RateWidget* m_rateWidget; ///< Main display of the calculated rate
+      RateWidget* m_rateWidget; ///< Main display of the calculated rate
 
       QLabel* m_sourceNameLabel; ///< Description of the statistics source name
       QLabel* m_sourceName; ///< Source of the displayed statistics
@@ -112,6 +112,6 @@ namespace stat {
 
    }; // class RateWindow
 
-} // namespace stat
+} // namespace cdastat
 
 #endif // CDA_GUI_STAT_RATEWINDOW_H

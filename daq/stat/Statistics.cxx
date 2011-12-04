@@ -3,7 +3,7 @@
 // Local include(s):
 #include "Statistics.h"
 
-namespace stat {
+namespace cdastat {
 
    Statistics::Statistics( quint32 processedEvents, const QString& source,
                            const QTime& statTime )
@@ -77,4 +77,4 @@ namespace stat {
 
    }
 
-} // namespace stat
+} // namespace cdastat

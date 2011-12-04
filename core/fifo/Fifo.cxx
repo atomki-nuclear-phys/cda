@@ -1,7 +1,7 @@
 // $Id$
 
 // CDA include(s):
-#include "msg/Logger.h"
+#include "../msg/Logger.h"
 
 // Local include(s):
 #include "Fifo.h"

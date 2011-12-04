@@ -45,3 +45,17 @@ unix:!mac {
    INCLUDEPATH += ../../core ../../daq
    LIBS        += -L../../lib -lcdacore -l cdadaq
 }
+
+#
+# These are the specific configuration options for compiling the code
+# on Windows.
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cda-glomem-writer\" application on Windows)
+   message(*)
+
+   INCLUDEPATH += ../../core ../../daq
+   LIBS        += -L../../bin -lcdacore0 -l cdadaq0 -L../../dev -lad413a -lad1000 \
+                  -lad2249a -lt2228a -lt4300b -ls9418t
+}

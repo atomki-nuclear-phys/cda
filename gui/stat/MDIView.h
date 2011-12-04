@@ -14,7 +14,7 @@ QT_FORWARD_DECLARE_CLASS( QSplitter )
 QT_FORWARD_DECLARE_CLASS( QMdiArea )
 QT_FORWARD_DECLARE_CLASS( QTableWidget )
 
-namespace stat {
+namespace cdastat {
 
    // Forward declaration(s):
    class Statistics;
@@ -55,7 +55,7 @@ namespace stat {
 
    public slots:
       /// Slot handling incoming statistics information
-      void handleStatistics( const stat::Statistics& stat );
+      void handleStatistics( const cdastat::Statistics& stat );
 
    protected:
       /// Re-implemented function for layout management
@@ -88,6 +88,6 @@ namespace stat {
 
    }; // class MDIView
 
-} // namespace stat
+} // namespace cdastat
 
 #endif // CDA_GUI_STAT_MDIVIEW_H

@@ -50,3 +50,16 @@ unix:!mac {
    INCLUDEPATH += ../../core ../../gui ../../daq
    LIBS        += -L../../lib -lcdacore -lcdadaq -lcdagui
 }
+
+#
+# These are the specific configuration options for compiling the code
+# on Windows.
+#
+win32 {
+   message(*)
+   message(* Configuring to build the \"cda-simple-daq\" application on Windows)
+   message(*)
+
+   INCLUDEPATH += ../../core ../../gui ../../daq
+   LIBS        += -L../../bin -lcdacore0 -lcdadaq0 -lcdagui0
+}

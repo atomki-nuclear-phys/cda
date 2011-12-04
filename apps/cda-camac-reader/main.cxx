@@ -316,7 +316,7 @@ int main( int argc, char* argv[] ) {
    // Open connections to all the statistics recepients. (Ignore connection errors
    // here, since statistics publishing is not a major concern...)
    //
-   stat::Sender stat_sender;
+   cdastat::Sender stat_sender;
    for( unsigned int i = 0; i < statistics.count(); ++i ) {
       stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
    }
@@ -337,7 +337,7 @@ int main( int argc, char* argv[] ) {
 
    // Initialise the statistics information to something meaningful, then start
    // the statistics sender object:
-   stat_sender.update( stat::Statistics( 0, statSource ) );
+   stat_sender.update( cdastat::Statistics( 0, statSource ) );
    stat_sender.start();
 
    //
@@ -368,7 +368,7 @@ int main( int argc, char* argv[] ) {
       // Update the statistics information after 10 events were sent out:
       ++g_evcount;
       if( ! ( g_evcount % 10 ) ) {
-         stat_sender.update( stat::Statistics( g_evcount, statSource ) );
+         stat_sender.update( cdastat::Statistics( g_evcount, statSource ) );
       }
 
    }

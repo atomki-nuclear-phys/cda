@@ -10,7 +10,7 @@
 QT_FORWARD_DECLARE_CLASS( QSpinBox )
 QT_FORWARD_DECLARE_CLASS( QDockWidget )
 QT_FORWARD_DECLARE_CLASS( QAction )
-namespace stat {
+namespace cdastat {
    class Server;
    class MDIView;
 } // namespace stat
@@ -53,8 +53,8 @@ private:
    /// Function creating the dock widgets of the window
    void createDockWidgets();
 
-   stat::Server*  m_server; ///< Statistics server
-   stat::MDIView* m_view; ///< Statistics presenter widget
+   cdastat::Server*  m_server; ///< Statistics server
+   cdastat::MDIView* m_view; ///< Statistics presenter widget
 
    QSpinBox* m_portEdit; ///< Listening port editor
    QDockWidget* m_portDock; ///< Dock widget for the listening port editor

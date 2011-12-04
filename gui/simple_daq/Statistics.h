@@ -57,7 +57,7 @@ namespace simple_daq {
 
    private slots:
       /// Slot updating the statistics using the object given to it
-      void updateStat( const stat::Statistics& stat );
+      void updateStat( const cdastat::Statistics& stat );
       /// Slot updating the statistics when no statistics has been received
       void updateStat();
 
@@ -71,8 +71,8 @@ namespace simple_daq {
 
       QTimer* m_rateTimer; ///< Timer resetting the statistics if needed
 
-      stat::Statistics m_lastStat; ///< The last statistics that was received
-      stat::Server m_server;       ///< Statistics server
+      cdastat::Statistics m_lastStat; ///< The last statistics that was received
+      cdastat::Server m_server;       ///< Statistics server
 
    }; // class Statistics
 
