@@ -12,7 +12,7 @@ include(../cda_common.pri)
 
 # This will be a library with the name "cdacore":
 TEMPLATE = lib
-VERSION  = 0.9.0
+VERSION  = 1.1.0
 TARGET   = cdacore
 
 # These are the header and source files:
@@ -181,8 +181,8 @@ contains(DEFINES,HAVE_CERNLIB) {
          message(Both g77 and gfortran are available. Adding gfortran to link list...)
          LIBS += -lgfortran
       } else {
-	      LIBS += -lg2c
-	   }
+         LIBS += -lg2c
+      }
    } else {
       !system(gfortran --version) {
          warning(Could not determine which fortran library to use)
@@ -219,6 +219,3 @@ contains(DEFINES,HAVE_CAEN_LIBS) {
 contains(DEFINES,HAVE_VME_LIB) {
    LIBS += -lpcivme
 }
-
-
-

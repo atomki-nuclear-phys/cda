@@ -295,6 +295,7 @@ int main( int argc, char* argv[] ) {
    // Connect the interrupt signal to the shutDown function:
    //
    signal( SIGINT, shutDown );
+   signal( SIGTERM, shutDown );
 
    //
    // Construct the source string of the statistics objects that are sent out

@@ -12,7 +12,7 @@ include(../cda_common.pri)
 
 # This will be a library with the name "cdagui":
 TEMPLATE = lib
-VERSION  = 0.9.0
+VERSION  = 1.1.0
 TARGET   = cdagui
 
 # These are the header and source files:

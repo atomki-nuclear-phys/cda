@@ -71,19 +71,19 @@ win32 {
 # Uncomment the following if you have the CAEN libraries installed
 # on your system.
 #
-#DEFINES += HAVE_CAEN_LIBS
+DEFINES += HAVE_CAEN_LIBS
 
 #
 # Uncomment the following if you have the VME library installed
 # on your system.
 #
-#DEFINES += HAVE_VME_LIB
+DEFINES += HAVE_VME_LIB
 
 #
 # Uncomment the following if you have CERNLIB installed on your
 # system.
 #
-#DEFINES += HAVE_CERNLIB
+DEFINES += HAVE_CERNLIB
 
 #
 # Compiler settings. In order to be able to link against CERNLIB on

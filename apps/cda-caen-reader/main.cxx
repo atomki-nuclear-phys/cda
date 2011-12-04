@@ -275,6 +275,7 @@ int main( int argc, char* argv[] ) {
    // Connect the interrupt signal to the shutDown function:
    //
    signal( SIGINT, shutDown );
+   signal( SIGTERM, shutDown );
 
    //
    // Let the user know what we're doing:

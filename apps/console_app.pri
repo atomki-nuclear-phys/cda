@@ -19,6 +19,3 @@ QT     = core network xml gui
 OBJECTS_DIR = ./.obj
 MOC_DIR     = ./.obj
 DESTDIR     = ../../bin
-
-# Special linking setup for Windows:
-QMAKE_LFLAGS += --enable-auto-import
