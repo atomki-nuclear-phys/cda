@@ -1,0 +1,9 @@
+<!DOCTYPE CDA_SETUP PUBLIC '' ''>
+<Setup xmlns="">
+   <CaenDigitizer ConnType="USB">
+      <DT5740>
+         <Channel Subaddress="3" LowerBound="0" Name="tone" NumberOfChannels="1024" UpperBound="1024" />
+         <Channel Subaddress="5" LowerBound="0" Name="ttwo" NumberOfChannels="1024" UpperBound="1024" />
+      </DT5740>
+   </CaenDigitizer>
+</Setup>

@@ -12,7 +12,7 @@ extern "C" {
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
-#include "msg/Logger.h"
+#include "../msg/Logger.h"
 
 /**
  *  @short Namespace for the CAEN library related classes
@@ -64,6 +64,11 @@ namespace caen {
       /// Close the connection
       bool close();
 
+      /// Write to a 32-bit register
+      bool writeRegister( uint32_t address, uint32_t data );
+      /// Read from a 32-bit register
+      bool readRegister( uint32_t address, uint32_t& data ) const;
+
       /// Prints information about the digitizer
       bool printInfo() const;
 
@@ -84,6 +89,40 @@ namespace caen {
       bool printInterruptConfig() const;
       /// Waits for an interrupt from the digitizer
       bool irqWait( uint32_t timeout ) const;
+
+      /// Set which channels should be enabled
+      bool setChannelEnableMask( uint32_t mask );
+      /// Retrieves which channels are enabled
+      bool getChannelEnableMask( uint32_t& mask ) const;
+
+      /// Enumeration listing the channel trigger modes
+      enum TriggerMode {
+         TRIG_Disabled  = 0, ///< Triggering for the channel is disabled
+         TRIG_ExtOnly   = 1, ///< Trigger only on external input
+         TRIG_AcqOnly   = 2, ///< Trigger only according to data acquisition
+         TRIG_AcqAndExt = 3  ///< Trigger on both inputs
+      };
+
+      /// Sets the global triggering mode
+      bool setGlobalTriggerMode( TriggerMode mode );
+      /// Retrieves the global triggering mode
+      bool getGlobalTriggerMode( TriggerMode& mode ) const;
+      /// Sets the triggering mode for one channel
+      bool setChannelTriggerMode( uint32_t channel, TriggerMode mode );
+      /// Retrieves the triggering mode of one channel
+      bool getChannelTriggerMode( uint32_t channel,
+                                  TriggerMode& mode ) const;
+
+      /// Sets the trigger threshold for a specific channel
+      bool setChannelTriggerThreshold( uint32_t channel, uint32_t thr );
+      /// Retrieves the trigger threshold of a specific channel
+      bool getChannelTriggerThreshold( uint32_t channel,
+                                       uint32_t& thr ) const;
+
+      /// Sets the DC offset for a specified channel
+      bool setDCOffset( uint32_t channel, uint32_t value );
+      /// Retrieves the DC offset of a specified channel
+      bool getDCOffset( uint32_t channel, uint32_t& value ) const;
 
    private:
       int m_handle; ///< C-style device handle

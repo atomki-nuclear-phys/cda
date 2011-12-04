@@ -8,6 +8,7 @@
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
+#include <QtCore/QString>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -22,9 +23,9 @@ namespace dev {
    class Loader;
 
    /**
-    *  @short Base class for all CAMAC/VME crate classes
+    *  @short Base class for all CAMAC/VME/CAEN "crate" classes
     *
-    *         All the CDA applications have to handle a crate of CAMAC/VME
+    *         All the CDA applications have to handle a "crate" of CAMAC/VME/CAEN
     *         devices. The configuration of these devices is always
     *         read and written in the same way, so it makes sense to only
     *         code it once. The situation is complicated a bit by the
@@ -52,7 +53,7 @@ namespace dev {
 
    public:
       /// Constructor
-      Crate();
+      Crate( const QString& type = "CamacCrate" );
       /// Destructor
       ~Crate();
 
@@ -66,6 +67,11 @@ namespace dev {
       /// Write the configuration of the crate to an XML node
       virtual bool writeConfig( QDomElement& node ) const;
 
+      /// Check if this object can read this binary configuration
+      bool canRead( QIODevice* dev ) const;
+      /// Check if this object can read this XML configuration
+      bool canRead( const QDomElement& node ) const;
+
       /// Get the dev::Loader object used by the crate
       Loader* getLoader() const;
       /// Set the dev::Loader object used by the crate
@@ -78,11 +84,22 @@ namespace dev {
       /// Check that a usable dev::Loader is set
       virtual bool checkLoader() const;
 
+      /// Read the crate specific options from binary input
+      virtual bool readCrateConfig( QIODevice* dev );
+      /// Write the crate specific options to binary output
+      virtual bool writeCrateConfig( QIODevice* dev ) const;
+
+      /// Read the crate specific options from XML input
+      virtual bool readCrateConfig( const QDomElement& node );
+      /// Write the crate specific options to XML output
+      virtual bool writeCrateConfig( QDomElement& node ) const;
+
       /// Container for the devices
       /**
-       * I'm not yet sure about this std::map... A simple array of
-       * Device pointers could be used just as well I guess. It works
-       * for the moment, but might be considered too fancy later on.
+       * The key is the "ID" of the device. In case of a CAMAC crate this
+       * is the slot number of the device, in case of VME, the address.
+       * In the CAEN case we only have one device, so the key is not too
+       * important...
        */
       std::map< unsigned int, DEVICE* > m_devices;
 
@@ -90,6 +107,8 @@ namespace dev {
       const Loader* m_loader;
 
    private:
+      /// Type of this specific crate
+      const QString m_type;
       /// Message logging object
       mutable msg::Logger m_logger;
 

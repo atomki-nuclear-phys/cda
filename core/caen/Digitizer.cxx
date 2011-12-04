@@ -17,6 +17,7 @@ extern "C" {
 
 #ifdef HAVE_CAEN_LIBS
 namespace {
+
    /// Function turning a CAEN error code into a string
    /**
     * To print meaningful error messages easily, this function
@@ -127,16 +128,173 @@ namespace {
       }
       return "Coding error detected";
    }
+
+   /// Function turning a digitizer model into a human readable string
+   const char* toString( CAEN_DGTZ_BoardModel_t model ) {
+
+      switch( model ) {
+
+      case CAEN_DGTZ_V1724:
+         return "V1724";
+         break;
+      case CAEN_DGTZ_V1721:
+         return "V1721";
+         break;
+      case CAEN_DGTZ_V1731:
+         return "V1731";
+         break;
+      case CAEN_DGTZ_V1720:
+         return "V1720";
+         break;
+      case CAEN_DGTZ_V1740:
+         return "V1740";
+         break;
+      case CAEN_DGTZ_V1751:
+         return "V1751";
+         break;
+      case CAEN_DGTZ_DT5724:
+         return "DT5724";
+         break;
+      case CAEN_DGTZ_DT5721:
+         return "DT5721";
+         break;
+      case CAEN_DGTZ_DT5731:
+         return "DT5731";
+         break;
+      case CAEN_DGTZ_DT5720:
+         return "DT5720";
+         break;
+      case CAEN_DGTZ_DT5740:
+         return "DT5740";
+         break;
+      case CAEN_DGTZ_DT5751:
+         return "DT5751";
+         break;
+      case CAEN_DGTZ_N6724:
+         return "N6724";
+         break;
+      case CAEN_DGTZ_N6721:
+         return "N6721";
+         break;
+      case CAEN_DGTZ_N6731:
+         return "N6731";
+         break;
+      case CAEN_DGTZ_N6720:
+         return "N6720";
+         break;
+      case CAEN_DGTZ_N6740:
+         return "N6740";
+         break;
+      case CAEN_DGTZ_N6751:
+         return "N6751";
+         break;
+      case CAEN_DGTZ_DT5742:
+         return "DT5742";
+         break;
+      case CAEN_DGTZ_N6742:
+         return "N6742";
+         break;
+      case CAEN_DGTZ_V1742:
+         return "V1742";
+         break;
+      default:
+         return "Board model not recognized";
+         break;
+      }
+      return "Coding error detected";
+   }
+
+   /// Function turning a digitizer form factor into a human readable string
+   const char* toString( CAEN_DGTZ_BoardFormFactor_t form ) {
+
+      switch( form ) {
+
+      case CAEN_DGTZ_VME64_FORM_FACTOR:
+         return "VME64";
+         break;
+      case CAEN_DGTZ_VME64X_FORM_FACTOR:
+         return "VME64X";
+         break;
+      case CAEN_DGTZ_DESKTOP_FORM_FACTOR:
+         return "Desktop";
+         break;
+      case CAEN_DGTZ_NIM_FORM_FACTOR:
+         return "NIM";
+         break;
+      default:
+         return "Board form factor not recognized";
+         break;
+      }
+      return "Coding error detected";
+   }
+
+   /// Convert between the trigger mode enumerations
+   CAEN_DGTZ_TriggerMode_t convert( caen::Digitizer::TriggerMode mode ) {
+
+      switch( mode ) {
+
+      case caen::Digitizer::TRIG_Disabled:
+         return CAEN_DGTZ_TRGMODE_DISABLED;
+         break;
+      case caen::Digitizer::TRIG_ExtOnly:
+         return CAEN_DGTZ_TRGMODE_EXTOUT_ONLY;
+         break;
+      case caen::Digitizer::TRIG_AcqOnly:
+         return CAEN_DGTZ_TRGMODE_ACQ_ONLY;
+         break;
+      case caen::Digitizer::TRIG_AcqAndExt:
+         return CAEN_DGTZ_TRGMODE_ACQ_AND_EXTOUT;
+         break;
+      default:
+         return static_cast< CAEN_DGTZ_TriggerMode_t >( 10L );
+         break;
+      }
+      return static_cast< CAEN_DGTZ_TriggerMode_t >( 10L );
+   }
+
+   /// Convert between the trigger mode enumerations
+   caen::Digitizer::TriggerMode convert( CAEN_DGTZ_TriggerMode_t mode ) {
+
+      switch( mode ) {
+
+      case CAEN_DGTZ_TRGMODE_DISABLED:
+         return caen::Digitizer::TRIG_Disabled;
+         break;
+      case CAEN_DGTZ_TRGMODE_EXTOUT_ONLY:
+         return caen::Digitizer::TRIG_ExtOnly;
+         break;
+      case CAEN_DGTZ_TRGMODE_ACQ_ONLY:
+         return caen::Digitizer::TRIG_AcqOnly;
+         break;
+      case CAEN_DGTZ_TRGMODE_ACQ_AND_EXTOUT:
+         return caen::Digitizer::TRIG_AcqAndExt;
+         break;
+      default:
+         return static_cast< caen::Digitizer::TriggerMode >( 10L );
+         break;
+      }
+      return static_cast< caen::Digitizer::TriggerMode >( 10L );
+   }
+
+   /// Convert a channel number to a channel mask
+   uint32_t toMask( uint32_t channel ) {
+
+      return ( 0x1 << channel );
+   }
+
 } // private namespace
+
 /// Define the name of the current function
 #if defined( __GNUC__ )
 #   define CHECK_FNAME __PRETTY_FUNCTION__
 #else
 #   define CHECK_FNAME ""
 #endif
+
 /// Prefix put before error messages
 #define CHECK_REPORT_PREFIX \
    __FILE__ << ":" << __LINE__ << " (" << CHECK_FNAME << "): "
+
 /// Macro checking the return value of a CAEN Digitizer function
 #define CHECK(CMD) {                                                    \
       CAEN_DGTZ_ErrorCode code = CMD;                                   \
@@ -150,6 +308,7 @@ namespace {
          return false;                                                  \
       }                                                                 \
    } while( 0 )
+
 #endif // HAVE_CAEN_LIBS
 
 namespace caen {
@@ -236,6 +395,38 @@ namespace caen {
       return true;
    }
 
+   bool Digitizer::writeRegister( uint32_t address, uint32_t data ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_WriteRegister( m_handle, address, data ) );
+#else
+      m_logger << msg::DEBUG
+               << tr( "writeRegister( address: %1, data: %2 )" )
+         .arg( address ).arg( data )
+               << msg::endmsg;
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::readRegister( uint32_t address,
+                                 uint32_t& data ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_ReadRegister( m_handle, address, &data ) );
+#else
+      m_logger << msg::DEBUG
+               << tr( "readRegister( address: %1, data: to be set )" )
+         .arg( address )
+               << msg::endmsg;
+      data = 0;
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
    /**
     * This function can be used to print some information about the
     * digitizer that this object is connected to.
@@ -262,8 +453,10 @@ namespace caen {
                       "  serial num.: %8\n"
                       "  PCB rev.   : %9\n"
                       "  ADC NBits  : %10" )
-         .arg( boardInfo.ModelName ).arg( boardInfo.Model )
-         .arg( boardInfo.Channels ).arg( boardInfo.FormFactor )
+         .arg( boardInfo.ModelName )
+         .arg( toString( static_cast< CAEN_DGTZ_BoardModel_t >( boardInfo.Model ) ) )
+         .arg( boardInfo.Channels )
+         .arg( toString( static_cast< CAEN_DGTZ_BoardFormFactor_t >( boardInfo.FormFactor ) ) )
          .arg( boardInfo.FamilyCode ).arg( boardInfo.ROC_FirmwareRel )
          .arg( boardInfo.AMC_FirmwareRel ).arg( boardInfo.SerialNumber )
          .arg( boardInfo.PCB_Revision ).arg( boardInfo.ADC_NBits )
@@ -382,6 +575,130 @@ namespace caen {
       tv.tv_sec = 0;
       tv.tv_usec = 100000;
       select( 0, NULL, NULL, NULL, &tv );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::setChannelEnableMask( uint32_t mask ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_SetChannelEnableMask( m_handle, mask ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getChannelEnableMask( uint32_t& mask ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_GetChannelEnableMask( m_handle, &mask ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::setGlobalTriggerMode( TriggerMode mode ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_SetSWTriggerMode( m_handle, convert( mode ) ) );
+      CHECK( CAEN_DGTZ_SetExtTriggerInputMode( m_handle,
+                                               convert( mode ) ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getGlobalTriggerMode( TriggerMode& mode ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CAEN_DGTZ_TriggerMode_t sw, ext;
+      CHECK( CAEN_DGTZ_GetSWTriggerMode( m_handle, &sw ) );
+      CHECK( CAEN_DGTZ_GetExtTriggerInputMode( m_handle, &ext ) );
+      if( sw != ext ) {
+         m_logger << msg::WARNING
+                  << tr( "Trigger mode setting not consistent.\n"
+                         "Set trigger mode explicitly!" )
+                  << msg::endmsg;
+      }
+      mode = convert( sw );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::setChannelTriggerMode( uint32_t channel,
+                                          TriggerMode mode ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_SetChannelSelfTrigger( m_handle, convert( mode ),
+                                              toMask( channel ) ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getChannelTriggerMode( uint32_t channel,
+                                          TriggerMode& mode ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CAEN_DGTZ_TriggerMode_t cmode;
+      CHECK( CAEN_DGTZ_GetChannelSelfTrigger( m_handle, channel,
+                                              &cmode ) );
+      mode = convert( cmode );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::setChannelTriggerThreshold( uint32_t channel,
+                                               uint32_t thr ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_SetChannelTriggerThreshold( m_handle, channel,
+                                                   thr ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getChannelTriggerThreshold( uint32_t channel,
+                                               uint32_t& thr ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_GetChannelTriggerThreshold( m_handle, channel,
+                                                   &thr ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::setDCOffset( uint32_t channel, uint32_t value ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_SetChannelDCOffset( m_handle, channel,
+                                           value ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getDCOffset( uint32_t channel,
+                                uint32_t& value ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_GetChannelDCOffset( m_handle, channel,
+                                           &value ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:

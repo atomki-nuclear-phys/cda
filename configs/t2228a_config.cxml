@@ -1,11 +1,13 @@
 <!DOCTYPE CDA_SETUP PUBLIC '' ''>
 <Setup xmlns="">
-   <T2228A Slot="10" GenerateLAM="1" >
-      <Channel Subaddress="3" LowerBound="0" Name="tone" NumberOfChannels="1024" UpperBound="1024" />
-      <Channel Subaddress="5" LowerBound="0" Name="ttwo" NumberOfChannels="1024" UpperBound="1024" />
-   </T2228A>
-   <T2228A Slot="15" GenerateLAM="0" >
-      <Channel Subaddress="1" LowerBound="0" Name="t3" NumberOfChannels="1024" UpperBound="1024" />
-      <Channel Subaddress="2" LowerBound="0" Name="t4" NumberOfChannels="1024" UpperBound="1024" />
-   </T2228A>
+   <CamacCrate>
+      <T2228A Slot="10" GenerateLAM="1" >
+         <Channel Subaddress="3" LowerBound="0" Name="tone" NumberOfChannels="1024" UpperBound="1024" />
+         <Channel Subaddress="5" LowerBound="0" Name="ttwo" NumberOfChannels="1024" UpperBound="1024" />
+      </T2228A>
+      <T2228A Slot="15" GenerateLAM="0" >
+         <Channel Subaddress="1" LowerBound="0" Name="t3" NumberOfChannels="1024" UpperBound="1024" />
+         <Channel Subaddress="2" LowerBound="0" Name="t4" NumberOfChannels="1024" UpperBound="1024" />
+      </T2228A>
+   </CamacCrate>
 </Setup>

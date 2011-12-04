@@ -18,7 +18,6 @@
 #include <csignal>
 
 // STL include(s):
-#include <iostream>
 #include <map>
 
 // Qt include(s):

@@ -1,0 +1,173 @@
+// Dear emacs, this is -*- c++ -*-
+// $Id$
+#ifndef CDA_COMMON_CAEN_CRATE_ICC
+#define CDA_COMMON_CAEN_CRATE_ICC
+
+// Qt include(s):
+#include <QtCore/QIODevice>
+#include <QtCore/QDataStream>
+#include <QtXml/QDomElement>
+
+namespace caen {
+
+   template< class DEVICE >
+   Crate< DEVICE >::Crate()
+      : dev::Crate< DEVICE >( "CaenDigitizer" ),
+        m_logger( "caen::Crate" ) {
+
+   }
+
+   template< class DEVICE >
+   Digitizer::ConnectionType
+   Crate< DEVICE >::getConnType() const {
+
+      return m_connType;
+   }
+
+   template< class DEVICE >
+   void Crate< DEVICE >::setConnType( Digitizer::ConnectionType type ) {
+
+      m_connType = type;
+      return;
+   }
+
+   template< class DEVICE >
+   bool Crate< DEVICE >::readCrateConfig( QIODevice* dev ) {
+
+      QDataStream input( dev );
+      input.setVersion( QDataStream::Qt_4_0 );
+
+      quint32 ctype;
+      input >> ctype;
+
+      m_connType = convert( ctype );
+
+      return true;
+   }
+
+   template< class DEVICE >
+   bool Crate< DEVICE >::writeCrateConfig( QIODevice* dev ) const {
+
+      QDataStream output( dev );
+      output.setVersion( QDataStream::Qt_4_0 );
+
+      output << convert( m_connType );
+
+      return true;
+   }
+
+   template< class DEVICE >
+   bool Crate< DEVICE >::readCrateConfig( const QDomElement& node ) {
+
+      // Read the connection type:
+      const QString type = node.attribute( "ConnType", "USB" );
+      // Convert it to an enumeration:
+      m_connType = fromString( type );
+
+      return true;
+   }
+
+   template< class DEVICE >
+   bool Crate< DEVICE >::writeCrateConfig( QDomElement& node ) const {
+
+      // Set the connection type:
+      node.setAttribute( "ConnType", toString( m_connType ) );
+
+      return true;
+   }
+
+   template< class DEVICE >
+   quint32 Crate< DEVICE >::convert( Digitizer::ConnectionType type ) {
+
+      switch( type ) {
+
+      case Digitizer::USB:
+         return 0;
+         break;
+      case Digitizer::PCI_OpticalLink:
+         return 1;
+         break;
+      case Digitizer::PCIE_OpticalLink:
+         return 2;
+         break;
+      case Digitizer::PCIE_EmbeddedDigitizer:
+         return 3;
+         break;
+      default:
+         return 0;
+         break;
+      }
+
+      return 1000;
+   }
+
+   template< class DEVICE >
+   Digitizer::ConnectionType Crate< DEVICE >::convert( quint32 type ) {
+
+      switch( type ) {
+
+      case 0:
+         return Digitizer::USB;
+         break;
+      case 1:
+         return Digitizer::PCI_OpticalLink;
+         break;
+      case 2:
+         return Digitizer::PCIE_OpticalLink;
+         break;
+      case 3:
+         return Digitizer::PCIE_EmbeddedDigitizer;
+         break;
+      default:
+         return Digitizer::USB;
+         break;
+      }
+
+      return static_cast< Digitizer::ConnectionType >( 1000 );
+   }
+
+   template< class DEVICE >
+   QString Crate< DEVICE >::toString( Digitizer::ConnectionType type ) {
+
+      switch( type ) {
+
+      case Digitizer::USB:
+         return "USB";
+         break;
+      case Digitizer::PCI_OpticalLink:
+         return "PCI_OpticalLink";
+         break;
+      case Digitizer::PCIE_OpticalLink:
+         return "PCIE_OpticalLink";
+         break;
+      case Digitizer::PCIE_EmbeddedDigitizer:
+         return "PCIE_EmbeddedDigitizer";
+         break;
+      default:
+         return "USB";
+         break;
+      }
+
+      return "Unknown";
+   }
+
+   template< class DEVICE >
+   Digitizer::ConnectionType
+   Crate< DEVICE >::fromString( const QString& type ) {
+
+      if( type == "USB" ) {
+         return Digitizer::USB;
+      } else if( type == "PCI_OpticalLink" ) {
+         return Digitizer::PCI_OpticalLink;
+      } else if( type == "PCIE_OpticalLink" ) {
+         return Digitizer::PCIE_OpticalLink;
+      } else if( type == "PCIE_EmbeddedDigitizer" ) {
+         return Digitizer::PCIE_EmbeddedDigitizer;
+      }
+
+      return Digitizer::USB;
+   }
+
+} // namespace caen
+
+#endif // CDA_COMMON_CAEN_CRATE_ICC

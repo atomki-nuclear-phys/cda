@@ -16,7 +16,7 @@ include(../console_app.pri)
 TARGET   = cda-caen-reader
 
 # These are the header and source files:
-#HEADERS = *.h
+HEADERS = *.h
 SOURCES = *.cxx
 TRANSLATIONS = ../../trans/cda-caen-reader_hu.ts
 
@@ -30,7 +30,7 @@ mac {
    message(*)
 
    QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore
+   LIBS           += -F../../lib -framework cdacore -framework cdadaq
 }
 
 #
@@ -42,6 +42,6 @@ unix:!mac {
    message(* Configuring to build the \"cda-caen-reader\" application on Linux)
    message(*)
 
-   INCLUDEPATH += ../../core
-   LIBS        += -L../../lib -lcdacore
+   INCLUDEPATH += ../../core ../../daq
+   LIBS        += -L../../lib -lcdacore -lcdadaq
 }
