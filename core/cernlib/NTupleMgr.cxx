@@ -143,10 +143,10 @@ namespace cernlib {
          return false;
       }
 
+#ifdef HAVE_CERNLIB
       // Some additionally needed variables for the CERNLIB functions:
       int istat = 0, record_size = 1024;
 
-#ifdef HAVE_CERNLIB
       // Create the HBOOK common block(s):
       HLIMIT( PAWC_SIZE );
 
@@ -203,10 +203,10 @@ namespace cernlib {
       sprintf( aq, "acquisition" );
       sprintf( t, "T" );
 
+#ifdef HAVE_CERNLIB
       // Additional variable(s) needed by CERNLIB:
       int icycle;
 
-#ifdef HAVE_CERNLIB
       // Flush the memory buffers:
       HROUT( 0, icycle, t );
 

@@ -219,3 +219,4 @@ contains(DEFINES,HAVE_CAEN_LIBS) {
 contains(DEFINES,HAVE_VME_LIB) {
    LIBS += -lpcivme
 }
+

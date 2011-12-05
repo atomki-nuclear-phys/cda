@@ -39,6 +39,7 @@
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/EventServer.h"
 #   include "cdacore/i18n/Loader.h"
+#   include "cdacore/common/Sleep.h"
 #   include "cdadaq/stat/Sender.h"
 #   include "cdadaq/config/ConfReader.h"
 #else
@@ -49,6 +50,7 @@
 #   include "event/Event.h"
 #   include "event/EventServer.h"
 #   include "i18n/Loader.h"
+#   include "common/Sleep.h"
 #   include "stat/Sender.h"
 #   include "config/ConfReader.h"
 #endif
@@ -390,7 +392,7 @@ int main( int argc, char* argv[] ) {
          }
 
          // Sleep for 2 seconds:
-         sleep( 2 );
+         common::Sleep( 2000 );
       }
    } else {
       //
@@ -429,7 +431,7 @@ int main( int argc, char* argv[] ) {
                                                statSource ) );
 
          // Sleep for 2 seconds:
-         sleep( 2 );
+         common::Sleep( 2000 );
       }
    }
 

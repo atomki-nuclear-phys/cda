@@ -1,11 +1,7 @@
 // $Id$
 
-// System include(s):
-extern "C" {
-#   include <sys/time.h>
-#   include <sys/types.h>
-#   include <unistd.h>
-}
+// CDA include(s):
+#include "../common/Sleep.h"
 
 // Local include(s):
 #include "Crate.h"
@@ -398,16 +394,8 @@ namespace camac {
       }
 #else
       m_logger << msg::VERBOSE << tr( "Waiting for LAM" ) << msg::endmsg;
-#ifndef Q_WS_WIN
-      // Wait for a 100 miliseconds before returning. This is a good way
-      // to produce an eco-friendly 10 Hz readout rate without CAMAC access.
-      struct timeval tv;
-      tv.tv_sec = 0;
-      tv.tv_usec = 100000;
-      select( 0, NULL, NULL, NULL, &tv );
-#else
-      _sleep( 1 );
-#endif // Q_WS_WIN
+      // Sleep for a hundred miliseconds:
+      common::Sleep( 100 );
 #endif // HAVE_CAMAC_LIB
 
       return true;

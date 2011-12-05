@@ -71,7 +71,7 @@ namespace vme {
       int read( Address_t address, void* data, unsigned int length ) const;
 
       /// Function that puts the program in idle state for a given time.
-      static void wait( int usec = 100 );
+      static void wait( unsigned int milisec = 1 );
 
    private:
       /// The VME file descriptor.

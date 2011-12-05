@@ -2,15 +2,14 @@
 
 // System include(s):
 #include <iomanip>
-extern "C" {
-#   include <sys/time.h>
-#   include <sys/types.h>
-#   include <unistd.h>
-}
 
+// VME library include(s):
 #ifdef HAVE_VME_LIB
 #include "pcivme_ni.h"
 #endif // HAVE_VME_LIB
+
+// CDA include(s):
+#include "../common/Sleep.h"
 
 // Local include(s):
 #include "VmeBus.h"
@@ -367,19 +366,12 @@ namespace vme {
    }
 
    /**
-    * Function that waits for 'usec' usec-s. It plays a big
+    * Function that waits for 'milisec' miliseconds. It plays a big
     * role in the VME bus readout!
     */
-   void VmeBus::wait( int usec ) {
+   void VmeBus::wait( unsigned int milisec ) {
 
-#ifndef Q_WS_WIN
-      struct timeval tv;
-      tv.tv_sec = 0;
-      tv.tv_usec = usec;
-      ::select( 0, NULL, NULL, NULL, &tv );
-#else
-       _sleep( 1 );
-#endif // Q_WS_WIN
+      common::Sleep( milisec );
 
       return;
    }
