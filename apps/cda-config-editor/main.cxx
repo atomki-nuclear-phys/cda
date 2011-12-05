@@ -30,6 +30,7 @@
 
 // Local include(s):
 #include "ConfigEditorWindow.h"
+#include "../win32/plugins.h"
 
 int main( int argc, char* argv[] ) {
 

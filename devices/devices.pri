@@ -12,8 +12,17 @@
 TEMPLATE = lib
 
 # The plugins use the QtCore, QtGui and QtXml libraries:
-CONFIG += qt plugin
+CONFIG += qt
 QT      = core gui xml
+
+# On Windows we compile static plugins, but on Linux/MacOS X,
+# we compile dynamic loading plugins instead.
+win32 {
+   CONFIG += static plugin
+}
+!win32 {
+   CONFIG += plugin
+}
 
 # The place to put the intermediate and final build results:
 OBJECTS_DIR = ./.obj

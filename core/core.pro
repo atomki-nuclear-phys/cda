@@ -155,8 +155,8 @@ win32 {
    message(* Configuring to build the \"cdacore\" static library on Windows)
    message(*)
 
-   CONFIG += shared
-   DESTDIR = ../bin
+   CONFIG += static
+   DESTDIR = ../lib
 }
 
 #

@@ -62,5 +62,5 @@ win32 {
    message(*)
 
    INCLUDEPATH += ../../core ../../gui
-   LIBS        += -L../../bin -lcdacore0 -lcdadaq0 -lcdagui0
+   LIBS        += -L../../lib -lcdagui -lcdadaq -lcdacore
 }

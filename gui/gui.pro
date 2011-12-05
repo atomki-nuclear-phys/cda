@@ -116,10 +116,10 @@ win32 {
    message(*)
 
    # Create a static library and link it against the cdacore library:
-   CONFIG      += shared
+   CONFIG      += static
    INCLUDEPATH += ../core ../daq
-   LIBS        += -L../bin -lcdacore0 -lcdadaq0
+   LIBS        += -L../lib -lcdadaq -lcdacore
 
    # Place the library in ../bin:
-   DESTDIR      = ../bin
+   DESTDIR      = ../lib
 }

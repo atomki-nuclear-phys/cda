@@ -10,12 +10,13 @@
 # Include the common project options:
 include(../../cda_common.pri)
 include(../gui_app.pri)
+include(../plugin_app.pri)
 
 # This will be an application with the name "cda-config-editor":
 TARGET = cda-config-editor
 
 # These are the header and source files:
-HEADERS = *.h
+HEADERS = *.h ../win32/plugins.h
 SOURCES = *.cxx
 
 # The application uses some resources:
@@ -62,7 +63,5 @@ win32 {
    message(*)
 
    INCLUDEPATH += ../../core ../../gui
-   LIBS        += ../../bin/libcdacore0.a ../../bin/libcdadaq0.a ../../bin/libcdagui0.a
-#                  ../../dev/libad413a1.a ../../dev/libad10001.a ../../dev/libad22491.a \
-#                  ../../dev/libt2228a1.a ../../dev/libt4300b1.a ../../dev/libs9418t1.a
+   LIBS        += -L../../lib -lcdagui -lcdadaq -lcdacore
 }

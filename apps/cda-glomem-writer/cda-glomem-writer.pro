@@ -11,12 +11,13 @@
 # Include the common project options:
 include(../../cda_common.pri)
 include(../console_app.pri)
+include(../plugin_app.pri)
 
 # This will be an application with the name "cda-glomem-writer":
 TARGET   = cda-glomem-writer
 
 # These are the header and source files:
-HEADERS = *.h
+HEADERS = *.h ../win32/plugins.h
 SOURCES = *.cxx
 TRANSLATIONS = ../../trans/cda-glomem-writer_hu.ts
 
@@ -56,6 +57,5 @@ win32 {
    message(*)
 
    INCLUDEPATH += ../../core ../../daq
-   LIBS        += -L../../bin -lcdacore0 -l cdadaq0 -L../../dev -lad413a -lad1000 \
-                  -lad2249a -lt2228a -lt4300b -ls9418t
+   LIBS        += -L../../lib -lcdadaq -lcdacore
 }

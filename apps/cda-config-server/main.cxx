@@ -17,6 +17,9 @@
 #   include "config/ConfServer.h"
 #endif
 
+// Local include(s):
+#include "../win32/plugins.h"
+
 /// Description printed to the console
 static const char* description =
    "This program can be used to broadcast a configuration to other "

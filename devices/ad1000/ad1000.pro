@@ -49,5 +49,5 @@ win32 {
 
    # The plugin has to be linked against the cdacore library:
    INCLUDEPATH += ../../core
-   LIBS         = ../../bin/libcdacore0.a
+   LIBS         = ../../bin/libcdacore1.a
 }

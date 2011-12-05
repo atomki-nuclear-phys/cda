@@ -11,12 +11,13 @@
 # Include the common project options:
 include(../../cda_common.pri)
 include(../console_app.pri)
+include(../plugin_app.pri)
 
 # This will be an application with the name "cda-config-server":
 TARGET = cda-config-server
 
 # These are the header and source files:
-HEADERS =
+HEADERS = ../win32/plugins.h
 SOURCES = *.cxx
 TRANSLATIONS = ../../trans/cda-config-server_hu.ts
 
@@ -57,5 +58,5 @@ win32 {
    message(*)
 
    INCLUDEPATH += ../../core ../../daq
-   LIBS        += ../../bin/libcdacore0.a ../../bin/libcdadaq0.a
+   LIBS        += -L../../lib -lcdadaq -lcdacore
 }

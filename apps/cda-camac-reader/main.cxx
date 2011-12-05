@@ -55,6 +55,7 @@
 
 // Local include(s):
 #include "Crate.h"
+#include "../win32/plugins.h"
 
 // Function forward declaration(s):
 void shutDown( int );
