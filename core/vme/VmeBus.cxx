@@ -243,7 +243,7 @@ namespace vme {
       VMEwrite( m_vmeFD, address, sizeof( char ), length, data );
 #else
       m_logger << msg::VERBOSE
-               << tr( "Unknown length write > Address: 0x%1; length: %2" )
+               << tr( "Unknown length write > Address: 0x%1; length: %3" )
          .arg( address ).arg( length )
                << msg::endmsg;
 #endif // HAVE_VME_LIB
@@ -271,6 +271,9 @@ namespace vme {
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( char ), 1, data );
 #else
+      m_logger << msg::VERBOSE
+               << tr( "8-bit read request from address: %1" ).arg( address )
+               << msg::endmsg;
       *data = 100;
 #endif // HAVE_VME_LIB
 
@@ -297,6 +300,9 @@ namespace vme {
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( int16_t ), 1, data );
 #else
+      m_logger << msg::VERBOSE
+               << tr( "16-bit read request from address: %1" ).arg( address )
+               << msg::endmsg;
       *data = 1000;
 #endif // HAVE_VME_LIB
 
@@ -323,6 +329,10 @@ namespace vme {
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( int32_t ), 1, data );
 #else
+      m_logger << msg::VERBOSE
+               << tr( "32-bit read request from address: %1" ).arg( address )
+               << msg::endmsg;
+
       if( ( eventCounter >= 0 ) && ( eventCounter < 32 ) ) {
          *data = ( ( eventCounter << 20 ) & 0x01f00000 ) |
             ( eventCounter * 100 + 100 );
@@ -360,18 +370,23 @@ namespace vme {
 
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( char ), length, data );
+#else
+      m_logger << msg::VERBOSE
+               << tr( "Unknown size read request from Address: %1; length: %2" )
+         .arg( address ).arg( length )
+               << msg::endmsg;
 #endif // HAVE_VME_LIB
 
       return 0;
    }
 
    /**
-    * Function that waits for 'milisec' miliseconds. It plays a big
-    * role in the VME bus readout!
+    * Function that waits for the shortest possible time on the platform.
+    * Used in the readout of the VME devices when waiting for new data.
     */
-   void VmeBus::wait( unsigned int milisec ) {
+   void VmeBus::wait() {
 
-      common::Sleep( milisec );
+      common::SleepMin();
 
       return;
    }

@@ -70,8 +70,8 @@ namespace vme {
       /// General function that reads a variable of a user defined size
       int read( Address_t address, void* data, unsigned int length ) const;
 
-      /// Function that puts the program in idle state for a given time.
-      static void wait( unsigned int milisec = 1 );
+      /// Function that puts the program in idle state for a short time
+      static void wait();
 
    private:
       /// The VME file descriptor.

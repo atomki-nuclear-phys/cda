@@ -45,4 +45,26 @@ namespace common {
       return;
    }
 
+   /**
+    * The VME readout relies on as short of a sleep cycle as possible on the
+    * platform. This means ~1 miliseconds on Windows, and ~100 microseconds on
+    * Linux/MacOS X.
+    */
+   void SleepMin() {
+
+#ifdef Q_WS_WIN32
+      // On Windows we can use this built-in function:
+      ::Sleep( 1 );
+#else
+      // On POSIX systems the most accurate one is the
+      // select(...) function:
+      struct timeval tv;
+      tv.tv_sec = 0;
+      tv.tv_usec = 100;
+      select( 0, NULL, NULL, NULL, &tv );
+#endif
+
+      return;
+   }
+
 }
