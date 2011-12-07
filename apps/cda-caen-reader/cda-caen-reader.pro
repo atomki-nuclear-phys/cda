@@ -57,5 +57,8 @@ win32 {
    message(*)
 
    INCLUDEPATH += ../../core ../../daq
-   LIBS        += -L../../lib -lcdadaq -lcdacore
+   LIBS        += -L../../lib -lcdadaq -lcdacore -L"/Program Files/CAEN/Digitizers/Library/lib" \
+                  -L"/Program Files/CAEN/Comm/lib" \
+                  -L"/Program Files/CAEN/VME/lib" \
+                  -lCAENDigitizer -lCAENComm -lCAENVMElib
 }

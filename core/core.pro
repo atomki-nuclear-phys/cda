@@ -210,7 +210,17 @@ contains(DEFINES,HAVE_CAMAC_LIB) {
 # Decide whether to link the library against the CAEN libraries:
 #
 contains(DEFINES,HAVE_CAEN_LIBS) {
-   LIBS += -lCAENVME -lCAENComm -lCAENDigitizer
+   win32 {
+      INCLUDEPATH += "/Program Files/CAEN/Digitizers/Library/include" \
+                     "/Program Files/CAEN/Comm/include" \
+                     "/Program Files/CAEN/VME/include"
+      LIBS += -L"/Program Files/CAEN/Digitizers/Library/lib" \
+              -L"/Program Files/CAEN/Comm/lib" \
+              -L"/Program Files/CAEN/VME/lib" \
+              -lCAENDigitizer -lCAENComm -lCAENVMElib
+   } else {
+      LIBS += -lCAENVME -lCAENComm -lCAENDigitizer
+   }
 }
 
 #
