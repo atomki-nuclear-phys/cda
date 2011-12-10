@@ -55,7 +55,7 @@ unix {
    isEmpty(CDASYS) {
       error(CDASYS not defined. Please source one of the setup scripts!)
    }
-   DEFINES += CDASYS=\'\"$$CDASYS\"\'
+   DEFINES += CDASYS=$$CDASYS
 }
 win32 {
    DEFINES += CDASYS=$$PWD
@@ -83,7 +83,7 @@ win32 {
 # Uncomment the following if you have CERNLIB installed on your
 # system.
 #
-DEFINES += HAVE_CERNLIB
+#DEFINES += HAVE_CERNLIB
 
 #
 # Compiler settings. In order to be able to link against CERNLIB on

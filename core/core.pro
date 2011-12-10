@@ -29,7 +29,6 @@ TRANSLATIONS = ../trans/cdacore_hu.ts
 # The library uses the QtCore, QtNetwork and QtGui libraries:
 CONFIG += qt
 QT      = core network gui
-LIBS   += -L$$CERNLIB_PATH/lib
 
 # The place to put the intermediate build results:
 OBJECTS_DIR = ./.obj
@@ -175,6 +174,7 @@ contains(DEFINES,HAVE_CERNLIB) {
    }
    DEFINES     += LINUX f2cFortran
    INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran
+   LIBS   += -L$$CERNLIB_PATH/lib
 
    system(g77 --version) {
       system(gfortran --version) {

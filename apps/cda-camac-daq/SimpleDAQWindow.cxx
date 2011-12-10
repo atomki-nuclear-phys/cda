@@ -62,7 +62,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    } else {
       setWindowTitle( tr( "CDA Simple DAQ" ) );
    }
-   setWindowIcon( QIcon( ":/img/cda-simple-daq.png" ) );
+   setWindowIcon( QIcon( ":/img/cda-daq.png" ) );
 
    //
    // Create the central widget. This is the one on which all other widgets are placed:
@@ -286,7 +286,7 @@ void SimpleDAQWindow::drawMenus() {
             this, SLOT( aboutQtSlot() ) );
 
    QAction* aboutConfigEditorAc =
-      helpMenu->addAction( QIcon( ":/img/cda-simple-daq.png" ),
+      helpMenu->addAction( QIcon( ":/img/cda-daq.png" ),
                            tr( "About Simple DAQ" ) );
    connect( aboutConfigEditorAc, SIGNAL( triggered() ),
             this, SLOT( aboutSimpleDAQSlot() ) );

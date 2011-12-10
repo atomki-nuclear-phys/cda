@@ -20,5 +20,5 @@ SUBDIRS  = cda-msgserver cda-camac-reader cda-config-editor \
 # Only compile the applications needing CERNLIB if that is in fact
 # available:
 contains(DEFINES,HAVE_CERNLIB) {
-   SUBDIRS += cda-glomem-writer cda-hbook-writer cda-simple-daq
+   SUBDIRS += cda-glomem-writer cda-hbook-writer cda-camac-daq
 }
