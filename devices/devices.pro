@@ -13,8 +13,11 @@ include(../cda_common.pri)
 
 TEMPLATE = subdirs
 
-# The CAMAC devices:
+# The CAMAC device(s):
 SUBDIRS  = t2228a ad2249a t4300b ad413a ad1000
 
-# The VME devices:
+# The VME device(s):
 SUBDIRS += s9418t
+
+# The CAEN device(s):
+SUBDIRS += dt5740

@@ -21,6 +21,7 @@ namespace dev {
    CaenEditor::CaenEditor( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
         caen::Crate< dev::CaenGui >(),
+        m_selfModification( false ),
         m_logger( "dev::CaenEditor" ) {
 
       resize( CaenGui::WIDGET_WIDTH + 20, 640 );
@@ -71,7 +72,7 @@ namespace dev {
 
       // Create a widget to show the devices in:
       m_deviceStack = new QStackedWidget( this );
-      m_deviceStack->setGeometry( QRect( 10, 100, CaenGui::WIDGET_WIDTH,
+      m_deviceStack->setGeometry( QRect( 10, 50, CaenGui::WIDGET_WIDTH,
                                          CaenGui::WIDGET_HEIGHT ) );
 
    }
@@ -86,7 +87,22 @@ namespace dev {
 
       // Now show the device:
       if( m_devices.size() ) {
+         // Disable the device creation temporarily:
+         m_selfModification = true;
+         // Display the device:
          m_deviceStack->addWidget( m_devices.begin()->second );
+         // Make the combo box display the appropriate device type:
+         const int index =
+            m_createDevice->findData( m_devices.begin()->second->deviceName() );
+         if( index >= 0 ) {
+            m_createDevice->setCurrentIndex( index );
+         }
+         // Re-enable the device creation:
+         m_selfModification = false;
+         // Disable the device creation widget:
+         m_createDevice->setEnabled( false );
+         // Enable the device clearing widget:
+         m_clearDevice->setEnabled( true );
       }
 
       return true;
@@ -102,7 +118,22 @@ namespace dev {
 
       // Now show the device:
       if( m_devices.size() ) {
+         // Disable the device creation temporarily:
+         m_selfModification = true;
+         // Display the device:
          m_deviceStack->addWidget( m_devices.begin()->second );
+         // Make the combo box display the appropriate device type:
+         const int index =
+            m_createDevice->findData( m_devices.begin()->second->deviceName() );
+         if( index >= 0 ) {
+            m_createDevice->setCurrentIndex( index );
+         }
+         // Re-enable the device creation:
+         m_selfModification = false;
+         // Disable the device creation widget:
+         m_createDevice->setEnabled( false );
+         // Enable the device clearing widget:
+         m_clearDevice->setEnabled( true );
       }
 
       return true;
@@ -112,6 +143,9 @@ namespace dev {
     * @param index Index of the menu item in m_createDevice
     */
    void CaenEditor::createDeviceSlot( int index ) {
+
+      // Don't do anything if the object is modifying itself:
+      if( m_selfModification ) return;
 
       // A security check:
       if( ! checkLoader() ) return;
@@ -164,15 +198,22 @@ namespace dev {
       // Return right away if there's no device configured at the moment:
       if( ! m_devices.size() ) return;
 
+      // Disable the device creation temporarily:
+      m_selfModification = true;
+
       // If there is a device configured, remove it from the stack, and
       // then remove it completely:
       m_deviceStack->removeWidget( m_devices.begin()->second );
       clear();
+      m_createDevice->setCurrentIndex( 0 );
 
       // Enable the device creation widget:
       m_createDevice->setEnabled( true );
       // Disable the device clearing widget:
       m_clearDevice->setEnabled( false );
+
+      // Re-enable the device creation:
+      m_selfModification = false;
 
       return;
    }
