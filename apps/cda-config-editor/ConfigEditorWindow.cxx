@@ -222,35 +222,40 @@ void ConfigEditorWindow::createMenus() {
 
    QMenu* fileMenu = menuBar()->addMenu( tr( "&File" ) );
 
-   QAction* newAction = fileMenu->addAction( QIcon::fromTheme( "document-new",
-                                                               QIcon( ":/img/filenew.png" ) ),
-                                             tr( "&Create new configuration..." ) );
+   QAction* newAction =
+      fileMenu->addAction( QIcon::fromTheme( "document-new",
+                                             QIcon( ":/img/filenew.png" ) ),
+                           tr( "&Create new configuration..." ) );
    connect( newAction, SIGNAL( triggered() ),
             this, SLOT( newConfigSlot() ) );
 
-   QAction* openAction = fileMenu->addAction( QIcon::fromTheme( "document-open",
-                                                                QIcon( ":/img/fileopen.png" ) ),
-                                              tr( "&Open configuration file..." ) );
+   QAction* openAction =
+      fileMenu->addAction( QIcon::fromTheme( "document-open",
+                                             QIcon( ":/img/fileopen.png" ) ),
+                           tr( "&Open configuration file..." ) );
    connect( openAction, SIGNAL( triggered() ),
             this, SLOT( readConfigSlot() ) );
 
-   QAction* saveAction = fileMenu->addAction( QIcon::fromTheme( "document-save",
-                                                                QIcon( ":/img/filesave.png" ) ),
-                                              tr( "&Save configuration file" ) );
+   QAction* saveAction =
+      fileMenu->addAction( QIcon::fromTheme( "document-save",
+                                             QIcon( ":/img/filesave.png" ) ),
+                           tr( "&Save configuration file" ) );
    connect( saveAction, SIGNAL( triggered() ),
             this, SLOT( writeConfigSlot() ) );
 
-   QAction* saveAsAction = fileMenu->addAction( QIcon::fromTheme( "document-save-as",
-                                                                  QIcon( ":/img/filesaveas.png" ) ),
-                                                tr( "Save configuration as..." ) );
+   QAction* saveAsAction =
+      fileMenu->addAction( QIcon::fromTheme( "document-save-as",
+                                             QIcon( ":/img/filesaveas.png" ) ),
+                           tr( "Save configuration as..." ) );
    connect( saveAsAction, SIGNAL( triggered() ),
             this, SLOT( writeConfigAsSlot() ) );
 
    fileMenu->addSeparator();
 
-   QAction* quitAction = fileMenu->addAction( QIcon::fromTheme( "application-exit",
-                                                                QIcon( ":/img/warning.png" ) ),
-                                              tr( "&Quit" ) );
+   QAction* quitAction =
+      fileMenu->addAction( QIcon::fromTheme( "application-exit",
+                                             QIcon( ":/img/warning.png" ) ),
+                           tr( "&Quit" ) );
    connect( quitAction, SIGNAL( triggered() ),
             this, SLOT( close() ) );
 
@@ -298,8 +303,9 @@ void ConfigEditorWindow::createMenus() {
    connect( aboutQtAction, SIGNAL( triggered() ),
             this, SLOT( aboutQtSlot() ) );
 
-   QAction* aboutConfigEditorAc = helpMenu->addAction( QIcon( ":/img/cda-config-editor.png" ),
-                                                       tr( "About Config Editor" ) );
+   QAction* aboutConfigEditorAc =
+      helpMenu->addAction( QIcon( ":/img/cda-config-editor.png" ),
+                           tr( "About Config Editor" ) );
    connect( aboutConfigEditorAc, SIGNAL( triggered() ),
             this, SLOT( aboutConfigEditorSlot() ) );
 

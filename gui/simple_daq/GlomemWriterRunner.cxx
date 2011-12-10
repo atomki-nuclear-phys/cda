@@ -6,6 +6,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QPalette>
 #include <QtGui/QFont>
+#include <QtGui/QIcon>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -46,7 +47,8 @@ namespace simple_daq {
       font.setPointSize( 14 );
       m_processStatus->setFont( font );
 
-      m_starterButton = new QPushButton( tr( "Start glomem writer" ), m_mainBox );
+      m_starterButton = new QPushButton( QIcon::fromTheme( "media-playback-start" ),
+                                         tr( "Start glomem writer" ), m_mainBox );
       m_starterButton->setGeometry( QRect( 20, 100, 250, 35 ) );
       m_starterButton->setCheckable( true );
       connect( m_starterButton, SIGNAL( clicked( bool ) ),
@@ -122,8 +124,7 @@ namespace simple_daq {
          m_runner.setOptions( options );
 
          if( ! m_runner.start() ) {
-            m_logger << msg::ERROR << tr( "Couldn't start GloMem writer!" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "Couldn't start GloMem writer!" ) );
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
@@ -134,6 +135,7 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
             m_starterButton->setText( tr( "Reset" ) );
+            m_starterButton->setIcon( QIcon::fromTheme( "edit-clear" ) );
 
          } else {
             m_logger << msg::INFO << tr( "GloMem writer started" )
@@ -148,17 +150,16 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
             m_starterButton->setText( tr( "Stop glomem writer" ) );
+            m_starterButton->setIcon( QIcon::fromTheme( "media-playback-stop" ) );
 
             emit running( true );
-
          }
 
       } else {
 
          if( ! m_runner.stop() ) {
-            m_logger << msg::ERROR
-                     << tr( "The GloMem writer could not be stopped "
-                            "successfully" ) << msg::endmsg;
+            REPORT_ERROR( tr( "The GloMem writer could not be stopped "
+                              "successfully" ) );
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
@@ -180,11 +181,11 @@ namespace simple_daq {
                               QColor( 10, 150, 10 ) );
             m_processStatus->setPalette( palette );
 
-            m_starterButton->setText( tr( "Start glomem writer" ) );
-
             emit running( false );
-
          }
+
+         m_starterButton->setText( tr( "Start glomem writer" ) );
+         m_starterButton->setIcon( QIcon::fromTheme( "media-playback-start" ) );
 
       }
 

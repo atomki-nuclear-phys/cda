@@ -3,6 +3,9 @@
 #ifndef CDA_GUI_SIMPLE_DAQ_CAMACREADERRUNNER_H
 #define CDA_GUI_SIMPLE_DAQ_CAMACREADERRUNNER_H
 
+// STL include(s):
+#include <vector>
+
 // Qt include(s):
 #include <QtCore/QString>
 #include <QtGui/QWidget>
@@ -66,15 +69,8 @@ namespace simple_daq {
       /// Get the address of the statistics server(s)
       const QString& getStatServerAddress() const;
 
-      /// Set the address where cda-hbook-writer listenes for events
-      void setHBookWriterAddress( const QString& address );
-      /// Get the address where cda-hbook-writer listenes for events
-      const QString& getHBookWriterAddress() const;
-
-      /// Set the address where cda-glomem-writer listened for events
-      void setGlomemWriterAddress( const QString& address );
-      /// Get the address where cda-glomem-writer listened for events
-      const QString& getGlomemWriterAddress() const;
+      /// Add the address of an event listener
+      void addEventListenerAddress( const QString& address );
 
       /// Set the verbosity level of the cda-camac-reader application
       void setVerbosity( msg::Level verbosity );
@@ -82,10 +78,8 @@ namespace simple_daq {
       msg::Level getVerbosity() const;
 
    public slots:
-      /// Set whether cda-hbook-writer is running already
-      void setHBookWriterRunning( bool running );
-      /// Set whether cda-glomem-writer is running already
-      void setGlomemWriterRunning( bool running );
+      /// Set whether a writer application is running
+      void setWriterRunning( bool running );
 
    private slots:
       /// Internal function starting and stopping cda-camac-reader
@@ -103,13 +97,11 @@ namespace simple_daq {
       QString m_configFileName;      ///< Name of the configuration file
       QString m_msgServerAddress;    ///< Address of the message server
       QString m_statServerAddress;   ///< Address of the statistics server
-      QString m_hbookWriterAddress;  ///< Address of cda-hbook-writer
-      QString m_glomemWriterAddress; ///< Address of cda-glomem-writer
+      /// Addresses of event listener applications
+      std::vector< QString > m_eventListenerAddresses;
       msg::Level m_level;            ///< Output level of cda-camac-reader
 
-      bool m_hbookWriterUpdating; ///< Flag showing if cda-hbook-writer is in the file name update process
-      bool m_hbookWriterRunning;  ///< Flag showing if cda-hbook-writer is running
-      bool m_glomemWriterRunning; ///< Flag showing if cda-glomem-writer is running
+      int m_writersRunning;          ///< Number of dependent applications running
 
       mutable daq::AppRunner m_runner; ///< The object starting cda-camac-reader
       mutable msg::Logger m_logger;    ///< Internal logger object

@@ -7,6 +7,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QPalette>
 #include <QtGui/QFont>
+#include <QtGui/QIcon>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -81,7 +82,8 @@ namespace simple_daq {
       //
       // Create the button starting and stopping the application:
       //
-      m_starterButton = new QPushButton( tr( "Start camac reader" ), m_mainBox );
+      m_starterButton = new QPushButton( QIcon::fromTheme( "media-playback-start" ),
+                                         tr( "Start camac reader" ), m_mainBox );
       m_starterButton->setGeometry( QRect( 20, 100, 250, 35 ) );
       m_starterButton->setCheckable( true );
       m_starterButton->setEnabled( false );
@@ -97,9 +99,7 @@ namespace simple_daq {
       //
       // Reset the internal flags:
       //
-      m_hbookWriterUpdating = false;
-      m_hbookWriterRunning = false;
-      m_glomemWriterRunning = false;
+      m_writersRunning = 0;
    }
 
    CamacReaderRunner::~CamacReaderRunner() {
@@ -163,37 +163,12 @@ namespace simple_daq {
    }
 
    /**
-    * @param address The address where cda-hbook-writer waits for events
+    * @param address The address where a writer waits for events
     */
-   void CamacReaderRunner::setHBookWriterAddress( const QString& address ) {
+   void CamacReaderRunner::addEventListenerAddress( const QString& address ) {
 
-      m_hbookWriterAddress = address;
+      m_eventListenerAddresses.push_back( address );
       return;
-   }
-
-   /**
-    * @returns The address where cda-hbook-writer waits for events
-    */
-   const QString& CamacReaderRunner::getHBookWriterAddress() const {
-
-      return m_hbookWriterAddress;
-   }
-
-   /**
-    * @param address The address where cda-glomem-writer waits for events
-    */
-   void CamacReaderRunner::setGlomemWriterAddress( const QString& address ) {
-
-      m_glomemWriterAddress = address;
-      return;
-   }
-
-   /**
-    * @returns The address where cda-glomem-writer waits for events
-    */
-   const QString& CamacReaderRunner::getGlomemWriterAddress() const {
-
-      return m_glomemWriterAddress;
    }
 
    /**
@@ -213,65 +188,18 @@ namespace simple_daq {
       return m_level;
    }
 
-   void CamacReaderRunner::setHBookWriterRunning( bool running ) {
+   void CamacReaderRunner::setWriterRunning( bool running ) {
 
-      // Update the internal flag:
-      m_hbookWriterRunning = running;
-      if( m_hbookWriterRunning && m_glomemWriterRunning ) {
-         m_starterButton->setEnabled( true );
+      // Update the running applications flag:
+      if( running ) {
+         ++m_writersRunning;
       } else {
-         m_starterButton->setEnabled( false );
+         --m_writersRunning;
       }
 
-      //
-      // Halt the CAMAC reader as long as the HBOOK writer is updating its file name:
-      //
-      if( ( ! running ) && ( m_runner.isRunning() ) ) {
-         if( ! m_runner.stop() ) {
-            m_logger << msg::ERROR << tr( "Couldn't halt cda-camac-reader for the duration of the HBOOK "
-                                          "file name change!" ) << msg::endmsg;
-            m_processStatus->setText( tr( "ERROR" ) );
-            QPalette palette( m_processStatus->palette() );
-            palette.setColor( QPalette::Active, QPalette::Foreground,
-                              QColor( 150, 10, 10 ) );
-            palette.setColor( QPalette::Inactive, QPalette::Foreground,
-                              QColor( 150, 10, 10 ) );
-            m_processStatus->setPalette( palette );
-            return;
-         } else {
-            m_logger << msg::INFO << tr( "Temporarily halted cda-camac-reader" ) << msg::endmsg;
-         }
-         m_hbookWriterUpdating = true;
-      }
-
-      //
-      // Restart the CAMAC reader when the file name updating finished:
-      //
-      if( running && ( ! m_runner.isRunning() ) && m_hbookWriterUpdating ) {
-         m_hbookWriterUpdating = false;
-         if( ! m_runner.start() ) {
-            m_logger << msg::ERROR << tr( "Couldn't restart cda-camac-reader for the duration of the HBOOK "
-                                          "file name change!" ) << msg::endmsg;
-            m_processStatus->setText( tr( "ERROR" ) );
-            QPalette palette( m_processStatus->palette() );
-            palette.setColor( QPalette::Active, QPalette::Foreground,
-                              QColor( 150, 10, 10 ) );
-            palette.setColor( QPalette::Inactive, QPalette::Foreground,
-                              QColor( 150, 10, 10 ) );
-            m_processStatus->setPalette( palette );
-            return;
-         } else {
-            m_logger << msg::INFO << tr( "Re-started cda-camac-reader" ) << msg::endmsg;
-         }
-      }
-
-      return;
-   }
-
-   void CamacReaderRunner::setGlomemWriterRunning( bool running ) {
-
-      m_glomemWriterRunning = running;
-      if( m_hbookWriterRunning && m_glomemWriterRunning ) {
+      // Enable the starting of the application if there are enough
+      // writers running already:
+      if( m_writersRunning == ( int ) m_eventListenerAddresses.size() ) {
          m_starterButton->setEnabled( true );
       } else {
          m_starterButton->setEnabled( false );
@@ -307,13 +235,11 @@ namespace simple_daq {
          //
          // Collect where the application should send events to:
          //
-         if( m_hbookWriterRunning || m_glomemWriterRunning ) {
+         if( m_eventListenerAddresses.size() ) {
             options += " -e ";
-            if( m_hbookWriterRunning ) {
-               options += m_hbookWriterAddress + " ";
-            }
-            if( m_glomemWriterRunning ) {
-               options += m_glomemWriterAddress;
+            for( size_t i = 0; i < m_eventListenerAddresses.size();
+                 ++i ) {
+               options += m_eventListenerAddresses[ i ] + " ";
             }
          }
 
@@ -325,8 +251,7 @@ namespace simple_daq {
          m_runner.setOptions( options );
 
          if( ! m_runner.start() ) {
-            m_logger << msg::ERROR << tr( "Couldn't start camac reader!" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "Couldn't start camac reader!" ) );
 
             //
             // Signal the error as much as possible:
@@ -340,6 +265,7 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
             m_starterButton->setText( tr( "Reset" ) );
+            m_starterButton->setIcon( QIcon::fromTheme( "edit-clear" ) );
 
          } else {
             m_logger << msg::INFO << tr( "Camac reader started" )
@@ -361,15 +287,15 @@ namespace simple_daq {
             m_stopTime->setText( tr( "N/A" ) );
 
             m_starterButton->setText( tr( "Stop camac reader" ) );
+            m_starterButton->setIcon( QIcon::fromTheme( "media-playback-stop" ) );
 
          }
 
       } else {
 
          if( ! m_runner.stop() ) {
-            m_logger << msg::ERROR
-                     << tr( "The camac reader could not be stopped "
-                            "successfully" ) << msg::endmsg;
+            REPORT_ERROR( tr( "The camac reader could not be stopped "
+                              "successfully" ) );
 
             //
             // Signal the error as much as possible:
@@ -399,9 +325,10 @@ namespace simple_daq {
 
             // Set up the time label(s):
             m_stopTime->setText( QTime::currentTime().toString() );
-
-            m_starterButton->setText( tr( "Start camac reader" ) );
          }
+
+         m_starterButton->setText( tr( "Start camac reader" ) );
+         m_starterButton->setIcon( QIcon::fromTheme( "media-playback-start" ) );
 
       }
 

@@ -109,8 +109,8 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    m_camacReader->setConfigFileName( confFileName );
    m_camacReader->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
    m_camacReader->setStatServerAddress( Const::STAT_SERVER_ADDRESS );
-   m_camacReader->setHBookWriterAddress( Const::HBOOK_WRITER_ADDRESS );
-   m_camacReader->setGlomemWriterAddress( Const::GLOMEM_WRITER_ADDRESS );
+   m_camacReader->addEventListenerAddress( Const::HBOOK_WRITER_ADDRESS );
+   m_camacReader->addEventListenerAddress( Const::GLOMEM_WRITER_ADDRESS );
    m_camacReader->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_camacReader->setEnabled( false );
@@ -129,7 +129,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
       m_glomemWriter->setEnabled( false );
    }
    connect( m_glomemWriter, SIGNAL( running( bool ) ),
-            m_camacReader, SLOT( setGlomemWriterRunning( bool ) ) );
+            m_camacReader, SLOT( setWriterRunning( bool ) ) );
 
    //
    // Create the widget controlling cda-hbook-writer:
@@ -144,7 +144,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
       m_hbookWriter->setEnabled( false );
    }
    connect( m_hbookWriter, SIGNAL( running( bool ) ),
-            m_camacReader, SLOT( setHBookWriterRunning( bool ) ) );
+            m_camacReader, SLOT( setWriterRunning( bool ) ) );
 
    // Draw the menus of the window:
    drawMenus();
@@ -254,15 +254,19 @@ void SimpleDAQWindow::drawMenus() {
 
    QMenu* fileMenu = menuBar()->addMenu( tr( "&File" ) );
 
-   QAction* openAction = fileMenu->addAction( QIcon( ":/img/fileopen.png" ),
-                                              tr( "&Open configuration file..." ) );
+   QAction* openAction =
+      fileMenu->addAction( QIcon::fromTheme( "document-open",
+                                             QIcon( ":/img/fileopen.png" ) ),
+                           tr( "&Open configuration file..." ) );
    connect( openAction, SIGNAL( triggered() ),
             this, SLOT( readConfigSlot() ) );
 
    fileMenu->addSeparator();
 
-   QAction* quitAction = fileMenu->addAction( QIcon( ":/img/warning.png" ),
-                                              tr( "&Quit" ) );
+   QAction* quitAction =
+      fileMenu->addAction( QIcon::fromTheme( "application-exit",
+                                             QIcon( ":/img/warning.png" ) ),
+                           tr( "&Quit" ) );
    connect( quitAction, SIGNAL( triggered() ),
             this, SLOT( close() ) );
 
@@ -273,13 +277,17 @@ void SimpleDAQWindow::drawMenus() {
    /////////////////////////////////////////////////////////////
 
    menuBar()->addSeparator();
-   QMenu* helpMenu = menuBar()->addMenu( tr( "&Help" ) );
+   QMenu* helpMenu = menuBar()->addMenu( QIcon::fromTheme( "system-help" ),
+                                         tr( "&Help" ) );
 
-   QAction* aboutQtAction = helpMenu->addAction( tr( "About Qt" ) );
+   QAction* aboutQtAction = helpMenu->addAction( QIcon( ":/img/qt-logo.jpg" ),
+                                                 tr( "About Qt" ) );
    connect( aboutQtAction, SIGNAL( triggered() ),
             this, SLOT( aboutQtSlot() ) );
 
-   QAction* aboutConfigEditorAc = helpMenu->addAction( tr( "About Simple DAQ" ) );
+   QAction* aboutConfigEditorAc =
+      helpMenu->addAction( QIcon( ":/img/cda-simple-daq.png" ),
+                           tr( "About Simple DAQ" ) );
    connect( aboutConfigEditorAc, SIGNAL( triggered() ),
             this, SLOT( aboutSimpleDAQSlot() ) );
 

@@ -4,6 +4,7 @@
 #include <QtGui/QStackedWidget>
 #include <QtGui/QComboBox>
 #include <QtGui/QPushButton>
+#include <QtGui/QIcon>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -64,7 +65,8 @@ namespace dev {
                this, SLOT( createDeviceSlot( int ) ) );
 
       // Create the button clearing the configuration:
-      m_clearDevice = new QPushButton( tr( "Clear device" ), this );
+      m_clearDevice = new QPushButton( QIcon::fromTheme( "edit-clear" ),
+                                       tr( "Clear device" ), this );
       m_clearDevice->setGeometry( QRect( 320, 0, 150, 25 ) );
       m_clearDevice->setEnabled( false );
       connect( m_clearDevice, SIGNAL( pressed() ),
