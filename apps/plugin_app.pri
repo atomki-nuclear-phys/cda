@@ -11,5 +11,5 @@
 # Link the application against all available plugins on Windows:
 win32 {
    LIBS += -L../../dev -lad413a -lad1000 -lad2249a \
-           -lt2228a -lt4300b -ls9418t
+           -lt2228a -lt4300b -ls9418t -ldt5740
 }

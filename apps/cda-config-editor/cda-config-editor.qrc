@@ -9,5 +9,6 @@
    <file alias="filesaveas.png">../../images/filesaveas.png</file>
    <file alias="warning.png">../../images/warning.png</file>
    <file alias="logo.png">../../images/logo.png</file>
+   <file alias="qt-logo.jpg">../../images/qt-logo.jpg</file>
 </qresource>
 </RCC>
