@@ -62,8 +62,6 @@ namespace caen {
       static Digitizer::ConnectionType
       fromString( const QString& type );
 
-      mutable msg::Logger m_logger; ///< Message logger object
-
    }; // class Crate
 
 } // namespace caen

@@ -53,7 +53,8 @@ namespace dev {
 
    public:
       /// Constructor
-      Crate( const QString& type = "CamacCrate" );
+      Crate( const QString& type = "CamacCrate",
+             bool isTypeImportant = false );
       /// Destructor
       ~Crate();
 
@@ -103,12 +104,17 @@ namespace dev {
        */
       std::map< unsigned int, DEVICE* > m_devices;
 
+      /// XML node name for the crate
+      static const char* XML_NODE_NAME;
+
       /// The dev::Loader class used by the class
       const Loader* m_loader;
 
    private:
       /// Type of this specific crate
       const QString m_type;
+      /// Is the type of the configuration important?
+      const bool m_isTypeImportant;
       /// Message logging object
       mutable msg::Logger m_logger;
 

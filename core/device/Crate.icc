@@ -22,6 +22,10 @@ namespace dev {
    using QT_PREPEND_NAMESPACE( QDataStream );
    using QT_PREPEND_NAMESPACE( QDomElement );
 
+   // Initialize the static member(s):
+   template< class DEVICE >
+   const char* Crate< DEVICE >::XML_NODE_NAME = "Crate";
+
    /**
     * The constructor expects a function pointer to one of the functions of
     * dev::Factory. The specified function will later on be used to create
@@ -35,8 +39,10 @@ namespace dev {
     * @param factoryFncn Function pointer to one of dev::Factory's functions
     */
    template< class DEVICE >
-   Crate< DEVICE >::Crate( const QString& type )
+   Crate< DEVICE >::Crate( const QString& type,
+                           bool isTypeImportant )
       : m_devices(), m_loader( 0 ), m_type( type ),
+        m_isTypeImportant( isTypeImportant ),
         m_logger( "dev::Crate" ) {
 
    }
@@ -57,9 +63,7 @@ namespace dev {
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
 
-      m_logger << msg::VERBOSE
-               << tr( "Reading configuration from binary input" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
@@ -69,13 +73,11 @@ namespace dev {
       // Check if the configuration is of the right type:
       QString type;
       input >> type;
-      if( type != m_type ) {
-         m_logger << msg::ERROR
-                  << tr( "Wrong type found in configuration (%1 != %2) "
-                         "You may be reading a too old XML file, or "
-                         "a configuration meant for a different application." )
-            .arg( type ).arg( m_type )
-                  << msg::endmsg;
+      if( ( type != m_type ) && m_isTypeImportant ) {
+         REPORT_ERROR( tr( "Wrong type found in configuration (%1 != %2) "
+                           "You may be reading a too old XML file, or "
+                           "a configuration meant for a different application." )
+                       .arg( type ).arg( m_type ) );
          return false;
       }
 
@@ -93,10 +95,8 @@ namespace dev {
             DEVICE* device = factory->createDevice< DEVICE >();
             if( ! device ) continue;
             if( ! device->readConfig( dev ) ) {
-               m_logger << msg::ERROR
-                        << tr( "There was a problem reading the "
-                               "configuration of one of the devices!" )
-                        << msg::endmsg;
+               REPORT_ERROR( tr( "There was a problem reading the "
+                                 "configuration of one of the devices!" ) );
                delete device;
                return false;
             }
@@ -113,10 +113,9 @@ namespace dev {
             m_devices[ device->getID() ] = device;
 
          } else {
-            m_logger << msg::ERROR
-                     << tr( "Device type \"%1\" unknown.\n"
-                            "Check that you have all plugins available!" )
-               .arg( type ) << msg::endmsg;
+            REPORT_ERROR( tr( "Device type \"%1\" unknown.\n"
+                              "Check that you have all plugins available!" )
+                          .arg( type ) );
             return false;
          }
 
@@ -124,26 +123,26 @@ namespace dev {
 
       // Let the derived classes read in their specific configuration:
       if( ! readCrateConfig( dev ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Failed to read crate specific configuration" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Failed to read crate specific configuration" ) );
          return false;
       }
 
+      // Signal that the operation was successful:
       return true;
    }
 
    template< class DEVICE >
    bool Crate< DEVICE >::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << tr( "Writing configuration to binary output" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
+      // Write the "header" of the configuration:
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_type;
       output << ( quint32 ) m_devices.size();
 
+      // Write the configuration of each device:
       typename std::map< unsigned int, DEVICE* >::const_iterator itr =
          m_devices.begin();
       typename std::map< unsigned int, DEVICE* >::const_iterator end =
@@ -152,23 +151,19 @@ namespace dev {
 
          output << itr->second->deviceName();
          if( ! itr->second->writeConfig( dev ) ) {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem writing the "
-                            "configuration of a device" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem writing the "
+                              "configuration of a device" ) );
             return false;
          }
-
       }
 
       // Let the derived classes write out their specific configuration:
       if( ! writeCrateConfig( dev ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Failed to write crate specific configuration" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Failed to write crate specific configuration" ) );
          return false;
       }
 
+      // Signal that the operation was successful:
       return true;
    }
 
@@ -178,107 +173,121 @@ namespace dev {
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
 
-      m_logger << msg::VERBOSE << tr( "Reading configuration from XML input" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
+      // First of all, clear the current configuration:
       clear();
 
       // Find the element describing the crate:
       int crate_index = -1;
       for( int i = 0; i < element.childNodes().size(); ++i ) {
 
-         if( ! element.childNodes().at( i ).isElement() ) continue;
-
-         if( element.childNodes().at( i ).nodeName() == m_type ) {
+         if( ! element.childNodes().at( i ).isElement() ) {
+            continue;
+         }
+         if( element.childNodes().at( i ).nodeName() == XML_NODE_NAME ) {
             crate_index = i;
             break;
          }
       }
       if( crate_index == -1 ) {
-         m_logger << msg::ERROR
-                  << tr( "Couldn't find crate element in XML. "
-                         "You may be reading a too old XML file, or "
-                         "a configuration meant for a different application." )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Couldn't find crate element in XML. "
+                           "You may be reading a too old XML file." ) );
          return false;
       }
 
-      // Access the DOM node:
-      QDomElement crate_element =
+      // Access the DOM element:
+      const QDomElement crate_element =
          element.childNodes().at( crate_index ).toElement();
+
+      // Check the type of the crate, if it's important:
+      if( m_isTypeImportant ) {
+         const QString type = crate_element.attribute( "Type", "" );
+         if( type != m_type ) {
+            REPORT_ERROR( tr( "Wrong type found in configuration "
+                              "(\"%1\" != \"%2\") "
+                              "You may be reading a too old XML file, or "
+                              "a configuration meant for a different "
+                              "application." )
+                          .arg( type ).arg( m_type ) );
+            return false;
+         }
+      }
 
       // Let the derived classes read in their specific configuration:
       if( ! readCrateConfig( crate_element ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Failed to read crate specific configuration" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Failed to read crate specific configuration" ) );
          return false;
       }
 
+      // Loop over all the elements inside the crate node:
       for( int i = 0; i < crate_element.childNodes().size(); ++i ) {
 
+         // We are only interested in elements:
          if( ! crate_element.childNodes().at( i ).isElement() ) continue;
 
+         // The type of the node describes the device type:
          const QString type = crate_element.childNodes().at( i ).nodeName();
 
-         if( m_loader->isLoaded( type ) ) {
-
-            Factory* factory = m_loader->getFactory( type );
-            DEVICE* device = factory->createDevice< DEVICE >();
-            if( ! device->readConfig( crate_element.childNodes().at( i ).toElement() ) ) {
-               m_logger << msg::ERROR
-                        << tr( "There was a problem reading the "
-                               "configuration of one of the devices!" )
-                        << msg::endmsg;
-               delete device;
-               return false;
-            }
-
-            typename std::map< unsigned int, DEVICE* >::iterator it;
-            if( ( it = m_devices.find( device->getID() ) ) !=
-                m_devices.end() ) {
-               m_logger << msg::WARNING
-                        << tr( "Redefining the device with 'id': %1" )
-                  .arg( device->getID() )
-                        << msg::endmsg;
-               delete it->second;
-            }
-
-            m_devices[ device->getID() ] = device;
-
-         } else {
-            m_logger << msg::ERROR
-                     << tr( "Device type \"%1\" unknown\n"
-                            "Check that you have all plugins available!" )
-               .arg( type )
-                     << msg::endmsg;
+         // Check whether we have a plugin for this type:
+         if( ! m_loader->isLoaded( type ) ) {
+            REPORT_ERROR( tr( "Device type \"%1\" unknown\n"
+                              "Check that you have all plugins available!" )
+                          .arg( type ) );
             return false;
          }
 
+         // If we do, let's try loading the configuration:
+         Factory* factory = m_loader->getFactory( type );
+         DEVICE* device = factory->createDevice< DEVICE >();
+         const QDomElement conf =
+            crate_element.childNodes().at( i ).toElement();
+         if( ! device->readConfig( conf ) ) {
+            REPORT_ERROR( tr( "There was a problem reading the "
+                              "configuration of one of the devices!" ) );
+            delete device;
+            return false;
+         }
+
+         // Add this new device to the crate:
+         typename std::map< unsigned int, DEVICE* >::iterator it;
+         if( ( it = m_devices.find( device->getID() ) ) !=
+             m_devices.end() ) {
+            m_logger << msg::WARNING
+                     << tr( "Redefining the device with 'id': %1" )
+               .arg( device->getID() )
+                     << msg::endmsg;
+            delete it->second;
+         }
+         m_devices[ device->getID() ] = device;
+
       }
 
+      // Signal that the operation was successful:
       return true;
    }
 
    template< class DEVICE >
    bool Crate< DEVICE >::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << tr( "Writing configuration to XML output" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       // Create a top level element for the whole crate:
       QDomElement crate_element =
-         element.ownerDocument().createElement( m_type );
+         element.ownerDocument().createElement( XML_NODE_NAME );
+      crate_element.setAttribute( "Type", m_type );
 
       // Let the derived classes write out their specific configuration:
       if( ! writeCrateConfig( crate_element ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Failed to write crate specific configuration" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Failed to write crate specific configuration" ) );
          return false;
       }
+
+      // Add the crate node to the configuration:
       element.appendChild( crate_element );
 
+      // Loop over the devices, and add their configuration to the
+      // crate node:
       typename std::map< unsigned int, DEVICE* >::const_iterator itr =
          m_devices.begin();
       typename std::map< unsigned int, DEVICE* >::const_iterator end =
@@ -288,21 +297,24 @@ namespace dev {
          QDomElement dev_element =
             element.ownerDocument().createElement( itr->second->deviceName() );
          if( ! itr->second->writeConfig( dev_element ) ) {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem writing the "
-                            "configuration of a device" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem writing the "
+                              "configuration of a device" ) );
             return false;
          }
          crate_element.appendChild( dev_element );
 
       }
 
+      // Signal that the operation was successful:
       return true;
    }
 
    template< class DEVICE >
    bool Crate< DEVICE >::canRead( QIODevice* dev ) const {
+
+      // If the type is not important, then the answer is always
+      // yes:
+      if( ! m_isTypeImportant ) return true;
 
       QDataStream input( dev );
       input.setVersion( QDataStream::Qt_4_0 );
@@ -318,18 +330,43 @@ namespace dev {
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::canRead( const QDomElement& node ) const {
+   bool Crate< DEVICE >::canRead( const QDomElement& element ) const {
 
-      for( int i = 0; i < node.childNodes().size(); ++i ) {
+      // If the type is not important, then the answer is always
+      // yes:
+      if( ! m_isTypeImportant ) return true;
 
-         if( ! node.childNodes().at( i ).isElement() ) continue;
+      // Find the element describing the crate:
+      int crate_index = -1;
+      for( int i = 0; i < element.childNodes().size(); ++i ) {
 
-         if( node.childNodes().at( i ).nodeName() == m_type ) {
-            return true;
+         if( ! element.childNodes().at( i ).isElement() ) {
+            continue;
+         }
+         if( element.childNodes().at( i ).nodeName() == XML_NODE_NAME ) {
+            crate_index = i;
+            break;
          }
       }
+      if( crate_index == -1 ) {
+         REPORT_ERROR( tr( "Couldn't find crate element in XML. "
+                           "You may be reading a too old XML file." ) );
+         return false;
+      }
 
-      return false;
+      // Access the DOM element:
+      const QDomElement crate_element =
+         element.childNodes().at( crate_index ).toElement();
+
+      // Read the crate type:
+      const QString type = crate_element.attribute( "Type", "" );
+
+      // Now check it:
+      if( type == m_type ) {
+         return true;
+      } else {
+         return false;
+      }
    }
 
    template< class DEVICE >
@@ -382,10 +419,8 @@ namespace dev {
    bool Crate< DEVICE >::checkLoader() const {
 
       if( ! m_loader ) {
-         m_logger << msg::ERROR
-                  << tr( "No functional dev::Loader object specified yet\n"
-                         "Configuration reading is not possible like this!" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "No functional dev::Loader object specified yet\n"
+                           "Configuration reading is not possible like this!" ) );
          return false;
       }
 

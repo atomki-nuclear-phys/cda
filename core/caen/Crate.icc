@@ -12,8 +12,7 @@ namespace caen {
 
    template< class DEVICE >
    Crate< DEVICE >::Crate()
-      : dev::Crate< DEVICE >( "CaenDigitizer" ),
-        m_logger( "caen::Crate" ) {
+      : dev::Crate< DEVICE >( "CaenDigitizer", true ) {
 
    }
 
