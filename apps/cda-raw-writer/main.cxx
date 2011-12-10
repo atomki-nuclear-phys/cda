@@ -152,8 +152,7 @@ int main( int argc, char* argv[] ) {
    //
    // Try to load all available device plugins:
    //
-   dev::Loader loader;
-   if( loader.loadAll() ) {
+   if( dev::Loader::instance()->loadAll() ) {
       g_logger << msg::INFO
                << qApp->translate( "cda-raw-writer",
                                    "Successfully loaded all available devices" )
@@ -169,7 +168,7 @@ int main( int argc, char* argv[] ) {
    // Create the crate object:
    //
    g_crate = new raw::Crate();
-   g_crate->setLoader( &loader );
+   g_crate->setLoader( dev::Loader::instance() );
 
    //
    // Decide how to read the configuration:

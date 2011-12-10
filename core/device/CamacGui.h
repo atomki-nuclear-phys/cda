@@ -41,13 +41,7 @@ namespace dev {
 
    public:
       /// Standard QWidget style constructor
-      CamacGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 )
-         : QWidget( parent, flags ) {
-
-         this->resize( WIDGET_WIDTH, WIDGET_HEIGHT );
-         this->setMinimumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
-         this->setMaximumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
-      }
+      CamacGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Draw an illustration of the module
       /**

@@ -12,7 +12,7 @@ namespace caen {
 
    template< class DEVICE >
    Crate< DEVICE >::Crate()
-      : dev::Crate< DEVICE >( "CaenDigitizer", true ) {
+      : dev::Crate< DEVICE >( "CAEN", true ) {
 
    }
 

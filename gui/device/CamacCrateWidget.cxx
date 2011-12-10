@@ -21,7 +21,7 @@
 #endif
 
 // Local include(s):
-#include "CrateWidget.h"
+#include "CamacCrateWidget.h"
 #include "CreateAction.h"
 #include "ClearAction.h"
 
@@ -30,17 +30,17 @@ namespace dev {
    //
    // Initialise the class constants:
    //
-   const int CrateWidget::NUMBER_OF_SLOTS = 24;
+   const int CamacCrateWidget::NUMBER_OF_SLOTS = 24;
 
-   const int CrateWidget::SLOT_WIDTH  = 20;
-   const int CrateWidget::SLOT_HEIGHT = 200;
-   const int CrateWidget::BORDER_SIZE = 10;
+   const int CamacCrateWidget::SLOT_WIDTH  = 20;
+   const int CamacCrateWidget::SLOT_HEIGHT = 200;
+   const int CamacCrateWidget::BORDER_SIZE = 10;
 
-   const int CrateWidget::WIDTH  =
-      ( CrateWidget::NUMBER_OF_SLOTS + 1 ) * CrateWidget::SLOT_WIDTH +
-      2 * CrateWidget::BORDER_SIZE;
-   const int CrateWidget::HEIGHT = CrateWidget::SLOT_HEIGHT +
-      2 * CrateWidget::BORDER_SIZE + 30;
+   const int CamacCrateWidget::WIDTH  =
+      ( CamacCrateWidget::NUMBER_OF_SLOTS + 1 ) * CamacCrateWidget::SLOT_WIDTH +
+      2 * CamacCrateWidget::BORDER_SIZE;
+   const int CamacCrateWidget::HEIGHT = CamacCrateWidget::SLOT_HEIGHT +
+      2 * CamacCrateWidget::BORDER_SIZE + 30;
 
    /**
     * The constructor takes care of carefully constructing the dev::Crate
@@ -50,22 +50,14 @@ namespace dev {
     * @param parent Qt parent of the object
     * @param flags Qt flags for the widget
     */
-   CrateWidget::CrateWidget( QWidget* parent, Qt::WindowFlags flags )
+   CamacCrateWidget::CamacCrateWidget( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        Crate< dev::CamacGui >(),
-        m_logger( "dev::CrateWidget" ) {
+        Crate< dev::CamacGui >( "CAMAC", true ),
+        m_logger( "dev::CamacCrateWidget" ) {
 
       resize( WIDTH, HEIGHT );
       setMinimumSize( WIDTH, HEIGHT );
       setMaximumSize( WIDTH, HEIGHT );
-   }
-
-   /**
-    * The devices are deleted by the dev::Crate destructor, so we don't
-    * have to do anything here...
-    */
-   CrateWidget::~CrateWidget() {
-
    }
 
    /**
@@ -77,7 +69,7 @@ namespace dev {
     *
     * @param dev Device to read the binary configuration from
     */
-   bool CrateWidget::readConfig( QIODevice* dev ) {
+   bool CamacCrateWidget::readConfig( QIODevice* dev ) {
 
       //
       // Read the configuration using the base class:
@@ -113,7 +105,7 @@ namespace dev {
     *
     * @param element The XML node holding the CAMAC crate configuration
     */
-   bool CrateWidget::readConfig( const QDomElement& element ) {
+   bool CamacCrateWidget::readConfig( const QDomElement& element ) {
 
       //
       // Read the configuration using the base class:
@@ -149,7 +141,7 @@ namespace dev {
     * @param slot The crate slot
     * @returns The pointer to the module, or 0 if the slot is empty
     */
-   CamacGui* CrateWidget::getDevice( int slot ) {
+   CamacGui* CamacCrateWidget::getDevice( int slot ) {
 
       std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
@@ -169,7 +161,7 @@ namespace dev {
     * @param slot The crate slot to configure
     * @param device Pointer to the device that we now want to use
     */
-   void CrateWidget::setDevice( int slot, CamacGui* device ) {
+   void CamacCrateWidget::setDevice( int slot, CamacGui* device ) {
 
       //
       // Save the pointer to the new device:
@@ -204,38 +196,23 @@ namespace dev {
     * @param slot The crate slot to create the device in
     * @param type The type of the device
     */
-   void CrateWidget::createSlot( int slot, const QString& type ) {
+   void CamacCrateWidget::createSlot( int slot, const QString& type ) {
 
       // A security check:
       if( ! checkLoader() ) return;
 
-      m_logger << msg::VERBOSE
-               << tr( "\"%1\" creation requested in slot %2" )
-         .arg( type ).arg( slot )
-               << msg::endmsg;
-
-      //
-      // Check that a Loader object is available:
-      //
-      if( ! m_loader ) {
-         m_logger << msg::ERROR << tr( "No Loader object configured yet!" )
-                  << msg::endmsg;
-         return;
-      }
+      REPORT_VERBOSE( tr( "\"%1\" creation requested in slot %2" )
+                      .arg( type ).arg( slot ) );
 
       //
       // Try to access the Factory of this device type:
       //
       Factory* factory = m_loader->getFactory( type );
       if( ! factory ) {
-         m_logger << msg::ERROR
-                  << tr( "No factory found for device type \"%1\"" ).arg( type )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "No factory found for device type \"%1\"" ).arg( type ) );
          return;
       } else {
-         m_logger << msg::VERBOSE
-                  << tr( "Factory found for device type \"%1\"" ).arg( type )
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "Factory found for device type \"%1\"" ).arg( type ) );
       }
 
       //
@@ -243,14 +220,10 @@ namespace dev {
       //
       CamacGui* device = factory->createDevice< CamacGui >();
       if( ! device ) {
-         m_logger << msg::ERROR
-                  << tr( "No GUI implemented by device \"%1\"" ).arg( type )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" ).arg( type ) );
          return;
       } else {
-         m_logger << msg::VERBOSE
-                  << tr( "GUI object created for device type \"%1\"" ).arg( type )
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "GUI object created for device type \"%1\"" ).arg( type ) );
       }
 
       //
@@ -271,10 +244,9 @@ namespace dev {
     *
     * @param slot The crate slot to clear
     */
-   void CrateWidget::clearSlot( int slot ) {
+   void CamacCrateWidget::clearSlot( int slot ) {
 
-      m_logger << msg::VERBOSE << tr( "Clearing slot %1" ).arg( slot )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Clearing slot %1" ).arg( slot ) );
 
       std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
@@ -298,7 +270,7 @@ namespace dev {
     *
     * @image html CrateWidget.png
     */
-   void CrateWidget::paintEvent( QPaintEvent* /* event */ ) {
+   void CamacCrateWidget::paintEvent( QPaintEvent* /* event */ ) {
 
       //
       // Create the object used for painting:
@@ -422,7 +394,7 @@ namespace dev {
     *
     * @param event Object describing the mouse-click
     */
-   void CrateWidget::mousePressEvent( QMouseEvent* event ) {
+   void CamacCrateWidget::mousePressEvent( QMouseEvent* event ) {
 
       //
       // Get the X and Y coordinates of the double-click:
@@ -529,7 +501,7 @@ namespace dev {
     *
     * @param event Object describing the mouse-click
     */
-   void CrateWidget::mouseDoubleClickEvent( QMouseEvent* event ) {
+   void CamacCrateWidget::mouseDoubleClickEvent( QMouseEvent* event ) {
 
       //
       // Only look for left-button double-clicks:

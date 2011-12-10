@@ -12,8 +12,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/common/Address.h"
+#   include "cdacore/device/Loader.h"
 #else
 #   include "common/Address.h"
+#   include "device/Loader.h"
 #endif
 
 namespace conf {
@@ -26,12 +28,12 @@ namespace conf {
     */
    ConfServer::ConfServer( const QString& configFileName, QObject* parent )
       : QTcpServer( parent ), m_configFileName( configFileName ),
-        m_loader(), m_logger( "conf::ConfServer" ) {
+        m_logger( "conf::ConfServer" ) {
 
       //
       // Load all the device plugins:
       //
-      if( m_loader.loadAll() ) {
+      if( dev::Loader::instance()->loadAll() ) {
          m_logger << msg::DEBUG << "Successfully loaded all available devices"
                   << msg::endmsg;
       } else {
@@ -194,7 +196,7 @@ namespace conf {
       // Use a temporary crate object to read this configuration:
       //
       Crate crate;
-      crate.setLoader( &m_loader );
+      crate.setLoader( dev::Loader::instance() );
       if( ! crate.readConfig( &configFile ) ) {
          m_logger << msg::ERROR << "Some error happened while reading the (binary) file: "
                   << m_configFileName << std::endl
@@ -272,7 +274,7 @@ namespace conf {
       // Decode this XMl document using a temporary crate object:
       //
       Crate crate;
-      crate.setLoader( &m_loader );
+      crate.setLoader( dev::Loader::instance() );
       if( ! crate.readConfig( doc.documentElement() ) ) {
          m_logger << msg::ERROR << "Failed to read configuration file!" << msg::endmsg;
          return false;

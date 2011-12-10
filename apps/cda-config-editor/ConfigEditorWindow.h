@@ -15,10 +15,10 @@
 #endif
 
 // Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QListWidget )
-QT_FORWARD_DECLARE_CLASS( QListWidgetItem )
+QT_FORWARD_DECLARE_CLASS( QStackedWidget )
 namespace dev {
-   class Editor;
+   class CamacEditor;
+   class CaenEditor;
 }
 
 /**
@@ -59,6 +59,11 @@ private slots:
    /// Slot handling the writing of a configuration
    void writeConfigAsSlot();
 
+   /// Slot for showing the CAMAC configuration
+   void showCamacConfigSlot();
+   /// Slot for showing the CAEN configuration
+   void showCaenConfigSlot();
+
    /// Slot showing a window about the Qt version used
    void aboutQtSlot();
    /// Slot showing a window about CDA
@@ -78,20 +83,18 @@ private:
    /// Function writing a binary configuration file
    void writeBinaryConfig( const QString& filename );
 
-   /// Widget holding all the shown widgets
-   QWidget*         m_centralWidget;
-   /// Widget holding the icons
-   QListWidget*     m_setupSelect;
-   /// Icon for the CAMAC crate settings
-   QListWidgetItem* m_deviceSetup;
-
-   /// Icon for the Network settings
-   QListWidgetItem* m_networkSetup;
+   /// Central widget
+   QWidget* m_centralWidget;
+   /// Stack of the editor widgets
+   QStackedWidget* m_editStack;
 
    /// Widget to modify the CAMAC crate settings
-   dev::Editor*     m_devEdit;
+   dev::CamacEditor* m_camacEdit;
+   /// Widget to modify the CAEN device settings
+   dev::CaenEditor* m_caenEdit;
+
    /// Name of the currently "opened" file
-   QString          m_currFileName;
+   QString m_currFileName;
    /// Message logging object
    mutable msg::Logger m_logger;
 

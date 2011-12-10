@@ -4,12 +4,12 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtGui/QWidget>
-#include <QtGui/QListWidget>
-#include <QtGui/QListWidgetItem>
+#include <QtGui/QStackedWidget>
 #include <QtGui/QIcon>
 #include <QtGui/QMenuBar>
 #include <QtGui/QMenu>
 #include <QtGui/QAction>
+#include <QtGui/QActionGroup>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <QtXml/QDomImplementation>
@@ -18,10 +18,12 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdagui/device/Editor.h"
+#   include "cdagui/device/CamacEditor.h"
+#   include "cdagui/device/CaenEditor.h"
 #   include "cdagui/common/aboutCDA.h"
 #else
-#   include "device/Editor.h"
+#   include "device/CamacEditor.h"
+#   include "device/CaenEditor.h"
 #   include "common/aboutCDA.h"
 #endif
 
@@ -38,13 +40,13 @@ ConfigEditorWindow::ConfigEditorWindow()
    // Set the fixed size of the window:
    //
 #ifdef Q_OS_DARWIN
-   resize( 645, 660 );
-   setMinimumSize( 645, 660 );
-   setMaximumSize( 645, 660 );
+   resize( 540, 660 );
+   setMinimumSize( 540, 660 );
+   setMaximumSize( 540, 660 );
 #else
-   resize( 645, 690 );
-   setMinimumSize( 645, 690 );
-   setMaximumSize( 645, 690 );
+   resize( 540, 690 );
+   setMinimumSize( 540, 690 );
+   setMaximumSize( 540, 690 );
 #endif
 
    //
@@ -57,42 +59,46 @@ ConfigEditorWindow::ConfigEditorWindow()
    // Create a central widget for the window:
    //
    m_centralWidget = new QWidget( this );
-   m_centralWidget->resize( 645, 660 );
-   m_centralWidget->setMinimumSize( 645, 660 );
-   m_centralWidget->setMaximumSize( 645, 660 );
+   m_centralWidget->resize( 540, 660 );
+   m_centralWidget->setMinimumSize( 540, 660 );
+   m_centralWidget->setMaximumSize( 540, 660 );
    setCentralWidget( m_centralWidget );
 
    //
-   // Create the icon view for selecting the configuration "aspect":
+   // Create a widget stack for the configuration objects:
    //
-   m_setupSelect = new QListWidget( m_centralWidget );
-   m_setupSelect->setViewMode( QListView::IconMode );
-   m_setupSelect->setGeometry( QRect( 10, 10, 95, 640 ) );
-
-   //
-   // Create the icon for the CAMAC crate configuration:
-   //
-   m_deviceSetup = new QListWidgetItem( QIcon( ":/img/crate-settings.png" ),
-                                        tr( "CAMAC setup" ), m_setupSelect );
-   m_deviceSetup->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-   m_deviceSetup->setTextAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+   m_editStack = new QStackedWidget( m_centralWidget );
+   m_editStack->setGeometry( QRect( 10, 10, 520, 640 ) );
 
    //
    // Create the CAMAC crate editor:
    //
-   m_devEdit = new dev::Editor( m_centralWidget );
-   m_devEdit->setGeometry( QRect( 115, 10, 520, 640 ) );
+   m_camacEdit = new dev::CamacEditor( m_editStack );
+   m_camacEdit->setGeometry( QRect( 0, 0, 520, 640 ) );
+   m_editStack->addWidget( m_camacEdit );
+
+   //
+   // Create the CAEN device editor:
+   //
+   m_caenEdit = new dev::CaenEditor( m_editStack );
+   m_caenEdit->setGeometry( QRect( 0, 0, 520, 640 ) );
+   m_editStack->addWidget( m_caenEdit );
 
    //
    // Create the application menus:
    //
    createMenus();
 
+   // Show the CAMAC editor by default:
+   showCamacConfigSlot();
+
 }
 
 void ConfigEditorWindow::newConfigSlot() {
 
-   m_devEdit->clear();
+   m_camacEdit->clear();
+   m_caenEdit->clear();
+   showCamacConfigSlot();
    setWindowTitle( tr( "CDA configuration editor - Untitled.cxml" ) );
 
    return;
@@ -162,6 +168,28 @@ void ConfigEditorWindow::writeConfigAsSlot() {
    return;
 }
 
+void ConfigEditorWindow::showCamacConfigSlot() {
+
+   // Bring the Camac configuration to the front if it's not there
+   // already:
+   if( m_editStack->currentWidget() != m_camacEdit ) {
+      m_editStack->setCurrentWidget( m_camacEdit );
+   }
+
+   return;
+}
+
+void ConfigEditorWindow::showCaenConfigSlot() {
+
+   // Bring the Caen configuration to the front if it's not there
+   // already:
+   if( m_editStack->currentWidget() != m_caenEdit ) {
+      m_editStack->setCurrentWidget( m_caenEdit );
+   }
+
+   return;
+}
+
 void ConfigEditorWindow::aboutQtSlot() {
 
    QMessageBox::aboutQt( this, tr( "CDA Configuration Editor - built on Qt" ) );
@@ -223,6 +251,34 @@ void ConfigEditorWindow::createMenus() {
 
    /////////////////////////////////////////////////////////////
    //                                                         //
+   //                Create the Config menu                   //
+   //                                                         //
+   /////////////////////////////////////////////////////////////
+
+   QMenu* configMenu = menuBar()->addMenu( tr( "&Config" ) );
+
+   QAction* camacConfigAction = new QAction( tr( "Show CAMAC Config" ),
+                                             this );
+   camacConfigAction->setCheckable( true );
+   connect( camacConfigAction, SIGNAL( triggered() ),
+            this, SLOT( showCamacConfigSlot() ) );
+   QAction* caenConfigAction = new QAction( tr( "Show CAEN Config" ),
+                                            this );
+   caenConfigAction->setCheckable( true );
+   connect( caenConfigAction, SIGNAL( triggered() ),
+            this, SLOT( showCaenConfigSlot() ) );
+
+   QActionGroup* configGroup = new QActionGroup( this );
+   configGroup->setExclusive( true );
+   configGroup->addAction( camacConfigAction );
+   configGroup->addAction( caenConfigAction );
+   camacConfigAction->setChecked( true );
+
+   configMenu->addAction( camacConfigAction );
+   configMenu->addAction( caenConfigAction );
+
+   /////////////////////////////////////////////////////////////
+   //                                                         //
    //                 Create the Help menu                    //
    //                                                         //
    /////////////////////////////////////////////////////////////
@@ -253,16 +309,14 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    //
    QFile config_file( filename );
    if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-      m_logger << msg::ERROR
-               << tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename )
-               << msg::endmsg;
+      REPORT_ERROR( tr( "The specified configuration file (\"%1\")"
+                        " could not be opened!" ).arg( filename ) );
       QMessageBox::critical( this, tr( "File not opened" ),
-                             tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename ) );
+                             tr( "The specified configuration file (\"%1\")"
+                                 " could not be opened!" ).arg( filename ) );
       return;
    } else {
-      m_logger << msg::VERBOSE
-               << tr( "Opened file: %1" ).arg( filename )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Opened file: %1" ).arg( filename ) );
    }
 
    //
@@ -273,19 +327,19 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    int errorLine, errorColumn;
    if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
                          &errorColumn ) ) {
-      m_logger << msg::ERROR
-               << tr( "Error in parsing \"%1\"\n"
-                      "  Error message: %2\n"
-                      "  Error line   : %3\n"
-                      "  Error column : %4" )
-                  .arg( filename ).arg( errorMsg ).arg( errorLine ).arg( errorColumn )
-               << msg::endmsg;
+      REPORT_ERROR( tr( "Error in parsing \"%1\"\n"
+                        "  Error message: %2\n"
+                        "  Error line   : %3\n"
+                        "  Error column : %4" )
+                    .arg( filename ).arg( errorMsg )
+                    .arg( errorLine ).arg( errorColumn ) );
       QMessageBox::critical( this, tr( "XML error" ),
                              tr( "There is some problem with the format of the "
                                  "input file.\n\n "
                                  "Error message: %1\n"
                                  "Error line: %2\n"
-                                 "Error column: %3" ).arg( errorMsg ).arg( errorLine ).arg( errorColumn ) );
+                                 "Error column: %3" ).arg( errorMsg )
+                             .arg( errorLine ).arg( errorColumn ) );
       return;
    } else {
       m_logger << msg::DEBUG
@@ -296,14 +350,31 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    //
    // Let the appropriate object read the configuration:
    //
-   QDomElement work = doc.documentElement();
-
-   if( ! m_devEdit->readConfig( work ) ) { 
-      m_logger << msg::ERROR
-               << tr( "Failed to read configuration file!" )
-               << msg::endmsg;
+   const QDomElement work = doc.documentElement();
+   if( m_camacEdit->canRead( work ) ) {
+      if( ! m_camacEdit->readConfig( work ) ) { 
+         REPORT_ERROR( tr( "Failed to read CAMAC configuration file!" ) );
+         QMessageBox::critical( this, tr( "CAMAC configuration problem" ),
+                                tr( "Failed to read CAMAC configuration file!" ) );
+         return;
+      }
+      showCamacConfigSlot();
+   } else if( m_caenEdit->canRead( work ) ) {
+      if( ! m_caenEdit->readConfig( work ) ) { 
+         REPORT_ERROR( tr( "Failed to read CAEN configuration file!" ) );
+         QMessageBox::critical( this, tr( "CAEN configuration problem" ),
+                                tr( "Failed to read CAEN configuration file!" ) );
+         return;
+      }
+      showCaenConfigSlot();
+   } else {
+      REPORT_ERROR( tr( "Couldn't find an editor able to handle the "
+                        "specified configuration file" ) );
+      QMessageBox::critical( this, tr( "Configuration unknown" ),
+                             tr( "Couldn't find an editor able to handle the "
+                                 "specified configuration file" ) );
       return;
-   } 
+   }
 
    //
    // Modify the window title:
@@ -321,34 +392,46 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    //
    QFile input_file( filename );
    if( ! input_file.open( QFile::ReadOnly ) ) {
-       m_logger << msg::ERROR
-                << tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename )
-                << msg::endmsg;
+      REPORT_ERROR( tr( "The specified configuration file (\"%1\")"
+                        " could not be opened!" ).arg( filename ) );
       QMessageBox::critical( this, tr( "File reading error" ),
-                             tr( "The specified configuration file (\"%1\") could not be opened!" ).arg( filename ) );
+                             tr( "The specified configuration file "
+                                 "(\"%1\") could not be opened!" ).arg( filename ) );
       return;
    } else {
-       m_logger << msg::VERBOSE
-                << tr( "Opened file: %1" ).arg( filename )
-                << msg::endmsg;
+      REPORT_VERBOSE( tr( "Opened file: %1" ).arg( filename ) );
    }
 
    //
    // Read the configuration from this file:
    //
-   if( ! m_devEdit->readConfig( &input_file ) ) {
-      m_logger << msg::ERROR
-               << tr( "Some error happened while reading the "
-                      "binary configuration" )
-               << msg::endmsg;
-      QMessageBox::critical( this, tr( "Configuration reading error" ),
-                             tr( "The configuration could not be read. See "
-                                 "the application messages for more information" ) );
-      return;
+   if( m_camacEdit->canRead( &input_file ) ) {
+      if( ! m_camacEdit->readConfig( &input_file ) ) {
+         REPORT_ERROR( tr( "Some error happened while reading the "
+                           "binary configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration reading error" ),
+                                tr( "The configuration could not be read. See "
+                                    "the application messages for more information" ) );
+         return;
+      }
+      showCamacConfigSlot();
+   } else if( m_caenEdit->canRead( &input_file ) ) {
+      if( ! m_caenEdit->readConfig( &input_file ) ) {
+         REPORT_ERROR( tr( "Some error happened while reading the "
+                           "binary configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration reading error" ),
+                                tr( "The configuration could not be read. See "
+                                    "the application messages for more information" ) );
+         return;
+      }
+      showCaenConfigSlot();
    } else {
-      m_logger << msg::VERBOSE
-               << tr( "Configuration read in binary format" )
-               << msg::endmsg;
+      REPORT_ERROR( tr( "Couldn't find an editor able to handle the "
+                        "specified configuration file" ) );
+      QMessageBox::critical( this, tr( "Configuration unknown" ),
+                             tr( "Couldn't find an editor able to handle the "
+                                 "specified configuration file" ) );
+      return;
    }
 
    //
@@ -374,19 +457,24 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    // Write the configuration to this document:
    //
    QDomElement elem = doc.documentElement();
-   if( ! m_devEdit->writeConfig( elem ) ) {
-      m_logger << msg::ERROR
-               << tr( "Some error happened while creating the "
-                      "XML configuration" )
-               << msg::endmsg;
-      QMessageBox::critical( this, tr( "Configuration writing error" ),
-                             tr( "The configuration could not be written. See "
-                                 "the application messages for more information." ) );
-      return;
-   } else {
-      m_logger << msg::VERBOSE
-               << tr( "Configuration translated to XML format" )
-               << msg::endmsg;
+   if( m_editStack->currentWidget() == m_camacEdit ) {
+      if( ! m_camacEdit->writeConfig( elem ) ) {
+         REPORT_ERROR( tr( "Some error happened while creating the "
+                           "XML configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration writing error" ),
+                                tr( "The configuration could not be written. See "
+                                    "the application messages for more information." ) );
+         return;
+      }
+   } else if( m_editStack->currentWidget() == m_caenEdit ) {
+      if( ! m_caenEdit->writeConfig( elem ) ) {
+         REPORT_ERROR( tr( "Some error happened while creating the "
+                           "XML configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration writing error" ),
+                                tr( "The configuration could not be written. See "
+                                    "the application messages for more information." ) );
+         return;
+      }
    }
 
    //
@@ -394,10 +482,8 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
    //
    QFile output_file( filename );
    if( ! output_file.open( QFile::WriteOnly | QFile::Truncate ) ) {
-      m_logger << msg::ERROR
-               << tr( "%1 couldn't be opened "
-                      "for writing" ).arg( filename )
-               << msg::endmsg;
+      REPORT_ERROR( tr( "%1 couldn't be opened "
+                        "for writing" ).arg( filename ) );
       QMessageBox::critical( this, tr( "File writing error" ),
                              tr( "The selected file could not be opened for "
                                  "writing. Check permissions!" ) );
@@ -427,10 +513,8 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    //
    QFile output_file( filename );
    if( ! output_file.open( QFile::WriteOnly | QFile::Truncate ) ) {
-       m_logger << msg::ERROR
-                << tr( "%1 couldn't be opened "
-                       "for writing" ).arg( filename )
-                << msg::endmsg;
+      REPORT_ERROR( tr( "%1 couldn't be opened "
+                        "for writing" ).arg( filename ) );
       QMessageBox::critical( this, tr( "File writing error" ),
                              tr( "The selected file could not be opened for "
                                  "writing. Check permissions!" ) );
@@ -444,19 +528,24 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    //
    // Write the configuration to this file:
    //
-   if( ! m_devEdit->writeConfig( &output_file ) ) {
-      m_logger << msg::ERROR
-               << tr( "Some error happened while creating the "
-                      "binary configuration" )
-               << msg::endmsg;
-      QMessageBox::critical( this, tr( "Configuration writing error" ),
-                             tr( "The configuration could not be written. See "
-                                 "the application messages for more information." ) );
-      return;
-   } else {
-      m_logger << msg::VERBOSE
-               << tr( "Configuration written in binary format" )
-               << msg::endmsg;
+   if( m_editStack->currentWidget() == m_camacEdit ) {
+      if( ! m_camacEdit->writeConfig( &output_file ) ) {
+         REPORT_ERROR( tr( "Some error happened while creating the "
+                           "binary configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration writing error" ),
+                                tr( "The configuration could not be written. See "
+                                    "the application messages for more information." ) );
+         return;
+      }
+   } else if( m_editStack->currentWidget() == m_caenEdit ) {
+      if( ! m_caenEdit->writeConfig( &output_file ) ) {
+         REPORT_ERROR( tr( "Some error happened while creating the "
+                           "binary configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration writing error" ),
+                                tr( "The configuration could not be written. See "
+                                    "the application messages for more information." ) );
+         return;
+      }
    }
 
    //

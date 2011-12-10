@@ -151,8 +151,7 @@ int main( int argc, char* argv[] ) {
    //
    // Try to load all available device plugins:
    //
-   dev::Loader loader;
-   if( loader.loadAll() ) {
+   if( dev::Loader::instance()->loadAll() ) {
       g_logger << msg::INFO
                << qApp->translate( "cda-hbook-writer",
                                    "Successfully loaded all available devices" )
@@ -168,7 +167,7 @@ int main( int argc, char* argv[] ) {
    // Create the crate object:
    //
    g_crate = new hbook::Crate();
-   g_crate->setLoader( &loader );
+   g_crate->setLoader( dev::Loader::instance() );
 
    //
    // Decide how to read the configuration:

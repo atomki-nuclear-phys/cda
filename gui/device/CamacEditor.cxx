@@ -15,8 +15,8 @@
 #endif
 
 // Local include(s):
-#include "Editor.h"
-#include "CrateWidget.h"
+#include "CamacEditor.h"
+#include "CamacCrateWidget.h"
 
 namespace dev {
 
@@ -25,23 +25,22 @@ namespace dev {
     * are created and arranged in the constructor such that they would
     * "look good"...
     */
-   Editor::Editor( QWidget* parent, Qt::WindowFlags flags )
-      : QWidget( parent, flags ), m_logger( "dev::Editor" ) {
+   CamacEditor::CamacEditor( QWidget* parent, Qt::WindowFlags flags )
+      : QWidget( parent, flags ), m_logger( "dev::CamacEditor" ) {
 
       // Set the size of the widget:
-      resize( CrateWidget::WIDTH, 640 );
-      setMinimumSize( CrateWidget::WIDTH, 640 );
-      setMaximumSize( CrateWidget::WIDTH, 640 );
+      resize( CamacCrateWidget::WIDTH, 640 );
+      setMinimumSize( CamacCrateWidget::WIDTH, 640 );
+      setMaximumSize( CamacCrateWidget::WIDTH, 640 );
 
       // Load all plugins:
-      m_loader = new Loader();
-      m_loader->loadAll();
+      Loader::instance()->loadAll();
 
       // Create and arrange the crate object:
-      m_crateView = new CrateWidget( this );
-      m_crateView->setLoader( m_loader );
-      m_crateView->setGeometry( QRect( 0, 0, CrateWidget::WIDTH,
-                                       CrateWidget::HEIGHT ) );
+      m_crateView = new CamacCrateWidget( this );
+      m_crateView->setLoader( Loader::instance() );
+      m_crateView->setGeometry( QRect( 0, 0, CamacCrateWidget::WIDTH,
+                                       CamacCrateWidget::HEIGHT ) );
       connect( m_crateView, SIGNAL( doubleClicked( int ) ),
                this, SLOT( showDeviceSlot( int ) ) );
 
@@ -61,55 +60,72 @@ namespace dev {
    /**
     * The destructor deletes all objects created in the constructor.
     */
-   Editor::~Editor() {
+   CamacEditor::~CamacEditor() {
 
       delete m_crateView;
       delete m_deviceWidget;
       delete m_deviceBox;
-      delete m_loader;
    }
 
    /**
-    * The configuration reading is simply forwarded to the CrateWidget
+    * The configuration reading is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool Editor::readConfig( QIODevice* dev ) {
+   bool CamacEditor::readConfig( QIODevice* dev ) {
 
       return m_crateView->readConfig( dev );
    }
 
    /**
-    * The configuration writing is simply forwarded to the CrateWidget
+    * The configuration writing is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool Editor::writeConfig( QIODevice* dev ) const {
+   bool CamacEditor::writeConfig( QIODevice* dev ) const {
 
       return m_crateView->writeConfig( dev );
    }
 
    /**
-    * The configuration reading is simply forwarded to the CrateWidget
+    * The configuration reading is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool Editor::readConfig( const QDomElement& node ) {
+   bool CamacEditor::readConfig( const QDomElement& node ) {
 
       return m_crateView->readConfig( node );
    }
 
    /**
-    * The configuration writing is simply forwarded to the CrateWidget
+    * The configuration writing is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool Editor::writeConfig( QDomElement& node ) const {
+   bool CamacEditor::writeConfig( QDomElement& node ) const {
 
       return m_crateView->writeConfig( node );
    }
 
    /**
-    * Clearing the configuration means clearing and redrawing the CrateWidget
+    * The function call is simply forvarded to the
+    * CamacCrateWidget.
+    */
+   bool CamacEditor::canRead( QIODevice* dev ) const {
+
+      return m_crateView->canRead( dev );
+   }
+
+   /**
+    * The function call is simply forvarded to the
+    * CamacCrateWidget.
+    */
+   bool CamacEditor::canRead( const QDomElement& node ) const {
+
+      return m_crateView->canRead( node );
+   }
+
+   /**
+    * Clearing the configuration means clearing and redrawing the CamacCrateWidget
     * object.
     */
-   void Editor::clear() {
+   void CamacEditor::clear() {
 
       m_crateView->clear();
       m_crateView->update();
@@ -122,7 +138,7 @@ namespace dev {
     *
     * @param slot The crate slot in which the device can be found
     */
-   void Editor::showDeviceSlot( int slot ) {
+   void CamacEditor::showDeviceSlot( int slot ) {
 
       // Access the device:
       CamacGui* device = m_crateView->getDevice( slot );
@@ -135,12 +151,11 @@ namespace dev {
 
       // Do nothing if it is being shown right now:
       if( device == m_deviceWidget->currentWidget() ) {
-         m_logger << msg::VERBOSE << tr( "This device is shown right now..." )
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "This device is shown right now..." ) );
          return;
       }
 
-      // Remove the currently shown widget. (m_deviceWidget should only
+      // Remove the currently shown widget. (m_deviceWidget should
       // only contain one widget at all times...)
       QWidget* shown_widget = m_deviceWidget->currentWidget();
       if( shown_widget ) {
@@ -158,7 +173,7 @@ namespace dev {
    /**
     * This is just to always show a good title on top of the QGroupBox...
     */
-   void Editor::removeDeviceSlot( int /* slot */ ) {
+   void CamacEditor::removeDeviceSlot( int /* slot */ ) {
 
       m_deviceBox->setTitle( tr( "No slot selected" ) );
       return;

@@ -11,10 +11,8 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/device/Loader.h"
 #else
 #   include "msg/Logger.h"
-#   include "device/Loader.h"
 #endif
 
 // Forward declaration(s):
@@ -87,8 +85,6 @@ namespace conf {
    private:
       QString m_configFileName; ///< Name of the configuration file
       QBuffer m_buffer; ///< Internal buffer storing the binary configuration
-
-      dev::Loader m_loader; ///< Device plugin handler
 
       mutable msg::Logger m_logger; ///< Private logger object
 

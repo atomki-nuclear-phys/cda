@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_GUI_DEVICE_EDITOR_H
-#define CDA_GUI_DEVICE_EDITOR_H
+#ifndef CDA_GUI_DEVICE_CAMACEDITOR_H
+#define CDA_GUI_DEVICE_CAMACEDITOR_H
 
 // Qt include(s):
 #include <QtGui/QWidget>
@@ -22,7 +22,7 @@ namespace dev {
 
    // Forward declaration(s):
    class Loader;
-   class CrateWidget;
+   class CamacCrateWidget;
 
    /**
     *  @short Class used for editing the CAMAC crate setup
@@ -37,16 +37,16 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Editor : public QWidget,
-                  public Config {
+   class CamacEditor : public QWidget,
+                       public Config {
 
       Q_OBJECT
 
    public:
       /// Constructor
-      Editor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CamacEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       /// Destructor
-      ~Editor();
+      ~CamacEditor();
 
       /// Function reading the configuration in binary format
       virtual bool readConfig( QIODevice* dev );
@@ -56,6 +56,11 @@ namespace dev {
       virtual bool readConfig( const QDomElement& node );
       /// Function writing the configuration in XML format
       virtual bool writeConfig( QDomElement& node ) const;
+
+      /// Check if this object can read this binary configuration
+      bool canRead( QIODevice* dev ) const;
+      /// Check if this object can read this XML configuration
+      bool canRead( const QDomElement& node ) const;
 
       /// Clear the configuration
       void clear();
@@ -67,15 +72,14 @@ namespace dev {
       void removeDeviceSlot( int slot );
 
    private:
-      Loader*         m_loader; ///< Object used by the underlying classes
-      CrateWidget*    m_crateView; ///< Widget representing the CAMAC crate
-      QGroupBox*      m_deviceBox; ///< Area for showing the detailed config.
-      QStackedWidget* m_deviceWidget; ///< Widget for showing the config.
+      CamacCrateWidget* m_crateView; ///< Widget representing the CAMAC crate
+      QGroupBox*        m_deviceBox; ///< Area for showing the detailed config.
+      QStackedWidget*   m_deviceWidget; ///< Widget for showing the config.
 
-      mutable msg::Logger m_logger; ///< Message logging object
+      mutable msg::Logger m_logger; ///< Message logger object
 
-   }; // class Editor
+   }; // class CamacEditor
 
 } // namespace dev
 
-#endif // CDA_GUI_DEVICE_EDITOR_H
+#endif // CDA_GUI_DEVICE_CAMACEDITOR_H

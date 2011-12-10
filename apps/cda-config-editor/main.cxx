@@ -18,6 +18,7 @@
 
 // Qt include(s):
 #include <QtGui/QApplication>
+#include <QtGui/QPixmap>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

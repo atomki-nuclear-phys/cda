@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_GUI_DEVICE_CRATEWIDGET_H
-#define CDA_GUI_DEVICE_CRATEWIDGET_H
+#ifndef CDA_GUI_DEVICE_CAMACCRATEWIDGET_H
+#define CDA_GUI_DEVICE_CAMACCRATEWIDGET_H
 
 // Qt include(s):
 #include <QtGui/QWidget>
@@ -48,16 +48,14 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class CrateWidget : public QWidget,
-                       public Crate< dev::CamacGui > {
+   class CamacCrateWidget : public QWidget,
+                            public Crate< dev::CamacGui > {
 
       Q_OBJECT
 
    public:
       /// Constructor
-      CrateWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~CrateWidget();
+      CamacCrateWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Extended configuration reading from binary file
       virtual bool readConfig( QIODevice* dev );
@@ -122,8 +120,8 @@ namespace dev {
    private:
       mutable msg::Logger m_logger; ///< Message logging object
 
-   }; // class CrateWidget
+   }; // class CamacCrateWidget
 
 } // namespace dev
 
-#endif // CDA_GUI_DEVICE_CRATEWIDGET_H
+#endif // CDA_GUI_DEVICE_CAMACCRATEWIDGET_H

@@ -45,8 +45,9 @@ namespace dev {
       Q_DECLARE_TR_FUNCTIONS( dev::Loader )
 
    public:
-      /// Constructor specifying the directory of the plugins
-      Loader( const QString& path = "" );
+      /// Access the singleton instance
+      static Loader* instance( const QString& path = "" );
+
       /// Destructor
       ~Loader();
 
@@ -65,6 +66,11 @@ namespace dev {
       Factory*    getFactory( const QString& name ) const;
 
    private:
+      /// Constructor specifying the directory of the plugins
+      Loader( const QString& path = "" );
+
+      static Loader* m_instance; ///< The singleton instance
+
       QString                       m_path;      ///< Plugin directory
       std::map< QString, Factory* > m_deviceMap; ///< Loaded devices
       mutable msg::Logger           m_logger;    ///< Private logger object

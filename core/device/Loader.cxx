@@ -27,51 +27,30 @@ namespace dev {
    using QT_PREPEND_NAMESPACE( QDir );
    using QT_PREPEND_NAMESPACE( QLibrary );
 
+   // Initialize the static member(s):
+   Loader* Loader::m_instance = 0;
+
    /**
-    * You can either specify a concrete directory path under which
-    * device plugins should be searched for, or the class can try
-    * to find the "general" device plugin directory from the environment
-    * setup. For the latter, the <code>CDASYS</code> environment
-    * variable has to be set.
+    * The device loader is implemented as a singleton, as many different
+    * components may need this object in the same application, and passing
+    * the same object around is not too practical.
     *
     * @param path Name of the directory holding the plugins
+    * @returns The only device loader instance in memory
     */
-   Loader::Loader( const QString& path )
-      : m_path( path ), m_logger( "dev::Loader" ) {
+   Loader* Loader::instance( const QString& path ) {
 
-      //
-      // Check if a directory name has been specified:
-      //
-      if( m_path.isEmpty() ) {
-         //
-         // Get the CDASYS environment variable. Remember that the
-         // return value is in our responsibility...
-         //
-         char* env_path = getenv( "CDASYS" );
-         if( ! env_path ) {
-            // In case CDASYS is not in the environment, try using the directory where
-            // the code was compiled:
-            m_path = CDASYS_PATH;
-            m_path.append( "/dev" );
-         } else {
-            m_path = env_path;
-            m_path.append( "/dev" );
-         }
-         m_logger << msg::DEBUG << tr( "Setting device plugin directory "
-                                       "to: %1" ).arg( m_path ) << msg::endmsg;
-
-         //
-         // Delete the return value of getenv():
-         //
-         // Mac OS X complains about this call, so it's removed for the moment.
-         //         if( env_path ) free( env_path );
+      // Create an instance if it doesn't exist:
+      if( ! m_instance ) {
+         m_instance = new Loader( path );
       }
 
+      return m_instance;
    }
 
    /**
     * The destructor deletes all device factories instantiated
-    * by this object.
+    * by this object, and clears the static instance variable.
     */
    Loader::~Loader() {
 
@@ -79,7 +58,7 @@ namespace dev {
            it != m_deviceMap.end(); ++it ) {
          if( it->second ) delete it->second;
       }
-
+      m_instance = 0;
    }
 
    /**
@@ -97,7 +76,6 @@ namespace dev {
       } else {
          return false;
       }
-
    }
 
    /**
@@ -114,9 +92,7 @@ namespace dev {
       // First of all, load all the statically linked plugins:
       //
       if( ! loadStaticPlugins() ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem loading the static plugins" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "There was a problem loading the static plugins" ) );
          return false;
       } else {
          m_logger << msg::DEBUG << tr( "Loaded the static plugins" )
@@ -136,22 +112,17 @@ namespace dev {
       for( QStringList::const_iterator pname = files.begin();
            pname != files.end(); ++pname ) {
 
-         m_logger << msg::VERBOSE
-                  << tr( "Evaluating: %1" ).arg( *pname )
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "Evaluating: %1" ).arg( *pname ) );
 
          //
          // Try to load the files that look like shared libraries:
          //
          if( QLibrary::isLibrary( *pname ) ) {
 
-            m_logger << msg::VERBOSE
-                     << tr( "Trying to load plugin: %1" ).arg( *pname )
-                     << msg::endmsg;
+            REPORT_VERBOSE( tr( "Trying to load plugin: %1" ).arg( *pname ) );
 
             if( this->load( *pname ) ) {
-               m_logger << msg::VERBOSE << tr( "%1 loaded" ).arg( *pname )
-                        << msg::endmsg;
+               REPORT_VERBOSE( tr( "%1 loaded" ).arg( *pname ) );
             } else {
                m_logger << msg::WARNING
                         << tr( "%1 could not be loaded" ).arg( *pname )
@@ -185,9 +156,7 @@ namespace dev {
       QPluginLoader ploader( m_path + "/" + plugin_name );
       QObject* plugin = ploader.instance();
       if( ! plugin ) {
-         m_logger << msg::ERROR
-                  << tr( "Couldn't load plugin with name: %1" ).arg( plugin_name )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Couldn't load plugin with name: %1" ).arg( plugin_name ) );
          return false;
       } else {
          m_logger << msg::DEBUG
@@ -200,16 +169,21 @@ namespace dev {
       //
       dev::Factory* factory = qobject_cast< dev::Factory* >( plugin );
       if( ! factory ) {
-         m_logger << msg::ERROR
-                  << tr( "%1 doesn't provide the "
-                         "dev::Factory interface!" ).arg( plugin_name )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "%1 doesn't provide the "
+                           "dev::Factory interface!" ).arg( plugin_name ) );
          delete factory;
          return false;
       } else {
          m_logger << msg::DEBUG
                   << tr( "Accessed dev::Factory interface in plugin: %1" ).arg( plugin_name )
                   << msg::endmsg;
+      }
+
+      //
+      // Don't do anything if it's already loaded:
+      //
+      if( m_deviceMap.find( factory->shortName() ) != m_deviceMap.end() ) {
+         return true;
       }
 
       //
@@ -254,15 +228,12 @@ namespace dev {
          //
          dev::Factory* factory = qobject_cast< dev::Factory* >( *plugin );
          if( ! factory ) {
-            m_logger << msg::ERROR << tr( "Found a static plugin not providing "
-                                          "the needed interface" )
-                     << msg::endmsg;
-            delete factory;
+            REPORT_ERROR( tr( "Found a static plugin not providing "
+                              "the needed interface" ) );
             return false;
          } else {
-            m_logger << msg::VERBOSE << tr( "Accessed dev::Factory interface in "
-                                            "static plugin" )
-                     << msg::endmsg;
+            REPORT_VERBOSE( tr( "Accessed dev::Factory interface in "
+                                "static plugin" ) );
          }
 
          //
@@ -303,9 +274,8 @@ namespace dev {
    Factory* Loader::getFactory( const QString& name ) const {
 
       if( ! isLoaded( name ) ) {
-         m_logger << msg::ERROR
-                  << tr( "No device with name \"%1\" loaded currently" ).arg( name )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "No device with name \"%1\" loaded "
+                           "currently" ).arg( name ) );
          return 0;
       }
 
@@ -313,6 +283,48 @@ namespace dev {
          m_deviceMap.find( name );
 
       return it->second;
+   }
+
+   /**
+    * You can either specify a concrete directory path under which
+    * device plugins should be searched for, or the class can try
+    * to find the "general" device plugin directory from the environment
+    * setup. For the latter, the <code>CDASYS</code> environment
+    * variable has to be set.
+    *
+    * @param path Name of the directory holding the plugins
+    */
+   Loader::Loader( const QString& path )
+      : m_path( path ), m_logger( "dev::Loader" ) {
+
+      //
+      // Check if a directory name has been specified:
+      //
+      if( m_path.isEmpty() ) {
+         //
+         // Get the CDASYS environment variable. Remember that the
+         // return value is in our responsibility...
+         //
+         char* env_path = getenv( "CDASYS" );
+         if( ! env_path ) {
+            // In case CDASYS is not in the environment, try using the directory where
+            // the code was compiled:
+            m_path = CDASYS_PATH;
+            m_path.append( "/dev" );
+         } else {
+            m_path = env_path;
+            m_path.append( "/dev" );
+         }
+         m_logger << msg::DEBUG << tr( "Setting device plugin directory "
+                                       "to: %1" ).arg( m_path ) << msg::endmsg;
+
+         //
+         // Delete the return value of getenv():
+         //
+         // Mac OS X complains about this call, so it's removed for the moment.
+         //         if( env_path ) free( env_path );
+      }
+
    }
 
 } // namespace dev
