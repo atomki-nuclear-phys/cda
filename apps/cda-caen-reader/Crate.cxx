@@ -16,7 +16,7 @@
 namespace caen_reader {
 
    Crate::Crate()
-      : caen::Crate< dev::CaenReadout >(),
+      : dev::Crate< dev::CaenReadout >(),
         m_logger( "caen_reader::Crate" ) {
 
    }

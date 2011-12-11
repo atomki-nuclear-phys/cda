@@ -9,12 +9,12 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CaenReadout.h"
-#   include "cdacore/caen/Crate.h"
+#   include "cdacore/device/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/CaenReadout.h"
-#   include "caen/Crate.h"
+#   include "device/Crate.h"
 #   include "event/Event.h"
 #   include "msg/Logger.h"
 #endif
@@ -51,7 +51,7 @@ namespace caen_reader {
     * $Revision$
     * $Date$
     */
-   class Crate : public caen::Crate< dev::CaenReadout > {
+   class Crate : public dev::Crate< dev::CaenReadout > {
 
    public:
       /// Default constructor

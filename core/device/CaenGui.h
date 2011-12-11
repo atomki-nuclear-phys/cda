@@ -43,7 +43,7 @@ namespace dev {
       /// Fixed width of a device
       static const int WIDGET_WIDTH = 500;
       /// Fixed height of a device
-      static const int WIDGET_HEIGHT = 550;
+      static const int WIDGET_HEIGHT = 580;
 
    }; // class CaenGui
 

@@ -8,11 +8,11 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/caen/Crate.h"
+#   include "cdacore/device/Crate.h"
 #   include "cdacore/device/CaenGui.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "caen/Crate.h"
+#   include "device/Crate.h"
 #   include "device/CaenGui.h"
 #   include "msg/Logger.h"
 #endif
@@ -37,7 +37,7 @@ namespace dev {
     * $Date$
     */
    class CaenEditor : public QWidget,
-                      public caen::Crate< dev::CaenGui > {
+                      public dev::Crate< dev::CaenGui > {
 
       Q_OBJECT
 
@@ -55,8 +55,6 @@ namespace dev {
       void createDeviceSlot( int index );
       /// Remove the current device from the configuration
       void clearDeviceSlot();
-      /// Change the connection mode
-      void connectionModeSlot( int index );
 
    private:
       QStackedWidget* m_deviceStack; ///< A widget to show the device(s) in
@@ -64,9 +62,6 @@ namespace dev {
       QComboBox* m_createDevice; ///< Dropdown menu selecting what kind of device to create
       bool m_selfModification; ///< Flag showing that the object is modifying itself at the moment
       QPushButton* m_clearDevice; ///< Button for clearing the configuration
-
-      QLabel* m_connModeLabel; ///< Label for the connection mode selector
-      QComboBox* m_connMode; ///< Connection mode selector
 
       mutable msg::Logger m_logger; ///< Message logger object
 

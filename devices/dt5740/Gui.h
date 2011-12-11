@@ -9,8 +9,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CaenGui.h"
+#   include "cdacore/msg/Logger.h"
 #else
 #   include "device/CaenGui.h"
+#   include "msg/Logger.h"
 #endif
 
 // Local include(s):
@@ -20,6 +22,9 @@
 QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QCheckBox )
 QT_FORWARD_DECLARE_CLASS( QScrollArea )
+QT_FORWARD_DECLARE_CLASS( QGroupBox )
+QT_FORWARD_DECLARE_CLASS( QComboBox )
+QT_FORWARD_DECLARE_CLASS( QSpinBox )
 
 namespace dt5740 {
 
@@ -63,6 +68,11 @@ namespace dt5740 {
       virtual bool readConfig( const QDomElement& node );
 
    private slots:
+      /// Slot handling changes to the connection mode
+      void connectionModeSlot( int index );
+      /// Slot handling changes to the connection link
+      void connectionLinkSlot( int link );
+
       /// Slot handling changes to channel enablement
       void channelEnabledSlot( int channel, bool on );
       /// Slot handling changes to channel names
@@ -107,8 +117,16 @@ namespace dt5740 {
       QLabel*     m_image; ///< Image of the digitizer itself
       QLabel*     m_topLabel; ///< Text label at the top
 
+      QGroupBox* m_connectionBox; ///< Box for the connection parameters
+      QLabel*    m_connModeLabel; ///< Description for conn. mode setting
+      QComboBox* m_connMode;      ///< Connection mode chooser
+      QLabel*    m_connLinkLabel; ///< Description for conn. link setting
+      QSpinBox*  m_connLink;      ///< Connection link chooser
+
       /// The graphical representation of channel groups
       GroupGui* m_ggroups[ NUMBER_OF_GROUPS ];
+
+      mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Gui
 

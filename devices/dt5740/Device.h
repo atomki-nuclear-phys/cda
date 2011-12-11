@@ -9,9 +9,11 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Device.h"
+#   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Device.h"
+#   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -57,9 +59,9 @@ namespace dt5740 {
       /// The type of the child class
       virtual QString deviceName() const { return "DT5740"; }
 
-      /// Dummy value, the device is always accessed through USB
+      /// ID of the USB connection
       virtual unsigned int getID() const;
-      /// No value is stored with the function
+      /// Sets the ID of the USB connection (not used)
       virtual void setID( unsigned int value );
 
    protected:
@@ -75,6 +77,11 @@ namespace dt5740 {
       ChannelConfig* m_channels[ NUMBER_OF_CHANNELS ];
       /// Configuration of the channel groups
       GroupConfig m_groups[ NUMBER_OF_GROUPS ];
+
+      /// Connection protocol to access the device
+      caen::Digitizer::ConnectionType m_connType;
+      /// Link number (0 if only USB device)
+      int m_linkNumber;
 
    private:
       mutable msg::Logger m_logger; ///< Message logger object

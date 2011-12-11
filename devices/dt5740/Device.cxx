@@ -49,6 +49,14 @@ namespace dt5740 {
       // Read the properties of this class:
       QDataStream input( dev );
       input.setVersion( QDataStream::Qt_4_0 );
+
+      // Read the connection parameters of the device:
+      int ctype;
+      input >> ctype;
+      m_connType = caen::Digitizer::convertConnType( ctype );
+      input >> m_linkNumber;
+
+      // Read the number of active channels:
       quint32 number_of_channels;
       input >> number_of_channels;
 
@@ -106,6 +114,10 @@ namespace dt5740 {
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
 
+      // Write out the connection parameters of the device:
+      output << caen::Digitizer::convertConnType( m_connType );
+      output << m_linkNumber;
+
       // Count the number of configured channels:
       quint32 number_of_channels = 0;
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
@@ -143,6 +155,24 @@ namespace dt5740 {
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
       clear();
+
+      //
+      // Read the device wide configuration:
+      //
+      bool ok;
+
+      const int ctype = element.attribute( "ConnType", "0" ).toInt( &ok );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "Couldn't read connection type" ) );
+         return false;
+      }
+      m_connType = caen::Digitizer::convertConnType( ctype );
+
+      m_linkNumber = element.attribute( "LinkNumber", "0" ).toInt( &ok );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "Couldn't read link number" ) );
+         return false;
+      }
 
       //
       // Configure the groups:
@@ -213,6 +243,13 @@ namespace dt5740 {
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       //
+      // Write the device wide configuration:
+      //
+      element.setAttribute( "ConnType",
+                            caen::Digitizer::convertConnType( m_connType ) );
+      element.setAttribute( "LinkNumber", m_linkNumber );
+
+      //
       // Create a new node for the configuration of each group:
       //
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -250,11 +287,12 @@ namespace dt5740 {
 
    unsigned int Device::getID() const {
 
-      return 0;
+      return m_linkNumber;
    }
 
-   void Device::setID( unsigned int ) {
+   void Device::setID( unsigned int id ) {
 
+      m_linkNumber = id;
       return;
    }
 

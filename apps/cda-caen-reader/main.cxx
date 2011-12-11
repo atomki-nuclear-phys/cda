@@ -241,7 +241,7 @@ int main( int argc, char* argv[] ) {
    // Open the connection to the digitizer:
    //
    g_dgtz = new caen::Digitizer();
-   if( ! g_dgtz->open( crate.getConnType() ) ) {
+   if( ! g_dgtz->open() ) {
       g_logger << msg::FATAL
                << qApp->translate( "cda-caen-reader",
                                    "Couldn't open connection to digitizer" )

@@ -8,6 +8,9 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QScrollArea>
 #include <QtGui/QPixmap>
+#include <QtGui/QGroupBox>
+#include <QtGui/QComboBox>
+#include <QtGui/QSpinBox>
 
 // Local include(s):
 #include "Gui.h"
@@ -24,13 +27,14 @@ namespace dt5740 {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CaenGui( parent, flags ) {
+      : dev::CaenGui( parent, flags ),
+        m_logger( "dt5740::Gui" ) {
 
       //
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 2900 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 3000 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -50,16 +54,54 @@ namespace dt5740 {
       //
       // Create a label telling us what kind of device this is:
       //
-      m_topLabel = new QLabel( tr( "CAEN DT5740 32 Channel 12 bit 62.5MS/s Digitizer" ),
+      m_topLabel = new QLabel( tr( "CAEN DT5740 32 Channel 12 bit "
+                                   "62.5MS/s Digitizer" ),
                                m_scrollWidget );
       m_topLabel->setAlignment( Qt::AlignCenter );
-      m_topLabel->setGeometry( QRect( 25, 200, 430, 25 ) );
+      m_topLabel->setGeometry( QRect( 20, 200, WIDGET_WIDTH - 40, 35 ) );
+      QFont titleFont( m_topLabel->font() );
+      titleFont.setPointSize( titleFont.pointSize() + 2 );
+      titleFont.setBold( true );
+      m_topLabel->setFont( titleFont );
 
+      //
+      // Create the device connection settings:
+      //
+      m_connectionBox = new QGroupBox( tr( "Connection parameters" ),
+                                       m_scrollWidget );
+      m_connectionBox->setGeometry( QRect( 5, 245, WIDGET_WIDTH - 30, 90 ) );
+
+      m_connModeLabel = new QLabel( tr( "Connection mode:" ),
+                                    m_connectionBox);
+      m_connModeLabel->setGeometry( QRect( 10, 25, 130, 25 ) );
+
+      m_connMode = new QComboBox( m_connectionBox );
+      m_connMode->setGeometry( QRect( 160, 25, 220, 25 ) );
+      m_connMode->addItem( tr( "USB" ) );
+      m_connMode->addItem( tr( "PCI Optical Link" ) );
+      m_connMode->addItem( tr( "PCIe Optical Link" ) );
+      m_connMode->addItem( tr( "PCIe Embedded Digitizer" ) );
+      connect( m_connMode, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( connectionModeSlot( int ) ) ); 
+
+      m_connLinkLabel = new QLabel( tr( "Connection link:" ),
+                                    m_connectionBox );
+      m_connLinkLabel->setGeometry( QRect( 10, 55, 130, 25 ) );
+
+      m_connLink = new QSpinBox( m_connectionBox );
+      m_connLink->setGeometry( QRect( 160, 55, 220, 25 ) );
+      m_connLink->setRange( 0, 10 );
+      connect( m_connLink, SIGNAL( valueChanged( int ) ),
+               this, SLOT( connectionLinkSlot( int ) ) );
+
+      //
+      // Create the channel groups:
+      //
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( i, m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 245 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 340 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
 
          // Connect all of its signals to this object:
@@ -69,8 +111,10 @@ namespace dt5740 {
                   this, SLOT( trigOutEnabledSlot( int, bool ) ) );
          connect( m_ggroups[ i ], SIGNAL( trigOvlpEnabled( int, bool ) ),
                   this, SLOT( trigOvlpEnabledSlot( int, bool ) ) );
-         connect( m_ggroups[ i ], SIGNAL( trigMode( int, dt5740::GroupConfig::TriggerMode ) ),
-                  this, SLOT( trigModeSlot( int, dt5740::GroupConfig::TriggerMode ) ) );
+         connect( m_ggroups[ i ],
+                  SIGNAL( trigMode( int, dt5740::GroupConfig::TriggerMode ) ),
+                  this,
+                  SLOT( trigModeSlot( int, dt5740::GroupConfig::TriggerMode ) ) );
          connect( m_ggroups[ i ], SIGNAL( trigThreshold( int, int ) ),
                   this, SLOT( trigThresholdSlot( int, int ) ) );
          connect( m_ggroups[ i ], SIGNAL( trigMask( int, unsigned int ) ),
@@ -81,23 +125,31 @@ namespace dt5740 {
                   this, SLOT( dcOffsetSlot( int, int ) ) );
          connect( m_ggroups[ i ], SIGNAL( patGenEnabled( int, bool ) ),
                   this, SLOT( patGenEnabledSlot( int, bool ) ) );
-         connect( m_ggroups[ i ], SIGNAL( gateMode( int, dt5740::GroupConfig::GateMode ) ),
+         connect( m_ggroups[ i ],
+                  SIGNAL( gateMode( int, dt5740::GroupConfig::GateMode ) ),
                   this, SLOT( gateModeSlot( int, dt5740::GroupConfig::GateMode ) ) );
-         connect( m_ggroups[ i ], SIGNAL( bufferMode( int, dt5740::GroupConfig::BufferMode ) ),
-                  this, SLOT( bufferModeSlot( int, dt5740::GroupConfig::BufferMode ) ) );
+         connect( m_ggroups[ i ],
+                  SIGNAL( bufferMode( int, dt5740::GroupConfig::BufferMode ) ),
+                  this,
+                  SLOT( bufferModeSlot( int, dt5740::GroupConfig::BufferMode ) ) );
 
          // Connect the signals of the channels belonging to the channel group
          // to this object:
          for( int j = 0; j < GroupConfig::CHANNELS_IN_GROUP; ++j ) {
-            connect( m_ggroups[ i ]->getChannel( j ), SIGNAL( enableChanged( int, bool ) ),
+            connect( m_ggroups[ i ]->getChannel( j ),
+                     SIGNAL( enableChanged( int, bool ) ),
                      this, SLOT( channelEnabledSlot( int, bool ) ) );
-            connect( m_ggroups[ i ]->getChannel( j ), SIGNAL( nameChanged( int, const QString& ) ),
+            connect( m_ggroups[ i ]->getChannel( j ),
+                     SIGNAL( nameChanged( int, const QString& ) ),
                      this, SLOT( nameChangedSlot( int, const QString& ) ) );
-            connect( m_ggroups[ i ]->getChannel( j ), SIGNAL( channelsChanged( int, int ) ),
+            connect( m_ggroups[ i ]->getChannel( j ),
+                     SIGNAL( channelsChanged( int, int ) ),
                      this, SLOT( channelsChangedSlot( int, int ) ) );
-            connect( m_ggroups[ i ]->getChannel( j ), SIGNAL( lowerBoundChanged( int, double ) ),
+            connect( m_ggroups[ i ]->getChannel( j ),
+                     SIGNAL( lowerBoundChanged( int, double ) ),
                      this, SLOT( lowerBoundChangedSlot( int, double ) ) );
-            connect( m_ggroups[ i ]->getChannel( j ), SIGNAL( upperBoundChanged( int, double ) ),
+            connect( m_ggroups[ i ]->getChannel( j ),
+                     SIGNAL( upperBoundChanged( int, double ) ),
                      this, SLOT( upperBoundChangedSlot( int, double ) ) );
          }
       }
@@ -111,6 +163,12 @@ namespace dt5740 {
 
       delete m_image;
       delete m_topLabel;
+
+      delete m_connModeLabel;
+      delete m_connMode;
+      delete m_connLinkLabel;
+      delete m_connLink;
+      delete m_connectionBox;
 
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          delete m_ggroups[ i ];
@@ -146,6 +204,37 @@ namespace dt5740 {
       }
       sync();
       return true;
+   }
+
+   void Gui::connectionModeSlot( int index ) {
+
+      switch( index ) {
+
+      case 0:
+         m_connType = caen::Digitizer::USB;
+         break;
+      case 1:
+         m_connType = caen::Digitizer::PCI_OpticalLink;
+         break;
+      case 2:
+         m_connType = caen::Digitizer::PCIE_OpticalLink;
+         break;
+      case 3:
+         m_connType = caen::Digitizer::PCIE_EmbeddedDigitizer;
+         break;
+      default:
+         REPORT_ERROR( tr( "Connection mode not recognized" ) );
+         m_connType = caen::Digitizer::USB;
+         break;
+      }
+
+      return;
+   }
+
+   void Gui::connectionLinkSlot( int link ) {
+
+      m_linkNumber = link;
+      return;
    }
 
    void Gui::channelEnabledSlot( int channel, bool on ) {
@@ -257,6 +346,32 @@ namespace dt5740 {
     * care of doing that.
     */
    void Gui::sync() {
+
+      // Set the connection mode:
+      m_connMode->setEnabled( false );
+      switch( m_connType ) {
+      case caen::Digitizer::USB:
+         m_connMode->setCurrentIndex( 0 );
+         break;
+      case caen::Digitizer::PCI_OpticalLink:
+         m_connMode->setCurrentIndex( 1 );
+         break;
+      case caen::Digitizer::PCIE_OpticalLink:
+         m_connMode->setCurrentIndex( 2 );
+         break;
+      case caen::Digitizer::PCIE_EmbeddedDigitizer:
+         m_connMode->setCurrentIndex( 3 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Connection mode not recognized" ) );
+         break;
+      }
+      m_connMode->setEnabled( true ); 
+
+      // Set the connection link:
+      m_connLink->setEnabled( false );
+      m_connLink->setValue( m_linkNumber );
+      m_connLink->setEnabled( true );
 
       //
       // For each channel the adjustments to the graphical objects

@@ -53,14 +53,20 @@ namespace caen {
 
       /// Enumeration for the connection type to use
       enum ConnectionType {
-         USB = 0, ///< USB connection (Only one really supported)
-         PCI_OpticalLink = 1,
-         PCIE_OpticalLink = 2,
-         PCIE_EmbeddedDigitizer = 3
+         USB = 0, ///< USB connection (direct or V1718->VME)
+         PCI_OpticalLink = 1, ///< PCI-A2818 (direct or V2718->VME)
+         PCIE_OpticalLink = 2, ///< PCIe-A3818 (direct or A3818->VME)
+         PCIE_EmbeddedDigitizer = 3 ///< Possible future development
       };
 
+      /// Helper function converting connection type
+      static int convertConnType( ConnectionType type );
+      /// Helper function converting connection type
+      static ConnectionType convertConnType( int type );
+
       /// Open the connection
-      bool open( ConnectionType type = USB );
+      bool open( ConnectionType type = USB, int linkNum = 0,
+                 int conetNode = 0, uint32_t vmeAddress = 0 );
       /// Close the connection
       bool close();
 
@@ -78,10 +84,20 @@ namespace caen {
       /// Clears the data from the digitizer
       bool clear();
 
+      /// Acquisition mode
+      enum AcquisitionMode {
+         ACQ_SW_Controlled  = 0, ///< Acquisition starts on SW command
+         ACQ_SIn_Controlled = 1  ///< Acquisition starts on SIn signal
+      };
+
       /// Start the data acquisition by the digitizer
       bool startAcquisition();
       /// Stop the data acquisition by the digitizer
       bool stopAcquisition();
+      /// Set the acquisition mode
+      bool setAcquisitionMode( AcquisitionMode mode );
+      /// Get the acquisition mode
+      bool getAcquisitionMode( AcquisitionMode& mode ) const;
 
       /// Sets up the interrupt mode of the digitizer
       bool setInterruptAfterEvents( uint16_t event_number );
@@ -90,44 +106,88 @@ namespace caen {
       /// Waits for an interrupt from the digitizer
       bool irqWait( uint32_t timeout ) const;
 
-      /// Set which channels should be enabled
-      bool setChannelEnableMask( uint32_t mask );
-      /// Retrieves which channels are enabled
-      bool getChannelEnableMask( uint32_t& mask ) const;
-
       /// Enumeration listing the channel trigger modes
       enum TriggerMode {
-         TRIG_Disabled  = 0, ///< Triggering for the channel is disabled
-         TRIG_ExtOnly   = 1, ///< Trigger only on external input
-         TRIG_AcqOnly   = 2, ///< Trigger only according to data acquisition
-         TRIG_AcqAndExt = 3  ///< Trigger on both inputs
+         TRIG_Disabled  = 0, ///< Triggering is disabled
+         TRIG_ExtOnly   = 1, ///< Trigger only for external output
+         TRIG_AcqOnly   = 2, ///< Trigger only according for data acquisition
+         TRIG_AcqAndExt = 3  ///< Send trigger for both purposes
       };
 
-      /// Sets the global triggering mode
-      bool setGlobalTriggerMode( TriggerMode mode );
-      /// Retrieves the global triggering mode
-      bool getGlobalTriggerMode( TriggerMode& mode ) const;
+      /// Sets the SW triggering mode
+      bool setSWTriggerMode( TriggerMode mode );
+      /// Retrieves the SW triggering mode
+      bool getSWTriggerMode( TriggerMode& mode ) const;
+      /// Sets the external triggering mode
+      bool setExtTriggerMode( TriggerMode mode );
+      /// Retrieves the external triggering mode
+      bool getExtTriggerMode( TriggerMode& mode ) const;
       /// Sets the triggering mode for one channel
-      bool setChannelTriggerMode( uint32_t channel, TriggerMode mode );
+      bool setChannelSelfTriggerMode( uint32_t channel,
+                                      TriggerMode mode );
       /// Retrieves the triggering mode of one channel
-      bool getChannelTriggerMode( uint32_t channel,
-                                  TriggerMode& mode ) const;
+      bool getChannelSelfTriggerMode( uint32_t channel,
+                                      TriggerMode& mode ) const;
+      /// Sets the triggering mode for one group
+      bool setGroupSelfTriggerMode( uint32_t group,
+                                    TriggerMode mode );
+      /// Retrieves the triggering mode of one group
+      bool getGroupSelfTriggerMode( uint32_t group,
+                                    TriggerMode& mode ) const;
+
+      /// Sets which channels of a group should generate self triggers
+      bool setChannelGroupMask( uint32_t group,
+                                uint32_t mask );
+      /// Gets which channels of a group should generate self triggers
+      bool getChannelGroupMask( uint32_t group,
+                                uint32_t& mask ) const;
 
       /// Sets the trigger threshold for a specific channel
-      bool setChannelTriggerThreshold( uint32_t channel, uint32_t thr );
+      bool setChannelTriggerThreshold( uint32_t channel,
+                                       uint32_t thr );
       /// Retrieves the trigger threshold of a specific channel
       bool getChannelTriggerThreshold( uint32_t channel,
                                        uint32_t& thr ) const;
+      /// Sets the trigger threshold for a group
+      bool setGroupTriggerThreshold( uint32_t group,
+                                     uint32_t thr );
+      /// Retrieves the trigger threshold of a group
+      bool getGroupTriggerThreshold( uint32_t group,
+                                     uint32_t& thr ) const;
+
+      /// Sets which channels are enabled for readout
+      bool setChannelEnableMask( uint32_t mask );
+      /// Gets which channels are enabled for readout
+      bool getChannelEnableMask( uint32_t& mask ) const;
+      /// Sets which groups are enabled for readout
+      bool setGroupEnableMask( uint32_t mask );
+      /// Gets which groups are enabled for readout
+      bool getGroupEnableMask( uint32_t& mask ) const;
+
+      /// Sets the record length of the digitizer
+      bool setRecordLength( uint32_t size );
+      /// Gets the record length of the digitizer
+      bool getRecordLength( uint32_t& size ) const;
+      /// Sets how much of the readout is after the trigger
+      bool setPostTriggerSize( uint32_t percent );
+      /// Gets how much of the readout is after the trigger
+      bool getPostTriggerSize( uint32_t& percent ) const;
 
       /// Sets the DC offset for a specified channel
-      bool setDCOffset( uint32_t channel, uint32_t value );
+      bool setChannelDCOffset( uint32_t channel,
+                               uint32_t value );
       /// Retrieves the DC offset of a specified channel
-      bool getDCOffset( uint32_t channel, uint32_t& value ) const;
+      bool getChannelDCOffset( uint32_t channel,
+                               uint32_t& value ) const;
+      /// Sets the DC offset for a group
+      bool setGroupDCOffset( uint32_t group,
+                             uint32_t value );
+      /// Retrieves the DC offset of a group
+      bool getGroupDCOffset( uint32_t group,
+                             uint32_t& value ) const;
 
    private:
       int m_handle; ///< C-style device handle
-      /// Number of events after which to send interrupt
-      uint16_t m_interruptAfterEvents;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

@@ -16,13 +16,12 @@
 
 // Local include(s):
 #include "CaenEditor.h"
-#include "CreateAction.h"
 
 namespace dev {
 
    CaenEditor::CaenEditor( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        caen::Crate< dev::CaenGui >(),
+        dev::Crate< dev::CaenGui >(),
         m_selfModification( false ),
         m_logger( "dev::CaenEditor" ) {
 
@@ -73,23 +72,9 @@ namespace dev {
       connect( m_clearDevice, SIGNAL( pressed() ),
                this, SLOT( clearDeviceSlot() ) );
 
-      // Create the connection mode setting:
-      m_connModeLabel = new QLabel( tr( "Connection mode:" ),
-                                    this );
-      m_connModeLabel->setGeometry( QRect( 70, 30, 130, 25 ) );
-
-      m_connMode = new QComboBox( this );
-      m_connMode->setGeometry( QRect( 230, 30, 220, 25 ) );
-      m_connMode->addItem( tr( "USB" ) );
-      m_connMode->addItem( tr( "PCI Optical Link" ) );
-      m_connMode->addItem( tr( "PCIe Optical Link" ) );
-      m_connMode->addItem( tr( "PCIe Embedded Digitizer" ) );
-      connect( m_connMode, SIGNAL( currentIndexChanged( int ) ),
-               this, SLOT( connectionModeSlot( int ) ) );
-
       // Create a widget to show the devices in:
       m_deviceStack = new QStackedWidget( this );
-      m_deviceStack->setGeometry( QRect( 10, 80, CaenGui::WIDGET_WIDTH,
+      m_deviceStack->setGeometry( QRect( 10, 50, CaenGui::WIDGET_WIDTH,
                                          CaenGui::WIDGET_HEIGHT ) );
 
    }
@@ -97,31 +82,10 @@ namespace dev {
    bool CaenEditor::readConfig( QIODevice* dev ) {
 
       // Read the configuration using the base class:
-      if( ! caen::Crate< dev::CaenGui >::readConfig( dev ) ) {
+      if( ! dev::Crate< dev::CaenGui >::readConfig( dev ) ) {
          REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
          return false;
       }
-
-      // Set the connection mode:
-      m_connMode->setEnabled( false );
-      switch( m_connType ) {
-      case caen::Digitizer::USB:
-         m_connMode->setCurrentIndex( 0 );
-         break;
-      case caen::Digitizer::PCI_OpticalLink:
-         m_connMode->setCurrentIndex( 1 );
-         break;
-      case caen::Digitizer::PCIE_OpticalLink:
-         m_connMode->setCurrentIndex( 2 );
-         break;
-      case caen::Digitizer::PCIE_EmbeddedDigitizer:
-         m_connMode->setCurrentIndex( 3 );
-         break;
-      default:
-         REPORT_ERROR( tr( "Connection mode not recognized" ) );
-         break;
-      }
-      m_connMode->setEnabled( true );
 
       // Now show the device:
       if( m_devices.size() ) {
@@ -149,31 +113,10 @@ namespace dev {
    bool CaenEditor::readConfig( const QDomElement& node ) {
 
       // Read the configuration using the base class:
-      if( ! caen::Crate< dev::CaenGui >::readConfig( node ) ) {
+      if( ! dev::Crate< dev::CaenGui >::readConfig( node ) ) {
          REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
          return false;
       }
-
-      // Set the connection mode:
-      m_connMode->setEnabled( false );
-      switch( m_connType ) {
-      case caen::Digitizer::USB:
-         m_connMode->setCurrentIndex( 0 );
-         break;
-      case caen::Digitizer::PCI_OpticalLink:
-         m_connMode->setCurrentIndex( 1 );
-         break;
-      case caen::Digitizer::PCIE_OpticalLink:
-         m_connMode->setCurrentIndex( 2 );
-         break;
-      case caen::Digitizer::PCIE_EmbeddedDigitizer:
-         m_connMode->setCurrentIndex( 3 );
-         break;
-      default:
-         REPORT_ERROR( tr( "Connection mode not recognized" ) );
-         break;
-      }
-      m_connMode->setEnabled( true );
 
       // Now show the device:
       if( m_devices.size() ) {
@@ -273,31 +216,6 @@ namespace dev {
 
       // Re-enable the device creation:
       m_selfModification = false;
-
-      return;
-   }
-
-   void CaenEditor::connectionModeSlot( int index ) {
-
-      switch( index ) {
-
-      case 0:
-         m_connType = caen::Digitizer::USB;
-         break;
-      case 1:
-         m_connType = caen::Digitizer::PCI_OpticalLink;
-         break;
-      case 2:
-         m_connType = caen::Digitizer::PCIE_OpticalLink;
-         break;
-      case 3:
-         m_connType = caen::Digitizer::PCIE_EmbeddedDigitizer;
-         break;
-      default:
-         REPORT_ERROR( tr( "Connection mode not recognized" ) );
-         m_connType = caen::Digitizer::USB;
-         break;
-      }
 
       return;
    }
