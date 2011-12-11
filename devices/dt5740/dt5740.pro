@@ -19,6 +19,7 @@ TARGET   = dt5740
 # These are the header and source files:
 HEADERS = *.h
 SOURCES = *.cxx
+RESOURCES = dt5740.qrc
 TRANSLATIONS = ../../trans/dt5740_hu.ts
 
 mac {

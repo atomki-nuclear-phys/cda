@@ -14,6 +14,9 @@ QT_FORWARD_DECLARE_CLASS( QDoubleSpinBox )
 
 namespace dt5740 {
 
+   // Forward declaration(s):
+   class ChannelConfig;
+
    /**
     *  @short Class for modifying the properties of one input channel
     *
@@ -54,34 +57,34 @@ namespace dt5740 {
    signals:
       /// Signal emitted when the channel is turned on or off
       /**
-       * @param subaddress The subaddress of the channel
+       * @param channel The channel number
        * @param on The state of the object
        */
-      void enableChanged( int subaddress, bool on );
+      void enableChanged( int channel, bool on );
       /// Signal emitted when the name of the channel changes
       /**
-       * @param subaddress The subaddress of the channel
+       * @param channel The channel number
        * @param text The new name of the channel
        */
-      void nameChanged( int subaddress, const QString& text );
+      void nameChanged( int channel, const QString& text );
       /// Signal emitted when the number of histogram channels changes
       /**
-       * @param subaddress The subaddress of the channel
+       * @param channel The channel number
        * @param channels The new number of histogram channels
        */
-      void channelsChanged( int subaddress, int channels );
+      void channelsChanged( int channel, int channels );
       /// Signal emitted when the histogram lower bound changes
       /**
-       * @param subaddress The subaddress of the channel
+       * @param channel The channel number
        * @param value The new histogram lower bound
        */
-      void lowerBoundChanged( int subaddress, double value );
+      void lowerBoundChanged( int channel, double value );
       /// Signal emitted when the histogram upper bound changes
       /**
-       * @param subaddress The subaddress of the channel
+       * @param channel The channel number
        * @param value The new histogram upper bound
        */
-      void upperBoundChanged( int subaddress, double value );
+      void upperBoundChanged( int channel, double value );
 
    public slots:
       /// Slot for turning the channel on or off
@@ -108,7 +111,7 @@ namespace dt5740 {
       void upperBoundChangedSlot( double value );
 
    private:
-      int             m_channelNumber; ///< The subaddress described by this widget
+      int             m_channelNumber; ///< The channel described by this widget
 
       QCheckBox*      m_enabledEdit; ///< Widget turning the channel on or off
       QLineEdit*      m_nameEdit; ///< Widget setting the channel's name

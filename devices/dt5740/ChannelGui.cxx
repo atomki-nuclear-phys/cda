@@ -86,7 +86,7 @@ namespace dt5740 {
       m_upperBoundEdit->setGeometry( QRect( 355, 0, 75, 25 ) );
       m_upperBoundEdit->setDecimals( 1 );
       m_upperBoundEdit->setRange( -100000., 100000. );
-      m_upperBoundEdit->setValue( 1024. );
+      m_upperBoundEdit->setValue( 4096. );
       connect( m_upperBoundEdit, SIGNAL( valueChanged( double ) ),
                this, SLOT( upperBoundChangedSlot( double ) ) );
 

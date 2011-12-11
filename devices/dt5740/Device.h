@@ -17,6 +17,7 @@
 
 // Local include(s):
 #include "ChannelConfig.h"
+#include "GroupConfig.h"
 
 namespace dt5740 {
 
@@ -65,11 +66,15 @@ namespace dt5740 {
       /// Clear the configuration of the device
       void clear();
 
-      /// Number of input channels on the device
+      /// Number of channel groups handled by the device
+      static const int NUMBER_OF_GROUPS = 4;
+      /// Total number of input channels on the device
       static const int NUMBER_OF_CHANNELS = 32;
 
       /// Configuration of the input channels
       ChannelConfig* m_channels[ NUMBER_OF_CHANNELS ];
+      /// Configuration of the channel groups
+      GroupConfig m_groups[ NUMBER_OF_GROUPS ];
 
    private:
       mutable msg::Logger m_logger; ///< Message logger object

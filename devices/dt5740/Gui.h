@@ -24,7 +24,7 @@ QT_FORWARD_DECLARE_CLASS( QScrollArea )
 namespace dt5740 {
 
    // Forward declaration(s):
-   class ChannelGui;
+   class GroupGui;
 
    //
    // Make sure that the following Qt classes are available in the
@@ -64,15 +64,38 @@ namespace dt5740 {
 
    private slots:
       /// Slot handling changes to channel enablement
-      void channelEnabledSlot( int subaddress, bool on );
+      void channelEnabledSlot( int channel, bool on );
       /// Slot handling changes to channel names
-      void nameChangedSlot( int subaddress, const QString& text );
+      void nameChangedSlot( int channel, const QString& text );
       /// Slot handling changes to histogram channel numbers
-      void channelsChangedSlot( int subaddress, int channels );
+      void channelsChangedSlot( int channel, int channels );
       /// Slot handling changes to histogram lower bounds
-      void lowerBoundChangedSlot( int subaddress, double value );
+      void lowerBoundChangedSlot( int channel, double value );
       /// Slot handling changes to histogram upper bounds
-      void upperBoundChangedSlot( int subaddress, double value );
+      void upperBoundChangedSlot( int channel, double value );
+
+      /// Slot handling changes to self trigger enablement
+      void trigEnabledSlot( int group, bool state );
+      /// Slot handling changes to the trigger output enablement
+      void trigOutEnabledSlot( int group, bool state );
+      /// Slot handling changes to the trigger overlap state
+      void trigOvlpEnabledSlot( int group, bool state );
+      /// Slot handling changes to the trigger mode
+      void trigModeSlot( int group, dt5740::GroupConfig::TriggerMode mode );
+      /// Slot handling changes to the trigger threshold
+      void trigThresholdSlot( int group, int value );
+      /// Slot handling changes to the trigger masks
+      void trigMaskSlot( int group, unsigned int value );
+      /// Slot handling changes to the post trigger samples value
+      void postTrigSamplesSlot( int group, int value );
+      /// Slot handling changes to the DC offset values
+      void dcOffsetSlot( int group, int value );
+      /// Slot handling changes to the pattern generation state
+      void patGenEnabledSlot( int group, bool state );
+      /// Slot handling changes to the gate modes
+      void gateModeSlot( int group, dt5740::GroupConfig::GateMode mode );
+      /// Slot handling changes to the buffer modes
+      void bufferModeSlot( int group, dt5740::GroupConfig::BufferMode mode );
 
    private:
       /// Function "syncing" the configuration
@@ -81,15 +104,11 @@ namespace dt5740 {
       QScrollArea* m_scrollArea; ///< Object providing the scrolling functions
       QWidget*     m_scrollWidget; ///< Main widget that is scrolled
 
+      QLabel*     m_image; ///< Image of the digitizer itself
       QLabel*     m_topLabel; ///< Text label at the top
 
-      QLabel*     m_nameLabel; ///< Label above channel names
-      QLabel*     m_channelsLabel; ///< Label above histogram channels
-      QLabel*     m_lowerBoundLabel; ///< Label above histogram lower bounds
-      QLabel*     m_upperBoundLabel; ///< Label above histogram upper bounds
-
-      /// The graphical channel representations
-      ChannelGui* m_gchannels[ NUMBER_OF_CHANNELS ];
+      /// The graphical representation of channel groups
+      GroupGui* m_ggroups[ NUMBER_OF_GROUPS ];
 
    }; // class Gui
 

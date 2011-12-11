@@ -18,6 +18,7 @@
 #endif
 
 // Forward declaration(s):
+QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QStackedWidget )
 QT_FORWARD_DECLARE_CLASS( QComboBox )
 QT_FORWARD_DECLARE_CLASS( QPushButton )
@@ -54,6 +55,8 @@ namespace dev {
       void createDeviceSlot( int index );
       /// Remove the current device from the configuration
       void clearDeviceSlot();
+      /// Change the connection mode
+      void connectionModeSlot( int index );
 
    private:
       QStackedWidget* m_deviceStack; ///< A widget to show the device(s) in
@@ -61,6 +64,9 @@ namespace dev {
       QComboBox* m_createDevice; ///< Dropdown menu selecting what kind of device to create
       bool m_selfModification; ///< Flag showing that the object is modifying itself at the moment
       QPushButton* m_clearDevice; ///< Button for clearing the configuration
+
+      QLabel* m_connModeLabel; ///< Label for the connection mode selector
+      QComboBox* m_connMode; ///< Connection mode selector
 
       mutable msg::Logger m_logger; ///< Message logger object
 

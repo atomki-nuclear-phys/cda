@@ -69,12 +69,6 @@ namespace dt5740 {
 
       clear();
 
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         REPORT_ERROR( tr( "Node received is not a DomElement" ) );
-         return false;
-      }
-
       bool ok;
 
       m_numberOfChannels = element.attribute( "NumberOfChannels",

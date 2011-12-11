@@ -24,6 +24,11 @@ namespace dt5740 {
    Device::Device()
       : m_logger( "dt5740::Device" ) {
 
+      // Set the ID of each group:
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         m_groups[ i ].setGroupNumber( i );
+      }
+
       // Reset all the pointers in the array:
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          m_channels[ i ] = 0;
@@ -49,6 +54,20 @@ namespace dt5740 {
 
       REPORT_VERBOSE( tr( "Number of configured channels: %1" )
                       .arg( number_of_channels ) );
+
+      // Read in the configuration of the groups:
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         if( ! m_groups[ i ].readConfig( dev ) ) {
+            REPORT_ERROR( tr( "The configuration of a group couldn't be "
+                              "read!" ) );
+            return false;
+         }
+         if( m_groups[ i ].getGroupNumber() != i ) {
+            REPORT_ERROR( tr( "There was an error reading the configuration "
+                              "of a group" ) );
+            return false;
+         }
+      }
 
       // Read in the configuration of all the channels:
       for( quint32 i = 0; i < number_of_channels; ++i ) {
@@ -96,6 +115,15 @@ namespace dt5740 {
       // Write the number of channels to follow:
       output << number_of_channels;
 
+      // Write out the group configurations:
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         if( ! m_groups[ i ].writeConfig( dev ) ) {
+            REPORT_ERROR( tr( "A problem happened while writing out a "
+                              "group's configuration" ) );
+            return false;
+         }
+      }
+
       // Write the channel configurations:
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          if( m_channels[ i ] ) {
@@ -116,6 +144,35 @@ namespace dt5740 {
 
       clear();
 
+      //
+      // Configure the groups:
+      //
+      for( int i = 0; i < element.childNodes().size(); ++i ) {
+
+         // Only process "Group" type child-nodes:
+         if( element.childNodes().at( i ).nodeName() != "Group" ) {
+            continue;
+         }
+
+         GroupConfig group;
+         if( ! group.readConfig( element.childNodes().at( i ).toElement() ) ) {
+            REPORT_ERROR( tr( "The configuration of a group couldn't be "
+                              "read" ) );
+            return false;
+         }
+         if( ( group.getGroupNumber() >= 0 ) &&
+             ( group.getGroupNumber() < NUMBER_OF_GROUPS ) ) {
+            m_groups[ group.getGroupNumber() ] = group;
+         } else {
+            REPORT_ERROR( tr( "There was an error reading the configuration "
+                              "of a group" ) );
+            return false;
+         }
+      }
+
+      //
+      // Configure the channels:
+      //
       for( int i = 0; i < element.childNodes().size(); ++i ) {
 
          // Only process "Channel" type child-nodes:
@@ -154,6 +211,21 @@ namespace dt5740 {
    bool Device::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
+
+      //
+      // Create a new node for the configuration of each group:
+      //
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+
+         QDomElement gr_element =
+            element.ownerDocument().createElement( "Group" );
+         if( ! m_groups[ i ].writeConfig( gr_element ) ) {
+            REPORT_ERROR( tr( "A problem happened while writing out a "
+                              "group's configuration" ) );
+            return false;
+         }
+         element.appendChild( gr_element );
+      }
 
       //
       // Create a new node for the configuration of each channel:

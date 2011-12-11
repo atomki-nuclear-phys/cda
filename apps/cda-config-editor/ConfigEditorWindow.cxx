@@ -420,7 +420,8 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    //
    // Read the configuration from this file:
    //
-   if( m_camacEdit->canRead( &input_file ) ) {
+   if( input_file.seek( 0 ) && m_camacEdit->canRead( &input_file ) ) {
+      input_file.seek( 0 );
       if( ! m_camacEdit->readConfig( &input_file ) ) {
          REPORT_ERROR( tr( "Some error happened while reading the "
                            "binary configuration" ) );
@@ -430,7 +431,8 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
          return;
       }
       showCamacConfigSlot();
-   } else if( m_caenEdit->canRead( &input_file ) ) {
+   } else if( input_file.seek( 0 ) && m_caenEdit->canRead( &input_file ) ) {
+      input_file.seek( 0 );
       if( ! m_caenEdit->readConfig( &input_file ) ) {
          REPORT_ERROR( tr( "Some error happened while reading the "
                            "binary configuration" ) );

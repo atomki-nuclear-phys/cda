@@ -29,7 +29,7 @@ RESOURCES = cda-camac-daq.qrc
 #
 mac {
    message(*)
-   message(* Configuring to build the \"cda-simple-daq\" application on Mac OS X)
+   message(* Configuring to build the \"cda-camac-daq\" application on Mac OS X)
    message(*)
 
    QMAKE_CXXFLAGS += -F../../lib
@@ -44,7 +44,7 @@ mac {
 #
 unix:!mac {
    message(*)
-   message(* Configuring to build the \"cda-simple-daq\" application on Linux)
+   message(* Configuring to build the \"cda-camac-daq\" application on Linux)
    message(*)
 
    INCLUDEPATH += ../../core ../../gui ../../daq
@@ -57,7 +57,7 @@ unix:!mac {
 #
 win32 {
    message(*)
-   message(* Configuring to build the \"cda-simple-daq\" application on Windows)
+   message(* Configuring to build the \"cda-camac-daq\" application on Windows)
    message(*)
 
    INCLUDEPATH += ../../core ../../gui ../../daq
