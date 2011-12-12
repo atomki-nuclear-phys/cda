@@ -25,11 +25,13 @@
 #   include "cdacore/msg/Sender.h"
 #   include "cdacore/cmdl/cmdargs.h"
 #   include "cdacore/i18n/Loader.h"
+#   include "cdagui/common/DefaultFont.h"
 #else
 #   include "msg/Logger.h"
 #   include "msg/Sender.h"
 #   include "cmdl/cmdargs.h"
 #   include "i18n/Loader.h"
+#   include "common/DefaultFont.h"
 #endif
 
 // Local include(s):
@@ -49,6 +51,7 @@ int main( int argc, char* argv[] ) {
    // command line arguments:
    //
    QApplication app( argc, argv );
+   app.setFont( gui::DefaultFont() );
 
    //
    // Read the rest of the command line arguments:

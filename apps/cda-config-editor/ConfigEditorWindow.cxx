@@ -107,11 +107,12 @@ void ConfigEditorWindow::newConfigSlot() {
 void ConfigEditorWindow::readConfigSlot() {
 
    // Ask the user for a file name:
-   QString fileName = QFileDialog::getOpenFileName( this, tr( "Open setup file" ),
-                                                    tr( "default.cxml" ),
-                                                    tr( "CDA XML setup files (*.cxml);;"
-                                                        "CDA binary setup files (*.cbin);;"
-                                                        "All files (*)" ) );
+   const QString fileName =
+      QFileDialog::getOpenFileName( this, tr( "Open setup file" ),
+                                    tr( "default.cxml" ),
+                                    tr( "CDA XML setup files (*.cxml);;"
+                                        "CDA binary setup files (*.cbin);;"
+                                        "All files (*)" ) );
 
    // If the cancel button has been pushed, don't continue:
    if( fileName.isEmpty() ) return;
@@ -147,10 +148,11 @@ void ConfigEditorWindow::writeConfigSlot() {
 
 void ConfigEditorWindow::writeConfigAsSlot() {
 
-   QString fileName = QFileDialog::getSaveFileName( this, tr( "Save setup file" ),
-                                                    tr( "default.cxml" ),
-                                                    tr( "CDA XML setup files (*.cxml);;"
-                                                    "CDA binary setup files (*.cbin)" ) );
+   const QString fileName =
+      QFileDialog::getSaveFileName( this, tr( "Save setup file" ),
+                                    tr( "default.cxml" ),
+                                    tr( "CDA XML setup files (*.cxml);;"
+                                        "CDA binary setup files (*.cbin)" ) );
 
    // If the cancel button has been pushed, don't continue:
    if( fileName.isEmpty() ) return;
@@ -273,8 +275,7 @@ void ConfigEditorWindow::createMenus() {
    //                                                         //
    /////////////////////////////////////////////////////////////
 
-   QMenu* configMenu = menuBar()->addMenu( QIcon::fromTheme( "preferences-system" ),
-                                           tr( "&Config" ) );
+   QMenu* configMenu = menuBar()->addMenu( tr( "&Config" ) );
 
    m_camacConfigAction = new QAction( tr( "Show CAMAC Config" ),
                                       this );
@@ -303,8 +304,7 @@ void ConfigEditorWindow::createMenus() {
    /////////////////////////////////////////////////////////////
 
    menuBar()->addSeparator();
-   QMenu* helpMenu = menuBar()->addMenu( QIcon::fromTheme( "system-help" ),
-                                         tr( "&Help" ) );
+   QMenu* helpMenu = menuBar()->addMenu( tr( "&Help" ) );
 
    QAction* aboutQtAction = helpMenu->addAction( QIcon( ":/img/qt-logo.jpg" ),
                                                  tr( "About Qt" ) );

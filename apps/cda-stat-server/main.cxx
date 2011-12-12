@@ -22,8 +22,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/i18n/Loader.h"
+#   include "cdagui/common/DefaultFont.h"
 #else
 #   include "i18n/Loader.h"
+#   include "common/DefaultFont.h"
 #endif
 
 // Local include(s):
@@ -35,6 +37,7 @@ int main( int argc, char* argv[] ) {
    // Start a graphical Qt application:
    //
    QApplication app( argc, argv );
+   app.setFont( gui::DefaultFont() );
 
    //
    // Load all the available translations:
