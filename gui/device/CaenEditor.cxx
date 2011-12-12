@@ -142,6 +142,17 @@ namespace dev {
    }
 
    /**
+    * The implementation is a bit weird. This function calls the slot
+    * clearing the editor, which in turn calls the clear function of the
+    * base class. Should still work though.
+    */
+   void CaenEditor::clear() {
+
+      clearDeviceSlot();
+      return;
+   }
+
+   /**
     * @param index Index of the menu item in m_createDevice
     */
    void CaenEditor::createDeviceSlot( int index ) {
@@ -206,7 +217,7 @@ namespace dev {
       // If there is a device configured, remove it from the stack, and
       // then remove it completely:
       m_deviceStack->removeWidget( m_devices.begin()->second );
-      clear();
+      dev::Crate< dev::CaenGui >::clear();
       m_createDevice->setCurrentIndex( 0 );
 
       // Enable the device creation widget:

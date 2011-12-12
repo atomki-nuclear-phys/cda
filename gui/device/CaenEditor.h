@@ -50,6 +50,9 @@ namespace dev {
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );
 
+      /// Re-implemented clear function, resetting the widget
+      virtual void clear();
+
    private slots:
       /// Create a device in the configuration
       void createDeviceSlot( int index );
