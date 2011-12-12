@@ -69,7 +69,7 @@ namespace dt5740 {
       //
       m_connectionBox = new QGroupBox( tr( "Connection parameters" ),
                                        m_scrollWidget );
-      m_connectionBox->setGeometry( QRect( 5, 245, WIDGET_WIDTH - 30, 90 ) );
+      m_connectionBox->setGeometry( QRect( 10, 245, WIDGET_WIDTH - 30, 90 ) );
 
       m_connModeLabel = new QLabel( tr( "Connection mode:" ),
                                     m_connectionBox);

@@ -16,6 +16,7 @@
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedWidget )
+QT_FORWARD_DECLARE_CLASS( QAction )
 namespace dev {
    class CamacEditor;
    class CaenEditor;
@@ -92,6 +93,11 @@ private:
    dev::CamacEditor* m_camacEdit;
    /// Widget to modify the CAEN device settings
    dev::CaenEditor* m_caenEdit;
+
+   /// Action triggering the display of the CAMAC confiugration
+   QAction* m_camacConfigAction;
+   /// Action triggering the display of the CAEN configuration
+   QAction* m_caenConfigAction;
 
    /// Name of the currently "opened" file
    QString m_currFileName;

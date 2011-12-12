@@ -175,6 +175,10 @@ void ConfigEditorWindow::showCamacConfigSlot() {
    if( m_editStack->currentWidget() != m_camacEdit ) {
       m_editStack->setCurrentWidget( m_camacEdit );
    }
+   // Make sure the menu is in sync with what is shown:
+   if( ! m_camacConfigAction->isChecked() ) {
+      m_camacConfigAction->setChecked( true );
+   }
 
    return;
 }
@@ -185,6 +189,10 @@ void ConfigEditorWindow::showCaenConfigSlot() {
    // already:
    if( m_editStack->currentWidget() != m_caenEdit ) {
       m_editStack->setCurrentWidget( m_caenEdit );
+   }
+   // Make sure the menu is in sync with what is shown:
+   if( ! m_caenConfigAction->isChecked() ) {
+      m_caenConfigAction->setChecked( true );
    }
 
    return;
@@ -268,25 +276,25 @@ void ConfigEditorWindow::createMenus() {
    QMenu* configMenu = menuBar()->addMenu( QIcon::fromTheme( "preferences-system" ),
                                            tr( "&Config" ) );
 
-   QAction* camacConfigAction = new QAction( tr( "Show CAMAC Config" ),
-                                             this );
-   camacConfigAction->setCheckable( true );
-   connect( camacConfigAction, SIGNAL( triggered() ),
+   m_camacConfigAction = new QAction( tr( "Show CAMAC Config" ),
+                                      this );
+   m_camacConfigAction->setCheckable( true );
+   connect( m_camacConfigAction, SIGNAL( triggered() ),
             this, SLOT( showCamacConfigSlot() ) );
-   QAction* caenConfigAction = new QAction( tr( "Show CAEN Config" ),
-                                            this );
-   caenConfigAction->setCheckable( true );
-   connect( caenConfigAction, SIGNAL( triggered() ),
+   m_caenConfigAction = new QAction( tr( "Show CAEN Config" ),
+                                     this );
+   m_caenConfigAction->setCheckable( true );
+   connect( m_caenConfigAction, SIGNAL( triggered() ),
             this, SLOT( showCaenConfigSlot() ) );
 
    QActionGroup* configGroup = new QActionGroup( this );
    configGroup->setExclusive( true );
-   configGroup->addAction( camacConfigAction );
-   configGroup->addAction( caenConfigAction );
-   camacConfigAction->setChecked( true );
+   configGroup->addAction( m_camacConfigAction );
+   configGroup->addAction( m_caenConfigAction );
+   m_camacConfigAction->setChecked( true );
 
-   configMenu->addAction( camacConfigAction );
-   configMenu->addAction( caenConfigAction );
+   configMenu->addAction( m_camacConfigAction );
+   configMenu->addAction( m_caenConfigAction );
 
    /////////////////////////////////////////////////////////////
    //                                                         //
