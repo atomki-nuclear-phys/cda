@@ -4,7 +4,7 @@
 #define CDA_APPS_CDA_CAEN_READER_CRATE_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -18,11 +18,6 @@
 #   include "event/Event.h"
 #   include "msg/Logger.h"
 #endif
-
-// Forward declaration(s):
-namespace caen {
-   class Digitizer;
-}
 
 /**
  *  @short Namespace for the CAEN readout class(es)
@@ -53,16 +48,23 @@ namespace caen_reader {
     */
    class Crate : public dev::Crate< dev::CaenReadout > {
 
+      Q_DECLARE_TR_FUNCTIONS( caen_reader::Crate )
+
    public:
       /// Default constructor
       Crate();
+      /// Destructor
+      ~Crate();
 
       /// Function initializing all CAEN devices
-      bool initialize( caen::Digitizer& dgtz ) const;
+      bool initialize();
+      /// Function finalizing all CAEN devices
+      bool finalize();
       /// Function reading out one event from the crate
-      ev::Event readEvent( caen::Digitizer& dgtz ) const;
+      ev::Event readEvent() const;
 
    private:
+      bool m_initialized; ///< "Initialized state" of the device
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Crate

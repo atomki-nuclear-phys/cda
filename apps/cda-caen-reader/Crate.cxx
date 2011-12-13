@@ -17,23 +17,67 @@ namespace caen_reader {
 
    Crate::Crate()
       : dev::Crate< dev::CaenReadout >(),
+        m_initialized( false ),
         m_logger( "caen_reader::Crate" ) {
 
    }
 
-   bool Crate::initialize( caen::Digitizer& dgtz ) const {
+   Crate::~Crate() {
 
-      // The crate should only contain one device:
-      if( m_devices.size() != 1 ) {
-         m_logger << msg::ERROR
-                  << tr( "Crate doesn't contain exactly one device. "
-                         "Initialization failed." )
+      // Force a finalization, as that often needs to close devices and
+      // free up memory:
+      if( m_initialized ) {
+         m_logger << msg::WARNING
+                  << tr( "Object getting deleted without being finalized!" )
                   << msg::endmsg;
-         return false;
+         finalize();
+      }
+   }
+
+   bool Crate::initialize() {
+
+      // Initialize all the devices:
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr = m_devices.begin();
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator end = m_devices.end();
+      for( ; itr != end; ++itr ) {
+         if( ! itr->second->initialize() ) {
+            REPORT_ERROR( tr( "Couldn't initialize one of the CAEN devices" ) );
+            return false;
+         }
       }
 
-      // Initialize this one device:
-      return m_devices.begin()->second->initialize( dgtz );
+      // Remember the object's internal state:
+      m_initialized = true;
+
+      // Show that we were successful:
+      return true;
+   }
+
+   bool Crate::finalize() {
+
+      // Don't do anything if the object is not initialized:
+      if( ! m_initialized ) {
+         m_logger << msg::WARNING
+                  << tr( "Object not in initialized state, not finalizing" )
+                  << msg::endmsg;
+         return true;
+      }
+
+      // Finalize all the devices:
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr = m_devices.begin();
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator end = m_devices.end();
+      for( ; itr != end; ++itr ) {
+         if( ! itr->second->finalize() ) {
+            REPORT_ERROR( tr( "Couldn't finalize one of the CAEN devices" ) );
+            return false;
+         }
+      }
+
+      // Remember the object's internal state:
+      m_initialized = false;
+
+      // Show that we were successful:
+      return true;
    }
 
    /**
@@ -42,26 +86,20 @@ namespace caen_reader {
     * other parts of CDA, one has to package the data coming from this
     * one device into a full ev::Event object.
     *
-    * @param dgtz The object to access the CAEN digitizer with
     * @returns A full even read from the device(s)
     */
-   ev::Event Crate::readEvent( caen::Digitizer& dgtz ) const {
+   ev::Event Crate::readEvent() const {
 
       // The event object to return:
       ev::Event event;
 
-      // The only device in this "crate":
-      const dev::CaenReadout* device = m_devices.begin()->second;
-
-      // Wait for events to become available, if there's nothing
-      // to read out right now.
-      while( ! device->eventsAvailable( dgtz ) ) {
-         // Wait for an IRQ for the next 100 ms:
-         dgtz.irqWait( 100 );
+      // Read out all the devices:
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr = m_devices.begin();
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator end = m_devices.end();
+      for( ; itr != end; ++itr ) {
+         // Read out the event from a single constituent:
+         event.addFragment( itr->second->readEvent() );
       }
-
-      // Read out the event from the single constituent:
-      event.addFragment( m_devices.begin()->second->readEvent( dgtz ) );
 
       // Return the event:
       return event;

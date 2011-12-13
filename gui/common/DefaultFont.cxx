@@ -10,7 +10,11 @@ namespace gui {
     * Helvetica if it's available on the system.
     */
    DefaultFont::DefaultFont()
+#ifdef Q_OS_DARWIN
+      : QFont( "Helvetica [Cronyx]", 12 ) {
+#else
       : QFont( "Helvetica [Cronyx]", 10 ) {
+#endif // Q_OS_DARWIN
 
    }
 

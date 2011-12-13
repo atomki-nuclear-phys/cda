@@ -22,8 +22,10 @@
 #   include "cdacore/cmdl/cmdargs.h"
 #   include "cdacore/i18n/Loader.h"
 #   include "cdacore/device/Loader.h"
-#   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/common/Address.h"
+#   include "cdacore/event/Event.h"
+#   include "cdacore/event/Sender.h"
+#   include "cdadaq/stat/Sender.h"
 #   include "cdadaq/config/ConfReader.h"
 #else
 #   include "msg/Sender.h"
@@ -31,8 +33,10 @@
 #   include "cmdl/cmdargs.h"
 #   include "i18n/Loader.h"
 #   include "device/Loader.h"
-#   include "caen/Digitizer.h"
 #   include "common/Address.h"
+#   include "event/Event.h"
+#   include "event/Sender.h"
+#   include "stat/Sender.h"
 #   include "config/ConfReader.h"
 #endif
 
@@ -45,12 +49,17 @@ void shutDown( int );
 
 // Global variable(s):
 static msg::Logger g_logger( "cda-caen-reader" );
-static caen::Digitizer* g_dgtz = 0;
+static caen_reader::Crate* g_crate = 0;
 
 /// Description for the executable
 static const char* description =
-   "Program reading events from a CAEN digitizer for the CDA "
-   "application suite.";
+   "Program reading events from a (set of) CAEN digitizer(s) for the CDA "
+   "application suite.\n\n"
+   "This executable should normally be started by CDA internally. "
+   "You should only start it by hand for debugging purposes.";
+
+/// Number of events processed
+quint32 g_evcount = 0;
 
 int main( int argc, char* argv[] ) {
 
@@ -63,8 +72,13 @@ int main( int argc, char* argv[] ) {
    CmdArgStr config( 'c', "config", "filename/address",
                      "Name of an XML config file or address of a config server",
                      CmdArg::isREQ );
+   CmdArgStrList clients( 'e', "clients", "addresses",
+                          "Addresses of event reader clients" );
+   CmdArgStrList statistics( 's', "statistics", "addresses",
+                             "Addresses of statistics reader clients" );
 
-   CmdLine cmd( *argv, &verbosity, &config, &msgservers, NULL );
+   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &clients,
+                &statistics, NULL );
    cmd.description( description );
 
    CmdArgvIter arg_iter( --argc, ++argv );
@@ -132,8 +146,8 @@ int main( int argc, char* argv[] ) {
    //
    // Create the crate object:
    //
-   caen_reader::Crate crate;
-   crate.setLoader( dev::Loader::instance() );
+   g_crate = new caen_reader::Crate();
+   g_crate->setLoader( dev::Loader::instance() );
 
    //
    // Decide how to read the configuration:
@@ -157,7 +171,7 @@ int main( int argc, char* argv[] ) {
       //
       // Initialise the crate object from the buffer:
       //
-      if( ! crate.readConfig( reader.buffer() ) ) {
+      if( ! g_crate->readConfig( reader.buffer() ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-caen-reader",
                                       "Couldn't process configuration "
@@ -219,7 +233,7 @@ int main( int argc, char* argv[] ) {
       // Initialise a Crate object with this configuration:
       //
       QDomElement work = doc.documentElement();
-      if( ! crate.readConfig( work ) ) {
+      if( ! g_crate->readConfig( work ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-caen-reader",
                                       "Failed to read configuration file!\n"
@@ -238,36 +252,19 @@ int main( int argc, char* argv[] ) {
    }
 
    //
-   // Open the connection to the digitizer:
-   //
-   g_dgtz = new caen::Digitizer();
-   if( ! g_dgtz->open() ) {
-      g_logger << msg::FATAL
-               << qApp->translate( "cda-caen-reader",
-                                   "Couldn't open connection to digitizer" )
-               << msg::endmsg;
-      return 1;
-   } else {
-      g_logger << msg::INFO
-               << qApp->translate( "cda-caen-reader",
-                                   "Connection opened to the digitizer" )
-               << msg::endmsg;
-   }
-
-   //
    // Initialize the digitizer(s) for data acquisition:
    //
-   if( ! crate.initialize( *g_dgtz ) ) {
+   if( ! g_crate->initialize() ) {
       g_logger << msg::FATAL
                << qApp->translate( "cda-caen-reader",
-                                   "Failed to initialise devices for data "
+                                   "Failed to initialise device(s) for data "
                                    "acquisition" )
                << msg::endmsg;
       return 1;
    } else {
       g_logger << msg::DEBUG
                << qApp->translate( "cda-caen-reader",
-                                   "Initialised devices for data acquisition" )
+                                   "Initialised device(s) for data acquisition" )
                << msg::endmsg;
    }
 
@@ -278,6 +275,44 @@ int main( int argc, char* argv[] ) {
    signal( SIGTERM, shutDown );
 
    //
+   // Open connections to all the event recepients:
+   //
+   ev::Sender ev_sender;
+   for( unsigned int i = 0; i < clients.count(); ++i ) {
+      if( ! ev_sender.addSocket( Address( ( const char* ) clients[ i ] ) ) ) {
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-caen-reader",
+                                      "Couldn't connect to event receiver: %1" )
+            .arg( ( const char* ) clients[ i ] )
+                  << msg::endmsg;
+         shutDown( 0 );
+      }
+   }
+
+   //
+   // Open connections to all the statistics recepients. (Ignore connection errors
+   // here, since statistics publishing is not a major concern...)
+   //
+   cdastat::Sender stat_sender;
+   for( unsigned int i = 0; i < statistics.count(); ++i ) {
+      stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
+   }
+
+   //
+   // Construct the source string of the statistics objects that are sent out
+   // during event processing:
+   //
+   QString statSource = "cda-caen-reader:";
+   statSource += ( const char* ) config;
+   statSource += ":";
+   statSource += QString::number( QCoreApplication::applicationPid() );
+
+   // Initialise the statistics information to something meaningful, then start
+   // the statistics sender object:
+   stat_sender.update( cdastat::Statistics( 0, statSource ) );
+   stat_sender.start();
+
+   //
    // Let the user know what we're doing:
    //
    g_logger << msg::INFO
@@ -285,9 +320,28 @@ int main( int argc, char* argv[] ) {
                                 "CAEN readout running..." )
             << msg::endmsg;
 
+   //
+   // Read the events, and send them out in an endless loop:
+   //
+   g_evcount = 0;
    for( ; ; ) {
 
-      ev::Event event = crate.readEvent( *g_dgtz );
+      // Read and send an event:
+      const ev::Event event = g_crate->readEvent();
+      if( ! ev_sender.send( event ) ) {
+         g_logger << msg::FATAL
+                  << qApp->translate( "cda-caen-reader",
+                                      "Failed to send event to all recepients.\n"
+                                      "Event readout can not continue!" )
+                  << msg::endmsg;
+         shutDown( 0 );
+      }
+
+      // Update the statistics information after 10 events were sent out:
+      ++g_evcount;
+      if( ! ( g_evcount % 10 ) ) {
+         stat_sender.update( cdastat::Statistics( g_evcount, statSource ) );
+      }
    }
 
    return 0;
@@ -295,19 +349,25 @@ int main( int argc, char* argv[] ) {
 
 void shutDown( int ) {
 
-   if( ! g_dgtz->close() ) {
-      g_logger << msg::ERROR
+   // Finalize the data acquisition:
+   if( ! g_crate->finalize() ) {
+      g_logger << msg::FATAL
                << qApp->translate( "cda-caen-reader",
-                                   "Failed to close CAEN digitizer" )
+                                   "Couldn't cleanly finalize data acquisition" )
                << msg::endmsg;
    } else {
-      g_logger << msg::DEBUG
+      g_logger << msg::INFO
                << qApp->translate( "cda-caen-reader",
-                                   "Successfully closed CAEN digitizer" )
+                                   "Data acquisition finalized" )
                << msg::endmsg;
    }
-   delete g_dgtz;
+   delete g_crate;
 
+   g_logger << msg::INFO
+            << qApp->translate( "cda-caen-reader",
+                                "Total number of events read: %1" )
+      .arg( g_evcount )
+            << msg::endmsg;
    g_logger << msg::INFO
             << qApp->translate( "cda-caen-reader",
                                 "Terminating application..." )
