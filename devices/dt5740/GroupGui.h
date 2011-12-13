@@ -77,8 +77,8 @@ namespace dt5740 {
       void trigThreshold( int group, int value );
       /// Signal emitted when the trigger mask changes
       void trigMask( int group, unsigned int value );
-      /// Signal emitted when the post trigger sample value changes
-      void postTrigSamples( int group, int value );
+      /// Signal emitted when the post trigger percentage value changes
+      void postTrigPercentage( int group, int value );
       /// Signal emitted when the DC offset changes
       void dcOffset( int group, int value );
       /// Signal emitted when the pattern generation state changes
@@ -101,8 +101,8 @@ namespace dt5740 {
       void trigThresholdSlot( int value );
       /// Slot handling trigger mask changes
       void trigMaskSlot( bool checked );
-      /// Slot handling post trigger sample changes
-      void postTrigSamplesSlot( int value );
+      /// Slot handling post trigger percentage changes
+      void postTrigPercentageSlot( int value );
       /// Slot handling DC offset value changes
       void dcOffsetSlot( int value );
       /// Slot handling changes to the pattern generation state
@@ -131,8 +131,8 @@ namespace dt5740 {
       QGroupBox* m_trigMaskBox;
       QCheckBox* m_trigMask[ GroupConfig::CHANNELS_IN_GROUP ];
 
-      QLabel*   m_postTrigSamplesLabel;
-      QSpinBox* m_postTrigSamples;
+      QLabel*   m_postTrigPercentageLabel;
+      QSpinBox* m_postTrigPercentage;
 
       QLabel*   m_dcOffsetLabel;
       QSpinBox* m_dcOffset;

@@ -97,7 +97,7 @@ namespace dt5740 {
       /// Slot handling changes to the trigger masks
       void trigMaskSlot( int group, unsigned int value );
       /// Slot handling changes to the post trigger samples value
-      void postTrigSamplesSlot( int group, int value );
+      void postTrigPercentageSlot( int group, int value );
       /// Slot handling changes to the DC offset values
       void dcOffsetSlot( int group, int value );
       /// Slot handling changes to the pattern generation state

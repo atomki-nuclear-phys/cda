@@ -104,15 +104,15 @@ namespace dt5740 {
       //
       // Create the post trigger samples setting:
       //
-      m_postTrigSamplesLabel = new QLabel( tr( "Post trigger samples:" ),
-                                           m_groupBox );
-      m_postTrigSamplesLabel->setGeometry( QRect( 10, 245, 150, 25 ) );
+      m_postTrigPercentageLabel = new QLabel( tr( "Post trigger perc.:" ),
+                                              m_groupBox );
+      m_postTrigPercentageLabel->setGeometry( QRect( 10, 245, 150, 25 ) );
 
-      m_postTrigSamples = new QSpinBox( m_groupBox );
-      m_postTrigSamples->setGeometry( QRect( 180, 245, 150, 25 ) );
-      m_postTrigSamples->setRange( 0, 0x7fffffff ); // We have 32 bits for this setting
-      connect( m_postTrigSamples, SIGNAL( valueChanged( int ) ),
-               this, SLOT( postTrigSamplesSlot( int ) ) );
+      m_postTrigPercentage = new QSpinBox( m_groupBox );
+      m_postTrigPercentage->setGeometry( QRect( 180, 245, 150, 25 ) );
+      m_postTrigPercentage->setRange( 0, 100 ); // This is an integer percentage...
+      connect( m_postTrigPercentage, SIGNAL( valueChanged( int ) ),
+               this, SLOT( postTrigPercentageSlot( int ) ) );
 
       //
       // Create the DC offset setting:
@@ -223,8 +223,8 @@ namespace dt5740 {
       }
       delete m_trigMaskBox;
 
-      delete m_postTrigSamplesLabel;
-      delete m_postTrigSamples;
+      delete m_postTrigPercentageLabel;
+      delete m_postTrigPercentage;
 
       delete m_dcOffsetLabel;
       delete m_dcOffset;
@@ -314,7 +314,7 @@ namespace dt5740 {
          }
       }
 
-      m_postTrigSamples->setValue( conf.getPostTrigSamples() );
+      m_postTrigPercentage->setValue( conf.getPostTrigPercentage() );
       m_dcOffset->setValue( conf.getDCOffset() );
 
       if( conf.getPatGenEnabled() ) {
@@ -462,13 +462,13 @@ namespace dt5740 {
       emit trigMask( m_groupNumber, mask );
    }
 
-   void GroupGui::postTrigSamplesSlot( int value ) {
+   void GroupGui::postTrigPercentageSlot( int value ) {
 
       // Don't emit anything if the object is syncing itself to the
       // configuration:
       if( m_syncing ) return;
 
-      emit postTrigSamples( m_groupNumber, value );
+      emit postTrigPercentage( m_groupNumber, value );
       return;
    }
 

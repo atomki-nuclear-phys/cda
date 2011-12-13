@@ -121,10 +121,10 @@ namespace dt5740 {
       /// Set the trigger mask for the channels
       void setTrigMask( unsigned int mask );
 
-      /// Get the number of post trigger samples to collect
-      int getPostTrigSamples() const;
-      /// Set the number of post trigger samples to collect
-      void setPostTrigSamples( int value );
+      /// Get the percentage of post trigger samples to collect
+      int getPostTrigPercentage() const;
+      /// Set the percentage of post trigger samples to collect
+      void setPostTrigPercentage( int value );
 
       /// Get the DC offset for the group
       int getDCOffset() const;
@@ -145,6 +145,8 @@ namespace dt5740 {
       BufferMode getBufferMode() const;
       /// Set the buffer mode of the group
       void setBufferMode( BufferMode mode );
+      /// Helper function for getting the number of samples
+      int getSamples() const;
 
    private:
       /// Transform trigger mode into an integer
@@ -172,7 +174,7 @@ namespace dt5740 {
       BufferMode   m_bufferMode; ///< Division mode of the event buffer
       bool         m_trigEnabled; ///< Enable triggering on this group
       bool         m_trigOutEnabled; ///< Enable to send triggers to front panel
-      int          m_postTrigSamples; ///< Post trigger samples to collect
+      int          m_postTrigPercentage; ///< Percentage of post-trigger samples
 
       mutable msg::Logger m_logger; ///< Message logger object
 

@@ -18,7 +18,7 @@ namespace dt5740 {
         m_trigOvlpEnabled( false ), m_patGenEnabled( false ),
         m_gateMode( WindowGate ), m_bufferMode( NBuffers1 ),
         m_trigEnabled( false ), m_trigOutEnabled( false ),
-        m_postTrigSamples( 0 ),
+        m_postTrigPercentage( 0 ),
         m_logger( "dt5740::GroupConfig" ) {
 
    }
@@ -36,7 +36,7 @@ namespace dt5740 {
         m_bufferMode( parent.m_bufferMode ),
         m_trigEnabled( parent.m_trigEnabled ),
         m_trigOutEnabled( parent.m_trigOutEnabled ),
-        m_postTrigSamples( parent.m_postTrigSamples ),
+        m_postTrigPercentage( parent.m_postTrigPercentage ),
         m_logger( "dt5740::GroupConfig" ) {
 
    }
@@ -54,7 +54,7 @@ namespace dt5740 {
       m_bufferMode = rh.m_bufferMode;
       m_trigEnabled = rh.m_trigEnabled;
       m_trigOutEnabled = rh.m_trigOutEnabled;
-      m_postTrigSamples = rh.m_postTrigSamples;
+      m_postTrigPercentage = rh.m_postTrigPercentage;
 
       return *this;
    }
@@ -82,7 +82,7 @@ namespace dt5740 {
       m_bufferMode = toBufferMode( temp );
       input >> m_trigEnabled;
       input >> m_trigOutEnabled;
-      input >> m_postTrigSamples;
+      input >> m_postTrigPercentage;
 
       return true;
    }
@@ -105,7 +105,7 @@ namespace dt5740 {
       output << toUInt( m_bufferMode );
       output << m_trigEnabled;
       output << m_trigOutEnabled;
-      output << m_postTrigSamples;
+      output << m_postTrigPercentage;
 
       return true;
    }
@@ -197,11 +197,11 @@ namespace dt5740 {
          return false;
       }
 
-      m_postTrigSamples = node.attribute( "PostTrigSamples",
-                                          "0" ).toInt( &ok );
+      m_postTrigPercentage = node.attribute( "PostTrigPercentage",
+                                             "0" ).toInt( &ok );
       if( ! ok ) {
          REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"post trigger samples\" value" ) );
+                           "\"post trigger percentage\" value" ) );
          return false;
       }
 
@@ -223,7 +223,7 @@ namespace dt5740 {
       node.setAttribute( "BufferMode", toUInt( m_bufferMode ) );
       node.setAttribute( "TrigEnabled", m_trigEnabled );
       node.setAttribute( "TrigOutEnabled", m_trigOutEnabled );
-      node.setAttribute( "PostTrigSamples", m_postTrigSamples );
+      node.setAttribute( "PostTrigPercentage", m_postTrigPercentage );
 
       return true;
    }
@@ -305,14 +305,14 @@ namespace dt5740 {
       return;
    }
 
-   int GroupConfig::getPostTrigSamples() const {
+   int GroupConfig::getPostTrigPercentage() const {
 
-      return m_postTrigSamples;
+      return m_postTrigPercentage;
    }
 
-   void GroupConfig::setPostTrigSamples( int value ) {
+   void GroupConfig::setPostTrigPercentage( int value ) {
 
-      m_postTrigSamples = value;
+      m_postTrigPercentage = value;
       return;
    }
 
@@ -358,6 +358,51 @@ namespace dt5740 {
 
       m_bufferMode = mode;
       return;
+   }
+
+   int GroupConfig::getSamples() const {
+
+      switch( m_bufferMode ) {
+
+      case NBuffers1:
+         return 196608;
+         break;
+      case NBuffers2:
+         return 98304;
+         break;
+      case NBuffers4:
+         return 49152;
+         break;
+      case NBuffers8:
+         return 24576;
+         break;
+      case NBuffers16:
+         return 12288;
+         break;
+      case NBuffers32:
+         return 6144;
+         break;
+      case NBuffers64:
+         return 3072;
+         break;
+      case NBuffers128:
+         return 1536;
+         break;
+      case NBuffers256:
+         return 768;
+         break;
+      case NBuffers512:
+         return 384;
+         break;
+      case NBuffers1024:
+         return 192;
+         break;
+      default:
+         REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( m_bufferMode ) );
+         break;
+      }
+
+      return 0;
    }
 
    unsigned int GroupConfig::toUInt( GroupConfig::TriggerMode mode ) const {

@@ -21,6 +21,11 @@
 #include "ChannelConfig.h"
 #include "GroupConfig.h"
 
+// Forward declaration(s):
+namespace ev {
+   class Fragment;
+}
+
 namespace dt5740 {
 
    /**
@@ -67,6 +72,18 @@ namespace dt5740 {
    protected:
       /// Clear the configuration of the device
       void clear();
+
+      /// Number of bits in one channel's data
+      static const int BITS_PER_CHANNEL = 12;
+      /// Data type read out for one trigger
+      /**
+       * The structure of this is that the outer vector describes the
+       * channels (including the inactive ones), and the inner vector
+       * describes the samples collected for that channel.
+       */
+      typedef std::vector< std::vector< unsigned int > > Data_t;
+      /// Function decoding the data read for a trigger
+      Data_t decode( const ev::Fragment& fragment ) const;
 
       /// Number of channel groups handled by the device
       static const int NUMBER_OF_GROUPS = 4;

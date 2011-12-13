@@ -119,8 +119,8 @@ namespace dt5740 {
                   this, SLOT( trigThresholdSlot( int, int ) ) );
          connect( m_ggroups[ i ], SIGNAL( trigMask( int, unsigned int ) ),
                   this, SLOT( trigMaskSlot( int, unsigned int ) ) );
-         connect( m_ggroups[ i ], SIGNAL( postTrigSamples( int, int ) ),
-                  this, SLOT( postTrigSamplesSlot( int, int ) ) );
+         connect( m_ggroups[ i ], SIGNAL( postTrigPercentage( int, int ) ),
+                  this, SLOT( postTrigPercentageSlot( int, int ) ) );
          connect( m_ggroups[ i ], SIGNAL( dcOffset( int, int ) ),
                   this, SLOT( dcOffsetSlot( int, int ) ) );
          connect( m_ggroups[ i ], SIGNAL( patGenEnabled( int, bool ) ),
@@ -310,9 +310,9 @@ namespace dt5740 {
       return;
    }
 
-   void Gui::postTrigSamplesSlot( int group, int value ) {
+   void Gui::postTrigPercentageSlot( int group, int value ) {
 
-      m_groups[ group ].setPostTrigSamples( value );
+      m_groups[ group ].setPostTrigPercentage( value );
       return;
    }
 

@@ -1,10 +1,20 @@
-// $Id: Device.cxx$
+// $Id$
+
+// System include(s):
+#include <cmath>
 
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
 #include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/event/Fragment.h"
+#else
+#   include "event/Fragment.h"
+#endif
 
 // Local include(s):
 #include "Device.h"
@@ -304,6 +314,63 @@ namespace dt5740 {
       }
 
       return;
+   }
+
+   Device::Data_t Device::decode( const ev::Fragment& fragment ) const {
+
+      // The result object:
+      Data_t result;
+      result.resize( NUMBER_OF_CHANNELS );
+
+      // The maximum number of samples requested by any of the groups:
+      const int max_samples = std::max( std::max( m_groups[ 0 ].getSamples(),
+                                                  m_groups[ 1 ].getSamples() ),
+                                        std::max( m_groups[ 2 ].getSamples(),
+                                                  m_groups[ 3 ].getSamples() ) );
+
+      // The first bit of the next data word:
+      int bit_number = 0;
+
+      // Loop over the samples:
+      for( int sample = 0; sample < max_samples; ++sample ) {
+         // Loop over the groups:
+         for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
+            // Check if this group is still active for this sample:
+            if( sample >= m_groups[ group ].getSamples() ) {
+               continue;
+            }
+            // Loop over the channels of the group:
+            for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
+                 ++channel ) {
+               // The absolute channel number of this channel:
+               const int ch_number = group * GroupConfig::CHANNELS_IN_GROUP + channel;
+               // Check if the channel is configured:
+               if( ! m_channels[ ch_number ] ) {
+                  continue;
+               }
+               // The data of this channel in this sample:
+               unsigned int ch_data = 0;
+               // Fill the data bit-by-bit:
+               for( int abit = bit_number, i = 0; abit < bit_number + BITS_PER_CHANNEL;
+                    ++abit, ++i ) {
+                  const int word = abit / 32;
+                  const int bit  = abit % 32;
+                  // A security check:
+                  if( word >= static_cast< int >( fragment.getDataWords().size() ) ) {
+                     REPORT_ERROR( tr( "The received data fragment is too small!" ) );
+                     return result;
+                  }
+                  if( ( fragment.getDataWords()[ word ] >> bit ) & 0x1 ) {
+                     ch_data |= ( 0x1 << i );
+                  }
+               } // end of loop over bits
+               // Add this data word to the result:
+               result[ ch_number ].push_back( ch_data );
+            } // end of loop over channels in group
+         } // end of loop over groups
+      } // end of loop over samples
+
+      return result;
    }
 
 } // namespace dt5740
