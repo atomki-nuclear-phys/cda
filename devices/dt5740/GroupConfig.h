@@ -17,6 +17,9 @@
 
 namespace dt5740 {
 
+   // Forward declaration(s):
+   class ChannelConfig;
+
    /**
     *  @short Configuration for a single channel group
     *
@@ -37,10 +40,12 @@ namespace dt5740 {
       Q_DECLARE_TR_FUNCTIONS( dt5740::GroupConfig )
 
    public:
-      /// Constructor
+      /// Default constructor
       GroupConfig();
       /// Copy constructor
       GroupConfig( const GroupConfig& parent );
+      /// Destructor
+      ~GroupConfig();
 
       /// Assignment operator
       GroupConfig& operator= ( const GroupConfig& rh );
@@ -148,6 +153,16 @@ namespace dt5740 {
       /// Helper function for getting the number of samples
       int getSamples() const;
 
+      /// Enable/disable one of the channels
+      void enableChannel( int channel, bool enable );
+      /// Access one of the channels
+      ChannelConfig* getChannel( int channel );
+      /// Access one of the channels (constant version)
+      const ChannelConfig* getChannel( int channel ) const;
+
+      /// Clear the group's configuration
+      void clear();
+
    private:
       /// Transform trigger mode into an integer
       unsigned int toUInt( TriggerMode mode ) const;
@@ -175,6 +190,9 @@ namespace dt5740 {
       bool         m_trigEnabled; ///< Enable triggering on this group
       bool         m_trigOutEnabled; ///< Enable to send triggers to front panel
       int          m_postTrigPercentage; ///< Percentage of post-trigger samples
+
+      /// Configuration of the input channels belonging to this group
+      ChannelConfig* m_channels[ CHANNELS_IN_GROUP ];
 
       mutable msg::Logger m_logger; ///< Message logger object
 

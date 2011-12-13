@@ -29,6 +29,17 @@ namespace dt5740 {
 
    }
 
+   ChannelConfig::ChannelConfig( const ChannelConfig& parent )
+      : dev::Config(),
+        m_numberOfChannels( parent.m_numberOfChannels ),
+        m_lowerBound( parent.m_lowerBound ),
+        m_upperBound( parent.m_upperBound ),
+        m_name( parent.m_name ),
+        m_channelNumber( parent.m_channelNumber ),
+        m_logger( "dt5740::ChannelConfig" ) {
+
+   }
+
    bool ChannelConfig::readConfig( QIODevice* dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );

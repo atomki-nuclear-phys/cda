@@ -21,7 +21,7 @@ namespace dev {
 
    CaenEditor::CaenEditor( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        dev::Crate< dev::CaenGui >(),
+        dev::Crate< dev::CaenGui >( "CAEN", true ),
         m_selfModification( false ),
         m_logger( "dev::CaenEditor" ) {
 

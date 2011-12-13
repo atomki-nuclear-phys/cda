@@ -73,40 +73,6 @@ namespace dt5740 {
       /// Slot handling changes to the connection link
       void connectionLinkSlot( int link );
 
-      /// Slot handling changes to channel enablement
-      void channelEnabledSlot( int channel, bool on );
-      /// Slot handling changes to channel names
-      void nameChangedSlot( int channel, const QString& text );
-      /// Slot handling changes to histogram channel numbers
-      void channelsChangedSlot( int channel, int channels );
-      /// Slot handling changes to histogram lower bounds
-      void lowerBoundChangedSlot( int channel, double value );
-      /// Slot handling changes to histogram upper bounds
-      void upperBoundChangedSlot( int channel, double value );
-
-      /// Slot handling changes to self trigger enablement
-      void trigEnabledSlot( int group, bool state );
-      /// Slot handling changes to the trigger output enablement
-      void trigOutEnabledSlot( int group, bool state );
-      /// Slot handling changes to the trigger overlap state
-      void trigOvlpEnabledSlot( int group, bool state );
-      /// Slot handling changes to the trigger mode
-      void trigModeSlot( int group, dt5740::GroupConfig::TriggerMode mode );
-      /// Slot handling changes to the trigger threshold
-      void trigThresholdSlot( int group, int value );
-      /// Slot handling changes to the trigger masks
-      void trigMaskSlot( int group, unsigned int value );
-      /// Slot handling changes to the post trigger samples value
-      void postTrigPercentageSlot( int group, int value );
-      /// Slot handling changes to the DC offset values
-      void dcOffsetSlot( int group, int value );
-      /// Slot handling changes to the pattern generation state
-      void patGenEnabledSlot( int group, bool state );
-      /// Slot handling changes to the gate modes
-      void gateModeSlot( int group, dt5740::GroupConfig::GateMode mode );
-      /// Slot handling changes to the buffer modes
-      void bufferModeSlot( int group, dt5740::GroupConfig::BufferMode mode );
-
    private:
       /// Function "syncing" the configuration
       void sync();

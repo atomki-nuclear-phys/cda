@@ -42,6 +42,8 @@ namespace dt5740 {
    public:
       /// Constructor
       ChannelConfig();
+      /// Copy constructor
+      ChannelConfig( const ChannelConfig& parent );
 
       /// Function reading the configuration in binary format
       virtual bool readConfig( QIODevice* dev );

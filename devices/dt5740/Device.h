@@ -79,7 +79,9 @@ namespace dt5740 {
       /**
        * The structure of this is that the outer vector describes the
        * channels (including the inactive ones), and the inner vector
-       * describes the samples collected for that channel.
+       * describes the samples collected for that channel. So the outer
+       * vector always has a size of 32, and the inner one has the size
+       * of the number of samples requested for its channel group.
        */
       typedef std::vector< std::vector< unsigned int > > Data_t;
       /// Function decoding the data read for a trigger
@@ -87,11 +89,6 @@ namespace dt5740 {
 
       /// Number of channel groups handled by the device
       static const int NUMBER_OF_GROUPS = 4;
-      /// Total number of input channels on the device
-      static const int NUMBER_OF_CHANNELS = 32;
-
-      /// Configuration of the input channels
-      ChannelConfig* m_channels[ NUMBER_OF_CHANNELS ];
       /// Configuration of the channel groups
       GroupConfig m_groups[ NUMBER_OF_GROUPS ];
 

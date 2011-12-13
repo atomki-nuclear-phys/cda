@@ -38,11 +38,6 @@ namespace dt5740 {
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          m_groups[ i ].setGroupNumber( i );
       }
-
-      // Reset all the pointers in the array:
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         m_channels[ i ] = 0;
-      }
    }
 
    Device::~Device() {
@@ -66,13 +61,6 @@ namespace dt5740 {
       m_connType = caen::Digitizer::convertConnType( ctype );
       input >> m_linkNumber;
 
-      // Read the number of active channels:
-      quint32 number_of_channels;
-      input >> number_of_channels;
-
-      REPORT_VERBOSE( tr( "Number of configured channels: %1" )
-                      .arg( number_of_channels ) );
-
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          if( ! m_groups[ i ].readConfig( dev ) ) {
@@ -84,32 +72,6 @@ namespace dt5740 {
             REPORT_ERROR( tr( "There was an error reading the configuration "
                               "of a group" ) );
             return false;
-         }
-      }
-
-      // Read in the configuration of all the channels:
-      for( quint32 i = 0; i < number_of_channels; ++i ) {
-         ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( dev ) ) {
-            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
-                              "read!" ) );
-            delete channel;
-            return false;
-         }
-         if( ( channel->getChannelNumber() >= 0 ) &&
-             ( channel->getChannelNumber() < NUMBER_OF_CHANNELS ) ) {
-            if( m_channels[ channel->getChannelNumber() ] ) {
-               m_logger << msg::WARNING
-                        << tr( "Redefining channel number: %1" )
-                  .arg( channel->getChannelNumber() )
-                        << msg::endmsg;
-               delete m_channels[ channel->getChannelNumber() ];
-            }
-            m_channels[ channel->getChannelNumber() ] = channel;
-         } else {
-            REPORT_ERROR( tr( "There was a problem reading the configuration "
-                              "of one channel" ) );
-            delete channel;
          }
       }
 
@@ -128,32 +90,12 @@ namespace dt5740 {
       output << caen::Digitizer::convertConnType( m_connType );
       output << m_linkNumber;
 
-      // Count the number of configured channels:
-      quint32 number_of_channels = 0;
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         if( m_channels[ i ] ) ++number_of_channels;
-      }
-
-      // Write the number of channels to follow:
-      output << number_of_channels;
-
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          if( ! m_groups[ i ].writeConfig( dev ) ) {
             REPORT_ERROR( tr( "A problem happened while writing out a "
                               "group's configuration" ) );
             return false;
-         }
-      }
-
-      // Write the channel configurations:
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         if( m_channels[ i ] ) {
-            if( ! m_channels[ i ]->writeConfig( dev ) ) {
-               REPORT_ERROR( tr( "A problem happened while writing out a "
-                                 "channel configuration" ) );
-               return false;
-            }
          }
       }
 
@@ -210,41 +152,6 @@ namespace dt5740 {
          }
       }
 
-      //
-      // Configure the channels:
-      //
-      for( int i = 0; i < element.childNodes().size(); ++i ) {
-
-         // Only process "Channel" type child-nodes:
-         if( element.childNodes().at( i ).nodeName() != "Channel" ) {
-            continue;
-         }
-
-         ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( element.childNodes().at( i ).toElement() ) ) {
-            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
-                              "read!" ) );
-            delete channel;
-            return false;
-         }
-         if( ( channel->getChannelNumber() >= 0 ) &&
-             ( channel->getChannelNumber() < NUMBER_OF_CHANNELS ) ) {
-            if( m_channels[ channel->getChannelNumber() ] ) {
-               m_logger << msg::WARNING
-                        << tr( "Redefining channel number: %1" )
-                  .arg( channel->getChannelNumber() )
-                        << msg::endmsg;
-               delete m_channels[ channel->getChannelNumber() ];
-            }
-            m_channels[ channel->getChannelNumber() ] = channel;
-         } else {
-            REPORT_ERROR( tr( "There was a problem reading the configuration "
-                              "of one channel" ) );
-            delete channel;
-            return false;
-         }
-      }
-
       return true;
    }
 
@@ -274,24 +181,6 @@ namespace dt5740 {
          element.appendChild( gr_element );
       }
 
-      //
-      // Create a new node for the configuration of each channel:
-      //
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         if( m_channels[ i ] ) {
-
-            QDomElement ch_element =
-               element.ownerDocument().createElement( "Channel" );
-            if( ! m_channels[ i ]->writeConfig( ch_element ) ) {
-               REPORT_ERROR( tr( "A problem happened while writing out a "
-                                 "channel configuration" ) );
-               return false;
-            }
-            element.appendChild( ch_element );
-
-         }
-      }
-
       return true;
    }
 
@@ -308,46 +197,56 @@ namespace dt5740 {
 
    void Device::clear() {
 
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         if( m_channels[ i ] ) delete m_channels[ i ];
-         m_channels[ i ] = 0;
+      // Reset the simple properties:
+      m_connType = caen::Digitizer::USB;
+      m_linkNumber = 0;
+
+      // Clear all the groups:
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         m_groups[ i ].clear();
       }
 
       return;
    }
 
+   /**
+    * This function is used by the derived classes to decode the content
+    * of the data words read from the device's memory during data
+    * taking.
+    *
+    * @param fragment The raw data words coming from the device
+    * @returns The data in an easier-to-digest format
+    */
    Device::Data_t Device::decode( const ev::Fragment& fragment ) const {
 
       // The result object:
       Data_t result;
-      result.resize( NUMBER_OF_CHANNELS );
+      result.resize( NUMBER_OF_GROUPS * GroupConfig::CHANNELS_IN_GROUP );
 
-      // The maximum number of samples requested by any of the groups:
-      const int max_samples = std::max( std::max( m_groups[ 0 ].getSamples(),
-                                                  m_groups[ 1 ].getSamples() ),
-                                        std::max( m_groups[ 2 ].getSamples(),
-                                                  m_groups[ 3 ].getSamples() ) );
+      // The first bit of the next data word. Remember that the first
+      // 4 words belong to the header of the event:
+      int bit_number = 128;
 
-      // The first bit of the next data word:
-      int bit_number = 0;
+      // According to the documentation the readout format is as follows:
+      //  - First we get all the samples for the first channel of the first
+      //    group.
+      //  - Next we get all the samples of the second channel of the first
+      //    group.
+      //  - etc.
 
-      // Loop over the samples:
-      for( int sample = 0; sample < max_samples; ++sample ) {
-         // Loop over the groups:
-         for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
-            // Check if this group is still active for this sample:
-            if( sample >= m_groups[ group ].getSamples() ) {
-               continue;
-            }
-            // Loop over the channels of the group:
-            for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
-                 ++channel ) {
-               // The absolute channel number of this channel:
-               const int ch_number = group * GroupConfig::CHANNELS_IN_GROUP + channel;
-               // Check if the channel is configured:
-               if( ! m_channels[ ch_number ] ) {
-                  continue;
-               }
+      // Loop over the groups:
+      for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
+         // Loop over the channels of the group:
+         for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
+              ++channel ) {
+            // Skip the inactive channels:
+            if( ! m_groups[ group ].getChannel( channel ) ) continue;
+            // Reserve the needed space in the inner vector:
+            result[ ( group * GroupConfig::CHANNELS_IN_GROUP ) +
+                    channel ].resize( m_groups[ group ].getSamples() );
+            // Loop over all the samples:
+            for( int sample = 0; sample < m_groups[ group ].getSamples();
+                 ++sample ) {
                // The data of this channel in this sample:
                unsigned int ch_data = 0;
                // Fill the data bit-by-bit:
@@ -365,10 +264,13 @@ namespace dt5740 {
                   }
                } // end of loop over bits
                // Add this data word to the result:
-               result[ ch_number ].push_back( ch_data );
-            } // end of loop over channels in group
-         } // end of loop over groups
-      } // end of loop over samples
+               result[ ( group * GroupConfig::CHANNELS_IN_GROUP ) +
+                       channel ].push_back( ch_data );
+               // Increment the bit position:
+               bit_number += BITS_PER_CHANNEL;
+            } // end of loop over samples
+         } // end of loop over channels in group
+      } // end of loop over groups
 
       return result;
    }

@@ -45,13 +45,10 @@ namespace dt5740 {
 
    public:
       /// Constructor
-      GroupGui( int group, QWidget* parent = 0,
+      GroupGui( GroupConfig& group, QWidget* parent = 0,
                 Qt::WindowFlags flags = 0 );
       /// Destructor
       ~GroupGui();
-
-      /// Get the group described by this widget
-      int getGroupNumber() const;
 
       /// Total width of the widget
       static const int WIDTH;
@@ -62,31 +59,7 @@ namespace dt5740 {
       ChannelGui* getChannel( int index ) const;
 
       /// Function "syncing" to the config object
-      void sync( const GroupConfig& conf );
-
-   signals:
-      /// Signal emitted when the self triggering state changes
-      void trigEnabled( int group, bool state );
-      /// Signal emitted when the trigger output state changes
-      void trigOutEnabled( int group, bool state );
-      /// Signal emitted when the trigger overlap state changes
-      void trigOvlpEnabled( int group, bool state );
-      /// Signal emitted when the trigger mode changes
-      void trigMode( int group, dt5740::GroupConfig::TriggerMode mode );
-      /// Signal emitted when the trigger threshold changes
-      void trigThreshold( int group, int value );
-      /// Signal emitted when the trigger mask changes
-      void trigMask( int group, unsigned int value );
-      /// Signal emitted when the post trigger percentage value changes
-      void postTrigPercentage( int group, int value );
-      /// Signal emitted when the DC offset changes
-      void dcOffset( int group, int value );
-      /// Signal emitted when the pattern generation state changes
-      void patGenEnabled( int group, bool state );
-      /// Signal emitted when the gate mode changes
-      void gateMode( int group, dt5740::GroupConfig::GateMode mode );
-      /// Signal emitted when the buffer mode changes
-      void bufferMode( int group, dt5740::GroupConfig::BufferMode mode );
+      void sync();
 
    private slots:
       /// Slot handling trigger state changes
@@ -112,8 +85,20 @@ namespace dt5740 {
       /// Slot handling the buffer mode changes
       void bufferModeSlot( int index );
 
+      /// Slot handling changes to channel enablement
+      void channelEnabledSlot( int channel, bool on );
+      /// Slot handling changes to channel names
+      void nameChangedSlot( int channel, const QString& text );
+      /// Slot handling changes to histogram channel numbers
+      void channelsChangedSlot( int channel, int channels );
+      /// Slot handling changes to histogram lower bounds
+      void lowerBoundChangedSlot( int channel, double value );
+      /// Slot handling changes to histogram upper bounds
+      void upperBoundChangedSlot( int channel, double value );
+
    private:
-      const int m_groupNumber; ///< Channel group ID
+      /// Reference to the group that this widget configures
+      GroupConfig& m_group;
       bool m_syncing; ///< Flag showing when a syncing operation is going on
 
       QGroupBox* m_groupBox;
