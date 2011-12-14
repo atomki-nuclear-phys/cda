@@ -6,8 +6,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/camac/Crate.h"
+#   include "cdacore/event/Fragment.h"
 #else
 #   include "camac/Crate.h"
+#   include "event/Fragment.h"
 #endif
 
 // Local include(s):
@@ -51,18 +53,16 @@ namespace ad1000 {
     * of the device, and adds it as a single data word (without much
     * encoding) to the event fragment.
     */
-   ev::Fragment Readout::readEvent( camac::Crate& crate ) const {
+   ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
 
-      ev::Fragment fragment;
-      fragment.setModuleID( m_slot );
+      ev::Fragment* fragment = new ev::Fragment();
+      fragment->setModuleID( m_slot );
 
       // Read the channel data:
       crate.writeWord( m_slot, 0, 16, 0 ); // I think this command initiates the data conversion...
       uint32_t channel = crate.readWord( m_slot, 0, 0 );
       uint32_t dword = channel & 0xffffff;
-      fragment.addDataWord( dword );
-      m_logger << msg::VERBOSE << "Readout data: "
-               << channel << msg::endmsg;
+      fragment->addDataWord( dword );
 
       return fragment;
    }

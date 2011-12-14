@@ -3,16 +3,16 @@
 #ifndef CDA_CORE_DEVICE_VMEREADOUT_H
 #define CDA_CORE_DEVICE_VMEREADOUT_H
 
-// CDA include(s):
-#include "../event/Fragment.h"
-
 // Local include(s):
 #include "Device.h"
 
 // Forward declaration(s):
 namespace vme {
    class VmeBus;
-} // namespace vme
+}
+namespace ev {
+   class Fragment;
+}
 
 namespace dev {
 
@@ -46,15 +46,19 @@ namespace dev {
        *          <code>false</code> otherwise
        */
       virtual bool initialize( vme::VmeBus& bus ) const = 0;
+
       /// Function reading the current data from the device
       /**
        * The device is supposed to present its latest data when calling
        * this function.
        *
+       * Note that the caller of the function is responsible for
+       * eventually deleting the received object.
+       *
        * @param bus The object to access the VME bus with
        * @returns The event fragment coming from this device
        */
-      virtual ev::Fragment readEvent( vme::VmeBus& bus ) const = 0;
+      virtual ev::Fragment* readEvent( vme::VmeBus& bus ) const = 0;
 
    }; // class VmeReadout
 

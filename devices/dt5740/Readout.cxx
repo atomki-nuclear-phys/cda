@@ -1,5 +1,15 @@
 // $Id$
 
+// Qt include(s):
+#include <QtCore/QtGlobal>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/event/Fragment.h"
+#else
+#   include "event/Fragment.h"
+#endif
+
 // Local include(s):
 #include "Readout.h"
 
@@ -36,9 +46,9 @@ namespace dt5740 {
       return true;
    }
 
-   ev::Fragment Readout::readEvent() const {
+   ev::Fragment* Readout::readEvent() const {
 
-      ev::Fragment result;
+      ev::Fragment* result = new ev::Fragment();
 
       return result;
    }

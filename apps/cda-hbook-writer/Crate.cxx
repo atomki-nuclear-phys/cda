@@ -30,6 +30,9 @@ namespace hbook {
 
       m_nmgr.clear();
 
+      //
+      // Create the output variables of each device:
+      //
       std::map< unsigned int, dev::CernlibDisk* >::const_iterator dev_itr =
          m_devices.begin();
       std::map< unsigned int, dev::CernlibDisk* >::const_iterator dev_end =
@@ -37,18 +40,15 @@ namespace hbook {
       for( ; dev_itr != dev_end; ++dev_itr ) {
 
          if( ! dev_itr->second->initialize( m_nmgr ) ) {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem initializing one of "
-                            "the devices" ) << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem initializing one of "
+                              "the devices" ) );
             return false;
          }
 
       }
 
       if( ! m_nmgr.openFile( fileName ) ) {
-         m_logger << msg::ERROR
-                  << tr( "The output file couldn't be opened" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "The output file couldn't be opened" ) );
          return false;
       } else {
          m_logger << msg::DEBUG << tr( "The output file was opened" )
@@ -62,32 +62,31 @@ namespace hbook {
 
       // Access the fragments coming from the different modules that
       // are used in data acquisition:
-      const std::vector< ev::Fragment >& fragments = event.getFragments();
+      const std::vector< std::tr1::shared_ptr< ev::Fragment > >& fragments =
+         event.getFragments();
 
       // Loop over the fragments:
-      std::vector< ev::Fragment >::const_iterator fragment_itr = fragments.begin();
-      std::vector< ev::Fragment >::const_iterator fragment_end = fragments.end();
+      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
+         fragment_itr = fragments.begin();
+      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
+         fragment_end = fragments.end();
       for( ; fragment_itr != fragment_end; ++fragment_itr ) {
 
          // Find the device that is expecting this event fragment:
          std::map< unsigned int, dev::CernlibDisk* >::iterator device =
             m_devices.find( fragment_itr->getModuleID() );
          if( device == m_devices.end() ) {
-            m_logger << msg::ERROR
-                     << tr( "Failed to assign fragment with "
-                            "module ID: %1" )
-               .arg( fragment_itr->getModuleID() )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "Failed to assign fragment with "
+                              "module ID: %1" )
+                          .arg( fragment_itr->getModuleID() ) );
             return false;
          }
 
          // Give this fragment to the device that we just found:
-         if( ! device->second->writeEvent( *fragment_itr, m_nmgr ) ) {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem writing the data "
-                            "from device with ID: %1" )
-               .arg( fragment_itr->getModuleID() )
-                     << msg::endmsg;
+         if( ! device->second->writeEvent( *( *fragment_itr ), m_nmgr ) ) {
+            REPORT_ERROR( tr( "There was a problem writing the data "
+                              "from device with ID: %1" )
+                          .arg( fragment_itr->getModuleID() ) );
             return false;
          }
 

@@ -54,7 +54,7 @@ namespace dt5740 {
       virtual bool stop();
 
       /// Function reading a single event from the device
-      virtual ev::Fragment readEvent() const;
+      virtual ev::Fragment* readEvent() const;
 
    private:
       caen::Digitizer m_digitizer; ///< Connection to the hardware

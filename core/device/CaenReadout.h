@@ -3,11 +3,13 @@
 #ifndef CDA_CORE_DEVICE_CAENREADOUT_H
 #define CDA_CORE_DEVICE_CAENREADOUT_H
 
-// CDA include(s):
-#include "../event/Fragment.h"
-
 // Local include(s):
 #include "Device.h"
+
+// Forward declaration(s):
+namespace ev {
+   class Fragment;
+}
 
 namespace dev {
 
@@ -86,9 +88,12 @@ namespace dev {
        * should stall until an event becomes available. (Either by
        * waiting for an interrupt, or polling for new data.)
        *
+       * Note that the caller of the function is responsible for
+       * eventually deleting the received object.
+       *
        * @returns The event fragment coming from this device
        */
-      virtual ev::Fragment readEvent() const = 0;
+      virtual ev::Fragment* readEvent() const = 0;
 
    }; // class CaenReadout
 

@@ -23,8 +23,7 @@ namespace glomem {
       : dev::Crate< dev::CernlibHist >(),
         m_hmgr(), m_logger( "glomem::Crate" ) {
 
-      m_logger << msg::VERBOSE << tr( "Object constructed" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object constructed" ) );
    }
 
    /**
@@ -32,8 +31,7 @@ namespace glomem {
     */
    Crate::~Crate() {
 
-      m_logger << msg::VERBOSE << tr( "Object destructed" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object destructed" ) );
    }
 
    /**
@@ -67,10 +65,8 @@ namespace glomem {
       for( ; dev_itr != dev_end; ++dev_itr ) {
 
          if( ! dev_itr->second->initialize( m_hmgr ) ) {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem initializing one of "
-                            "the devices" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem initializing one of "
+                              "the devices" ) );
             return false;
          }
 
@@ -93,31 +89,33 @@ namespace glomem {
     */
    bool Crate::displayEvent( const ev::Event& event ) {
 
-      m_logger << msg::VERBOSE << tr( "Received new event" )
-               << msg::endmsg;
+      // Access the fragments coming from the different modules that
+      // are used in data acquisition:
+      const std::vector< std::tr1::shared_ptr< ev::Fragment > >& fragments =
+         event.getFragments();
 
-      const std::vector< ev::Fragment >& fragments = event.getFragments();
-
-      std::vector< ev::Fragment >::const_iterator frag_itr = fragments.begin();
-      std::vector< ev::Fragment >::const_iterator frag_end = fragments.end();
+      // Loop over the fragments:
+      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
+         frag_itr = fragments.begin();
+      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
+         frag_end = fragments.end();
       for( ; frag_itr != frag_end; ++frag_itr ) {
 
+         // Find the device that is expecting this event fragment:
          std::map< unsigned int, dev::CernlibHist* >::iterator device =
             m_devices.find( frag_itr->getModuleID() );
          if( device == m_devices.end() ) {
-            m_logger << msg::ERROR
-                     << tr( "Failed to assign fragment with "
-                            "module ID: %1" ).arg( frag_itr->getModuleID() )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "Failed to assign fragment with "
+                              "module ID: %1" )
+                          .arg( frag_itr->getModuleID() ) );
             return false;
          }
 
-         if( ! device->second->displayEvent( *frag_itr, m_hmgr ) ) {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem displaying the data "
-                            "from device with ID: %1" )
-               .arg( frag_itr->getModuleID() )
-                     << msg::endmsg;
+         // Give this fragment to the device that we just found:
+         if( ! device->second->displayEvent( *( *frag_itr ), m_hmgr ) ) {
+            REPORT_ERROR( tr( "There was a problem displaying the data "
+                              "from device with ID: %1" )
+                          .arg( frag_itr->getModuleID() ) );
             return false;
          }
 

@@ -46,7 +46,7 @@ namespace s9418t {
       /// Function initializing the device
       virtual bool initialize( vme::VmeBus& bus ) const;
       /// Function reading the current data from the device
-      virtual ev::Fragment readEvent( vme::VmeBus& bus ) const;
+      virtual ev::Fragment* readEvent( vme::VmeBus& bus ) const;
 
    private:
       static const short CONTROL_REGISTER_ADDR = 0x44;

@@ -21,7 +21,7 @@ namespace raw {
    Crate::Crate()
       : dev::Crate< dev::CernlibDisk >(),
         m_file( 0 ), m_stream( 0 ), m_evCounter( 0 ),
-        m_logger( "hbook::Crate" ) {
+        m_logger( "raw::Crate" ) {
 
    }
 
@@ -34,9 +34,7 @@ namespace raw {
 
       // Check if a file is already open:
       if( m_file ) {
-         m_logger << msg::ERROR
-                  << tr( "Output file is already open" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Output file is already open" ) );
          return false;
       }
 
@@ -45,9 +43,8 @@ namespace raw {
       //
       m_file = new QFile( fileName );
       if( ! m_file->open( QFile::WriteOnly | QFile::Truncate ) ) {
-         m_logger << msg::ERROR
-                  << tr( "%1 couldn't be opened for writing" ).arg( fileName )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "%1 couldn't be opened for writing" )
+                       .arg( fileName ) );
          return false;
       } else {
          m_logger << msg::DEBUG
@@ -60,9 +57,8 @@ namespace raw {
       // data taking to the file:
       //
       if( ! writeConfig( m_file ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Couldn't write the configuration into the output file" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Couldn't write the configuration into the "
+                           "output file" ) );
          return false;
       } else {
          m_logger << msg::DEBUG
@@ -72,10 +68,8 @@ namespace raw {
 
       // Create the stream object on top of the file:
       if( m_stream ) {
-         m_logger << msg::ERROR
-                  << tr( "The object is in a very weird state. No file "
-                         "was opened, but there was a stream created..." )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "The object is in a very weird state. No file "
+                           "was opened, but there was a stream created..." ) );
          return false;
       }
       m_stream = new ev::BinaryStream( m_file );
@@ -95,9 +89,8 @@ namespace raw {
 
       // Check that the object has already been initialized:
       if( ( ! m_stream ) || ( ! m_file ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Trying to write an event before opening an output file" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Trying to write an event before opening an "
+                           "output file" ) );
          return false;
       }
 
@@ -108,9 +101,8 @@ namespace raw {
       ++m_evCounter;
       if( m_evCounter >= 100 ) {
          if( ! m_file->flush() ) {
-            m_logger << msg::ERROR
-                     << tr( "There was an error flushing the output file" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "There was an error flushing the "
+                              "output file" ) );
             return false;
          }
          m_evCounter = 0;
@@ -128,10 +120,8 @@ namespace raw {
       // Next, flush the output file, then close it:
       if( m_file ) {
          if( ! m_file->flush() ) {
-            m_logger << msg::ERROR
-                     << tr( "There was an error flushing the output file "
-                            "before closing it" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "There was an error flushing the output file "
+                              "before closing it" ) );
             return false;
          }
          delete m_file;

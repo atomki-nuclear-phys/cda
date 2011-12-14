@@ -51,10 +51,12 @@ namespace ev {
          .arg( event.getFragments().size() );
 
       if( event.getFragments().size() ) {
-         for( std::vector< Fragment >::const_iterator fragment =
-                 event.getFragments().begin();
-              fragment != event.getFragments().end(); ++fragment ) {
-            *this << *fragment << "\n";
+         std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator itr =
+            event.getFragments().begin();
+         std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator end =
+            event.getFragments().end();
+         for( ; itr != end; ++itr ) {
+            *this << *( *itr ) << "\n";
          }
       } else {
          ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
@@ -83,12 +85,14 @@ namespace ev {
          .arg( fragment.getModuleID() );
 
       if( fragment.getDataWords().size() ) {
-         for( std::vector< uint32_t >::const_iterator dword =
-                 fragment.getDataWords().begin();
-              dword != fragment.getDataWords().end(); ++dword ) {
+         std::vector< uint32_t >::const_iterator itr =
+            fragment.getDataWords().begin();
+         std::vector< uint32_t >::const_iterator end =
+            fragment.getDataWords().end();
+         for( ; itr != end; ++itr ) {
             ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
                                                             "   Data word: 0x%1\n" )
-               .arg( QString::number( *dword, 16 ) );
+               .arg( QString::number( *itr, 16 ) );
          }
       } else {
          ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",

@@ -35,10 +35,12 @@ namespace ev {
 
       ( * ( QDataStream* ) this ) << ( quint32 ) event.getFragments().size();
 
-      for( std::vector< Fragment >::const_iterator fragment =
-              event.getFragments().begin();
-           fragment != event.getFragments().end(); ++fragment ) {
-         *this << *fragment;
+      std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator itr =
+         event.getFragments().begin();
+      std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator end =
+         event.getFragments().end();
+      for( ; itr != end; ++itr ) {
+         *this << *( *itr );
       }
 
       return *this;
@@ -62,8 +64,8 @@ namespace ev {
       ( * ( QDataStream* ) this ) >> nFragments;
 
       for( quint32 i = 0; i < nFragments; ++i ) {
-         Fragment fragment;
-         *this >> fragment;
+         Fragment* fragment = new Fragment();
+         *this >> *fragment;
          event.addFragment( fragment );
       }
 

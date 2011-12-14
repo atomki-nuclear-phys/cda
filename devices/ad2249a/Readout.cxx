@@ -6,8 +6,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/camac/Crate.h"
+#   include "cdacore/event/Fragment.h"
 #else
 #   include "camac/Crate.h"
+#   include "event/Fragment.h"
 #endif
 
 // Local include(s):
@@ -60,18 +62,16 @@ namespace ad2249a {
     * 10-bit ADC (as far as I remember), this should leave plenty of space
     * for both quantities...
     */
-   ev::Fragment Readout::readEvent( camac::Crate& crate ) const {
- 	
-      ev::Fragment fragment; 
-      fragment.setModuleID( m_slot );
+   ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
+
+      ev::Fragment* fragment = new ev::Fragment();
+      fragment->setModuleID( m_slot );
 
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
             uint32_t channel = crate.readWord( m_slot, i, 0 );
             uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
-            fragment.addDataWord( dword );
-            m_logger << msg::VERBOSE << "From subaddress " << i
-                     << " : " << channel << msg::endmsg;
+            fragment->addDataWord( dword );
          }
       }
 

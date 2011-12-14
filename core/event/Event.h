@@ -5,6 +5,7 @@
 
 // STL include(s):
 #include <vector>
+#include <tr1/memory>
 
 // Local include(s):
 #include "Fragment.h"
@@ -32,17 +33,24 @@ namespace ev {
    public:
       /// Default constructor
       Event();
+      /// Copy constructor
+      Event( const Event& parent );
+
+      /// Copy operator
+      Event& operator= ( const Event& rh );
 
       /// Get all the event fragments
-      const std::vector< Fragment >& getFragments() const;
+      const std::vector< std::tr1::shared_ptr< Fragment > >&
+      getFragments() const;
       /// Add one more event fragment
-      void addFragment( const Fragment& fragment );
+      void addFragment( Fragment* fragment );
 
       /// Clear the event object
       void clear();
 
    private:
-      std::vector< Fragment > m_fragments; ///< Event fragments (module info)
+      /// Event fragments (module info)
+      std::vector< std::tr1::shared_ptr< Fragment > > m_fragments;
 
    }; // class Event
 

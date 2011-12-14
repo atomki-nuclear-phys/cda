@@ -3,16 +3,16 @@
 #ifndef CDA_CORE_DEVICE_CAMACREADOUT_H
 #define CDA_CORE_DEVICE_CAMACREADOUT_H
 
-// CDA include(s):
-#include "../event/Fragment.h"
-
 // Local include(s):
 #include "Device.h"
 
 // Forward declaration(s):
 namespace camac {
    class Crate;
-} // namespace camac
+}
+namespace ev {
+   class Fragment;
+}
 
 namespace dev {
 
@@ -43,16 +43,21 @@ namespace dev {
        *          <code>false</code> otherwise
        */
       virtual bool initialize( camac::Crate& crate ) const = 0;
+
       /// Function reading the current data from the device
       /**
        * I'm just guessing here. It would probably make sense to define
        * an "event" structure. Then the whole event could be transmitted
        * between the processes. (Through a fifo or whatever...)
        *
+       * Note that the caller of the function is responsible for
+       * eventually deleting the received object.
+       *
        * @param crate The object to access the CAMAC crate with
        * @returns The event fragment coming from this device
        */
-      virtual ev::Fragment readEvent( camac::Crate& crate ) const = 0;
+      virtual ev::Fragment* readEvent( camac::Crate& crate ) const = 0;
+
       /// Clear the module to receive a new event
       /**
        * This function is called after all the modules have been read out

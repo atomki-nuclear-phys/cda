@@ -6,8 +6,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/vme/VmeBus.h"
+#   include "cdacore/event/Fragment.h"
 #else
 #   include "vme/VmeBus.h"
+#   include "event/Fragment.h"
 #endif
 
 // Local include(s):
@@ -89,11 +91,11 @@ namespace s9418t {
       return true;
    }
 
-   ev::Fragment Readout::readEvent( vme::VmeBus& bus ) const {
+   ev::Fragment* Readout::readEvent( vme::VmeBus& bus ) const {
 
       // Create the event fragment object:
-      ev::Fragment fragment;
-      fragment.setModuleID( m_address );
+      ev::Fragment* fragment = new ev::Fragment();
+      fragment->setModuleID( m_address );
 
       // Temporary data used in the readout:
       int tempData;
@@ -124,8 +126,8 @@ namespace s9418t {
          }
 
          // Extract the data from the word:
-         fragment.addDataWord( ( ( tempData & FIFO_DWORD_MASK ) >> 4 ) |
-                               ( tempData & FIFO_DATA_MASK ) );
+         fragment->addDataWord( ( ( tempData & FIFO_DWORD_MASK ) >> 4 ) |
+                                ( tempData & FIFO_DATA_MASK ) );
       }
 
       // Return the data fragment:
