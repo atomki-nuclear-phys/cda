@@ -15,7 +15,7 @@
 namespace dt5740 {
 
    // Initialize the static constant(s):
-   const int GroupGui::WIDTH  = 480;
+   const int GroupGui::WIDTH  = 470;
    const int GroupGui::HEIGHT = 650;
 
    GroupGui::GroupGui( GroupConfig& group, QWidget* parent,
@@ -89,7 +89,7 @@ namespace dt5740 {
       //
       // Create the trigger mask setting:
       //
-      m_trigMaskBox = new QGroupBox( tr( "Trigger mask" ),
+      m_trigMaskBox = new QGroupBox( tr( "Trigger mask (channels enabled)" ),
                                      m_groupBox );
       m_trigMaskBox->setGeometry( QRect( 10, 175, WIDTH - 30, 50 ) );
       m_trigMaskBox->setToolTip( "You can set here which channels should contribute "
@@ -99,7 +99,7 @@ namespace dt5740 {
 
       for( int i = 0; i < GroupConfig::CHANNELS_IN_GROUP; ++i ) {
          m_trigMask[ i ] =
-            new QCheckBox( tr( "%1.ch" )
+            new QCheckBox( tr( "%1." )
                            .arg( m_group.getGroupNumber() *
                                  GroupConfig::CHANNELS_IN_GROUP + i ),
                            m_trigMaskBox );

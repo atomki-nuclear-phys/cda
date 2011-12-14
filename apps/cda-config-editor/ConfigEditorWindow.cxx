@@ -3,6 +3,7 @@
 // Qt include(s):
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
+#include <QtCore/QFlags>
 #include <QtGui/QWidget>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QIcon>
@@ -12,6 +13,7 @@
 #include <QtGui/QActionGroup>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
+#include <QtGui/QApplication>
 #include <QtXml/QDomImplementation>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -21,10 +23,12 @@
 #   include "cdagui/device/CamacEditor.h"
 #   include "cdagui/device/CaenEditor.h"
 #   include "cdagui/common/aboutCDA.h"
+#   include "cdagui/common/DefaultFont.h"
 #else
 #   include "device/CamacEditor.h"
 #   include "device/CaenEditor.h"
 #   include "common/aboutCDA.h"
+#   include "common/DefaultFont.h"
 #endif
 
 // Local include(s):
@@ -35,6 +39,9 @@
  */
 ConfigEditorWindow::ConfigEditorWindow()
    : QMainWindow(), m_currFileName( "" ), m_logger( "ConfigEditorWindow" ) {
+
+   // Make sure Qt remembers what is its default font:
+   QApplication::setFont( gui::DefaultFont() );
 
    //
    // Set the fixed size of the window:
@@ -200,12 +207,6 @@ void ConfigEditorWindow::showCaenConfigSlot() {
    return;
 }
 
-void ConfigEditorWindow::aboutQtSlot() {
-
-   QMessageBox::aboutQt( this, tr( "CDA Configuration Editor - built on Qt" ) );
-   return;
-}
-
 void ConfigEditorWindow::aboutCDASlot() {
 
    aboutCDA( this );
@@ -219,6 +220,11 @@ void ConfigEditorWindow::aboutConfigEditorSlot() {
                            "configuration files for the CDA applications. "
                            "The files can be read and saved in both binary "
                            "and XML format." ) );
+
+   // Make sure Qt remembers what is its default font.
+   // (There seems to be a bug in Qt...)
+   QApplication::setFont( gui::DefaultFont() );
+
    return;
 }
 
@@ -309,7 +315,7 @@ void ConfigEditorWindow::createMenus() {
    QAction* aboutQtAction = helpMenu->addAction( QIcon( ":/img/qt-logo.jpg" ),
                                                  tr( "About Qt" ) );
    connect( aboutQtAction, SIGNAL( triggered() ),
-            this, SLOT( aboutQtSlot() ) );
+            qApp, SLOT( aboutQt() ) );
 
    QAction* aboutConfigEditorAc =
       helpMenu->addAction( QIcon( ":/img/cda-config-editor.png" ),

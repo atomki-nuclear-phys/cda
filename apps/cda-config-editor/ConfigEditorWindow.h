@@ -65,8 +65,6 @@ private slots:
    /// Slot for showing the CAEN configuration
    void showCaenConfigSlot();
 
-   /// Slot showing a window about the Qt version used
-   void aboutQtSlot();
    /// Slot showing a window about CDA
    void aboutCDASlot();
    /// Slot showing a window about this application

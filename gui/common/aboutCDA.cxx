@@ -3,9 +3,11 @@
 // Qt include(s):
 #include <QtCore/QCoreApplication>
 #include <QtGui/QMessageBox>
+#include <QtGui/QApplication>
 
 // Local include(s):
 #include "aboutCDA.h"
+#include "DefaultFont.h"
 
 /**
  * All the CDA graphical applications should be able to show an information window
@@ -24,5 +26,10 @@ void aboutCDA( QT_PREPEND_NAMESPACE( QWidget )* parent ) {
                                                     "composed of multiple executables "
                                                     "that work together in the data "
                                                     "acquisition." ) );
+
+   // Make sure Qt remembers what is its default font.
+   // (There seems to be a bug in Qt...)
+   QApplication::setFont( gui::DefaultFont() );
+
    return;
 }

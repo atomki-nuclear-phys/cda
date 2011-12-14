@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 3000 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 30, 3000 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -84,13 +84,16 @@ namespace dt5740 {
       connect( m_connMode, SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( connectionModeSlot( int ) ) ); 
 
-      m_connLinkLabel = new QLabel( tr( "Connection link:" ),
+      m_connLinkLabel = new QLabel( tr( "Link number:" ),
                                     m_connectionBox );
       m_connLinkLabel->setGeometry( QRect( 10, 55, 130, 25 ) );
 
       m_connLink = new QSpinBox( m_connectionBox );
       m_connLink->setGeometry( QRect( 160, 55, 220, 25 ) );
       m_connLink->setRange( 0, 10 );
+      m_connLink->setToolTip( "In USB mode this means the ID given by the OS "
+                              "to the USB connection. If this is the only such "
+                              "device connected by USB, it will be \"0\"." );
       connect( m_connLink, SIGNAL( valueChanged( int ) ),
                this, SLOT( connectionLinkSlot( int ) ) );
 
