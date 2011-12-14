@@ -52,6 +52,31 @@ namespace dev {
        */
       virtual bool finalize() = 0;
 
+      /// Function enabling data acquisition in the device
+      /**
+       * This is the function that should finally enable the readout of the
+       * device. Once it is called, cda-caen-readout will go to looking for
+       * collected events right away.
+       *
+       * @returns <code>true</code> if the operation was successful,
+       *          <code>false</code> otherwise
+       */
+      virtual bool start() = 0;
+
+      /// Function disabling data acquisition in the device
+      /**
+       * Not sure how useful this function is going to be, as data acquisition
+       * usually only needs to stop at the end of data taking, where the quick
+       * stop is not that important. So it could be enough if finalize() would
+       * take care of also stopping the acquisition.
+       *
+       * But still, for the moment let's keep it in the interface...
+       *
+       * @returns <code>true</code> if the operation was successful,
+       *          <code>false</code> otherwise
+       */
+      virtual bool stop() = 0;
+
       /// Function reading a single event from the device
       /**
        * This function is used to read out a single event from the
