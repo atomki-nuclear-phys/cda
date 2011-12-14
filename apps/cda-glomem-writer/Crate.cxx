@@ -103,11 +103,11 @@ namespace glomem {
 
          // Find the device that is expecting this event fragment:
          std::map< unsigned int, dev::CernlibHist* >::iterator device =
-            m_devices.find( frag_itr->getModuleID() );
+            m_devices.find( ( *frag_itr )->getModuleID() );
          if( device == m_devices.end() ) {
             REPORT_ERROR( tr( "Failed to assign fragment with "
                               "module ID: %1" )
-                          .arg( frag_itr->getModuleID() ) );
+                          .arg( ( *frag_itr )->getModuleID() ) );
             return false;
          }
 
@@ -115,7 +115,7 @@ namespace glomem {
          if( ! device->second->displayEvent( *( *frag_itr ), m_hmgr ) ) {
             REPORT_ERROR( tr( "There was a problem displaying the data "
                               "from device with ID: %1" )
-                          .arg( frag_itr->getModuleID() ) );
+                          .arg( ( *frag_itr )->getModuleID() ) );
             return false;
          }
 

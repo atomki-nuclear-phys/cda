@@ -1,9 +1,17 @@
 <!DOCTYPE CDA_SETUP PUBLIC '' ''>
 <Setup xmlns="">
-   <CaenDigitizer ConnType="USB">
-      <DT5740>
-         <Channel Subaddress="3" LowerBound="0" Name="tone" NumberOfChannels="1024" UpperBound="1024" />
-         <Channel Subaddress="5" LowerBound="0" Name="ttwo" NumberOfChannels="1024" UpperBound="1024" />
+   <Crate Type="CAEN">
+      <DT5740 ConnType="0" LinkNumber="0">
+         <Group TrigMask="3" GateMode="0" Number="0" TrigOutEnabled="1" TrigMode="0" PostTrigPercentage="80" TrigEnabled="1" DCOffset="50" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="100" BufferMode="8">
+            <Channel LowerBound="0" ChannelNumber="0" Name="a1" NumberOfChannels="4096" UpperBound="4097"/>
+            <Channel LowerBound="0" ChannelNumber="1" Name="a2" NumberOfChannels="4096" UpperBound="4096"/>
+         </Group>
+         <Group TrigMask="0" GateMode="0" Number="1" TrigOutEnabled="0" TrigMode="0" PostTrigPercentage="0" TrigEnabled="0" DCOffset="200" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="200" BufferMode="8">
+            <Channel LowerBound="0" ChannelNumber="8" Name="a3" NumberOfChannels="4096" UpperBound="4096"/>
+            <Channel LowerBound="0" ChannelNumber="9" Name="a4" NumberOfChannels="4096" UpperBound="4096"/>
+         </Group>
+         <Group TrigMask="0" GateMode="0" Number="2" TrigOutEnabled="0" TrigMode="0" PostTrigPercentage="0" TrigEnabled="0" DCOffset="0" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="0" BufferMode="0"/>
+         <Group TrigMask="0" GateMode="0" Number="3" TrigOutEnabled="0" TrigMode="0" PostTrigPercentage="0" TrigEnabled="0" DCOffset="0" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="0" BufferMode="0"/>
       </DT5740>
-   </CaenDigitizer>
+   </Crate>
 </Setup>

@@ -74,11 +74,11 @@ namespace hbook {
 
          // Find the device that is expecting this event fragment:
          std::map< unsigned int, dev::CernlibDisk* >::iterator device =
-            m_devices.find( fragment_itr->getModuleID() );
+            m_devices.find( ( *fragment_itr )->getModuleID() );
          if( device == m_devices.end() ) {
             REPORT_ERROR( tr( "Failed to assign fragment with "
                               "module ID: %1" )
-                          .arg( fragment_itr->getModuleID() ) );
+                          .arg( ( *fragment_itr )->getModuleID() ) );
             return false;
          }
 
@@ -86,7 +86,7 @@ namespace hbook {
          if( ! device->second->writeEvent( *( *fragment_itr ), m_nmgr ) ) {
             REPORT_ERROR( tr( "There was a problem writing the data "
                               "from device with ID: %1" )
-                          .arg( fragment_itr->getModuleID() ) );
+                          .arg( ( *fragment_itr )->getModuleID() ) );
             return false;
          }
 

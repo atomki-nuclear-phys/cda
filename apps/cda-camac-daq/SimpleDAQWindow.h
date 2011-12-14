@@ -53,8 +53,6 @@ public:
 private slots:
    /// Slot for specifying a configuration file
    void readConfigSlot();
-   /// Slot for displaying a window about Qt
-   void aboutQtSlot();
    /// Slot for displaying a window about this application
    void aboutSimpleDAQSlot();
    /// Slot for displaying a window about CDA

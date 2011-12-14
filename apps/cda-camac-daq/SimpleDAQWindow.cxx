@@ -7,7 +7,7 @@
 #include <QtGui/QIcon>
 #include <QtGui/QMenuBar>
 #include <QtGui/QMenu>
-#include <QtCore/QCoreApplication>
+#include <QtGui/QApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -19,6 +19,7 @@
 #   include "cdagui/simple_daq/GlomemWriterRunner.h"
 #   include "cdagui/simple_daq/HBookWriterRunner.h"
 #   include "cdagui/common/aboutCDA.h"
+#   include "cdagui/common/DefaultFont.h"
 #else
 #   include "common/Address.h"
 #   include "msg/Server.h"
@@ -28,6 +29,7 @@
 #   include "simple_daq/GlomemWriterRunner.h"
 #   include "simple_daq/HBookWriterRunner.h"
 #   include "common/aboutCDA.h"
+#   include "common/DefaultFont.h"
 #endif
 
 // Local include(s):
@@ -58,9 +60,9 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
 
    // Set up the window according to whether a configuration file was already specified:
    if( ! confFileName.isEmpty() ) {
-      setWindowTitle( tr( "CDA Simple DAQ - %1" ).arg( confFileName ) );
+      setWindowTitle( tr( "CDA CAMAC DAQ - %1" ).arg( confFileName ) );
    } else {
-      setWindowTitle( tr( "CDA Simple DAQ" ) );
+      setWindowTitle( tr( "CDA CAMAC DAQ" ) );
    }
    setWindowIcon( QIcon( ":/img/cda-daq.png" ) );
 
@@ -88,7 +90,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
                              tr( "The TCP/IP message server could not be started "
                                  "on address %1. The application has to shut down!" )
                              .arg( Const::MSG_SERVER_ADDRESS ) );
-      QCoreApplication::exit( 1 );
+      QApplication::exit( 1 );
    } else {
       m_logger << msg::INFO << tr( "The message server started successfully" )
                << msg::endmsg;
@@ -153,7 +155,8 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    // Print some final log message:
    //
    if( ! confFileName.isEmpty() ) {
-      m_logger << msg::INFO << tr( "Using configuration file: %1" ).arg( confFileName )
+      m_logger << msg::INFO
+               << tr( "Using configuration file: %1" ).arg( confFileName )
                << msg::endmsg;
    } else {
       m_logger << msg::INFO << tr( "Please open a configuration file before"
@@ -203,7 +206,7 @@ void SimpleDAQWindow::readConfigSlot() {
    //
    // Set up everything to use this new configuration file:
    //
-   setWindowTitle( tr( "CDA Simple DAQ - %1" ).arg( fileName ) );
+   setWindowTitle( tr( "CDA CAMAC DAQ - %1" ).arg( fileName ) );
    m_camacReader->setConfigFileName( fileName );
    m_camacReader->setEnabled( true );
    m_glomemWriter->setConfigFileName( fileName );
@@ -217,20 +220,16 @@ void SimpleDAQWindow::readConfigSlot() {
    return;
 }
 
-void SimpleDAQWindow::aboutQtSlot() {
-
-   QMessageBox::aboutQt( this, tr( "CDA Simple DAQ - built on Qt" ) );
-   return;
-}
-
 void SimpleDAQWindow::aboutSimpleDAQSlot() {
 
    QMessageBox::about( this, tr( "CDA Simple DAQ" ),
                        tr( "This application is a simplified interface for running "
-                           "a CDA data acquisition session. While the CDA "
+                           "a CDA CAMAC data acquisition session. While the CDA "
                            "executables can be started on multiple separate computers, "
-                           "this application starts one instance of the 3 main CDA "
-                           "applications on the local computer." ) );
+                           "this application starts one instance of the 3 CDA "
+                           "applications used in CAMAC data taking, on the "
+                           "local computer." ) );
+   QApplication::setFont( gui::DefaultFont() );
 
    return;
 }
@@ -283,7 +282,7 @@ void SimpleDAQWindow::drawMenus() {
    QAction* aboutQtAction = helpMenu->addAction( QIcon( ":/img/qt-logo.jpg" ),
                                                  tr( "About Qt" ) );
    connect( aboutQtAction, SIGNAL( triggered() ),
-            this, SLOT( aboutQtSlot() ) );
+            qApp, SLOT( aboutQt() ) );
 
    QAction* aboutConfigEditorAc =
       helpMenu->addAction( QIcon( ":/img/cda-daq.png" ),

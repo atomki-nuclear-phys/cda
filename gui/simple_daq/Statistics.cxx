@@ -23,7 +23,7 @@ namespace simple_daq {
       //
       // Create the box into which everything else is put:
       //
-      m_mainBox = new QGroupBox( tr( "DAQ statistics (for current output file)" ), this );
+      m_mainBox = new QGroupBox( tr( "DAQ statistics" ), this );
       m_mainBox->setGeometry( QRect( 5, 5, 290, 140 ) );
 
       //
