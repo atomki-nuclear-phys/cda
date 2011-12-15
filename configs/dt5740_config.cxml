@@ -1,17 +1,21 @@
 <!DOCTYPE CDA_SETUP PUBLIC '' ''>
 <Setup xmlns="">
    <Crate Type="CAEN">
-      <DT5740 ConnType="0" LinkNumber="0">
-         <Group TrigMask="3" GateMode="0" Number="0" TrigOutEnabled="1" TrigMode="0" PostTrigPercentage="80" TrigEnabled="1" DCOffset="50" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="100" BufferMode="8">
-            <Channel LowerBound="0" ChannelNumber="0" Name="a1" NumberOfChannels="4096" UpperBound="4097"/>
+      <DT5740 ExtTrigOutEnabled="0" ConnType="0" GateMode="0" TrigMode="0" PostTrigPercentage="80" ExtTrigEnabled="0" PatGenEnabled="0" LinkNumber="0" TrigOvlpEnabled="1" BufferMode="8">
+         <Group TrigMask="3" Number="0" TrigOutEnabled="1" TrigEnabled="1" DCOffset="100" TrigThreshold="500">
+            <Channel LowerBound="0" ChannelNumber="0" Name="a1" NumberOfChannels="4096" UpperBound="4096"/>
             <Channel LowerBound="0" ChannelNumber="1" Name="a2" NumberOfChannels="4096" UpperBound="4096"/>
+            <Channel LowerBound="0" ChannelNumber="2" Name="a3" NumberOfChannels="4096" UpperBound="4096"/>
+            <Channel LowerBound="0" ChannelNumber="3" Name="a4" NumberOfChannels="4096" UpperBound="4096"/>
          </Group>
-         <Group TrigMask="0" GateMode="0" Number="1" TrigOutEnabled="0" TrigMode="0" PostTrigPercentage="0" TrigEnabled="0" DCOffset="200" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="200" BufferMode="8">
-            <Channel LowerBound="0" ChannelNumber="8" Name="a3" NumberOfChannels="4096" UpperBound="4096"/>
-            <Channel LowerBound="0" ChannelNumber="9" Name="a4" NumberOfChannels="4096" UpperBound="4096"/>
+         <Group TrigMask="0" Number="1" TrigOutEnabled="0" TrigEnabled="0" DCOffset="200" TrigThreshold="0">
+            <Channel LowerBound="0" ChannelNumber="8" Name="a5" NumberOfChannels="4096" UpperBound="4096"/>
+            <Channel LowerBound="0" ChannelNumber="9" Name="a6" NumberOfChannels="4096" UpperBound="4096"/>
+            <Channel LowerBound="0" ChannelNumber="10" Name="a7" NumberOfChannels="4096" UpperBound="4096"/>
+            <Channel LowerBound="0" ChannelNumber="11" Name="a8" NumberOfChannels="4096" UpperBound="4096"/>
          </Group>
-         <Group TrigMask="0" GateMode="0" Number="2" TrigOutEnabled="0" TrigMode="0" PostTrigPercentage="0" TrigEnabled="0" DCOffset="0" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="0" BufferMode="0"/>
-         <Group TrigMask="0" GateMode="0" Number="3" TrigOutEnabled="0" TrigMode="0" PostTrigPercentage="0" TrigEnabled="0" DCOffset="0" PatGenEnabled="0" TrigOvlpEnabled="0" TrigThreshold="0" BufferMode="0"/>
+         <Group TrigMask="0" Number="2" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
+         <Group TrigMask="0" Number="3" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
       </DT5740>
    </Crate>
 </Setup>

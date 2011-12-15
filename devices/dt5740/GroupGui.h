@@ -66,24 +66,12 @@ namespace dt5740 {
       void trigEnabledSlot( bool checked );
       /// Slot handling trigger out state changes
       void trigOutEnabledSlot( bool checked );
-      /// Slot handling trigger overlap state changes
-      void trigOvlpEnabledSlot( bool checked );
-      /// Slot handling trigger mode changes
-      void trigModeSlot( int index );
       /// Slot handling trigger threshold changes
       void trigThresholdSlot( int value );
       /// Slot handling trigger mask changes
       void trigMaskSlot( bool checked );
-      /// Slot handling post trigger percentage changes
-      void postTrigPercentageSlot( int value );
       /// Slot handling DC offset value changes
       void dcOffsetSlot( int value );
-      /// Slot handling changes to the pattern generation state
-      void patGenEnabledSlot( bool checked );
-      /// Slot handling the gate mode changes
-      void gateModeSlot( int index );
-      /// Slot handling the buffer mode changes
-      void bufferModeSlot( int index );
 
       /// Slot handling changes to channel enablement
       void channelEnabledSlot( int channel, bool on );
@@ -105,10 +93,6 @@ namespace dt5740 {
 
       QCheckBox* m_trigEnabled;
       QCheckBox* m_trigOutEnabled;
-      QCheckBox* m_trigOvlpEnabled;
-
-      QLabel*    m_trigModeLabel;
-      QComboBox* m_trigMode;
 
       QLabel*   m_trigThresholdLabel;
       QSpinBox* m_trigThreshold;
@@ -116,19 +100,8 @@ namespace dt5740 {
       QGroupBox* m_trigMaskBox;
       QCheckBox* m_trigMask[ GroupConfig::CHANNELS_IN_GROUP ];
 
-      QLabel*   m_postTrigPercentageLabel;
-      QSpinBox* m_postTrigPercentage;
-
       QLabel*   m_dcOffsetLabel;
       QSpinBox* m_dcOffset;
-
-      QCheckBox* m_patGenEnabled;
-
-      QLabel*    m_gateModeLabel;
-      QComboBox* m_gateMode;
-
-      QLabel*    m_bufferModeLabel;
-      QComboBox* m_bufferMode;
 
       QLabel* m_nameLabel; ///< Label above channel names
       QLabel* m_channelsLabel; ///< Label above histogram channels

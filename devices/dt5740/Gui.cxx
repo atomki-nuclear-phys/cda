@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 30, 3000 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 30, 2500 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -76,7 +76,7 @@ namespace dt5740 {
       m_connModeLabel->setGeometry( QRect( 10, 25, 130, 25 ) );
 
       m_connMode = new QComboBox( m_connectionBox );
-      m_connMode->setGeometry( QRect( 160, 25, 220, 25 ) );
+      m_connMode->setGeometry( QRect( 180, 25, 250, 25 ) );
       m_connMode->addItem( tr( "USB" ) );
       m_connMode->addItem( tr( "PCI Optical Link" ) );
       m_connMode->addItem( tr( "PCIe Optical Link" ) );
@@ -89,7 +89,7 @@ namespace dt5740 {
       m_connLinkLabel->setGeometry( QRect( 10, 55, 130, 25 ) );
 
       m_connLink = new QSpinBox( m_connectionBox );
-      m_connLink->setGeometry( QRect( 160, 55, 220, 25 ) );
+      m_connLink->setGeometry( QRect( 180, 55, 250, 25 ) );
       m_connLink->setRange( 0, 10 );
       m_connLink->setToolTip( "In USB mode this means the ID given by the OS "
                               "to the USB connection. If this is the only such "
@@ -98,13 +98,112 @@ namespace dt5740 {
                this, SLOT( connectionLinkSlot( int ) ) );
 
       //
+      // Create the trigger settings:
+      //
+      m_triggerBox = new QGroupBox( tr( "Trigger settings" ),
+                                    m_scrollWidget );
+      m_triggerBox->setGeometry( QRect( 10, 345, WIDGET_WIDTH - 30, 180 ) );
+
+      m_trigOvlpEnabledWidget = new QCheckBox( tr( "Enable trigger overlaps" ),
+                                               m_triggerBox );
+      m_trigOvlpEnabledWidget->setGeometry( QRect( 10, 25, 400, 25 ) );
+      connect( m_trigOvlpEnabledWidget, SIGNAL( toggled( bool ) ),
+               this, SLOT( trigOvlpEnabledSlot( bool ) ) );
+
+      m_extTrigEnabledWidget = new QCheckBox( tr( "Enable external trigger" ),
+                                              m_triggerBox );
+      m_extTrigEnabledWidget->setGeometry( QRect( 10, 55, 400, 25 ) );
+      connect( m_extTrigEnabledWidget, SIGNAL( toggled( bool ) ),
+               this, SLOT( extTrigEnabledSlot( bool ) ) );
+
+      m_extTrigOutEnabledWidget =
+         new QCheckBox( tr( "Forward external trigger to front panel" ),
+                        m_triggerBox );
+      m_extTrigOutEnabledWidget->setGeometry( QRect( 10, 85, 400, 25 ) );
+      connect( m_extTrigOutEnabledWidget, SIGNAL( toggled( bool ) ),
+               this, SLOT( extTrigOutEnabledSlot( bool ) ) );
+
+      m_trigModeLabel = new QLabel( tr( "Trigger mode:" ),
+                                    m_triggerBox );
+      m_trigModeLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
+
+      m_trigModeWidget = new QComboBox( m_triggerBox );
+      m_trigModeWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
+      m_trigModeWidget->addItem( tr( "Trigger on input over threshold" ) );
+      m_trigModeWidget->addItem( tr( "Trigger on input under threshold" ) );
+      connect( m_trigModeWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( trigModeSlot( int ) ) ); 
+
+      m_postTrigPercentageLabel = new QLabel( tr( "Post trigger percentage:" ),
+                                              m_triggerBox );
+      m_postTrigPercentageLabel->setGeometry( QRect( 10, 145, 150, 25 ) );
+
+      m_postTrigPercentageWidget = new QSpinBox( m_triggerBox );
+      m_postTrigPercentageWidget->setGeometry( QRect( 180, 145, 150, 25 ) );
+      m_postTrigPercentageWidget->setRange( 0, 100 );
+      m_postTrigPercentageWidget->setValue( 100 );
+      m_postTrigPercentageWidget->setToolTip( "You can set here how many of "
+                                              "the collected samples should be "
+                                              "taken after the trigger "
+                                              "signal." );
+      connect( m_postTrigPercentageWidget, SIGNAL( valueChanged( int ) ),
+               this, SLOT( postTrigPercentageSlot( int ) ) ); 
+
+      //
+      // Create the data acquisition settings:
+      //
+      m_acquisitionBox = new QGroupBox( tr( "Data acquisition settings" ),
+                                        m_scrollWidget );
+      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 30, 120 ) );
+
+      m_patGenEnabledWidget = new QCheckBox( tr( "Enable test pattern generation" ),
+                                             m_acquisitionBox );
+      m_patGenEnabledWidget->setGeometry( QRect( 10, 25, 400, 25 ) );
+      connect( m_patGenEnabledWidget, SIGNAL( toggled( bool ) ),
+               this, SLOT( patGenEnabledSlot( bool ) ) ); 
+
+      m_gateModeLabel = new QLabel( tr( "Gate mode:" ),
+                                    m_acquisitionBox );
+      m_gateModeLabel->setGeometry( QRect( 10, 55, 150, 25 ) );
+
+      m_gateModeWidget = new QComboBox( m_acquisitionBox );
+      m_gateModeWidget->setGeometry( QRect( 180, 55, 250, 25 ) );
+      m_gateModeWidget->addItem( "Window" );
+      m_gateModeWidget->addItem( "Single shot" );
+      connect( m_gateModeWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( gateModeSlot( int ) ) );
+
+      m_bufferModeLabel = new QLabel( tr( "Buffer mode:" ),
+                                      m_acquisitionBox );
+      m_bufferModeLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
+
+      m_bufferModeWidget = new QComboBox( m_acquisitionBox );
+      m_bufferModeWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
+      m_bufferModeWidget->setToolTip( "You can choose how many samples should be "
+                                      "collected after each trigger, using this "
+                                      "property." );
+      m_bufferModeWidget->addItem( "1 buffer with 192k samples" );
+      m_bufferModeWidget->addItem( "2 buffers with 96k samples" );
+      m_bufferModeWidget->addItem( "4 buffers with 48k samples" );
+      m_bufferModeWidget->addItem( "8 buffers with 24k samples" );
+      m_bufferModeWidget->addItem( "16 buffers with 12k samples" );
+      m_bufferModeWidget->addItem( "32 buffers with 6k samples" );
+      m_bufferModeWidget->addItem( "64 buffers with 3k samples" );
+      m_bufferModeWidget->addItem( "128 buffers with 1536 samples" );
+      m_bufferModeWidget->addItem( "256 buffers with 768 samples" );
+      m_bufferModeWidget->addItem( "512 buffers with 384 samples" );
+      m_bufferModeWidget->addItem( "1024 buffers with 192 samples" );
+      connect( m_bufferModeWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( bufferModeSlot( int ) ) );
+
+      //
       // Create the channel groups:
       //
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 340 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 665 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
    }
@@ -122,6 +221,22 @@ namespace dt5740 {
       delete m_connLinkLabel;
       delete m_connLink;
       delete m_connectionBox;
+
+      delete m_trigOvlpEnabledWidget;
+      delete m_extTrigEnabledWidget;
+      delete m_extTrigOutEnabledWidget;
+      delete m_trigModeLabel;
+      delete m_trigModeWidget;
+      delete m_postTrigPercentageLabel;
+      delete m_postTrigPercentageWidget;
+      delete m_triggerBox;
+
+      delete m_patGenEnabledWidget;
+      delete m_gateModeLabel;
+      delete m_gateModeWidget;
+      delete m_bufferModeLabel;
+      delete m_bufferModeWidget;
+      delete m_acquisitionBox;
 
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          delete m_ggroups[ i ];
@@ -190,6 +305,120 @@ namespace dt5740 {
       return;
    }
 
+   void Gui::trigOvlpEnabledSlot( bool checked ) {
+
+      m_trigOvlpEnabled = checked;
+      return;
+   }
+
+   void Gui::extTrigEnabledSlot( bool checked ) {
+
+      m_extTrigEnabled = checked;
+      return;
+   }
+
+   void Gui::extTrigOutEnabledSlot( bool checked ) {
+
+      m_extTrigOutEnabled = checked;
+      return;
+   }
+
+   void Gui::trigModeSlot( int index ) {
+
+      // Translate the state of the combo box into an enumeration value:
+      switch( index ) {
+
+      case 0:
+         m_trigMode = TriggerOnInputOverThreshold;
+         break;
+      case 1:
+         m_trigMode = TriggerOnInputUnderThreshold;
+         break;
+      default:
+         REPORT_ERROR( tr( "Trigger mode not recognized" ) );
+         break;
+      }
+
+      return;
+   }
+
+   void Gui::postTrigPercentageSlot( int value ) {
+
+      m_postTrigPercentage = value;
+      return;
+   }
+
+   void Gui::patGenEnabledSlot( bool checked ) {
+
+      m_patGenEnabled = checked;
+      return;
+   }
+
+   void Gui::gateModeSlot( int index ) {
+
+      // Translate the state of the combo box into an enumeration value:
+      switch( index ) {
+
+      case 0:
+         m_gateMode = WindowGate;
+         break;
+      case 1:
+         m_gateMode = SingleShotGate;
+         break;
+      default:
+         REPORT_ERROR( tr( "Gate mode not recognized" ) );
+         break;
+      }
+
+      return;
+   }
+
+   void Gui::bufferModeSlot( int index ) {
+
+      // Translate the state of the combo box into an enumeration value:
+      switch( index ) {
+
+      case 0:
+         m_bufferMode = NBuffers1;
+         break;
+      case 1:
+         m_bufferMode = NBuffers2;
+         break;
+      case 2:
+         m_bufferMode = NBuffers4;
+         break;
+      case 3:
+         m_bufferMode = NBuffers8;
+         break;
+      case 4:
+         m_bufferMode = NBuffers16;
+         break;
+      case 5:
+         m_bufferMode = NBuffers32;
+         break;
+      case 6:
+         m_bufferMode = NBuffers64;
+         break;
+      case 7:
+         m_bufferMode = NBuffers128;
+         break;
+      case 8:
+         m_bufferMode = NBuffers256;
+         break;
+      case 9:
+         m_bufferMode = NBuffers512;
+         break;
+      case 10:
+         m_bufferMode = NBuffers1024;
+         break;
+      default:
+         REPORT_ERROR( tr( "Buffer mode not recognized" ) );
+         break;
+      }
+
+      return;
+   }
+
    /**
     * After a configuration is read from file, the graphical objects have
     * to be sync-ed to show this new configuration. This function takes
@@ -222,6 +451,100 @@ namespace dt5740 {
       m_connLink->setEnabled( false );
       m_connLink->setValue( m_linkNumber );
       m_connLink->setEnabled( true );
+
+      // Set the trigger overlap:
+      m_trigOvlpEnabledWidget->setEnabled( false );
+      m_trigOvlpEnabledWidget->setChecked( m_trigOvlpEnabled );
+      m_trigOvlpEnabledWidget->setEnabled( true );
+
+      // Set the external trigger:
+      m_extTrigEnabledWidget->setEnabled( false );
+      m_extTrigEnabledWidget->setChecked( m_extTrigEnabled );
+      m_extTrigEnabledWidget->setEnabled( true );
+
+      // Set the external trigger forwarding:
+      m_extTrigOutEnabledWidget->setEnabled( false );
+      m_extTrigOutEnabledWidget->setChecked( m_extTrigOutEnabled );
+      m_extTrigOutEnabledWidget->setEnabled( true );
+
+      // Set the trigger mode:
+      switch( m_trigMode ) {
+
+      case TriggerOnInputOverThreshold:
+         m_trigModeWidget->setCurrentIndex( 0 );
+         break;
+      case TriggerOnInputUnderThreshold:
+         m_trigModeWidget->setCurrentIndex( 1 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Trigger mode not recognized" ) );
+         break;
+      } 
+
+      // Set the percentage of post trigger samples:
+      m_postTrigPercentageWidget->setEnabled( false );
+      m_postTrigPercentageWidget->setValue( m_postTrigPercentage );
+      m_postTrigPercentageWidget->setEnabled( true );
+
+      // Set the state of the pattern generation:
+      m_patGenEnabledWidget->setEnabled( false );
+      m_patGenEnabledWidget->setChecked( m_patGenEnabled );
+      m_patGenEnabledWidget->setEnabled( true );
+
+      // Set the gate mode:
+      switch( m_gateMode ) {
+
+      case WindowGate:
+         m_gateModeWidget->setCurrentIndex( 0 );
+         break;
+      case SingleShotGate:
+         m_gateModeWidget->setCurrentIndex( 1 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Gate mode not recognized" ) );
+         break;
+      }
+
+      // Set the buffer mode:
+      switch( m_bufferMode ) {
+
+      case NBuffers1:
+         m_bufferModeWidget->setCurrentIndex( 0 );
+         break;
+      case NBuffers2:
+         m_bufferModeWidget->setCurrentIndex( 1 );
+         break;
+      case NBuffers4:
+         m_bufferModeWidget->setCurrentIndex( 2 );
+         break;
+      case NBuffers8:
+         m_bufferModeWidget->setCurrentIndex( 3 );
+         break;
+      case NBuffers16:
+         m_bufferModeWidget->setCurrentIndex( 4 );
+         break;
+      case NBuffers32:
+         m_bufferModeWidget->setCurrentIndex( 5 );
+         break;
+      case NBuffers64:
+         m_bufferModeWidget->setCurrentIndex( 6 );
+         break;
+      case NBuffers128:
+         m_bufferModeWidget->setCurrentIndex( 7 );
+         break;
+      case NBuffers256:
+         m_bufferModeWidget->setCurrentIndex( 8 );
+         break;
+      case NBuffers512:
+         m_bufferModeWidget->setCurrentIndex( 9 );
+         break;
+      case NBuffers1024:
+         m_bufferModeWidget->setCurrentIndex( 10 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Buffer mode not recognized" ) );
+         break;
+      }
 
       // Synchronize all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {

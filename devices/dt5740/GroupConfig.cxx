@@ -15,11 +15,7 @@ namespace dt5740 {
    GroupConfig::GroupConfig()
       : m_groupNumber( -1 ),
         m_trigThreshold( 0 ), m_dcOffset( 0 ), m_trigMask( 0 ),
-        m_trigMode( TriggerOnInputOverThreshold ), 
-        m_trigOvlpEnabled( false ), m_patGenEnabled( false ),
-        m_gateMode( WindowGate ), m_bufferMode( NBuffers1 ),
         m_trigEnabled( false ), m_trigOutEnabled( false ),
-        m_postTrigPercentage( 0 ),
         m_logger( "dt5740::GroupConfig" ) {
 
       // Reset all the pointers in the array:
@@ -34,14 +30,8 @@ namespace dt5740 {
         m_trigThreshold( parent.m_trigThreshold ),
         m_dcOffset( parent.m_dcOffset ),
         m_trigMask( parent.m_trigMask ),
-        m_trigMode( parent.m_trigMode ), 
-        m_trigOvlpEnabled( parent.m_trigOvlpEnabled ),
-        m_patGenEnabled( parent.m_patGenEnabled ),
-        m_gateMode( parent.m_gateMode ),
-        m_bufferMode( parent.m_bufferMode ),
         m_trigEnabled( parent.m_trigEnabled ),
         m_trigOutEnabled( parent.m_trigOutEnabled ),
-        m_postTrigPercentage( parent.m_postTrigPercentage ),
         m_logger( "dt5740::GroupConfig" ) {
 
       // Copy the channel configuration:
@@ -65,14 +55,8 @@ namespace dt5740 {
       m_trigThreshold = rh.m_trigThreshold;
       m_dcOffset = rh.m_dcOffset;
       m_trigMask = rh.m_trigMask;
-      m_trigMode = rh.m_trigMode;
-      m_trigOvlpEnabled = rh.m_trigOvlpEnabled;
-      m_patGenEnabled = rh.m_patGenEnabled;
-      m_gateMode = rh.m_gateMode;
-      m_bufferMode = rh.m_bufferMode;
       m_trigEnabled = rh.m_trigEnabled;
       m_trigOutEnabled = rh.m_trigOutEnabled;
-      m_postTrigPercentage = rh.m_postTrigPercentage;
 
       // Copy the channel configuration:
       for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
@@ -90,8 +74,6 @@ namespace dt5740 {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
-      unsigned int temp = 0;
-
       QDataStream input( dev );
       input.setVersion( QDataStream::Qt_4_0 );
 
@@ -100,17 +82,8 @@ namespace dt5740 {
       input >> m_trigThreshold;
       input >> m_dcOffset;
       input >> m_trigMask;
-      input >> temp;
-      m_trigMode = toTriggerMode( temp );
-      input >> m_trigOvlpEnabled;
-      input >> m_patGenEnabled;
-      input >> temp;
-      m_gateMode = toGateMode( temp );
-      input >> temp;
-      m_bufferMode = toBufferMode( temp );
       input >> m_trigEnabled;
       input >> m_trigOutEnabled;
-      input >> m_postTrigPercentage;
 
       // Read in the number of active channels in the group:
       quint32 number_of_channels;
@@ -126,7 +99,8 @@ namespace dt5740 {
             return false;
          }
          if( ( channel->getChannelNumber() >= ( m_groupNumber * CHANNELS_IN_GROUP ) ) &&
-             ( channel->getChannelNumber() < ( ( m_groupNumber + 1 ) * CHANNELS_IN_GROUP ) ) ) {
+             ( channel->getChannelNumber() <
+               ( ( m_groupNumber + 1 ) * CHANNELS_IN_GROUP ) ) ) {
             if( m_channels[ channel->getChannelNumber() -
                             ( m_groupNumber * CHANNELS_IN_GROUP ) ] ) {
                m_logger << msg::WARNING
@@ -160,14 +134,8 @@ namespace dt5740 {
       output << m_trigThreshold;
       output << m_dcOffset;
       output << m_trigMask;
-      output << toUInt( m_trigMode );
-      output << m_trigOvlpEnabled;
-      output << m_patGenEnabled;
-      output << toUInt( m_gateMode );
-      output << toUInt( m_bufferMode );
       output << m_trigEnabled;
       output << m_trigOutEnabled;
-      output << m_postTrigPercentage;
 
       // Count the number of configured channels:
       quint32 number_of_channels = 0;
@@ -229,44 +197,6 @@ namespace dt5740 {
          return false;
       }
 
-      m_trigMode = toTriggerMode( node.attribute( "TrigMode",
-                                                  "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger mode\" value" ) );
-         return false;
-      }
-
-      m_trigOvlpEnabled = node.attribute( "TrigOvlpEnabled", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger overlap enabled\" value" ) );
-         return false;
-      }
-
-      m_patGenEnabled = node.attribute( "PatGenEnabled", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"pattern generation enabled\" value" ) );
-         return false;
-      }
-
-      m_gateMode = toGateMode( node.attribute( "GateMode",
-                                               "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"gate mode\" value" ) );
-         return false;
-      }
-
-      m_bufferMode = toBufferMode( node.attribute( "BufferMode",
-                                                   "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"buffer mode\" value" ) );
-         return false;
-      }
-
       m_trigEnabled = node.attribute( "TrigEnabled", "0" ).toInt( &ok );
       if( ! ok ) {
          REPORT_ERROR( tr( "There was a problem reading a "
@@ -279,14 +209,6 @@ namespace dt5740 {
       if( ! ok ) {
          REPORT_ERROR( tr( "There was a problem reading a "
                            "\"trigger output enabled\" value" ) );
-         return false;
-      }
-
-      m_postTrigPercentage = node.attribute( "PostTrigPercentage",
-                                             "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"post trigger percentage\" value" ) );
          return false;
       }
 
@@ -308,7 +230,8 @@ namespace dt5740 {
             return false;
          }
          if( ( channel->getChannelNumber() >= ( m_groupNumber * CHANNELS_IN_GROUP ) ) &&
-             ( channel->getChannelNumber() < ( ( m_groupNumber + 1 ) * CHANNELS_IN_GROUP ) ) ) {
+             ( channel->getChannelNumber() <
+               ( ( m_groupNumber + 1 ) * CHANNELS_IN_GROUP ) ) ) {
             if( m_channels[ channel->getChannelNumber() -
                             ( m_groupNumber * CHANNELS_IN_GROUP ) ] ) {
                m_logger << msg::WARNING
@@ -342,14 +265,8 @@ namespace dt5740 {
       node.setAttribute( "TrigThreshold", m_trigThreshold );
       node.setAttribute( "DCOffset", m_dcOffset );
       node.setAttribute( "TrigMask", m_trigMask );
-      node.setAttribute( "TrigMode", toUInt( m_trigMode ) );
-      node.setAttribute( "TrigOvlpEnabled", m_trigOvlpEnabled );
-      node.setAttribute( "PatGenEnabled", m_patGenEnabled );
-      node.setAttribute( "GateMode", toUInt( m_gateMode ) );
-      node.setAttribute( "BufferMode", toUInt( m_bufferMode ) );
       node.setAttribute( "TrigEnabled", m_trigEnabled );
       node.setAttribute( "TrigOutEnabled", m_trigOutEnabled );
-      node.setAttribute( "PostTrigPercentage", m_postTrigPercentage );
 
       //
       // Create a new node for the configuration of each channel:
@@ -405,28 +322,6 @@ namespace dt5740 {
       return;
    }
 
-   bool GroupConfig::getTrigOvlpEnabled() const {
-
-      return m_trigOvlpEnabled;
-   }
-
-   void GroupConfig::setTrigOvlpEnabled( bool on ) {
-
-      m_trigOvlpEnabled = on;
-      return;
-   }
-
-   GroupConfig::TriggerMode GroupConfig::getTrigMode() const {
-
-      return m_trigMode;
-   }
-
-   void GroupConfig::setTrigMode( GroupConfig::TriggerMode mode ) {
-
-      m_trigMode = mode;
-      return;
-   }
-
    int GroupConfig::getTrigThreshold() const {
 
       return m_trigThreshold;
@@ -449,17 +344,6 @@ namespace dt5740 {
       return;
    }
 
-   int GroupConfig::getPostTrigPercentage() const {
-
-      return m_postTrigPercentage;
-   }
-
-   void GroupConfig::setPostTrigPercentage( int value ) {
-
-      m_postTrigPercentage = value;
-      return;
-   }
-
    int GroupConfig::getDCOffset() const {
 
       return m_dcOffset;
@@ -471,91 +355,14 @@ namespace dt5740 {
       return;
    }
 
-   bool GroupConfig::getPatGenEnabled() const {
-
-      return m_patGenEnabled;
-   }
-
-   void GroupConfig::setPatGenEnabled( bool on ) {
-
-      m_patGenEnabled = on;
-      return;
-   }
-
-   GroupConfig::GateMode GroupConfig::getGateMode() const {
-
-      return m_gateMode;
-   }
-
-   void GroupConfig::setGateMode( GroupConfig::GateMode mode ) {
-
-      m_gateMode = mode;
-      return;
-   }
-
-   GroupConfig::BufferMode GroupConfig::getBufferMode() const {
-
-      return m_bufferMode;
-   }
-
-   void GroupConfig::setBufferMode( GroupConfig::BufferMode mode ) {
-
-      m_bufferMode = mode;
-      return;
-   }
-
-   int GroupConfig::getSamples() const {
-
-      switch( m_bufferMode ) {
-
-      case NBuffers1:
-         return 196608;
-         break;
-      case NBuffers2:
-         return 98304;
-         break;
-      case NBuffers4:
-         return 49152;
-         break;
-      case NBuffers8:
-         return 24576;
-         break;
-      case NBuffers16:
-         return 12288;
-         break;
-      case NBuffers32:
-         return 6144;
-         break;
-      case NBuffers64:
-         return 3072;
-         break;
-      case NBuffers128:
-         return 1536;
-         break;
-      case NBuffers256:
-         return 768;
-         break;
-      case NBuffers512:
-         return 384;
-         break;
-      case NBuffers1024:
-         return 192;
-         break;
-      default:
-         REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( m_bufferMode ) );
-         break;
-      }
-
-      return 0;
-   }
-
    void GroupConfig::enableChannel( int channel, bool enable ) {
 
       if( enable ) {
          if( ! m_channels[ channel ] ) {
             m_channels[ channel ] = new ChannelConfig();
             m_channels[ channel ]->setChannelNumber( channel +
-                                                     m_groupNumber * CHANNELS_IN_GROUP );
+                                                     m_groupNumber *
+                                                     CHANNELS_IN_GROUP );
          }
       } else {
          if( m_channels[ channel ] ) {
@@ -574,7 +381,8 @@ namespace dt5740 {
          return m_channels[ channel ];
       }
 
-      REPORT_ERROR( tr( "Channel with invalid index (%1) requested" ).arg( channel ) );
+      REPORT_ERROR( tr( "Channel with invalid index (%1) requested" )
+                    .arg( channel ) );
       return 0;
    }
 
@@ -595,14 +403,8 @@ namespace dt5740 {
       m_trigThreshold = 0;
       m_dcOffset = 0;
       m_trigMask = 0;
-      m_trigMode = TriggerOnInputOverThreshold;
-      m_trigOvlpEnabled = false;
-      m_patGenEnabled = false;
-      m_gateMode = WindowGate;
-      m_bufferMode = NBuffers1;
       m_trigEnabled = false;
       m_trigOutEnabled = false;
-      m_postTrigPercentage = 100;
 
       // Delete all the channels:
       for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
@@ -611,171 +413,6 @@ namespace dt5740 {
       }
 
       return;
-   }
-
-   unsigned int GroupConfig::toUInt( GroupConfig::TriggerMode mode ) const {
-
-      switch( mode ) {
-
-      case TriggerOnInputOverThreshold:
-         return 0;
-         break;
-      case TriggerOnInputUnderThreshold:
-         return 1;
-         break;
-      default:
-         REPORT_ERROR( tr( "Trigger mode (%1) not recognized" ).arg( mode ) );
-         break;
-      }
-
-      return 0;
-   }
-
-   unsigned int GroupConfig::toUInt( GroupConfig::GateMode mode ) const {
-
-      switch( mode ) {
-
-      case WindowGate:
-         return 0;
-         break;
-      case SingleShotGate:
-         return 1;
-         break;
-      default:
-         REPORT_ERROR( tr( "Gate mode (%1) not recognized" ).arg( mode ) );
-         break;
-      }
-
-      return 0;
-   }
-
-   unsigned int GroupConfig::toUInt( GroupConfig::BufferMode mode ) const {
-
-      switch( mode ) {
-
-      case NBuffers1:
-         return 0;
-         break;
-      case NBuffers2:
-         return 1;
-         break;
-      case NBuffers4:
-         return 2;
-         break;
-      case NBuffers8:
-         return 3;
-         break;
-      case NBuffers16:
-         return 4;
-         break;
-      case NBuffers32:
-         return 5;
-         break;
-      case NBuffers64:
-         return 6;
-         break;
-      case NBuffers128:
-         return 7;
-         break;
-      case NBuffers256:
-         return 8;
-         break;
-      case NBuffers512:
-         return 9;
-         break;
-      case NBuffers1024:
-         return 10;
-         break;
-      default:
-         REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( mode ) );
-         break;
-      }
-
-      return 0;
-   }
-
-   GroupConfig::TriggerMode
-   GroupConfig::toTriggerMode( unsigned int value ) const {
-
-      switch( value ) {
-
-      case 0:
-         return TriggerOnInputOverThreshold;
-         break;
-      case 1:
-         return TriggerOnInputUnderThreshold;
-         break;
-      default:
-         REPORT_ERROR( tr( "Trigger mode (%1) not recognized" ).arg( value ) );
-         break;
-      }
-
-      return TriggerOnInputOverThreshold;
-   }
-
-   GroupConfig::GateMode
-   GroupConfig::toGateMode( unsigned int value ) const {
-
-      switch( value ) {
-
-      case 0:
-         return WindowGate;
-         break;
-      case 1:
-         return SingleShotGate;
-         break;
-      default:
-         REPORT_ERROR( tr( "Gate mode (%1) not recognized" ).arg( value ) );
-         break;
-      }
-
-      return WindowGate;
-   }
-
-   GroupConfig::BufferMode
-   GroupConfig::toBufferMode( unsigned int value ) const {
-
-      switch( value ) {
-
-      case 0:
-         return NBuffers1;
-         break;
-      case 1:
-         return NBuffers2;
-         break;
-      case 2:
-         return NBuffers4;
-         break;
-      case 3:
-         return NBuffers8;
-         break;
-      case 4:
-         return NBuffers16;
-         break;
-      case 5:
-         return NBuffers32;
-         break;
-      case 6:
-         return NBuffers64;
-         break;
-      case 7:
-         return NBuffers128;
-         break;
-      case 8:
-         return NBuffers256;
-         break;
-      case 9:
-         return NBuffers512;
-         break;
-      case 10:
-         return NBuffers1024;
-         break;
-      default:
-         REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( value ) );
-         break;
-      }
-
-      return NBuffers1;
    }
 
 } // namespace dt5740

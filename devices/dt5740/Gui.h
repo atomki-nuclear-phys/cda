@@ -73,6 +73,24 @@ namespace dt5740 {
       /// Slot handling changes to the connection link
       void connectionLinkSlot( int link );
 
+      /// Slot handling trigger overlap state changes
+      void trigOvlpEnabledSlot( bool checked );
+      /// Slot handling external trigger changes
+      void extTrigEnabledSlot( bool checked );
+      /// Slot handling external forwarding trigger changes
+      void extTrigOutEnabledSlot( bool checked );
+      /// Slot handling trigger mode changes
+      void trigModeSlot( int index );
+      /// Slot handling post trigger percentage changes
+      void postTrigPercentageSlot( int value );
+
+      /// Slot handling changes to the pattern generation state
+      void patGenEnabledSlot( bool checked );
+      /// Slot handling the gate mode changes
+      void gateModeSlot( int index );
+      /// Slot handling the buffer mode changes
+      void bufferModeSlot( int index );
+
    private:
       /// Function "syncing" the configuration
       void sync();
@@ -88,6 +106,22 @@ namespace dt5740 {
       QComboBox* m_connMode;      ///< Connection mode chooser
       QLabel*    m_connLinkLabel; ///< Description for conn. link setting
       QSpinBox*  m_connLink;      ///< Connection link chooser
+
+      QGroupBox* m_triggerBox;               ///< Box for the trigger settings
+      QCheckBox* m_trigOvlpEnabledWidget;    ///< Setting for enabling trigger overlaps
+      QCheckBox* m_extTrigEnabledWidget;     ///< External trigger setting
+      QCheckBox* m_extTrigOutEnabledWidget;  ///< External trigger forward setting
+      QLabel*    m_trigModeLabel;            ///< Description of the trigger mode setting
+      QComboBox* m_trigModeWidget;           ///< Trigger mode chooser
+      QLabel*    m_postTrigPercentageLabel;  ///< Description for post trigger fraction
+      QSpinBox*  m_postTrigPercentageWidget; ///< Post trigger fraction setting
+
+      QGroupBox* m_acquisitionBox;      ///< Box for the acquisition settings
+      QCheckBox* m_patGenEnabledWidget; ///< Pattern generation setting
+      QLabel*    m_gateModeLabel;       ///< Description of the gate mode setting
+      QComboBox* m_gateModeWidget;      ///< Gate mode chooser
+      QLabel*    m_bufferModeLabel;     ///< Description of buffer mode setting
+      QComboBox* m_bufferModeWidget;    ///< Buffer mode chooser
 
       /// The graphical representation of channel groups
       GroupGui* m_ggroups[ NUMBER_OF_GROUPS ];
