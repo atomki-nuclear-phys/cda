@@ -101,16 +101,14 @@ namespace ev {
       //
       QTcpServer server;
       if( server.listen( m_address.getHost(), m_address.getPort() ) ) {
-         m_logger << msg::VERBOSE
-                  << tr( "Server is listening on host \"%1\" and port %2" )
-            .arg( m_address.getHost().toString() ).arg( m_address.getPort() )
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "Server is listening on host \"%1\" and port %2" )
+                         .arg( m_address.getHost().toString() )
+                         .arg( m_address.getPort() ) );
       } else {
-         m_logger << msg::ERROR
-                  << tr( "Server could not be started on host \"%1\" and "
-                         "port \"%2\"" )
-            .arg( m_address.getHost().toString() ).arg( m_address.getPort() )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Server could not be started on host \"%1\" and "
+                           "port \"%2\"" )
+                       .arg( m_address.getHost().toString() )
+                       .arg( m_address.getPort() ) );
          return;
       }
 
@@ -123,14 +121,9 @@ namespace ev {
          //
          // Wait indefinitely for an incoming connection:
          //
-         if( server.waitForNewConnection( -1 ) ) {
-            m_logger << msg::VERBOSE
-                     << tr( "Received new incoming connection" )
-                     << msg::endmsg;
-         } else {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem while waiting for an "
-                            "incoming connection" ) << msg::endmsg;
+         if( ! server.waitForNewConnection( -1 ) ) {
+            REPORT_ERROR( tr( "There was a problem while waiting for an "
+                              "incoming connection" ) );
             return;
          }
 
@@ -140,9 +133,8 @@ namespace ev {
          //
          QTcpSocket* socket = server.nextPendingConnection();
          if( ! socket ) {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem while accepting an "
-                            "incoming connection" ) << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem while accepting an "
+                              "incoming connection" ) );
             return;
          }
 
@@ -153,23 +145,12 @@ namespace ev {
          Event event;
          BinaryStream stream( socket );
          for( ; ; ) {
-            if( socket->waitForReadyRead( -1 ) ) {
-               m_logger << msg::VERBOSE
-                        << tr( "Data is ready for readout" )
-                        << msg::endmsg;
-            } else {
+            if( ! socket->waitForReadyRead( -1 ) ) {
                m_logger << msg::INFO
                         << tr( "Connection to event sender lost." )
                         << msg::endmsg;
                break;
             }
-
-            //
-            // A little debugging message:
-            //
-            m_logger << msg::VERBOSE
-                     << tr( "Bytes available: %1" ).arg( socket->bytesAvailable() )
-                     << msg::endmsg;
 
             //
             // Read the event from the socket:
@@ -181,7 +162,7 @@ namespace ev {
             //
             if( m_events.size() < m_bufferSize ) {
                m_mutex.lock();
-               m_events.push_back( event );//copy
+               m_events.push_back( event );
                m_mutex.unlock();
             } else {
                if( m_warningTime.secsTo( QTime::currentTime() ) > 2 ) {

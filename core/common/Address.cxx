@@ -35,19 +35,17 @@ Address::Address( const QString& address )
    //
    // Create a logger object and report what we're doing:
    //
-   msg::Logger logger( "Address" );
-   logger << msg::VERBOSE
-          << tr( "Constructing address from string: \"%1\"" ).arg( address )
-          << msg::endmsg;
+   msg::Logger m_logger( "Address" );
+   REPORT_VERBOSE( tr( "Constructing address from string: \"%1\"" )
+                   .arg( address ) );
 
    //
    // Split the address string into a host name and a port number:
    //
    QStringList split = address.split( ":", QString::SkipEmptyParts );
    if( split.size() != 2 ) {
-      logger << msg::ERROR << tr( "Couldn't decode address: \"%1\"\n"
-                                  "Setting to 127.0.0.1:50000" ).arg( address )
-             << msg::endmsg;
+      REPORT_ERROR( tr( "Couldn't decode address: \"%1\"\n"
+                        "Setting to 127.0.0.1:50000" ).arg( address ) );
       m_host.setAddress( "127.0.0.1" );
       m_port = 50000;
       return;
@@ -56,9 +54,8 @@ Address::Address( const QString& address )
    //
    // Report what we've done:
    //
-   logger << msg::VERBOSE
-          << tr( "Decoded host name: %1, port: %2" ).arg( split.at( 0 ) ).arg( split.at( 1 ) )
-          << msg::endmsg;
+   REPORT_VERBOSE( tr( "Decoded host name: %1, port: %2" )
+                   .arg( split.at( 0 ) ).arg( split.at( 1 ) ) );
 
    m_host.setAddress( split.at( 0 ) );
 
@@ -68,9 +65,8 @@ Address::Address( const QString& address )
    bool ok = false;
    m_port = split.at( 1 ).toUInt( &ok );
    if( ! ok ) {
-      logger << msg::ERROR << tr( "Couldn't decode port: %1\n"
-                                  "Setting it to 50000" ).arg( split.at( 1 ) )
-             << msg::endmsg;
+      REPORT_ERROR( tr( "Couldn't decode port: %1\n"
+                        "Setting it to 50000" ).arg( split.at( 1 ) ) );
       m_port = 50000;
    }
 

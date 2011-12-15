@@ -5,6 +5,7 @@
 
 // Qt include(s):
 #include <QtCore/QBuffer>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -35,6 +36,9 @@ namespace conf {
     * $Date$
     */
    class ConfReader {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( conf::ConfReader )
 
    public:
       /// Constructor

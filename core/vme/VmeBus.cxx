@@ -31,7 +31,7 @@ namespace vme {
       : m_vmeFD( 0 ), m_path( dev_path ), m_addressModifier( 0x39 ),
         m_opened( false ), m_logger( "VmeBus" ) {
 
-      m_logger << msg::VERBOSE << tr( "Creating object" ) << msg::endmsg;;
+      REPORT_VERBOSE( tr( "Creating object" ) );
    }
 
    /**
@@ -71,9 +71,7 @@ namespace vme {
                      &m_vmeFD ) ) {
          m_opened = true;
       } else {
-         m_logger << msg::ERROR
-                  << tr( "The PCIVME driver could not be opened" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "The PCIVME driver could not be opened" ) );
          return 1;
       }
 #else
@@ -101,9 +99,7 @@ namespace vme {
 
 #ifdef HAVE_VME_LIB
       if( VMEclose( m_vmeFD ) ) {
-         m_logger << msg::ERROR
-                  << "Failed to close the PCIVME driver"
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Failed to close the PCIVME driver" ) );
          return 1;
       }
 #endif // HAVE_VME_LIB
@@ -143,19 +139,15 @@ namespace vme {
    int VmeBus::write( Address_t address, char data ) {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( char ), 1, &data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "8bit write > Address: 0x%1; Data: %2" )
-         .arg( address ).arg( data )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "8bit write > Address: 0x%1; Data: %2" )
+                      .arg( address ).arg( data ) );
 #endif // HAVE_VME_LIB
 
       return 0;
@@ -172,19 +164,15 @@ namespace vme {
    int VmeBus::write( Address_t address, int16_t data ) {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( int16_t ), 1, &data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "16bit write > Address: 0x%1; Data: %2" )
-         .arg( address ).arg( data )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "16bit write > Address: 0x%1; Data: %2" )
+                      .arg( address ).arg( data ) );
 #endif // HAVE_VME_LIB
 
       return 0;
@@ -201,19 +189,15 @@ namespace vme {
    int VmeBus::write( Address_t address, int32_t data ) {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( int32_t ), 1, &data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "32bit write > Address: 0x%1; Data: %2" )
-         .arg( address ).arg( data )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "32bit write > Address: 0x%1; Data: %2" )
+                      .arg( address ).arg( data ) );
 #endif // HAVE_VME_LIB
 
       return 0;
@@ -233,19 +217,15 @@ namespace vme {
                       unsigned int length ) {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEwrite( m_vmeFD, address, sizeof( char ), length, data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "Unknown length write > Address: 0x%1; length: %3" )
-         .arg( address ).arg( length )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Unknown length write > Address: 0x%1; length: %3" )
+                      .arg( address ).arg( length ) );
 #endif // HAVE_VME_LIB
 
       return 0;
@@ -262,18 +242,15 @@ namespace vme {
    int VmeBus::read( Address_t address, char* data ) const {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( char ), 1, data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "8-bit read request from address: %1" ).arg( address )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "8-bit read request from address: %1" )
+                      .arg( address ) );
       *data = 100;
 #endif // HAVE_VME_LIB
 
@@ -291,18 +268,15 @@ namespace vme {
    int VmeBus::read( Address_t address, int16_t* data ) const {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( int16_t ), 1, data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "16-bit read request from address: %1" ).arg( address )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "16-bit read request from address: %1" )
+                      .arg( address ) );
       *data = 1000;
 #endif // HAVE_VME_LIB
 
@@ -320,18 +294,15 @@ namespace vme {
    int VmeBus::read( Address_t address, int32_t* data ) const {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( int32_t ), 1, data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "32-bit read request from address: %1" ).arg( address )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "32-bit read request from address: %1" )
+                      .arg( address ) );
 
       if( ( eventCounter >= 0 ) && ( eventCounter < 32 ) ) {
          *data = ( ( eventCounter << 20 ) & 0x01f00000 ) |
@@ -362,19 +333,15 @@ namespace vme {
                      unsigned int length ) const {
 
       if( ! isOpen() ) {
-         m_logger << msg::ERROR
-                  << tr( "VME bus not open yet" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "VME bus not open yet" ) );
          return 1;
       }
 
 #ifdef HAVE_VME_LIB
       VMEread( m_vmeFD, address, sizeof( char ), length, data );
 #else
-      m_logger << msg::VERBOSE
-               << tr( "Unknown size read request from Address: %1; length: %2" )
-         .arg( address ).arg( length )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Unknown size read request from Address: %1; length: %2" )
+                      .arg( address ).arg( length ) );
 #endif // HAVE_VME_LIB
 
       return 0;

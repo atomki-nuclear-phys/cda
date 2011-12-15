@@ -24,7 +24,7 @@ namespace cernlib {
       : m_initialized( false ), m_counter( 0 ),
         m_logger( "cernlib::HistMgr" ) {
 
-      m_logger << msg::VERBOSE << tr( "Object constructed" ) << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object constructed" ) );
    }
 
    /**
@@ -39,6 +39,9 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      m_logger << msg::DEBUG
+               << tr( "Booking global memory block: %1" ).arg( gname )
+               << msg::endmsg;
       return;
 #endif // HAVE_CERNLIB
 
@@ -50,9 +53,8 @@ namespace cernlib {
          // character strings...
          char* name = const_cast< char* >( gname );
          if( ! name ) {
-            m_logger << msg::ERROR
-                     << tr( "Couldn't const_cast specified global memory name" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "Couldn't const_cast specified global "
+                              "memory name" ) );
             return;
          }
 #ifdef HAVE_CERNLIB
@@ -83,6 +85,10 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      REPORT_VERBOSE( tr( "Booking 1D histogram with name \"%1\", channels: %2, "
+                          "lower bound: %3, upper bound: %4" )
+                      .arg( name ).arg( channels ).arg( lowerBound )
+                      .arg( upperBound ) );
       return -1;
 #endif // HAVE_CERNLIB
 
@@ -92,9 +98,7 @@ namespace cernlib {
       // Do this ugly cast to make CERNLIB happy:
       char* lname = const_cast< char* >( name );
       if( ! lname ) {
-         m_logger << msg::ERROR
-                  << tr( "Couldn't const_cast specified histogram name" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Couldn't const_cast specified histogram name" ) );
          return -1;
       }
 
@@ -129,6 +133,10 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      REPORT_VERBOSE( tr( "Booking 2D histogram with name \"%1\", x-channels: %2, "
+                          "x-low: %3, x-up: %4, y-channels: %5, y-low: %6, y-up: %7" )
+                      .arg( name ).arg( xchannels ).arg( xlow ).arg( xup )
+                      .arg( ychannels ).arg( ylow ).arg( yup ) );
       return -1;
 #endif // HAVE_CERNLIB
 
@@ -138,9 +146,7 @@ namespace cernlib {
       // Do this ugly cast to make CERNLIB happy:
       char* lname = const_cast< char* >( name );
       if( ! lname ) {
-         m_logger << msg::ERROR
-                  << tr( "Couldn't const_cast specified histogram name" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Couldn't const_cast specified histogram name" ) );
          return -1;
       }
 
@@ -170,6 +176,8 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      REPORT_VERBOSE( tr( "Filling histogram %1 with data: %2, weight: %3" )
+                      .arg( id ).arg( data ).arg( weight ) );
       return;
 #endif // HAVE_CERNLIB
 
@@ -199,6 +207,9 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      REPORT_VERBOSE( tr( "Filling histogram %1 with xdata: %2, ydata: %3, "
+                          "weight: %4" )
+                      .arg( id ).arg( xdata ).arg( ydata ).arg( weight ) );
       return;
 #endif // HAVE_CERNLIB
 
@@ -223,10 +234,8 @@ namespace cernlib {
    bool HistMgr::checkInit() const {
 
       if( ! m_initialized ) {
-         m_logger << msg::ERROR
-                  << tr( "Trying to create/access histograms without\n"
-                         "initializing the global memory first" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Trying to create/access histograms without\n"
+                           "initializing the global memory first" ) );
          return false;
       }
 

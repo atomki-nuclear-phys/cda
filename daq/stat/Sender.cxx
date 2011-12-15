@@ -18,14 +18,12 @@ namespace cdastat {
       : QThread( parent ), m_mutex(), m_updateTimeout( updateTimeout ),
         m_lastStat(), m_logger( "stat::Sender" ) {
 
-      m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
-
+      REPORT_VERBOSE( tr( "Object created" ) );
    }
 
    Sender::~Sender() {
 
-      m_logger << msg::VERBOSE << tr( "Object deleted" ) << msg::endmsg;
-
+      REPORT_VERBOSE( tr( "Object deleted" ) );
    }
 
    /**
@@ -35,7 +33,6 @@ namespace cdastat {
 
       m_addresses.push_back( address );
       return;
-
    }
 
    /**
@@ -48,7 +45,6 @@ namespace cdastat {
       m_mutex.unlock();
 
       return;
-
    }
 
    /**
@@ -137,7 +133,6 @@ namespace cdastat {
       }
 
       return;
-
    }
 
    /**
@@ -148,13 +143,12 @@ namespace cdastat {
     */
    void Sender::printError( const QTcpSocket& socket ) const {
 
-      m_logger << msg::ERROR
-               << tr( "Could not connect to statistics receiver on address \"%1\", "
-                      "port \"%2\"" ).arg( socket.peerName() )
-         .arg( socket.peerPort() ) << msg::endmsg;
+      REPORT_ERROR( tr( "Could not connect to statistics receiver on "
+                        "address \"%1\", port \"%2\"" )
+                    .arg( socket.peerName() )
+                    .arg( socket.peerPort() ) );
 
       return;
-
    }
 
 } // namespace cdastat

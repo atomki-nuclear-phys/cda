@@ -41,7 +41,7 @@ namespace cernlib {
       : m_fileOpen( false ), m_varNames(), m_variables( 0 ),
         m_events( 0 ), m_logger( "cernlib::NTupleMgr" ) {
 
-      m_logger << msg::VERBOSE << tr( "Object constructed" ) << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object constructed" ) );
    }
 
    /**
@@ -51,7 +51,7 @@ namespace cernlib {
    NTupleMgr::~NTupleMgr() {
 
       closeFile();
-      m_logger << msg::VERBOSE << tr( "Object destructed" ) << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object destructed" ) );
    }
 
    /**
@@ -70,15 +70,14 @@ namespace cernlib {
 
 // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      REPORT_VERBOSE( tr( "Adding variable with name: %1" ).arg( name ) );
       return -1;
 #endif // HAVE_CERNLIB
 
       // Check that the file is not yet open:
       if( m_fileOpen ) {
-         m_logger << msg::ERROR
-                  << tr( "You can't add new variables when the output file\n"
-                         "is already open!" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "You can't add new variables when the output file\n"
+                           "is already open!" ) );
          return -1;
       }
 
@@ -102,6 +101,7 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      REPORT_VERBOSE( tr( "Opening output file: %1" ).arg( fileName ) );
       return false;
 #endif // HAVE_CERNLIB
 
@@ -137,9 +137,7 @@ namespace cernlib {
       sprintf( n, "N" );
       if( snprintf( hname, sizeof( hname ), "%s",
                     fileName.toLatin1().constData() ) > ( int ) sizeof( hname ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Output file name too long. File not opened!" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Output file name too long. File not opened!" ) );
          return false;
       }
 
@@ -153,9 +151,7 @@ namespace cernlib {
       // Try to open the output file:
       HROPEN( HFILE_ID, aq, hname, n, record_size, istat );
       if( istat ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem opening: %1" ).arg( hname )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "There was a problem opening: %1" ).arg( hname ) );
          return false;
       } else {
          m_logger << msg::INFO << tr( "\"%1\" opened" ).arg( hname )
@@ -244,22 +240,22 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
+      REPORT_VERBOSE( tr( "Setting variable %1 to: %2" )
+                      .arg( index ).arg( value ) );
       return false;
 #endif // HAVE_CERNLIB
 
       // Check that the file is already open:
       if( ! m_fileOpen ) {
-         m_logger << msg::ERROR
-                  << tr( "You should not be setting variables before opening\n"
-                         "an output file!" ) << msg::endmsg;
+         REPORT_ERROR( tr( "You should not be setting variables before opening\n"
+                           "an output file!" ) );
          return false;
       }
 
       // Check that this is a valid index:
       if( ( ! ( index < ( int ) m_varNames.size() ) ) || ( index < 0 ) ) {
-         m_logger << msg::ERROR
-                  << tr( "Index %1 is not defined in the ntuple!" ).arg( index )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Index %1 is not defined in the ntuple!" )
+                       .arg( index ) );
          return false;
       }
 
@@ -283,9 +279,8 @@ namespace cernlib {
 
       // Check that the output file is open:
       if( ! m_fileOpen ) {
-         m_logger << msg::ERROR
-                  << tr( "saveEvent() should only be called when an output\n"
-                         "file is already open!" ) << msg::endmsg;
+         REPORT_ERROR( tr( "saveEvent() should only be called when an output\n"
+                           "file is already open!" ) );
          return;
       }
 

@@ -159,8 +159,9 @@ namespace moni {
 
       // Check if the configured values make sense:
       if( ! ( m_up > m_low ) ) {
-         m_logger << msg::ERROR << "The upper bound of histogram '" << m_title
-                  << "' is not larger than its lower bound" << msg::endmsg;
+         REPORT_ERROR( tr( "The upper bound of histogram '%1' "
+                           "is not larger than its lower bound" )
+                       .arg( m_title ) );
       }
 
       update();
@@ -179,8 +180,8 @@ namespace moni {
 
       // Check if the given parameters make sense:
       if( std::isnan( value ) || std::isnan( weight ) ) {
-         m_logger << msg::ERROR << "fill( value = " << value << ", weight = " << weight
-                  << " ): NaN received" << msg::endmsg;
+         REPORT_ERROR( tr( "fill( value = %1, weight = %2 ): NaN received" )
+                       .arg( value ).arg( weight ) );
          return;
       }
 
@@ -672,8 +673,8 @@ namespace moni {
 
       // Check if this binning is possible:
       if( ! ( low > 0.0 ) ) {
-         m_logger << msg::ERROR << "Unable to use logarithmic style with limits ["
-                  << low << "," << up << "]" << msg::endmsg;
+         REPORT_ERROR( tr( "Unable to use logarithmic style with limits [%1,%2]" )
+                       .arg( low ).arg( up ) );
          AxisBinning result( Logarithmic, low, up, alength );
          return result;
       }
@@ -789,7 +790,7 @@ namespace moni {
             view_minimum = 0.1;
          }
       } else {
-         m_logger << msg::ERROR << "Unknown Y axis style!" << msg::endmsg;
+         REPORT_ERROR( tr( "Unknown Y axis style!" ) );
          view_maximum = maximum;
          view_minimum = minimum;
       }
@@ -810,8 +811,9 @@ namespace moni {
       }
 
       // Handle programming errors gracefully:
-      m_logger << msg::ERROR << "Binning style for the X axis (" << m_xAxisStyle
-               << ") not understood, using linear binning" << msg::endmsg;
+      REPORT_ERROR( tr( "Binning style for the X axis (%1) "
+                        "not understood, using linear binning" )
+                    .arg( m_xAxisStyle ) );
       return getLinearAxisBinning( m_low, m_up, axis_length );
    }
 
@@ -830,8 +832,9 @@ namespace moni {
       }
 
       // Handle programming errors gracefully:
-      m_logger << msg::ERROR << "Binning style for the Y axis (" << m_yAxisStyle
-               << ") not understood, using linear binning" << msg::endmsg;
+      REPORT_ERROR( tr( "Binning style for the Y axis (%1) "
+                        "not understood, using linear binning" )
+                    .arg( m_yAxisStyle ) );
       return getLinearAxisBinning( limits.first, limits.second, axis_length );
    }
 
@@ -867,7 +870,7 @@ namespace moni {
             return std::make_pair( false, -1 );
          }
       } else {
-         m_logger << msg::ERROR << "Unknown axis style encountered" << msg::endmsg;
+         REPORT_ERROR( tr( "Unknown axis style encountered" ) );
          return std::make_pair( false, -1 );
       }
    }
