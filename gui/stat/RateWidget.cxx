@@ -2,6 +2,7 @@
 
 // STL include(s):
 #include <algorithm>
+#include <cmath>
 
 // Qt include(s):
 #include <QtCore/QPoint>
@@ -110,7 +111,9 @@ namespace cdastat {
       int column = 0;
       for( std::list< qreal >::const_iterator it = m_rateValues.begin();
            it != m_rateValues.end(); ++it, ++column ) {
-         const int marks = ( ( height() - 30 ) / mark_height ) * ( *it / view_maximum );
+         const int marks =
+            static_cast< int >( std::floor( ( ( height() - 30 ) / mark_height ) *
+                                            ( *it / view_maximum ) ) );
          for( int mark = 0; mark < marks; ++mark ) {
             const qreal rect_x = 5 + column * mark_width;
             const qreal rect_y = ( height() - 5 - mark_height ) - ( mark * mark_height );

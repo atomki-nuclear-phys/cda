@@ -438,6 +438,11 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_OpenDigitizer( convert( type ), linkNum, conetNode,
                                       vmeAddress, &m_handle ) );
+#else
+      REPORT_VERBOSE( tr( "Opening connection type %1 on link number %2, "
+                          " CONET node %3, VME address %4" )
+                      .arg( convertConnType( type ) ).arg( linkNum )
+                      .arg( conetNode ).arg( vmeAddress ) );
 #endif // HAVE_CAEN_LIBS
 
       // Let the user know what we did:
@@ -608,6 +613,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetAcquisitionMode( m_handle,
                                            convert( mode ) ) );
+#else
+      REPORT_VERBOSE( tr( "Setting acquisition mode to %1" )
+                      .arg( mode ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -622,6 +630,8 @@ namespace caen {
       CHECK( CAEN_DGTZ_GetAcquisitionMode( m_handle,
                                            &cmode ) );
       mode = convert( cmode );
+#else
+      mode = ACQ_SW_Controlled;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -635,6 +645,9 @@ namespace caen {
       CHECK( CAEN_DGTZ_SetInterruptConfig( m_handle, CAEN_DGTZ_DISABLE,
                                            0, 0, event_number,
                                            CAEN_DGTZ_IRQ_MODE_RORA ) );
+#else
+      REPORT_VERBOSE( tr( "Setting interrupt to happen after %1 events" )
+                      .arg( event_number ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -691,6 +704,9 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetSWTriggerMode( m_handle, convert( mode ) ) );
+#else
+      REPORT_VERBOSE( tr( "Setting SW trigger mode to %1" )
+                      .arg( mode ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -703,6 +719,8 @@ namespace caen {
       CAEN_DGTZ_TriggerMode_t cmode;
       CHECK( CAEN_DGTZ_GetSWTriggerMode( m_handle, &cmode ) );
       mode = convert( cmode );
+#else
+      mode = TRIG_Disabled;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -714,6 +732,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetExtTriggerInputMode( m_handle,
                                                convert( mode ) ) );
+#else
+      REPORT_VERBOSE( tr( "Setting Ext trigger mode to %1" )
+                      .arg( mode ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -726,6 +747,8 @@ namespace caen {
       CAEN_DGTZ_TriggerMode_t cmode;
       CHECK( CAEN_DGTZ_GetExtTriggerInputMode( m_handle, &cmode ) );
       mode = convert( cmode );
+#else
+      mode = TRIG_Disabled;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -738,6 +761,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetChannelSelfTrigger( m_handle, convert( mode ),
                                               toMask( channel ) ) );
+#else
+      REPORT_VERBOSE( tr( "Setting channel %1 self-trigger mode to %2" )
+                      .arg( channel ).arg( mode ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -752,6 +778,10 @@ namespace caen {
       CHECK( CAEN_DGTZ_GetChannelSelfTrigger( m_handle, channel,
                                               &cmode ) );
       mode = convert( cmode );
+#else
+      REPORT_VERBOSE( tr( "Requesting channel %1's self-trigger mode" )
+                      .arg( channel ) );
+      mode = TRIG_Disabled;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -764,6 +794,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetGroupSelfTrigger( m_handle, convert( mode ),
                                             toMask( group ) ) );
+#else
+      REPORT_VERBOSE( tr( "Setting group %1 self-trigger mode to %2" )
+                      .arg( group ).arg( mode ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -778,6 +811,10 @@ namespace caen {
       CHECK( CAEN_DGTZ_GetGroupSelfTrigger( m_handle, group,
                                             &cmode ) );
       mode = convert( cmode );
+#else
+      REPORT_VERBOSE( tr( "Requesting group %1's self-trigger mode" )
+                      .arg( group ) );
+      mode = TRIG_Disabled;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -790,6 +827,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetChannelGroupMask( m_handle, group,
                                             mask ) );
+#else
+      REPORT_VERBOSE( tr( "Setting group %1's channel mask to %2" )
+                      .arg( group ).arg( mask ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -802,6 +842,10 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetChannelGroupMask( m_handle, group,
                                             &mask ) );
+#else
+      REPORT_VERBOSE( tr( "Requestuing group %1's channel mask" )
+                      .arg( group ) );
+      mask = 0;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -814,6 +858,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetChannelTriggerThreshold( m_handle, channel,
                                                    thr ) );
+#else
+      REPORT_VERBOSE( tr( "Setting channel %1's trigger threshold to %2" )
+                      .arg( channel ).arg( thr ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -826,6 +873,10 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetChannelTriggerThreshold( m_handle, channel,
                                                    &thr ) );
+#else
+      REPORT_VERBOSE( tr( "Retrieving trigger threshold for channel %1" )
+                      .arg( channel ) );
+      thr = 0;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -838,6 +889,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetGroupTriggerThreshold( m_handle, group,
                                                  thr ) );
+#else
+      REPORT_VERBOSE( tr( "Setting group %1's trigger threshold to %2" )
+                      .arg( group ).arg( thr ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -850,6 +904,10 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetGroupTriggerThreshold( m_handle, group,
                                                  &thr ) );
+#else
+      REPORT_VERBOSE( tr( "Retrieving trigger threshold for group %1" )
+                      .arg( group ) );
+      thr = 0;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -860,6 +918,9 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetChannelEnableMask( m_handle, mask ) );
+#else
+      REPORT_VERBOSE( tr( "Channel enable mask set to %1" )
+                      .arg( mask ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -870,6 +931,8 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetChannelEnableMask( m_handle, &mask ) );
+#else
+      mask = 0;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -880,6 +943,9 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetGroupEnableMask( m_handle, mask ) );
+#else
+      REPORT_VERBOSE( tr( "Group enable mask set to %1" )
+                      .arg( mask ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -890,6 +956,8 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetGroupEnableMask( m_handle, &mask ) );
+#else
+      mask = 0;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -900,6 +968,9 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetRecordLength( m_handle, size ) );
+#else
+      REPORT_VERBOSE( tr( "Record length set to %1" )
+                      .arg( size ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -910,6 +981,8 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetRecordLength( m_handle, &size ) );
+#else
+      size = 100;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -920,6 +993,9 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetPostTriggerSize( m_handle, percent ) );
+#else
+      REPORT_VERBOSE( tr( "Post trigger size set to %1\%" )
+                      .arg( percent ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -930,6 +1006,8 @@ namespace caen {
 
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetPostTriggerSize( m_handle, &percent ) );
+#else
+      percent = 100;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -942,6 +1020,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetChannelDCOffset( m_handle, channel,
                                            value ) );
+#else
+      REPORT_VERBOSE( tr( "Setting channel %1's DC offset to %2" )
+                      .arg( channel ).arg( value ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -954,6 +1035,10 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetChannelDCOffset( m_handle, channel,
                                            &value ) );
+#else
+      REPORT_VERBOSE( tr( "Retrieving channel %1's DC offset" )
+                      .arg( channel ) );
+      value = 0;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -966,6 +1051,9 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_SetGroupDCOffset( m_handle, group,
                                          value ) );
+#else
+      REPORT_VERBOSE( tr( "Setting group %1's DC offset to %2" )
+                      .arg( group ).arg( value ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -978,6 +1066,10 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetGroupDCOffset( m_handle, group,
                                          &value ) );
+#else
+      REPORT_VERBOSE( tr( "Retrieving group %1's DC offset" )
+                      .arg( group ) );
+      value = 0;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:

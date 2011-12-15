@@ -83,7 +83,7 @@ win32 {
 # Uncomment the following if you have CERNLIB installed on your
 # system.
 #
-#DEFINES += HAVE_CERNLIB
+DEFINES += HAVE_CERNLIB
 
 #
 # Compiler settings. In order to be able to link against CERNLIB on

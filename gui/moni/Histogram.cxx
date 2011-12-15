@@ -342,7 +342,8 @@ namespace moni {
       for( ; major_itr != major_end; ++major_itr ) {
 
          // Calculate the position of the tick:
-         const int tick_location = axis_start + major_itr->position();
+         const int tick_location =
+            static_cast< int >( std::floor( axis_start + major_itr->position() ) );
          if( ( tick_location < axis_start ) ||
              ( tick_location > ( width() - 20 ) ) ) continue;
 
@@ -385,7 +386,8 @@ namespace moni {
       std::vector< AxisBinning::MinorTick >::const_iterator minor_end =
          abin.minors().end();
       for( ; minor_itr != minor_end; ++minor_itr ) {
-         const int tick_location = axis_start + minor_itr->position();
+         const int tick_location =
+            static_cast< int >( std::floor( axis_start + minor_itr->position() ) );
          if( ( tick_location < axis_start ) ||
              ( tick_location > ( width() - 20 ) ) ) continue;
          painter.drawLine( QLine( tick_location, height() - X_AXIS_SPACING,
@@ -421,7 +423,8 @@ namespace moni {
       for( ; major_itr != major_end; ++major_itr ) {
 
          // Calculate the position of the tick:
-         const int tick_location = axis_start - major_itr->position();
+         const int tick_location =
+            static_cast< int >( std::floor( axis_start - major_itr->position() ) );
          if( ( tick_location < 20 ) || ( tick_location > axis_start ) ) continue;
 
          // Draw the line of the tick:
@@ -461,7 +464,8 @@ namespace moni {
       std::vector< AxisBinning::MinorTick >::const_iterator minor_end =
          abin.minors().end();
       for( ; minor_itr != minor_end; ++minor_itr ) {
-         const int tick_location = axis_start - minor_itr->position();
+         const int tick_location =
+            static_cast< int >( std::floor( axis_start - minor_itr->position() ) );
          if( ( tick_location < 20 ) || ( tick_location > axis_start ) ) continue;
          painter.drawLine( QLine( Y_AXIS_SPACING - TICK_LENGTH_MINOR, tick_location,
                                   Y_AXIS_SPACING, tick_location ) );
@@ -500,9 +504,15 @@ namespace moni {
             continue;
          }
 
-         const int y_bin_pos = y_axis_start - ybin.getDrawPosition( m_values[ i + 1 ] );
-         const int x_bin_low_pos = xbin.getDrawPosition( m_low + i * bin_width );
-         const int x_bin_up_pos  = xbin.getDrawPosition( m_low + ( i + 1 ) * bin_width );
+         const int y_bin_pos =
+            static_cast< int >( std::floor( y_axis_start -
+                                            ybin.getDrawPosition( m_values[ i + 1 ] ) ) );
+         const int x_bin_low_pos =
+            static_cast< int >( std::floor( xbin.getDrawPosition( m_low +
+                                                                  i * bin_width ) ) );
+         const int x_bin_up_pos =
+            static_cast< int >( std::floor( xbin.getDrawPosition( m_low +
+                                                                  ( i + 1 ) * bin_width ) ) );
 
          // Another security check:
          if( ( x_bin_low_pos < 0.0 ) || ( x_bin_up_pos < 0.0 ) ) continue;
@@ -600,8 +610,10 @@ namespace moni {
       //
       // Number of ticks for the axis:
       //
-      const int n_major_ticks = std::ceil( ( up - low ) / tick_major_unit ) + 1.0;
-      const int n_minor_ticks = std::floor( ( up - low ) / tick_minor_unit ) + 1.0;
+      const int n_major_ticks =
+         static_cast< int >( std::ceil( ( up - low ) / tick_major_unit ) + 1.0 );
+      const int n_minor_ticks =
+         static_cast< int >( std::floor( ( up - low ) / tick_minor_unit ) + 1.0 );
 
       //
       // Offsets of the first major and minor tick marks:
@@ -695,7 +707,8 @@ namespace moni {
       // Number of ticks for the axis:
       //
       const int n_major_ticks =
-         std::ceil( ( up_log - low_log ) / tick_major_exponent_unit ) + 1.0;
+         static_cast< int >( std::ceil( ( up_log - low_log ) /
+                                        tick_major_exponent_unit ) + 1.0 );
 
       //
       // Offset of the first major tick mark:
@@ -839,13 +852,14 @@ namespace moni {
       } else if( abin.getStyle() == Logarithmic ) {
          if( abin.majors().back().value() > 1000.0 ) {
             // Take an average of the exponents:
-            int exponent = 0.0;
+            int exponent = 0;
             std::vector< AxisBinning::MajorTick >::const_iterator itr =
                abin.majors().begin();
             std::vector< AxisBinning::MajorTick >::const_iterator end =
                abin.majors().end();
             for( ; itr != end; ++itr ) {
-               exponent += std::floor( std::log10( itr->value() ) );
+               exponent +=
+                  static_cast< int >( std::floor( std::log10( itr->value() ) ) );
             }
             exponent /= abin.majors().size();
             return std::make_pair( true, exponent );
