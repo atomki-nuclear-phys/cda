@@ -69,7 +69,7 @@ namespace dt5740 {
       //
       m_connectionBox = new QGroupBox( tr( "Connection parameters" ),
                                        m_scrollWidget );
-      m_connectionBox->setGeometry( QRect( 10, 245, WIDGET_WIDTH - 30, 90 ) );
+      m_connectionBox->setGeometry( QRect( 10, 245, WIDGET_WIDTH - 40, 90 ) );
 
       m_connModeLabel = new QLabel( tr( "Connection mode:" ),
                                     m_connectionBox);
@@ -89,7 +89,7 @@ namespace dt5740 {
       m_connLinkLabel->setGeometry( QRect( 10, 55, 130, 25 ) );
 
       m_connLink = new QSpinBox( m_connectionBox );
-      m_connLink->setGeometry( QRect( 180, 55, 250, 25 ) );
+      m_connLink->setGeometry( QRect( 180, 55, 150, 25 ) );
       m_connLink->setRange( 0, 10 );
       m_connLink->setToolTip( "In USB mode this means the ID given by the OS "
                               "to the USB connection. If this is the only such "
@@ -102,7 +102,7 @@ namespace dt5740 {
       //
       m_triggerBox = new QGroupBox( tr( "Trigger settings" ),
                                     m_scrollWidget );
-      m_triggerBox->setGeometry( QRect( 10, 345, WIDGET_WIDTH - 30, 180 ) );
+      m_triggerBox->setGeometry( QRect( 10, 345, WIDGET_WIDTH - 40, 180 ) );
 
       m_trigOvlpEnabledWidget = new QCheckBox( tr( "Enable trigger overlaps" ),
                                                m_triggerBox );
@@ -154,7 +154,7 @@ namespace dt5740 {
       //
       m_acquisitionBox = new QGroupBox( tr( "Data acquisition settings" ),
                                         m_scrollWidget );
-      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 30, 120 ) );
+      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 120 ) );
 
       m_patGenEnabledWidget = new QCheckBox( tr( "Enable test pattern generation" ),
                                              m_acquisitionBox );
