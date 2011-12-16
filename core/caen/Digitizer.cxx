@@ -341,6 +341,66 @@ namespace {
       return ( 0x1 << channel );
    }
 
+   /// Convert between read mode enumerations
+   CAEN_DGTZ_ReadMode_t convert( caen::Digitizer::ReadMode mode ) {
+
+      switch( mode ) {
+
+      case caen::Digitizer::READ_SlaveTerminatedMBLT:
+         return CAEN_DGTZ_SLAVE_TERMINATED_READOUT_MBLT;
+         break;
+      case caen::Digitizer::READ_SlaveTerminated2eVME:
+         return CAEN_DGTZ_SLAVE_TERMINATED_READOUT_2eVME;
+         break;
+      case caen::Digitizer::READ_SlaveTerminated2eSST:
+         return CAEN_DGTZ_SLAVE_TERMINATED_READOUT_2eSST;
+         break;
+      case caen::Digitizer::READ_PollingMBLT:
+         return CAEN_DGTZ_POLLING_MBLT;
+         break;
+      case caen::Digitizer::READ_Polling2eVME:
+         return CAEN_DGTZ_POLLING_2eVME;
+         break;
+      case caen::Digitizer::READ_Polling2eSST:
+         return CAEN_DGTZ_POLLING_2eSST;
+         break;
+      default:
+         return static_cast< CAEN_DGTZ_ReadMode_t >( 10L );
+         break;
+      }
+      return static_cast< CAEN_DGTZ_ReadMode_t >( 10L );
+   }
+
+   /// Convert read mode into human readable format
+   const char* toString( caen::Digitizer::ReadMode mode ) {
+
+      switch( mode ) {
+
+      case caen::Digitizer::READ_SlaveTerminatedMBLT:
+         return "CAEN_DGTZ_SLAVE_TERMINATED_READOUT_MBLT";
+         break;
+      case caen::Digitizer::READ_SlaveTerminated2eVME:
+         return "CAEN_DGTZ_SLAVE_TERMINATED_READOUT_2eVME";
+         break;
+      case caen::Digitizer::READ_SlaveTerminated2eSST:
+         return "CAEN_DGTZ_SLAVE_TERMINATED_READOUT_2eSST";
+         break;
+      case caen::Digitizer::READ_PollingMBLT:
+         return "CAEN_DGTZ_POLLING_MBLT";
+         break;
+      case caen::Digitizer::READ_Polling2eVME:
+         return "CAEN_DGTZ_POLLING_2eVME";
+         break;
+      case caen::Digitizer::READ_Polling2eSST:
+         return "CAEN_DGTZ_POLLING_2eSST";
+         break;
+      default:
+         return "Unknown";
+         break;
+      }
+      return "Unknown";
+   }
+
 } // private namespace
 
 /// Macro checking the return value of a CAEN Digitizer function
@@ -584,6 +644,42 @@ namespace caen {
 
       // Signal a successful operation:
       return true;
+   }
+
+   int Digitizer::convertAcqMode( Digitizer::AcquisitionMode mode ) {
+
+      switch( mode ) {
+
+      case ACQ_SW_Controlled:
+         return 0;
+         break;
+      case ACQ_SIn_Controlled:
+         return 1;
+         break;
+      default:
+         return 0;
+         break;
+      }
+
+      return 1000;
+   }
+
+   Digitizer::AcquisitionMode Digitizer::convertAcqMode( int mode ) {
+
+      switch( mode ) {
+
+      case 0:
+         return ACQ_SW_Controlled;
+         break;
+      case 1:
+         return ACQ_SIn_Controlled;
+         break;
+      default:
+         return ACQ_SW_Controlled;
+         break;
+      }
+
+      return static_cast< AcquisitionMode >( 1000 );
    }
 
    bool Digitizer::startAcquisition() {
@@ -1071,6 +1167,172 @@ namespace caen {
       REPORT_VERBOSE( tr( "Retrieving group %1's DC offset" )
                       .arg( group ) );
       value = 0;
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::setMaxNumEventsBLT( uint32_t events ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_SetMaxNumEventsBLT( m_handle, events ) );
+#else
+      REPORT_VERBOSE( tr( "Setting maximum number of events to read out to %1" )
+                      .arg( events ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getMaxNumEventsBLT( uint32_t& events ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_GetMaxNumEventsBLT( m_handle, &events ) );
+#else
+      REPORT_VERBOSE( tr( "Retrieving maximum number of events to read out" ) );
+      events = 0;
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::mallocReadoutBuffer( char** buffer, uint32_t& size ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_MallocReadoutBuffer( m_handle, buffer, &size ) );
+#else
+      REPORT_VERBOSE( tr( "Allocating readout buffer" ) );
+      ( *buffer ) = new char[ 100 ];
+      size = 100;
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::freeReadoutBuffer( char** buffer ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_FreeReadoutBuffer( buffer ) );
+#else
+      REPORT_VERBOSE( tr( "Freeing readout buffer" ) );
+      delete[] ( *buffer );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::readData( ReadMode mode, char* buffer,
+                             uint32_t& bufferSize ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_ReadData( m_handle, convert( mode ),
+                                 buffer, &bufferSize ) );
+#else
+      REPORT_VERBOSE( tr( "Reading data in mode \"%1\"" )
+                      .arg( toString( mode ) ) );
+      *buffer = 0xf5;
+      bufferSize = 1;
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getNumEvents( char* buffer, uint32_t bufferSize,
+                                 uint32_t& numEvents ) const {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_GetNumEvents( m_handle, buffer,
+                                     bufferSize, &numEvents ) );
+#else
+      REPORT_VERBOSE( tr( "Extracting number of events from buffer of size %1" )
+                      .arg( bufferSize ) );
+      numEvents = 1;
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getEvent( char* buffer, uint32_t bufferSize,
+                             int32_t event, EventInfo& eventInfo,
+                             EventData16Bit& eventData ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CAEN_DGTZ_EventInfo_t ei;
+      char* evtPtr = NULL;
+      CAEN_DGTZ_UINT16_EVENT_t* evt = NULL;
+      void* evtVoidPtr = evt;
+      // Get the information about this event:
+      CHECK( CAEN_DGTZ_GetEventInfo( m_handle, buffer, bufferSize,
+                                     event, &ei, &evtPtr ) );
+      // Fill the event info into the output:
+      eventInfo.eventSize      = ei.EventSize;
+      eventInfo.boardId        = ei.BoardId;
+      eventInfo.pattern        = ei.Pattern;
+      eventInfo.channelMask    = ei.ChannelMask;
+      eventInfo.eventCounter   = ei.EventCounter;
+      eventInfo.triggerTimeTag = ei.TriggerTimeTag;
+      // Decode the event:
+      CHECK( CAEN_DGTZ_DecodeEvent( m_handle, evtPtr,
+                                    &evtVoidPtr ) );
+      // Fill the event data to the output:
+      for( int i = 0; i < EventData16Bit::MAX_CHANNEL_NUMBER; ++i ) {
+         eventData.chSize[ i ] = evt->ChSize[ i ];
+         eventData.chData[ i ].resize( eventData.chSize[ i ], 0 );
+         for( uint32_t j = 0; j < eventData.chSize[ i ]; ++j ) {
+            eventData.chData[ i ][ j ] = evt->DataChannel[ i ][ j ];
+         }
+      }
+      // Free the allocated memory:
+      CHECK( CAEN_DGTZ_FreeEvent( m_handle, &evtVoidPtr ) );
+#else
+
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
+   bool Digitizer::getEvent( char* buffer, uint32_t bufferSize,
+                             int32_t event, EventInfo& eventInfo,
+                             EventData8Bit& eventData ) {
+
+#ifdef HAVE_CAEN_LIBS
+      CAEN_DGTZ_EventInfo_t ei;
+      char* evtPtr = NULL;
+      CAEN_DGTZ_UINT8_EVENT_t* evt = NULL;
+      void* evtVoidPtr = evt;
+      // Get the information about this event:
+      CHECK( CAEN_DGTZ_GetEventInfo( m_handle, buffer, bufferSize,
+                                     event, &ei, &evtPtr ) );
+      // Fill the event info into the output:
+      eventInfo.eventSize      = ei.EventSize;
+      eventInfo.boardId        = ei.BoardId;
+      eventInfo.pattern        = ei.Pattern;
+      eventInfo.channelMask    = ei.ChannelMask;
+      eventInfo.eventCounter   = ei.EventCounter;
+      eventInfo.triggerTimeTag = ei.TriggerTimeTag;
+      // Decode the event:
+      CHECK( CAEN_DGTZ_DecodeEvent( m_handle, evtPtr,
+                                    &evtVoidPtr ) );
+      // Fill the event data to the output:
+      for( int i = 0; i < EventData8Bit::MAX_CHANNEL_NUMBER; ++i ) {
+         eventData.chSize[ i ] = evt->ChSize[ i ];
+         eventData.chData[ i ].resize( eventData.chSize[ i ], 0 );
+         for( uint32_t j = 0; j < eventData.chSize[ i ]; ++j ) {
+            eventData.chData[ i ][ j ] = evt->DataChannel[ i ][ j ];
+         }
+      }
+      // Free the allocated memory:
+      CHECK( CAEN_DGTZ_FreeEvent( m_handle, &evtVoidPtr ) );
+#else
+
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:

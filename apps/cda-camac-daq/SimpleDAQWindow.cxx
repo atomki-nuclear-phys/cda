@@ -195,6 +195,7 @@ void SimpleDAQWindow::readConfigSlot() {
                                                     tr( "default.cxml" ),
                                                     tr( "CDA XML setup files (*.cxml);;"
                                                         "All files (*)" ) );
+   QApplication::setFont( gui::DefaultFont() );
 
    // If the user cancels the file selection, don't continue:
    if( fileName.isEmpty() ) {

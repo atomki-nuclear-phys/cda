@@ -120,6 +120,7 @@ void ConfigEditorWindow::readConfigSlot() {
                                     tr( "CDA XML setup files (*.cxml);;"
                                         "CDA binary setup files (*.cbin);;"
                                         "All files (*)" ) );
+   QApplication::setFont( gui::DefaultFont() );
 
    // If the cancel button has been pushed, don't continue:
    if( fileName.isEmpty() ) return;
@@ -160,6 +161,7 @@ void ConfigEditorWindow::writeConfigAsSlot() {
                                     tr( "default.cxml" ),
                                     tr( "CDA XML setup files (*.cxml);;"
                                         "CDA binary setup files (*.cbin)" ) );
+   QApplication::setFont( gui::DefaultFont() );
 
    // If the cancel button has been pushed, don't continue:
    if( fileName.isEmpty() ) return;

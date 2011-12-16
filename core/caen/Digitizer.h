@@ -90,6 +90,11 @@ namespace caen {
          ACQ_SIn_Controlled = 1  ///< Acquisition starts on SIn signal
       };
 
+      /// Helper function converting the acquisition mode
+      static int convertAcqMode( AcquisitionMode mode );
+      /// Helper function converting the acquisition mode
+      static AcquisitionMode convertAcqMode( int mode );
+
       /// Start the data acquisition by the digitizer
       bool startAcquisition();
       /// Stop the data acquisition by the digitizer
@@ -185,6 +190,62 @@ namespace caen {
       /// Retrieves the DC offset of a group
       bool getGroupDCOffset( uint32_t group,
                              uint32_t& value ) const;
+
+      /// Sets the maximum number of events during readout
+      bool setMaxNumEventsBLT( uint32_t events );
+      /// Retrieves the maximum number of events during readout
+      bool getMaxNumEventsBLT( uint32_t& events ) const;
+
+      /// Data reading modes
+      enum ReadMode {
+         READ_SlaveTerminatedMBLT  = 0,
+         READ_SlaveTerminated2eVME = 1,
+         READ_SlaveTerminated2eSST = 2,
+         READ_PollingMBLT          = 3,
+         READ_Polling2eVME         = 4,
+         READ_Polling2eSST         = 5
+      };
+
+      /// Event information
+      struct EventInfo {
+         uint32_t eventSize;
+         uint32_t boardId;
+         uint32_t pattern;
+         uint32_t channelMask;
+         uint32_t eventCounter;
+         uint32_t triggerTimeTag;
+      };
+
+      /// Event data
+      struct EventData16Bit {
+         static const int MAX_CHANNEL_NUMBER = 64;
+         uint32_t                chSize[ MAX_CHANNEL_NUMBER ];
+         std::vector< uint16_t > chData[ MAX_CHANNEL_NUMBER ];
+      };
+      struct EventData8Bit {
+         static const int MAX_CHANNEL_NUMBER = 8;
+         uint32_t               chSize[ MAX_CHANNEL_NUMBER ];
+         std::vector< uint8_t > chData[ MAX_CHANNEL_NUMBER ];
+      };
+
+      /// Allocates the readout buffer in memory
+      bool mallocReadoutBuffer( char** buffer, uint32_t& size );
+      /// Frees the memory allocated for the readout buffer
+      bool freeReadoutBuffer( char** buffer );
+      /// Read data from the digitizer
+      bool readData( ReadMode mode, char* buffer,
+                     uint32_t& bufferSize );
+      /// Get the number of events in the readout buffer
+      bool getNumEvents( char* buffer, uint32_t bufferSize,
+                         uint32_t& numEvents ) const;
+      /// Get the data of one of the events in the readout buffer
+      bool getEvent( char* buffer, uint32_t bufferSize,
+                     int32_t event, EventInfo& eventInfo,
+                     EventData16Bit& eventData );
+      /// Get the data of one of the events in the readout buffer
+      bool getEvent( char* buffer, uint32_t bufferSize,
+                     int32_t event, EventInfo& eventInfo,
+                     EventData8Bit& eventData );
 
    private:
       int m_handle; ///< C-style device handle

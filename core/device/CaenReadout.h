@@ -93,7 +93,7 @@ namespace dev {
        *
        * @returns The event fragment coming from this device
        */
-      virtual ev::Fragment* readEvent() const = 0;
+      virtual ev::Fragment* readEvent() = 0;
 
    }; // class CaenReadout
 

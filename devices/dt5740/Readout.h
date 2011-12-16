@@ -54,7 +54,7 @@ namespace dt5740 {
       virtual bool stop();
 
       /// Function reading a single event from the device
-      virtual ev::Fragment* readEvent() const;
+      virtual ev::Fragment* readEvent();
 
    private:
       /// Get the external trigger mode
@@ -68,8 +68,18 @@ namespace dt5740 {
       static const uint32_t REG_SCRATCH = 0xef20;
       /// Address of the group configuration register
       static const uint32_t REG_GROUP_CONFIG = 0x8000;
+      /// Address of the event number register
+      static const uint32_t REG_EVENT_STORED = 0x812c;
 
       caen::Digitizer m_digitizer; ///< Connection to the hardware
+
+      char* m_buffer; ///< Event buffer used during data readout
+      uint32_t m_bufferSize; ///< Total size of the event buffer
+      uint32_t m_eventSize; ///< Size of the current payload in the readout buffer
+      uint32_t m_numEvents; ///< Number of events in the current readout buffer
+      uint32_t m_currentEvent; ///< Current event to be read out from the buffer
+      caen::Digitizer::EventInfo m_eventInfo; ///< Event information
+      caen::Digitizer::EventData16Bit m_event; ///< Event data
 
       mutable msg::Logger m_logger; ///< Message logger object
 

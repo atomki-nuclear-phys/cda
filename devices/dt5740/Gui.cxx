@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 30, 2500 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 30, 2530 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -154,7 +154,7 @@ namespace dt5740 {
       //
       m_acquisitionBox = new QGroupBox( tr( "Data acquisition settings" ),
                                         m_scrollWidget );
-      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 120 ) );
+      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 150 ) );
 
       m_patGenEnabledWidget = new QCheckBox( tr( "Enable test pattern generation" ),
                                              m_acquisitionBox );
@@ -162,12 +162,23 @@ namespace dt5740 {
       connect( m_patGenEnabledWidget, SIGNAL( toggled( bool ) ),
                this, SLOT( patGenEnabledSlot( bool ) ) ); 
 
+      m_acqModeLabel = new QLabel( tr( "Acquisition mode:" ),
+                                   m_acquisitionBox );
+      m_acqModeLabel->setGeometry( QRect( 10, 55, 150, 25 ) );
+
+      m_acqModeWidget = new QComboBox( m_acquisitionBox );
+      m_acqModeWidget->setGeometry( QRect( 180, 55, 250, 25 ) );
+      m_acqModeWidget->addItem( "Register controlled" );
+      m_acqModeWidget->addItem( "GPI controlled" );
+      connect( m_acqModeWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( acqModeSlot( int ) ) );
+
       m_gateModeLabel = new QLabel( tr( "Gate mode:" ),
                                     m_acquisitionBox );
-      m_gateModeLabel->setGeometry( QRect( 10, 55, 150, 25 ) );
+      m_gateModeLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
 
       m_gateModeWidget = new QComboBox( m_acquisitionBox );
-      m_gateModeWidget->setGeometry( QRect( 180, 55, 250, 25 ) );
+      m_gateModeWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
       m_gateModeWidget->addItem( "Window" );
       m_gateModeWidget->addItem( "Single shot" );
       connect( m_gateModeWidget, SIGNAL( currentIndexChanged( int ) ),
@@ -175,10 +186,10 @@ namespace dt5740 {
 
       m_bufferModeLabel = new QLabel( tr( "Buffer mode:" ),
                                       m_acquisitionBox );
-      m_bufferModeLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
+      m_bufferModeLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
 
       m_bufferModeWidget = new QComboBox( m_acquisitionBox );
-      m_bufferModeWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
+      m_bufferModeWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
       m_bufferModeWidget->setToolTip( "You can choose how many samples should be "
                                       "collected after each trigger, using this "
                                       "property." );
@@ -203,7 +214,7 @@ namespace dt5740 {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 665 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 695 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
    }
@@ -232,6 +243,8 @@ namespace dt5740 {
       delete m_triggerBox;
 
       delete m_patGenEnabledWidget;
+      delete m_acqModeLabel;
+      delete m_acqModeWidget;
       delete m_gateModeLabel;
       delete m_gateModeWidget;
       delete m_bufferModeLabel;
@@ -354,6 +367,25 @@ namespace dt5740 {
       return;
    }
 
+   void Gui::acqModeSlot( int index ) {
+
+      // Translate the state of the combo box into an enumeration value:
+      switch( index ) {
+
+      case 0:
+         m_acqMode = caen::Digitizer::ACQ_SW_Controlled;
+         break;
+      case 1:
+         m_acqMode = caen::Digitizer::ACQ_SIn_Controlled;;
+         break;
+      default:
+         REPORT_ERROR( tr( "Acquisition mode not recognized" ) );
+         break;
+      }
+
+      return;
+   }
+
    void Gui::gateModeSlot( int index ) {
 
       // Translate the state of the combo box into an enumeration value:
@@ -468,6 +500,7 @@ namespace dt5740 {
       m_extTrigOutEnabledWidget->setEnabled( true );
 
       // Set the trigger mode:
+      m_trigModeWidget->setEnabled( false );
       switch( m_trigMode ) {
 
       case TriggerOnInputOverThreshold:
@@ -479,7 +512,8 @@ namespace dt5740 {
       default:
          REPORT_ERROR( tr( "Trigger mode not recognized" ) );
          break;
-      } 
+      }
+      m_trigModeWidget->setEnabled( true );
 
       // Set the percentage of post trigger samples:
       m_postTrigPercentageWidget->setEnabled( false );
@@ -491,7 +525,24 @@ namespace dt5740 {
       m_patGenEnabledWidget->setChecked( m_patGenEnabled );
       m_patGenEnabledWidget->setEnabled( true );
 
+      // Set the acquisition mode:
+      m_acqModeWidget->setEnabled( false );
+      switch( m_acqMode ) {
+
+      case caen::Digitizer::ACQ_SW_Controlled:
+         m_acqModeWidget->setCurrentIndex( 0 );
+         break;
+      case caen::Digitizer::ACQ_SIn_Controlled:
+         m_acqModeWidget->setCurrentIndex( 1 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Acquisition mode not recognized" ) );
+         break;
+      }
+      m_acqModeWidget->setEnabled( true );
+
       // Set the gate mode:
+      m_gateModeWidget->setEnabled( false );
       switch( m_gateMode ) {
 
       case WindowGate:
@@ -504,8 +555,10 @@ namespace dt5740 {
          REPORT_ERROR( tr( "Gate mode not recognized" ) );
          break;
       }
+      m_gateModeWidget->setEnabled( true );
 
       // Set the buffer mode:
+      m_bufferModeWidget->setEnabled( false );
       switch( m_bufferMode ) {
 
       case NBuffers1:
@@ -545,6 +598,7 @@ namespace dt5740 {
          REPORT_ERROR( tr( "Buffer mode not recognized" ) );
          break;
       }
+      m_bufferModeWidget->setEnabled( true );
 
       // Synchronize all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {

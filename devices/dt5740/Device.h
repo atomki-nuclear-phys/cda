@@ -103,19 +103,14 @@ namespace dt5740 {
       /// Helper function for getting the number of samples
       int getSamples() const;
 
-      /// Number of bits in one channel's data
-      static const int BITS_PER_CHANNEL = 12;
-      /// Data type read out for one trigger
-      /**
-       * The structure of this is that the outer vector describes the
-       * channels (including the inactive ones), and the inner vector
-       * describes the samples collected for that channel. So the outer
-       * vector always has a size of 32, and the inner one has the size
-       * of the number of samples requested for its channel group.
-       */
-      typedef std::vector< std::vector< unsigned int > > Data_t;
-      /// Function decoding the data read for a trigger
-      Data_t decode( const ev::Fragment& fragment ) const;
+      /// Function decoding the data from an event fragment
+      bool decode( const ev::Fragment& fragment,
+                   caen::Digitizer::EventInfo& ei,
+                   caen::Digitizer::EventData16Bit& ed ) const;
+      /// Function encoding the data into an event fragment
+      bool encode( const caen::Digitizer::EventInfo& ei,
+                   const caen::Digitizer::EventData16Bit& ed,
+                   ev::Fragment& fragment ) const;
 
       /// Transform trigger mode into an integer
       unsigned int toUInt( TriggerMode mode ) const;
@@ -148,6 +143,9 @@ namespace dt5740 {
       int         m_postTrigPercentage; ///< Percentage of post-trigger samples
       bool        m_extTrigEnabled; ///< Enable readout on external triggers
       bool        m_extTrigOutEnabled; ///< Forward external triggers to front panel
+
+      /// Acquisition mode for the device
+      caen::Digitizer::AcquisitionMode m_acqMode;
 
    private:
       mutable msg::Logger m_logger; ///< Message logger object

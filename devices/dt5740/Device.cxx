@@ -12,8 +12,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/event/Fragment.h"
+#   include "cdacore/common/errorcheck.h"
 #else
 #   include "event/Fragment.h"
+#   include "common/errorcheck.h"
 #endif
 
 // Local include(s):
@@ -38,6 +40,7 @@ namespace dt5740 {
         m_gateMode( WindowGate ), m_bufferMode( NBuffers1 ),
         m_postTrigPercentage( 0 ), m_extTrigEnabled( false ),
         m_extTrigOutEnabled( false ),
+        m_acqMode( caen::Digitizer::ACQ_SW_Controlled ),
         m_logger( "dt5740::Device" ) {
 
       // Set the ID of each group:
@@ -79,6 +82,8 @@ namespace dt5740 {
       input >> m_postTrigPercentage;
       input >> m_extTrigEnabled;
       input >> m_extTrigOutEnabled;
+      input >> ctype;
+      m_acqMode = caen::Digitizer::convertAcqMode( ctype );
 
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -116,6 +121,7 @@ namespace dt5740 {
       output << m_postTrigPercentage; 
       output << m_extTrigEnabled;
       output << m_extTrigOutEnabled;
+      output << caen::Digitizer::convertAcqMode( m_acqMode );
 
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -215,6 +221,14 @@ namespace dt5740 {
          return false;
       }
 
+      m_acqMode = caen::Digitizer::convertAcqMode( element.attribute( "AcqMode",
+                                                                      "0" ).toInt( &ok ) );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "There was a problem reading an "
+                           "\"acquisition mode\" value" ) );
+         return false;
+      }
+
       //
       // Configure the groups:
       //
@@ -261,7 +275,9 @@ namespace dt5740 {
       element.setAttribute( "BufferMode", toUInt( m_bufferMode ) );
       element.setAttribute( "PostTrigPercentage", m_postTrigPercentage );
       element.setAttribute( "ExtTrigEnabled", m_extTrigEnabled );
-      element.setAttribute( "ExtTrigOutEnabled", m_extTrigOutEnabled ); 
+      element.setAttribute( "ExtTrigOutEnabled", m_extTrigOutEnabled );
+      element.setAttribute( "AcqMode",
+                            caen::Digitizer::convertAcqMode( m_acqMode ) );
 
       //
       // Create a new node for the configuration of each group:
@@ -354,67 +370,122 @@ namespace dt5740 {
 
    /**
     * This function is used by the derived classes to decode the content
-    * of the data words read from the device's memory during data
-    * taking.
+    * an event fragment into easier-to-use structures.
     *
-    * @param fragment The raw data words coming from the device
-    * @returns The data in an easier-to-digest format
+    * @param fragment The encoded information
+    * @param ei The decoded event information
+    * @param ed The decoded event data
+    * @returns <code>true</code> if the decoding was successful,
+    *          <code>false</code> otherwise
     */
-   Device::Data_t Device::decode( const ev::Fragment& fragment ) const {
+   bool Device::decode( const ev::Fragment& fragment,
+                        caen::Digitizer::EventInfo& ei,
+                        caen::Digitizer::EventData16Bit& ed ) const {
 
-      // The result object:
-      Data_t result;
-      result.resize( NUMBER_OF_GROUPS * GroupConfig::CHANNELS_IN_GROUP );
-
-      // The first bit of the next data word. Remember that the first
-      // 4 words belong to the header of the event:
-      int bit_number = 128;
-
-      // According to the documentation the readout format is as follows:
-      //  - First we get all the samples for the first channel of the first
-      //    group.
-      //  - Next we get all the samples of the second channel of the first
-      //    group.
-      //  - etc.
-
-      // Loop over the groups:
+      // Calculate the number of active channels:
+      size_t channels = 0;
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
-         // Loop over the channels of the group:
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
               ++channel ) {
-            // Skip the inactive channels:
-            if( ! m_groups[ group ].getChannel( channel ) ) continue;
-            // Reserve the needed space in the inner vector:
-            result[ ( group * GroupConfig::CHANNELS_IN_GROUP ) +
-                    channel ].resize( getSamples() );
-            // Loop over all the samples:
-            for( int sample = 0; sample < getSamples(); ++sample ) {
-               // The data of this channel in this sample:
-               unsigned int ch_data = 0;
-               // Fill the data bit-by-bit:
-               for( int abit = bit_number, i = 0; abit < bit_number + BITS_PER_CHANNEL;
-                    ++abit, ++i ) {
-                  const int word = abit / 32;
-                  const int bit  = abit % 32;
-                  // A security check:
-                  if( word >= static_cast< int >( fragment.getDataWords().size() ) ) {
-                     REPORT_ERROR( tr( "The received data fragment is too small!" ) );
-                     return result;
-                  }
-                  if( ( fragment.getDataWords()[ word ] >> bit ) & 0x1 ) {
-                     ch_data |= ( 0x1 << i );
-                  }
-               } // end of loop over bits
-               // Add this data word to the result:
-               result[ ( group * GroupConfig::CHANNELS_IN_GROUP ) +
-                       channel ].push_back( ch_data );
-               // Increment the bit position:
-               bit_number += BITS_PER_CHANNEL;
-            } // end of loop over samples
-         } // end of loop over channels in group
-      } // end of loop over groups
+            if( m_groups[ group ].getChannel( channel ) ) {
+               ++channels;
+            }
+         }
+      }
 
-      return result;
+      // The required size of the fragment:
+      const size_t size =
+         6 +                      // Event info words
+         channels * getSamples(); // Samples for each channel
+
+      // Check if the fragment is if the expected size:
+      CHECK( fragment.getDataWords().size() == size );
+
+      // Easy access to the data words:
+      const std::vector< uint32_t >& data = fragment.getDataWords();
+
+      // Set the event information:
+      ei.eventSize      = data[ 0 ];
+      ei.boardId        = data[ 1 ];
+      ei.pattern        = data[ 2 ];
+      ei.channelMask    = data[ 3 ];
+      ei.eventCounter   = data[ 4 ];
+      ei.triggerTimeTag = data[ 5 ];
+
+      // Set the sample information for each active channel:
+      int index = 6;
+      for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
+         for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
+              ++channel ) {
+
+            // Index of this channel:
+            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP + channel;
+
+            // Clear the data in the inactive channels:
+            if( ! m_groups[ group ].getChannel( channel ) ) {
+               ed.chData[ chIndex ].clear();
+               continue;
+            }
+
+            // Fill the event data for this channel:
+            ed.chData[ chIndex ].resize( getSamples(), 0 );
+            for( int sample = 0; sample < getSamples();
+                 ++sample, ++index ) {
+               ed.chData[ chIndex ][ sample ] = data[ index ];
+            }
+         }
+      }
+
+      return true;
+   }
+
+   /**
+    * This function is used by the Readout class to place the device's data
+    * into an event fragment.
+    *
+    * @param ei The event information
+    * @param ed The event data
+    * @param fragment The encoded event information
+    * @returns <code>true</code> if the decoding was successful,
+    *          <code>false</code> otherwise
+    */
+   bool Device::encode( const caen::Digitizer::EventInfo& ei,
+                        const caen::Digitizer::EventData16Bit& ed,
+                        ev::Fragment& fragment ) const {
+
+      // Put the event information into the fragment:
+      fragment.addDataWord( ei.eventSize );
+      fragment.addDataWord( ei.boardId );
+      fragment.addDataWord( ei.pattern );
+      fragment.addDataWord( ei.channelMask );
+      fragment.addDataWord( ei.eventCounter );
+      fragment.addDataWord( ei.triggerTimeTag );
+
+      // Now place all the channel data into the fragment:
+      for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
+         for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
+              ++channel ) {
+
+            // Skip inactive channels:
+            if( ! m_groups[ group ].getChannel( channel ) ) {
+               continue;
+            }
+
+            // Index of this channel:
+            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP + channel;
+
+            // A security check:
+            CHECK( static_cast< int >( ed.chData[ chIndex ].size() ) ==
+                   getSamples() );
+
+            // Add the data from this channel to the fragment:
+            for( int sample = 0; sample < getSamples(); ++sample ) {
+               fragment.addDataWord( ed.chData[ chIndex ][ sample ] );
+            }
+         }
+      }
+
+      return true;
    }
 
    unsigned int Device::toUInt( Device::TriggerMode mode ) const {

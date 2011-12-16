@@ -7,9 +7,11 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/event/Fragment.h"
 #   include "cdacore/common/errorcheck.h"
+#   include "cdacore/common/Sleep.h"
 #else
 #   include "event/Fragment.h"
 #   include "common/errorcheck.h"
+#   include "common/Sleep.h"
 #endif
 
 // Local include(s):
@@ -19,6 +21,8 @@ namespace dt5740 {
 
    Readout::Readout()
       : dev::CaenReadout(), Device(), m_digitizer(),
+        m_buffer( NULL ), m_bufferSize( 0 ), m_eventSize( 0 ),
+        m_numEvents( 0 ), m_currentEvent( 0 ),
         m_logger( "dt5740::Readout" ) {
 
    }
@@ -60,6 +64,7 @@ namespace dt5740 {
       CHECK( m_digitizer.setPostTriggerSize( m_postTrigPercentage ) );
       CHECK( m_digitizer.writeRegister( REG_GROUP_CONFIG,
                                         groupConfReg() ) );
+      CHECK( m_digitizer.setAcquisitionMode( m_acqMode ) );
 
       // Configure the group wide parameters:
       uint32_t groupMask = 0;
@@ -81,17 +86,27 @@ namespace dt5740 {
       }
       CHECK( m_digitizer.setGroupEnableMask( groupMask ) );
 
-      // Configure the channels:
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         for( int j = 0; j < GroupConfig::CHANNELS_IN_GROUP; ++j ) {
-            
-         }
-      }
+      // Allocate the memory buffer for the event readout:
+      CHECK( m_digitizer.mallocReadoutBuffer( &m_buffer, m_bufferSize ) );
+      m_logger << msg::DEBUG
+               << tr( "Allocated a %1 byte buffer for the event readout" )
+         .arg( m_bufferSize )
+               << msg::endmsg;
+
+      // Reset the variables used during event readout:
+      m_eventSize = 0;
+      m_numEvents = 0;
+      m_currentEvent = 0;
 
       return true;
    }
 
    bool Readout::finalize() {
+
+      // Free up the allocated readout buffer:
+      CHECK( m_digitizer.freeReadoutBuffer( &m_buffer ) );
+      m_buffer = NULL;
+      m_bufferSize = 0;
 
       // Clear and close the digitizer:
       CHECK( m_digitizer.reset() );
@@ -102,17 +117,83 @@ namespace dt5740 {
 
    bool Readout::start() {
 
+      // Start the acquisition:
+      CHECK( m_digitizer.startAcquisition() );
+
       return true;
    }
 
    bool Readout::stop() {
 
+      // Stop the acquisition:
+      CHECK( m_digitizer.stopAcquisition() );
+
       return true;
    }
 
-   ev::Fragment* Readout::readEvent() const {
+   ev::Fragment* Readout::readEvent() {
 
+      // Create the new event fragment:
       ev::Fragment* result = new ev::Fragment();
+
+      // Read a new (set of) event(s) if the event buffer is empty:
+      if( ! m_numEvents ) {
+         // Wait until there are events in the hardware's memory:
+         for( ; ; ) {
+            // Get the number of available events:
+            uint32_t events = 0;
+            if( ! m_digitizer.readRegister( REG_EVENT_STORED,
+                                            events ) ) {
+               REPORT_ERROR( tr( "Couldn't read number of available events" ) );
+               return result;
+            }
+            // If there are events available, exit the loop:
+            if( events ) {
+               break;
+            }
+            // If not, then wait a bit and then try again:
+            common::SleepMin();
+         }
+
+         // Pull all events into the computer's memory:
+         if( ! m_digitizer.readData( caen::Digitizer::READ_SlaveTerminatedMBLT,
+                                     m_buffer, m_eventSize ) ) {
+            REPORT_ERROR( tr( "Couldn't read data from the device" ) );
+            return result;
+         }
+
+         // Decode how many events we just retrieved:
+         if( ! m_digitizer.getNumEvents( m_buffer, m_eventSize,
+                                         m_numEvents ) ) {
+            REPORT_ERROR( tr( "Couldn't get the number of events for the "
+                              "current readout buffer" ) );
+            return result;
+         }
+         m_currentEvent = 0;
+      }
+
+      // Read out the next event from the buffer:
+      if( ! m_digitizer.getEvent( m_buffer, m_bufferSize,
+                                  m_currentEvent, m_eventInfo,
+                                  m_event ) ) {
+         REPORT_ERROR( tr( "Couldn't decode event from buffer" ) );
+         return result;
+      }
+
+      // Encode the information into the event fragment:
+      if( ! encode( m_eventInfo, m_event, *result ) ) {
+         REPORT_ERROR( tr( "Couldn't encode event into event fragment" ) );
+         return result;
+      }
+
+      // Switch to the next event:
+      ++m_currentEvent;
+
+      // If the buffer is out of events, tell the function that it should
+      // do a new readout the next time it's called:
+      if( ! ( m_currentEvent < m_numEvents ) ) {
+         m_numEvents = 0;
+      }
 
       return result;
    }
