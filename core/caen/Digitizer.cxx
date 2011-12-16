@@ -352,7 +352,7 @@ namespace {
                        .arg( toString( code ) ) );                      \
          return false;                                                  \
       }                                                                 \
-   } while( 0 )
+   } while( 0 ){}
 
 #endif // HAVE_CAEN_LIBS
 
@@ -523,17 +523,18 @@ namespace caen {
     * This function can be used to print some information about the
     * digitizer that this object is connected to.
     *
+    * @param level Message level of the printed information
     * @returns <code>true</code> if the operation was successful,
     *          <code>false</code> if it wasn't
     */
-   bool Digitizer::printInfo() const {
+   bool Digitizer::printInfo( msg::Level level ) const {
 
 #ifdef HAVE_CAEN_LIBS
       // Read the board information:
       CAEN_DGTZ_BoardInfo_t boardInfo;
       CHECK( CAEN_DGTZ_GetInfo( m_handle, &boardInfo ) );
       // Now print it:
-      m_logger << msg::INFO
+      m_logger << level
                << tr( "Digitizer board information:\n"
                       "  model name : %1\n"
                       "  model      : %2\n"
@@ -554,7 +555,7 @@ namespace caen {
          .arg( boardInfo.PCB_Revision ).arg( boardInfo.ADC_NBits )
                << msg::endmsg;
 #else
-      m_logger << msg::INFO
+      m_logger << level
                << tr( "No CAEN library available" )
                << msg::endmsg;
 #endif // HAVE_CAEN_LIBS

@@ -76,7 +76,7 @@ namespace caen {
       bool readRegister( uint32_t address, uint32_t& data ) const;
 
       /// Prints information about the digitizer
-      bool printInfo() const;
+      bool printInfo( msg::Level level ) const;
 
       /// Resets the digitizer
       bool reset();

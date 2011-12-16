@@ -57,6 +57,18 @@ namespace dt5740 {
       virtual ev::Fragment* readEvent() const;
 
    private:
+      /// Get the external trigger mode
+      caen::Digitizer::TriggerMode extTrigMode() const;
+      /// Get the trigger mode of a channel group
+      static caen::Digitizer::TriggerMode trigMode( const GroupConfig& group );
+      /// Get the bit-pattern for the group configuration register
+      uint32_t groupConfReg() const;
+
+      /// Address of a test register on the device
+      static const uint32_t REG_SCRATCH = 0xef20;
+      /// Address of the group configuration register
+      static const uint32_t REG_GROUP_CONFIG = 0x8000;
+
       caen::Digitizer m_digitizer; ///< Connection to the hardware
 
       mutable msg::Logger m_logger; ///< Message logger object
