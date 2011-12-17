@@ -43,7 +43,7 @@ namespace dev {
       /// Fixed width of a device
       static const int WIDGET_WIDTH = 510;
       /// Fixed height of a device
-      static const int WIDGET_HEIGHT = 550;
+      static const int WIDGET_HEIGHT = 570;
 
    signals:
       /// Signal emitted when the ID of the device is modified

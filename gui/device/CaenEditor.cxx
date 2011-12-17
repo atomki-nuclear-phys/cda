@@ -67,10 +67,9 @@ namespace dev {
 
       // Create a widget to show the devices in:
       m_deviceTab = new QTabWidget( this );
-      m_deviceTab->setGeometry( QRect( 0, 50, 520,
-                                       CaenGui::WIDGET_HEIGHT + 30 ) );
+      m_deviceTab->setGeometry( QRect( 0, 30, 520,
+                                       CaenGui::WIDGET_HEIGHT + 40 ) );
       m_deviceTab->setUsesScrollButtons( true );
-      m_deviceTab->setTabShape( QTabWidget::Triangular );
       m_deviceTab->setTabsClosable( true );
       connect( m_deviceTab, SIGNAL( tabCloseRequested( int ) ),
                this, SLOT( deleteDeviceSlot( int ) ) );
