@@ -191,7 +191,7 @@ namespace dt5740 {
 
       // If the buffer is out of events, tell the function that it should
       // do a new readout the next time it's called:
-      if( ! ( m_currentEvent < m_numEvents ) ) {
+      if(  m_currentEvent >= m_numEvents ) {
          m_numEvents = 0;
       }
 

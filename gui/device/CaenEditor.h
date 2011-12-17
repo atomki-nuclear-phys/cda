@@ -18,10 +18,8 @@
 #endif
 
 // Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QLabel )
-QT_FORWARD_DECLARE_CLASS( QStackedWidget )
+QT_FORWARD_DECLARE_CLASS( QTabWidget )
 QT_FORWARD_DECLARE_CLASS( QComboBox )
-QT_FORWARD_DECLARE_CLASS( QPushButton )
 
 namespace dev {
 
@@ -44,6 +42,8 @@ namespace dev {
    public:
       /// Standard QWidget style constructor
       CaenEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      /// Destructor
+      ~CaenEditor();
 
       /// Function reading the configuration in binary format
       virtual bool readConfig( QIODevice* dev );
@@ -57,14 +57,16 @@ namespace dev {
       /// Create a device in the configuration
       void createDeviceSlot( int index );
       /// Remove the current device from the configuration
-      void clearDeviceSlot();
+      void deleteDeviceSlot( int index );
+      /// Handle the change in the connection configuration of a device
+      void idChangedSlot();
 
    private:
-      QStackedWidget* m_deviceStack; ///< A widget to show the device(s) in
+      /// Function checking if the GUI is consistent with the configuration
+      bool consistent() const;
 
+      QTabWidget* m_deviceTab; ///< A widget to show the device(s) in
       QComboBox* m_createDevice; ///< Dropdown menu selecting what kind of device to create
-      bool m_selfModification; ///< Flag showing that the object is modifying itself at the moment
-      QPushButton* m_clearDevice; ///< Button for clearing the configuration
 
       mutable msg::Logger m_logger; ///< Message logger object
 

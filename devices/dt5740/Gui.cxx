@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 30, 2530 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 2530 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -309,12 +309,20 @@ namespace dt5740 {
          break;
       }
 
+      // Tell the crate that the device's ID changed:
+      emit idChanged();
+
       return;
    }
 
    void Gui::connectionLinkSlot( int link ) {
 
+      // Remember the link number:
       m_linkNumber = link;
+
+      // Tell the crate that the device's ID changed:
+      emit idChanged();
+
       return;
    }
 

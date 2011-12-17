@@ -371,6 +371,23 @@ namespace {
       return static_cast< CAEN_DGTZ_ReadMode_t >( 10L );
    }
 
+} // private namespace
+
+/// Macro checking the return value of a CAEN Digitizer function
+#define CHECK( CMD ) {                                                  \
+      CAEN_DGTZ_ErrorCode code = CMD;                                   \
+      if( code != CAEN_DGTZ_Success ) {                                 \
+         REPORT_ERROR( tr( "Failed executing \"%1\", "                  \
+                           "Return value: %2" ).arg( #CMD )             \
+                       .arg( toString( code ) ) );                      \
+         return false;                                                  \
+      }                                                                 \
+   } while( 0 ){}
+
+#endif // HAVE_CAEN_LIBS
+
+namespace {
+
    /// Convert read mode into human readable format
    const char* toString( caen::Digitizer::ReadMode mode ) {
 
@@ -402,19 +419,6 @@ namespace {
    }
 
 } // private namespace
-
-/// Macro checking the return value of a CAEN Digitizer function
-#define CHECK( CMD ) {                                                  \
-      CAEN_DGTZ_ErrorCode code = CMD;                                   \
-      if( code != CAEN_DGTZ_Success ) {                                 \
-         REPORT_ERROR( tr( "Failed executing \"%1\", "                  \
-                           "Return value: %2" ).arg( #CMD )             \
-                       .arg( toString( code ) ) );                      \
-         return false;                                                  \
-      }                                                                 \
-   } while( 0 ){}
-
-#endif // HAVE_CAEN_LIBS
 
 namespace caen {
 
@@ -1283,7 +1287,6 @@ namespace caen {
                                     &evtVoidPtr ) );
       // Fill the event data to the output:
       for( int i = 0; i < EventData16Bit::MAX_CHANNEL_NUMBER; ++i ) {
-         eventData.chSize[ i ] = evt->ChSize[ i ];
          eventData.chData[ i ].resize( eventData.chSize[ i ], 0 );
          for( uint32_t j = 0; j < eventData.chSize[ i ]; ++j ) {
             eventData.chData[ i ][ j ] = evt->DataChannel[ i ][ j ];
@@ -1323,7 +1326,6 @@ namespace caen {
                                     &evtVoidPtr ) );
       // Fill the event data to the output:
       for( int i = 0; i < EventData8Bit::MAX_CHANNEL_NUMBER; ++i ) {
-         eventData.chSize[ i ] = evt->ChSize[ i ];
          eventData.chData[ i ].resize( eventData.chSize[ i ], 0 );
          for( uint32_t j = 0; j < eventData.chSize[ i ]; ++j ) {
             eventData.chData[ i ][ j ] = evt->DataChannel[ i ][ j ];

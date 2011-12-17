@@ -219,12 +219,10 @@ namespace caen {
       /// Event data
       struct EventData16Bit {
          static const int MAX_CHANNEL_NUMBER = 64;
-         uint32_t                chSize[ MAX_CHANNEL_NUMBER ];
          std::vector< uint16_t > chData[ MAX_CHANNEL_NUMBER ];
       };
       struct EventData8Bit {
          static const int MAX_CHANNEL_NUMBER = 8;
-         uint32_t               chSize[ MAX_CHANNEL_NUMBER ];
          std::vector< uint8_t > chData[ MAX_CHANNEL_NUMBER ];
       };
 

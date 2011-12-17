@@ -1,17 +1,18 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QStackedWidget>
+#include <QtGui/QTabWidget>
 #include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
 #include <QtGui/QIcon>
-#include <QtGui/QLabel>
+#include <QtGui/QMessageBox>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Loader.h"
+#   include "cdacore/common/errorcheck.h"
 #else
 #   include "device/Loader.h"
+#   include "common/errorcheck.h"
 #endif
 
 // Local include(s):
@@ -22,19 +23,19 @@ namespace dev {
    CaenEditor::CaenEditor( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
         dev::Crate< dev::CaenGui >( "CAEN", true ),
-        m_selfModification( false ),
         m_logger( "dev::CaenEditor" ) {
 
-      resize( CaenGui::WIDGET_WIDTH + 20, 640 );
-      setMinimumSize( CaenGui::WIDGET_WIDTH + 20, 640 );
+      resize( 520, 640 );
+      setMinimumSize( 520, 640 );
+      setMaximumSize( 520, 640 );
 
       // Set up which loader the base class should use:
       setLoader( Loader::instance() );
 
       // Create the dropdown menu that can be used to create a device:
       m_createDevice = new QComboBox( this );
-      m_createDevice->setGeometry( QRect( 50, 0, 250, 25 ) );
-      m_createDevice->addItem( tr( "Create CAEN device..." ) );
+      m_createDevice->setGeometry( QRect( 110, 0, 300, 25 ) );
+      m_createDevice->addItem( tr( "Add CAEN device..." ) );
 
       // Add all CAEN devices to the list:
       QStringList devices = m_loader->getDeviceNames();
@@ -64,19 +65,28 @@ namespace dev {
       connect( m_createDevice, SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( createDeviceSlot( int ) ) );
 
-      // Create the button clearing the configuration:
-      m_clearDevice = new QPushButton( QIcon::fromTheme( "edit-clear" ),
-                                       tr( "Clear device" ), this );
-      m_clearDevice->setGeometry( QRect( 320, 0, 150, 25 ) );
-      m_clearDevice->setEnabled( false );
-      connect( m_clearDevice, SIGNAL( pressed() ),
-               this, SLOT( clearDeviceSlot() ) );
-
       // Create a widget to show the devices in:
-      m_deviceStack = new QStackedWidget( this );
-      m_deviceStack->setGeometry( QRect( 10, 50, CaenGui::WIDGET_WIDTH,
-                                         CaenGui::WIDGET_HEIGHT ) );
+      m_deviceTab = new QTabWidget( this );
+      m_deviceTab->setGeometry( QRect( 0, 50, 520,
+                                       CaenGui::WIDGET_HEIGHT + 30 ) );
+      m_deviceTab->setUsesScrollButtons( true );
+      m_deviceTab->setTabShape( QTabWidget::Triangular );
+      m_deviceTab->setTabsClosable( true );
+      connect( m_deviceTab, SIGNAL( tabCloseRequested( int ) ),
+               this, SLOT( deleteDeviceSlot( int ) ) );
 
+   }
+
+   CaenEditor::~CaenEditor() {
+
+      // The tab widget thinks that it actually owns its widgets,
+      // so it deletes them in the end. To avoid crashes because of
+      // a double-delete, let's not allow the base class to try
+      // to delete these objects itself.
+      m_devices.clear();
+
+      delete m_createDevice;
+      delete m_deviceTab;
    }
 
    bool CaenEditor::readConfig( QIODevice* dev ) {
@@ -87,25 +97,26 @@ namespace dev {
          return false;
       }
 
-      // Now show the device:
-      if( m_devices.size() ) {
-         // Disable the device creation temporarily:
-         m_selfModification = true;
+      // Now show the device(s):
+      std::map< unsigned int, dev::CaenGui* >::const_iterator itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CaenGui* >::const_iterator end =
+         m_devices.end();
+      for( ; itr != end; ++itr ) {
          // Display the device:
-         m_deviceStack->addWidget( m_devices.begin()->second );
-         // Make the combo box display the appropriate device type:
-         const int index =
-            m_createDevice->findData( m_devices.begin()->second->deviceName() );
-         if( index >= 0 ) {
-            m_createDevice->setCurrentIndex( index );
-         }
-         // Re-enable the device creation:
-         m_selfModification = false;
-         // Disable the device creation widget:
-         m_createDevice->setEnabled( false );
-         // Enable the device clearing widget:
-         m_clearDevice->setEnabled( true );
+         m_deviceTab->addTab( itr->second, itr->second->deviceName() );
+         // Connect its signal(s):
+         connect( itr->second, SIGNAL( idChanged() ),
+                  this, SLOT( idChangedSlot() ) );
       }
+
+      // Make sure the combo box is in the first position:
+      m_createDevice->setCurrentIndex( 0 );
+
+      // Check if the GUI is still "consistent":
+      CHECK( consistent() );
+      // Check if the configuration is "consistent":
+      idChangedSlot();
 
       return true;
    }
@@ -118,37 +129,42 @@ namespace dev {
          return false;
       }
 
-      // Now show the device:
-      if( m_devices.size() ) {
-         // Disable the device creation temporarily:
-         m_selfModification = true;
+      // Now show the device(s):
+      std::map< unsigned int, dev::CaenGui* >::const_iterator itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CaenGui* >::const_iterator end =
+         m_devices.end();
+      for( ; itr != end; ++itr ) {
          // Display the device:
-         m_deviceStack->addWidget( m_devices.begin()->second );
-         // Make the combo box display the appropriate device type:
-         const int index =
-            m_createDevice->findData( m_devices.begin()->second->deviceName() );
-         if( index >= 0 ) {
-            m_createDevice->setCurrentIndex( index );
-         }
-         // Re-enable the device creation:
-         m_selfModification = false;
-         // Disable the device creation widget:
-         m_createDevice->setEnabled( false );
-         // Enable the device clearing widget:
-         m_clearDevice->setEnabled( true );
+         m_deviceTab->addTab( itr->second, itr->second->deviceName() );
+         // Connect its signal(s):
+         connect( itr->second, SIGNAL( idChanged() ),
+                  this, SLOT( idChangedSlot() ) );
       }
+
+      // Make sure the combo box is in the first position:
+      m_createDevice->setCurrentIndex( 0 );
+
+      // Check if the GUI is still "consistent":
+      CHECK( consistent() );
+      // Check if the configuration is "consistent":
+      idChangedSlot();
 
       return true;
    }
 
-   /**
-    * The implementation is a bit weird. This function calls the slot
-    * clearing the editor, which in turn calls the clear function of the
-    * base class. Should still work though.
-    */
    void CaenEditor::clear() {
 
-      clearDeviceSlot();
+      m_deviceTab->clear();
+      dev::Crate< dev::CaenGui >::clear();
+
+      // Check if the GUI is still "consistent":
+      if( ! consistent() ) {
+         REPORT_ERROR( tr( "The GUI is not consistent after ID change "
+                           "handling" ) );
+         return;
+      }
+
       return;
    }
 
@@ -157,17 +173,20 @@ namespace dev {
     */
    void CaenEditor::createDeviceSlot( int index ) {
 
-      // Don't do anything if the object is modifying itself:
-      if( m_selfModification ) return;
-
       // A security check:
       if( ! checkLoader() ) return;
 
-      // First let's make sure that this is the only device:
-      clearDeviceSlot();
-
       // Get the name of the library that we have to use:
       const QString type = m_createDevice->itemData( index ).toString();
+
+      // Ignore possible signals coming from switching the combo box
+      // back to the first item:
+      if( type == "" ) return;
+
+      // Make sure the combo box is in the first position:
+      m_createDevice->setEnabled( false ); // So that the function doesn't call itself
+      m_createDevice->setCurrentIndex( 0 );
+      m_createDevice->setEnabled( true );
 
       //
       // Try to access the Factory of this device type:
@@ -191,44 +210,126 @@ namespace dev {
          REPORT_VERBOSE( tr( "GUI object created for device type \"%1\"" ).arg( type ) );
       }
 
-      // Store the device:
-      m_devices[ 0 ] = device;
+      // Connect its signal(s):
+      connect( device, SIGNAL( idChanged() ),
+               this, SLOT( idChangedSlot() ) );
 
-      // Configure the device and show it:
-      device->setID( 0 );
-      m_deviceStack->addWidget( device );
+      // Store the device with a "random" ID first:
+      m_devices[ 10000 + m_devices.size() ] = device;
 
-      // Disable the device creation widget:
-      m_createDevice->setEnabled( false );
-      // Enable the device clearing widget:
-      m_clearDevice->setEnabled( true );
+      // Show the device:
+      m_deviceTab->addTab( device, device->deviceName() );
+
+      // Check if the GUI is still "consistent":
+      if( ! consistent() ) {
+         REPORT_ERROR( tr( "The GUI is not consistent after ID change "
+                           "handling" ) );
+         return;
+      }
 
       return;
    }
 
-   void CaenEditor::clearDeviceSlot() {
+   void CaenEditor::deleteDeviceSlot( int index ) {
 
       // Return right away if there's no device configured at the moment:
       if( ! m_devices.size() ) return;
 
-      // Disable the device creation temporarily:
-      m_selfModification = true;
+      // Get the pointer of the currently shown device:
+      CaenGui* device = dynamic_cast< CaenGui* >( m_deviceTab->widget( index ) );
+      if( ! device ) {
+         REPORT_ERROR( tr( "No device selected currently" ) );
+         return;
+      }
 
-      // If there is a device configured, remove it from the stack, and
-      // then remove it completely:
-      m_deviceStack->removeWidget( m_devices.begin()->second );
-      dev::Crate< dev::CaenGui >::clear();
+      // Remove the current device from view:
+      m_deviceTab->removeTab( index );
+
+      // Now remove it from the base class, and delete it. Have
+      // to do it in such a complicated way, because the devices
+      // are not necessarily keyed correctly at this point...
+      std::map< unsigned int, dev::CaenGui* >::iterator itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CaenGui* >::iterator end =
+         m_devices.end();
+      for( ; itr != end; ++itr ) {
+         if( itr->second != device ) continue;
+         m_devices.erase( itr );
+         break;
+      }
+      delete device;
+
+      // Make sure the combo box is in the correct position:
       m_createDevice->setCurrentIndex( 0 );
 
-      // Enable the device creation widget:
-      m_createDevice->setEnabled( true );
-      // Disable the device clearing widget:
-      m_clearDevice->setEnabled( false );
-
-      // Re-enable the device creation:
-      m_selfModification = false;
+      // Check if the GUI is still "consistent":
+      if( ! consistent() ) {
+         REPORT_ERROR( tr( "The GUI is not consistent after ID change "
+                           "handling" ) );
+         return;
+      }
 
       return;
+   }
+
+   void CaenEditor::idChangedSlot() {
+
+      // Make an "endless" loop, with a bit of added security.
+      // (We don't expect more than ~20 devices, so the loop should
+      // be able to stop at 100 turns...)
+      for( int i = 0; i < 100; ++i ) {
+
+         // Flag showing whether we need to continue with this
+         // loop:
+         bool repeat = false;
+
+         // Loop over the devices:
+         std::map< unsigned int, dev::CaenGui* >::iterator itr =
+            m_devices.begin();
+         std::map< unsigned int, dev::CaenGui* >::iterator end =
+            m_devices.end();
+         for( ; itr != end; ++itr ) {
+
+            // If this device's ID didn't change, then leave it in peace:
+            if( itr->first == itr->second->getID() ) continue;
+
+            // Check that nobody else is using this ID:
+            if( m_devices.find( itr->second->getID() ) != m_devices.end() ) {
+               QMessageBox::warning( this, tr( "Clash between devices" ),
+                                     tr( "The connection parameters configured for the "
+                                         "device clash with those of another device. "
+                                         "Please fix this before continuing." ) );
+               break;
+            }
+
+            // If it now has an ID that is not used by others, then let's re-add it with
+            // this ID to the base class:
+            CaenGui* device = itr->second;
+            m_devices.erase( itr );
+            m_devices[ device->getID() ] = device;
+
+            // Let's start the algorithm once more:
+            repeat = true;
+            break;
+         }
+
+         // If the loop doesn't have to be continued, break out from it:
+         if( ! repeat ) break;
+      }
+
+      // Check if the GUI is still "consistent":
+      if( ! consistent() ) {
+         REPORT_ERROR( tr( "The GUI is not consistent after ID change "
+                           "handling" ) );
+         return;
+      }
+
+      return;
+   }
+
+   bool CaenEditor::consistent() const {
+
+      return ( static_cast< int >( m_devices.size() ) == m_deviceTab->count() );
    }
 
 } // namespace dev

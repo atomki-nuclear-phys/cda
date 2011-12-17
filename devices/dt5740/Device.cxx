@@ -299,12 +299,33 @@ namespace dt5740 {
 
    unsigned int Device::getID() const {
 
-      return m_linkNumber;
+      unsigned int result = 0;
+      switch( m_connType ) {
+
+      case caen::Digitizer::USB:
+         result = 0;
+         break;
+      case caen::Digitizer::PCI_OpticalLink:
+         result = 1000;
+         break;
+      case caen::Digitizer::PCIE_OpticalLink:
+         result = 2000;
+         break;
+      case caen::Digitizer::PCIE_EmbeddedDigitizer:
+         result = 3000;
+         break;
+      default:
+         result = 0;
+         break;
+      }
+
+      result += m_linkNumber;
+
+      return result;
    }
 
-   void Device::setID( unsigned int id ) {
+   void Device::setID( unsigned int ) {
 
-      m_linkNumber = id;
       return;
    }
 

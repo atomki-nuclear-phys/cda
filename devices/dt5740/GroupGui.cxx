@@ -15,7 +15,7 @@
 namespace dt5740 {
 
    // Initialize the static constant(s):
-   const int GroupGui::WIDTH  = 470;
+   const int GroupGui::WIDTH  = 480;
    const int GroupGui::HEIGHT = 450;
 
    GroupGui::GroupGui( GroupConfig& group, QWidget* parent,

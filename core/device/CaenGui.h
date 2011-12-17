@@ -41,9 +41,20 @@ namespace dev {
       CaenGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Fixed width of a device
-      static const int WIDGET_WIDTH = 500;
+      static const int WIDGET_WIDTH = 510;
       /// Fixed height of a device
-      static const int WIDGET_HEIGHT = 580;
+      static const int WIDGET_HEIGHT = 550;
+
+   signals:
+      /// Signal emitted when the ID of the device is modified
+      /**
+       * The ID of CAEN devices is calculated from their connection
+       * parameters. Since these can be modified after the device has
+       * been created, the crate holding them has to listen to such
+       * signals, and re-order them in its internal map when one of them
+       * modifies its connection parameters.
+       */
+      void idChanged();
 
    }; // class CaenGui
 
