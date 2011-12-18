@@ -23,10 +23,11 @@ namespace ev {
    }
 
    /**
-    * The destructor have to closes the connections
+    * The destructor has to close all the connections.
     */
    Sender::~Sender() {
 
+      // Close and delete all the sockets:
       for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
            socket != m_sockets.end(); ++socket ) {
 
@@ -65,12 +66,11 @@ namespace ev {
          printError( *socket );
          delete socket;
          return false;
-      } else {
-         if( ! socket->open( QIODevice::WriteOnly ) ) {
-            printError( *socket );
-            delete socket;
-            return false;
-         }
+      }
+      if( ! socket->open( QIODevice::WriteOnly ) ) {
+         printError( *socket );
+         delete socket;
+         return false;
       }
 
       //

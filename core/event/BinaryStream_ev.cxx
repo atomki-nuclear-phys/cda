@@ -38,13 +38,10 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      const std::vector< std::tr1::shared_ptr< Fragment > >& fragments =
-         event.getFragments();
+      ( * ( QDataStream* ) this ) << ( quint32 ) event.size();
 
-      ( * ( QDataStream* ) this ) << ( quint32 ) fragments.size();
-
-      for( size_t i = 0; i < fragments.size(); ++i ) {
-         *this << *( fragments[ i ] );
+      for( size_t i = 0; i < event.size(); ++i ) {
+         *this << *( event[ i ] );
       }
 
       return *this;
@@ -58,14 +55,18 @@ namespace ev {
     *
     * @returns This same object
     */
-   BinaryStream& BinaryStream::operator>> ( Event& event ) {
+   BinaryStream&
+   BinaryStream::operator>> ( Event& event ) throw( IncompleteEvent ) {
 
       event.clear();
 
       setVersion( QDataStream::Qt_4_0 );
 
       if( ! ensureDataAvailable( 4 ) ) {
-         REPORT_ERROR( tr( "Can't read the needed data" ) );
+         m_logger << msg::WARNING
+                  << tr( "Incomplete event received" )
+                  << msg::endmsg;
+         throw IncompleteEvent();
          return *this;
       }
       quint32 nFragments;
@@ -74,7 +75,7 @@ namespace ev {
       for( quint32 i = 0; i < nFragments; ++i ) {
          Fragment* fragment = new Fragment();
          *this >> *fragment;
-         event.addFragment( fragment );
+         event.push_back( fragment );
       }
 
       return *this;
@@ -92,14 +93,14 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      const std::vector< uint32_t >& dwords = fragment.getDataWords();
+      const Fragment::Payload_t& dwords = fragment.getDataWords();
 
       ( * ( QDataStream* ) this ) << fragment.getModuleID();
       ( * ( QDataStream* ) this ) << ( quint32 ) dwords.size();
 
       for( size_t i = 0; i < dwords.size(); ++i ) {
          ( * ( QDataStream* ) this ) << dwords[ i ];
-         if( ! ensureDataSent( 10000 ) ) {
+         if( ! ensureDataSent() ) {
             REPORT_ERROR( tr( "Couldn't send data" ) );
             return *this;
          }
@@ -116,17 +117,22 @@ namespace ev {
     *
     * @returns This same object
     */
-   BinaryStream& BinaryStream::operator>> ( Fragment& fragment ) {
+   BinaryStream&
+   BinaryStream::operator>> ( Fragment& fragment ) throw( IncompleteEvent ) {
 
       fragment.clear();
 
       setVersion( QDataStream::Qt_4_0 );
 
-      int moduleID;
+      Fragment::Identifier_t moduleID;
       quint32 nDataWords;
 
-      if( ! ensureDataAvailable( 8 ) ) {
-         REPORT_ERROR( tr( "Can't read the needed data" ) );
+      if( ! ensureDataAvailable( sizeof( moduleID ) +
+                                 sizeof( nDataWords ) ) ) {
+         m_logger << msg::WARNING
+                  << tr( "Incomplete event received" )
+                  << msg::endmsg;
+         throw IncompleteEvent();
          return *this;
       }
       ( * ( QDataStream* ) this ) >> moduleID;
@@ -134,10 +140,13 @@ namespace ev {
 
       fragment.setModuleID( moduleID );
 
-      uint32_t dataWord;
+      Fragment::Payload_t::value_type dataWord;
       for( quint32 i = 0; i < nDataWords; ++i ) {
-         if( ! ensureDataAvailable( 4 ) ) {
-            REPORT_ERROR( tr( "Can't read the needed data" ) );
+         if( ! ensureDataAvailable( sizeof( dataWord ) ) ) {
+            m_logger << msg::WARNING
+                     << tr( "Incomplete event received" )
+                     << msg::endmsg;
+            throw IncompleteEvent();
             return *this;
          }
          ( * ( QDataStream* ) this ) >> dataWord;
@@ -147,6 +156,16 @@ namespace ev {
       return *this;
    }
 
+   /**
+    * A large event may end up in multiple TCP windows, which means that
+    * it will need to be read in multiple steps by the data processing
+    * application. This function makes sure that the socket has data
+    * ready for the upcoming read request(s).
+    *
+    * @param minBytes Bytes needed for the next read operation(s)
+    * @returns <code>true</code> if the operation was successful,
+    *          <code>false</code> otherwise
+    */
    bool BinaryStream::ensureDataAvailable( qint64 minBytes ) {
 
       // If we are not operating on an I/O device, then
@@ -162,6 +181,20 @@ namespace ev {
       return true;
    }
 
+   /**
+    * As I've found out, the TCP windows have a maximum size of 64 kB.
+    * Some of the devices in CDA can produce events that are larger than
+    * this. (I'm looking at you, DT5740...)
+    *
+    * When this happens, the code needs to send the event in multiple
+    * TCP windows. This function makes sure than when there are more than
+    * 50 kB of data ready to be written, they do get written to the
+    * socket.
+    *
+    * @param maxBytes Maximum number of bytes for writing at once
+    * @returns <code>true</code> if the operation was successful,
+    *          <code>false</code> otherwise
+    */
    bool BinaryStream::ensureDataSent( qint64 maxBytes ) {
 
       // If we are not operating on an I/O device, then

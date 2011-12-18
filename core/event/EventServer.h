@@ -17,6 +17,7 @@
 
 // Local include(s):
 #include "Event.h"
+#include "IncompleteEvent.h"
 
 namespace ev {
 
@@ -55,7 +56,7 @@ namespace ev {
     *         something in it.) Sounds a bit complicated, but it's actually
     *         pretty simple code...
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
@@ -66,7 +67,7 @@ namespace ev {
 
    public:
       /// Constructor
-      EventServer( size_t bufferSize = 100000, QObject* parent = 0 );
+      EventServer( size_t bufferSize = 10000, QObject* parent = 0 );
 
       /// Start listening on the specified address
       void listen( const Address& address );

@@ -13,24 +13,25 @@
 namespace ev {
 
    /**
-    *  @short A whole event read out from the CAMAC system
+    *  @short A whole event read out during data taking
     *
-    *         This class represents a whole event read out from the CAMAC
-    *         system. It is a collection of ev::Fragment objects that each
-    *         describe the information coming from one device.
+    *         This class represents a whole event read out from one of
+    *         the data sources. (CAMAC/CAEN/VME) It is a collection of
+    *         ev::Fragment objects that each describe the information
+    *         coming from one device.
     *
-    *         In theory this Event Data Model (EDM) can handle multiple
-    *         CAMAC crates with readout modules. However other parts of the
-    *         system are not likely to ever support this...
-    *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
-   class Event {
+   class Event :
+      public std::vector< std::tr1::shared_ptr< Fragment > > {
 
    public:
+      /// Type of the base class
+      typedef std::vector< std::tr1::shared_ptr< Fragment > > Base_t;
+
       /// Default constructor
       Event();
       /// Copy constructor
@@ -40,17 +41,14 @@ namespace ev {
       Event& operator= ( const Event& rh );
 
       /// Get all the event fragments
-      const std::vector< std::tr1::shared_ptr< Fragment > >&
-      getFragments() const;
+      const Base_t& getFragments() const;
       /// Add one more event fragment
       void addFragment( Fragment* fragment );
+      /// Add one more event fragment
+      void push_back( Fragment* fragment );
 
-      /// Clear the event object
-      void clear();
-
-   private:
-      /// Event fragments (module info)
-      std::vector< std::tr1::shared_ptr< Fragment > > m_fragments;
+      /// Get the size of this event in bytes
+      uint32_t sizeInBytes() const;
 
    }; // class Event
 

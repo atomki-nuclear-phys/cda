@@ -36,7 +36,7 @@ namespace ev {
     *         should be used in conjunction with ev::EventServer to
     *         send events over the network.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

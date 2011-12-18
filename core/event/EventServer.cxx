@@ -20,6 +20,10 @@ namespace ev {
         m_bufferSize( bufferSize ), m_warningTime( QTime::currentTime() ),
         m_logger( "ev::EventServer" ) {
 
+      // Reserve the entire buffer right away. Most of the data is
+      // kept on the heap in ev::Event, but this could still improve
+      // performance by a bit.
+      m_events.reserve( m_bufferSize );
    }
 
    /**
@@ -113,8 +117,9 @@ namespace ev {
       }
 
       //
-      // In order to handle broken connections (let's say because the event sender application
-      // is stopped), the connection handling is put into a loop:
+      // In order to handle broken connections (let's say because the event
+      // sender application is stopped), the connection handling is put
+      // into a loop:
       //
       for( ; ; ) {
 
@@ -129,7 +134,7 @@ namespace ev {
 
          //
          // Get the TCP socket and wait until data becomes available
-         // on it. (This function actually reads the data...)
+         // on it.
          //
          QTcpSocket* socket = server.nextPendingConnection();
          if( ! socket ) {
@@ -138,9 +143,6 @@ namespace ev {
             return;
          }
 
-         REPORT_VERBOSE( tr( "Size of the reading socket: %1" )
-                         .arg( socket->readBufferSize() ) );
-
          //
          // Start a never-ending loop:
          // Use sinals (for ex. SIGINT) to stop it.
@@ -148,6 +150,10 @@ namespace ev {
          Event event;
          BinaryStream stream( socket );
          for( ; ; ) {
+
+            //
+            // Wait for data to become available on the socket:
+            //
             if( ! socket->waitForReadyRead( -1 ) ) {
                m_logger << msg::INFO
                         << tr( "Connection to event sender lost." )
@@ -158,7 +164,12 @@ namespace ev {
             //
             // Read the event from the socket:
             //
-            stream >> event;
+            try {
+               stream >> event;
+            } catch( const IncompleteEvent& ex ) {
+               // Throw away the incomplete event:
+               continue;
+            }
 
             //
             // Add the event to the internal buffer:

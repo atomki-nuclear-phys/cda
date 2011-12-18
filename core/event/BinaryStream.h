@@ -12,6 +12,7 @@
 
 // Local include(s):
 #include "Event.h"
+#include "IncompleteEvent.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QIODevice )
@@ -57,18 +58,18 @@ namespace ev {
       /// Operator "serialising" a full CAMAC event
       BinaryStream& operator<< ( const Event& event );
       /// Operator "de-serialising" a full CAMAC event
-      BinaryStream& operator>> ( Event& event );
+      BinaryStream& operator>> ( Event& event ) throw( IncompleteEvent );
 
    private:
       /// Operator "serialising" a CAMAC event fragment
       BinaryStream& operator<< ( const Fragment& fragment );
       /// Operator "de-serialising" a CAMAC event fragment
-      BinaryStream& operator>> ( Fragment& fragment );
+      BinaryStream& operator>> ( Fragment& fragment ) throw( IncompleteEvent );
 
       /// Function making sure that the socket has data available
       bool ensureDataAvailable( qint64 minBytes );
       /// Function making sure that the socket sends all data
-      bool ensureDataSent( qint64 maxBytes );
+      bool ensureDataSent( qint64 maxBytes = 50000 );
 
       mutable msg::Logger m_logger; ///< Message logger object
 
