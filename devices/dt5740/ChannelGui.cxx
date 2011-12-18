@@ -1,8 +1,8 @@
 // $Id$
 
 // Qt include(s):
-#include <QtCore/QRect>
 #include <QtGui/QCheckBox>
+#include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
 #include <QtGui/QSpinBox>
 #include <QtGui/QDoubleSpinBox>
@@ -13,7 +13,7 @@
 namespace dt5740 {
 
    const int ChannelGui::WIDTH  = 430;
-   const int ChannelGui::HEIGHT = 25;
+   const int ChannelGui::HEIGHT = 75;
 
    /**
     * The constructor sets up the look of the widget and connects up
@@ -37,59 +37,130 @@ namespace dt5740 {
       //
       // Create the widget enabling/disabling the channel:
       //
-      m_enabledEdit = new QCheckBox( QString::number( m_channelNumber ) +
-                                     tr( ". channel" ), this );
+      m_enabledEdit = new QCheckBox( tr( "%1. channel" ).arg( m_channelNumber ),
+                                     this );
       m_enabledEdit->setGeometry( QRect( 0, 0, 110, 25 ) );
       connect( m_enabledEdit, SIGNAL( toggled( bool ) ),
                this, SLOT( enableChangedSlot( bool ) ) );
 
       //
-      // Create the widget changing the name of the channel:
+      // Create the widget editing the "raw name" of the channel:
       //
-      m_nameEdit = new QLineEdit( this );
-      m_nameEdit->setEnabled( false );
-      m_nameEdit->setGeometry( QRect( 115, 2, 75, 21 ) );
-      connect( m_nameEdit, SIGNAL( textChanged( const QString& ) ),
-               this, SLOT( nameChangedSlot( const QString& ) ) );
+      m_rawNameEdit = new QLineEdit( this );
+      m_rawNameEdit->setEnabled( false );
+      m_rawNameEdit->setGeometry( QRect( 115, 2, 75, 22 ) );
+      connect( m_rawNameEdit, SIGNAL( textChanged( const QString& ) ),
+               this, SLOT( rawNameChangedSlot( const QString& ) ) );
+
+      //
+      // Create a description for the time channel:
+      //
+      m_timeLabel = new QLabel( tr( "Time" ),
+                                this );
+      m_timeLabel->setGeometry( QRect( 15, 25, 95, 25 ) );
+      m_timeLabel->setEnabled( false );
+
+      //
+      // Create the widget changing the name of the time channel:
+      //
+      m_timeNameEdit = new QLineEdit( this );
+      m_timeNameEdit->setEnabled( false );
+      m_timeNameEdit->setGeometry( QRect( 115, 27, 75, 22 ) );
+      connect( m_timeNameEdit, SIGNAL( textChanged( const QString& ) ),
+               this, SLOT( timeNameChangedSlot( const QString& ) ) );
 
       //
       // Create the widget changing the number of channels in the
-      // monitoring histogram:
+      // time monitoring histogram:
       //
-      m_channelsEdit = new QSpinBox( this );
-      m_channelsEdit->setEnabled( false );
-      m_channelsEdit->setGeometry( QRect( 195, 0, 75, 25 ) );
-      m_channelsEdit->setRange( 10, 4096 );
-      m_channelsEdit->setValue( 4096 );
-      connect( m_channelsEdit, SIGNAL( valueChanged( int ) ),
-               this, SLOT( channelsChangedSlot( int ) ) );
+      m_timeChannelsEdit = new QSpinBox( this );
+      m_timeChannelsEdit->setEnabled( false );
+      m_timeChannelsEdit->setGeometry( QRect( 195, 25, 75, 25 ) );
+      m_timeChannelsEdit->setRange( 10, 4096 );
+      m_timeChannelsEdit->setValue( 4096 );
+      connect( m_timeChannelsEdit, SIGNAL( valueChanged( int ) ),
+               this, SLOT( timeChannelsChangedSlot( int ) ) );
 
       //
-      // Create the widget changing the lower bound of the monitoring
-      // histogram:
+      // Create the widget changing the lower bound of the
+      // time monitoring histogram:
       //
-      m_lowerBoundEdit = new QDoubleSpinBox( this );
-      m_lowerBoundEdit->setEnabled( false );
-      m_lowerBoundEdit->setGeometry( QRect( 275, 0, 75, 25 ) );
-      m_lowerBoundEdit->setDecimals( 1 );
-      m_lowerBoundEdit->setRange( -100000., 100000. );
-      m_lowerBoundEdit->setValue( 0. );
-      connect( m_lowerBoundEdit, SIGNAL( valueChanged( double ) ),
-               this, SLOT( lowerBoundChangedSlot( double ) ) );
+      m_timeLowerBoundEdit = new QDoubleSpinBox( this );
+      m_timeLowerBoundEdit->setEnabled( false );
+      m_timeLowerBoundEdit->setGeometry( QRect( 275, 25, 75, 25 ) );
+      m_timeLowerBoundEdit->setDecimals( 1 );
+      m_timeLowerBoundEdit->setRange( -100000., 100000. );
+      m_timeLowerBoundEdit->setValue( 0. );
+      connect( m_timeLowerBoundEdit, SIGNAL( valueChanged( double ) ),
+               this, SLOT( timeLowerBoundChangedSlot( double ) ) );
 
       //
-      // Create the widget changing the upper bound of the monitoring
-      // histogram:
+      // Create the widget changing the upper bound of the
+      // time monitoring histogram:
       //
-      m_upperBoundEdit = new QDoubleSpinBox( this );
-      m_upperBoundEdit->setEnabled( false );
-      m_upperBoundEdit->setGeometry( QRect( 355, 0, 75, 25 ) );
-      m_upperBoundEdit->setDecimals( 1 );
-      m_upperBoundEdit->setRange( -100000., 100000. );
-      m_upperBoundEdit->setValue( 4096. );
-      connect( m_upperBoundEdit, SIGNAL( valueChanged( double ) ),
-               this, SLOT( upperBoundChangedSlot( double ) ) );
+      m_timeUpperBoundEdit = new QDoubleSpinBox( this );
+      m_timeUpperBoundEdit->setEnabled( false );
+      m_timeUpperBoundEdit->setGeometry( QRect( 355, 25, 75, 25 ) );
+      m_timeUpperBoundEdit->setDecimals( 1 );
+      m_timeUpperBoundEdit->setRange( -100000., 100000. );
+      m_timeUpperBoundEdit->setValue( 4096. );
+      connect( m_timeUpperBoundEdit, SIGNAL( valueChanged( double ) ),
+               this, SLOT( timeUpperBoundChangedSlot( double ) ) );
 
+      //
+      // Create a description for the energy channel:
+      //
+      m_energyLabel = new QLabel( tr( "Energy" ),
+                                  this );
+      m_energyLabel->setGeometry( QRect( 15, 50, 95, 25 ) );
+      m_energyLabel->setEnabled( false );
+
+      //
+      // Create the widget changing the name of the energy channel:
+      //
+      m_energyNameEdit = new QLineEdit( this );
+      m_energyNameEdit->setEnabled( false );
+      m_energyNameEdit->setGeometry( QRect( 115, 52, 75, 22 ) );
+      connect( m_energyNameEdit, SIGNAL( textChanged( const QString& ) ),
+               this, SLOT( energyNameChangedSlot( const QString& ) ) );
+
+      //
+      // Create the widget changing the number of channels in the
+      // energy monitoring histogram:
+      //
+      m_energyChannelsEdit = new QSpinBox( this );
+      m_energyChannelsEdit->setEnabled( false );
+      m_energyChannelsEdit->setGeometry( QRect( 195, 50, 75, 25 ) );
+      m_energyChannelsEdit->setRange( 10, 4096 );
+      m_energyChannelsEdit->setValue( 4096 );
+      connect( m_energyChannelsEdit, SIGNAL( valueChanged( int ) ),
+               this, SLOT( energyChannelsChangedSlot( int ) ) );
+
+      //
+      // Create the widget changing the lower bound of the
+      // energy monitoring histogram:
+      //
+      m_energyLowerBoundEdit = new QDoubleSpinBox( this );
+      m_energyLowerBoundEdit->setEnabled( false );
+      m_energyLowerBoundEdit->setGeometry( QRect( 275, 50, 75, 25 ) );
+      m_energyLowerBoundEdit->setDecimals( 1 );
+      m_energyLowerBoundEdit->setRange( -100000., 100000. );
+      m_energyLowerBoundEdit->setValue( 0. );
+      connect( m_energyLowerBoundEdit, SIGNAL( valueChanged( double ) ),
+               this, SLOT( energyLowerBoundChangedSlot( double ) ) );
+
+      //
+      // Create the widget changing the upper bound of the
+      // energy monitoring histogram:
+      //
+      m_energyUpperBoundEdit = new QDoubleSpinBox( this );
+      m_energyUpperBoundEdit->setEnabled( false );
+      m_energyUpperBoundEdit->setGeometry( QRect( 355, 50, 75, 25 ) );
+      m_energyUpperBoundEdit->setDecimals( 1 );
+      m_energyUpperBoundEdit->setRange( -100000., 100000. );
+      m_energyUpperBoundEdit->setValue( 4096. );
+      connect( m_energyUpperBoundEdit, SIGNAL( valueChanged( double ) ),
+               this, SLOT( energyUpperBoundChangedSlot( double ) ) );
    }
 
    /**
@@ -98,11 +169,19 @@ namespace dt5740 {
    ChannelGui::~ChannelGui() {
 
       delete m_enabledEdit;
-      delete m_nameEdit;
-      delete m_channelsEdit;
-      delete m_lowerBoundEdit;
-      delete m_upperBoundEdit;
+      delete m_rawNameEdit;
 
+      delete m_timeLabel;
+      delete m_timeNameEdit;
+      delete m_timeChannelsEdit;
+      delete m_timeLowerBoundEdit;
+      delete m_timeUpperBoundEdit;
+
+      delete m_energyLabel;
+      delete m_energyNameEdit;
+      delete m_energyChannelsEdit;
+      delete m_energyLowerBoundEdit;
+      delete m_energyUpperBoundEdit;
    }
 
    int ChannelGui::getChannelNumber() const {
@@ -126,40 +205,75 @@ namespace dt5740 {
    void ChannelGui::setEnabled( bool on ) {
 
       m_enabledEdit->setChecked( on );
-      m_nameEdit->setEnabled( on );
-      m_channelsEdit->setEnabled( on );
-      m_lowerBoundEdit->setEnabled( on );
-      m_upperBoundEdit->setEnabled( on );
-      return;
+      m_rawNameEdit->setEnabled( on );
 
+      m_timeLabel->setEnabled( on );
+      m_timeNameEdit->setEnabled( on );
+      m_timeChannelsEdit->setEnabled( on );
+      m_timeLowerBoundEdit->setEnabled( on );
+      m_timeUpperBoundEdit->setEnabled( on );
+
+      m_energyLabel->setEnabled( on );
+      m_energyNameEdit->setEnabled( on );
+      m_energyChannelsEdit->setEnabled( on );
+      m_energyLowerBoundEdit->setEnabled( on );
+      m_energyUpperBoundEdit->setEnabled( on );
+
+      return;
    }
 
-   void ChannelGui::setName( const QString& text ) {
+   void ChannelGui::setRawName( const QString& text ) {
 
-      m_nameEdit->setText( text );
+      m_rawNameEdit->setText( text );
       return;
-
    }
 
-   void ChannelGui::setChannels( int channels ) {
+   void ChannelGui::setTimeName( const QString& text ) {
 
-      m_channelsEdit->setValue( channels );
+      m_timeNameEdit->setText( text );
       return;
-
    }
 
-   void ChannelGui::setLowerBound( double value ) {
+   void ChannelGui::setTimeChannels( int channels ) {
 
-      m_lowerBoundEdit->setValue( value );
+      m_timeChannelsEdit->setValue( channels );
       return;
-
    }
 
-   void ChannelGui::setUpperBound( double value ) {
+   void ChannelGui::setTimeLowerBound( double value ) {
 
-      m_upperBoundEdit->setValue( value );
+      m_timeLowerBoundEdit->setValue( value );
       return;
+   }
 
+   void ChannelGui::setTimeUpperBound( double value ) {
+
+      m_timeUpperBoundEdit->setValue( value );
+      return;
+   }
+
+   void ChannelGui::setEnergyName( const QString& text ) {
+
+      m_energyNameEdit->setText( text );
+      return;
+   }
+
+   void ChannelGui::setEnergyChannels( int channels ) {
+
+      m_energyChannelsEdit->setValue( channels );
+      return;
+   }
+
+   void ChannelGui::setEnergyLowerBound( double value ) {
+
+      m_energyLowerBoundEdit->setValue( value );
+      return;
+   }
+
+   void ChannelGui::setEnergyUpperBound( double value ) {
+
+      m_energyUpperBoundEdit->setValue( value );
+      return;
    }
 
    /**
@@ -176,49 +290,89 @@ namespace dt5740 {
     */
    void ChannelGui::enableChangedSlot( bool on ) {
 
-      m_nameEdit->setEnabled( on );
-      m_channelsEdit->setEnabled( on );
-      m_lowerBoundEdit->setEnabled( on );
-      m_upperBoundEdit->setEnabled( on );
+      m_rawNameEdit->setEnabled( on );
+
+      m_timeLabel->setEnabled( on );
+      m_timeNameEdit->setEnabled( on );
+      m_timeChannelsEdit->setEnabled( on );
+      m_timeLowerBoundEdit->setEnabled( on );
+      m_timeUpperBoundEdit->setEnabled( on );
+
+      m_energyLabel->setEnabled( on );
+      m_energyNameEdit->setEnabled( on );
+      m_energyChannelsEdit->setEnabled( on );
+      m_energyLowerBoundEdit->setEnabled( on );
+      m_energyUpperBoundEdit->setEnabled( on );
 
       emit enableChanged( m_channelNumber, on );
       if( on ) {
-         emit nameChanged( m_channelNumber, m_nameEdit->text() );
-         emit channelsChanged( m_channelNumber, m_channelsEdit->value() );
-         emit lowerBoundChanged( m_channelNumber, m_lowerBoundEdit->value() );
-         emit upperBoundChanged( m_channelNumber, m_upperBoundEdit->value() );
+         emit rawNameChanged( m_channelNumber, m_rawNameEdit->text() );
+
+         emit timeNameChanged( m_channelNumber, m_timeNameEdit->text() );
+         emit timeChannelsChanged( m_channelNumber, m_timeChannelsEdit->value() );
+         emit timeLowerBoundChanged( m_channelNumber, m_timeLowerBoundEdit->value() );
+         emit timeUpperBoundChanged( m_channelNumber, m_timeUpperBoundEdit->value() );
+
+         emit energyNameChanged( m_channelNumber, m_energyNameEdit->text() );
+         emit energyChannelsChanged( m_channelNumber, m_energyChannelsEdit->value() );
+         emit energyLowerBoundChanged( m_channelNumber, m_energyLowerBoundEdit->value() );
+         emit energyUpperBoundChanged( m_channelNumber, m_energyUpperBoundEdit->value() );
       }
 
       return;
-
    }
 
-   void ChannelGui::nameChangedSlot( const QString& text ) {
+   void ChannelGui::rawNameChangedSlot( const QString& text ) {
 
-      emit nameChanged( m_channelNumber, text );
-      return;
-
+      emit rawNameChanged( m_channelNumber, text );
    }
 
-   void ChannelGui::channelsChangedSlot( int channels ) {
+   void ChannelGui::timeNameChangedSlot( const QString& text ) {
 
-      emit channelsChanged( m_channelNumber, channels );
+      emit timeNameChanged( m_channelNumber, text );
       return;
-
    }
 
-   void ChannelGui::lowerBoundChangedSlot( double value ) {
+   void ChannelGui::timeChannelsChangedSlot( int channels ) {
 
-      emit lowerBoundChanged( m_channelNumber, value );
+      emit timeChannelsChanged( m_channelNumber, channels );
       return;
-
    }
 
-   void ChannelGui::upperBoundChangedSlot( double value ) {
+   void ChannelGui::timeLowerBoundChangedSlot( double value ) {
 
-      emit upperBoundChanged( m_channelNumber, value );
+      emit timeLowerBoundChanged( m_channelNumber, value );
       return;
+   }
 
+   void ChannelGui::timeUpperBoundChangedSlot( double value ) {
+
+      emit timeUpperBoundChanged( m_channelNumber, value );
+      return;
+   }
+
+   void ChannelGui::energyNameChangedSlot( const QString& text ) {
+
+      emit energyNameChanged( m_channelNumber, text );
+      return;
+   }
+
+   void ChannelGui::energyChannelsChangedSlot( int channels ) {
+
+      emit energyChannelsChanged( m_channelNumber, channels );
+      return;
+   }
+
+   void ChannelGui::energyLowerBoundChangedSlot( double value ) {
+
+      emit energyLowerBoundChanged( m_channelNumber, value );
+      return;
+   }
+
+   void ChannelGui::energyUpperBoundChangedSlot( double value ) {
+
+      emit energyUpperBoundChanged( m_channelNumber, value );
+      return;
    }
 
 } // namespace dt5740

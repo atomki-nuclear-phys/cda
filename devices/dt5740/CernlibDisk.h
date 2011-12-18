@@ -9,14 +9,17 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CernlibDisk.h"
+#   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/CernlibDisk.h"
+#   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
+#include "Processor.h"
 
 namespace dt5740 {
 
@@ -47,6 +50,12 @@ namespace dt5740 {
                                cernlib::NTupleMgr& nmgr ) const;
 
    private:
+      Processor m_processor; ///< Object reconstructing the signals
+      /// "Map" for the created variables
+      int m_ntupleMap[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 2 ];
+      mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info
+      mutable caen::Digitizer::EventData16Bit m_eventData; ///< Decoded event data
+
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class CernlibDisk

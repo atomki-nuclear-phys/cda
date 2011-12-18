@@ -75,14 +75,26 @@ namespace dt5740 {
 
       /// Slot handling changes to channel enablement
       void channelEnabledSlot( int channel, bool on );
-      /// Slot handling changes to channel names
-      void nameChangedSlot( int channel, const QString& text );
-      /// Slot handling changes to histogram channel numbers
-      void channelsChangedSlot( int channel, int channels );
-      /// Slot handling changes to histogram lower bounds
-      void lowerBoundChangedSlot( int channel, double value );
-      /// Slot handling changes to histogram upper bounds
-      void upperBoundChangedSlot( int channel, double value );
+      /// Slot handling changes to the channel's raw name
+      void rawNameChangedSlot( int channel, const QString& text );
+
+      /// Slot handling changes to time channel names
+      void timeNameChangedSlot( int channel, const QString& text );
+      /// Slot handling changes to time histogram channel numbers
+      void timeChannelsChangedSlot( int channel, int channels );
+      /// Slot handling changes to time histogram lower bounds
+      void timeLowerBoundChangedSlot( int channel, double value );
+      /// Slot handling changes to time histogram upper bounds
+      void timeUpperBoundChangedSlot( int channel, double value );
+
+      /// Slot handling changes to energy channel names
+      void energyNameChangedSlot( int channel, const QString& text );
+      /// Slot handling changes to energy histogram channel numbers
+      void energyChannelsChangedSlot( int channel, int channels );
+      /// Slot handling changes to energy histogram lower bounds
+      void energyLowerBoundChangedSlot( int channel, double value );
+      /// Slot handling changes to energy histogram upper bounds
+      void energyUpperBoundChangedSlot( int channel, double value );
 
    private:
       /// Reference to the group that this widget configures

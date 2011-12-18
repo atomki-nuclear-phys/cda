@@ -8,6 +8,7 @@
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QCheckBox )
+QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QLineEdit )
 QT_FORWARD_DECLARE_CLASS( QSpinBox )
 QT_FORWARD_DECLARE_CLASS( QDoubleSpinBox )
@@ -61,63 +62,128 @@ namespace dt5740 {
        * @param on The state of the object
        */
       void enableChanged( int channel, bool on );
-      /// Signal emitted when the name of the channel changes
+      /// Signal emitted when the raw name of the channel changes
       /**
        * @param channel The channel number
-       * @param text The new name of the channel
+       * @param text The new raw name of the channel
        */
-      void nameChanged( int channel, const QString& text );
-      /// Signal emitted when the number of histogram channels changes
+      void rawNameChanged( int channel, const QString& text );
+
+      /// Signal emitted when the name of the time channel changes
       /**
        * @param channel The channel number
-       * @param channels The new number of histogram channels
+       * @param text The new name of the time channel
        */
-      void channelsChanged( int channel, int channels );
-      /// Signal emitted when the histogram lower bound changes
+      void timeNameChanged( int channel, const QString& text );
+      /// Signal emitted when the number of the time histogram's channels changes
       /**
        * @param channel The channel number
-       * @param value The new histogram lower bound
+       * @param channels The new number of time histogram channels
        */
-      void lowerBoundChanged( int channel, double value );
-      /// Signal emitted when the histogram upper bound changes
+      void timeChannelsChanged( int channel, int channels );
+      /// Signal emitted when the time histogram's lower bound changes
       /**
        * @param channel The channel number
-       * @param value The new histogram upper bound
+       * @param value The new time histogram lower bound
        */
-      void upperBoundChanged( int channel, double value );
+      void timeLowerBoundChanged( int channel, double value );
+      /// Signal emitted when the time histogram's upper bound changes
+      /**
+       * @param channel The channel number
+       * @param value The new time histogram upper bound
+       */
+      void timeUpperBoundChanged( int channel, double value );
+
+      /// Signal emitted when the name of the energy channel changes
+      /**
+       * @param channel The channel number
+       * @param text The new name of the energy channel
+       */
+      void energyNameChanged( int channel, const QString& text );
+      /// Signal emitted when the number of the energy histogram's channels changes
+      /**
+       * @param channel The channel number
+       * @param channels The new number of energy histogram channels
+       */
+      void energyChannelsChanged( int channel, int channels );
+      /// Signal emitted when the energy histogram's lower bound changes
+      /**
+       * @param channel The channel number
+       * @param value The new energy histogram lower bound
+       */
+      void energyLowerBoundChanged( int channel, double value );
+      /// Signal emitted when the energy histogram's upper bound changes
+      /**
+       * @param channel The channel number
+       * @param value The new energy histogram upper bound
+       */
+      void energyUpperBoundChanged( int channel, double value );
 
    public slots:
       /// Slot for turning the channel on or off
       void setEnabled( bool on );
-      /// Slot for setting the name of the channel
-      void setName( const QString& text );
-      /// Slot for setting the number of histogram channels
-      void setChannels( int channels );
-      /// Slot for setting the lower bound of the histogram
-      void setLowerBound( double value );
-      /// Slot for setting the upper bound of the histogram
-      void setUpperBound( double value );
+      /// Slot for setting the raw name of the channel
+      void setRawName( const QString& text );
+
+      /// Slot for setting the name of the time channel
+      void setTimeName( const QString& text );
+      /// Slot for setting the number of time histogram channels
+      void setTimeChannels( int channels );
+      /// Slot for setting the lower bound of the time histogram
+      void setTimeLowerBound( double value );
+      /// Slot for setting the upper bound of the time histogram
+      void setTimeUpperBound( double value );
+
+      /// Slot for setting the name of the energy channel
+      void setEnergyName( const QString& text );
+      /// Slot for setting the number of energy histogram channels
+      void setEnergyChannels( int channels );
+      /// Slot for setting the lower bound of the energy histogram
+      void setEnergyLowerBound( double value );
+      /// Slot for setting the upper bound of the energy histogram
+      void setEnergyUpperBound( double value );
 
    private slots:
       /// Slot emitting enableChanged signals
       void enableChangedSlot( bool on );
-      /// Slot emitting nameChanged signals
-      void nameChangedSlot( const QString& text );
-      /// Slot emitting channelsChanged signals
-      void channelsChangedSlot( int channels );
-      /// Slot emitting lowerBoundChanged signals
-      void lowerBoundChangedSlot( double value );
-      /// Slot emitting upperBoundChanged signals
-      void upperBoundChangedSlot( double value );
+      /// Slot emitting the rawNameChanged signals
+      void rawNameChangedSlot( const QString& text );
+
+      /// Slot emitting timeNameChanged signals
+      void timeNameChangedSlot( const QString& text );
+      /// Slot emitting timeChannelsChanged signals
+      void timeChannelsChangedSlot( int channels );
+      /// Slot emitting timeLowerBoundChanged signals
+      void timeLowerBoundChangedSlot( double value );
+      /// Slot emitting timeUpperBoundChanged signals
+      void timeUpperBoundChangedSlot( double value );
+
+      /// Slot emitting energyNameChanged signals
+      void energyNameChangedSlot( const QString& text );
+      /// Slot emitting energyChannelsChanged signals
+      void energyChannelsChangedSlot( int channels );
+      /// Slot emitting energyLowerBoundChanged signals
+      void energyLowerBoundChangedSlot( double value );
+      /// Slot emitting energyUpperBoundChanged signals
+      void energyUpperBoundChangedSlot( double value );
 
    private:
       int             m_channelNumber; ///< The channel described by this widget
 
       QCheckBox*      m_enabledEdit; ///< Widget turning the channel on or off
-      QLineEdit*      m_nameEdit; ///< Widget setting the channel's name
-      QSpinBox*       m_channelsEdit; ///< Widget setting the histogram's channels
-      QDoubleSpinBox* m_lowerBoundEdit; ///< Widget setting the histogram's lower bound
-      QDoubleSpinBox* m_upperBoundEdit; ///< Widget setting the histogram's upper bound
+      QLineEdit*      m_rawNameEdit; ///< Widget setting the channel's raw name
+
+      QLabel*         m_timeLabel; ///< Description of the time channel
+      QLineEdit*      m_timeNameEdit; ///< Widget setting the time channel's name
+      QSpinBox*       m_timeChannelsEdit; ///< Widget setting the time histogram's channels
+      QDoubleSpinBox* m_timeLowerBoundEdit; ///< Widget setting the time histogram's lower bound
+      QDoubleSpinBox* m_timeUpperBoundEdit; ///< Widget setting the time histogram's upper bound
+
+      QLabel*         m_energyLabel; ///< Description of the energy channel
+      QLineEdit*      m_energyNameEdit; ///< Widget setting the energy channel's name
+      QSpinBox*       m_energyChannelsEdit; ///< Widget setting the energy histogram's channels
+      QDoubleSpinBox* m_energyLowerBoundEdit; ///< Widget setting the energy histogram's lower bound
+      QDoubleSpinBox* m_energyUpperBoundEdit; ///< Widget setting the energy histogram's upper bound
 
    }; // class ChannelGui
 

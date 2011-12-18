@@ -86,6 +86,8 @@ namespace dt5740 {
 
       /// Slot handling changes to the pattern generation state
       void patGenEnabledSlot( bool checked );
+      /// Slot handling changes to the raw ntuple saving state
+      void saveRawNtupleSlot( bool checked );
       /// Slot handling the acquisition mode changes
       void acqModeSlot( int index );
       /// Slot handling the gate mode changes
@@ -120,6 +122,7 @@ namespace dt5740 {
 
       QGroupBox* m_acquisitionBox;      ///< Box for the acquisition settings
       QCheckBox* m_patGenEnabledWidget; ///< Pattern generation setting
+      QCheckBox* m_saveRawNtupleWidget; ///< RAW ntuple save setting
       QLabel*    m_acqModeLabel;        ///< Description of the acquisition mode setting
       QComboBox* m_acqModeWidget;       ///< Acquisition mode chooser
       QLabel*    m_gateModeLabel;       ///< Description of the gate mode setting

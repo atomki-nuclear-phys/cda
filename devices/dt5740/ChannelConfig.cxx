@@ -22,8 +22,11 @@ namespace dt5740 {
    using QT_PREPEND_NAMESPACE( QDomElement );
 
    ChannelConfig::ChannelConfig()
-      : m_numberOfChannels( 100 ),
-        m_lowerBound( 0. ), m_upperBound( 100. ), m_name( "time" ),
+      : m_rawName( "raw" ),
+        m_timeNumberOfChannels( 100 ), m_timeLowerBound( 0. ), m_timeUpperBound( 100. ),
+        m_timeName( "time" ),
+        m_energyNumberOfChannels( 100 ), m_energyLowerBound( 0. ), m_energyUpperBound( 100. ),
+        m_energyName( "energy" ),
         m_channelNumber( -1 ),
         m_logger( "dt5740::ChannelConfig" ) {
 
@@ -31,10 +34,15 @@ namespace dt5740 {
 
    ChannelConfig::ChannelConfig( const ChannelConfig& parent )
       : dev::Config(),
-        m_numberOfChannels( parent.m_numberOfChannels ),
-        m_lowerBound( parent.m_lowerBound ),
-        m_upperBound( parent.m_upperBound ),
-        m_name( parent.m_name ),
+        m_rawName( parent.m_rawName ),
+        m_timeNumberOfChannels( parent.m_timeNumberOfChannels ),
+        m_timeLowerBound( parent.m_timeLowerBound ),
+        m_timeUpperBound( parent.m_timeUpperBound ),
+        m_timeName( parent.m_timeName ),
+        m_energyNumberOfChannels( parent.m_energyNumberOfChannels ),
+        m_energyLowerBound( parent.m_energyLowerBound ),
+        m_energyUpperBound( parent.m_energyUpperBound ),
+        m_energyName( parent.m_energyName ),
         m_channelNumber( parent.m_channelNumber ),
         m_logger( "dt5740::ChannelConfig" ) {
 
@@ -48,10 +56,15 @@ namespace dt5740 {
 
       QDataStream input( dev );
       input.setVersion( QDataStream::Qt_4_0 );
-      input >> m_numberOfChannels;
-      input >> m_lowerBound;
-      input >> m_upperBound;
-      input >> m_name;
+      input >> m_rawName;
+      input >> m_timeNumberOfChannels;
+      input >> m_timeLowerBound;
+      input >> m_timeUpperBound;
+      input >> m_timeName;
+      input >> m_energyNumberOfChannels;
+      input >> m_energyLowerBound;
+      input >> m_energyUpperBound;
+      input >> m_energyName;
       input >> m_channelNumber;
 
       printConfig( msg::VERBOSE );
@@ -65,10 +78,15 @@ namespace dt5740 {
 
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
-      output << m_numberOfChannels;
-      output << m_lowerBound;
-      output << m_upperBound;
-      output << m_name;
+      output << m_rawName;
+      output << m_timeNumberOfChannels;
+      output << m_timeLowerBound;
+      output << m_timeUpperBound;
+      output << m_timeName;
+      output << m_energyNumberOfChannels;
+      output << m_energyLowerBound;
+      output << m_energyUpperBound;
+      output << m_energyName;
       output << m_channelNumber;
 
       return true;
@@ -82,29 +100,59 @@ namespace dt5740 {
 
       bool ok;
 
-      m_numberOfChannels = element.attribute( "NumberOfChannels",
-                                              "100" ).toInt( &ok );
+      m_rawName = element.attribute( "RawName", "" );
+
+      m_timeNumberOfChannels = element.attribute( "NumberOfTimeChannels",
+                                                  "100" ).toInt( &ok );
       if( ! ok ) {
          REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"number of channels\" value" ) );
+                           "\"number of time channels\" value" ) );
          return false;
       }
 
-      m_lowerBound = element.attribute( "LowerBound", "0." ).toDouble( &ok );
+      m_timeLowerBound = element.attribute( "TimeLowerBound",
+                                            "0." ).toDouble( &ok );
       if( ! ok ) {
          REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"lower bound\" value" ) );
+                           "\"time lower bound\" value" ) );
          return false;
       }
 
-      m_upperBound = element.attribute( "UpperBound", "100." ).toDouble( &ok );
+      m_timeUpperBound = element.attribute( "TimeUpperBound",
+                                            "100." ).toDouble( &ok );
       if( ! ok ) {
          REPORT_ERROR( tr( "There was a problem reading an "
-                           "\"upper bound\" value" ) );
+                           "\"time upper bound\" value" ) );
          return false;
       }
 
-      m_name = element.attribute( "Name", "" );
+      m_timeName = element.attribute( "TimeName", "" );
+
+      m_energyNumberOfChannels = element.attribute( "NumberOfEnergyChannels",
+                                                    "100" ).toInt( &ok );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "There was a problem reading a "
+                           "\"number of energy channels\" value" ) );
+         return false;
+      }
+
+      m_energyLowerBound = element.attribute( "EnergyLowerBound",
+                                              "0." ).toDouble( &ok );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "There was a problem reading a "
+                           "\"energy lower bound\" value" ) );
+         return false;
+      }
+
+      m_energyUpperBound = element.attribute( "EnergyUpperBound",
+                                              "100." ).toDouble( &ok );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "There was a problem reading an "
+                           "\"energy upper bound\" value" ) );
+         return false;
+      }
+
+      m_energyName = element.attribute( "EnergyName", "" );
 
       m_channelNumber = element.attribute( "ChannelNumber",
                                            "0" ).toInt( &ok );
@@ -123,33 +171,106 @@ namespace dt5740 {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
-      element.setAttribute( "NumberOfChannels", m_numberOfChannels );
-      element.setAttribute( "LowerBound", m_lowerBound );
-      element.setAttribute( "UpperBound", m_upperBound );
-      element.setAttribute( "Name", m_name );
+      element.setAttribute( "RawName", m_rawName );
+      element.setAttribute( "NumberOfTimeChannels", m_timeNumberOfChannels );
+      element.setAttribute( "TimeLowerBound", m_timeLowerBound );
+      element.setAttribute( "TimeUpperBound", m_timeUpperBound );
+      element.setAttribute( "TimeName", m_timeName );
+      element.setAttribute( "NumberOfEnergyChannels", m_energyNumberOfChannels );
+      element.setAttribute( "EnergyLowerBound", m_energyLowerBound );
+      element.setAttribute( "EnergyUpperBound", m_energyUpperBound );
+      element.setAttribute( "EnergyName", m_energyName );
       element.setAttribute( "ChannelNumber", m_channelNumber );
 
       return true;
    }
 
-   int ChannelConfig::getNumberOfChannels() const {
+   int ChannelConfig::getTimeNumberOfChannels() const {
 
-      return m_numberOfChannels;
+      return m_timeNumberOfChannels;
    }
 
-   double ChannelConfig::getLowerBound() const {
+   double ChannelConfig::getTimeLowerBound() const {
 
-      return m_lowerBound;
+      return m_timeLowerBound;
    }
 
-   double ChannelConfig::getUpperBound() const {
+   double ChannelConfig::getTimeUpperBound() const {
 
-      return m_upperBound;
+      return m_timeUpperBound;
    }
 
-   const QString& ChannelConfig::getName() const {
+   const QString& ChannelConfig::getTimeName() const {
 
-      return m_name;
+      return m_timeName;
+   }
+
+   void ChannelConfig::setTimeNumberOfChannels( int value ) {
+
+      m_timeNumberOfChannels = value;
+      return;
+   }
+
+   void ChannelConfig::setTimeLowerBound( double value ) {
+
+      m_timeLowerBound = value;
+      return;
+   }
+
+   void ChannelConfig::setTimeUpperBound( double value ) {
+
+      m_timeUpperBound = value;
+      return;
+   }
+
+   void ChannelConfig::setTimeName( const QString& value ) {
+
+      m_timeName = value;
+      return;
+   }
+
+   int ChannelConfig::getEnergyNumberOfChannels() const {
+
+      return m_energyNumberOfChannels;
+   }
+
+   double ChannelConfig::getEnergyLowerBound() const {
+
+      return m_energyLowerBound;
+   }
+
+   double ChannelConfig::getEnergyUpperBound() const {
+
+      return m_energyUpperBound;
+   }
+
+   const QString& ChannelConfig::getEnergyName() const {
+
+      return m_energyName;
+   }
+
+   void ChannelConfig::setEnergyNumberOfChannels( int value ) {
+
+      m_energyNumberOfChannels = value;
+      return;
+   }
+
+   void ChannelConfig::setEnergyLowerBound( double value ) {
+
+      m_energyLowerBound = value;
+      return;
+   }
+
+   void ChannelConfig::setEnergyUpperBound( double value ) {
+
+      m_energyUpperBound = value;
+      return;
+   }
+
+   void ChannelConfig::setEnergyName( const QString& value ) {
+
+      m_energyName = value;
+      return;
    }
 
    int ChannelConfig::getChannelNumber() const {
@@ -157,33 +278,20 @@ namespace dt5740 {
       return m_channelNumber;
    }
 
-   void ChannelConfig::setNumberOfChannels( int value ) {
-
-      m_numberOfChannels = value;
-      return;
-   }
-
-   void ChannelConfig::setLowerBound( double value ) {
-
-      m_lowerBound = value;
-      return;
-   }
-
-   void ChannelConfig::setUpperBound( double value ) {
-
-      m_upperBound = value;
-      return;
-   }
-
-   void ChannelConfig::setName( const QString& value ) {
-
-      m_name = value;
-      return;
-   }
-
    void ChannelConfig::setChannelNumber( int number ) {
 
       m_channelNumber = number;
+      return;
+   }
+
+   const QString& ChannelConfig::getRawName() const {
+
+      return m_rawName;
+   }
+
+   void ChannelConfig::setRawName( const QString& value ) {
+
+      m_rawName = value;
       return;
    }
 
@@ -195,13 +303,21 @@ namespace dt5740 {
 
       m_logger << level
                << tr( " - Channel number    : %1\n"
-                      " - Number of channels: %2\n"
-                      " - Lower bound       : %3\n"
-                      " - Upper bound       : %4\n"
-                      " - Name              : %5" )
-         .arg( m_channelNumber ).arg( m_numberOfChannels )
-         .arg( m_lowerBound ).arg( m_upperBound )
-         .arg( m_name )
+                      " - Raw channel name  : %2\n"
+                      " - Number of time channels: %3\n"
+                      " - Time lower bound       : %4\n"
+                      " - Time upper bound       : %5\n"
+                      " - Time name              : %6\n"
+                      " - Number of energy channels: %7\n"
+                      " - Energy lower bound       : %8\n"
+                      " - Energy upper bound       : %9\n"
+                      " - Energy name              : %10" )
+         .arg( m_channelNumber ).arg( m_rawName )
+         .arg( m_timeNumberOfChannels )
+         .arg( m_timeLowerBound ).arg( m_timeUpperBound )
+         .arg( m_timeName ).arg( m_energyNumberOfChannels )
+         .arg( m_energyLowerBound ).arg( m_energyUpperBound )
+         .arg( m_energyName )
                << msg::endmsg;
 
       return;
@@ -209,10 +325,18 @@ namespace dt5740 {
 
    void ChannelConfig::clear() {
 
-      m_numberOfChannels = 100;
-      m_lowerBound = 0.;
-      m_upperBound = 100.;
-      m_name = "";
+      m_rawName = "";
+
+      m_timeNumberOfChannels = 100;
+      m_timeLowerBound = 0.;
+      m_timeUpperBound = 100.;
+      m_timeName = "";
+
+      m_energyNumberOfChannels = 100;
+      m_energyLowerBound = 0.;
+      m_energyUpperBound = 100.;
+      m_energyName = "";
+
       m_channelNumber = -1;
 
       return;

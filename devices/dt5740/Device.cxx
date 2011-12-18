@@ -41,6 +41,7 @@ namespace dt5740 {
         m_postTrigPercentage( 0 ), m_extTrigEnabled( false ),
         m_extTrigOutEnabled( false ),
         m_acqMode( caen::Digitizer::ACQ_SW_Controlled ),
+        m_saveRawNtuple( false ),
         m_logger( "dt5740::Device" ) {
 
       // Set the ID of each group:
@@ -84,6 +85,7 @@ namespace dt5740 {
       input >> m_extTrigOutEnabled;
       input >> ctype;
       m_acqMode = caen::Digitizer::convertAcqMode( ctype );
+      input >> m_saveRawNtuple;
 
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -122,6 +124,7 @@ namespace dt5740 {
       output << m_extTrigEnabled;
       output << m_extTrigOutEnabled;
       output << caen::Digitizer::convertAcqMode( m_acqMode );
+      output << m_saveRawNtuple;
 
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -229,6 +232,14 @@ namespace dt5740 {
          return false;
       }
 
+      m_saveRawNtuple = element.attribute( "SaveRawNtuple",
+                                           "0" ).toInt( &ok );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "There was a problem reading a "
+                           "\"save RAW ntuple\" value" ) );
+         return false;
+      }
+
       //
       // Configure the groups:
       //
@@ -278,6 +289,7 @@ namespace dt5740 {
       element.setAttribute( "ExtTrigOutEnabled", m_extTrigOutEnabled );
       element.setAttribute( "AcqMode",
                             caen::Digitizer::convertAcqMode( m_acqMode ) );
+      element.setAttribute( "SaveRawNtuple", m_saveRawNtuple );
 
       //
       // Create a new node for the configuration of each group:

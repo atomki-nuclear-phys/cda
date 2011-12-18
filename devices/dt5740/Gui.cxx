@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 2530 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4160 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -154,20 +154,26 @@ namespace dt5740 {
       //
       m_acquisitionBox = new QGroupBox( tr( "Data acquisition settings" ),
                                         m_scrollWidget );
-      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 150 ) );
+      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 180 ) );
 
       m_patGenEnabledWidget = new QCheckBox( tr( "Enable test pattern generation" ),
                                              m_acquisitionBox );
       m_patGenEnabledWidget->setGeometry( QRect( 10, 25, 400, 25 ) );
       connect( m_patGenEnabledWidget, SIGNAL( toggled( bool ) ),
-               this, SLOT( patGenEnabledSlot( bool ) ) ); 
+               this, SLOT( patGenEnabledSlot( bool ) ) );
+
+      m_saveRawNtupleWidget = new QCheckBox( tr( "Save raw data to ntuple" ),
+                                             m_acquisitionBox );
+      m_saveRawNtupleWidget->setGeometry( QRect( 10, 55, 400, 25 ) );
+      connect( m_saveRawNtupleWidget, SIGNAL( toggled( bool ) ),
+               this, SLOT( saveRawNtupleSlot( bool ) ) );
 
       m_acqModeLabel = new QLabel( tr( "Acquisition mode:" ),
                                    m_acquisitionBox );
-      m_acqModeLabel->setGeometry( QRect( 10, 55, 150, 25 ) );
+      m_acqModeLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
 
       m_acqModeWidget = new QComboBox( m_acquisitionBox );
-      m_acqModeWidget->setGeometry( QRect( 180, 55, 250, 25 ) );
+      m_acqModeWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
       m_acqModeWidget->addItem( "Register controlled" );
       m_acqModeWidget->addItem( "GPI controlled" );
       connect( m_acqModeWidget, SIGNAL( currentIndexChanged( int ) ),
@@ -175,10 +181,10 @@ namespace dt5740 {
 
       m_gateModeLabel = new QLabel( tr( "Gate mode:" ),
                                     m_acquisitionBox );
-      m_gateModeLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
+      m_gateModeLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
 
       m_gateModeWidget = new QComboBox( m_acquisitionBox );
-      m_gateModeWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
+      m_gateModeWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
       m_gateModeWidget->addItem( "Window" );
       m_gateModeWidget->addItem( "Single shot" );
       connect( m_gateModeWidget, SIGNAL( currentIndexChanged( int ) ),
@@ -186,10 +192,10 @@ namespace dt5740 {
 
       m_bufferModeLabel = new QLabel( tr( "Buffer mode:" ),
                                       m_acquisitionBox );
-      m_bufferModeLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
+      m_bufferModeLabel->setGeometry( QRect( 10, 145, 150, 25 ) );
 
       m_bufferModeWidget = new QComboBox( m_acquisitionBox );
-      m_bufferModeWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
+      m_bufferModeWidget->setGeometry( QRect( 180, 145, 250, 25 ) );
       m_bufferModeWidget->setToolTip( "You can choose how many samples should be "
                                       "collected after each trigger, using this "
                                       "property." );
@@ -214,7 +220,7 @@ namespace dt5740 {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 695 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 725 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
    }
@@ -243,6 +249,7 @@ namespace dt5740 {
       delete m_triggerBox;
 
       delete m_patGenEnabledWidget;
+      delete m_saveRawNtupleWidget;
       delete m_acqModeLabel;
       delete m_acqModeWidget;
       delete m_gateModeLabel;
@@ -372,6 +379,12 @@ namespace dt5740 {
    void Gui::patGenEnabledSlot( bool checked ) {
 
       m_patGenEnabled = checked;
+      return;
+   }
+
+   void Gui::saveRawNtupleSlot( bool checked ) {
+
+      m_saveRawNtuple = checked;
       return;
    }
 

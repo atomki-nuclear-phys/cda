@@ -9,14 +9,17 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CernlibHist.h"
+#   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/CernlibHist.h"
+#   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
+#include "Processor.h"
 
 namespace dt5740 {
 
@@ -47,6 +50,12 @@ namespace dt5740 {
                                  const cernlib::HistMgr& hmgr ) const;
 
    private:
+      Processor m_processor; ///< Object reconstructing the signals
+      /// "Map" for the created histograms
+      int m_histMap[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 2 ];
+      mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info
+      mutable caen::Digitizer::EventData16Bit m_eventData; ///< Decoded event data
+
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class CernlibBist

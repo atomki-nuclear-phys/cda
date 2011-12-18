@@ -16,7 +16,7 @@ namespace dt5740 {
 
    // Initialize the static constant(s):
    const int GroupGui::WIDTH  = 480;
-   const int GroupGui::HEIGHT = 450;
+   const int GroupGui::HEIGHT = 850;
 
    GroupGui::GroupGui( GroupConfig& group, QWidget* parent,
                        Qt::WindowFlags flags )
@@ -129,20 +129,32 @@ namespace dt5740 {
             new ChannelGui( m_group.getGroupNumber() *
                             GroupConfig::CHANNELS_IN_GROUP + i,
                             m_groupBox );
-         m_channels[ i ]->setGeometry( QRect( 10, 240 + i * 25,
+         m_channels[ i ]->setGeometry( QRect( 10, 240 + i * 75,
                                               ChannelGui::WIDTH,
                                               ChannelGui::HEIGHT ) );
 
          connect( m_channels[ i ], SIGNAL( enableChanged( int, bool ) ),
                   this, SLOT( channelEnabledSlot( int, bool ) ) );
-         connect( m_channels[ i ], SIGNAL( nameChanged( int, const QString& ) ),
-                  this, SLOT( nameChangedSlot( int, const QString& ) ) );
-         connect( m_channels[ i ], SIGNAL( channelsChanged( int, int ) ),
-                  this, SLOT( channelsChangedSlot( int, int ) ) );
-         connect( m_channels[ i ], SIGNAL( lowerBoundChanged( int, double ) ),
-                  this, SLOT( lowerBoundChangedSlot( int, double ) ) );
-         connect( m_channels[ i ], SIGNAL( upperBoundChanged( int, double ) ),
-                  this, SLOT( upperBoundChangedSlot( int, double ) ) );
+         connect( m_channels[ i ], SIGNAL( rawNameChanged( int, const QString& ) ),
+                  this, SLOT( rawNameChangedSlot( int, const QString& ) ) );
+
+         connect( m_channels[ i ], SIGNAL( timeNameChanged( int, const QString& ) ),
+                  this, SLOT( timeNameChangedSlot( int, const QString& ) ) );
+         connect( m_channels[ i ], SIGNAL( timeChannelsChanged( int, int ) ),
+                  this, SLOT( timeChannelsChangedSlot( int, int ) ) );
+         connect( m_channels[ i ], SIGNAL( timeLowerBoundChanged( int, double ) ),
+                  this, SLOT( timeLowerBoundChangedSlot( int, double ) ) );
+         connect( m_channels[ i ], SIGNAL( timeUpperBoundChanged( int, double ) ),
+                  this, SLOT( timeUpperBoundChangedSlot( int, double ) ) );
+
+         connect( m_channels[ i ], SIGNAL( energyNameChanged( int, const QString& ) ),
+                  this, SLOT( energyNameChangedSlot( int, const QString& ) ) );
+         connect( m_channels[ i ], SIGNAL( energyChannelsChanged( int, int ) ),
+                  this, SLOT( energyChannelsChangedSlot( int, int ) ) );
+         connect( m_channels[ i ], SIGNAL( energyLowerBoundChanged( int, double ) ),
+                  this, SLOT( energyLowerBoundChangedSlot( int, double ) ) );
+         connect( m_channels[ i ], SIGNAL( energyUpperBoundChanged( int, double ) ),
+                  this, SLOT( energyUpperBoundChangedSlot( int, double ) ) );
       }
 
    }
@@ -220,10 +232,19 @@ namespace dt5740 {
       for( int i = 0; i < GroupConfig::CHANNELS_IN_GROUP; ++i ) {
          if( m_group.getChannel( i ) ) {
             m_channels[ i ]->setEnabled( false );
-            m_channels[ i ]->setName( m_group.getChannel( i )->getName() );
-            m_channels[ i ]->setChannels( m_group.getChannel( i )->getNumberOfChannels() );
-            m_channels[ i ]->setLowerBound( m_group.getChannel( i )->getLowerBound() );
-            m_channels[ i ]->setUpperBound( m_group.getChannel( i )->getUpperBound() );
+
+            m_channels[ i ]->setRawName( m_group.getChannel( i )->getRawName() );
+
+            m_channels[ i ]->setTimeName( m_group.getChannel( i )->getTimeName() );
+            m_channels[ i ]->setTimeChannels( m_group.getChannel( i )->getTimeNumberOfChannels() );
+            m_channels[ i ]->setTimeLowerBound( m_group.getChannel( i )->getTimeLowerBound() );
+            m_channels[ i ]->setTimeUpperBound( m_group.getChannel( i )->getTimeUpperBound() );
+
+            m_channels[ i ]->setEnergyName( m_group.getChannel( i )->getEnergyName() );
+            m_channels[ i ]->setEnergyChannels( m_group.getChannel( i )->getEnergyNumberOfChannels() );
+            m_channels[ i ]->setEnergyLowerBound( m_group.getChannel( i )->getEnergyLowerBound() );
+            m_channels[ i ]->setEnergyUpperBound( m_group.getChannel( i )->getEnergyUpperBound() );
+
             m_channels[ i ]->setEnabled( true );
          } else {
             m_channels[ i ]->setEnabled( false );
@@ -303,35 +324,75 @@ namespace dt5740 {
       return;
    }
 
-   void GroupGui::nameChangedSlot( int channel, const QString& text ) {
+   void GroupGui::rawNameChangedSlot( int channel, const QString& text ) {
 
       m_group.getChannel( channel -
                           ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setName( text );
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setRawName( text );
       return;
    }
 
-   void GroupGui::channelsChangedSlot( int channel, int channels ) {
+   void GroupGui::timeNameChangedSlot( int channel, const QString& text ) {
 
       m_group.getChannel( channel -
                           ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setNumberOfChannels( channels );
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeName( text );
       return;
    }
 
-   void GroupGui::lowerBoundChangedSlot( int channel, double value ) {
+   void GroupGui::timeChannelsChangedSlot( int channel, int channels ) {
 
       m_group.getChannel( channel -
                           ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setLowerBound( value );
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeNumberOfChannels( channels );
       return;
    }
 
-   void GroupGui::upperBoundChangedSlot( int channel, double value ) {
+   void GroupGui::timeLowerBoundChangedSlot( int channel, double value ) {
 
       m_group.getChannel( channel -
                           ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setUpperBound( value );
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeLowerBound( value );
+      return;
+   }
+
+   void GroupGui::timeUpperBoundChangedSlot( int channel, double value ) {
+
+      m_group.getChannel( channel -
+                          ( m_group.getGroupNumber() *
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeUpperBound( value );
+      return;
+   }
+
+   void GroupGui::energyNameChangedSlot( int channel, const QString& text ) {
+
+      m_group.getChannel( channel -
+                          ( m_group.getGroupNumber() *
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyName( text );
+      return;
+   }
+
+   void GroupGui::energyChannelsChangedSlot( int channel, int channels ) {
+
+      m_group.getChannel( channel -
+                          ( m_group.getGroupNumber() *
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyNumberOfChannels( channels );
+      return;
+   }
+
+   void GroupGui::energyLowerBoundChangedSlot( int channel, double value ) {
+
+      m_group.getChannel( channel -
+                          ( m_group.getGroupNumber() *
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyLowerBound( value );
+      return;
+   }
+
+   void GroupGui::energyUpperBoundChangedSlot( int channel, double value ) {
+
+      m_group.getChannel( channel -
+                          ( m_group.getGroupNumber() *
+                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyUpperBound( value );
       return;
    }
 

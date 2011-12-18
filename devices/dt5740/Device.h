@@ -147,6 +147,9 @@ namespace dt5740 {
       /// Acquisition mode for the device
       caen::Digitizer::AcquisitionMode m_acqMode;
 
+      /// Flag showing whether raw information should be put into ntuples
+      bool m_saveRawNtuple;
+
    private:
       mutable msg::Logger m_logger; ///< Message logger object
 
