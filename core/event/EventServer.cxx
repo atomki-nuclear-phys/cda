@@ -152,9 +152,12 @@ namespace ev {
          for( ; ; ) {
 
             //
-            // Wait for data to become available on the socket:
+            // Only ask for new data if there's no data on the socket right
+            // now. (There might be if the data rate from the readout
+            // application is high.)
             //
-            if( ! socket->waitForReadyRead( -1 ) ) {
+            if( ( ! socket->bytesAvailable() ) &&
+                ( ! socket->waitForReadyRead( -1 ) ) ) {
                m_logger << msg::INFO
                         << tr( "Connection to event sender lost." )
                         << msg::endmsg;
