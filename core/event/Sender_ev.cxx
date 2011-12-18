@@ -3,6 +3,9 @@
 // Qt include(s):
 #include <QtNetwork/QTcpSocket>
 
+// CDA include(s):
+#include "../common/errorcheck.h"
+
 // Local include(s):
 #include "Sender.h"
 #include "BinaryStream.h"
@@ -16,7 +19,7 @@ namespace ev {
    Sender::Sender()
       :  m_sockets(), m_logger( "ev::Sender" ) {
 
-      m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object created" ) );
    }
 
    /**
@@ -32,7 +35,7 @@ namespace ev {
          delete ( *socket );
 	   }
 
-      m_logger << msg::VERBOSE << tr( "Object deleted" ) << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object deleted" ) );
    }
 
    /**
@@ -116,15 +119,7 @@ namespace ev {
          //
          BinaryStream out( *socket );
          out << event;
-         ( *socket )->flush();
-
-         //
-         // A little debugging message:
-         //
-         m_logger << msg::VERBOSE
-                  << tr( "Bytes to write: %1" ).arg( ( *socket )->bytesToWrite() )
-                  << msg::endmsg;
-
+         CHECK( ( *socket )->waitForBytesWritten( 500 ) );
       }
 
       return result;
@@ -138,10 +133,9 @@ namespace ev {
     */
    void Sender::printError( const QTcpSocket& socket ) const {
 
-      m_logger << msg::ERROR
-               << tr( "Could not connect to event receiver on address \"%1\", "
-                      "port \"%2\"" ).arg( socket.peerName() )
-         .arg( socket.peerPort() ) << msg::endmsg;
+      REPORT_ERROR( tr( "Could not connect to event receiver on address \"%1\", "
+                        "port \"%2\"" ).arg( socket.peerName() )
+                    .arg( socket.peerPort() ) );
 
       return;
    }

@@ -6,19 +6,24 @@
 // library...
 //
 
+// CDA include(s):
+#include "../common/errorcheck.h"
+
 // Local include(s):
 #include "BinaryStream.h"
 
 namespace ev {
 
    BinaryStream::BinaryStream( QIODevice* device )
-      : QDataStream( device ) {
+      : QDataStream( device ),
+        m_logger( "ev::BinaryStream" ) {
 
    }
 
    BinaryStream::BinaryStream( QByteArray* array,
                                QIODevice::OpenMode openMode )
-      : QDataStream( array, openMode ) {
+      : QDataStream( array, openMode ),
+        m_logger( "ev::BinaryStream" ) {
 
    }
 
@@ -33,14 +38,13 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      ( * ( QDataStream* ) this ) << ( quint32 ) event.getFragments().size();
+      const std::vector< std::tr1::shared_ptr< Fragment > >& fragments =
+         event.getFragments();
 
-      std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator itr =
-         event.getFragments().begin();
-      std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator end =
-         event.getFragments().end();
-      for( ; itr != end; ++itr ) {
-         *this << *( *itr );
+      ( * ( QDataStream* ) this ) << ( quint32 ) fragments.size();
+
+      for( size_t i = 0; i < fragments.size(); ++i ) {
+         *this << *( fragments[ i ] );
       }
 
       return *this;
@@ -60,6 +64,10 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
+      if( ! ensureDataAvailable( 4 ) ) {
+         REPORT_ERROR( tr( "Can't read the needed data" ) );
+         return *this;
+      }
       quint32 nFragments;
       ( * ( QDataStream* ) this ) >> nFragments;
 
@@ -84,13 +92,17 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      ( * ( QDataStream* ) this ) << fragment.getModuleID();
-      ( * ( QDataStream* ) this ) << ( quint32 ) fragment.getDataWords().size();
+      const std::vector< uint32_t >& dwords = fragment.getDataWords();
 
-      for( std::vector< uint32_t >::const_iterator it =
-              fragment.getDataWords().begin();
-           it != fragment.getDataWords().end(); ++it ) {
-         ( * ( QDataStream* ) this ) << ( quint32 ) ( *it );
+      ( * ( QDataStream* ) this ) << fragment.getModuleID();
+      ( * ( QDataStream* ) this ) << ( quint32 ) dwords.size();
+
+      for( size_t i = 0; i < dwords.size(); ++i ) {
+         ( * ( QDataStream* ) this ) << dwords[ i ];
+         if( ! ensureDataSent( 10000 ) ) {
+            REPORT_ERROR( tr( "Couldn't send data" ) );
+            return *this;
+         }
       }
 
       return *this;
@@ -113,6 +125,10 @@ namespace ev {
       int moduleID;
       quint32 nDataWords;
 
+      if( ! ensureDataAvailable( 8 ) ) {
+         REPORT_ERROR( tr( "Can't read the needed data" ) );
+         return *this;
+      }
       ( * ( QDataStream* ) this ) >> moduleID;
       ( * ( QDataStream* ) this ) >> nDataWords;
 
@@ -120,11 +136,45 @@ namespace ev {
 
       uint32_t dataWord;
       for( quint32 i = 0; i < nDataWords; ++i ) {
+         if( ! ensureDataAvailable( 4 ) ) {
+            REPORT_ERROR( tr( "Can't read the needed data" ) );
+            return *this;
+         }
          ( * ( QDataStream* ) this ) >> dataWord;
          fragment.addDataWord( dataWord );
       }
 
       return *this;
+   }
+
+   bool BinaryStream::ensureDataAvailable( qint64 minBytes ) {
+
+      // If we are not operating on an I/O device, then
+      // return right away:
+      if( ! device() ) return true;
+
+      // Check if the requested amount of data is available:
+      if( device()->bytesAvailable() >= minBytes ) return true;
+
+      // Wait for new data to arrive to the socket:
+      CHECK( device()->waitForReadyRead( 500 ) );
+
+      return true;
+   }
+
+   bool BinaryStream::ensureDataSent( qint64 maxBytes ) {
+
+      // If we are not operating on an I/O device, then
+      // return right away:
+      if( ! device() ) return true;
+
+      // Check if the requested amount of data is available:
+      if( device()->bytesToWrite() < maxBytes ) return true;
+
+      // Write new data to the output:
+      CHECK( device()->waitForBytesWritten( 500 ) );
+
+      return true;
    }
 
 } // namespace ev

@@ -248,6 +248,10 @@ namespace caen {
    private:
       int m_handle; ///< C-style device handle
 
+#ifndef HAVE_CAEN_LIBS
+      uint32_t m_recordLength; ///< Record length to read out in test mode
+#endif // HAVE_CAEN_LIBS
+
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Digitizer

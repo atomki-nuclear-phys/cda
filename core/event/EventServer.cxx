@@ -138,6 +138,9 @@ namespace ev {
             return;
          }
 
+         REPORT_VERBOSE( tr( "Size of the reading socket: %1" )
+                         .arg( socket->readBufferSize() ) );
+
          //
          // Start a never-ending loop:
          // Use sinals (for ex. SIGINT) to stop it.

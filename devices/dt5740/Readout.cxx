@@ -46,7 +46,11 @@ namespace dt5740 {
       CHECK( m_digitizer.writeRegister( REG_SCRATCH, 0x383838 ) );
       uint32_t dummy = 0;
       CHECK( m_digitizer.readRegister( REG_SCRATCH, dummy ) );
+#ifdef HAVE_CAEN_LIBS
+      // This should only be checked when actually communicating
+      // with the hardware.
       CHECK( dummy == 0x383838 );
+#endif // HAVE_CAEN_LIBS
 
       // Print some information about the board for debugging:
       CHECK( m_digitizer.printInfo( msg::DEBUG ) );
@@ -69,7 +73,8 @@ namespace dt5740 {
       // Configure the group wide parameters:
       uint32_t groupMask = 0;
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         CHECK( m_digitizer.setGroupTriggerThreshold( i, m_groups[ i ].getTrigThreshold() ) );
+         CHECK( m_digitizer.setGroupTriggerThreshold( i,
+                                                      m_groups[ i ].getTrigThreshold() ) );
          CHECK( m_digitizer.setGroupDCOffset( i, m_groups[ i ].getDCOffset() ) );
          CHECK( m_digitizer.setChannelGroupMask( i, m_groups[ i ].getTrigMask() ) );
          // Check if any channels are active in this group:
@@ -135,6 +140,7 @@ namespace dt5740 {
 
       // Create the new event fragment:
       ev::Fragment* result = new ev::Fragment();
+      result->setModuleID( getID() );
 
       // Read a new (set of) event(s) if the event buffer is empty:
       if( ! m_numEvents ) {
@@ -147,6 +153,10 @@ namespace dt5740 {
                REPORT_ERROR( tr( "Couldn't read number of available events" ) );
                return result;
             }
+#ifndef HAVE_CAEN_LIBS
+            // When in testing mode, let's not wait around here...
+            events = 1;
+#endif // HAVE_CAEN_LIBS
             // If there are events available, exit the loop:
             if( events ) {
                break;

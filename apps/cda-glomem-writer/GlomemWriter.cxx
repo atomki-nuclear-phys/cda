@@ -61,9 +61,8 @@ namespace glomem {
       // Run the thread:
       int retval = 0;
       if( ( retval = exec() ) ) {
-         m_logger << msg::FATAL
-                  << tr( "Thread exited with return code: %1" ).arg( retval )
-                  << msg::endmsg;
+         REPORT_FATAL( tr( "Thread exited with return code: %1" )
+                       .arg( retval ) );
       }
 
       return;
@@ -80,14 +79,12 @@ namespace glomem {
 
          // Display this event:
          if( ! m_crate.displayEvent( event ) ) {
-            m_logger << msg::FATAL << tr( "There was a problem diplaying an event" )
-                     << msg::endmsg;
+            REPORT_FATAL( tr( "There was a problem diplaying an event" ) );
             exit( 1 );
          }
 
          // Increment the event counter:
          ++m_processedEvents;
-
       }
 
       return;

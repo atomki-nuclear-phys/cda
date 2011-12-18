@@ -424,6 +424,9 @@ namespace caen {
 
    Digitizer::Digitizer()
       : m_handle( -1 ),
+#ifndef HAVE_CAEN_LIBS
+        m_recordLength( 0 ),
+#endif // HAVE_CAEN_LIBS
         m_logger( "caen::Digitizer" ) {
 
    }
@@ -1072,6 +1075,7 @@ namespace caen {
 #else
       REPORT_VERBOSE( tr( "Record length set to %1" )
                       .arg( size ) );
+      m_recordLength = size;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -1083,7 +1087,7 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_GetRecordLength( m_handle, &size ) );
 #else
-      size = 100;
+      size = m_recordLength;
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -1287,15 +1291,33 @@ namespace caen {
                                     &evtVoidPtr ) );
       // Fill the event data to the output:
       for( int i = 0; i < EventData16Bit::MAX_CHANNEL_NUMBER; ++i ) {
-         eventData.chData[ i ].resize( eventData.chSize[ i ], 0 );
-         for( uint32_t j = 0; j < eventData.chSize[ i ]; ++j ) {
+         eventData.chData[ i ].resize( evt->ChSize[ i ], 0 );
+         for( uint32_t j = 0; j < evt->ChSize[ i ]; ++j ) {
             eventData.chData[ i ][ j ] = evt->DataChannel[ i ][ j ];
          }
       }
       // Free the allocated memory:
       CHECK( CAEN_DGTZ_FreeEvent( m_handle, &evtVoidPtr ) );
 #else
-
+      // Print what we're doing:
+      REPORT_VERBOSE( tr( "Reading event %1 from buffer with size %2" )
+                      .arg( event ).arg( bufferSize ) );
+      // Fill the event info with some dummy values:
+      eventInfo.eventSize      = 1;
+      eventInfo.boardId        = 0;
+      eventInfo.pattern        = 0;
+      eventInfo.channelMask    = 0xffffffff;
+      eventInfo.eventCounter   = 1;
+      eventInfo.triggerTimeTag = 0;
+      // Fill the event data with some dummy values:
+      for( int i = 0; i < EventData16Bit::MAX_CHANNEL_NUMBER; ++i ) {
+         eventData.chData[ i ].resize( m_recordLength, 0 );
+         for( uint32_t j = 0; j < m_recordLength; ++j ) {
+            eventData.chData[ i ][ j ] = 1000;
+         }
+      }
+      // Sleep a bit, in order to produce a meaningful test rate:
+      common::Sleep( 100 );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -1326,15 +1348,33 @@ namespace caen {
                                     &evtVoidPtr ) );
       // Fill the event data to the output:
       for( int i = 0; i < EventData8Bit::MAX_CHANNEL_NUMBER; ++i ) {
-         eventData.chData[ i ].resize( eventData.chSize[ i ], 0 );
-         for( uint32_t j = 0; j < eventData.chSize[ i ]; ++j ) {
+         eventData.chData[ i ].resize( evt->ChSize[ i ], 0 );
+         for( uint32_t j = 0; j < evt->ChSize[ i ]; ++j ) {
             eventData.chData[ i ][ j ] = evt->DataChannel[ i ][ j ];
          }
       }
       // Free the allocated memory:
       CHECK( CAEN_DGTZ_FreeEvent( m_handle, &evtVoidPtr ) );
 #else
-
+      // Print what we're doing:
+      REPORT_VERBOSE( tr( "Reading event %1 from buffer with size %2" )
+                      .arg( event ).arg( bufferSize ) );
+      // Fill the event info with some dummy values:
+      eventInfo.eventSize      = 1;
+      eventInfo.boardId        = 0;
+      eventInfo.pattern        = 0;
+      eventInfo.channelMask    = 0xffffffff;
+      eventInfo.eventCounter   = 1;
+      eventInfo.triggerTimeTag = 0;
+      // Fill the event data with some dummy values:
+      for( int i = 0; i < EventData8Bit::MAX_CHANNEL_NUMBER; ++i ) {
+         eventData.chData[ i ].resize( m_recordLength, 0 );
+         for( uint32_t j = 0; j < m_recordLength; ++j ) {
+            eventData.chData[ i ][ j ] = 100;
+         }
+      }
+      // Sleep a bit, in order to produce a meaningful test rate:
+      common::Sleep( 100 );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:

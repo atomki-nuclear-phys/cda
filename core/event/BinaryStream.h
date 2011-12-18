@@ -5,6 +5,10 @@
 
 // Qt include(s):
 #include <QtCore/QDataStream>
+#include <QtCore/QCoreApplication>
+
+// CDA include(s):
+#include "../msg/Logger.h"
 
 // Local include(s):
 #include "Event.h"
@@ -40,6 +44,9 @@ namespace ev {
     */
    class BinaryStream : public QDataStream {
 
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( ev::BinaryStream )
+
    public:
       /// Constructor operating on a binary device
       BinaryStream( QIODevice* device = 0 );
@@ -57,6 +64,13 @@ namespace ev {
       BinaryStream& operator<< ( const Fragment& fragment );
       /// Operator "de-serialising" a CAMAC event fragment
       BinaryStream& operator>> ( Fragment& fragment );
+
+      /// Function making sure that the socket has data available
+      bool ensureDataAvailable( qint64 minBytes );
+      /// Function making sure that the socket sends all data
+      bool ensureDataSent( qint64 maxBytes );
+
+      mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class BinaryStream
 
