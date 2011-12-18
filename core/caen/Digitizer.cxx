@@ -1,5 +1,8 @@
 // $Id$
 
+// System include(s):
+#include <cmath>
+
 // CAEN include(s):
 #ifdef HAVE_CAEN_LIBS
 // On Windows we compile the code with MinGW, so this definition would just
@@ -418,6 +421,54 @@ namespace {
       return "Unknown";
    }
 
+   /// 16-bit gaussian distribution generator
+   /**
+    * When generating a pattern in test mode, this function is used
+    * for simulating a 16-bit device.
+    *
+    * It generates a Gaussian distribution with a peak value of 2100,
+    * a minimum value of 100, a sigma of 1/16-th of the total samples,
+    * and a random mean value between 1/4 - 3/4 of the samples.
+    *
+    * @param samples Total number of samples read out
+    * @param sample The current sample to be simulated
+    * @returns A meaningful looking Gaussian distribution
+    */
+   uint16_t gauss16( uint32_t samples, uint32_t sample ) {
+
+      const double peak  = 2000.0;
+      const double sigma = samples / 16.0;
+      const double mean  = samples / 4.0 + rand() % ( samples / 2 );
+      const double arg   = ( sample - mean ) / sigma;
+      return ( static_cast< uint16_t >( std::floor( peak *
+                                                    std::exp( -0.5 * arg * arg ) ) ) +
+               100 );
+   }
+
+   /// 8-bit gaussian distribution generator
+   /**
+    * When generating a pattern in test mode, this function is used
+    * for simulating an 8-bit device.
+    *
+    * It generates a Gaussian distribution with a peak value of 2100,
+    * a minimum value of 100, a sigma of 1/16-th of the total samples,
+    * and a random mean value between 1/4 - 3/4 of the samples.
+    *
+    * @param samples Total number of samples read out
+    * @param sample The current sample to be simulated
+    * @returns A meaningful looking Gaussian distribution
+    */
+   uint8_t gauss8( uint32_t samples, uint32_t sample ) {
+
+      const double peak  = 200.0;
+      const double sigma = samples / 16.0;
+      const double mean  = samples / 4.0 + rand() % ( samples / 2 );
+      const double arg   = ( sample - mean ) / sigma;
+      return ( static_cast< uint8_t >( std::floor( peak *
+                                                   std::exp( -0.5 * arg * arg ) ) ) +
+               10 );
+   }
+
 } // private namespace
 
 namespace caen {
@@ -559,10 +610,8 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_WriteRegister( m_handle, address, data ) );
 #else
-      m_logger << msg::DEBUG
-               << tr( "writeRegister( address: %1, data: %2 )" )
-         .arg( address ).arg( data )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "writeRegister( address: %1, data: %2 )" )
+                      .arg( address ).arg( data ) );
 #endif // HAVE_CAEN_LIBS
 
       // Signal a successful operation:
@@ -575,10 +624,8 @@ namespace caen {
 #ifdef HAVE_CAEN_LIBS
       CHECK( CAEN_DGTZ_ReadRegister( m_handle, address, &data ) );
 #else
-      m_logger << msg::DEBUG
-               << tr( "readRegister( address: %1, data: to be set )" )
-         .arg( address )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "readRegister( address: %1, data: to be set )" )
+                      .arg( address ) );
       data = 0;
 #endif // HAVE_CAEN_LIBS
 
@@ -1309,11 +1356,11 @@ namespace caen {
       eventInfo.channelMask    = 0xffffffff;
       eventInfo.eventCounter   = 1;
       eventInfo.triggerTimeTag = 0;
-      // Fill the event data with some dummy values:
+      // Fill the event data with a Gaussian distribution:
       for( int i = 0; i < EventData16Bit::MAX_CHANNEL_NUMBER; ++i ) {
          eventData.chData[ i ].resize( m_recordLength, 0 );
          for( uint32_t j = 0; j < m_recordLength; ++j ) {
-            eventData.chData[ i ][ j ] = 1000;
+            eventData.chData[ i ][ j ] = gauss16( m_recordLength, j );
          }
       }
       // Sleep a bit, in order to produce a meaningful test rate:
@@ -1366,11 +1413,11 @@ namespace caen {
       eventInfo.channelMask    = 0xffffffff;
       eventInfo.eventCounter   = 1;
       eventInfo.triggerTimeTag = 0;
-      // Fill the event data with some dummy values:
+      // Fill the event data with a Gaussian distribution:
       for( int i = 0; i < EventData8Bit::MAX_CHANNEL_NUMBER; ++i ) {
          eventData.chData[ i ].resize( m_recordLength, 0 );
          for( uint32_t j = 0; j < m_recordLength; ++j ) {
-            eventData.chData[ i ][ j ] = 100;
+            eventData.chData[ i ][ j ] = gauss8( m_recordLength, j );
          }
       }
       // Sleep a bit, in order to produce a meaningful test rate:

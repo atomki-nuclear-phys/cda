@@ -416,8 +416,8 @@ namespace dt5740 {
 
       // The required size of the fragment:
       const size_t size =
-         6 +                      // Event info words
-         channels * getSamples(); // Samples for each channel
+         6 +                              // Event info words
+         ( channels * getSamples() / 2 ); // Samples for each channel
 
       // Check if the fragment is if the expected size:
       CHECK( fragment.getDataWords().size() == size );
@@ -435,6 +435,7 @@ namespace dt5740 {
 
       // Set the sample information for each active channel:
       int index = 6;
+      bool low_bits = true;
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
               ++channel ) {
@@ -451,8 +452,15 @@ namespace dt5740 {
             // Fill the event data for this channel:
             ed.chData[ chIndex ].resize( getSamples(), 0 );
             for( int sample = 0; sample < getSamples();
-                 ++sample, ++index ) {
-               ed.chData[ chIndex ][ sample ] = data[ index ];
+                 ++sample ) {
+               if( low_bits ) {
+                  ed.chData[ chIndex ][ sample ] = data[ index ] & 0xffff;
+                  low_bits = false;
+               } else {
+                  ed.chData[ chIndex ][ sample ] = ( data[ index ] >> 16 ) & 0xffff;
+                  low_bits = true;
+                  ++index;
+               }
             }
          }
       }
@@ -474,6 +482,9 @@ namespace dt5740 {
                         const caen::Digitizer::EventData16Bit& ed,
                         ev::Fragment& fragment ) const {
 
+      // Clear the data words, but leave the module ID alone:
+      fragment.clear( false );
+
       // Put the event information into the fragment:
       fragment.addDataWord( ei.eventSize );
       fragment.addDataWord( ei.boardId );
@@ -483,6 +494,8 @@ namespace dt5740 {
       fragment.addDataWord( ei.triggerTimeTag );
 
       // Now place all the channel data into the fragment:
+      bool low_bits = true;
+      ev::Fragment::Payload_t::value_type dataWord = 0;
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
               ++channel ) {
@@ -501,9 +514,22 @@ namespace dt5740 {
 
             // Add the data from this channel to the fragment:
             for( int sample = 0; sample < getSamples(); ++sample ) {
-               fragment.addDataWord( ed.chData[ chIndex ][ sample ] );
+               if( low_bits ) {
+                  dataWord = 0;
+                  dataWord |= ed.chData[ chIndex ][ sample ] & 0xffff;
+                  low_bits = false;
+               } else {
+                  dataWord |= ( ed.chData[ chIndex ][ sample ] << 16 ) & 0xffff0000;
+                  fragment.addDataWord( dataWord );
+                  low_bits = true;
+               }
             }
          }
+      }
+
+      // If a sample was set, but not added to the payload, let's do that here:
+      if( ! low_bits ) {
+         fragment.addDataWord( dataWord );
       }
 
       return true;
