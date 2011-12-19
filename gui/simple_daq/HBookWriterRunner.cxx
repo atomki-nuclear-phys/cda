@@ -1,7 +1,6 @@
 // $Id$
 
 // Qt include(s):
-#include <QtCore/QTimer>
 #include <QtGui/QGroupBox>
 #include <QtGui/QPushButton>
 #include <QtGui/QLabel>
@@ -197,7 +196,7 @@ namespace simple_daq {
             m_starterButton->setIcon( QIcon::fromTheme( "media-playback-stop" ) );
 
             emit running( true );
-
+            emit receiverRunning( true, m_eventAddress );
          }
 
       } else {
@@ -224,16 +223,15 @@ namespace simple_daq {
             palette.setColor( QPalette::Inactive, QPalette::Foreground,
                               QColor( 10, 150, 10 ) );
             m_processStatus->setPalette( palette );
-
-            emit running( false );
          }
 
+         emit running( false );
+         emit receiverRunning( true, m_eventAddress );
          m_starterButton->setText( tr( "Start hbook writer" ) );
          m_starterButton->setIcon( QIcon::fromTheme( "media-playback-start" ) );
 
          m_fileNameEdit->setReadOnly( false );
          m_updateFrequency->setEnabled( true );
-
       }
 
       return;

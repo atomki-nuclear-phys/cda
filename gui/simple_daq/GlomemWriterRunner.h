@@ -74,6 +74,8 @@ namespace simple_daq {
    signals:
       /// Signal showing if the application is running
       void running( bool );
+      /// Signal sending the event receiver address of this application
+      void receiverRunning( bool, const QString& );
 
    private slots:
       /// Internal function starting and stopping cda-glomem-writer

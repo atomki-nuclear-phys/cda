@@ -363,8 +363,8 @@ int main( int argc, char* argv[] ) {
 
          // Update the statistics receivers:
          stat_sender.update( cdastat::Statistics( g_evcount +
-                                               g_fwriter->processedEvents(),
-                                               statSource ) );
+                                                  g_fwriter->processedEvents(),
+                                                  statSource ) );
 
          // If it's time to open a new file, let's do it:
          if( startTime.secsTo( QTime::currentTime() ) > ( 60 * updatefreq ) ) {
@@ -436,7 +436,7 @@ int main( int argc, char* argv[] ) {
 
          // Update the statistics receivers:
          stat_sender.update( cdastat::Statistics( g_fwriter->processedEvents(),
-                                               statSource ) );
+                                                  statSource ) );
 
          // Sleep for 2 seconds:
          common::Sleep( 2000 );

@@ -6,6 +6,8 @@
 #include <QtGui/QLabel>
 #include <QtGui/QPalette>
 #include <QtGui/QFont>
+#include <QtGui/QLineEdit>
+#include <QtGui/QSpinBox>
 #include <QtGui/QIcon>
 
 // CDA include(s):
@@ -16,24 +18,27 @@
 #endif
 
 // Local include(s):
-#include "GlomemWriterRunner.h"
+#include "RawWriterRunner.h"
 
 namespace simple_daq {
 
-   GlomemWriterRunner::GlomemWriterRunner( QWidget* parent, Qt::WindowFlags flags )
+   RawWriterRunner::RawWriterRunner( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
         m_msgServerAddress( "127.0.0.1:50000" ),
         m_runner(),
-        m_logger( "sd::GlomemWriterRunner" ) {
+        m_logger( "sd::RawWriterRunner" ) {
 
       setMinimumSize( 300, 150 );
       setMaximumSize( 300, 150 );
 
-      m_mainBox = new QGroupBox( tr( "GloMem writing control" ), this );
+      m_mainBox = new QGroupBox( tr( "Raw file writing control" ), this );
       m_mainBox->setGeometry( QRect( 5, 5, 290, 140 ) );
 
-      m_processStatus = new QLabel( tr( "GloMem writer stopped" ), m_mainBox );
-      m_processStatus->setGeometry( QRect( 0, 40, 290, 40 ) );
+      //
+      // Set up the big label showing the application status:
+      //
+      m_processStatus = new QLabel( tr( "Raw writer stopped" ), m_mainBox );
+      m_processStatus->setGeometry( QRect( 0, 15, 290, 40 ) );
       m_processStatus->setAlignment( Qt::AlignCenter );
 
       QPalette palette( m_processStatus->palette() );
@@ -47,84 +52,133 @@ namespace simple_daq {
       font.setPointSize( 14 );
       m_processStatus->setFont( font );
 
+      //
+      // Set up the widgets for the automatic file name updates:
+      //
+      m_updateFrequencyLabel = new QLabel( tr( "Update freq. [min]:" ), m_mainBox );
+      m_updateFrequencyLabel->setGeometry( QRect( 10, 52, 140, 20 ) );
+      m_updateFrequencyLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+
+      m_updateFrequency = new QSpinBox( m_mainBox );
+      m_updateFrequency->setGeometry( QRect( 160, 50, 100, 24 ) );
+      m_updateFrequency->setMinimum( 1 );
+      m_updateFrequency->setMaximum( 360 );
+      m_updateFrequency->setValue( 120 );
+      m_updateFrequency->setToolTip( tr( "Set the intervals at which a new output "
+                                         "file should be opened" ) );
+
+      //
+      // Set up the widgets for the file name specification:
+      //
+      m_fileNameLabel = new QLabel( tr( "Output file:" ), m_mainBox );
+      m_fileNameLabel->setGeometry( QRect( 0, 75, 100, 25 ) );
+      m_fileNameLabel->setAlignment( Qt::AlignCenter );
+
+      m_fileNameEdit = new QLineEdit( m_mainBox );
+      m_fileNameEdit->setGeometry( QRect( 100, 75, 170, 25 ) );
+      m_fileNameEdit->setToolTip( tr( "To activate automatic file name updating, put\n"
+                                      "\"\%1\" in the file name where a number should\n"
+                                      "be filled in. To disable the automatic updating\n"
+                                      "just don't put this symbol in the file name." ) );
+
+      //
+      // Set up the button starting the application:
+      //
       m_starterButton = new QPushButton( QIcon::fromTheme( "media-playback-start" ),
-                                         tr( "Start glomem writer" ), m_mainBox );
+                                         tr( "Start raw writer" ), m_mainBox );
       m_starterButton->setGeometry( QRect( 20, 100, 250, 35 ) );
       m_starterButton->setCheckable( true );
       connect( m_starterButton, SIGNAL( clicked( bool ) ),
                this, SLOT( startApp( bool ) ) );
 
-      m_runner.setExecName( daq::PathResolver::resolve( "cda-glomem-writer",
+      m_runner.setExecName( daq::PathResolver::resolve( "cda-raw-writer",
                                                         "PATH" ) );
+
    }
 
-   GlomemWriterRunner::~GlomemWriterRunner() {
+   RawWriterRunner::~RawWriterRunner() {
 
       delete m_starterButton;
+      delete m_fileNameLabel;
+      delete m_fileNameEdit;
+      delete m_updateFrequencyLabel;
+      delete m_updateFrequency;
       delete m_processStatus;
       delete m_mainBox;
    }
 
-   void GlomemWriterRunner::setConfigFileName( const QString& fileName ) {
+   void RawWriterRunner::setConfigFileName( const QString& fileName ) {
 
       m_configFileName = fileName;
       return;
    }
 
-   const QString& GlomemWriterRunner::getConfigFileName() const {
+   const QString& RawWriterRunner::getConfigFileName() const {
 
       return m_configFileName;
    }
 
-   void GlomemWriterRunner::setMsgServerAddress( const QString& address ) {
+   void RawWriterRunner::setMsgServerAddress( const QString& address ) {
 
       m_msgServerAddress = address;
       return;
    }
 
-   const QString& GlomemWriterRunner::getMsgServerAddress() const {
+   const QString& RawWriterRunner::getMsgServerAddress() const {
 
       return m_msgServerAddress;
    }
 
-   void GlomemWriterRunner::setEventAddress( const QString& address ) {
+   void RawWriterRunner::setEventAddress( const QString& address ) {
 
       m_eventAddress = address;
       return;
    }
 
-   const QString& GlomemWriterRunner::getEventAddress() const {
+   const QString& RawWriterRunner::getEventAddress() const {
 
       return m_eventAddress;
    }
 
-   void GlomemWriterRunner::setVerbosity( msg::Level verbosity ) {
+   void RawWriterRunner::setVerbosity( msg::Level verbosity ) {
 
       m_level = verbosity;
       return;
    }
 
-   msg::Level GlomemWriterRunner::getVerbosity() const {
+   msg::Level RawWriterRunner::getVerbosity() const {
 
       return m_level;
    }
 
-   void GlomemWriterRunner::startApp( bool start ) {
+   void RawWriterRunner::startApp( bool start ) {
 
       if( start ) {
 
+         //
+         // Set up some things for the automatic file name updating:
+         //
+         m_fileNameEdit->setReadOnly( true );
+         m_updateFrequency->setEnabled( false );
+
+
+         //
+         // Construct the application arguments:
+         //
          QString options;
          options += " -m " + m_msgServerAddress;
          options += " -c " + m_configFileName;
          options += " -v " + QString::number( m_level );
          options += " -e " + m_eventAddress;
+         options += " -o " + m_fileNameEdit->text();
+         options += " -u " + QString::number( m_updateFrequency->value() );
 
          m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options )
                   << msg::endmsg;
          m_runner.setOptions( options );
 
          if( ! m_runner.start() ) {
-            REPORT_ERROR( tr( "Couldn't start GloMem writer!" ) );
+            REPORT_ERROR( tr( "Couldn't start Raw writer!" ) );
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
@@ -138,10 +192,10 @@ namespace simple_daq {
             m_starterButton->setIcon( QIcon::fromTheme( "edit-clear" ) );
 
          } else {
-            m_logger << msg::INFO << tr( "GloMem writer started" )
+            m_logger << msg::INFO << tr( "Raw writer started" )
                      << msg::endmsg;
 
-            m_processStatus->setText( tr( "GloMem writer running" ) );
+            m_processStatus->setText( tr( "Raw writer running" ) );
             QPalette palette( m_processStatus->palette() );
             palette.setColor( QPalette::Active, QPalette::Foreground,
                               QColor( 150, 10, 10 ) );
@@ -149,7 +203,7 @@ namespace simple_daq {
                               QColor( 150, 10, 10 ) );
             m_processStatus->setPalette( palette );
 
-            m_starterButton->setText( tr( "Stop glomem writer" ) );
+            m_starterButton->setText( tr( "Stop raw writer" ) );
             m_starterButton->setIcon( QIcon::fromTheme( "media-playback-stop" ) );
 
             emit running( true );
@@ -159,7 +213,7 @@ namespace simple_daq {
       } else {
 
          if( ! m_runner.stop() ) {
-            REPORT_ERROR( tr( "The GloMem writer could not be stopped "
+            REPORT_ERROR( tr( "The Raw writer could not be stopped "
                               "successfully" ) );
 
             m_processStatus->setText( tr( "ERROR" ) );
@@ -171,10 +225,9 @@ namespace simple_daq {
             m_processStatus->setPalette( palette );
 
          } else {
-            m_logger << msg::INFO << tr( "GloMem writer stopped" )
-                     << msg::endmsg;
+            m_logger << msg::INFO << tr( "Raw writer stopped" ) << msg::endmsg;
 
-            m_processStatus->setText( tr( "GloMem writer stopped" ) );
+            m_processStatus->setText( tr( "Raw writer stopped" ) );
             QPalette palette( m_processStatus->palette() );
             palette.setColor( QPalette::Active, QPalette::Foreground,
                               QColor( 10, 150, 10 ) );
@@ -185,8 +238,11 @@ namespace simple_daq {
 
          emit running( false );
          emit receiverRunning( false, m_eventAddress );
-         m_starterButton->setText( tr( "Start glomem writer" ) );
+         m_starterButton->setText( tr( "Start raw writer" ) );
          m_starterButton->setIcon( QIcon::fromTheme( "media-playback-start" ) );
+
+         m_fileNameEdit->setReadOnly( false );
+         m_updateFrequency->setEnabled( true );
       }
 
       return;

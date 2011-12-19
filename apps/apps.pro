@@ -12,13 +12,18 @@ include(../cda_common.pri)
 
 TEMPLATE = subdirs
 
-# These are the applications that only depend on Qt:
-SUBDIRS  = cda-msgserver cda-camac-reader cda-config-editor \
-           cda-stat-server cda-raw-writer cda-config-server \
-           cda-caen-reader
+# Generic application(s):
+SUBDIRS  = cda-msgserver cda-config-editor \
+           cda-stat-server cda-raw-writer cda-config-server
+
+# CAMAC specific application(s):
+SUBDIRS += cda-camac-reader cda-camac-daq
+
+# CAEN specific application(s):
+SUBDIRS +=  cda-caen-reader cda-caen-daq
 
 # Only compile the applications needing CERNLIB if that is in fact
 # available:
 contains(DEFINES,HAVE_CERNLIB) {
-   SUBDIRS += cda-glomem-writer cda-hbook-writer cda-camac-daq
+   SUBDIRS += cda-glomem-writer cda-hbook-writer
 }

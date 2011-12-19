@@ -1,21 +1,49 @@
 // $Id$
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
-
-// The include(s) needed on different platforms:
-#ifdef Q_WS_WIN32
-#   include <windows.h>
-#else
-extern "C" {
-#   include <sys/time.h>
-#   include <sys/types.h>
-#   include <unistd.h>
-}
-#endif
+#include <QtCore/QThread>
 
 // Local include(s):
 #include "Sleep.h"
+
+namespace {
+
+   /**
+    *  @short Class exposing Qt's thread waiting functions
+    *
+    *         Qt has very reliable functions for sending a thread to sleep
+    *         for a specified amount of time. Unfortunately QThread hides
+    *         these functions from the outside world by default, but that's
+    *         nothing that a little C++ magic can't fix.
+    *
+    *         Using the select(...) function in a multi-threaded environment
+    *         on MacOS X turned out to be unreliable, so this way I'll just
+    *         make use of the Qt team's knowledge of the platforms that Qt
+    *         is supported on...
+    *
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+    *
+    * $Revision$
+    * $Date$
+    */
+   class ThreadWait : public QThread {
+
+   public:
+      /// Sleep the current thread for a specified number of miliseconds
+      static void msleep( unsigned long msecs ) {
+         QThread::msleep( msecs );
+         return;
+      }
+
+      /// Sleep the current thread for a specified number of microseconds
+      static void usleep( unsigned long usecs ) {
+         QThread::usleep( usecs );
+         return;
+      }
+
+   }; // class ThreadWait
+
+} // private namespace
 
 namespace common {
 
@@ -30,18 +58,7 @@ namespace common {
     */
    void Sleep( unsigned int milisec ) {
 
-#ifdef Q_WS_WIN32
-      // On Windows we can use this built-in function:
-      ::Sleep( milisec );
-#else
-      // On POSIX systems the most accurate one is the
-      // select(...) function:
-      struct timeval tv;
-      tv.tv_sec = 0;
-      tv.tv_usec = milisec * 1000;
-      select( 0, NULL, NULL, NULL, &tv );
-#endif
-
+      ThreadWait::msleep( milisec );
       return;
    }
 
@@ -52,18 +69,7 @@ namespace common {
     */
    void SleepMin() {
 
-#ifdef Q_WS_WIN32
-      // On Windows we can use this built-in function:
-      ::Sleep( 1 );
-#else
-      // On POSIX systems the most accurate one is the
-      // select(...) function:
-      struct timeval tv;
-      tv.tv_sec = 0;
-      tv.tv_usec = 100;
-      select( 0, NULL, NULL, NULL, &tv );
-#endif
-
+      ThreadWait::usleep( 100 );
       return;
    }
 
