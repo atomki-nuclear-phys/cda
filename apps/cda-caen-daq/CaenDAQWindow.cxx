@@ -66,7 +66,7 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
    } else {
       setWindowTitle( tr( "CDA CAEN DAQ" ) );
    }
-   setWindowIcon( QIcon( ":/img/cda-daq.png" ) );
+   setWindowIcon( QIcon( ":/img/caen.png" ) );
 
    //
    // Create the central widget. This is the one on which all other widgets are placed:
@@ -303,7 +303,7 @@ void CaenDAQWindow::drawMenus() {
             qApp, SLOT( aboutQt() ) );
 
    QAction* aboutCaenDaqAc =
-      helpMenu->addAction( QIcon( ":/img/cda-daq.png" ),
+      helpMenu->addAction( QIcon( ":/img/caen.png" ),
                            tr( "About Caen DAQ" ) );
    connect( aboutCaenDaqAc, SIGNAL( triggered() ),
             this, SLOT( aboutCaenDAQSlot() ) );
