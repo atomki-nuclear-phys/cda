@@ -27,3 +27,9 @@ SUBDIRS +=  cda-caen-reader cda-caen-daq
 contains(DEFINES,HAVE_CERNLIB) {
    SUBDIRS += cda-glomem-writer cda-hbook-writer
 }
+
+# Only compile the application(s) needing ROOT, if that is in
+# fact available:
+contains(DEFINES,HAVE_ROOT_LIBS) {
+   SUBDIR += cda-root-writer
+}

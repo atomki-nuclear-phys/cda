@@ -10,6 +10,7 @@ namespace Const {
    static const char* GLOMEM_WRITER_ADDRESS = "127.0.0.1:46000";
    static const char* HBOOK_WRITER_ADDRESS  = "127.0.0.1:47000";
    static const char* RAW_WRITER_ADDRESS    = "127.0.0.1:48000";
+   static const char* ROOT_WRITER_ADDRESS   = "127.0.0.1:49000";
 
 } // namespace Const
 

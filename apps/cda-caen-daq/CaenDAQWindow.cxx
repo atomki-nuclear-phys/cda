@@ -18,6 +18,7 @@
 #   include "cdagui/simple_daq/CaenReaderRunner.h"
 #   include "cdagui/simple_daq/GlomemWriterRunner.h"
 #   include "cdagui/simple_daq/HBookWriterRunner.h"
+#   include "cdagui/simple_daq/RootWriterRunner.h"
 #   include "cdagui/simple_daq/RawWriterRunner.h"
 #   include "cdagui/common/aboutCDA.h"
 #   include "cdagui/common/DefaultFont.h"
@@ -29,6 +30,7 @@
 #   include "simple_daq/CaenReaderRunner.h"
 #   include "simple_daq/GlomemWriterRunner.h"
 #   include "simple_daq/HBookWriterRunner.h"
+#   include "simple_daq/RootWriterRunner.h"
 #   include "simple_daq/RawWriterRunner.h"
 #   include "common/aboutCDA.h"
 #   include "common/DefaultFont.h"
@@ -149,10 +151,25 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
             m_caenReader, SLOT( setWriterRunning( bool, const QString& ) ) );
 
    //
+   // Create the widget controlling cda-root-writer:
+   //
+   m_rootWriter = new simple_daq::RootWriterRunner( m_centralWidget );
+   m_rootWriter->setGeometry( QRect( 310, 160, 300, 150 ) );
+   m_rootWriter->setConfigFileName( confFileName );
+   m_rootWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
+   m_rootWriter->setEventAddress( Const::ROOT_WRITER_ADDRESS );
+   m_rootWriter->setVerbosity( verbosity );
+   if( confFileName.isEmpty() ) {
+      m_rootWriter->setEnabled( false );
+   }
+   connect( m_rootWriter, SIGNAL( receiverRunning( bool, const QString& ) ),
+            m_caenReader, SLOT( setWriterRunning( bool, const QString& ) ) );
+
+   //
    // Create the widget controlling cda-raw-writer:
    //
    m_rawWriter = new simple_daq::RawWriterRunner( m_centralWidget );
-   m_rawWriter->setGeometry( QRect( 310, 160, 300, 150 ) );
+   m_rawWriter->setGeometry( QRect( 615, 160, 300, 150 ) );
    m_rawWriter->setConfigFileName( confFileName );
    m_rawWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
    m_rawWriter->setEventAddress( Const::RAW_WRITER_ADDRESS );
@@ -194,6 +211,7 @@ CaenDAQWindow::~CaenDAQWindow() {
    delete m_caenReader;
    delete m_glomemWriter;
    delete m_hbookWriter;
+   delete m_rootWriter;
    delete m_rawWriter;
    delete m_msgServer;
    delete m_msgView;
@@ -230,6 +248,8 @@ void CaenDAQWindow::readConfigSlot() {
    m_glomemWriter->setEnabled( true );
    m_hbookWriter->setConfigFileName( fileName );
    m_hbookWriter->setEnabled( true );
+   m_rootWriter->setConfigFileName( fileName );
+   m_rootWriter->setEnabled( true );
    m_rawWriter->setConfigFileName( fileName );
    m_rawWriter->setEnabled( true );
 

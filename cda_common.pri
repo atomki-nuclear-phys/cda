@@ -86,6 +86,12 @@ win32 {
 #DEFINES += HAVE_CERNLIB
 
 #
+# Uncomment the following if you have ROOT installed on your
+# system.
+#
+#DEFINES += HAVE_ROOT_LIBS
+
+#
 # Compiler settings. In order to be able to link against CERNLIB on
 # Mac OS X, the built-in version of GCC can't be used. In my case
 # I installed CERNLIB using the Fink project. (www.finkproject.org)

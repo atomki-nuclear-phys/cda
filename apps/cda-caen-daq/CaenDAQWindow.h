@@ -24,6 +24,7 @@ namespace simple_daq {
    class CaenReaderRunner;
    class GlomemWriterRunner;
    class HBookWriterRunner;
+   class RootWriterRunner;
    class RawWriterRunner;
 } // namespace simple_daq
 
@@ -72,6 +73,7 @@ private:
    simple_daq::CaenReaderRunner*   m_caenReader;   ///< Widget controlling cda-caen-reader
    simple_daq::GlomemWriterRunner* m_glomemWriter; ///< Widget controlling cda-glomem-writer
    simple_daq::HBookWriterRunner*  m_hbookWriter;  ///< Widget controlling cda-hbook-writer
+   simple_daq::RootWriterRunner*   m_rootWriter;   ///< Widget controlling cda-root-writer
    simple_daq::RawWriterRunner*    m_rawWriter;    ///< Widget controlling cda-raw-writer
 
    mutable msg::Logger m_logger; ///< Private message logger

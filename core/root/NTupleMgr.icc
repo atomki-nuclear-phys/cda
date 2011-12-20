@@ -1,0 +1,92 @@
+// Dear emacs, this is -*- c++ -*-
+// $Id$
+#ifndef CDA_CORE_ROOT_NTUPLEMGR_ICC
+#define CDA_CORE_ROOT_NTUPLEMGR_ICC
+
+#ifdef HAVE_ROOT_LIBS
+// System include(s):
+extern "C" {
+#   include <string.h>
+#   include <cxxabi.h>
+}
+#include <cstdlib>
+
+// STL include(s):
+#include <sstream>
+#include <typeinfo>
+
+// CDA include(s):
+#include "../common/errorcheck.h"
+#endif // HAVE_ROOT_LIBS
+
+namespace root {
+
+   template< typename TYPE >
+   bool NTupleMgr::addVar( TYPE& obj, const QString& name ) {
+
+      // Tell the user what we're doing:
+      m_logger << msg::DEBUG
+               << tr( "Creating new output branch with name: %1" ).arg( name )
+               << msg::endmsg;
+
+#ifdef HAVE_ROOT_LIBS
+      // A security check:
+      CHECK( checkBranch( name.toLatin1().constData() ) );
+
+      // First of all, lets figure out what kind of object we're dealing with
+      const char* type_name = typeid( obj ).name();
+
+      if( ::strlen( type_name ) == 1 ) {
+
+         // This is a simple variable:
+         REPORT_VERBOSE( tr( "The supplied variable is a \"primitive\"" ) );
+
+         // Construct the branch:
+         std::ostringstream leaflist;
+         leaflist << name.toLatin1().constData() << "/" << rootType( type_name );
+         CHECK( makeBranch( name.toLatin1().constData(), &obj,
+                            leaflist.str().c_str() ) );
+
+      } else {
+
+         // This is an object:
+         REPORT_VERBOSE( tr( "The supplied variable is an object" ) );
+
+         int status;
+         char* real_type_name = abi::__cxa_demangle( type_name, 0, 0, &status );
+         if( status ) {
+            REPORT_ERROR( tr( "Couldn't de-mangle type name: %1" )
+                          .arg( type_name ) );
+            return false;
+         }
+
+         REPORT_VERBOSE( tr( "Mangled name of object: %1" ).arg( type_name ) );
+         REPORT_VERBOSE( tr( "De-mangled name of object: %1" ).arg( real_type_name ) );
+
+         //
+         // Then try to add the object to the TTree. We have to do it in such a weird way,
+         // since the "pointer" variable is going to disappear at the end of this function
+         // so giving "&pointer" to TTree::Bronch would cause quite a crash when you're
+         // writing out the event. (Trust me, I *know*... :-)) I'm storing the pointers
+         // in an std::list, since lists don't move their elements around.
+         // (vectors are allowed to do that. This one I've just read... :-))
+         //
+         TYPE* pointer = &obj;
+         m_outputVarPointers.push_back( pointer );
+         CHECK( makeBronch( name.toLatin1().constData(), real_type_name,
+                            &m_outputVarPointers.back() ) );
+
+         // Free the previously allocated memory:
+         ::free( real_type_name );
+      }
+#endif // HAVE_ROOT_LIBS
+
+      // Tell the user what we've done:
+      REPORT_VERBOSE( tr( "Branch successfully added" ) );
+
+      return true;
+   }
+
+} // namespace root
+
+#endif // CDA_CORE_ROOT_NTUPLEMGR_ICC

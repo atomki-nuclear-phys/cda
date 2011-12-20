@@ -19,11 +19,12 @@ TARGET   = cdacore
 HEADERS = $$files(fifo/*.h) $$files(msg/*.h) $$files(event/*.h) \
           $$files(device/*.h) $$files(device/*.icc) $$files(camac/*.h) \
           $$files(cmdl/*.h) $$files(cernlib/*.h) $$files(common/*.h) \
-          $$files(i18n/*.h) $$files(vme/*.h) $$files(caen/*.h)
+          $$files(i18n/*.h) $$files(vme/*.h) $$files(caen/*.h) \
+          $$files(root/*.h) $$files(root/*.icc)
 SOURCES = $$files(fifo/*.cxx) $$files(msg/*.cxx) $$files(event/*.cxx) \
           $$files(device/*.cxx) $$files(camac/*.cxx) $$files(cmdl/*.cpp) \
           $$files(cernlib/*.cxx) $$files(common/*.cxx) $$files(i18n/*.cxx) \
-          $$files(vme/*.cxx) $$files(caen/*.cxx)
+          $$files(vme/*.cxx) $$files(caen/*.cxx) $$files(root/*.cxx)
 TRANSLATIONS = ../trans/cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
@@ -112,6 +113,11 @@ mac {
    I18N_HEADERS.path = Headers/i18n
    QMAKE_BUNDLE_DATA += I18N_HEADERS
 
+   ROOT_HEADERS.version = Versions
+   ROOT_HEADERS.files = $$files(root/*.h) $$files(root/*.icc)
+   ROOT_HEADERS.path = Headers/root
+   QMAKE_BUNDLE_DATA += ROOT_HEADERS
+
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =
    DUMMY_HEADERS.path = Headers
@@ -197,6 +203,14 @@ contains(DEFINES,HAVE_CERNLIB) {
       }
       LIBS += -lpacklib
    }
+}
+
+#
+# Decide whether to link the library against the ROOT libraries:
+#
+contains(DEFINES,HAVE_ROOT_LIBS) {
+   QMAKE_CXXFLAGS += `root-config --cflags`
+   LIBS += `root-config --libs`
 }
 
 #

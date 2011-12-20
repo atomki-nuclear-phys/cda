@@ -9,6 +9,7 @@
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
 #include "Readout.h"
+#include "RootDisk.h"
 
 namespace dt5740 {
 
@@ -39,6 +40,10 @@ namespace dt5740 {
       } else if( ti == typeid( dev::CaenReadout ) ) {
 
          return dynamic_cast< dev::CaenReadout* >( new Readout() );
+
+      } else if( ti == typeid( dev::RootDisk ) ) {
+
+         return dynamic_cast< dev::RootDisk* >( new RootDisk() );
 
       }
 
