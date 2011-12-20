@@ -31,5 +31,5 @@ contains(DEFINES,HAVE_CERNLIB) {
 # Only compile the application(s) needing ROOT, if that is in
 # fact available:
 contains(DEFINES,HAVE_ROOT_LIBS) {
-   SUBDIR += cda-root-writer
+   SUBDIRS += cda-root-writer
 }
