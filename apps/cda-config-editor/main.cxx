@@ -7,7 +7,7 @@
  *         cda-config-editor application. It basically just creates a
  *         ConfigEditorWindow window and lets that take charge of things.
  *
- * @author Attila Krasznahorkay Jr.
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
@@ -25,10 +25,12 @@
 #   include "cdacore/msg/Sender.h"
 #   include "cdacore/i18n/Loader.h"
 #   include "cdagui/common/DefaultFont.h"
+#   include "cdagui/common/SplashScreen.h"
 #else
 #   include "msg/Sender.h"
 #   include "i18n/Loader.h"
 #   include "common/DefaultFont.h"
+#   include "common/SplashScreen.h"
 #endif
 
 // Local include(s):
@@ -49,6 +51,14 @@ int main( int argc, char* argv[] ) {
    app.setFont( gui::DefaultFont() );
 
    //
+   // Create a splash screen:
+   //
+   gui::SplashScreen splash( QPixmap( ":/img/splash.png" ),
+                             Qt::WindowStaysOnTopHint |
+                             Qt::X11BypassWindowManagerHint );
+   splash.show();
+
+   //
    // Load all the available translations:
    //
    i18n::Loader trans_loader;
@@ -62,6 +72,9 @@ int main( int argc, char* argv[] ) {
    //
    ConfigEditorWindow editor;
    editor.show();
+   splash.showMessage( "Configuration Editor Ready",
+                       Qt::AlignHCenter | Qt::AlignBottom,
+                       Qt::white );
 
    //
    // Run the application:

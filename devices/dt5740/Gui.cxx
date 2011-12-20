@@ -546,6 +546,11 @@ namespace dt5740 {
       m_patGenEnabledWidget->setChecked( m_patGenEnabled );
       m_patGenEnabledWidget->setEnabled( true );
 
+      // Set the state of the raw ntuple writing:
+      m_saveRawNtupleWidget->setEnabled( false );
+      m_saveRawNtupleWidget->setChecked( m_saveRawNtuple );
+      m_saveRawNtupleWidget->setEnabled( true );
+
       // Set the acquisition mode:
       m_acqModeWidget->setEnabled( false );
       switch( m_acqMode ) {

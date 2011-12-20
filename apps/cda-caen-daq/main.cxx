@@ -23,12 +23,14 @@
 #   include "cdacore/cmdl/cmdargs.h"
 #   include "cdacore/i18n/Loader.h"
 #   include "cdagui/common/DefaultFont.h"
+#   include "cdagui/common/SplashScreen.h"
 #else
 #   include "msg/Logger.h"
 #   include "msg/Sender.h"
 #   include "cmdl/cmdargs.h"
 #   include "i18n/Loader.h"
 #   include "common/DefaultFont.h"
+#   include "common/SplashScreen.h"
 #endif
 
 // Local include(s):
@@ -67,6 +69,14 @@ int main( int argc, char* argv[] ) {
 
    // Logger object used to print messages directly from this function:
    msg::Logger logger( "cda-simple-daq" );
+
+   //
+   // Create a splash screen:
+   //
+   gui::SplashScreen splash( QPixmap( ":/img/splash.png" ),
+                             Qt::WindowStaysOnTopHint |
+                             Qt::X11BypassWindowManagerHint );
+   splash.show();
 
    //
    // Load all the available translations:
@@ -121,6 +131,9 @@ int main( int argc, char* argv[] ) {
    //
    CaenDAQWindow window( ( const char* ) config, lvl );
    window.show();
+   splash.showMessage( "CAEN DAQ Ready",
+                       Qt::AlignHCenter | Qt::AlignBottom,
+                       Qt::white );
 
    // Run the main Qt event loop:
    return app.exec();
