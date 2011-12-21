@@ -9,6 +9,7 @@ extern "C" {
 
 // Qt include(s):
 #include <QtCore/QStringList>
+#include <QtCore/QFileInfo>
 
 // Local include(s):
 #include "PathResolver.h"
@@ -48,19 +49,18 @@ namespace daq {
       //
       std::map< QString, std::list< QString > >::const_iterator envlist;
       if( ( envlist = m_environment.find( env ) ) != m_environment.end() ) {
-         m_logger << msg::VERBOSE << tr( "Environment variable \"%1\" already cached" )
-            .arg( env ) << msg::endmsg;
+         REPORT_VERBOSE( tr( "Environment variable \"%1\" already cached" )
+                         .arg( env ) );
       } else {
          m_logger << msg::DEBUG << tr( "Caching environment: %1" ).arg( env )
                   << msg::endmsg;
          QString envarray = ::getenv( env.toLatin1().constData() );
-         m_logger << msg::VERBOSE << tr( "%1 = %2" ).arg( env ).arg( envarray )
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "%1 = %2" ).arg( env ).arg( envarray ) );
          QStringList envsplit = envarray.split( ":", QString::SkipEmptyParts );
          for( QStringList::const_iterator element = envsplit.begin();
               element != envsplit.end(); ++element ) {
-            m_logger << msg::VERBOSE << tr( "Adding \"%1\" to environment %2" )
-               .arg( *element ).arg( env ) << msg::endmsg;
+            REPORT_VERBOSE( tr( "Adding \"%1\" to environment %2" )
+                            .arg( *element ).arg( env ) );
             m_environment[ env ].push_back( *element );
          }
          envlist = m_environment.find( env );
@@ -102,13 +102,28 @@ namespace daq {
       }
 
       //
+      // If we didn't find it, and the user is searching in PATH, check
+      // the CDASYS path set at compilation time:
+      //
+      if( env == "PATH" ) {
+         // Check if the file exists under $CDASYS/bin/:
+         QFileInfo finfo( CDASYS_PATH + ( "/bin/" + name ) );
+         if( finfo.exists() && finfo.isExecutable() ) {
+            m_logger << msg::DEBUG
+                     << tr( "\"%1\" found under \"%2/bin\"" )
+               .arg( name ).arg( CDASYS_PATH )
+                     << msg::endmsg;
+            return ( CDASYS_PATH + ( "/bin/" + name ) );
+         }
+      }
+
+      //
       // If we reached this point then we failed to find the file:
       //
-      m_logger << msg::WARNING << tr( "Failed to find \"%1\" in environment: %2\n"
-                                      "Assuming that it's in \"%3/bin\"" )
-         .arg( name ).arg( env ).arg( CDASYS_PATH ) << msg::endmsg;
+      m_logger << msg::WARNING << tr( "Failed to find \"%1\" in environment: %2" )
+         .arg( name ).arg( env ) << msg::endmsg;
 
-      return ( CDASYS_PATH + ( "/bin/" + name ) );
+      return "";
    }
 
 } // namepsace daq

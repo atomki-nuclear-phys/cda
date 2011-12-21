@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_APPS_CDA_SIMPLE_DAQ_SIMPLEDAQWINDOW_H
-#define CDA_APPS_CDA_SIMPLE_DAQ_SIMPLEDAQWINDOW_H
+#ifndef CDA_APPS_CDA_CAMAC_DAQ_CAMACDAQWINDOW_H
+#define CDA_APPS_CDA_CAMAC_DAQ_CAMACDAQWINDOW_H
 
 // Qt include(s):
 #include <QtGui/QMainWindow>
@@ -24,12 +24,14 @@ namespace simple_daq {
    class CamacReaderRunner;
    class GlomemWriterRunner;
    class HBookWriterRunner;
+   class RootWriterRunner;
+   class RawWriterRunner;
 } // namespace simple_daq
 
 /**
- *  @short Main (and only) window of cda-simple-daq
+ *  @short Main (and only) window of cda-camac-daq
  *
- *         This is the main window of cda-simple-daq. It shows widgets that make
+ *         This is the main window of cda-camac-daq. It shows widgets that make
  *         it easy to start the cda-camac-reader, cda-glomem-writer and cda-hbook-writer
  *         applications with the click of a button. It is even smart enough to start
  *         these applications with all the correct command line options.
@@ -39,22 +41,22 @@ namespace simple_daq {
  * $Revision$
  * $Date$
  */
-class SimpleDAQWindow : public QMainWindow {
+class CamacDAQWindow : public QMainWindow {
 
    Q_OBJECT
 
 public:
    /// Constructor with configuration file name and output verbosity setting
-   SimpleDAQWindow( const QString& confFileName = "",
+   CamacDAQWindow( const QString& confFileName = "",
                     msg::Level verbosity = msg::INFO );
    /// Destructor
-   ~SimpleDAQWindow();
+   ~CamacDAQWindow();
 
 private slots:
    /// Slot for specifying a configuration file
    void readConfigSlot();
    /// Slot for displaying a window about this application
-   void aboutSimpleDAQSlot();
+   void aboutCamacDAQSlot();
    /// Slot for displaying a window about CDA
    void aboutCDASlot();
 
@@ -71,9 +73,11 @@ private:
    simple_daq::CamacReaderRunner*  m_camacReader;  ///< Widget controlling cda-camac-reader
    simple_daq::GlomemWriterRunner* m_glomemWriter; ///< Widget controlling cda-glomem-writer
    simple_daq::HBookWriterRunner*  m_hbookWriter;  ///< Widget controlling cda-hbook-writer
+   simple_daq::RootWriterRunner*   m_rootWriter;   ///< Widget controlling cda-root-writer
+   simple_daq::RawWriterRunner*    m_rawWriter;    ///< Widget controlling cda-raw-writer
 
    mutable msg::Logger m_logger; ///< Private message logger
 
-}; // class SimpleDAQWindow
+}; // class CamacDAQWindow
 
-#endif // CDA_APPS_CDA_SIMPLE_DAQ_SIMPLEDAQWINDOW_H
+#endif // CDA_APPS_CDA_CAMAC_DAQ_CAMACDAQWINDOW_H

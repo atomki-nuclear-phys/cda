@@ -37,7 +37,7 @@
 #endif
 
 // Local include(s):
-#include "SimpleDAQWindow.h"
+#include "CamacDAQWindow.h"
 #include "Constants.h"
 
 // Description for the executable:
@@ -118,8 +118,8 @@ int main( int argc, char* argv[] ) {
    //
    // Create and show the main window of the application:
    //
-   SimpleDAQWindow window( ( const char* ) config,
-                           v_map.find( verbosity )->second );
+   CamacDAQWindow window( ( const char* ) config,
+                          v_map.find( verbosity )->second );
    window.show();
    splash.showMessage( "CAMAC DAQ Ready",
                        Qt::AlignHCenter | Qt::AlignBottom,

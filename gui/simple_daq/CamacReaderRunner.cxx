@@ -86,7 +86,6 @@ namespace simple_daq {
                                          tr( "Start camac reader" ), m_mainBox );
       m_starterButton->setGeometry( QRect( 20, 100, 250, 35 ) );
       m_starterButton->setCheckable( true );
-      m_starterButton->setEnabled( false );
       connect( m_starterButton, SIGNAL( clicked( bool ) ),
                this, SLOT( startApp( bool ) ) );
 
@@ -95,11 +94,10 @@ namespace simple_daq {
       //
       m_runner.setExecName( daq::PathResolver::resolve( "cda-camac-reader",
                                                         "PATH" ) );
-
-      //
-      // Reset the internal flags:
-      //
-      m_writersRunning = 0;
+      if( m_runner.getExecName() == "" ) {
+         REPORT_ERROR( tr( "cda-camac-reader not found. Data acquisition "
+                           "is not possible." ) );
+      }
    }
 
    CamacReaderRunner::~CamacReaderRunner() {
@@ -163,15 +161,6 @@ namespace simple_daq {
    }
 
    /**
-    * @param address The address where a writer waits for events
-    */
-   void CamacReaderRunner::addEventListenerAddress( const QString& address ) {
-
-      m_eventListenerAddresses.push_back( address );
-      return;
-   }
-
-   /**
     * @param verbosity The output verbosity of cda-camac-reader
     */
    void CamacReaderRunner::setVerbosity( msg::Level verbosity ) {
@@ -188,21 +177,30 @@ namespace simple_daq {
       return m_level;
    }
 
-   void CamacReaderRunner::setWriterRunning( bool running ) {
+   /**
+    * @param status The required state for the widget
+    */
+   void CamacReaderRunner::setEnabled( bool status ) {
+
+      // Always allow disabling the widgets:
+      if( ! status ) {
+         m_mainBox->setEnabled( status );
+      }
+      // Only enable the widgets if cda-glomem-writer has been found:
+      else if( m_runner.getExecName() != "" ) {
+         m_mainBox->setEnabled( status );
+      }
+
+      return;
+   }
+
+   void CamacReaderRunner::setWriterRunning( bool running, const QString& address ) {
 
       // Update the running applications flag:
       if( running ) {
-         ++m_writersRunning;
+         m_eventListenerAddresses.insert( address );
       } else {
-         --m_writersRunning;
-      }
-
-      // Enable the starting of the application if there are enough
-      // writers running already:
-      if( m_writersRunning == ( int ) m_eventListenerAddresses.size() ) {
-         m_starterButton->setEnabled( true );
-      } else {
-         m_starterButton->setEnabled( false );
+         m_eventListenerAddresses.erase( address );
       }
 
       return;
@@ -237,9 +235,10 @@ namespace simple_daq {
          //
          if( m_eventListenerAddresses.size() ) {
             options += " -e ";
-            for( size_t i = 0; i < m_eventListenerAddresses.size();
-                 ++i ) {
-               options += m_eventListenerAddresses[ i ] + " ";
+            std::set< QString >::const_iterator itr = m_eventListenerAddresses.begin();
+            std::set< QString >::const_iterator end = m_eventListenerAddresses.end();
+            for( ; itr != end; ++itr ) {
+               options += ( *itr ) + " ";
             }
          }
 

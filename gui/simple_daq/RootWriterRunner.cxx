@@ -93,6 +93,11 @@ namespace simple_daq {
 
       m_runner.setExecName( daq::PathResolver::resolve( "cda-root-writer",
                                                         "PATH" ) );
+      if( m_runner.getExecName() == "" ) {
+         m_logger << msg::WARNING
+                  << tr( "ROOT file writing not available" )
+                  << msg::endmsg;
+      }
    }
 
    RootWriterRunner::~RootWriterRunner() {
@@ -148,6 +153,23 @@ namespace simple_daq {
    msg::Level RootWriterRunner::getVerbosity() const {
 
       return m_level;
+   }
+
+   /**
+    * @param status The required state for the widget
+    */
+   void RootWriterRunner::setEnabled( bool status ) {
+
+      // Always allow disabling the widgets:
+      if( ! status ) {
+         m_mainBox->setEnabled( status );
+      }
+      // Only enable the widgets if cda-glomem-writer has been found:
+      else if( m_runner.getExecName() != "" ) {
+         m_mainBox->setEnabled( status );
+      }
+
+      return;
    }
 
    void RootWriterRunner::startApp( bool start ) {

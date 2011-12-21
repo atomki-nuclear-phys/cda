@@ -28,7 +28,7 @@ namespace daq {
     *         used for other things as well. (Finding libraries, finding
     *         configuration files in specific locations. etc.)
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

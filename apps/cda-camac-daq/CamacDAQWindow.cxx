@@ -18,6 +18,8 @@
 #   include "cdagui/simple_daq/CamacReaderRunner.h"
 #   include "cdagui/simple_daq/GlomemWriterRunner.h"
 #   include "cdagui/simple_daq/HBookWriterRunner.h"
+#   include "cdagui/simple_daq/RootWriterRunner.h"
+#   include "cdagui/simple_daq/RawWriterRunner.h"
 #   include "cdagui/common/aboutCDA.h"
 #   include "cdagui/common/DefaultFont.h"
 #else
@@ -28,12 +30,14 @@
 #   include "simple_daq/CamacReaderRunner.h"
 #   include "simple_daq/GlomemWriterRunner.h"
 #   include "simple_daq/HBookWriterRunner.h"
+#   include "simple_daq/RootWriterRunner.h"
+#   include "simple_daq/RawWriterRunner.h"
 #   include "common/aboutCDA.h"
 #   include "common/DefaultFont.h"
 #endif
 
 // Local include(s):
-#include "SimpleDAQWindow.h"
+#include "CamacDAQWindow.h"
 #include "Constants.h"
 
 /**
@@ -43,19 +47,19 @@
  * @param confFileName Name of the configuration file to be used
  * @param verbosity Output message verbosity of all components
  */
-SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbosity )
-   : QMainWindow(), m_logger( "SimpleDAQWindow" ) {
+CamacDAQWindow::CamacDAQWindow( const QString& confFileName, msg::Level verbosity )
+   : QMainWindow(), m_logger( "CamacDAQWindow" ) {
 
    // The size of the window depends on the architecture. The menu on MacOS X is not part
    // of the window, so the window can be smaller by 30 pixels...
 #ifdef Q_OS_DARWIN
-   resize( 615, 550 );
-   setMinimumSize( 615, 550 );
-   setMaximumSize( 615, 550 );
+   resize( 920, 550 );
+   setMinimumSize( 920, 550 );
+   setMaximumSize( 920, 550 );
 #else
-   resize( 615, 580 );
-   setMinimumSize( 615, 580 );
-   setMaximumSize( 615, 580 );
+   resize( 920, 580 );
+   setMinimumSize( 920, 580 );
+   setMaximumSize( 920, 580 );
 #endif
 
    // Set up the window according to whether a configuration file was already specified:
@@ -70,9 +74,9 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    // Create the central widget. This is the one on which all other widgets are placed:
    //
    m_centralWidget = new QWidget( this );
-   m_centralWidget->resize( 615, 550 );
-   m_centralWidget->setMinimumSize( 615, 550 );
-   m_centralWidget->setMaximumSize( 615, 550 );
+   m_centralWidget->resize( 920, 550 );
+   m_centralWidget->setMinimumSize( 920, 550 );
+   m_centralWidget->setMaximumSize( 920, 550 );
    setCentralWidget( m_centralWidget );
 
    //
@@ -81,7 +85,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    m_msgServer = new msg::Server();
    m_msgServer->setWriteOutputFile( false );
    m_msgView = new msg::TextView( m_centralWidget );
-   m_msgView->setGeometry( QRect( 0, 315, 615, 235 ) );
+   m_msgView->setGeometry( QRect( 0, 315, 920, 235 ) );
    m_msgView->setMinimumShownLevel( verbosity );
    connect( m_msgServer, SIGNAL( messageAvailable( const Message& ) ),
             m_msgView, SLOT( addMessage( const Message& ) ) );
@@ -111,8 +115,6 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    m_camacReader->setConfigFileName( confFileName );
    m_camacReader->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
    m_camacReader->setStatServerAddress( Const::STAT_SERVER_ADDRESS );
-   m_camacReader->addEventListenerAddress( Const::HBOOK_WRITER_ADDRESS );
-   m_camacReader->addEventListenerAddress( Const::GLOMEM_WRITER_ADDRESS );
    m_camacReader->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_camacReader->setEnabled( false );
@@ -122,7 +124,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    // Create the widget controlling cda-glomem-writer:
    //
    m_glomemWriter = new simple_daq::GlomemWriterRunner( m_centralWidget );
-   m_glomemWriter->setGeometry( QRect( 5, 160, 300, 150 ) );
+   m_glomemWriter->setGeometry( QRect( 615, 5, 300, 150 ) );
    m_glomemWriter->setConfigFileName( confFileName );
    m_glomemWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
    m_glomemWriter->setEventAddress( Const::GLOMEM_WRITER_ADDRESS );
@@ -130,14 +132,14 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    if( confFileName.isEmpty() ) {
       m_glomemWriter->setEnabled( false );
    }
-   connect( m_glomemWriter, SIGNAL( running( bool ) ),
-            m_camacReader, SLOT( setWriterRunning( bool ) ) );
+   connect( m_glomemWriter, SIGNAL( receiverRunning( bool, const QString& ) ),
+            m_camacReader, SLOT( setWriterRunning( bool, const QString& ) ) );
 
    //
    // Create the widget controlling cda-hbook-writer:
    //
    m_hbookWriter = new simple_daq::HBookWriterRunner( m_centralWidget );
-   m_hbookWriter->setGeometry( QRect( 310, 160, 300, 150 ) );
+   m_hbookWriter->setGeometry( QRect( 5, 160, 300, 150 ) );
    m_hbookWriter->setConfigFileName( confFileName );
    m_hbookWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
    m_hbookWriter->setEventAddress( Const::HBOOK_WRITER_ADDRESS );
@@ -145,8 +147,38 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
    if( confFileName.isEmpty() ) {
       m_hbookWriter->setEnabled( false );
    }
-   connect( m_hbookWriter, SIGNAL( running( bool ) ),
-            m_camacReader, SLOT( setWriterRunning( bool ) ) );
+   connect( m_hbookWriter, SIGNAL( receiverRunning( bool, const QString& ) ),
+            m_camacReader, SLOT( setWriterRunning( bool, const QString& ) ) );
+
+   //
+   // Create the widget controlling cda-root-writer:
+   //
+   m_rootWriter = new simple_daq::RootWriterRunner( m_centralWidget );
+   m_rootWriter->setGeometry( QRect( 310, 160, 300, 150 ) );
+   m_rootWriter->setConfigFileName( confFileName );
+   m_rootWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
+   m_rootWriter->setEventAddress( Const::ROOT_WRITER_ADDRESS );
+   m_rootWriter->setVerbosity( verbosity );
+   if( confFileName.isEmpty() ) {
+      m_rootWriter->setEnabled( false );
+   }
+   connect( m_rootWriter, SIGNAL( receiverRunning( bool, const QString& ) ),
+            m_camacReader, SLOT( setWriterRunning( bool, const QString& ) ) );
+
+   //
+   // Create the widget controlling cda-raw-writer:
+   //
+   m_rawWriter = new simple_daq::RawWriterRunner( m_centralWidget );
+   m_rawWriter->setGeometry( QRect( 615, 160, 300, 150 ) );
+   m_rawWriter->setConfigFileName( confFileName );
+   m_rawWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
+   m_rawWriter->setEventAddress( Const::RAW_WRITER_ADDRESS );
+   m_rawWriter->setVerbosity( verbosity );
+   if( confFileName.isEmpty() ) {
+      m_rawWriter->setEnabled( false );
+   }
+   connect( m_rawWriter, SIGNAL( receiverRunning( bool, const QString& ) ),
+            m_camacReader, SLOT( setWriterRunning( bool, const QString& ) ) );
 
    // Draw the menus of the window:
    drawMenus();
@@ -170,7 +202,7 @@ SimpleDAQWindow::SimpleDAQWindow( const QString& confFileName, msg::Level verbos
  * The destructor actually does something in this class, it has to delete quite a few
  * objects which were created in the constructor.
  */
-SimpleDAQWindow::~SimpleDAQWindow() {
+CamacDAQWindow::~CamacDAQWindow() {
 
    //
    // Delete all objects created in the constructor:
@@ -179,6 +211,8 @@ SimpleDAQWindow::~SimpleDAQWindow() {
    delete m_camacReader;
    delete m_glomemWriter;
    delete m_hbookWriter;
+   delete m_rootWriter;
+   delete m_rawWriter;
    delete m_msgServer;
    delete m_msgView;
    delete m_centralWidget;
@@ -188,7 +222,7 @@ SimpleDAQWindow::~SimpleDAQWindow() {
  * This "Qt slot" opens a file selection window and then sets up all the components of the
  * window to use this new selected file.
  */
-void SimpleDAQWindow::readConfigSlot() {
+void CamacDAQWindow::readConfigSlot() {
 
    // Ask the user for a file name:
    QString fileName = QFileDialog::getOpenFileName( this, tr( "Open setup file" ),
@@ -214,6 +248,10 @@ void SimpleDAQWindow::readConfigSlot() {
    m_glomemWriter->setEnabled( true );
    m_hbookWriter->setConfigFileName( fileName );
    m_hbookWriter->setEnabled( true );
+   m_rootWriter->setConfigFileName( fileName );
+   m_rootWriter->setEnabled( true );
+   m_rawWriter->setConfigFileName( fileName );
+   m_rawWriter->setEnabled( true );
 
    m_logger << msg::INFO << tr( "Using configuration file: %1" ).arg( fileName )
             << msg::endmsg;
@@ -221,9 +259,9 @@ void SimpleDAQWindow::readConfigSlot() {
    return;
 }
 
-void SimpleDAQWindow::aboutSimpleDAQSlot() {
+void CamacDAQWindow::aboutCamacDAQSlot() {
 
-   QMessageBox::about( this, tr( "CDA Simple DAQ" ),
+   QMessageBox::about( this, tr( "CDA Camac DAQ" ),
                        tr( "This application is a simplified interface for running "
                            "a CDA CAMAC data acquisition session. While the CDA "
                            "executables can be started on multiple separate computers, "
@@ -235,7 +273,7 @@ void SimpleDAQWindow::aboutSimpleDAQSlot() {
    return;
 }
 
-void SimpleDAQWindow::aboutCDASlot() {
+void CamacDAQWindow::aboutCDASlot() {
 
    aboutCDA( this );
    return;
@@ -244,7 +282,7 @@ void SimpleDAQWindow::aboutCDASlot() {
 /**
  * This function is responsible for creating a few simple menus on the top of the window.
  */
-void SimpleDAQWindow::drawMenus() {
+void CamacDAQWindow::drawMenus() {
 
    /////////////////////////////////////////////////////////////
    //                                                         //
@@ -287,9 +325,9 @@ void SimpleDAQWindow::drawMenus() {
 
    QAction* aboutConfigEditorAc =
       helpMenu->addAction( QIcon( ":/img/cda-daq.png" ),
-                           tr( "About Simple DAQ" ) );
+                           tr( "About Camac DAQ" ) );
    connect( aboutConfigEditorAc, SIGNAL( triggered() ),
-            this, SLOT( aboutSimpleDAQSlot() ) );
+            this, SLOT( aboutCamacDAQSlot() ) );
 
    QAction* aboutCDAAction = helpMenu->addAction( QIcon( ":/img/logo.png" ),
                                                   tr( "About CDA" ) );

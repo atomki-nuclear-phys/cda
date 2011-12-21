@@ -4,7 +4,7 @@
 #define CDA_GUI_SIMPLE_DAQ_CAMACREADERRUNNER_H
 
 // STL include(s):
-#include <vector>
+#include <set>
 
 // Qt include(s):
 #include <QtCore/QString>
@@ -39,7 +39,7 @@ namespace simple_daq {
     *         be used in conjunction with the other *Runner classes in
     *         this directory.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
@@ -69,17 +69,17 @@ namespace simple_daq {
       /// Get the address of the statistics server(s)
       const QString& getStatServerAddress() const;
 
-      /// Add the address of an event listener
-      void addEventListenerAddress( const QString& address );
-
       /// Set the verbosity level of the cda-camac-reader application
       void setVerbosity( msg::Level verbosity );
       /// Get the verbosity level of the cda-camac-reader application
       msg::Level getVerbosity() const;
 
+      /// Overrides the QWidget::setEnabled(...) function
+      void setEnabled( bool status );
+
    public slots:
       /// Set whether a writer application is running
-      void setWriterRunning( bool running );
+      void setWriterRunning( bool running, const QString& address );
 
    private slots:
       /// Internal function starting and stopping cda-camac-reader
@@ -98,10 +98,8 @@ namespace simple_daq {
       QString m_msgServerAddress;    ///< Address of the message server
       QString m_statServerAddress;   ///< Address of the statistics server
       /// Addresses of event listener applications
-      std::vector< QString > m_eventListenerAddresses;
+      std::set< QString > m_eventListenerAddresses;
       msg::Level m_level;            ///< Output level of cda-camac-reader
-
-      int m_writersRunning;          ///< Number of dependent applications running
 
       mutable daq::AppRunner m_runner; ///< The object starting cda-camac-reader
       mutable msg::Logger m_logger;    ///< Internal logger object

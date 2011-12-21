@@ -56,6 +56,11 @@ namespace simple_daq {
 
       m_runner.setExecName( daq::PathResolver::resolve( "cda-glomem-writer",
                                                         "PATH" ) );
+      if( m_runner.getExecName() == "" ) {
+         m_logger << msg::WARNING
+                  << tr( "Global memory writing not available" )
+                  << msg::endmsg;
+      }
    }
 
    GlomemWriterRunner::~GlomemWriterRunner() {
@@ -107,6 +112,23 @@ namespace simple_daq {
    msg::Level GlomemWriterRunner::getVerbosity() const {
 
       return m_level;
+   }
+
+   /**
+    * @param status The required state for the widget
+    */
+   void GlomemWriterRunner::setEnabled( bool status ) {
+
+      // Always allow disabling the widgets:
+      if( ! status ) {
+         m_mainBox->setEnabled( status );
+      }
+      // Only enable the widgets if cda-glomem-writer has been found:
+      else if( m_runner.getExecName() != "" ) {
+         m_mainBox->setEnabled( status );
+      }
+
+      return;
    }
 
    void GlomemWriterRunner::startApp( bool start ) {

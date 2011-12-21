@@ -42,7 +42,7 @@ namespace simple_daq {
     *         be used in conjunction with the other *Runner classes in
     *         this directory.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
@@ -76,6 +76,9 @@ namespace simple_daq {
       void setVerbosity( msg::Level verbosity );
       /// Get the verbosity level of the cda-root-writer application
       msg::Level getVerbosity() const;
+
+      /// Overrides the QWidget::setEnabled(...) function
+      void setEnabled( bool status );
 
    signals:
       /// Signal showing if the application is running

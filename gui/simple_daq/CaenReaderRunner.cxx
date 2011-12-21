@@ -94,6 +94,10 @@ namespace simple_daq {
       //
       m_runner.setExecName( daq::PathResolver::resolve( "cda-caen-reader",
                                                         "PATH" ) );
+      if( m_runner.getExecName() == "" ) {
+         REPORT_ERROR( tr( "cda-caen-reader not found. Data acquisition "
+                           "is not possible." ) );
+      }
    }
 
    CaenReaderRunner::~CaenReaderRunner() {
@@ -171,6 +175,23 @@ namespace simple_daq {
    msg::Level CaenReaderRunner::getVerbosity() const {
 
       return m_level;
+   }
+
+   /**
+    * @param status The required state for the widget
+    */
+   void CaenReaderRunner::setEnabled( bool status ) {
+
+      // Always allow disabling the widgets:
+      if( ! status ) {
+         m_mainBox->setEnabled( status );
+      }
+      // Only enable the widgets if cda-caen-reader has been found:
+      else if( m_runner.getExecName() != "" ) {
+         m_mainBox->setEnabled( status );
+      }
+
+      return;
    }
 
    void CaenReaderRunner::setWriterRunning( bool running, const QString& address ) {

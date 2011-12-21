@@ -93,7 +93,11 @@ namespace simple_daq {
 
       m_runner.setExecName( daq::PathResolver::resolve( "cda-hbook-writer",
                                                         "PATH" ) );
-
+      if( m_runner.getExecName() == "" ) {
+         m_logger << msg::WARNING
+                  << tr( "HBOOK file writing not available" )
+                  << msg::endmsg;
+      }
    }
 
    void HBookWriterRunner::setConfigFileName( const QString& fileName ) {
@@ -138,6 +142,23 @@ namespace simple_daq {
    msg::Level HBookWriterRunner::getVerbosity() const {
 
       return m_level;
+   }
+
+   /**
+    * @param status The required state for the widget
+    */
+   void HBookWriterRunner::setEnabled( bool status ) {
+
+      // Always allow disabling the widgets:
+      if( ! status ) {
+         m_mainBox->setEnabled( status );
+      }
+      // Only enable the widgets if cda-glomem-writer has been found:
+      else if( m_runner.getExecName() != "" ) {
+         m_mainBox->setEnabled( status );
+      }
+
+      return;
    }
 
    void HBookWriterRunner::startApp( bool start ) {
