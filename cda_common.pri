@@ -89,7 +89,7 @@ win32 {
 # Uncomment the following if you have ROOT installed on your
 # system.
 #
-DEFINES += HAVE_ROOT_LIBS
+#DEFINES += HAVE_ROOT_LIBS
 
 #
 # Compiler settings. In order to be able to link against CERNLIB on
