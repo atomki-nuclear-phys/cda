@@ -17,9 +17,9 @@ TARGET   = cdagui
 
 # These are the header and source files:
 HEADERS = $$files(msg/*.h) $$files(device/*.h) $$files(simple_daq/*.h) \
-          $$files(stat/*.h) $$files(common/*.h) $$files(moni/*.h)
+          $$files(stat/*.h) $$files(common/*.h)
 SOURCES = $$files(msg/*.cxx) $$files(device/*.cxx) $$files(simple_daq/*.cxx) \
-          $$files(stat/*.cxx) $$files(common/*.cxx) $$files(moni/*.cxx)
+          $$files(stat/*.cxx) $$files(common/*.cxx)
 TRANSLATIONS = ../trans/cdagui_hu.ts
 
 # The library uses the QtCore, QtNetwork, QtGui and QtXml libraries:
@@ -46,34 +46,29 @@ mac {
    # The headers are put in the framework in the same way as in the case of
    # the cdacore framework. See core/core.pro for details.
    MSG_HEADERS.version = Versions
-   MSG_HEADERS.files = $$system(ls msg/*.h)
+   MSG_HEADERS.files = $$files(msg/*.h)
    MSG_HEADERS.path = Headers/msg
    QMAKE_BUNDLE_DATA += MSG_HEADERS
 
    DEVICE_HEADERS.version = Versions
-   DEVICE_HEADERS.files = $$system(ls device/*.h)
+   DEVICE_HEADERS.files = $$files(device/*.h)
    DEVICE_HEADERS.path = Headers/device
    QMAKE_BUNDLE_DATA += DEVICE_HEADERS
 
    SIMPLE_DAQ_HEADERS.version = Versions
-   SIMPLE_DAQ_HEADERS.files = $$system(ls simple_daq/*.h)
+   SIMPLE_DAQ_HEADERS.files = $$files(simple_daq/*.h)
    SIMPLE_DAQ_HEADERS.path = Headers/simple_daq
    QMAKE_BUNDLE_DATA += SIMPLE_DAQ_HEADERS
 
    STAT_HEADERS.version = Versions
-   STAT_HEADERS.files = $$system(ls stat/*.h)
+   STAT_HEADERS.files = $$files(stat/*.h)
    STAT_HEADERS.path = Headers/stat
    QMAKE_BUNDLE_DATA += STAT_HEADERS
 
    COMMON_HEADERS.version = Versions
-   COMMON_HEADERS.files = $$system(ls common/*.h)
+   COMMON_HEADERS.files = $$files(common/*.h)
    COMMON_HEADERS.path = Headers/common
    QMAKE_BUNDLE_DATA += COMMON_HEADERS
-
-   MONI_HEADERS.version = Versions
-   MONI_HEADERS.files = $$system(ls moni/*.h)
-   MONI_HEADERS.path = Headers/moni
-   QMAKE_BUNDLE_DATA += MONI_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =

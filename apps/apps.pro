@@ -14,7 +14,8 @@ TEMPLATE = subdirs
 
 # Generic application(s):
 SUBDIRS  = cda-msgserver cda-config-editor \
-           cda-stat-server cda-raw-writer cda-config-server
+           cda-stat-server cda-raw-writer cda-config-server \
+           cda-qt-monitoring
 
 # CAMAC specific application(s):
 SUBDIRS += cda-camac-reader cda-camac-daq

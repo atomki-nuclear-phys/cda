@@ -10,6 +10,7 @@
 #include "CernlibDisk.h"
 #include "Readout.h"
 #include "RootDisk.h"
+#include "QtHist.h"
 
 namespace dt5740 {
 
@@ -44,6 +45,10 @@ namespace dt5740 {
       } else if( ti == typeid( dev::RootDisk ) ) {
 
          return dynamic_cast< dev::RootDisk* >( new RootDisk() );
+
+      } else if( ti == typeid( dev::QtHist ) ) {
+
+         return dynamic_cast< dev::QtHist* >( new QtHist() );
 
       }
 

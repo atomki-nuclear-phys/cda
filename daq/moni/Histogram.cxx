@@ -39,14 +39,23 @@ namespace moni {
     */
    Histogram::Histogram( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( "N/A" ), m_nbins( 100 ),
-        m_low( 0.0 ), m_up( 100.0 ), m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
+        m_low( 0.0 ), m_up( 100.0 ),
+        m_refreshTimer( this ),
+        m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
         m_values( 102, 0.0 ), m_entries( 0 ),
         m_logger( "moni::Histogram" ) {
 
-      setMinimumSize( 220, 200 );
+      setMinimumSize( 220, 150 );
       setMaximumSize( 2200, 2000 );
 
       reset();
+
+      // Set up the timer for the regular updates:
+      m_refreshTimer.setInterval( 2000 );
+      m_refreshTimer.setSingleShot( false );
+      connect( &m_refreshTimer, SIGNAL( timeout() ),
+               this, SLOT( update() ) );
+      m_refreshTimer.start();
    }
 
    /**
@@ -62,16 +71,26 @@ namespace moni {
     * @param flags Qt specific flags for the object
     */
    Histogram::Histogram( const QString& title, int bins, double low, double up,
+                         int refreshTimeout,
                          QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( title ), m_nbins( bins ),
-        m_low( low ), m_up( up ), m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
+        m_low( low ), m_up( up ),
+        m_refreshTimer( this ),
+        m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
         m_values( bins + 2, 0.0 ), m_entries( 0 ),
         m_logger( "moni::Histogram" ) {
 
-      setMinimumSize( 220, 200 );
+      setMinimumSize( 220, 150 );
       setMaximumSize( 2200, 2000 );
 
       reset();
+
+      // Set up the timer for the regular updates:
+      m_refreshTimer.setInterval( refreshTimeout );
+      m_refreshTimer.setSingleShot( false );
+      connect( &m_refreshTimer, SIGNAL( timeout() ),
+               this, SLOT( update() ) );
+      m_refreshTimer.start();
    }
 
    const QString& Histogram::getTitle() const {
@@ -92,6 +111,19 @@ namespace moni {
    double Histogram::getUpperBound() const {
 
       return m_up;
+   }
+
+   int Histogram::getRefreshTimeout() const {
+
+      return m_refreshTimer.interval();
+   }
+
+   void Histogram::setRefreshTimeout( int value ) {
+
+      m_refreshTimer.stop();
+      m_refreshTimer.setInterval( value );
+      m_refreshTimer.start();
+      return;
    }
 
    Histogram::AxisStyle Histogram::getXAxisStyle() const {
@@ -171,7 +203,7 @@ namespace moni {
    /**
     * Function used to fill the histogram. Just like in ROOT, it is
     * possible to fill entries using a weight, but in the monitoring this
-    * is probably not going to be used.
+    * is probably not going to be used. (I was wrong on the weights...)
     *
     * @param value The value at which the histogram should be filled
     * @param weight The weight with which the histogram should be filled
@@ -188,9 +220,6 @@ namespace moni {
       // Fill the histogram:
       m_values[ getBin( value ) ] += weight;
       ++m_entries;
-
-      // Re-draw the widget:
-      update();
 
       return;
    }

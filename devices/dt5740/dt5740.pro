@@ -30,7 +30,7 @@ mac {
    # The plugin has to be linked against the cdacore framework:
    INCLUDEPATH    += ../../core
    QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore
+   LIBS           += -F../../lib -framework cdacore -framework cdadaq
 }
 
 unix:!mac {
@@ -40,7 +40,7 @@ unix:!mac {
 
    # The plugin has to be linked against the cdacore library:
    INCLUDEPATH += ../../core
-   LIBS         = -L../../lib -lcdacore
+   LIBS         = -L../../lib -lcdacore -lcdadaq
 }
 
 win32 {
@@ -50,5 +50,5 @@ win32 {
 
    # The plugin has to be linked against the cdacore library:
    INCLUDEPATH += ../../core
-   LIBS         = ../../lib/libcdacore1.a
+   LIBS         = ../../lib/libcdacore1.a ../../lib/libcdadaq1.a
 }

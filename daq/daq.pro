@@ -17,14 +17,14 @@ TARGET   = cdadaq
 
 # These are the header and source files:
 HEADERS = $$files(common/*.h) $$files(schema/*.h) $$files(stat/*.h) \
-          $$files(config/*.h)
+          $$files(config/*.h) $$files(moni/*.h)
 SOURCES = $$files(common/*.cxx) $$files(schema/*.cxx) $$files(stat/*.cxx) \
-          $$files(config/*.cxx)
+          $$files(config/*.cxx) $$files(moni/*.cxx)
 TRANSLATIONS = ../trans/cdadaq_hu.ts
 
 # The library uses the QtCore library:
 CONFIG += qt
-QT      = core xml network
+QT      = core xml network gui
 
 # The place to put the intermediate build results:
 OBJECTS_DIR = ./.obj
@@ -64,6 +64,11 @@ mac {
    CONFIG_HEADERS.files = config/ConfServer.h config/ConfReader.h
    CONFIG_HEADERS.path = Headers/config
    QMAKE_BUNDLE_DATA += CONFIG_HEADERS
+
+   MONI_HEADERS.version = Versions
+   MONI_HEADERS.files = $$files(moni/*.h)
+   MONI_HEADERS.path = Headers/moni
+   QMAKE_BUNDLE_DATA += MONI_HEADERS
 
    DUMMY_HEADERS.version = Versions
    DUMMY_HEADERS.files =

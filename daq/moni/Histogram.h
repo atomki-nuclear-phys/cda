@@ -1,10 +1,11 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_GUI_MONI_HISTOGRAM_H
-#define CDA_GUI_MONI_HISTOGRAM_H
+#ifndef CDA_DAQ_MONI_HISTOGRAM_H
+#define CDA_DAQ_MONI_HISTOGRAM_H
 
 // Qt include(s):
 #include <QtCore/QString>
+#include <QtCore/QTimer>
 #include <QtGui/QWidget>
 
 // CDA include(s):
@@ -60,6 +61,7 @@ namespace moni {
       Histogram( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       /// Constructor specifying all properties of the histogram
       Histogram( const QString& title, int bins, double low, double up,
+                 int refreshTimeout = 2000,
                  QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Get the title of the histogram
@@ -70,6 +72,11 @@ namespace moni {
       double getLowerBound() const;
       /// Get the upper bound of the historgam
       double getUpperBound() const;
+
+      /// Get the refresh timeout in miliseconds
+      int getRefreshTimeout() const;
+      /// Set the refresh timeout in miliseconds
+      void setRefreshTimeout( int value );
 
       /// Possible styles for the axes
       enum AxisStyle {
@@ -224,6 +231,8 @@ namespace moni {
       double m_low; ///< The lower bound of the histogram
       double m_up; ///< The upper bound of the histogram
 
+      QTimer m_refreshTimer; ///< Timer for refreshing the histogram
+
       AxisStyle m_xAxisStyle; ///< Style of the X axis
       AxisStyle m_yAxisStyle; ///< Style of the Y axis
 
@@ -236,4 +245,4 @@ namespace moni {
 
 } // namespace moni
 
-#endif // CDA_GUI_MONI_HISTOGRAM_H
+#endif // CDA_DAQ_MONI_HISTOGRAM_H

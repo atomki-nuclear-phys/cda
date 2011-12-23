@@ -93,7 +93,13 @@ namespace dev {
 
             Factory* factory = m_loader->getFactory( type );
             DEVICE* device = factory->createDevice< DEVICE >();
-            if( ! device ) continue;
+            if( ! device ) {
+               m_logger << msg::WARNING
+                        << tr( "No implementation found for type %1" )
+                  .arg( type )
+                        << msg::endmsg;
+               continue;
+            }
             if( ! device->readConfig( dev ) ) {
                REPORT_ERROR( tr( "There was a problem reading the "
                                  "configuration of one of the devices!" ) );
@@ -240,6 +246,13 @@ namespace dev {
          // If we do, let's try loading the configuration:
          Factory* factory = m_loader->getFactory( type );
          DEVICE* device = factory->createDevice< DEVICE >();
+         if( ! device ) {
+            m_logger << msg::WARNING
+                     << tr( "No implementation found for type %1" )
+               .arg( type )
+                     << msg::endmsg;
+            continue;
+         }
          const QDomElement conf =
             crate_element.childNodes().at( i ).toElement();
          if( ! device->readConfig( conf ) ) {
