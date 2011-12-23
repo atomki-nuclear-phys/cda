@@ -313,6 +313,16 @@ int main( int argc, char* argv[] ) {
    stat_sender.start();
 
    //
+   // Start the data acquisition:
+   //
+   if( ! g_crate->start() ) {
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-caen-reader",
+                                   "Couldn't start the data acquisition" )
+               << msg::endmsg;
+   }
+
+   //
    // Let the user know what we're doing:
    //
    g_logger << msg::INFO
@@ -349,6 +359,18 @@ int main( int argc, char* argv[] ) {
 
 void shutDown( int ) {
 
+   // Stop the data acquisition:
+   if( ! g_crate->stop() ) {
+      g_logger << msg::FATAL
+               << qApp->translate( "cda-caen-reader",
+                                   "Couldn't stop data acquisition" )
+               << msg::endmsg;
+   } else {
+      g_logger << msg::DEBUG
+               << qApp->translate( "cda-caen-reader",
+                                   "Data acquisition stopped" )
+               << msg::endmsg;
+   }
    // Finalize the data acquisition:
    if( ! g_crate->finalize() ) {
       g_logger << msg::FATAL

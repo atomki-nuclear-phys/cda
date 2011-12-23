@@ -63,6 +63,8 @@ namespace dt5740 {
       static caen::Digitizer::TriggerMode trigMode( const GroupConfig& group );
       /// Get the bit-pattern for the group configuration register
       uint32_t groupConfReg() const;
+      /// Clean up the allocated memory
+      bool cleanup();
 
       /// Address of a test register on the device
       static const uint32_t REG_SCRATCH = 0xef20;

@@ -29,7 +29,7 @@ namespace dt5740 {
 
    Readout::~Readout() {
 
-      finalize();
+      cleanup();
    }
 
    bool Readout::initialize() {
@@ -65,9 +65,22 @@ namespace dt5740 {
 
       // Configure the device wide parameters:
       CHECK( m_digitizer.setRecordLength( getSamples() ) );
+      uint32_t recordLength = 0;
+      CHECK( m_digitizer.getRecordLength( recordLength ) );
+      REPORT_VERBOSE( tr( "Record length set to %1 samples (%2 samples set)" )
+                      .arg( recordLength ).arg( getSamples() ) );
       CHECK( m_digitizer.setPostTriggerSize( m_postTrigPercentage ) );
+      uint32_t postTrigPerc = 0;
+      CHECK( m_digitizer.getPostTriggerSize( postTrigPerc ) );
+      REPORT_VERBOSE( tr( "Post trigger percentage set to %1\%" )
+                      .arg( postTrigPerc ) );
       CHECK( m_digitizer.writeRegister( REG_GROUP_CONFIG,
                                         groupConfReg() ) );
+      uint32_t groupConf = 0;
+      CHECK( m_digitizer.readRegister( REG_GROUP_CONFIG,
+                                       groupConf ) );
+      REPORT_VERBOSE( tr( "Group config register set to %1" )
+                      .arg( groupConf ) );
       CHECK( m_digitizer.setAcquisitionMode( m_acqMode ) );
 
       // Configure the group wide parameters:
@@ -91,6 +104,37 @@ namespace dt5740 {
       }
       CHECK( m_digitizer.setGroupEnableMask( groupMask ) );
 
+      // Check the status of the groups:
+      /*
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         uint32_t data = 0;
+         CHECK( m_digitizer.readRegister( 0x1080 + i * 0x100,
+                                          data ) );
+         REPORT_VERBOSE( tr( "Group %1's trigger threshold is %2" )
+                         .arg( i ).arg( data ) );
+         CHECK( m_digitizer.readRegister( 0x1088 + i * 0x100,
+                                          data ) );
+         REPORT_VERBOSE( tr( "Group %1's status word is %2" )
+                         .arg( i ).arg( data ) );
+         CHECK( m_digitizer.readRegister( 0x1098 + i * 0x100,
+                                          data ) );
+         REPORT_VERBOSE( tr( "Group %1's DC offset is %2" )
+                         .arg( i ).arg( data ) );
+         CHECK( m_digitizer.readRegister( 0x10a8 + i * 0x100,
+                                          data ) );
+         REPORT_VERBOSE( tr( "Group %1's trigger mask is %2" )
+                         .arg( i ).arg( data ) );
+      }
+      */
+
+      uint32_t buffMode = 0;
+      CHECK( m_digitizer.readRegister( 0x800c, buffMode ) );
+      REPORT_VERBOSE( tr( "Buffer mode code: %1" ).arg( buffMode ) );
+      uint32_t trigSource = 0;
+      CHECK( m_digitizer.readRegister( 0x810c, trigSource ) );
+      REPORT_VERBOSE( tr( "Trigger Source Enable Mask: %1" )
+                      .arg( trigSource ) );
+
       // Allocate the memory buffer for the event readout:
       CHECK( m_digitizer.mallocReadoutBuffer( &m_buffer, m_bufferSize ) );
       m_logger << msg::DEBUG
@@ -109,9 +153,7 @@ namespace dt5740 {
    bool Readout::finalize() {
 
       // Free up the allocated readout buffer:
-      CHECK( m_digitizer.freeReadoutBuffer( &m_buffer ) );
-      m_buffer = NULL;
-      m_bufferSize = 0;
+      CHECK( cleanup() );
 
       // Clear and close the digitizer:
       CHECK( m_digitizer.reset() );
@@ -252,6 +294,18 @@ namespace dt5740 {
       }
 
       return result;
+   }
+
+   bool Readout::cleanup() {
+
+      if( m_buffer && m_bufferSize ) {
+         // Free up the allocated readout buffer:
+         CHECK( m_digitizer.freeReadoutBuffer( &m_buffer ) );
+         m_buffer = NULL;
+         m_bufferSize = 0;
+      }
+
+      return true;
    }
 
 } // namespace dt5740

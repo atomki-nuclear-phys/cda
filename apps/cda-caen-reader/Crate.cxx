@@ -6,8 +6,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/caen/Digitizer.h"
+#   include "cdacore/common/errorcheck.h"
 #else
 #   include "caen/Digitizer.h"
+#   include "common/errorcheck.h"
 #endif
 
 // Local include(s):
@@ -79,6 +81,36 @@ namespace caen_reader {
 
       // Remember the object's internal state:
       m_initialized = false;
+
+      // Show that we were successful:
+      return true;
+   }
+
+   bool Crate::start() {
+
+      // Start all the devices:
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator end =
+         m_devices.end();
+      for( ; itr != end; ++itr ) {
+         CHECK( itr->second->start() );
+      }
+
+      // Show that we were successful:
+      return true;
+   }
+
+   bool Crate::stop() {
+
+      // Stop all the devices:
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr =
+         m_devices.begin();
+      std::map< unsigned int, dev::CaenReadout* >::const_iterator end =
+         m_devices.end();
+      for( ; itr != end; ++itr ) {
+         CHECK( itr->second->stop() );
+      }
 
       // Show that we were successful:
       return true;

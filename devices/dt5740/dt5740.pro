@@ -39,7 +39,7 @@ unix:!mac {
    message(*)
 
    # The plugin has to be linked against the cdacore library:
-   INCLUDEPATH += ../../core
+   INCLUDEPATH += ../../core ../../daq
    LIBS         = -L../../lib -lcdacore -lcdadaq
 }
 
@@ -49,6 +49,6 @@ win32 {
    message(*)
 
    # The plugin has to be linked against the cdacore library:
-   INCLUDEPATH += ../../core
+   INCLUDEPATH += ../../core ../../daq
    LIBS         = ../../lib/libcdacore1.a ../../lib/libcdadaq1.a
 }

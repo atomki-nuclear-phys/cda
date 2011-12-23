@@ -594,7 +594,7 @@ namespace caen {
 #endif // HAVE_CAEN_LIBS
 
       // Reset the device handle:
-      m_handle = 0;
+      m_handle = -1;
 
       // Let the user know what we did:
       m_logger << msg::DEBUG

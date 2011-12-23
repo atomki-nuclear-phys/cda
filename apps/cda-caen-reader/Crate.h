@@ -60,6 +60,12 @@ namespace caen_reader {
       bool initialize();
       /// Function finalizing all CAEN devices
       bool finalize();
+
+      /// Start the acquisition on all the devices
+      bool start();
+      /// Stop the acquisition on all the devices
+      bool stop();
+
       /// Function reading out one event from the crate
       ev::Event readEvent() const;
 
