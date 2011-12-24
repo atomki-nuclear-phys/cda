@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4160 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4220 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -91,9 +91,9 @@ namespace dt5740 {
       m_connLink = new QSpinBox( m_connectionBox );
       m_connLink->setGeometry( QRect( 180, 55, 150, 25 ) );
       m_connLink->setRange( 0, 10 );
-      m_connLink->setToolTip( "In USB mode this means the ID given by the OS "
-                              "to the USB connection. If this is the only such "
-                              "device connected by USB, it will be \"0\"." );
+      m_connLink->setToolTip( tr( "In USB mode this means the ID given by the OS "
+                                  "to the USB connection. If this is the only such "
+                                  "device connected by USB, it will be \"0\"." ) );
       connect( m_connLink, SIGNAL( valueChanged( int ) ),
                this, SLOT( connectionLinkSlot( int ) ) );
 
@@ -142,10 +142,10 @@ namespace dt5740 {
       m_postTrigPercentageWidget->setGeometry( QRect( 180, 145, 150, 25 ) );
       m_postTrigPercentageWidget->setRange( 0, 100 );
       m_postTrigPercentageWidget->setValue( 100 );
-      m_postTrigPercentageWidget->setToolTip( "You can set here how many of "
-                                              "the collected samples should be "
-                                              "taken after the trigger "
-                                              "signal." );
+      m_postTrigPercentageWidget->setToolTip( tr( "You can set here how many of "
+                                                  "the collected samples should be "
+                                                  "taken after the trigger "
+                                                  "signal." ) );
       connect( m_postTrigPercentageWidget, SIGNAL( valueChanged( int ) ),
                this, SLOT( postTrigPercentageSlot( int ) ) ); 
 
@@ -154,7 +154,7 @@ namespace dt5740 {
       //
       m_acquisitionBox = new QGroupBox( tr( "Data acquisition settings" ),
                                         m_scrollWidget );
-      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 180 ) );
+      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 240 ) );
 
       m_patGenEnabledWidget = new QCheckBox( tr( "Enable test pattern generation" ),
                                              m_acquisitionBox );
@@ -196,22 +196,48 @@ namespace dt5740 {
 
       m_bufferModeWidget = new QComboBox( m_acquisitionBox );
       m_bufferModeWidget->setGeometry( QRect( 180, 145, 250, 25 ) );
-      m_bufferModeWidget->setToolTip( "You can choose how many samples should be "
-                                      "collected after each trigger, using this "
-                                      "property." );
-      m_bufferModeWidget->addItem( "1 buffer with 192k samples" );
-      m_bufferModeWidget->addItem( "2 buffers with 96k samples" );
-      m_bufferModeWidget->addItem( "4 buffers with 48k samples" );
-      m_bufferModeWidget->addItem( "8 buffers with 24k samples" );
-      m_bufferModeWidget->addItem( "16 buffers with 12k samples" );
-      m_bufferModeWidget->addItem( "32 buffers with 6k samples" );
-      m_bufferModeWidget->addItem( "64 buffers with 3k samples" );
-      m_bufferModeWidget->addItem( "128 buffers with 1536 samples" );
-      m_bufferModeWidget->addItem( "256 buffers with 768 samples" );
-      m_bufferModeWidget->addItem( "512 buffers with 384 samples" );
-      m_bufferModeWidget->addItem( "1024 buffers with 192 samples" );
+      m_bufferModeWidget->setToolTip( tr( "You can choose how many samples should be "
+                                          "collected after each trigger, using this "
+                                          "property." ) );
+      m_bufferModeWidget->addItem( tr( "1 buffer with 192k samples" ) );
+      m_bufferModeWidget->addItem( tr( "2 buffers with 96k samples" ) );
+      m_bufferModeWidget->addItem( tr( "4 buffers with 48k samples" ) );
+      m_bufferModeWidget->addItem( tr( "8 buffers with 24k samples" ) );
+      m_bufferModeWidget->addItem( tr( "16 buffers with 12k samples" ) );
+      m_bufferModeWidget->addItem( tr( "32 buffers with 6k samples" ) );
+      m_bufferModeWidget->addItem( tr( "64 buffers with 3k samples" ) );
+      m_bufferModeWidget->addItem( tr( "128 buffers with 1536 samples" ) );
+      m_bufferModeWidget->addItem( tr( "256 buffers with 768 samples" ) );
+      m_bufferModeWidget->addItem( tr( "512 buffers with 384 samples" ) );
+      m_bufferModeWidget->addItem( tr( "1024 buffers with 192 samples" ) );
       connect( m_bufferModeWidget, SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( bufferModeSlot( int ) ) );
+
+      m_clockSourceLabel = new QLabel( tr( "Clock source:" ),
+                                       m_acquisitionBox );
+      m_clockSourceLabel->setGeometry( QRect( 10, 175, 150, 25 ) );
+
+      m_clockSourceWidget = new QComboBox( m_acquisitionBox );
+      m_clockSourceWidget->setGeometry( QRect( 180, 175, 250, 25 ) );
+      m_clockSourceWidget->setToolTip( tr( "You can choose where the device should "
+                                           "get its clock for the digitization timing." ) );
+      m_clockSourceWidget->addItem( tr( "Internal" ) );
+      m_clockSourceWidget->addItem( tr( "External" ) );
+      connect( m_clockSourceWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( clockSourceSlot( int ) ) );
+
+      m_evCountModeLabel = new QLabel( tr( "Event count mode:" ),
+                                       m_acquisitionBox );
+      m_evCountModeLabel->setGeometry( QRect( 10, 205, 150, 25 ) );
+
+      m_evCountModeWidget = new QComboBox( m_acquisitionBox );
+      m_evCountModeWidget->setGeometry( QRect( 180, 205, 250, 25 ) );
+      m_evCountModeWidget->setToolTip( tr( "You can choose how the number of events should "
+                                           "be counted by the device." ) );
+      m_evCountModeWidget->addItem( tr( "Count accepted triggers" ) );
+      m_evCountModeWidget->addItem( tr( "Count all triggers" ) );
+      connect( m_evCountModeWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( evCountModeSlot( int ) ) );
 
       //
       // Create the channel groups:
@@ -220,7 +246,7 @@ namespace dt5740 {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 725 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 785 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
    }
@@ -256,6 +282,10 @@ namespace dt5740 {
       delete m_gateModeWidget;
       delete m_bufferModeLabel;
       delete m_bufferModeWidget;
+      delete m_clockSourceLabel;
+      delete m_clockSourceWidget;
+      delete m_evCountModeLabel;
+      delete m_evCountModeWidget;
       delete m_acquisitionBox;
 
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -472,6 +502,42 @@ namespace dt5740 {
       return;
    }
 
+   void Gui::clockSourceSlot( int index ) {
+
+      switch( index ) {
+
+      case 0:
+         m_clockSource = CLK_Internal;
+         break;
+      case 1:
+         m_clockSource = CLK_External;
+         break;
+      default:
+         REPORT_ERROR( tr( "Clock source not recognized" ) );
+         break;
+      }
+
+      return;
+   }
+
+   void Gui::evCountModeSlot( int index ) {
+
+      switch( index ) {
+
+      case 0:
+         m_evCountMode = EV_CountAcceptedTriggers;
+         break;
+      case 1:
+         m_evCountMode = EV_CountAllTriggers;
+         break;
+      default:
+         REPORT_ERROR( tr( "Event counting mode not recognized" ) );
+         break;
+      }
+
+      return;
+   }
+
    /**
     * After a configuration is read from file, the graphical objects have
     * to be sync-ed to show this new configuration. This function takes
@@ -625,6 +691,38 @@ namespace dt5740 {
          break;
       }
       m_bufferModeWidget->setEnabled( true );
+
+      // Set the clock source:
+      m_clockSourceWidget->setEnabled( false );
+      switch( m_clockSource ) {
+
+      case CLK_Internal:
+         m_clockSourceWidget->setCurrentIndex( 0 );
+         break;
+      case CLK_External:
+         m_clockSourceWidget->setCurrentIndex( 1 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Clock source not recognized" ) );
+         break;
+      }
+      m_clockSourceWidget->setEnabled( true );
+
+      // Set the event counting mode:
+      m_evCountModeWidget->setEnabled( false );
+      switch( m_evCountMode ) {
+
+      case EV_CountAcceptedTriggers:
+         m_evCountModeWidget->setCurrentIndex( 0 );
+         break;
+      case EV_CountAllTriggers:
+         m_evCountModeWidget->setCurrentIndex( 1 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Event counting mode not recognized" ) );
+         break;
+      }
+      m_evCountModeWidget->setEnabled( true );
 
       // Synchronize all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {

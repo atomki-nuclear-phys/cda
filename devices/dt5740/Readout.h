@@ -63,6 +63,8 @@ namespace dt5740 {
       static caen::Digitizer::TriggerMode trigMode( const GroupConfig& group );
       /// Get the bit-pattern for the group configuration register
       uint32_t groupConfReg() const;
+      /// Get the bit-pattern for the acquisition control register
+      uint32_t acqControlReg() const;
       /// Clean up the allocated memory
       bool cleanup();
 
@@ -72,6 +74,8 @@ namespace dt5740 {
       static const uint32_t REG_GROUP_CONFIG = 0x8000;
       /// Address of the event number register
       static const uint32_t REG_EVENT_STORED = 0x812c;
+      /// Address of the acquisition control register
+      static const uint32_t REG_ACQ_CONTROL = 0x8100;
 
       caen::Digitizer m_digitizer; ///< Connection to the hardware
 

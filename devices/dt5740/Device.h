@@ -98,6 +98,18 @@ namespace dt5740 {
          NBuffers1024 = 10 ///< 1024 buffers with 192 samples
       }; // enum BufferMode
 
+      /// Clock source
+      enum ClockSource {
+         CLK_Internal = 0, ///< Use the internal clock
+         CLK_External = 1  ///< Use an external clock
+      }; // enum Clock
+
+      /// Event counting method
+      enum EvCountMode {
+         EV_CountAcceptedTriggers = 0, ///< Only count the accepted triggers
+         EV_CountAllTriggers = 1       ///< Count all received triggers
+      }; // enum EvCountMode
+
       /// Clear the configuration of the device
       void clear();
       /// Helper function for getting the number of samples
@@ -118,12 +130,20 @@ namespace dt5740 {
       unsigned int toUInt( GateMode mode ) const;
       /// Transform buffer mode into an integer
       unsigned int toUInt( BufferMode mode ) const;
+      /// Transform the clock source into an integer
+      unsigned int toUInt( ClockSource source ) const;
+      /// Transform event counting mode into an integer
+      unsigned int toUInt( EvCountMode mode ) const;
       /// Create a trigger mode from an integer
       TriggerMode toTriggerMode( unsigned int value ) const;
       /// Create a gate mode from an integer
       GateMode toGateMode( unsigned int value ) const;
       /// Create a buffer mode from an integer
       BufferMode toBufferMode( unsigned int value ) const;
+      /// Create a clock source from an integer
+      ClockSource toClockSource( unsigned int value ) const;
+      /// Create an event counting mode from an integer
+      EvCountMode toEvCountMode( unsigned int value ) const;
 
       /// Number of channel groups handled by the device
       static const int NUMBER_OF_GROUPS = 4;
@@ -143,6 +163,8 @@ namespace dt5740 {
       int         m_postTrigPercentage; ///< Percentage of post-trigger samples
       bool        m_extTrigEnabled; ///< Enable readout on external triggers
       bool        m_extTrigOutEnabled; ///< Forward external triggers to front panel
+      ClockSource m_clockSource; ///< Clock source to use in the digitization
+      EvCountMode m_evCountMode; ///< Event counting mode in the device
 
       /// Acquisition mode for the device
       caen::Digitizer::AcquisitionMode m_acqMode;

@@ -94,6 +94,10 @@ namespace dt5740 {
       void gateModeSlot( int index );
       /// Slot handling the buffer mode changes
       void bufferModeSlot( int index );
+      /// Slot handling the clock source changes
+      void clockSourceSlot( int index );
+      /// Slot handling the event counting mode changes
+      void evCountModeSlot( int index );
 
    private:
       /// Function "syncing" the configuration
@@ -129,6 +133,10 @@ namespace dt5740 {
       QComboBox* m_gateModeWidget;      ///< Gate mode chooser
       QLabel*    m_bufferModeLabel;     ///< Description of buffer mode setting
       QComboBox* m_bufferModeWidget;    ///< Buffer mode chooser
+      QLabel*    m_clockSourceLabel;    ///< Description of the clock source setting
+      QComboBox* m_clockSourceWidget;   ///< Clock source chooser
+      QLabel*    m_evCountModeLabel;    ///< Description of the event counting mode setting
+      QComboBox* m_evCountModeWidget;   ///< Event counting mode chooser
 
       /// The graphical representation of channel groups
       GroupGui* m_ggroups[ NUMBER_OF_GROUPS ];

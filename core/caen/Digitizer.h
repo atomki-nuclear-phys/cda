@@ -140,6 +140,9 @@ namespace caen {
       bool getGroupSelfTriggerMode( uint32_t group,
                                     TriggerMode& mode ) const;
 
+      /// Send a software trigger to the device
+      bool sendSWTrigger();
+
       /// Sets which channels of a group should generate self triggers
       bool setChannelGroupMask( uint32_t group,
                                 uint32_t mask );

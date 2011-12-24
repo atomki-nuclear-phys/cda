@@ -40,6 +40,8 @@ namespace dt5740 {
         m_gateMode( WindowGate ), m_bufferMode( NBuffers1 ),
         m_postTrigPercentage( 0 ), m_extTrigEnabled( false ),
         m_extTrigOutEnabled( false ),
+        m_clockSource( CLK_Internal ),
+        m_evCountMode( EV_CountAcceptedTriggers ),
         m_acqMode( caen::Digitizer::ACQ_SW_Controlled ),
         m_saveRawNtuple( false ),
         m_logger( "dt5740::Device" ) {
@@ -86,6 +88,10 @@ namespace dt5740 {
       input >> ctype;
       m_acqMode = caen::Digitizer::convertAcqMode( ctype );
       input >> m_saveRawNtuple;
+      input >> temp;
+      m_clockSource = toClockSource( temp );
+      input >> temp;
+      m_evCountMode = toEvCountMode( temp );
 
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -125,6 +131,8 @@ namespace dt5740 {
       output << m_extTrigOutEnabled;
       output << caen::Digitizer::convertAcqMode( m_acqMode );
       output << m_saveRawNtuple;
+      output << toUInt( m_clockSource );
+      output << toUInt( m_evCountMode );
 
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -240,6 +248,22 @@ namespace dt5740 {
          return false;
       }
 
+      m_clockSource = toClockSource( element.attribute( "ClockSource",
+                                                        "0" ).toUInt( &ok ) );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "There was a problem reading a "
+                           "\"clock source\" value" ) );
+         return false;
+      }
+
+      m_evCountMode = toEvCountMode( element.attribute( "EvCountMode",
+                                                        "0" ).toUInt( &ok ) );
+      if( ! ok ) {
+         REPORT_ERROR( tr( "There was a problem reading an "
+                           "\"event count mode\" value" ) );
+         return false;
+      }
+
       //
       // Configure the groups:
       //
@@ -290,6 +314,8 @@ namespace dt5740 {
       element.setAttribute( "AcqMode",
                             caen::Digitizer::convertAcqMode( m_acqMode ) );
       element.setAttribute( "SaveRawNtuple", m_saveRawNtuple );
+      element.setAttribute( "ClockSource", toUInt( m_clockSource ) );
+      element.setAttribute( "EvCountMode", toUInt( m_evCountMode ) );
 
       //
       // Create a new node for the configuration of each group:
@@ -346,6 +372,18 @@ namespace dt5740 {
       // Reset the simple properties:
       m_connType = caen::Digitizer::USB;
       m_linkNumber = 0;
+
+      // Reset the device wide properties:
+      m_trigMode = TriggerOnInputOverThreshold;
+      m_trigOvlpEnabled = false;
+      m_patGenEnabled = false;
+      m_gateMode = WindowGate;
+      m_bufferMode = NBuffers1024;
+      m_postTrigPercentage = 50;
+      m_extTrigEnabled = false;
+      m_extTrigOutEnabled = false;
+      m_clockSource = CLK_Internal;
+      m_evCountMode = EV_CountAcceptedTriggers;
 
       // Clear all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -628,6 +666,42 @@ namespace dt5740 {
       return 0;
    }
 
+   unsigned int Device::toUInt( Device::ClockSource source ) const {
+
+      switch( source ) {
+
+      case CLK_Internal:
+         return 0;
+         break;
+      case CLK_External:
+         return 1;
+         break;
+      default:
+         REPORT_ERROR( tr( "Clock source (%1) not recognized" ).arg( source ) );
+         break;
+      }
+
+      return 0;
+   }
+
+   unsigned int Device::toUInt( Device::EvCountMode mode ) const {
+
+      switch( mode ) {
+
+      case EV_CountAcceptedTriggers:
+         return 0;
+         break;
+      case EV_CountAllTriggers:
+         return 1;
+         break;
+      default:
+         REPORT_ERROR( tr( "Event counting mode (%1) not recognized" ).arg( mode ) );
+         break;
+      }
+
+      return 0;
+   }
+
    Device::TriggerMode
    Device::toTriggerMode( unsigned int value ) const {
 
@@ -710,6 +784,44 @@ namespace dt5740 {
       }
 
       return NBuffers1;
-   } 
+   }
+
+   Device::ClockSource
+   Device::toClockSource( unsigned int value ) const {
+
+      switch( value ) {
+
+      case 0:
+         return CLK_Internal;
+         break;
+      case 1:
+         return CLK_External;
+         break;
+      default:
+         REPORT_ERROR( tr( "Clock source (%1) not recognized" ).arg( value ) );
+         break;
+      }
+
+      return CLK_Internal;
+   }
+
+   Device::EvCountMode
+   Device::toEvCountMode( unsigned int value ) const {
+
+      switch( value ) {
+
+      case 0:
+         return EV_CountAcceptedTriggers;
+         break;
+      case 1:
+         return EV_CountAllTriggers;
+         break;
+      default:
+         REPORT_ERROR( tr( "Event count mode (%1) not recognized" ).arg( value ) );
+         break;
+      }
+
+      return EV_CountAcceptedTriggers;
+   }
 
 } // namespace dt5740

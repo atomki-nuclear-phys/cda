@@ -71,7 +71,7 @@ win32 {
 # Uncomment the following if you have the CAEN libraries installed
 # on your system.
 #
-DEFINES += HAVE_CAEN_LIBS
+#DEFINES += HAVE_CAEN_LIBS
 
 #
 # Uncomment the following if you have the VME library installed
@@ -83,7 +83,7 @@ DEFINES += HAVE_CAEN_LIBS
 # Uncomment the following if you have CERNLIB installed on your
 # system.
 #
-DEFINES += HAVE_CERNLIB
+#DEFINES += HAVE_CERNLIB
 
 #
 # Uncomment the following if you have ROOT installed on your

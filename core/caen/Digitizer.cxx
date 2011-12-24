@@ -972,6 +972,18 @@ namespace caen {
       return true;
    }
 
+   bool Digitizer::sendSWTrigger() {
+
+#ifdef HAVE_CAEN_LIBS
+      CHECK( CAEN_DGTZ_SendSWtrigger( m_handle ) );
+#else
+      REPORT_VERBOSE( tr( "Sent a SW trigger" ) );
+#endif // HAVE_CAEN_LIBS
+
+      // Signal a successful operation:
+      return true;
+   }
+
    bool Digitizer::setChannelGroupMask( uint32_t group,
                                         uint32_t mask ) {
 
@@ -1322,7 +1334,7 @@ namespace caen {
       CAEN_DGTZ_EventInfo_t ei;
       char* evtPtr = NULL;
       CAEN_DGTZ_UINT16_EVENT_t* evt = NULL;
-      void* evtVoidPtr = evt;
+      void** evtVoidPtr = reinterpret_cast< void** >( &evt );
       // Get the information about this event:
       CHECK( CAEN_DGTZ_GetEventInfo( m_handle, buffer, bufferSize,
                                      event, &ei, &evtPtr ) );
@@ -1335,7 +1347,7 @@ namespace caen {
       eventInfo.triggerTimeTag = ei.TriggerTimeTag;
       // Decode the event:
       CHECK( CAEN_DGTZ_DecodeEvent( m_handle, evtPtr,
-                                    &evtVoidPtr ) );
+                                    evtVoidPtr ) );
       // Fill the event data to the output:
       for( int i = 0; i < EventData16Bit::MAX_CHANNEL_NUMBER; ++i ) {
          eventData.chData[ i ].resize( evt->ChSize[ i ], 0 );

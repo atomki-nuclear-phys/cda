@@ -56,7 +56,7 @@ namespace dt5740 {
       CHECK( m_digitizer.printInfo( msg::DEBUG ) );
 
       // Set up the triggering:
-      CHECK( m_digitizer.setSWTriggerMode( caen::Digitizer::TRIG_Disabled ) );
+      CHECK( m_digitizer.setSWTriggerMode( caen::Digitizer::TRIG_AcqOnly ) );
       CHECK( m_digitizer.setExtTriggerMode( extTrigMode() ) );
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          CHECK( m_digitizer.setGroupSelfTriggerMode( i,
@@ -81,6 +81,13 @@ namespace dt5740 {
                                        groupConf ) );
       REPORT_VERBOSE( tr( "Group config register set to %1" )
                       .arg( groupConf ) );
+      CHECK( m_digitizer.writeRegister( REG_ACQ_CONTROL,
+                                        acqControlReg() ) );
+      uint32_t acqControl = 0;
+      CHECK( m_digitizer.readRegister( REG_ACQ_CONTROL,
+                                       acqControl ) );
+      REPORT_VERBOSE( tr( "Acquisition control register set to %1" )
+                      .arg( acqControl ) );
       CHECK( m_digitizer.setAcquisitionMode( m_acqMode ) );
 
       // Configure the group wide parameters:
@@ -166,6 +173,9 @@ namespace dt5740 {
 
       // Start the acquisition:
       CHECK( m_digitizer.startAcquisition() );
+      // Send a SW trigger, otherwise the device doesn't seem to start
+      // normal operation...
+      CHECK( m_digitizer.sendSWTrigger() );
 
       return true;
    }
@@ -290,6 +300,23 @@ namespace dt5740 {
          result |= 0x8;
       }
       if( m_trigMode == TriggerOnInputUnderThreshold ) {
+         result |= 0x40;
+      }
+
+      return result;
+   }
+
+   uint32_t Readout::acqControlReg() const {
+
+      uint32_t result = 0x0;
+
+      if( m_acqMode == caen::Digitizer::ACQ_SIn_Controlled ) {
+         result |= 0x1;
+      }
+      if( m_evCountMode == EV_CountAllTriggers ) {
+         result |= 0x8;
+      }
+      if( m_clockSource == CLK_External ) {
          result |= 0x40;
       }
 
