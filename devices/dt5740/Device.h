@@ -73,29 +73,30 @@ namespace dt5740 {
       /// Triggering mode types
       enum TriggerMode {
          /// Generate trigger when a channel goes over the threshold
-         TriggerOnInputOverThreshold  = 0,
+         TRG_InputOverThreshold  = 0,
          /// Generate trigger when a channel goes under the threshold
-         TriggerOnInputUnderThreshold = 1
+         TRG_InputUnderThreshold = 1
       }; // enum TriggerMode
 
+      /// Really not sure what this is...
       enum GateMode {
-         WindowGate     = 0,
-         SingleShotGate = 1
+         GATE_Window     = 0,
+         GATE_SingleShot = 1
       }; // enum GateMode
 
       /// Buffer organization mode
       enum BufferMode {
-         NBuffers1    = 0, ///< 1 buffer with 192k samples
-         NBuffers2    = 1, ///< 2 buffers with 96k samples
-         NBuffers4    = 2, ///< 4 buffers with 48k samples
-         NBuffers8    = 3, ///< 8 buffers with 24k samples
-         NBuffers16   = 4, ///< 16 buffers with 12k samples
-         NBuffers32   = 5, ///< 32 buffers with 6k samples
-         NBuffers64   = 6, ///< 64 buffers with 3k samples
-         NBuffers128  = 7, ///< 128 buffers with 1536 samples
-         NBuffers256  = 8, ///< 256 buffers with 768 samples
-         NBuffers512  = 9, ///< 512 buffers with 384 samples
-         NBuffers1024 = 10 ///< 1024 buffers with 192 samples
+         BUFF_NBuffers1    = 0, ///< 1 buffer with 192k samples
+         BUFF_NBuffers2    = 1, ///< 2 buffers with 96k samples
+         BUFF_NBuffers4    = 2, ///< 4 buffers with 48k samples
+         BUFF_NBuffers8    = 3, ///< 8 buffers with 24k samples
+         BUFF_NBuffers16   = 4, ///< 16 buffers with 12k samples
+         BUFF_NBuffers32   = 5, ///< 32 buffers with 6k samples
+         BUFF_NBuffers64   = 6, ///< 64 buffers with 3k samples
+         BUFF_NBuffers128  = 7, ///< 128 buffers with 1536 samples
+         BUFF_NBuffers256  = 8, ///< 256 buffers with 768 samples
+         BUFF_NBuffers512  = 9, ///< 512 buffers with 384 samples
+         BUFF_NBuffers1024 = 10 ///< 1024 buffers with 192 samples
       }; // enum BufferMode
 
       /// Clock source
@@ -109,6 +110,12 @@ namespace dt5740 {
          EV_CountAcceptedTriggers = 0, ///< Only count the accepted triggers
          EV_CountAllTriggers = 1       ///< Count all received triggers
       }; // enum EvCountMode
+
+      /// Front panel signal standard
+      enum SignalType {
+         SGNL_NIM = 0, ///< The front panel expects/provides NIM signals
+         SGNL_TTL = 1  ///< The front panel expects/provides TTL signals
+      }; // enum SignalStandard
 
       /// Clear the configuration of the device
       void clear();
@@ -124,26 +131,30 @@ namespace dt5740 {
                    const caen::Digitizer::EventData16Bit& ed,
                    ev::Fragment& fragment ) const;
 
-      /// Transform trigger mode into an integer
-      unsigned int toUInt( TriggerMode mode ) const;
-      /// Transform gate mode into an integer
-      unsigned int toUInt( GateMode mode ) const;
-      /// Transform buffer mode into an integer
-      unsigned int toUInt( BufferMode mode ) const;
-      /// Transform the clock source into an integer
-      unsigned int toUInt( ClockSource source ) const;
-      /// Transform event counting mode into an integer
-      unsigned int toUInt( EvCountMode mode ) const;
-      /// Create a trigger mode from an integer
-      TriggerMode toTriggerMode( unsigned int value ) const;
-      /// Create a gate mode from an integer
-      GateMode toGateMode( unsigned int value ) const;
-      /// Create a buffer mode from an integer
-      BufferMode toBufferMode( unsigned int value ) const;
-      /// Create a clock source from an integer
-      ClockSource toClockSource( unsigned int value ) const;
-      /// Create an event counting mode from an integer
-      EvCountMode toEvCountMode( unsigned int value ) const;
+      /// Transform trigger mode into a string
+      QString toString( TriggerMode mode ) const;
+      /// Transform gate mode into a string
+      QString toString( GateMode mode ) const;
+      /// Transform buffer mode into a string
+      QString toString( BufferMode mode ) const;
+      /// Transform the clock source into a string
+      QString toString( ClockSource source ) const;
+      /// Transform event counting mode into a string
+      QString toString( EvCountMode mode ) const;
+      /// Transform the front panel signal type into a string
+      QString toString( SignalType type ) const;
+      /// Create a trigger mode from a string
+      TriggerMode toTriggerMode( const QString& value ) const;
+      /// Create a gate mode from a string
+      GateMode toGateMode( const QString& value ) const;
+      /// Create a buffer mode from a string
+      BufferMode toBufferMode( const QString& value ) const;
+      /// Create a clock source from a string
+      ClockSource toClockSource( const QString& value ) const;
+      /// Create an event counting mode from a string
+      EvCountMode toEvCountMode( const QString& value ) const;
+      /// Create a signal type from a string
+      SignalType toSignalType( const QString& value ) const;
 
       /// Number of channel groups handled by the device
       static const int NUMBER_OF_GROUPS = 4;
@@ -165,6 +176,8 @@ namespace dt5740 {
       bool        m_extTrigOutEnabled; ///< Forward external triggers to front panel
       ClockSource m_clockSource; ///< Clock source to use in the digitization
       EvCountMode m_evCountMode; ///< Event counting mode in the device
+      SignalType  m_signalType; ///< Signal type on the front panel
+      bool        m_highImpedanceGPO; ///< Output connector should have high impedance?
 
       /// Acquisition mode for the device
       caen::Digitizer::AcquisitionMode m_acqMode;

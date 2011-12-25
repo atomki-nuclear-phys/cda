@@ -83,6 +83,10 @@ namespace dt5740 {
       void trigModeSlot( int index );
       /// Slot handling post trigger percentage changes
       void postTrigPercentageSlot( int value );
+      /// Slot handling GPO impedance changes
+      void highImpedanceGPOSlot( bool checked );
+      /// Slot handling front panel signal type changes
+      void signalTypeSlot( int index );
 
       /// Slot handling changes to the pattern generation state
       void patGenEnabledSlot( bool checked );
@@ -119,10 +123,13 @@ namespace dt5740 {
       QCheckBox* m_trigOvlpEnabledWidget;    ///< Setting for enabling trigger overlaps
       QCheckBox* m_extTrigEnabledWidget;     ///< External trigger setting
       QCheckBox* m_extTrigOutEnabledWidget;  ///< External trigger forward setting
-      QLabel*    m_trigModeLabel;            ///< Description of the trigger mode setting
-      QComboBox* m_trigModeWidget;           ///< Trigger mode chooser
+      QCheckBox* m_highImpedanceGPOWidget;   ///< GPO impedance level setting
       QLabel*    m_postTrigPercentageLabel;  ///< Description for post trigger fraction
       QSpinBox*  m_postTrigPercentageWidget; ///< Post trigger fraction setting
+      QLabel*    m_trigModeLabel;            ///< Description of the trigger mode setting
+      QComboBox* m_trigModeWidget;           ///< Trigger mode chooser
+      QLabel*    m_signalTypeLabel;          ///< Description for front panel signal type
+      QComboBox* m_signalTypeWidget;         ///< Front panel signal type setting
 
       QGroupBox* m_acquisitionBox;      ///< Box for the acquisition settings
       QCheckBox* m_patGenEnabledWidget; ///< Pattern generation setting

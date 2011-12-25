@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4220 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4280 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -102,7 +102,7 @@ namespace dt5740 {
       //
       m_triggerBox = new QGroupBox( tr( "Trigger settings" ),
                                     m_scrollWidget );
-      m_triggerBox->setGeometry( QRect( 10, 345, WIDGET_WIDTH - 40, 180 ) );
+      m_triggerBox->setGeometry( QRect( 10, 345, WIDGET_WIDTH - 40, 240 ) );
 
       m_trigOvlpEnabledWidget = new QCheckBox( tr( "Enable trigger overlaps" ),
                                                m_triggerBox );
@@ -123,16 +123,12 @@ namespace dt5740 {
       connect( m_extTrigOutEnabledWidget, SIGNAL( toggled( bool ) ),
                this, SLOT( extTrigOutEnabledSlot( bool ) ) );
 
-      m_trigModeLabel = new QLabel( tr( "Trigger mode:" ),
-                                    m_triggerBox );
-      m_trigModeLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
-
-      m_trigModeWidget = new QComboBox( m_triggerBox );
-      m_trigModeWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
-      m_trigModeWidget->addItem( tr( "Trigger on input over threshold" ) );
-      m_trigModeWidget->addItem( tr( "Trigger on input under threshold" ) );
-      connect( m_trigModeWidget, SIGNAL( currentIndexChanged( int ) ),
-               this, SLOT( trigModeSlot( int ) ) ); 
+      m_highImpedanceGPOWidget =
+         new QCheckBox( tr( "Assert high impedance on GPO output" ),
+                        m_triggerBox );
+      m_highImpedanceGPOWidget->setGeometry( QRect( 10, 115, 400, 25 ) );
+      connect( m_highImpedanceGPOWidget, SIGNAL( toggled( bool ) ),
+               this, SLOT( highImpedanceGPOSlot( bool ) ) );
 
       m_postTrigPercentageLabel = new QLabel( tr( "Post trigger percentage:" ),
                                               m_triggerBox );
@@ -147,14 +143,36 @@ namespace dt5740 {
                                                   "taken after the trigger "
                                                   "signal." ) );
       connect( m_postTrigPercentageWidget, SIGNAL( valueChanged( int ) ),
-               this, SLOT( postTrigPercentageSlot( int ) ) ); 
+               this, SLOT( postTrigPercentageSlot( int ) ) );
+
+      m_trigModeLabel = new QLabel( tr( "Trigger mode:" ),
+                                    m_triggerBox );
+      m_trigModeLabel->setGeometry( QRect( 10, 175, 150, 25 ) );
+
+      m_trigModeWidget = new QComboBox( m_triggerBox );
+      m_trigModeWidget->setGeometry( QRect( 180, 175, 250, 25 ) );
+      m_trigModeWidget->addItem( tr( "Trigger on input over threshold" ) );
+      m_trigModeWidget->addItem( tr( "Trigger on input under threshold" ) );
+      connect( m_trigModeWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( trigModeSlot( int ) ) );
+
+      m_signalTypeLabel = new QLabel( tr( "Front panel signal type:" ),
+                                      m_triggerBox );
+      m_signalTypeLabel->setGeometry( QRect( 10, 205, 150, 25 ) );
+
+      m_signalTypeWidget = new QComboBox( m_triggerBox );
+      m_signalTypeWidget->setGeometry( QRect( 180, 205, 250, 25 ) );
+      m_signalTypeWidget->addItem( tr( "NIM" ) );
+      m_signalTypeWidget->addItem( tr( "TTL" ) );
+      connect( m_signalTypeWidget, SIGNAL( currentIndexChanged( int ) ),
+               this, SLOT( signalTypeSlot( int ) ) );
 
       //
       // Create the data acquisition settings:
       //
       m_acquisitionBox = new QGroupBox( tr( "Data acquisition settings" ),
                                         m_scrollWidget );
-      m_acquisitionBox->setGeometry( QRect( 10, 535, WIDGET_WIDTH - 40, 240 ) );
+      m_acquisitionBox->setGeometry( QRect( 10, 595, WIDGET_WIDTH - 40, 240 ) );
 
       m_patGenEnabledWidget = new QCheckBox( tr( "Enable test pattern generation" ),
                                              m_acquisitionBox );
@@ -220,7 +238,8 @@ namespace dt5740 {
       m_clockSourceWidget = new QComboBox( m_acquisitionBox );
       m_clockSourceWidget->setGeometry( QRect( 180, 175, 250, 25 ) );
       m_clockSourceWidget->setToolTip( tr( "You can choose where the device should "
-                                           "get its clock for the digitization timing." ) );
+                                           "get its clock for the digitization "
+                                           "timing." ) );
       m_clockSourceWidget->addItem( tr( "Internal" ) );
       m_clockSourceWidget->addItem( tr( "External" ) );
       connect( m_clockSourceWidget, SIGNAL( currentIndexChanged( int ) ),
@@ -232,8 +251,8 @@ namespace dt5740 {
 
       m_evCountModeWidget = new QComboBox( m_acquisitionBox );
       m_evCountModeWidget->setGeometry( QRect( 180, 205, 250, 25 ) );
-      m_evCountModeWidget->setToolTip( tr( "You can choose how the number of events should "
-                                           "be counted by the device." ) );
+      m_evCountModeWidget->setToolTip( tr( "You can choose how the number of events "
+                                           "should be counted by the device." ) );
       m_evCountModeWidget->addItem( tr( "Count accepted triggers" ) );
       m_evCountModeWidget->addItem( tr( "Count all triggers" ) );
       connect( m_evCountModeWidget, SIGNAL( currentIndexChanged( int ) ),
@@ -246,9 +265,12 @@ namespace dt5740 {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 785 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 845 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
+
+      // Take the default values set in the base class:
+      sync();
    }
 
    /**
@@ -272,6 +294,9 @@ namespace dt5740 {
       delete m_trigModeWidget;
       delete m_postTrigPercentageLabel;
       delete m_postTrigPercentageWidget;
+      delete m_highImpedanceGPOWidget;
+      delete m_signalTypeLabel;
+      delete m_signalTypeWidget;
       delete m_triggerBox;
 
       delete m_patGenEnabledWidget;
@@ -387,10 +412,10 @@ namespace dt5740 {
       switch( index ) {
 
       case 0:
-         m_trigMode = TriggerOnInputOverThreshold;
+         m_trigMode = TRG_InputOverThreshold;
          break;
       case 1:
-         m_trigMode = TriggerOnInputUnderThreshold;
+         m_trigMode = TRG_InputUnderThreshold;
          break;
       default:
          REPORT_ERROR( tr( "Trigger mode not recognized" ) );
@@ -403,6 +428,31 @@ namespace dt5740 {
    void Gui::postTrigPercentageSlot( int value ) {
 
       m_postTrigPercentage = value;
+      return;
+   }
+
+   void Gui::highImpedanceGPOSlot( bool checked ) {
+
+      m_highImpedanceGPO = checked;
+      return;
+   }
+
+   void Gui::signalTypeSlot( int index ) {
+
+      // Translate the state of the combo box into an enumeration value:
+      switch( index ) {
+
+      case 0:
+         m_signalType = SGNL_NIM;
+         break;
+      case 1:
+         m_signalType = SGNL_TTL;
+         break;
+      default:
+         REPORT_ERROR( tr( "Front panel signal type not recognized" ) );
+         break;
+      }
+
       return;
    }
 
@@ -443,10 +493,10 @@ namespace dt5740 {
       switch( index ) {
 
       case 0:
-         m_gateMode = WindowGate;
+         m_gateMode = GATE_Window;
          break;
       case 1:
-         m_gateMode = SingleShotGate;
+         m_gateMode = GATE_SingleShot;
          break;
       default:
          REPORT_ERROR( tr( "Gate mode not recognized" ) );
@@ -462,37 +512,37 @@ namespace dt5740 {
       switch( index ) {
 
       case 0:
-         m_bufferMode = NBuffers1;
+         m_bufferMode = BUFF_NBuffers1;
          break;
       case 1:
-         m_bufferMode = NBuffers2;
+         m_bufferMode = BUFF_NBuffers2;
          break;
       case 2:
-         m_bufferMode = NBuffers4;
+         m_bufferMode = BUFF_NBuffers4;
          break;
       case 3:
-         m_bufferMode = NBuffers8;
+         m_bufferMode = BUFF_NBuffers8;
          break;
       case 4:
-         m_bufferMode = NBuffers16;
+         m_bufferMode = BUFF_NBuffers16;
          break;
       case 5:
-         m_bufferMode = NBuffers32;
+         m_bufferMode = BUFF_NBuffers32;
          break;
       case 6:
-         m_bufferMode = NBuffers64;
+         m_bufferMode = BUFF_NBuffers64;
          break;
       case 7:
-         m_bufferMode = NBuffers128;
+         m_bufferMode = BUFF_NBuffers128;
          break;
       case 8:
-         m_bufferMode = NBuffers256;
+         m_bufferMode = BUFF_NBuffers256;
          break;
       case 9:
-         m_bufferMode = NBuffers512;
+         m_bufferMode = BUFF_NBuffers512;
          break;
       case 10:
-         m_bufferMode = NBuffers1024;
+         m_bufferMode = BUFF_NBuffers1024;
          break;
       default:
          REPORT_ERROR( tr( "Buffer mode not recognized" ) );
@@ -540,7 +590,7 @@ namespace dt5740 {
 
    /**
     * After a configuration is read from file, the graphical objects have
-    * to be sync-ed to show this new configuration. This function takes
+    * to be synced to show this new configuration. This function takes
     * care of doing that.
     */
    void Gui::sync() {
@@ -590,10 +640,10 @@ namespace dt5740 {
       m_trigModeWidget->setEnabled( false );
       switch( m_trigMode ) {
 
-      case TriggerOnInputOverThreshold:
+      case TRG_InputOverThreshold:
          m_trigModeWidget->setCurrentIndex( 0 );
          break;
-      case TriggerOnInputUnderThreshold:
+      case TRG_InputUnderThreshold:
          m_trigModeWidget->setCurrentIndex( 1 );
          break;
       default:
@@ -637,10 +687,10 @@ namespace dt5740 {
       m_gateModeWidget->setEnabled( false );
       switch( m_gateMode ) {
 
-      case WindowGate:
+      case GATE_Window:
          m_gateModeWidget->setCurrentIndex( 0 );
          break;
-      case SingleShotGate:
+      case GATE_SingleShot:
          m_gateModeWidget->setCurrentIndex( 1 );
          break;
       default:
@@ -653,37 +703,37 @@ namespace dt5740 {
       m_bufferModeWidget->setEnabled( false );
       switch( m_bufferMode ) {
 
-      case NBuffers1:
+      case BUFF_NBuffers1:
          m_bufferModeWidget->setCurrentIndex( 0 );
          break;
-      case NBuffers2:
+      case BUFF_NBuffers2:
          m_bufferModeWidget->setCurrentIndex( 1 );
          break;
-      case NBuffers4:
+      case BUFF_NBuffers4:
          m_bufferModeWidget->setCurrentIndex( 2 );
          break;
-      case NBuffers8:
+      case BUFF_NBuffers8:
          m_bufferModeWidget->setCurrentIndex( 3 );
          break;
-      case NBuffers16:
+      case BUFF_NBuffers16:
          m_bufferModeWidget->setCurrentIndex( 4 );
          break;
-      case NBuffers32:
+      case BUFF_NBuffers32:
          m_bufferModeWidget->setCurrentIndex( 5 );
          break;
-      case NBuffers64:
+      case BUFF_NBuffers64:
          m_bufferModeWidget->setCurrentIndex( 6 );
          break;
-      case NBuffers128:
+      case BUFF_NBuffers128:
          m_bufferModeWidget->setCurrentIndex( 7 );
          break;
-      case NBuffers256:
+      case BUFF_NBuffers256:
          m_bufferModeWidget->setCurrentIndex( 8 );
          break;
-      case NBuffers512:
+      case BUFF_NBuffers512:
          m_bufferModeWidget->setCurrentIndex( 9 );
          break;
-      case NBuffers1024:
+      case BUFF_NBuffers1024:
          m_bufferModeWidget->setCurrentIndex( 10 );
          break;
       default:

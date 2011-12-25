@@ -97,6 +97,7 @@ namespace simple_daq {
       if( m_runner.getExecName() == "" ) {
          REPORT_ERROR( tr( "cda-caen-reader not found. Data acquisition "
                            "is not possible." ) );
+         m_mainBox->setEnabled( false );
       }
    }
 

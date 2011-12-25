@@ -46,10 +46,13 @@
 
 /// Function shutting down the data acquisition
 void shutDown( int );
+/// Function preparing the application for the shutdown
+void prepareShutDown( int );
 
 // Global variable(s):
 static msg::Logger g_logger( "cda-caen-reader" );
 static caen_reader::Crate* g_crate = 0;
+static bool g_shouldStop = false;
 
 /// Description for the executable
 static const char* description =
@@ -319,8 +322,8 @@ int main( int argc, char* argv[] ) {
    //
    // Connect the interrupt signal to the shutDown function:
    //
-   signal( SIGINT, shutDown );
-   signal( SIGTERM, shutDown );
+   signal( SIGINT, prepareShutDown );
+   signal( SIGTERM, prepareShutDown );
    sigset_t blockedSignals;
    sigfillset( &blockedSignals );
    sigaddset( &blockedSignals, SIGINT );
@@ -358,7 +361,13 @@ int main( int argc, char* argv[] ) {
       if( ! ( g_evcount % 10 ) ) {
          stat_sender.update( cdastat::Statistics( g_evcount, statSource ) );
       }
+
+      // Exit data acquisition is there was an interrupt:
+      if( g_shouldStop ) break;
    }
+
+   // Shut down cleanly:
+   shutDown( 0 );
 
    return 0;
 }
@@ -406,6 +415,13 @@ void shutDown( int ) {
                                 "Terminating application..." )
             << msg::endmsg;
    exit( 0 );
+
+   return;
+}
+
+void prepareShutDown( int ) {
+
+   g_shouldStop = true;
 
    return;
 }

@@ -44,6 +44,7 @@ namespace dt5740 {
       // Print some information about the board for debugging:
       CHECK( m_digitizer.printInfo( msg::DEBUG ) );
 
+      // Some basic settings:
       REPORT_VERBOSE( tr( "Record length will be: %1" )
                       .arg( getSamples() ) );
       CHECK( m_digitizer.setRecordLength( getSamples() ) );
@@ -51,44 +52,41 @@ namespace dt5740 {
                       .arg( groupMask() ) );
       CHECK( m_digitizer.setGroupEnableMask( groupMask() ) );
 
+      // Configure each channel group:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          REPORT_VERBOSE( tr( "Setting trigger threshold for group %1 to %2" )
                          .arg( i ).arg( m_groups[ i ].getTrigThreshold() ) );
          CHECK( m_digitizer.setGroupTriggerThreshold( i,
-                                                      m_groups[ i ].getTrigThreshold() ) );
+                                               m_groups[ i ].getTrigThreshold() ) );
          REPORT_VERBOSE( tr( "Setting self trigger mode for group %1 to %2" )
                          .arg( i ).arg( trigMode( m_groups[ i ] ) ) );
          CHECK( m_digitizer.setGroupSelfTriggerMode( i,
                                                      trigMode( m_groups[ i ] ) ) );
-      }
-
-      CHECK( m_digitizer.setSWTriggerMode( caen::Digitizer::TRIG_AcqOnly ) );
-      REPORT_VERBOSE( tr( "Setting external trigger mode to %1" )
-                      .arg( extTrigMode() ) );
-      CHECK( m_digitizer.setExtTriggerMode( extTrigMode() ) );
-
-      // Configure the device wide parameters:
-      CHECK( m_digitizer.setPostTriggerSize( m_postTrigPercentage ) );
-      /*
-      CHECK( m_digitizer.writeRegister( REG_GROUP_CONFIG,
-                                        groupConfReg() ) );
-      CHECK( m_digitizer.writeRegister( REG_ACQ_CONTROL,
-                                        acqControlReg() ) );
-      */
-
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          REPORT_VERBOSE( tr( "Setting channel mask of group %1 to %2" )
                          .arg( i ).arg( m_groups[ i ].getTrigMask() ) );
          CHECK( m_digitizer.setChannelGroupMask( i, m_groups[ i ].getTrigMask() ) );
-      }
-
-      CHECK( m_digitizer.setMaxNumEventsBLT( 10 ) );
-
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
          REPORT_VERBOSE( tr( "Setting DC offset of group %1 to %2" )
                          .arg( i ).arg( m_groups[ i ].getDCOffset() ) );
          CHECK( m_digitizer.setGroupDCOffset( i, m_groups[ i ].getDCOffset() ) );
       }
+
+      // Set the device wide trigger parameters:
+      CHECK( m_digitizer.setSWTriggerMode( caen::Digitizer::TRIG_AcqOnly ) );
+      REPORT_VERBOSE( tr( "Setting external trigger mode to %1" )
+                      .arg( extTrigMode() ) );
+      CHECK( m_digitizer.setExtTriggerMode( extTrigMode() ) );
+      CHECK( m_digitizer.setPostTriggerSize( m_postTrigPercentage ) );
+
+      CHECK( m_digitizer.setAcquisitionMode( m_acqMode ) );
+      CHECK( m_digitizer.writeRegister( REG_GROUP_CONFIG,
+                                        groupConfReg() ) );
+      CHECK( m_digitizer.writeRegister( REG_ACQ_CONTROL,
+                                        acqControlReg() ) );
+      CHECK( m_digitizer.writeRegister( REG_IO_CONTROL,
+                                        ioControlReg() ) );
+
+      // Set the maximum number of events to read at once:
+      CHECK( m_digitizer.setMaxNumEventsBLT( 50 ) );
 
       // Allocate the memory buffer for the event readout:
       CHECK( m_digitizer.mallocReadoutBuffer( &m_buffer, m_bufferSize ) );
@@ -96,7 +94,6 @@ namespace dt5740 {
                << tr( "Allocated a %1 byte buffer for the event readout" )
          .arg( m_bufferSize )
                << msg::endmsg;
-      CHECK( m_digitizer.setAcquisitionMode( m_acqMode ) );
 
       // Reset the variables used during event readout:
       m_eventSize = 0;
@@ -253,7 +250,7 @@ namespace dt5740 {
 
       uint32_t result = 0x10;
 
-      if( m_gateMode == SingleShotGate ) {
+      if( m_gateMode == GATE_SingleShot ) {
          result |= 0x1;
       }
       if( m_trigOvlpEnabled ) {
@@ -262,7 +259,7 @@ namespace dt5740 {
       if( m_patGenEnabled ) {
          result |= 0x8;
       }
-      if( m_trigMode == TriggerOnInputUnderThreshold ) {
+      if( m_trigMode == TRG_InputUnderThreshold ) {
          result |= 0x40;
       }
 
@@ -281,6 +278,20 @@ namespace dt5740 {
       }
       if( m_clockSource == CLK_External ) {
          result |= 0x40;
+      }
+
+      return result;
+   }
+
+   uint32_t Readout::ioControlReg() const {
+
+      uint32_t result = 0;
+
+      if( m_signalType == SGNL_TTL ) {
+         result |= 0x1;
+      }
+      if( m_highImpedanceGPO ) {
+         result |= 0x2;
       }
 
       return result;

@@ -97,6 +97,7 @@ namespace simple_daq {
          m_logger << msg::WARNING
                   << tr( "HBOOK file writing not available" )
                   << msg::endmsg;
+         m_mainBox->setEnabled( false );
       }
    }
 

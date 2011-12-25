@@ -35,13 +35,15 @@ namespace dt5740 {
 
    Device::Device()
       : m_connType( caen::Digitizer::USB ), m_linkNumber( 0 ),
-        m_trigMode( TriggerOnInputOverThreshold ), 
+        m_trigMode( TRG_InputOverThreshold ), 
         m_trigOvlpEnabled( false ), m_patGenEnabled( false ),
-        m_gateMode( WindowGate ), m_bufferMode( NBuffers1 ),
+        m_gateMode( GATE_Window ), m_bufferMode( BUFF_NBuffers1024 ),
         m_postTrigPercentage( 0 ), m_extTrigEnabled( false ),
         m_extTrigOutEnabled( false ),
         m_clockSource( CLK_Internal ),
         m_evCountMode( EV_CountAcceptedTriggers ),
+        m_signalType( SGNL_NIM ),
+        m_highImpedanceGPO( false ),
         m_acqMode( caen::Digitizer::ACQ_SW_Controlled ),
         m_saveRawNtuple( false ),
         m_logger( "dt5740::Device" ) {
@@ -63,7 +65,7 @@ namespace dt5740 {
 
       clear();
 
-      unsigned int temp = 0;
+      QString temp;
 
       // Read the properties of this class:
       QDataStream input( dev );
@@ -92,6 +94,9 @@ namespace dt5740 {
       m_clockSource = toClockSource( temp );
       input >> temp;
       m_evCountMode = toEvCountMode( temp );
+      input >> temp;
+      m_signalType = toSignalType( temp );
+      input >> m_highImpedanceGPO;
 
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -121,18 +126,20 @@ namespace dt5740 {
       // Write out the connection parameters of the device:
       output << caen::Digitizer::convertConnType( m_connType );
       output << m_linkNumber;
-      output << toUInt( m_trigMode );
+      output << toString( m_trigMode );
       output << m_trigOvlpEnabled;
       output << m_patGenEnabled;
-      output << toUInt( m_gateMode );
-      output << toUInt( m_bufferMode );
+      output << toString( m_gateMode );
+      output << toString( m_bufferMode );
       output << m_postTrigPercentage; 
       output << m_extTrigEnabled;
       output << m_extTrigOutEnabled;
       output << caen::Digitizer::convertAcqMode( m_acqMode );
       output << m_saveRawNtuple;
-      output << toUInt( m_clockSource );
-      output << toUInt( m_evCountMode );
+      output << toString( m_clockSource );
+      output << toString( m_evCountMode );
+      output << toString( m_signalType );
+      output << m_highImpedanceGPO;
 
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -158,111 +165,60 @@ namespace dt5740 {
       bool ok;
 
       const int ctype = element.attribute( "ConnType", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "Couldn't read connection type" ) );
-         return false;
-      }
+      CHECK( ok );
       m_connType = caen::Digitizer::convertConnType( ctype );
 
       m_linkNumber = element.attribute( "LinkNumber", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "Couldn't read link number" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_trigMode = toTriggerMode( element.attribute( "TrigMode",
-                                                     "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger mode\" value" ) );
-         return false;
-      }
+                                                     "InputOverThreshold" ) );
 
       m_trigOvlpEnabled = element.attribute( "TrigOvlpEnabled", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger overlap enabled\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_patGenEnabled = element.attribute( "PatGenEnabled", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"pattern generation enabled\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_gateMode = toGateMode( element.attribute( "GateMode",
-                                                  "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"gate mode\" value" ) );
-         return false;
-      }
+                                                  "Window" ) );
 
       m_bufferMode = toBufferMode( element.attribute( "BufferMode",
-                                                      "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"buffer mode\" value" ) );
-         return false;
-      }
+                                                      "NBuffers1" ) );
 
       m_postTrigPercentage = element.attribute( "PostTrigPercentage",
                                                 "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"post trigger percentage\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_extTrigEnabled = element.attribute( "ExtTrigEnabled",
                                             "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading an "
-                           "\"external trigger enabled\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_extTrigOutEnabled = element.attribute( "ExtTrigOutEnabled",
                                                "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading an "
-                           "\"external trigger output enabled\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
-      m_acqMode = caen::Digitizer::convertAcqMode( element.attribute( "AcqMode",
-                                                                      "0" ).toInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading an "
-                           "\"acquisition mode\" value" ) );
-         return false;
-      }
+      m_acqMode =
+         caen::Digitizer::convertAcqMode( element.attribute( "AcqMode",
+                                                             "0" ).toInt( &ok ) );
+      CHECK( ok );
 
       m_saveRawNtuple = element.attribute( "SaveRawNtuple",
                                            "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"save RAW ntuple\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_clockSource = toClockSource( element.attribute( "ClockSource",
-                                                        "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"clock source\" value" ) );
-         return false;
-      }
+                                                        "Internal" ) );
 
       m_evCountMode = toEvCountMode( element.attribute( "EvCountMode",
-                                                        "0" ).toUInt( &ok ) );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading an "
-                           "\"event count mode\" value" ) );
-         return false;
-      }
+                                                        "AcceptedTriggers" ) );
+
+      m_signalType = toSignalType( element.attribute( "SignalType",
+                                                      "NIM" ) );
+
+      m_highImpedanceGPO = element.attribute( "HighImpedanceGPO",
+                                              "0" ).toInt( &ok );
+      CHECK( ok );
 
       //
       // Configure the groups:
@@ -275,11 +231,7 @@ namespace dt5740 {
          }
 
          GroupConfig group;
-         if( ! group.readConfig( element.childNodes().at( i ).toElement() ) ) {
-            REPORT_ERROR( tr( "The configuration of a group couldn't be "
-                              "read" ) );
-            return false;
-         }
+         CHECK( group.readConfig( element.childNodes().at( i ).toElement() ) );
          if( ( group.getGroupNumber() >= 0 ) &&
              ( group.getGroupNumber() < NUMBER_OF_GROUPS ) ) {
             m_groups[ group.getGroupNumber() ] = group;
@@ -303,19 +255,21 @@ namespace dt5740 {
       element.setAttribute( "ConnType",
                             caen::Digitizer::convertConnType( m_connType ) );
       element.setAttribute( "LinkNumber", m_linkNumber );
-      element.setAttribute( "TrigMode", toUInt( m_trigMode ) );
+      element.setAttribute( "TrigMode", toString( m_trigMode ) );
       element.setAttribute( "TrigOvlpEnabled", m_trigOvlpEnabled );
       element.setAttribute( "PatGenEnabled", m_patGenEnabled );
-      element.setAttribute( "GateMode", toUInt( m_gateMode ) );
-      element.setAttribute( "BufferMode", toUInt( m_bufferMode ) );
+      element.setAttribute( "GateMode", toString( m_gateMode ) );
+      element.setAttribute( "BufferMode", toString( m_bufferMode ) );
       element.setAttribute( "PostTrigPercentage", m_postTrigPercentage );
       element.setAttribute( "ExtTrigEnabled", m_extTrigEnabled );
       element.setAttribute( "ExtTrigOutEnabled", m_extTrigOutEnabled );
       element.setAttribute( "AcqMode",
                             caen::Digitizer::convertAcqMode( m_acqMode ) );
       element.setAttribute( "SaveRawNtuple", m_saveRawNtuple );
-      element.setAttribute( "ClockSource", toUInt( m_clockSource ) );
-      element.setAttribute( "EvCountMode", toUInt( m_evCountMode ) );
+      element.setAttribute( "ClockSource", toString( m_clockSource ) );
+      element.setAttribute( "EvCountMode", toString( m_evCountMode ) );
+      element.setAttribute( "SignalType", toString( m_signalType ) );
+      element.setAttribute( "HighImpedanceGPO", m_highImpedanceGPO );
 
       //
       // Create a new node for the configuration of each group:
@@ -324,11 +278,7 @@ namespace dt5740 {
 
          QDomElement gr_element =
             element.ownerDocument().createElement( "Group" );
-         if( ! m_groups[ i ].writeConfig( gr_element ) ) {
-            REPORT_ERROR( tr( "A problem happened while writing out a "
-                              "group's configuration" ) );
-            return false;
-         }
+         CHECK( m_groups[ i ].writeConfig( gr_element ) );
          element.appendChild( gr_element );
       }
 
@@ -374,16 +324,18 @@ namespace dt5740 {
       m_linkNumber = 0;
 
       // Reset the device wide properties:
-      m_trigMode = TriggerOnInputOverThreshold;
+      m_trigMode = TRG_InputOverThreshold;
       m_trigOvlpEnabled = false;
       m_patGenEnabled = false;
-      m_gateMode = WindowGate;
-      m_bufferMode = NBuffers1024;
+      m_gateMode = GATE_Window;
+      m_bufferMode = BUFF_NBuffers1024;
       m_postTrigPercentage = 50;
       m_extTrigEnabled = false;
       m_extTrigOutEnabled = false;
       m_clockSource = CLK_Internal;
       m_evCountMode = EV_CountAcceptedTriggers;
+      m_signalType = SGNL_NIM;
+      m_highImpedanceGPO = false;
 
       // Clear all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -397,37 +349,37 @@ namespace dt5740 {
 
       switch( m_bufferMode ) {
 
-      case NBuffers1:
+      case BUFF_NBuffers1:
          return 196608;
          break;
-      case NBuffers2:
+      case BUFF_NBuffers2:
          return 98304;
          break;
-      case NBuffers4:
+      case BUFF_NBuffers4:
          return 49152;
          break;
-      case NBuffers8:
+      case BUFF_NBuffers8:
          return 24576;
          break;
-      case NBuffers16:
+      case BUFF_NBuffers16:
          return 12288;
          break;
-      case NBuffers32:
+      case BUFF_NBuffers32:
          return 6144;
          break;
-      case NBuffers64:
+      case BUFF_NBuffers64:
          return 3072;
          break;
-      case NBuffers128:
+      case BUFF_NBuffers128:
          return 1536;
          break;
-      case NBuffers256:
+      case BUFF_NBuffers256:
          return 768;
          break;
-      case NBuffers512:
+      case BUFF_NBuffers512:
          return 384;
          break;
-      case NBuffers1024:
+      case BUFF_NBuffers1024:
          return 192;
          break;
       default:
@@ -585,243 +537,235 @@ namespace dt5740 {
       return true;
    }
 
-   unsigned int Device::toUInt( Device::TriggerMode mode ) const {
+   QString Device::toString( Device::TriggerMode mode ) const {
 
       switch( mode ) {
 
-      case TriggerOnInputOverThreshold:
-         return 0;
+      case TRG_InputOverThreshold:
+         return "InputOverThreshold";
          break;
-      case TriggerOnInputUnderThreshold:
-         return 1;
+      case TRG_InputUnderThreshold:
+         return "InputUnderThreshold";
          break;
       default:
          REPORT_ERROR( tr( "Trigger mode (%1) not recognized" ).arg( mode ) );
          break;
       }
 
-      return 0;
+      return "UnknownTriggerMode";
    }
 
-   unsigned int Device::toUInt( Device::GateMode mode ) const {
+   QString Device::toString( Device::GateMode mode ) const {
 
       switch( mode ) {
 
-      case WindowGate:
-         return 0;
+      case GATE_Window:
+         return "Window";
          break;
-      case SingleShotGate:
-         return 1;
+      case GATE_SingleShot:
+         return "SingleShot";
          break;
       default:
          REPORT_ERROR( tr( "Gate mode (%1) not recognized" ).arg( mode ) );
          break;
       }
 
-      return 0;
+      return "UnknownGateMode";
    }
 
-   unsigned int Device::toUInt( Device::BufferMode mode ) const {
+   QString Device::toString( Device::BufferMode mode ) const {
 
       switch( mode ) {
 
-      case NBuffers1:
-         return 0;
+      case BUFF_NBuffers1:
+         return "NBuffers1";
          break;
-      case NBuffers2:
-         return 1;
+      case BUFF_NBuffers2:
+         return "NBuffers2";
          break;
-      case NBuffers4:
-         return 2;
+      case BUFF_NBuffers4:
+         return "NBuffers4";
          break;
-      case NBuffers8:
-         return 3;
+      case BUFF_NBuffers8:
+         return "NBuffers8";
          break;
-      case NBuffers16:
-         return 4;
+      case BUFF_NBuffers16:
+         return "NBuffers16";
          break;
-      case NBuffers32:
-         return 5;
+      case BUFF_NBuffers32:
+         return "NBuffers32";
          break;
-      case NBuffers64:
-         return 6;
+      case BUFF_NBuffers64:
+         return "NBuffers64";
          break;
-      case NBuffers128:
-         return 7;
+      case BUFF_NBuffers128:
+         return "NBuffers128";
          break;
-      case NBuffers256:
-         return 8;
+      case BUFF_NBuffers256:
+         return "NBuffers256";
          break;
-      case NBuffers512:
-         return 9;
+      case BUFF_NBuffers512:
+         return "NBuffers512";
          break;
-      case NBuffers1024:
-         return 10;
+      case BUFF_NBuffers1024:
+         return "NBuffers1024";
          break;
       default:
          REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( mode ) );
          break;
       }
 
-      return 0;
+      return "UnknownBufferMode";
    }
 
-   unsigned int Device::toUInt( Device::ClockSource source ) const {
+   QString Device::toString( Device::ClockSource source ) const {
 
       switch( source ) {
 
       case CLK_Internal:
-         return 0;
+         return "Internal";
          break;
       case CLK_External:
-         return 1;
+         return "External";
          break;
       default:
          REPORT_ERROR( tr( "Clock source (%1) not recognized" ).arg( source ) );
          break;
       }
 
-      return 0;
+      return "UnknownClockSource";
    }
 
-   unsigned int Device::toUInt( Device::EvCountMode mode ) const {
+   QString Device::toString( Device::EvCountMode mode ) const {
 
       switch( mode ) {
 
       case EV_CountAcceptedTriggers:
-         return 0;
+         return "AcceptedTriggers";
          break;
       case EV_CountAllTriggers:
-         return 1;
+         return "AllTriggers";
          break;
       default:
          REPORT_ERROR( tr( "Event counting mode (%1) not recognized" ).arg( mode ) );
          break;
       }
 
-      return 0;
+      return "UnknownEvCountMode";
+   }
+
+   QString Device::toString( SignalType type ) const {
+
+      switch( type ) {
+
+      case SGNL_NIM:
+         return "NIM";
+         break;
+      case SGNL_TTL:
+         return "TTL";
+         break;
+      default:
+         REPORT_ERROR( tr( "Signal type (%1) not recognized" ).arg( type ) );
+         break;
+      }
+
+      return "UnknownSignalType";
    }
 
    Device::TriggerMode
-   Device::toTriggerMode( unsigned int value ) const {
+   Device::toTriggerMode( const QString& value ) const {
 
-      switch( value ) {
-
-      case 0:
-         return TriggerOnInputOverThreshold;
-         break;
-      case 1:
-         return TriggerOnInputUnderThreshold;
-         break;
-      default:
-         REPORT_ERROR( tr( "Trigger mode (%1) not recognized" ).arg( value ) );
-         break;
+      if( value == "InputOverThreshold" ) {
+         return TRG_InputOverThreshold;
+      } else if( value == "InputUnderThreshold" ) {
+         return TRG_InputUnderThreshold;
       }
 
-      return TriggerOnInputOverThreshold;
+      REPORT_ERROR( tr( "Trigger mode (%1) not recognized" ).arg( value ) );
+      return TRG_InputOverThreshold;
    }
 
    Device::GateMode
-   Device::toGateMode( unsigned int value ) const {
+   Device::toGateMode( const QString& value ) const {
 
-      switch( value ) {
-
-      case 0:
-         return WindowGate;
-         break;
-      case 1:
-         return SingleShotGate;
-         break;
-      default:
-         REPORT_ERROR( tr( "Gate mode (%1) not recognized" ).arg( value ) );
-         break;
+      if( value == "Window" ) {
+         return GATE_Window;
+      } else if( value == "SingleShot" ) {
+         return GATE_SingleShot;
       }
 
-      return WindowGate;
+      REPORT_ERROR( tr( "Gate mode (%1) not recognized" ).arg( value ) );
+      return GATE_Window;
    }
 
    Device::BufferMode
-   Device::toBufferMode( unsigned int value ) const {
+   Device::toBufferMode( const QString& value ) const {
 
-      switch( value ) {
-
-      case 0:
-         return NBuffers1;
-         break;
-      case 1:
-         return NBuffers2;
-         break;
-      case 2:
-         return NBuffers4;
-         break;
-      case 3:
-         return NBuffers8;
-         break;
-      case 4:
-         return NBuffers16;
-         break;
-      case 5:
-         return NBuffers32;
-         break;
-      case 6:
-         return NBuffers64;
-         break;
-      case 7:
-         return NBuffers128;
-         break;
-      case 8:
-         return NBuffers256;
-         break;
-      case 9:
-         return NBuffers512;
-         break;
-      case 10:
-         return NBuffers1024;
-         break;
-      default:
-         REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( value ) );
-         break;
+      if( value == "NBuffers1" ) {
+         return BUFF_NBuffers1;
+      } else if( value == "NBuffers2" ) {
+         return BUFF_NBuffers2;
+      } else if( value == "NBuffers4" ) {
+         return BUFF_NBuffers4;
+      } else if( value == "NBuffers8" ) {
+         return BUFF_NBuffers8;
+      } else if( value == "NBuffers16" ) {
+         return BUFF_NBuffers16;
+      } else if( value == "NBuffers32" ) {
+         return BUFF_NBuffers32;
+      } else if( value == "NBuffers64" ) {
+         return BUFF_NBuffers64;
+      } else if( value == "NBuffers128" ) {
+         return BUFF_NBuffers128;
+      } else if( value == "NBuffers256" ) {
+         return BUFF_NBuffers256;
+      } else if( value == "NBuffers512" ) {
+         return BUFF_NBuffers512;
+      } else if( value == "NBuffers1024" ) {
+         return BUFF_NBuffers1024;
       }
 
-      return NBuffers1;
+      REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( value ) );
+      return BUFF_NBuffers1;
    }
 
    Device::ClockSource
-   Device::toClockSource( unsigned int value ) const {
+   Device::toClockSource( const QString& value ) const {
 
-      switch( value ) {
-
-      case 0:
+      if( value == "Internal" ) {
          return CLK_Internal;
-         break;
-      case 1:
+      } else if( value == "External" ) {
          return CLK_External;
-         break;
-      default:
-         REPORT_ERROR( tr( "Clock source (%1) not recognized" ).arg( value ) );
-         break;
       }
 
+      REPORT_ERROR( tr( "Clock source (%1) not recognized" ).arg( value ) );
       return CLK_Internal;
    }
 
    Device::EvCountMode
-   Device::toEvCountMode( unsigned int value ) const {
+   Device::toEvCountMode( const QString& value ) const {
 
-      switch( value ) {
-
-      case 0:
+      if( value == "AcceptedTriggers" ) {
          return EV_CountAcceptedTriggers;
-         break;
-      case 1:
+      } else if( value == "AllTriggers" ) {
          return EV_CountAllTriggers;
-         break;
-      default:
-         REPORT_ERROR( tr( "Event count mode (%1) not recognized" ).arg( value ) );
-         break;
       }
 
+      REPORT_ERROR( tr( "Event count mode (%1) not recognized" ).arg( value ) );
       return EV_CountAcceptedTriggers;
+   }
+
+   Device::SignalType
+   Device::toSignalType( const QString& value ) const {
+
+      if( value == "NIM" ) {
+         return SGNL_NIM;
+      } else if( value == "TTL" ) {
+         return SGNL_TTL;
+      }
+
+      REPORT_ERROR( tr( "Signal type (%1) not recognized" ).arg( value ) );
+      return SGNL_NIM;
    }
 
 } // namespace dt5740

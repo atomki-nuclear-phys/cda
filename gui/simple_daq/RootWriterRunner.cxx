@@ -97,6 +97,7 @@ namespace simple_daq {
          m_logger << msg::WARNING
                   << tr( "ROOT file writing not available" )
                   << msg::endmsg;
+         m_mainBox->setEnabled( false );
       }
    }
 
@@ -164,7 +165,7 @@ namespace simple_daq {
       if( ! status ) {
          m_mainBox->setEnabled( status );
       }
-      // Only enable the widgets if cda-glomem-writer has been found:
+      // Only enable the widgets if cda-root-writer has been found:
       else if( m_runner.getExecName() != "" ) {
          m_mainBox->setEnabled( status );
       }
