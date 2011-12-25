@@ -338,7 +338,7 @@ namespace {
       return static_cast< caen::Digitizer::AcquisitionMode >( 10L );
    }
 
-   /// Convert a channel number to a channel mask
+   /// Convert a channel/group number to a channel/group mask
    uint32_t toMask( uint32_t channel ) {
 
       return ( 0x1 << channel );
@@ -378,7 +378,9 @@ namespace {
 
 /// Macro checking the return value of a CAEN Digitizer function
 #define CHECK( CMD ) {                                                  \
+      sigprocmask( SIG_BLOCK, &m_blockedSignals, NULL );                \
       CAEN_DGTZ_ErrorCode code = CMD;                                   \
+      sigprocmask( SIG_UNBLOCK, &m_blockedSignals, NULL );              \
       if( code != CAEN_DGTZ_Success ) {                                 \
          REPORT_ERROR( tr( "Failed executing \"%1\", "                  \
                            "Return value: %2" ).arg( #CMD )             \
@@ -480,6 +482,10 @@ namespace caen {
 #endif // HAVE_CAEN_LIBS
         m_logger( "caen::Digitizer" ) {
 
+      // Initialize the blocked signal list:
+      sigfillset( &m_blockedSignals );
+      sigaddset( &m_blockedSignals, SIGINT );
+      sigaddset( &m_blockedSignals, SIGTERM );
    }
 
    Digitizer::~Digitizer() {
@@ -1356,7 +1362,7 @@ namespace caen {
          }
       }
       // Free the allocated memory:
-      CHECK( CAEN_DGTZ_FreeEvent( m_handle, &evtVoidPtr ) );
+      CHECK( CAEN_DGTZ_FreeEvent( m_handle, evtVoidPtr ) );
 #else
       // Print what we're doing:
       REPORT_VERBOSE( tr( "Reading event %1 from buffer with size %2" )
@@ -1391,7 +1397,7 @@ namespace caen {
       CAEN_DGTZ_EventInfo_t ei;
       char* evtPtr = NULL;
       CAEN_DGTZ_UINT8_EVENT_t* evt = NULL;
-      void* evtVoidPtr = evt;
+      void** evtVoidPtr = reinterpret_cast< void** >( &evt );
       // Get the information about this event:
       CHECK( CAEN_DGTZ_GetEventInfo( m_handle, buffer, bufferSize,
                                      event, &ei, &evtPtr ) );
@@ -1404,7 +1410,7 @@ namespace caen {
       eventInfo.triggerTimeTag = ei.TriggerTimeTag;
       // Decode the event:
       CHECK( CAEN_DGTZ_DecodeEvent( m_handle, evtPtr,
-                                    &evtVoidPtr ) );
+                                    evtVoidPtr ) );
       // Fill the event data to the output:
       for( int i = 0; i < EventData8Bit::MAX_CHANNEL_NUMBER; ++i ) {
          eventData.chData[ i ].resize( evt->ChSize[ i ], 0 );
@@ -1413,7 +1419,7 @@ namespace caen {
          }
       }
       // Free the allocated memory:
-      CHECK( CAEN_DGTZ_FreeEvent( m_handle, &evtVoidPtr ) );
+      CHECK( CAEN_DGTZ_FreeEvent( m_handle, evtVoidPtr ) );
 #else
       // Print what we're doing:
       REPORT_VERBOSE( tr( "Reading event %1 from buffer with size %2" )

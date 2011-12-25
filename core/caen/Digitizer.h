@@ -7,6 +7,7 @@
 extern "C" {
 #   include <stdint.h>
 }
+#include <csignal>
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
@@ -254,6 +255,8 @@ namespace caen {
 #ifndef HAVE_CAEN_LIBS
       uint32_t m_recordLength; ///< Record length to read out in test mode
 #endif // HAVE_CAEN_LIBS
+
+      sigset_t m_blockedSignals; ///< Signals to block during hardware communication
 
       mutable msg::Logger m_logger; ///< Message logger object
 

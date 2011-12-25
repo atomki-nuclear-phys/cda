@@ -61,6 +61,8 @@ namespace dt5740 {
       caen::Digitizer::TriggerMode extTrigMode() const;
       /// Get the trigger mode of a channel group
       static caen::Digitizer::TriggerMode trigMode( const GroupConfig& group );
+      /// Group enable mask
+      uint32_t groupMask() const;
       /// Get the bit-pattern for the group configuration register
       uint32_t groupConfReg() const;
       /// Get the bit-pattern for the acquisition control register

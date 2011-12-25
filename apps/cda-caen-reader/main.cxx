@@ -269,12 +269,6 @@ int main( int argc, char* argv[] ) {
    }
 
    //
-   // Connect the interrupt signal to the shutDown function:
-   //
-   signal( SIGINT, shutDown );
-   signal( SIGTERM, shutDown );
-
-   //
    // Open connections to all the event recepients:
    //
    ev::Sender ev_sender;
@@ -323,6 +317,16 @@ int main( int argc, char* argv[] ) {
    }
 
    //
+   // Connect the interrupt signal to the shutDown function:
+   //
+   signal( SIGINT, shutDown );
+   signal( SIGTERM, shutDown );
+   sigset_t blockedSignals;
+   sigfillset( &blockedSignals );
+   sigaddset( &blockedSignals, SIGINT );
+   sigaddset( &blockedSignals, SIGTERM );
+
+   //
    // Let the user know what we're doing:
    //
    g_logger << msg::INFO
@@ -338,6 +342,7 @@ int main( int argc, char* argv[] ) {
 
       // Read and send an event:
       const ev::Event event = g_crate->readEvent();
+      sigprocmask( SIG_BLOCK, &blockedSignals, NULL );
       if( ! ev_sender.send( event ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-caen-reader",
@@ -346,6 +351,7 @@ int main( int argc, char* argv[] ) {
                   << msg::endmsg;
          shutDown( 0 );
       }
+      sigprocmask( SIG_UNBLOCK, &blockedSignals, NULL );
 
       // Update the statistics information after 10 events were sent out:
       ++g_evcount;
@@ -358,6 +364,11 @@ int main( int argc, char* argv[] ) {
 }
 
 void shutDown( int ) {
+
+   g_logger << msg::DEBUG
+            << qApp->translate( "cda-caen-reader",
+                                "Starting shutdown procedure" )
+            << msg::endmsg;
 
    // Stop the data acquisition:
    if( ! g_crate->stop() ) {

@@ -41,106 +41,54 @@ namespace dt5740 {
       // digitizer:
       CHECK( m_digitizer.reset() );
 
-      // Test the connection to the digitizer by trying to write a value
-      // to the test register, and then reading it back:
-      CHECK( m_digitizer.writeRegister( REG_SCRATCH, 0x383838 ) );
-      uint32_t dummy = 0;
-      CHECK( m_digitizer.readRegister( REG_SCRATCH, dummy ) );
-#ifdef HAVE_CAEN_LIBS
-      // This should only be checked when actually communicating
-      // with the hardware.
-      CHECK( dummy == 0x383838 );
-#endif // HAVE_CAEN_LIBS
-
       // Print some information about the board for debugging:
       CHECK( m_digitizer.printInfo( msg::DEBUG ) );
 
-      // Set up the triggering:
-      CHECK( m_digitizer.setSWTriggerMode( caen::Digitizer::TRIG_AcqOnly ) );
-      CHECK( m_digitizer.setExtTriggerMode( extTrigMode() ) );
+      REPORT_VERBOSE( tr( "Record length will be: %1" )
+                      .arg( getSamples() ) );
+      CHECK( m_digitizer.setRecordLength( getSamples() ) );
+      REPORT_VERBOSE( tr( "Group enable mask will be: %1" )
+                      .arg( groupMask() ) );
+      CHECK( m_digitizer.setGroupEnableMask( groupMask() ) );
+
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         REPORT_VERBOSE( tr( "Setting trigger threshold for group %1 to %2" )
+                         .arg( i ).arg( m_groups[ i ].getTrigThreshold() ) );
+         CHECK( m_digitizer.setGroupTriggerThreshold( i,
+                                                      m_groups[ i ].getTrigThreshold() ) );
+         REPORT_VERBOSE( tr( "Setting self trigger mode for group %1 to %2" )
+                         .arg( i ).arg( trigMode( m_groups[ i ] ) ) );
          CHECK( m_digitizer.setGroupSelfTriggerMode( i,
                                                      trigMode( m_groups[ i ] ) ) );
       }
 
+      CHECK( m_digitizer.setSWTriggerMode( caen::Digitizer::TRIG_AcqOnly ) );
+      REPORT_VERBOSE( tr( "Setting external trigger mode to %1" )
+                      .arg( extTrigMode() ) );
+      CHECK( m_digitizer.setExtTriggerMode( extTrigMode() ) );
+
       // Configure the device wide parameters:
-      CHECK( m_digitizer.setRecordLength( getSamples() ) );
-      uint32_t recordLength = 0;
-      CHECK( m_digitizer.getRecordLength( recordLength ) );
-      REPORT_VERBOSE( tr( "Record length set to %1 samples (%2 samples set)" )
-                      .arg( recordLength ).arg( getSamples() ) );
       CHECK( m_digitizer.setPostTriggerSize( m_postTrigPercentage ) );
-      uint32_t postTrigPerc = 0;
-      CHECK( m_digitizer.getPostTriggerSize( postTrigPerc ) );
-      REPORT_VERBOSE( tr( "Post trigger percentage set to %1\%" )
-                      .arg( postTrigPerc ) );
+      /*
       CHECK( m_digitizer.writeRegister( REG_GROUP_CONFIG,
                                         groupConfReg() ) );
-      uint32_t groupConf = 0;
-      CHECK( m_digitizer.readRegister( REG_GROUP_CONFIG,
-                                       groupConf ) );
-      REPORT_VERBOSE( tr( "Group config register set to %1" )
-                      .arg( groupConf ) );
       CHECK( m_digitizer.writeRegister( REG_ACQ_CONTROL,
                                         acqControlReg() ) );
-      uint32_t acqControl = 0;
-      CHECK( m_digitizer.readRegister( REG_ACQ_CONTROL,
-                                       acqControl ) );
-      REPORT_VERBOSE( tr( "Acquisition control register set to %1" )
-                      .arg( acqControl ) );
-      CHECK( m_digitizer.setAcquisitionMode( m_acqMode ) );
-
-      // Configure the group wide parameters:
-      uint32_t groupMask = 0;
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         CHECK( m_digitizer.setGroupTriggerThreshold( i,
-                                                      m_groups[ i ].getTrigThreshold() ) );
-         CHECK( m_digitizer.setGroupDCOffset( i, m_groups[ i ].getDCOffset() ) );
-         CHECK( m_digitizer.setChannelGroupMask( i, m_groups[ i ].getTrigMask() ) );
-         // Check if any channels are active in this group:
-         bool groupActive = false;
-         for( int j = 0; j < GroupConfig::CHANNELS_IN_GROUP; ++j ) {
-            if( m_groups[ i ].getChannel( j ) ) {
-               groupActive = true;
-               break;
-            }
-         }
-         if( groupActive ) {
-            groupMask |= ( 0x1 << i );
-         }
-      }
-      CHECK( m_digitizer.setGroupEnableMask( groupMask ) );
-
-      // Check the status of the groups:
-      /*
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         uint32_t data = 0;
-         CHECK( m_digitizer.readRegister( 0x1080 + i * 0x100,
-                                          data ) );
-         REPORT_VERBOSE( tr( "Group %1's trigger threshold is %2" )
-                         .arg( i ).arg( data ) );
-         CHECK( m_digitizer.readRegister( 0x1088 + i * 0x100,
-                                          data ) );
-         REPORT_VERBOSE( tr( "Group %1's status word is %2" )
-                         .arg( i ).arg( data ) );
-         CHECK( m_digitizer.readRegister( 0x1098 + i * 0x100,
-                                          data ) );
-         REPORT_VERBOSE( tr( "Group %1's DC offset is %2" )
-                         .arg( i ).arg( data ) );
-         CHECK( m_digitizer.readRegister( 0x10a8 + i * 0x100,
-                                          data ) );
-         REPORT_VERBOSE( tr( "Group %1's trigger mask is %2" )
-                         .arg( i ).arg( data ) );
-      }
       */
 
-      uint32_t buffMode = 0;
-      CHECK( m_digitizer.readRegister( 0x800c, buffMode ) );
-      REPORT_VERBOSE( tr( "Buffer mode code: %1" ).arg( buffMode ) );
-      uint32_t trigSource = 0;
-      CHECK( m_digitizer.readRegister( 0x810c, trigSource ) );
-      REPORT_VERBOSE( tr( "Trigger Source Enable Mask: %1" )
-                      .arg( trigSource ) );
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         REPORT_VERBOSE( tr( "Setting channel mask of group %1 to %2" )
+                         .arg( i ).arg( m_groups[ i ].getTrigMask() ) );
+         CHECK( m_digitizer.setChannelGroupMask( i, m_groups[ i ].getTrigMask() ) );
+      }
+
+      CHECK( m_digitizer.setMaxNumEventsBLT( 10 ) );
+
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         REPORT_VERBOSE( tr( "Setting DC offset of group %1 to %2" )
+                         .arg( i ).arg( m_groups[ i ].getDCOffset() ) );
+         CHECK( m_digitizer.setGroupDCOffset( i, m_groups[ i ].getDCOffset() ) );
+      }
 
       // Allocate the memory buffer for the event readout:
       CHECK( m_digitizer.mallocReadoutBuffer( &m_buffer, m_bufferSize ) );
@@ -148,6 +96,7 @@ namespace dt5740 {
                << tr( "Allocated a %1 byte buffer for the event readout" )
          .arg( m_bufferSize )
                << msg::endmsg;
+      CHECK( m_digitizer.setAcquisitionMode( m_acqMode ) );
 
       // Reset the variables used during event readout:
       m_eventSize = 0;
@@ -161,10 +110,11 @@ namespace dt5740 {
 
       // Free up the allocated readout buffer:
       CHECK( cleanup() );
+      REPORT_VERBOSE( tr( "Memory cleaned up" ) );
 
       // Clear and close the digitizer:
-      CHECK( m_digitizer.reset() );
       CHECK( m_digitizer.close() );
+      REPORT_VERBOSE( tr( "Digitizer closed" ) );
 
       return true;
    }
@@ -184,6 +134,7 @@ namespace dt5740 {
 
       // Stop the acquisition:
       CHECK( m_digitizer.stopAcquisition() );
+      REPORT_VERBOSE( tr( "Acquisition stopped" ) );
 
       return true;
    }
@@ -198,38 +149,29 @@ namespace dt5740 {
       if( ! m_numEvents ) {
          // Wait until there are events in the hardware's memory:
          for( ; ; ) {
-            // Get the number of available events:
-            uint32_t events = 0;
-            if( ! m_digitizer.readRegister( REG_EVENT_STORED,
-                                            events ) ) {
-               REPORT_ERROR( tr( "Couldn't read number of available events" ) );
+            // Pull all events into the computer's memory:
+            if( ! m_digitizer.readData( caen::Digitizer::READ_SlaveTerminatedMBLT,
+                                        m_buffer, m_eventSize ) ) {
+               REPORT_ERROR( tr( "Couldn't read data from the device" ) );
+               return result;
+            }
+            // Decode how many events we just retrieved:
+            if( ! m_digitizer.getNumEvents( m_buffer, m_eventSize,
+                                            m_numEvents ) ) {
+               REPORT_ERROR( tr( "Couldn't get the number of events for the "
+                                 "current readout buffer" ) );
                return result;
             }
 #ifndef HAVE_CAEN_LIBS
             // When in testing mode, let's not wait around here...
-            events = 1;
+            m_numEvents = 1;
 #endif // HAVE_CAEN_LIBS
             // If there are events available, exit the loop:
-            if( events ) {
+            if( m_numEvents ) {
                break;
             }
             // If not, then wait a bit and then try again:
             common::SleepMin();
-         }
-
-         // Pull all events into the computer's memory:
-         if( ! m_digitizer.readData( caen::Digitizer::READ_SlaveTerminatedMBLT,
-                                     m_buffer, m_eventSize ) ) {
-            REPORT_ERROR( tr( "Couldn't read data from the device" ) );
-            return result;
-         }
-
-         // Decode how many events we just retrieved:
-         if( ! m_digitizer.getNumEvents( m_buffer, m_eventSize,
-                                         m_numEvents ) ) {
-            REPORT_ERROR( tr( "Couldn't get the number of events for the "
-                              "current readout buffer" ) );
-            return result;
          }
          m_currentEvent = 0;
       }
@@ -284,6 +226,27 @@ namespace dt5740 {
       } else {
          return caen::Digitizer::TRIG_Disabled;
       }
+   }
+
+   uint32_t Readout::groupMask() const {
+
+      uint32_t result = 0;
+
+      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
+         // Check if any channels are active in this group:
+         bool groupActive = false;
+         for( int j = 0; j < GroupConfig::CHANNELS_IN_GROUP; ++j ) {
+            if( m_groups[ i ].getChannel( j ) ) {
+               groupActive = true;
+               break;
+            }
+         }
+         if( groupActive ) {
+            result |= ( 0x1 << i );
+         }
+      }
+
+      return result;
    }
 
    uint32_t Readout::groupConfReg() const {
