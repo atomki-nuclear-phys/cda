@@ -8,6 +8,9 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QMenu>
 #include <QtGui/QApplication>
+#include <QtGui/QLabel>
+#include <QtGui/QComboBox>
+#include <QtGui/QPushButton>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -53,13 +56,13 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
    // The size of the window depends on the architecture. The menu on MacOS X is not part
    // of the window, so the window can be smaller by 30 pixels...
 #ifdef Q_OS_DARWIN
-   resize( 920, 550 );
-   setMinimumSize( 920, 550 );
-   setMaximumSize( 920, 550 );
+   resize( 920, 610 );
+   setMinimumSize( 920, 610 );
+   setMaximumSize( 920, 610 );
 #else
    resize( 920, 580 );
-   setMinimumSize( 920, 580 );
-   setMaximumSize( 920, 580 );
+   setMinimumSize( 920, 640 );
+   setMaximumSize( 920, 640 );
 #endif
 
    // Set up the window according to whether a configuration file was already specified:
@@ -74,9 +77,9 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
    // Create the central widget. This is the one on which all other widgets are placed:
    //
    m_centralWidget = new QWidget( this );
-   m_centralWidget->resize( 920, 550 );
-   m_centralWidget->setMinimumSize( 920, 550 );
-   m_centralWidget->setMaximumSize( 920, 550 );
+   m_centralWidget->resize( 920, 610 );
+   m_centralWidget->setMinimumSize( 920, 610 );
+   m_centralWidget->setMaximumSize( 920, 610 );
    setCentralWidget( m_centralWidget );
 
    //
@@ -85,7 +88,7 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
    m_msgServer = new msg::Server();
    m_msgServer->setWriteOutputFile( false );
    m_msgView = new msg::TextView( m_centralWidget );
-   m_msgView->setGeometry( QRect( 0, 315, 920, 235 ) );
+   m_msgView->setGeometry( QRect( 0, 375, 920, 235 ) );
    m_msgView->setMinimumShownLevel( verbosity );
    connect( m_msgServer, SIGNAL( messageAvailable( const Message& ) ),
             m_msgView, SLOT( addMessage( const Message& ) ) );
@@ -180,6 +183,92 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
    connect( m_rawWriter, SIGNAL( receiverRunning( bool, const QString& ) ),
             m_caenReader, SLOT( setWriterRunning( bool, const QString& ) ) );
 
+   //
+   // Create the widgets for specifying extra event receivers:
+   //
+   m_eventReceiversLabel = new QLabel( tr( "Extra event receivers:" ),
+                                       m_centralWidget );
+   m_eventReceiversLabel->setGeometry( QRect( 50, 315, 200, 25 ) );
+   m_eventReceiversLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+   if( confFileName.isEmpty() ) {
+      m_eventReceiversLabel->setEnabled( false );
+   }
+
+   m_eventReceivers = new QComboBox( m_centralWidget );
+   m_eventReceivers->setGeometry( QRect( 260, 315, 200, 25 ) );
+   m_eventReceivers->setEditable( true );
+   m_eventReceivers->setDuplicatesEnabled( false );
+   if( confFileName.isEmpty() ) {
+      m_eventReceivers->setEnabled( false );
+   }
+   connect( m_eventReceivers, SIGNAL( currentIndexChanged( const QString& ) ),
+            this, SLOT( eventReceiverIndexChangedSlot( const QString& ) ) );
+   connect( m_eventReceivers, SIGNAL( editTextChanged( const QString& ) ),
+            this, SLOT( eventReceiverTextChangedSlot( const QString& ) ) );
+
+   m_currentEventReceiver = m_eventReceivers->currentText();
+
+   m_addEventReceiver = new QPushButton( QIcon::fromTheme( "list-add" ),
+                                         tr( "Add" ),
+                                         m_centralWidget );
+   m_addEventReceiver->setGeometry( QRect( 470, 315, 100, 25 ) );
+   if( confFileName.isEmpty() ) {
+      m_addEventReceiver->setEnabled( false );
+   }
+   connect( m_addEventReceiver, SIGNAL( pressed() ),
+            this, SLOT( addEventReceiverSlot() ) );
+
+   m_removeEventReceiver = new QPushButton( QIcon::fromTheme( "list-remove" ),
+                                            tr( "Remove" ),
+                                            m_centralWidget );
+   m_removeEventReceiver->setGeometry( QRect( 580, 315, 100, 25 ) );
+   if( confFileName.isEmpty() ) {
+      m_removeEventReceiver->setEnabled( false );
+   }
+   connect( m_removeEventReceiver, SIGNAL( pressed() ),
+            this, SLOT( removeEventReceiverSlot() ) );
+
+   //
+   // Create the widgets for specifying extra statistics receivers:
+   //
+   m_statReceiversLabel = new QLabel( tr( "Extra statistics receivers:" ),
+                                       m_centralWidget );
+   m_statReceiversLabel->setGeometry( QRect( 50, 345, 200, 25 ) );
+   m_statReceiversLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+   if( confFileName.isEmpty() ) {
+      m_statReceiversLabel->setEnabled( false );
+   }
+
+   m_statReceivers = new QComboBox( m_centralWidget );
+   m_statReceivers->setGeometry( QRect( 260, 345, 200, 25 ) );
+   m_statReceivers->setEditable( true );
+   m_statReceivers->setDuplicatesEnabled( false );
+   if( confFileName.isEmpty() ) {
+      m_statReceivers->setEnabled( false );
+   }
+   connect( m_statReceivers, SIGNAL( currentIndexChanged( const QString& ) ),
+            this, SLOT( statReceiverIndexChangedSlot( const QString& ) ) );
+   connect( m_statReceivers, SIGNAL( editTextChanged( const QString& ) ),
+            this, SLOT( statReceiverTextChangedSlot( const QString& ) ) );
+
+   m_currentStatReceiver = m_statReceivers->currentText();
+
+   m_addStatReceiver = new QPushButton( QIcon::fromTheme( "list-add" ),
+                                        tr( "Add" ),
+                                        m_centralWidget );
+   m_addStatReceiver->setGeometry( QRect( 470, 345, 100, 25 ) );
+   if( confFileName.isEmpty() ) {
+      m_addStatReceiver->setEnabled( false );
+   }
+
+   m_removeStatReceiver = new QPushButton( QIcon::fromTheme( "list-remove" ),
+                                           tr( "Remove" ),
+                                           m_centralWidget );
+   m_removeStatReceiver->setGeometry( QRect( 580, 345, 100, 25 ) );
+   if( confFileName.isEmpty() ) {
+      m_removeStatReceiver->setEnabled( false );
+   }
+
    // Draw the menus of the window:
    drawMenus();
 
@@ -213,8 +302,20 @@ CaenDAQWindow::~CaenDAQWindow() {
    delete m_hbookWriter;
    delete m_rootWriter;
    delete m_rawWriter;
+
    delete m_msgServer;
    delete m_msgView;
+
+   delete m_eventReceiversLabel;
+   delete m_eventReceivers;
+   delete m_addEventReceiver;
+   delete m_removeEventReceiver;
+
+   delete m_statReceiversLabel;
+   delete m_statReceivers;
+   delete m_addStatReceiver;
+   delete m_removeStatReceiver;
+
    delete m_centralWidget;
 }
 
@@ -253,6 +354,16 @@ void CaenDAQWindow::readConfigSlot() {
    m_rawWriter->setConfigFileName( fileName );
    m_rawWriter->setEnabled( true );
 
+   m_eventReceiversLabel->setEnabled( true );
+   m_eventReceivers->setEnabled( true );
+   m_addEventReceiver->setEnabled( true );
+   m_removeEventReceiver->setEnabled( true );
+
+   m_statReceiversLabel->setEnabled( true );
+   m_statReceivers->setEnabled( true );
+   m_addStatReceiver->setEnabled( true );
+   m_removeStatReceiver->setEnabled( true );
+
    m_logger << msg::INFO << tr( "Using configuration file: %1" ).arg( fileName )
             << msg::endmsg;
 
@@ -276,6 +387,67 @@ void CaenDAQWindow::aboutCaenDAQSlot() {
 void CaenDAQWindow::aboutCDASlot() {
 
    aboutCDA( this );
+   return;
+}
+
+void CaenDAQWindow::eventReceiverIndexChangedSlot( const QString& text ) {
+
+   // Remember the currently selected address:
+   m_currentEventReceiver = text;
+
+   return;
+}
+
+void CaenDAQWindow::eventReceiverTextChangedSlot( const QString& text ) {
+
+   // Remove the previous address from the event receiver list:
+   m_caenReader->setWriterRunning( false, m_currentEventReceiver );
+   // Add the current address as an event receiver:
+   m_caenReader->setWriterRunning( true, text );
+   // Update the current event receiver address:
+   m_currentEventReceiver = text;
+
+   return;
+}
+
+void CaenDAQWindow::addEventReceiverSlot() {
+
+   // Add a new item to the address list:
+   m_eventReceivers->addItem( "" );
+   // Remember that the current item is empty:
+   m_currentEventReceiver = "";
+
+   return;
+}
+
+void CaenDAQWindow::removeEventReceiverSlot() {
+
+   if( m_eventReceivers->count() > 1 ) {
+      // Remove the current entry from the list:
+      m_caenReader->setWriterRunning( false, m_eventReceivers->currentText() );
+      m_eventReceivers->removeItem( m_eventReceivers->currentIndex() );
+      m_currentEventReceiver = m_eventReceivers->currentText();
+   } else {
+      // Just clear the last entry:
+      m_caenReader->setWriterRunning( false, m_eventReceivers->currentText() );
+      m_eventReceivers->setItemText( m_eventReceivers->currentIndex(),
+                                     "" );
+      m_currentEventReceiver = "";
+   }
+
+   return;
+}
+
+void CaenDAQWindow::statReceiverIndexChangedSlot( const QString& text ) {
+
+   // Remember the currently selected address:
+   m_currentStatReceiver = text;
+
+   return;
+}
+
+void CaenDAQWindow::statReceiverTextChangedSlot( const QString& /*text*/ ) {
+
    return;
 }
 
