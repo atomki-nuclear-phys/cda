@@ -164,6 +164,9 @@ namespace ev {
                break;
             }
 
+            // Don't terminate the thread while an event is coming in:
+            setTerminationEnabled( false );
+
             //
             // Read the event from the socket:
             //
@@ -190,6 +193,9 @@ namespace ev {
                            << msg::endmsg;
                }
             }
+
+            // The thread can be terminated once more:
+            setTerminationEnabled( true );
 
             // Tell the listeners that new events are available:
             emit eventAvailable();

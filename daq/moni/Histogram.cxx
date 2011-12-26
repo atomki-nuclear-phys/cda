@@ -26,7 +26,7 @@ namespace moni {
    const int Histogram::TICK_LENGTH_MINOR = 8;
    const int Histogram::MIN_TICK_DISTANCE = 80;
 
-   const int Histogram::X_AXIS_SPACING = 80;
+   const int Histogram::X_AXIS_SPACING = 60;
    const int Histogram::Y_AXIS_SPACING = 80;
 
    /**
@@ -251,8 +251,8 @@ namespace moni {
 
       // Finally, show the title of the histogram:
       painter.setPen( Qt::SolidLine );
-      painter.drawText( QRect( 0, height() - ( X_AXIS_SPACING - TICK_LENGTH_MAJOR -
-                                               30 ), width(), 25 ),
+      painter.drawText( QRect( 0, height() - X_AXIS_SPACING + 35,
+                               width(), 25 ),
                         Qt::AlignCenter, m_title );
 
       return;

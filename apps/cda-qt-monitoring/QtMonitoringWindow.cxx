@@ -42,7 +42,7 @@
  * objects to interact with each other.
  */
 QtMonitoringWindow::QtMonitoringWindow()
-   : QMainWindow() {
+   : QMainWindow(), m_server( 0 ) {
 
    resize( 750, 500 );
    setWindowTitle( tr( "CDA Qt Monitoring" ) );
@@ -70,23 +70,28 @@ QtMonitoringWindow::QtMonitoringWindow()
 }
 
 /**
- * The destructor only has to delete the two statistics handling objects,
- * all the graphical objects are taken care of by Qt.
+ * The destructor has to be pretty smart about deleting the objects,
+ * because both the MDI area and the dev::Crate objects think that they
+ * own the dev::QtHist objects. In the end we let the MDI area delete
+ * them.
  */
 QtMonitoringWindow::~QtMonitoringWindow() {
 
-   /*
-   if( m_server ) delete m_server;
+   if( m_server ) {
+      m_server->terminate();
+      if( m_server->wait( 1000 ) ) {
+         delete m_server;
+      }
+   }
    m_view->closeAllSubWindows();
    delete m_view;
 
-   clear();
+   m_devices.clear();
 
    delete m_showPortDock;
 
    delete m_portEdit;
    delete m_portDock;
-   */
 }
 
 void QtMonitoringWindow::readConfigSlot() {
@@ -157,17 +162,25 @@ void QtMonitoringWindow::portChangedSlot() {
    } else {
       previous_port = port;
    }
-   // Delete the previous event server, as there is no other way of
-   // stopping its thread:
-   if( m_server ) delete m_server;
-   // Create it anew:
-   m_server = new ev::EventServer();
-   // Set up the new object as well:
-   connect( m_server, SIGNAL( eventAvailable() ),
-            this, SLOT( processEvents() ) );
+   // Terminate the previous thread, or start a new one:
+   if( m_server ) {
+      m_server->terminate();
+      if( ! m_server->wait( 1000 ) ) {
+         QMessageBox::critical( this, tr( "Event server thread error" ),
+                                tr( "Couldn't cleanly terminate the event "
+                                    "reading thread. This is strange." ) );
+         delete m_server;
+         m_server = new ev::EventServer( 10000, this );
+         connect( m_server, SIGNAL( eventAvailable() ),
+                  this, SLOT( processEvents() ) );
+      }
+   } else {
+      m_server = new ev::EventServer( 10000, this );
+      connect( m_server, SIGNAL( eventAvailable() ),
+               this, SLOT( processEvents() ) );
+   }
    // Start the server once more:
-   m_server->listen( Address( "127.0.0.1",
-                              port ) );
+   m_server->listen( Address( "0.0.0.0", port ) );
 
    statusBar()->showMessage( tr( "Event server is running on port %1" )
                              .arg( port ) );
@@ -382,7 +395,7 @@ void QtMonitoringWindow::createMenus() {
             qApp, SLOT( aboutQt() ) );
 
    QAction* aboutQtMonitoringAction =
-      helpMenu->addAction( tr( "&About Statistics Server" ) );
+      helpMenu->addAction( tr( "&About Qt DAQ Monitoring" ) );
    connect( aboutQtMonitoringAction, SIGNAL( triggered() ),
             this, SLOT( aboutQtMonitoringSlot() ) );
 

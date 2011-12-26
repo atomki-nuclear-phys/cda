@@ -210,7 +210,7 @@ contains(DEFINES,HAVE_CERNLIB) {
 #
 contains(DEFINES,HAVE_ROOT_LIBS) {
    QMAKE_CXXFLAGS += `root-config --cflags`
-   LIBS += `root-config --libs`
+   LIBS += `root-config --libs` -lMathCore
 }
 
 #
