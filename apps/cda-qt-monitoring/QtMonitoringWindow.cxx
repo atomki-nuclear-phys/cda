@@ -45,8 +45,8 @@ QtMonitoringWindow::QtMonitoringWindow()
    : QMainWindow(), m_server( 0 ) {
 
    resize( 750, 500 );
-   setWindowTitle( tr( "CDA Qt Monitoring" ) );
-   //   setWindowIcon( QIcon( ":/img/cda-stat-server.png" ) );
+   setWindowTitle( tr( "CDA Qt DAQ Monitoring" ) );
+   setWindowIcon( QIcon( ":/img/cda-qt-monitoring.png" ) );
 
    // Load all the plugins:
    dev::Loader::instance()->loadAll();
@@ -292,7 +292,7 @@ bool QtMonitoringWindow::readXMLConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( tr( "CDA Qt Monitoring - %1" ).arg( filePath.back() ) );
+   setWindowTitle( tr( "CDA Qt DAQ Monitoring - %1" ).arg( filePath.back() ) );
 
    return true;
 }
@@ -330,7 +330,7 @@ bool QtMonitoringWindow::readBinaryConfig( const QString& filename ) {
    // Modify the window title:
    //
    QStringList filePath = filename.split( "/" );
-   setWindowTitle( tr( "CDA Qt Monitoring - %1" ).arg( filePath.back() ) );
+   setWindowTitle( tr( "CDA Qt DAQ Monitoring - %1" ).arg( filePath.back() ) );
 
    return true;
 }

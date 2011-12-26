@@ -5,5 +5,6 @@
    <file alias="logo.png">../../images/logo.png</file>
    <file alias="qt-logo.jpg">../../images/qt-logo.jpg</file>
    <file alias="splash.png">../../images/splash.png</file>
+   <file alias="cda-qt-monitoring.png">../../images/cda-qt-monitoring.png</file>
 </qresource>
 </RCC>
