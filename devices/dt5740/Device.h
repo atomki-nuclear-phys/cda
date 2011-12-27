@@ -185,6 +185,10 @@ namespace dt5740 {
       /// Flag showing whether raw information should be put into ntuples
       bool m_saveRawNtuple;
 
+      double m_cfdFraction; ///< Fraction parameter of the digital CFD
+      int    m_cfdDelay; ///< Delay parameter of the digital CFD
+      int    m_cfdLength; ///< Length parameter of the digital CFD
+
    private:
       mutable msg::Logger m_logger; ///< Message logger object
 

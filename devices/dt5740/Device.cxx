@@ -46,6 +46,7 @@ namespace dt5740 {
         m_highImpedanceGPO( false ),
         m_acqMode( caen::Digitizer::ACQ_SW_Controlled ),
         m_saveRawNtuple( false ),
+        m_cfdFraction( 0.1 ), m_cfdDelay( 10 ), m_cfdLength( 5 ),
         m_logger( "dt5740::Device" ) {
 
       // Set the ID of each group:
@@ -97,6 +98,9 @@ namespace dt5740 {
       input >> temp;
       m_signalType = toSignalType( temp );
       input >> m_highImpedanceGPO;
+      input >> m_cfdFraction;
+      input >> m_cfdDelay;
+      input >> m_cfdLength;
 
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -140,6 +144,9 @@ namespace dt5740 {
       output << toString( m_evCountMode );
       output << toString( m_signalType );
       output << m_highImpedanceGPO;
+      output << m_cfdFraction;
+      output << m_cfdDelay;
+      output << m_cfdLength;
 
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -220,6 +227,15 @@ namespace dt5740 {
                                               "0" ).toInt( &ok );
       CHECK( ok );
 
+      m_cfdFraction = element.attribute( "CFDFraction", "0.0" ).toDouble( &ok );
+      CHECK( ok );
+
+      m_cfdDelay = element.attribute( "CFDDelay", "0" ).toInt( &ok );
+      CHECK( ok );
+
+      m_cfdLength = element.attribute( "CFDLength", "0" ).toInt( &ok );
+      CHECK( ok );
+
       //
       // Configure the groups:
       //
@@ -270,6 +286,9 @@ namespace dt5740 {
       element.setAttribute( "EvCountMode", toString( m_evCountMode ) );
       element.setAttribute( "SignalType", toString( m_signalType ) );
       element.setAttribute( "HighImpedanceGPO", m_highImpedanceGPO );
+      element.setAttribute( "CFDFraction", m_cfdFraction );
+      element.setAttribute( "CFDDelay", m_cfdDelay );
+      element.setAttribute( "CFDLength", m_cfdLength );
 
       //
       // Create a new node for the configuration of each group:

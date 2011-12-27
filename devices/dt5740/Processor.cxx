@@ -9,7 +9,7 @@
 namespace dt5740 {
 
    Processor::Processor()
-      : m_fraction( 0.4 ), m_delay( 40 ), m_length( 20 ),
+      : m_fraction( 0.2 ), m_delay( 20 ), m_length( 10 ),
         m_logger( "dt5740::Processor" ) {
 
    }
@@ -63,6 +63,39 @@ namespace dt5740 {
       }
 
       return true;
+   }
+
+   double Processor::getFraction() const {
+
+      return m_fraction;
+   }
+
+   void Processor::setFraction( double value ) {
+
+      m_fraction = value;
+      return;
+   }
+
+   int Processor::getDelay() const {
+
+      return m_delay;
+   }
+
+   void Processor::setDelay( int value ) {
+
+      m_delay = value;
+      return;
+   }
+
+   int Processor::getLength() const {
+
+      return m_length;
+   }
+
+   void Processor::setLength( int value ) {
+
+      m_length = value;
+      return;
    }
 
 } // namespace dt5740

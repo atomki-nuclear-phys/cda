@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4280 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4400 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -259,13 +259,50 @@ namespace dt5740 {
                this, SLOT( evCountModeSlot( int ) ) );
 
       //
+      // Create the signal reconstruction settings:
+      //
+      m_recoBox = new QGroupBox( tr( "Signal reconstruction settings" ),
+                                 m_scrollWidget );
+      m_recoBox->setGeometry( QRect( 10, 845, WIDGET_WIDTH - 40, 120 ) );
+
+      m_cfdFractionLabel = new QLabel( tr( "CFD fraction:" ),
+                                       m_recoBox );
+      m_cfdFractionLabel->setGeometry( QRect( 10, 25, 150, 25 ) );
+
+      m_cfdFractionWidget = new QDoubleSpinBox( m_recoBox );
+      m_cfdFractionWidget->setGeometry( QRect( 180, 25, 250, 25 ) );
+      m_cfdFractionWidget->setRange( -100.0, 100.0 );
+      connect( m_cfdFractionWidget, SIGNAL( valueChanged( double ) ),
+               this, SLOT( cfdFractionSlot( double ) ) );
+
+      m_cfdDelayLabel = new QLabel( tr( "CFD delay:" ),
+                                    m_recoBox );
+      m_cfdDelayLabel->setGeometry( QRect( 10, 55, 150, 25 ) );
+
+      m_cfdDelayWidget = new QSpinBox( m_recoBox );
+      m_cfdDelayWidget->setGeometry( QRect( 180, 55, 250, 25 ) );
+      m_cfdDelayWidget->setRange( 0, 1000 );
+      connect( m_cfdDelayWidget, SIGNAL( valueChanged( int ) ),
+               this, SLOT( cfdDelaySlot( int ) ) );
+
+      m_cfdLengthLabel = new QLabel( tr( "CFD length:" ),
+                                     m_recoBox );
+      m_cfdLengthLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
+
+      m_cfdLengthWidget = new QSpinBox( m_recoBox );
+      m_cfdLengthWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
+      m_cfdLengthWidget->setRange( 2, 1000 );
+      connect( m_cfdLengthWidget, SIGNAL( valueChanged( int ) ),
+               this, SLOT( cfdLengthSlot( int ) ) );
+
+      //
       // Create the channel groups:
       //
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 845 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 965 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
 
@@ -588,6 +625,24 @@ namespace dt5740 {
       return;
    }
 
+   void Gui::cfdFractionSlot( double value ) {
+
+      m_cfdFraction = value;
+      return;
+   }
+
+   void Gui::cfdDelaySlot( int value ) {
+
+      m_cfdDelay = value;
+      return;
+   }
+
+   void Gui::cfdLengthSlot( int value ) {
+
+      m_cfdLength = value;
+      return;
+   }
+
    /**
     * After a configuration is read from file, the graphical objects have
     * to be synced to show this new configuration. This function takes
@@ -773,6 +828,21 @@ namespace dt5740 {
          break;
       }
       m_evCountModeWidget->setEnabled( true );
+
+      // Set the CFD fraction:
+      m_cfdFractionWidget->setEnabled( false );
+      m_cfdFractionWidget->setValue( m_cfdFraction );
+      m_cfdFractionWidget->setEnabled( true );
+
+      // Set the CFD delay:
+      m_cfdDelayWidget->setEnabled( false );
+      m_cfdDelayWidget->setValue( m_cfdDelay );
+      m_cfdDelayWidget->setEnabled( true );
+
+      // Set the CFD length:
+      m_cfdLengthWidget->setEnabled( false );
+      m_cfdLengthWidget->setValue( m_cfdLength );
+      m_cfdLengthWidget->setEnabled( true );
 
       // Synchronize all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {

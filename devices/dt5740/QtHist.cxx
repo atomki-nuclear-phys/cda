@@ -142,6 +142,9 @@ namespace dt5740 {
             m_rawHistograms[ group ][ channel ] =
                new RawHistogram( ch->getRawName(), getSamples(),
                                  -0.5, getSamples() - 0.5, 5000 );
+            m_rawHistograms[ group ][ channel ]->setFraction( m_cfdFraction );
+            m_rawHistograms[ group ][ channel ]->setDelay( m_cfdLength );
+            m_rawHistograms[ group ][ channel ]->setLength( m_cfdLength );
             m_layouts[ group ][ channel ]->addWidget( m_rawHistograms[ group ][ channel ] );
 
             m_histograms[ group ][ channel ][ 0 ] =

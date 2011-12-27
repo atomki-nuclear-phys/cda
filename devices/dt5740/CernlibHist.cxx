@@ -35,6 +35,11 @@ namespace dt5740 {
 
    bool CernlibHist::initialize( cernlib::HistMgr& hmgr ) {
 
+      // Configure the signal processor:
+      m_processor.setFraction( m_cfdFraction );
+      m_processor.setDelay( m_cfdDelay );
+      m_processor.setLength( m_cfdLength );
+
       //
       // Book histograms for all the active channels:
       //

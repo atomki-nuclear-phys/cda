@@ -123,6 +123,9 @@ void QtMonitoringWindow::readConfigSlot() {
       }
    }
 
+   // Remove the current windows:
+   m_view->closeAllSubWindows();
+
    // Create a new QMdiSubWindow for each device:
    std::map< unsigned int, dev::QtHist* >::const_iterator itr = m_devices.begin();
    std::map< unsigned int, dev::QtHist* >::const_iterator end = m_devices.end();

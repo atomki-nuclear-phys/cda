@@ -35,6 +35,11 @@ namespace dt5740 {
 
    bool CernlibDisk::initialize( cernlib::NTupleMgr& nmgr ) {
 
+      // Configure the signal processor:
+      m_processor.setFraction( m_cfdFraction );
+      m_processor.setDelay( m_cfdDelay );
+      m_processor.setLength( m_cfdLength );
+
       //
       // Create variables for all the active channels:
       //

@@ -25,6 +25,7 @@ QT_FORWARD_DECLARE_CLASS( QScrollArea )
 QT_FORWARD_DECLARE_CLASS( QGroupBox )
 QT_FORWARD_DECLARE_CLASS( QComboBox )
 QT_FORWARD_DECLARE_CLASS( QSpinBox )
+QT_FORWARD_DECLARE_CLASS( QDoubleSpinBox )
 
 namespace dt5740 {
 
@@ -103,6 +104,13 @@ namespace dt5740 {
       /// Slot handling the event counting mode changes
       void evCountModeSlot( int index );
 
+      /// Slot handling the CFD fraction changes
+      void cfdFractionSlot( double value );
+      /// Slot handling the CFD delay changes
+      void cfdDelaySlot( int value );
+      /// Slot handling the CFD length changes
+      void cfdLengthSlot( int value );
+
    private:
       /// Function "syncing" the configuration
       void sync();
@@ -144,6 +152,14 @@ namespace dt5740 {
       QComboBox* m_clockSourceWidget;   ///< Clock source chooser
       QLabel*    m_evCountModeLabel;    ///< Description of the event counting mode setting
       QComboBox* m_evCountModeWidget;   ///< Event counting mode chooser
+
+      QGroupBox*      m_recoBox;           ///< Box for the signal reconstruction settings
+      QLabel*         m_cfdFractionLabel;  ///< Description of the CFD fraction setting
+      QDoubleSpinBox* m_cfdFractionWidget; ///< Digital CFD fraction setting
+      QLabel*         m_cfdDelayLabel;     ///< Description of the CFD delay setting
+      QSpinBox*       m_cfdDelayWidget;    ///< Digital CFD delay setting
+      QLabel*         m_cfdLengthLabel;    ///< Description of the CFD length setting
+      QSpinBox*       m_cfdLengthWidget;   ///< Digital CFD length setting
 
       /// The graphical representation of channel groups
       GroupGui* m_ggroups[ NUMBER_OF_GROUPS ];
