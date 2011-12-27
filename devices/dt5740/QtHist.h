@@ -32,6 +32,9 @@ namespace moni {
 
 namespace dt5740 {
 
+   // Forward declaration(s):
+   class RawHistogram;
+
    class QtHist : public dev::QtHist,
                   public virtual Device {
 
@@ -59,9 +62,12 @@ namespace dt5740 {
 
       QStackedLayout* m_channelLayout; ///< Layout for the tab widget
       QTabWidget* m_channelTab; ///< Separate tabs for the channels
-      /// The possibly created histograms
+      /// The possibly created raw histograms
+      RawHistogram*
+      m_rawHistograms[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
+      /// The possibly created reconstructed histograms
       moni::Histogram*
-      m_histograms[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 3 ];
+      m_histograms[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 2 ];
       /// Widgets for the tabs
       QWidget*
       m_widgets[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];

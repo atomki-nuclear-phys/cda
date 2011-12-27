@@ -99,6 +99,9 @@ namespace moni {
       /// Set the upper bound of the hisrogram
       void setUpperBound( double up );
 
+      /// Set the color of the histogram
+      void setHistColor( const QColor& color );
+
       /// Set the "style" of the X axis
       void setXAxisStyle( Histogram::AxisStyle style );
       /// Set the "style" of the Y axis
@@ -116,7 +119,6 @@ namespace moni {
       /// Re-implemented function, used to draw the pop-up menu
       virtual void mousePressEvent( QMouseEvent* event );
 
-   private:
       /**
        *  @short Internal class used in displaying the axis binning
        *
@@ -234,6 +236,8 @@ namespace moni {
       int m_nbins; ///< The number of channels
       double m_low; ///< The lower bound of the histogram
       double m_up; ///< The upper bound of the histogram
+
+      QColor m_hColor; ///< Color for the histogram
 
       QTimer m_refreshTimer; ///< Timer for refreshing the histogram
 

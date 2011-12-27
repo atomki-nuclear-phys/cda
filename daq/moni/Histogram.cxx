@@ -40,7 +40,7 @@ namespace moni {
     */
    Histogram::Histogram( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( "N/A" ), m_nbins( 100 ),
-        m_low( 0.0 ), m_up( 100.0 ),
+        m_low( 0.0 ), m_up( 100.0 ), m_hColor( Qt::darkRed ),
         m_refreshTimer( this ),
         m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
         m_values( 102, 0.0 ), m_entries( 0 ),
@@ -75,7 +75,7 @@ namespace moni {
                          int refreshTimeout,
                          QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( title ), m_nbins( bins ),
-        m_low( low ), m_up( up ),
+        m_low( low ), m_up( up ), m_hColor( Qt::darkRed ),
         m_refreshTimer( this ),
         m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
         m_values( bins + 2, 0.0 ), m_entries( 0 ),
@@ -162,6 +162,13 @@ namespace moni {
 
       m_up = up;
       reset();
+      return;
+   }
+
+   void Histogram::setHistColor( const QColor& color ) {
+
+      m_hColor = color;
+      update();
       return;
    }
 
@@ -526,6 +533,9 @@ namespace moni {
       // Determine the binning for the Y axis:
       const AxisBinning ybin = getYAxisBinning();
 
+      // Set the histogram color for the painter:
+      painter.setPen( QPen( QBrush( m_hColor ), 2 ) );
+
       // Draw the histogram:
       int prev_pos = -1;
       for( int i = 0; i < m_nbins; ++i ) {
@@ -548,7 +558,6 @@ namespace moni {
          // Another security check:
          if( ( x_bin_low_pos < 0.0 ) || ( x_bin_up_pos < 0.0 ) ) continue;
 
-         painter.setPen( QPen( QBrush( QColor( Qt::darkRed ) ), 2 ) );
          if( prev_pos > 0 ) {
             painter.drawLine( QLine( x_axis_start + x_bin_low_pos, prev_pos,
                                      x_axis_start + x_bin_low_pos, y_bin_pos ) );
@@ -556,10 +565,6 @@ namespace moni {
          prev_pos = y_bin_pos;
          painter.drawLine( QLine( x_axis_start + x_bin_low_pos, y_bin_pos,
                                   x_axis_start + x_bin_up_pos, y_bin_pos ) );
-         painter.setBrush( QBrush( Qt::darkRed, Qt::DiagCrossPattern ) );
-         painter.drawRect( QRect( x_axis_start + x_bin_low_pos, y_bin_pos,
-                                  x_bin_up_pos - x_bin_low_pos,
-                                  height() - y_bin_pos - X_AXIS_SPACING ) );
       }
 
       // Reset the painter settings:

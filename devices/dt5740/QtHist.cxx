@@ -17,6 +17,7 @@
 
 // Local include(s):
 #include "QtHist.h"
+#include "RawHistogram.h"
 
 namespace dt5740 {
 
@@ -30,7 +31,8 @@ namespace dt5740 {
               ++channel ) {
             m_layouts[ group ][ channel ] = 0;
             m_widgets[ group ][ channel ] = 0;
-            for( int i = 0; i < 3; ++i ) {
+            m_rawHistograms[ group ][ channel ] = 0;
+            for( int i = 0; i < 2; ++i ) {
                m_histograms[ group ][ channel ][ i ] = 0;
             }
          }
@@ -45,6 +47,7 @@ namespace dt5740 {
       m_channelTab->setMaximumSize( 20000, 20000 );
       m_channelTab->setSizePolicy( QSizePolicy::Expanding,
                                    QSizePolicy::Expanding );
+      m_channelTab->setUsesScrollButtons( true );
 
       // Add the tabs to the layout:
       m_channelLayout->addWidget( m_channelTab );
@@ -106,25 +109,27 @@ namespace dt5740 {
             const ChannelConfig* ch = m_groups[ group ].getChannel( channel );
             if( ! ch ) continue;
 
-            // Update the contents of the raw histogram every 5 seconds:
-            if( updateRaw ) {
-               m_histograms[ group ][ channel ][ 0 ]->reset();
-               for( int i = 0; i < getSamples(); ++i ) {
-                  m_histograms[ group ][ channel ][ 0 ]->fill( i,
-                                                               m_eventData.chData[ group *
-                                                                                   GroupConfig::CHANNELS_IN_GROUP +
-                                                                                   channel ][ i ] );
-               }
-            }
-
             // Reconstruct the data of this channel:
             CHECK( m_processor.reconstruct( m_eventData.chData[ group *
                                                                 GroupConfig::CHANNELS_IN_GROUP +
                                                                 channel ], res ) );
 
+            // Update the contents of the raw histogram every 5 seconds:
+            if( updateRaw ) {
+               m_rawHistograms[ group ][ channel ]->reset();
+               for( int i = 0; i < getSamples(); ++i ) {
+                  m_rawHistograms[ group ][ channel ]->fill( i,
+                                                             m_eventData.chData[ group *
+                                                                                 GroupConfig::CHANNELS_IN_GROUP +
+                                                                                 channel ][ i ] );
+                  m_rawHistograms[ group ][ channel ]->setReconstructedTime( res.time );
+                  m_rawHistograms[ group ][ channel ]->setReconstructedEnergy( res.energy );
+               }
+            }
+
             // Fill the decoded information:
-            m_histograms[ group ][ channel ][ 1 ]->fill( res.time );
-            m_histograms[ group ][ channel ][ 2 ]->fill( res.energy );
+            m_histograms[ group ][ channel ][ 0 ]->fill( res.time );
+            m_histograms[ group ][ channel ][ 1 ]->fill( res.energy );
          }
       }
 
@@ -153,22 +158,24 @@ namespace dt5740 {
                new QVBoxLayout( m_widgets[ group ][ channel ] );
 
             // Create the 3 histograms:
-            m_histograms[ group ][ channel ][ 0 ] =
-               new moni::Histogram( ch->getRawName(), getSamples(),
-                                    -0.5, getSamples() - 0.5 );
-            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 0 ] );
+            m_rawHistograms[ group ][ channel ] =
+               new RawHistogram( ch->getRawName(), getSamples(),
+                                 -0.5, getSamples() - 0.5 );
+            m_layouts[ group ][ channel ]->addWidget( m_rawHistograms[ group ][ channel ] );
 
-            m_histograms[ group ][ channel ][ 1 ] =
+            m_histograms[ group ][ channel ][ 0 ] =
                new moni::Histogram( ch->getTimeName(), ch->getTimeNumberOfChannels(),
                                     ch->getTimeLowerBound(),
                                     ch->getTimeUpperBound() );
-            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 1 ] );
+            m_histograms[ group ][ channel ][ 0 ]->setHistColor( QColor( Qt::darkBlue ) );
+            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 0 ] );
 
-            m_histograms[ group ][ channel ][ 2 ] =
+            m_histograms[ group ][ channel ][ 1 ] =
                new moni::Histogram( ch->getEnergyName(), ch->getEnergyNumberOfChannels(),
                                     ch->getEnergyLowerBound(),
                                     ch->getEnergyUpperBound() );
-            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 2 ] );
+            m_histograms[ group ][ channel ][ 1 ]->setHistColor( QColor( Qt::darkGreen ) );
+            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 1 ] );
 
             // Add the top widget as a tab:
             m_channelTab->addTab( m_widgets[ group ][ channel ],
@@ -191,7 +198,11 @@ namespace dt5740 {
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
               ++channel ) {
-            for( int i = 0; i < 3; ++i ) {
+            if( m_rawHistograms[ group ][ channel ] ) {
+               delete m_rawHistograms[ group ][ channel ];
+               m_rawHistograms[ group ][ channel ] = 0;
+            }
+            for( int i = 0; i < 2; ++i ) {
                if( m_histograms[ group ][ channel ][ i ] ) {
                   delete m_histograms[ group ][ channel ][ i ];
                   m_histograms[ group ][ channel ][ i ] = 0;
