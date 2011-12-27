@@ -29,13 +29,7 @@ namespace dt5740 {
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
               ++channel ) {
             m_layouts[ group ][ channel ] = 0;
-            m_areas[ group ][ channel ] = 0;
             m_widgets[ group ][ channel ] = 0;
-            /*
-            for( int i = 0; i < 2; ++i ) {
-               m_widgets[ group ][ channel ][ i ] = 0;
-            }
-            */
             for( int i = 0; i < 3; ++i ) {
                m_histograms[ group ][ channel ][ i ] = 0;
             }
@@ -94,6 +88,13 @@ namespace dt5740 {
       // The reconstructed object to be used:
       Processor::Result res;
 
+      // Decide whether the raw histogram should be updated:
+      bool updateRaw = false;
+      if( m_lastUpdate.secsTo( QTime::currentTime() ) > 5 ) {
+         updateRaw = true;
+         m_lastUpdate = QTime::currentTime();
+      }
+
       //
       // Reconstruct the data in all channels, and fill the histograms:
       //
@@ -106,7 +107,7 @@ namespace dt5740 {
             if( ! ch ) continue;
 
             // Update the contents of the raw histogram every 5 seconds:
-            if( m_lastUpdate.secsTo( QTime::currentTime() ) > 5 ) {
+            if( updateRaw ) {
                m_histograms[ group ][ channel ][ 0 ]->reset();
                for( int i = 0; i < getSamples(); ++i ) {
                   m_histograms[ group ][ channel ][ 0 ]->fill( i,
@@ -114,7 +115,6 @@ namespace dt5740 {
                                                                                    GroupConfig::CHANNELS_IN_GROUP +
                                                                                    channel ][ i ] );
                }
-               m_lastUpdate = QTime::currentTime();
             }
 
             // Reconstruct the data of this channel:
@@ -145,47 +145,33 @@ namespace dt5740 {
             const ChannelConfig* ch = m_groups[ group ].getChannel( channel );
             if( ! ch ) continue;
 
-            // Convenience pointers:
-            QWidget*     widget = m_widgets[ group ][ channel ];
-            QScrollArea* area   = m_areas[ group ][ channel ];
-            QVBoxLayout* layout = m_layouts[ group ][ channel ];
-            moni::Histogram** hists = m_histograms[ group ][ channel ];
-
             // Create a widget for the tab:
-            widget = new QWidget();
-
-            // Create the scrolled widget:
-            /*
-            widgets[ 1 ] = new QWidget();
-            widgets[ 1 ]->setMinimumSize( 250, 600 );
-            */
-
-            // Create the scroll area:
-            /*
-            area = new QScrollArea( widgets[ 0 ] );
-            area->setWidget( widgets[ 1 ] );
-            */
+            m_widgets[ group ][ channel ] = new QWidget();
 
             // Create the simple layout for the tab:
-            layout = new QVBoxLayout( widget );
+            m_layouts[ group ][ channel ] =
+               new QVBoxLayout( m_widgets[ group ][ channel ] );
 
             // Create the 3 histograms:
-            hists[ 0 ] = new moni::Histogram( ch->getRawName(), getSamples(),
-                                              -0.5, getSamples() - 0.5 );
-            layout->addWidget( hists[ 0 ] );
+            m_histograms[ group ][ channel ][ 0 ] =
+               new moni::Histogram( ch->getRawName(), getSamples(),
+                                    -0.5, getSamples() - 0.5 );
+            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 0 ] );
 
-            hists[ 1 ] = new moni::Histogram( ch->getTimeName(), ch->getTimeNumberOfChannels(),
-                                              ch->getTimeLowerBound(),
-                                              ch->getTimeUpperBound() );
-            layout->addWidget( hists[ 1 ] );
+            m_histograms[ group ][ channel ][ 1 ] =
+               new moni::Histogram( ch->getTimeName(), ch->getTimeNumberOfChannels(),
+                                    ch->getTimeLowerBound(),
+                                    ch->getTimeUpperBound() );
+            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 1 ] );
 
-            hists[ 2 ] = new moni::Histogram( ch->getEnergyName(), ch->getEnergyNumberOfChannels(),
-                                              ch->getEnergyLowerBound(),
-                                              ch->getEnergyUpperBound() );
-            layout->addWidget( hists[ 2 ] );
+            m_histograms[ group ][ channel ][ 2 ] =
+               new moni::Histogram( ch->getEnergyName(), ch->getEnergyNumberOfChannels(),
+                                    ch->getEnergyLowerBound(),
+                                    ch->getEnergyUpperBound() );
+            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 2 ] );
 
             // Add the top widget as a tab:
-            m_channelTab->addTab( widget,
+            m_channelTab->addTab( m_widgets[ group ][ channel ],
                                   tr( "Group %1, channel %2 (%3)" )
                                   .arg( group ).arg( channel )
                                   .arg( ch->getRawName() ) );
@@ -219,16 +205,6 @@ namespace dt5740 {
                delete m_widgets[ group ][ channel ];
                m_widgets[ group ][ channel ] = 0;
             }
-            if( m_areas[ group ][ channel ] ) {
-               delete m_areas[ group ][ channel ];
-               m_areas[ group ][ channel ] = 0;
-            }
-            /*
-            if( m_widgets[ group ][ channel ][ 0 ] ) {
-               delete m_widgets[ group ][ channel ][ 0 ];
-               m_widgets[ group ][ channel ][ 0 ] = 0;
-            }
-            */
          }
       }
 

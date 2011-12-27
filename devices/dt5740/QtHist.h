@@ -65,9 +65,6 @@ namespace dt5740 {
       /// Widgets for the tabs
       QWidget*
       m_widgets[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
-      /// Scroll areas for the tabs
-      QScrollArea*
-      m_areas[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
       /// Layouts for the tabs
       QVBoxLayout*
       m_layouts[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];

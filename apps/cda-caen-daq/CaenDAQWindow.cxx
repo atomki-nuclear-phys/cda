@@ -208,20 +208,10 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
 
    m_currentEventReceiver = m_eventReceivers->currentText();
 
-   m_addEventReceiver = new QPushButton( QIcon::fromTheme( "list-add" ),
-                                         tr( "Add" ),
-                                         m_centralWidget );
-   m_addEventReceiver->setGeometry( QRect( 470, 315, 100, 25 ) );
-   if( confFileName.isEmpty() ) {
-      m_addEventReceiver->setEnabled( false );
-   }
-   connect( m_addEventReceiver, SIGNAL( pressed() ),
-            this, SLOT( addEventReceiverSlot() ) );
-
    m_removeEventReceiver = new QPushButton( QIcon::fromTheme( "list-remove" ),
                                             tr( "Remove" ),
                                             m_centralWidget );
-   m_removeEventReceiver->setGeometry( QRect( 580, 315, 100, 25 ) );
+   m_removeEventReceiver->setGeometry( QRect( 470, 315, 100, 25 ) );
    if( confFileName.isEmpty() ) {
       m_removeEventReceiver->setEnabled( false );
    }
@@ -253,18 +243,10 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
 
    m_currentStatReceiver = m_statReceivers->currentText();
 
-   m_addStatReceiver = new QPushButton( QIcon::fromTheme( "list-add" ),
-                                        tr( "Add" ),
-                                        m_centralWidget );
-   m_addStatReceiver->setGeometry( QRect( 470, 345, 100, 25 ) );
-   if( confFileName.isEmpty() ) {
-      m_addStatReceiver->setEnabled( false );
-   }
-
    m_removeStatReceiver = new QPushButton( QIcon::fromTheme( "list-remove" ),
                                            tr( "Remove" ),
                                            m_centralWidget );
-   m_removeStatReceiver->setGeometry( QRect( 580, 345, 100, 25 ) );
+   m_removeStatReceiver->setGeometry( QRect( 470, 345, 100, 25 ) );
    if( confFileName.isEmpty() ) {
       m_removeStatReceiver->setEnabled( false );
    }
@@ -308,12 +290,10 @@ CaenDAQWindow::~CaenDAQWindow() {
 
    delete m_eventReceiversLabel;
    delete m_eventReceivers;
-   delete m_addEventReceiver;
    delete m_removeEventReceiver;
 
    delete m_statReceiversLabel;
    delete m_statReceivers;
-   delete m_addStatReceiver;
    delete m_removeStatReceiver;
 
    delete m_centralWidget;
@@ -356,12 +336,10 @@ void CaenDAQWindow::readConfigSlot() {
 
    m_eventReceiversLabel->setEnabled( true );
    m_eventReceivers->setEnabled( true );
-   m_addEventReceiver->setEnabled( true );
    m_removeEventReceiver->setEnabled( true );
 
    m_statReceiversLabel->setEnabled( true );
    m_statReceivers->setEnabled( true );
-   m_addStatReceiver->setEnabled( true );
    m_removeStatReceiver->setEnabled( true );
 
    m_logger << msg::INFO << tr( "Using configuration file: %1" ).arg( fileName )
@@ -406,16 +384,6 @@ void CaenDAQWindow::eventReceiverTextChangedSlot( const QString& text ) {
    m_caenReader->setWriterRunning( true, text );
    // Update the current event receiver address:
    m_currentEventReceiver = text;
-
-   return;
-}
-
-void CaenDAQWindow::addEventReceiverSlot() {
-
-   // Add a new item to the address list:
-   m_eventReceivers->addItem( "" );
-   // Remember that the current item is empty:
-   m_currentEventReceiver = "";
 
    return;
 }

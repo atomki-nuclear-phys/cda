@@ -67,8 +67,6 @@ private slots:
    void eventReceiverIndexChangedSlot( const QString& text );
    /// Slot for handling changes to the event receiver's address
    void eventReceiverTextChangedSlot( const QString& text );
-   /// Slot for adding a new event receiver
-   void addEventReceiverSlot();
    /// Slot for removing the current event receiver
    void removeEventReceiverSlot();
 
@@ -95,13 +93,11 @@ private:
 
    QLabel*      m_eventReceiversLabel; ///< Description of the extra event receivers
    QComboBox*   m_eventReceivers; ///< Widget specifying the extra event receivers
-   QPushButton* m_addEventReceiver; ///< Button for adding a new event receiver
    QPushButton* m_removeEventReceiver; ///< Button for removing an event receiver
    QString      m_currentEventReceiver; ///< Address of the currently selected event receiver
 
    QLabel*      m_statReceiversLabel; ///< Description of the extra statistics receivers
    QComboBox*   m_statReceivers; ///< Widget specifying the extra statistics receivers
-   QPushButton* m_addStatReceiver; ///< Button for adding a new statistics receiver
    QPushButton* m_removeStatReceiver; ///< Button for removing an statistics receiver
    QString      m_currentStatReceiver; ///< Address of the currently selected stat. receiver
 
