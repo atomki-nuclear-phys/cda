@@ -39,7 +39,7 @@ namespace dt5740 {
       virtual bool writeEvent( const ev::Fragment& fragment ) const;
 
    private:
-      Processor m_processor; ///< Object reconstructing the signals
+      mutable Processor m_processor; ///< Object reconstructing the signals
       mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info
       mutable caen::Digitizer::EventData16Bit m_eventData; ///< Decoded event data
 

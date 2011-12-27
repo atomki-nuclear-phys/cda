@@ -50,7 +50,7 @@ namespace dt5740 {
                                cernlib::NTupleMgr& nmgr ) const;
 
    private:
-      Processor m_processor; ///< Object reconstructing the signals
+      mutable Processor m_processor; ///< Object reconstructing the signals
       /// "Map" for the created variables
       int m_ntupleMap[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 2 ];
       mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info

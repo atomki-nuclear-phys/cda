@@ -61,8 +61,8 @@ namespace dt5740 {
       Processor();
 
       /// Reconstruct the properties of the digitized signal
-      bool reconstruct( const std::vector< uint16_t >& data,
-                        Result& result ) const;
+      virtual bool reconstruct( const std::vector< uint16_t >& data,
+                                Result& result );
 
       /// Get the "fraction" value used by the digital CFD
       double getFraction() const;
@@ -79,11 +79,14 @@ namespace dt5740 {
       /// Set the length of the samples used by the digital CFD
       void setLength( int value );
 
-   private:
+   protected:
       double m_fraction; ///< "Fraction" used by the digital CFD
       int    m_delay;    ///< Delay used by the digital CFD
       int    m_length;   ///< Length used by the digital CFD
 
+      std::vector< double > m_trans; ///< CFD transformed values
+
+   private:
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Processor

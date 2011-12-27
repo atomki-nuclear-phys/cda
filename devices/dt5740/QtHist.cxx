@@ -22,8 +22,8 @@
 namespace dt5740 {
 
    QtHist::QtHist( QWidget* parent, Qt::WindowFlags flags )
-      : dev::QtHist( parent, flags ), m_lastUpdate( QTime::currentTime() ),
-        m_processor(), m_logger( "dt5740::QtHist" ) {
+      : dev::QtHist( parent, flags ),
+        m_logger( "dt5740::QtHist" ) {
 
       // Reset all the object pointers as a start:
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
@@ -91,13 +91,6 @@ namespace dt5740 {
       // The reconstructed object to be used:
       Processor::Result res;
 
-      // Decide whether the raw histogram should be updated:
-      bool updateRaw = false;
-      if( m_lastUpdate.secsTo( QTime::currentTime() ) > 5 ) {
-         updateRaw = true;
-         m_lastUpdate = QTime::currentTime();
-      }
-
       //
       // Reconstruct the data in all channels, and fill the histograms:
       //
@@ -110,22 +103,10 @@ namespace dt5740 {
             if( ! ch ) continue;
 
             // Reconstruct the data of this channel:
-            CHECK( m_processor.reconstruct( m_eventData.chData[ group *
-                                                                GroupConfig::CHANNELS_IN_GROUP +
-                                                                channel ], res ) );
-
-            // Update the contents of the raw histogram every 5 seconds:
-            if( updateRaw ) {
-               m_rawHistograms[ group ][ channel ]->reset();
-               for( int i = 0; i < getSamples(); ++i ) {
-                  m_rawHistograms[ group ][ channel ]->fill( i,
-                                                             m_eventData.chData[ group *
-                                                                                 GroupConfig::CHANNELS_IN_GROUP +
-                                                                                 channel ][ i ] );
-                  m_rawHistograms[ group ][ channel ]->setReconstructedTime( res.time );
-                  m_rawHistograms[ group ][ channel ]->setReconstructedEnergy( res.energy );
-               }
-            }
+            CHECK( m_rawHistograms[ group ][ channel ]->reconstruct(
+                                     m_eventData.chData[ group *
+                                                         GroupConfig::CHANNELS_IN_GROUP +
+                                                         channel ], res ) );
 
             // Fill the decoded information:
             m_histograms[ group ][ channel ][ 0 ]->fill( res.time );
@@ -160,7 +141,7 @@ namespace dt5740 {
             // Create the 3 histograms:
             m_rawHistograms[ group ][ channel ] =
                new RawHistogram( ch->getRawName(), getSamples(),
-                                 -0.5, getSamples() - 0.5 );
+                                 -0.5, getSamples() - 0.5, 5000 );
             m_layouts[ group ][ channel ]->addWidget( m_rawHistograms[ group ][ channel ] );
 
             m_histograms[ group ][ channel ][ 0 ] =

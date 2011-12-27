@@ -13,6 +13,9 @@
 #   include "moni/Histogram.h"
 #endif
 
+// Local include(s):
+#include "Processor.h"
+
 namespace dt5740 {
 
    /**
@@ -22,12 +25,18 @@ namespace dt5740 {
     *         makes it possible to nicely display the reconstructed time
     *         and energy values on top of the raw signal shape.
     *
+    *         It is also responsible for reconstructing the time and
+    *         energy values in the Qt monitoring application.
+    *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
-   class RawHistogram : public moni::Histogram {
+   class RawHistogram : public moni::Histogram,
+                        public Processor {
+
+      Q_OBJECT
 
    public:
       /// Standard QWidget-style constructor
@@ -37,19 +46,24 @@ namespace dt5740 {
                     int refreshTimeout = 2000,
                     QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
-   public slots:
-      /// Set the reconstructed time parameter
-      void setReconstructedTime( double value );
-      /// Set the reconstructed energy parameter
-      void setReconstructedEnergy( double value );
+      /// Reconstruct the properties of the digitized signal
+      virtual bool reconstruct( const std::vector< uint16_t >& data,
+                                Processor::Result& result );
 
    protected:
       /// Re-implemented function, used to draw the histogram
       virtual void paintEvent( QPaintEvent* event );
 
+      /// Get the minimum and maximum for the Y axis
+      virtual std::pair< double, double > getYAxisLimits() const;
+
    private:
       double m_time; ///< Reconstructed time
       double m_energy; ///< Reconstructed energy
+
+      mutable double m_transScale; ///< Scaling for the transformed distribution
+
+      mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class RawHistogram
 

@@ -210,11 +210,11 @@ namespace moni {
       AxisBinning getLogarithmicAxisBinning( double low, double up,
                                              double alength, int tdist ) const;
       /// Get the minimum and maximum for the Y axis
-      std::pair< double, double > getYAxisLimits() const;
+      virtual std::pair< double, double > getYAxisLimits() const;
       /// Get the binning for the X axis
-      AxisBinning getXAxisBinning() const;
+      virtual AxisBinning getXAxisBinning() const;
       /// Get the binning for the Y axis
-      AxisBinning getYAxisBinning() const;
+      virtual AxisBinning getYAxisBinning() const;
       /// Get a possible exponent that should be used for displaying an axis
       std::pair< bool, int > getExponent( const AxisBinning& abin ) const;
 

@@ -50,7 +50,7 @@ namespace dt5740 {
                                  const cernlib::HistMgr& hmgr ) const;
 
    private:
-      Processor m_processor; ///< Object reconstructing the signals
+      mutable Processor m_processor; ///< Object reconstructing the signals
       /// "Map" for the created histograms
       int m_histMap[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 2 ];
       mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info

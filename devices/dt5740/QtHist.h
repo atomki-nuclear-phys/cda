@@ -4,7 +4,7 @@
 #define CDA_DEVICES_DT5740_QTHIST_H
 
 // Qt include(s):
-#include <QtCore/QTime>
+#include <QtCore/QtGlobal>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -19,7 +19,6 @@
 
 // Local include(s):
 #include "Device.h"
-#include "Processor.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedLayout )
@@ -75,9 +74,6 @@ namespace dt5740 {
       QVBoxLayout*
       m_layouts[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
 
-      QTime m_lastUpdate; ///< The last time the raw histogram was updated
-
-      Processor m_processor; ///< Object reconstructing the signals
       mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info
       mutable caen::Digitizer::EventData16Bit m_eventData; ///< Decoded event data
 
