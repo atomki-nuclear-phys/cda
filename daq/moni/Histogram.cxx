@@ -24,7 +24,8 @@ namespace moni {
    //
    const int Histogram::TICK_LENGTH_MAJOR = 15;
    const int Histogram::TICK_LENGTH_MINOR = 8;
-   const int Histogram::MIN_TICK_DISTANCE = 80;
+   const int Histogram::MIN_X_TICK_DISTANCE = 80;
+   const int Histogram::MIN_Y_TICK_DISTANCE = 40;
 
    const int Histogram::X_AXIS_SPACING = 60;
    const int Histogram::Y_AXIS_SPACING = 80;
@@ -389,8 +390,8 @@ namespace moni {
             tick_value /= std::pow( 10.0, exp.second );
          }
          // Now draw it on the axis:
-         painter.drawText( QRect( tick_location - MIN_TICK_DISTANCE / 2,
-                                  height() - ( X_AXIS_SPACING - 20 ), MIN_TICK_DISTANCE,
+         painter.drawText( QRect( tick_location - MIN_X_TICK_DISTANCE / 2,
+                                  height() - ( X_AXIS_SPACING - 20 ), MIN_X_TICK_DISTANCE,
                                   20 ),
                            Qt::AlignCenter, QString::number( tick_value ) );
 
@@ -468,9 +469,9 @@ namespace moni {
             tick_value /= std::pow( 10.0, exp.second );
          }
          // Now draw it on the axis:
-         painter.drawText( QRect( 5, tick_location - MIN_TICK_DISTANCE / 2,
+         painter.drawText( QRect( 5, tick_location - MIN_Y_TICK_DISTANCE / 2,
                                   Y_AXIS_SPACING - TICK_LENGTH_MAJOR - 3,
-                                  MIN_TICK_DISTANCE ),
+                                  MIN_Y_TICK_DISTANCE ),
                            Qt::AlignCenter, QString::number( tick_value ) );
 
          // Draw the dotted line across the pad:
@@ -606,10 +607,12 @@ namespace moni {
     * @param low The lower edge on the axis
     * @param up  The upper edge on the axis
     * @param alength The length of the axis in pixels
+    * @param tdist Minimal distance between the major ticks
     * @returns A structure describing the proposed axis decoration
     */
-   Histogram::AxisBinning Histogram::getLinearAxisBinning( double low, double up,
-                                                           double alength ) const {
+   Histogram::AxisBinning
+   Histogram::getLinearAxisBinning( double low, double up,
+                                    double alength, int tdist ) const {
 
       // The unit length in pixels:
       const double axis_unit = alength / ( up - low );
@@ -619,10 +622,10 @@ namespace moni {
       //
       double tick_major_unit = std::pow( 10.0, std::ceil( std::log10( up - low ) ) -
                                          1.0 );
-      while( tick_major_unit * axis_unit < MIN_TICK_DISTANCE ) {
+      while( tick_major_unit * axis_unit < tdist ) {
          tick_major_unit *= 2.0;
       }
-      while( ( tick_major_unit * axis_unit / 2 ) > MIN_TICK_DISTANCE ) {
+      while( ( tick_major_unit * axis_unit / 2 ) > tdist ) {
          tick_major_unit /= 2.0;
       }
 
@@ -695,10 +698,12 @@ namespace moni {
     * @param low The lower edge on the axis
     * @param up  The upper edge on the axis
     * @param alength The length of the axis in pixels
+    * @param tdist Minimal distance between the major ticks
     * @returns A structure describing the proposed axis decoration
     */
-   Histogram::AxisBinning Histogram::getLogarithmicAxisBinning( double low, double up,
-                                                                double alength ) const {
+   Histogram::AxisBinning
+   Histogram::getLogarithmicAxisBinning( double low, double up,
+                                         double alength, int tdist ) const {
 
       // Check if this binning is possible:
       if( ! ( low > 0.0 ) ) {
@@ -721,10 +726,10 @@ namespace moni {
       double tick_major_exponent_unit =
          std::pow( 10.0, std::ceil( std::log10( up_log -
                                                 low_log ) ) - 1.0 );
-      while( tick_major_exponent_unit * axis_unit < MIN_TICK_DISTANCE ) {
+      while( tick_major_exponent_unit * axis_unit < tdist ) {
          tick_major_exponent_unit *= 2.0;
       }
-      while( ( tick_major_exponent_unit * axis_unit / 2 ) > MIN_TICK_DISTANCE ) {
+      while( ( tick_major_exponent_unit * axis_unit / 2 ) > tdist ) {
          tick_major_exponent_unit /= 2.0;
       }
 
@@ -834,16 +839,19 @@ namespace moni {
 
       // Decide upon the correct axis binning:
       if( m_xAxisStyle == Linear ) {
-         return getLinearAxisBinning( m_low, m_up, axis_length );
+         return getLinearAxisBinning( m_low, m_up, axis_length,
+                                      MIN_X_TICK_DISTANCE );
       } else if( m_xAxisStyle == Logarithmic ) {
-         return getLogarithmicAxisBinning( m_low, m_up, axis_length );
+         return getLogarithmicAxisBinning( m_low, m_up, axis_length,
+                                           MIN_X_TICK_DISTANCE );
       }
 
       // Handle programming errors gracefully:
       REPORT_ERROR( tr( "Binning style for the X axis (%1) "
                         "not understood, using linear binning" )
                     .arg( m_xAxisStyle ) );
-      return getLinearAxisBinning( m_low, m_up, axis_length );
+      return getLinearAxisBinning( m_low, m_up, axis_length,
+                                   MIN_X_TICK_DISTANCE );
    }
 
    Histogram::AxisBinning Histogram::getYAxisBinning() const {
@@ -855,16 +863,19 @@ namespace moni {
 
       // Decide upon the correct axis binning:
       if( m_yAxisStyle == Linear ) {
-         return getLinearAxisBinning( limits.first, limits.second, axis_length );
+         return getLinearAxisBinning( limits.first, limits.second,
+                                      axis_length, MIN_Y_TICK_DISTANCE );
       } else if( m_yAxisStyle == Logarithmic ) {
-         return getLogarithmicAxisBinning( limits.first, limits.second, axis_length );
+         return getLogarithmicAxisBinning( limits.first, limits.second,
+                                           axis_length, MIN_Y_TICK_DISTANCE );
       }
 
       // Handle programming errors gracefully:
       REPORT_ERROR( tr( "Binning style for the Y axis (%1) "
                         "not understood, using linear binning" )
                     .arg( m_yAxisStyle ) );
-      return getLinearAxisBinning( limits.first, limits.second, axis_length );
+      return getLinearAxisBinning( limits.first, limits.second,
+                                   axis_length, MIN_Y_TICK_DISTANCE );
    }
 
    std::pair< bool, int >

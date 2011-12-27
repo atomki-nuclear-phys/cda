@@ -440,7 +440,7 @@ namespace {
 
       const double peak  = 2000.0;
       const double sigma = samples / 16.0;
-      const double mean  = samples / 4.0 + rand() % ( samples / 2 );
+      const double mean  = samples / 2.0;
       const double arg   = ( sample - mean ) / sigma;
       return ( static_cast< uint16_t >( std::floor( peak *
                                                     std::exp( -0.5 * arg * arg ) ) ) +
@@ -464,7 +464,7 @@ namespace {
 
       const double peak  = 200.0;
       const double sigma = samples / 16.0;
-      const double mean  = samples / 4.0 + rand() % ( samples / 2 );
+      const double mean  = samples / 2.0;
       const double arg   = ( sample - mean ) / sigma;
       return ( static_cast< uint8_t >( std::floor( peak *
                                                    std::exp( -0.5 * arg * arg ) ) ) +

@@ -202,9 +202,11 @@ namespace moni {
       /// Draw some statistics on top of the histogram
       void drawStat( QPainter& painter ) const;
       /// Function determining the visual binning for a linear axis
-      AxisBinning getLinearAxisBinning( double low, double up, double alength ) const;
+      AxisBinning getLinearAxisBinning( double low, double up,
+                                        double alength, int tdist ) const;
       /// Function determining the visual binning for a logarithmic axis
-      AxisBinning getLogarithmicAxisBinning( double low, double up, double alength ) const;
+      AxisBinning getLogarithmicAxisBinning( double low, double up,
+                                             double alength, int tdist ) const;
       /// Get the minimum and maximum for the Y axis
       std::pair< double, double > getYAxisLimits() const;
       /// Get the binning for the X axis
@@ -218,8 +220,10 @@ namespace moni {
       static const int TICK_LENGTH_MAJOR;
       /// Length of the minor ticks
       static const int TICK_LENGTH_MINOR;
-      /// Minimal distance between the major ticks
-      static const int MIN_TICK_DISTANCE;
+      /// Minimal distance between the major ticks on the X axis
+      static const int MIN_X_TICK_DISTANCE;
+      /// Minimal distance between the major ticks on the Y axis
+      static const int MIN_Y_TICK_DISTANCE;
 
       /// Space left under the X axis
       static const int X_AXIS_SPACING;
