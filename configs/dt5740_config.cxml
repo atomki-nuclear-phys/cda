@@ -3,26 +3,26 @@
    <Crate Type="CAEN">
       <DT5740 ExtTrigOutEnabled="0" ClockSource="Internal" ConnType="0" GateMode="Window" SignalType="NIM" AcqMode="1" TrigMode="InputOverThreshold" SaveRawNtuple="1" EvCountMode="AcceptedTriggers" PostTrigPercentage="50" HighImpedanceGPO="1" ExtTrigEnabled="0" PatGenEnabled="0" LinkNumber="0" TrigOvlpEnabled="1" BufferMode="NBuffers1024">
          <Group TrigMask="3" Number="0" TrigOutEnabled="1" TrigEnabled="1" DCOffset="32000" TrigThreshold="500">
-            <Channel EnergyName="a1ene" TimeName="a1time" EnergyLowerBound="0" ChannelNumber="0" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a1" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a2ene" TimeName="a2time" EnergyLowerBound="0" ChannelNumber="1" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a2" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a3ene" TimeName="a3time" EnergyLowerBound="0" ChannelNumber="2" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a3" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a4ene" TimeName="a4time" EnergyLowerBound="0" ChannelNumber="3" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a4" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
+            <Channel EnergyName="a1ene" TimeName="a1time" EnergyLowerBound="0" ChannelNumber="0" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a1" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a2ene" TimeName="a2time" EnergyLowerBound="0" ChannelNumber="1" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a2" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a3ene" TimeName="a3time" EnergyLowerBound="0" ChannelNumber="2" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a3" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a4ene" TimeName="a4time" EnergyLowerBound="0" ChannelNumber="3" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a4" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
          </Group>
          <Group TrigMask="0" Number="1" TrigOutEnabled="0" TrigEnabled="0" DCOffset="200" TrigThreshold="0">
-            <Channel EnergyName="a5ene" TimeName="a5time" EnergyLowerBound="0" ChannelNumber="8" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a5" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a6ene" TimeName="a6time" EnergyLowerBound="0" ChannelNumber="9" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a6" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a7ene" TimeName="a7time" EnergyLowerBound="0" ChannelNumber="10" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a7" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a8ene" TimeName="a8time" EnergyLowerBound="0" ChannelNumber="11" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a8" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
+            <Channel EnergyName="a5ene" TimeName="a5time" EnergyLowerBound="0" ChannelNumber="8" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a5" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a6ene" TimeName="a6time" EnergyLowerBound="0" ChannelNumber="9" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a6" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a7ene" TimeName="a7time" EnergyLowerBound="0" ChannelNumber="10" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a7" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a8ene" TimeName="a8time" EnergyLowerBound="0" ChannelNumber="11" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a8" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
          </Group>
          <Group TrigMask="0" Number="2" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
          <Group TrigMask="0" Number="3" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
       </DT5740>
       <DT5740 ExtTrigOutEnabled="1" ClockSource="Internal" ConnType="0" GateMode="Window" SignalType="NIM" AcqMode="1" TrigMode="InputOverThreshold" SaveRawNtuple="1" EvCountMode="AcceptedTriggers" PostTrigPercentage="80" HighImpedanceGPO="1" ExtTrigEnabled="1" PatGenEnabled="0" LinkNumber="1" TrigOvlpEnabled="0" BufferMode="NBuffers1024">
          <Group TrigMask="0" Number="0" TrigOutEnabled="0" TrigEnabled="0" DCOffset="35000" TrigThreshold="0">
-            <Channel EnergyName="a9ene" TimeName="a9time" EnergyLowerBound="0" ChannelNumber="0" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a9" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a10ene" TimeName="a10time" EnergyLowerBound="0" ChannelNumber="1" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a10" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a11ene" TimeName="a11time" EnergyLowerBound="0" ChannelNumber="2" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a11" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
-            <Channel EnergyName="a12ene" TimeName="a12time" EnergyLowerBound="0" ChannelNumber="3" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a12" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="1000"/>
+            <Channel EnergyName="a9ene" TimeName="a9time" EnergyLowerBound="0" ChannelNumber="0" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a9" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a10ene" TimeName="a10time" EnergyLowerBound="0" ChannelNumber="1" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a10" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a11ene" TimeName="a11time" EnergyLowerBound="0" ChannelNumber="2" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a11" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
+            <Channel EnergyName="a12ene" TimeName="a12time" EnergyLowerBound="0" ChannelNumber="3" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a12" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
          </Group>
          <Group TrigMask="0" Number="1" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
          <Group TrigMask="0" Number="2" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
