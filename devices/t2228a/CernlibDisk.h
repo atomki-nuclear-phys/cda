@@ -22,6 +22,18 @@
 
 namespace t2228a {
 
+   /**
+    *  @short Data file writer for the T2228A
+    *
+    *         This class is used to write out the information collected
+    *         using a T2228A CAMAC device, into an HBOOK file. A single
+    *         time value is stored per subaddress per event.
+    *
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+    *
+    * $Revision$
+    * $Date$
+    */
    class CernlibDisk : public virtual dev::CernlibDisk,
                        public virtual Device {
 

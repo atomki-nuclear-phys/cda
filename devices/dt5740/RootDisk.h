@@ -23,6 +23,20 @@
 
 namespace dt5740 {
 
+   /**
+    *  @short ROOT file writer for a DT5740 device
+    *
+    *         This class can write out all the data collected by a DT5740
+    *         device into a ROOT file. The class can either just write out
+    *         the reconstructed parameters, or the raw data collected from
+    *         the channels as well. (Controllable using a property found
+    *         in dt5740::Device.)
+    *
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+    *
+    * $Revision$
+    * $Date$
+    */
    class RootDisk : public virtual dev::RootDisk,
                     public virtual Device {
 

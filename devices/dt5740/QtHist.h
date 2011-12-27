@@ -22,7 +22,6 @@
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedLayout )
-QT_FORWARD_DECLARE_CLASS( QScrollArea )
 QT_FORWARD_DECLARE_CLASS( QTabWidget )
 QT_FORWARD_DECLARE_CLASS( QVBoxLayout )
 namespace moni {
@@ -34,6 +33,20 @@ namespace dt5740 {
    // Forward declaration(s):
    class RawHistogram;
 
+   /**
+    *  @short Qt-only monitoring for a DT5740 device
+    *
+    *         This class provides a completely standalone way of monitoring
+    *         the data collected by a DT5740 device. It uses the custom
+    *         histogram code to display both the daw data that's being
+    *         collected, and the distribution of the reconstructed
+    *         variables.
+    *
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+    *
+    * $Revison$
+    * $Date$
+    */
    class QtHist : public dev::QtHist,
                   public virtual Device {
 

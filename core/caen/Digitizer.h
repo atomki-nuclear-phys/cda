@@ -220,11 +220,12 @@ namespace caen {
          uint32_t triggerTimeTag;
       };
 
-      /// Event data
+      /// 16 bit event data
       struct EventData16Bit {
          static const int MAX_CHANNEL_NUMBER = 64;
          std::vector< uint16_t > chData[ MAX_CHANNEL_NUMBER ];
       };
+      /// 8 bit event data
       struct EventData8Bit {
          static const int MAX_CHANNEL_NUMBER = 8;
          std::vector< uint8_t > chData[ MAX_CHANNEL_NUMBER ];

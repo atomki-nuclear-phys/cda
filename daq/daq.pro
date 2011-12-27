@@ -16,9 +16,9 @@ VERSION  = 1.1.0
 TARGET   = cdadaq
 
 # These are the header and source files:
-HEADERS = $$files(common/*.h) $$files(schema/*.h) $$files(stat/*.h) \
+HEADERS = $$files(common/*.h) $$files(stat/*.h) \
           $$files(config/*.h) $$files(moni/*.h)
-SOURCES = $$files(common/*.cxx) $$files(schema/*.cxx) $$files(stat/*.cxx) \
+SOURCES = $$files(common/*.cxx) $$files(stat/*.cxx) \
           $$files(config/*.cxx) $$files(moni/*.cxx)
 TRANSLATIONS = ../trans/cdadaq_hu.ts
 
@@ -49,11 +49,6 @@ mac {
    COMMON_HEADERS.files = $$files(common/*.h)
    COMMON_HEADERS.path = Headers/common
    QMAKE_BUNDLE_DATA += COMMON_HEADERS
-
-   SCHEMA_HEADERS.version = Versions
-   SCHEMA_HEADERS.files = $$files(schema/*.h)
-   SCHEMA_HEADERS.path = Headers/schema
-   QMAKE_BUNDLE_DATA += SCHEMA_HEADERS
 
    STAT_HEADERS.version = Versions
    STAT_HEADERS.files = $$files(stat/*.h)

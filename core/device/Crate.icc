@@ -27,16 +27,14 @@ namespace dev {
    const char* Crate< DEVICE >::XML_NODE_NAME = "Crate";
 
    /**
-    * The constructor expects a function pointer to one of the functions of
-    * dev::Factory. The specified function will later on be used to create
-    * the new device objects when reading a configuration. You should
-    * construct the object something like this:
+    * The constructor needs to know the "type" of the crate, and
+    * whether this type is important. The type is normally only important
+    * when editing the configuration, or reading out the devices.
+    * The other applications should stay ignorant about the exact type of
+    * the crate.
     *
-    * <code>
-    *   dev::Crate< dev::Hist >( &dev::Factory::createHist );
-    * </code>
-    *
-    * @param factoryFncn Function pointer to one of dev::Factory's functions
+    * @param type Type name of the crate
+    * @param isTypeImportant A boolean flag specifying if the type is important
     */
    template< class DEVICE >
    Crate< DEVICE >::Crate( const QString& type,

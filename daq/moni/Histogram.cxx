@@ -68,6 +68,7 @@ namespace moni {
     * @param bins The number of bins for the histogram
     * @param low The lower edge of the X axis
     * @param up  The upper edge of the X axis
+    * @param refreshTimeout The time between two updates of the graphical object
     * @param parent The Qt widget parent of the histogram
     * @param flags Qt specific flags for the object
     */
