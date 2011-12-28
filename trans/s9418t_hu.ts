@@ -162,12 +162,12 @@
 <context>
     <name>s9418t::Readout</name>
     <message>
-        <location filename="../devices/s9418t/Readout.cxx" line="36"/>
+        <location filename="../devices/s9418t/Readout.cxx" line="38"/>
         <source>Operating mode not recognized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../devices/s9418t/Readout.cxx" line="107"/>
+        <location filename="../devices/s9418t/Readout.cxx" line="109"/>
         <source>Failed reading from the event FIFO</source>
         <translation type="unfinished"></translation>
     </message>

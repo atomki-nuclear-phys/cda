@@ -132,6 +132,8 @@ void QtMonitoringWindow::readConfigSlot() {
    for( ; itr != end; ++itr ) {
       QMdiSubWindow* window = m_view->addSubWindow( itr->second );
       window->setAttribute( Qt::WA_DeleteOnClose, false );
+      connect( window, SIGNAL( aboutToActivate() ),
+               itr->second, SLOT( update() ) );
       itr->second->show();
    }
 
