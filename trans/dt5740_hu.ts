@@ -595,7 +595,7 @@
     </message>
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="458"/>
-        <location filename="../devices/dt5740/Gui.cxx" line="705"/>
+        <location filename="../devices/dt5740/Gui.cxx" line="715"/>
         <source>Trigger mode not recognized</source>
         <translation type="unfinished"></translation>
     </message>
@@ -606,32 +606,37 @@
     </message>
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="520"/>
-        <location filename="../devices/dt5740/Gui.cxx" line="736"/>
+        <location filename="../devices/dt5740/Gui.cxx" line="757"/>
         <source>Acquisition mode not recognized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="539"/>
-        <location filename="../devices/dt5740/Gui.cxx" line="752"/>
+        <location filename="../devices/dt5740/Gui.cxx" line="773"/>
         <source>Gate mode not recognized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="585"/>
-        <location filename="../devices/dt5740/Gui.cxx" line="795"/>
+        <location filename="../devices/dt5740/Gui.cxx" line="816"/>
         <source>Buffer mode not recognized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="603"/>
-        <location filename="../devices/dt5740/Gui.cxx" line="811"/>
+        <location filename="../devices/dt5740/Gui.cxx" line="832"/>
         <source>Clock source not recognized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="621"/>
-        <location filename="../devices/dt5740/Gui.cxx" line="827"/>
+        <location filename="../devices/dt5740/Gui.cxx" line="848"/>
         <source>Event counting mode not recognized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../devices/dt5740/Gui.cxx" line="731"/>
+        <source>Signal type not recognized</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

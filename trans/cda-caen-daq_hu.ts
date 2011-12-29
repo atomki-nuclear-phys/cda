@@ -5,7 +5,7 @@
     <name>CaenDAQWindow</name>
     <message>
         <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="70"/>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="325"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="327"/>
         <source>CDA CAEN DAQ - %1</source>
         <translation>CDA CAEN DAQ - %1</translation>
     </message>
@@ -46,78 +46,78 @@
         <translation>Extra statisztika fogadók:</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="262"/>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="345"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="264"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="347"/>
         <source>Using configuration file: %1</source>
         <translation>A %1 konfigurációs fájl használata</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="265"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="267"/>
         <source>Please open a configuration file before trying to start the DAQ system.</source>
         <translation>Kérlek nyiss meg egy konfigurációs fájlt a DAQ rendszer használata elött.</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="309"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="311"/>
         <source>Open setup file</source>
         <translation>Beállítási fájl megnyitása</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="310"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="312"/>
         <source>default.cxml</source>
         <translation>default.cxml</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="311"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="313"/>
         <source>CDA XML setup files (*.cxml);;All files (*)</source>
         <translation>CDA XML beállítási fájlok (*.cxml);;Minden fájl (*)</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="317"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="319"/>
         <source>Configuration file selection cancelled</source>
         <translation>A konfigurációs fájl kiválasztás megszakítva</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="353"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="355"/>
         <source>CDA Caen DAQ</source>
         <translation>CDA Caen DAQ</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="354"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="356"/>
         <source>This application is a simplified interface for running a CDA CAEN data acquisition session. While the CDA executables can be started on multiple separate computers, this application starts one instance of the 4 CDA applications that can be used in CAEN data taking, on the local computer.</source>
         <translation>Ez a program egy egyszerűsített felület egy CDA CAEN adatgyűjtés futtatásához. Amíg a CDA programokat különálló számítógépeken is el lehet indítani, ez a program a helyi számítógépen tud elindítani egyet-egyet a fő CDA adatgyűjtő programokból.</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="433"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="474"/>
         <source>&amp;File</source>
         <translation>&amp;Fájl</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="438"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="479"/>
         <source>&amp;Open configuration file...</source>
         <translation>Konfigurációs fájl &amp;megnyitása...</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="447"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="488"/>
         <source>&amp;Quit</source>
         <translation>&amp;Kilépés</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="458"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="499"/>
         <source>&amp;Help</source>
         <translation>&amp;Segítség</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="461"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="502"/>
         <source>About Qt</source>
         <translation>A Qt-ról</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="467"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="508"/>
         <source>About Caen DAQ</source>
         <translation>A Caen DAQ-ról</translation>
     </message>
     <message>
-        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="472"/>
+        <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="513"/>
         <source>About CDA</source>
         <translation>A CDA-ról</translation>
     </message>

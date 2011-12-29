@@ -37,6 +37,9 @@ namespace dt5740 {
    class Readout : public virtual dev::CaenReadout,
                    public virtual Device {
 
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( dt5740::Readout )
+
    public:
       /// Constructor
       Readout();

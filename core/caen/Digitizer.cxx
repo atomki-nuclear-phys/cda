@@ -3,6 +3,9 @@
 // System include(s):
 #include <cmath>
 
+// Qt include(s):
+#include <QtCore/QCoreApplication>
+
 // CAEN include(s):
 #ifdef HAVE_CAEN_LIBS
 // On Windows we compile the code with MinGW, so this definition would just
@@ -382,8 +385,10 @@ namespace {
       CAEN_DGTZ_ErrorCode code = CMD;                                   \
       sigprocmask( SIG_UNBLOCK, &m_blockedSignals, NULL );              \
       if( code != CAEN_DGTZ_Success ) {                                 \
-         REPORT_ERROR( tr( "Failed executing \"%1\", "                  \
-                           "Return value: %2" ).arg( #CMD )             \
+         REPORT_ERROR( qApp->translate( "Digitizer_CHECK",              \
+                                        "Failed executing \"%1\", "     \
+                                        "Return value: %2" )            \
+                       .arg( #CMD )                                     \
                        .arg( toString( code ) ) );                      \
          return false;                                                  \
       }                                                                 \

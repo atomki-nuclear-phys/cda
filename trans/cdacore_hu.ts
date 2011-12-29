@@ -30,6 +30,22 @@ Beállítva 50000-re</translation>
     </message>
 </context>
 <context>
+    <name>CHECK</name>
+    <message>
+        <location filename="../core/common/errorcheck.h" line="33"/>
+        <source>Failed executing &quot;%1&quot;</source>
+        <translation>Hiba a következö futtatásakor: &quot;%1&quot;</translation>
+    </message>
+</context>
+<context>
+    <name>Digitizer_CHECK</name>
+    <message>
+        <location filename="../core/caen/Digitizer.cxx" line="388"/>
+        <source>Failed executing &quot;%1&quot;, Return value: %2</source>
+        <translation>Hiba a következö futtatásakor: &quot;%1&quot;, visszatérési érték: %2</translation>
+    </message>
+</context>
+<context>
     <name>Fifo</name>
     <message>
         <location filename="../core/fifo/Fifo.cxx" line="37"/>
@@ -45,37 +61,37 @@ Beállítva 50000-re</translation>
 <context>
     <name>caen::Digitizer</name>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="566"/>
+        <location filename="../core/caen/Digitizer.cxx" line="571"/>
         <source>Opening connection type %1 on link number %2,  CONET node %3, VME address %4</source>
         <translation>Kapcsolat megnyitása %1 típussal a %2 link számon, %3 CONET egységgel, %4 VME címmel</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="574"/>
+        <location filename="../core/caen/Digitizer.cxx" line="579"/>
         <source>Opened connection to digitizer</source>
         <translation>A kapcsolat a digitalizálóval megnyitva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="592"/>
+        <location filename="../core/caen/Digitizer.cxx" line="597"/>
         <source>No need to close the device, it&apos;s not open</source>
         <translation>Nem szükséges lezárni az eszközt, nincsen megnyitva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="607"/>
+        <location filename="../core/caen/Digitizer.cxx" line="612"/>
         <source>Closed connection to digitizer</source>
         <translation>A kapcsolat a digitalizálóval lezárva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="619"/>
+        <location filename="../core/caen/Digitizer.cxx" line="624"/>
         <source>writeRegister( address: %1, data: %2 )</source>
         <translation>writeRegister( cím: %1, adat: %2 )</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="633"/>
+        <location filename="../core/caen/Digitizer.cxx" line="638"/>
         <source>readRegister( address: %1, data: to be set )</source>
         <translation>readRegister( cím: %1, adat: beállítás alatt )</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="658"/>
+        <location filename="../core/caen/Digitizer.cxx" line="663"/>
         <source>Digitizer board information:
   model name : %1
   model      : %2
@@ -100,23 +116,23 @@ Beállítva 50000-re</translation>
   ADC bit-szám: %10</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="679"/>
-        <location filename="../core/caen/Digitizer.cxx" line="840"/>
+        <location filename="../core/caen/Digitizer.cxx" line="684"/>
+        <location filename="../core/caen/Digitizer.cxx" line="845"/>
         <source>No CAEN library available</source>
         <translation>A CAEN könyvtár nem elérhetö</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="774"/>
+        <location filename="../core/caen/Digitizer.cxx" line="779"/>
         <source>Setting acquisition mode to %1</source>
         <translation>Az adatgyüjtési mód beállítása %1-ra/re</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="806"/>
+        <location filename="../core/caen/Digitizer.cxx" line="811"/>
         <source>Setting interrupt to happen after %1 events</source>
         <translation>A megszakítás beállítása %1 esemény begyüjtése után</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="828"/>
+        <location filename="../core/caen/Digitizer.cxx" line="833"/>
         <source>Interrupt configuration:
   state       : %1
   level       : %2
@@ -131,143 +147,143 @@ Beállítva 50000-re</translation>
   mód              : %5</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="865"/>
+        <location filename="../core/caen/Digitizer.cxx" line="870"/>
         <source>Setting SW trigger mode to %1</source>
         <translation>A szoftveres trigger beállítása %1 módba</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="893"/>
+        <location filename="../core/caen/Digitizer.cxx" line="898"/>
         <source>Setting Ext trigger mode to %1</source>
         <translation>A külsö trigger beállítása %1 módba</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="922"/>
+        <location filename="../core/caen/Digitizer.cxx" line="927"/>
         <source>Setting channel %1 self-trigger mode to %2</source>
         <translation>A %1. csatorna ön-trigger módja %2-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="939"/>
+        <location filename="../core/caen/Digitizer.cxx" line="944"/>
         <source>Requesting channel %1&apos;s self-trigger mode</source>
         <translation>A %1. csatorna ön-trigger módjának lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="955"/>
+        <location filename="../core/caen/Digitizer.cxx" line="960"/>
         <source>Setting group %1 self-trigger mode to %2</source>
         <translation>A %1. csoport ön trigger módja %2-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="972"/>
+        <location filename="../core/caen/Digitizer.cxx" line="977"/>
         <source>Requesting group %1&apos;s self-trigger mode</source>
         <translation>A %1. csoport ön-trigger módjának lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="986"/>
+        <location filename="../core/caen/Digitizer.cxx" line="991"/>
         <source>Sent a SW trigger</source>
         <translation>Szoftveres trigger elküldve</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1000"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1005"/>
         <source>Setting group %1&apos;s channel mask to %2</source>
         <translation>A %1. csoport csatorna maszkja %2-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1015"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1020"/>
         <source>Requestuing group %1&apos;s channel mask</source>
         <translation>A %1. csoport csatorna maszkjának lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1031"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1036"/>
         <source>Setting channel %1&apos;s trigger threshold to %2</source>
         <translation>A(z) %1. csatorna trigger küszöbe beállítva %2-ra/re</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1046"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1051"/>
         <source>Retrieving trigger threshold for channel %1</source>
         <translation>A(z) %1. csatorna trigger küszöbének lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1062"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1067"/>
         <source>Setting group %1&apos;s trigger threshold to %2</source>
         <translation>A(z) %1. csoport trigger küszöbe beállítva %2-ra/re</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1077"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1082"/>
         <source>Retrieving trigger threshold for group %1</source>
         <translation>A(z) %1. csoport trigger küszöbének lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1091"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1096"/>
         <source>Channel enable mask set to %1</source>
         <translation>A csatorna engedélyezési maszk %1-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1116"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1121"/>
         <source>Group enable mask set to %1</source>
         <translation>A csoport engedélyezési maszk %1-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1141"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1146"/>
         <source>Record length set to %1</source>
         <translation>A minta szám %1-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1167"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1172"/>
         <source>Post trigger size set to %1%</source>
         <translation>A trigger utáni minta méret %1%-ra állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1194"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1199"/>
         <source>Setting channel %1&apos;s DC offset to %2</source>
         <translation>A(z) %1. csatorna DC eltolása %2-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1209"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1214"/>
         <source>Retrieving channel %1&apos;s DC offset</source>
         <translation>A(z) %1. csatorna DC eltolásának lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1225"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1230"/>
         <source>Setting group %1&apos;s DC offset to %2</source>
         <translation>A(z) %1. csoport DC eltolása %2-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1240"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1245"/>
         <source>Retrieving group %1&apos;s DC offset</source>
         <translation>A(z) %1. csoport DC eltolásának lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1254"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1259"/>
         <source>Setting maximum number of events to read out to %1</source>
         <translation>Az egyszerre kiolvasható események száma %1-ra/re állítva</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1267"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1272"/>
         <source>Retrieving maximum number of events to read out</source>
         <translation>Az egyszerre kiolvasható események számának lekérdezése</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1280"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1285"/>
         <source>Allocating readout buffer</source>
         <translation>Kiolvasási buffer lefoglalása</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1294"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1299"/>
         <source>Freeing readout buffer</source>
         <translation>Kiolvasási buffer felszabadítása</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1309"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1314"/>
         <source>Reading data in mode &quot;%1&quot;</source>
         <translation>Adatok olvasása &quot;%1&quot; módban</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1326"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1331"/>
         <source>Extracting number of events from buffer of size %1</source>
         <translation>Az események számának megállapítása egy %1 méretü bufferböl</translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1368"/>
-        <location filename="../core/caen/Digitizer.cxx" line="1425"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1373"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1430"/>
         <source>Reading event %1 from buffer with size %2</source>
         <translation>A(z) %1. esemény kiolvasása egy %2 méretü bufferböl</translation>
     </message>

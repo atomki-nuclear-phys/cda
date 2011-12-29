@@ -3,6 +3,9 @@
 #ifndef CDA_CORE_COMMON_ERRORCHECK_H
 #define CDA_CORE_COMMON_ERRORCHECK_H
 
+// Qt include(s):
+#include <QtCore/QCoreApplication>
+
 /// Macro for handling functions returning boolean status values
 /**
  * In many places of the code functions return boolean values, and
@@ -24,13 +27,14 @@
  * CHECK( functionCall() );
  * </code>
  */
-#define CHECK( CMD ) {                                   \
-      const bool result = CMD;                           \
-      if( ! result ) {                                   \
-         REPORT_ERROR( tr( "Failed executing \"%1\"" )   \
-                       .arg( #CMD ) );                   \
-            return result;                               \
-      }                                                  \
+#define CHECK( CMD ) {                                               \
+      const bool result = CMD;                                       \
+      if( ! result ) {                                               \
+         REPORT_ERROR( qApp->translate( "CHECK",                     \
+                                        "Failed executing \"%1\"" )  \
+                       .arg( #CMD ) );                               \
+         return result;                                              \
+      }                                                              \
    } while( 0 ){}
 
 #endif // CDA_CORE_COMMON_ERRORCHECK_H
