@@ -74,6 +74,8 @@ private slots:
    void statReceiverIndexChangedSlot( const QString& text );
    /// Slot for handling changes to the statistics receiver's address
    void statReceiverTextChangedSlot( const QString& text );
+   /// Slot for removing the current event receiver
+   void removeStatReceiverSlot();
 
 private:
    /// Private function drawing the menus of the window

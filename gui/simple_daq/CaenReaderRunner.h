@@ -64,11 +64,6 @@ namespace simple_daq {
       /// Get the address of the message server(s)
       const QString& getMsgServerAddress() const;
 
-      /// Set the address of the statistics server(s)
-      void setStatServerAddress( const QString& address );
-      /// Get the address of the statistics server(s)
-      const QString& getStatServerAddress() const;
-
       /// Set the verbosity level of the cda-caen-reader application
       void setVerbosity( msg::Level verbosity );
       /// Get the verbosity level of the cda-caen-reader application
@@ -80,6 +75,8 @@ namespace simple_daq {
    public slots:
       /// Set whether a writer application is running
       void setWriterRunning( bool running, const QString& address );
+      /// Set the address of a statistics receiver
+      void setStatServerAddress( bool status, const QString& address );
 
    private slots:
       /// Internal function starting and stopping cda-caen-reader
@@ -96,7 +93,8 @@ namespace simple_daq {
 
       QString m_configFileName;      ///< Name of the configuration file
       QString m_msgServerAddress;    ///< Address of the message server
-      QString m_statServerAddress;   ///< Address of the statistics server
+      /// Address(es) of the statistics server(s)
+      std::set< QString > m_statServerAddresses;
       /// Addresses of event listener applications
       std::set< QString > m_eventListenerAddresses;
       msg::Level m_level;            ///< Output level of cda-caen-reader

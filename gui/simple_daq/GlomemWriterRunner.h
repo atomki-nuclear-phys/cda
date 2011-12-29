@@ -3,6 +3,9 @@
 #ifndef CDA_GUI_SIMPLE_DAQ_GLOMEMWRITERRUNNER_H
 #define CDA_GUI_SIMPLE_DAQ_GLOMEMWRITERRUNNER_H
 
+// STL include(s):
+#include <set>
+
 // Qt include(s):
 #include <QtCore/QString>
 #include <QtGui/QWidget>
@@ -80,6 +83,10 @@ namespace simple_daq {
       /// Signal sending the event receiver address of this application
       void receiverRunning( bool, const QString& );
 
+   public slots:
+      /// Set the address of a statistics receiver
+      void setStatServerAddress( bool status, const QString& address );
+
    private slots:
       /// Internal function starting and stopping cda-glomem-writer
       void startApp( bool start );
@@ -92,6 +99,8 @@ namespace simple_daq {
       QString m_configFileName;   ///< Name of the configuration file
       QString m_msgServerAddress; ///< Address of the message server(s)
       QString m_eventAddress;     ///< Address of cda-glomem-writer
+      /// Address(es) of the statistics server(s)
+      std::set< QString > m_statServerAddresses;
       msg::Level m_level;         ///< Output level of cda-glomem-writer
 
       mutable daq::AppRunner m_runner; ///< The object starting cda-glomem-writer

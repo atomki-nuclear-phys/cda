@@ -22,7 +22,6 @@ namespace simple_daq {
 
    GlomemWriterRunner::GlomemWriterRunner( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        m_msgServerAddress( "127.0.0.1:50000" ),
         m_runner(),
         m_logger( "sd::GlomemWriterRunner" ) {
 
@@ -132,6 +131,20 @@ namespace simple_daq {
       return;
    }
 
+   /**
+    * @param status Selects whether the address should be added or removed
+    * @param address The statistics server address to be used by the application
+    */
+   void GlomemWriterRunner::setStatServerAddress( bool status, const QString& address ) {
+
+      if( status ) {
+         m_statServerAddresses.insert( address );
+      } else {
+         m_statServerAddresses.erase( address );
+      }
+      return;
+   }
+
    void GlomemWriterRunner::startApp( bool start ) {
 
       if( start ) {
@@ -141,6 +154,18 @@ namespace simple_daq {
          options += " -c " + m_configFileName;
          options += " -v " + QString::number( m_level );
          options += " -e " + m_eventAddress;
+
+         //
+         // Collect where the application should send statistics information to:
+         //
+         if( m_statServerAddresses.size() ) {
+            options += " -s ";
+            std::set< QString >::const_iterator itr = m_statServerAddresses.begin();
+            std::set< QString >::const_iterator end = m_statServerAddresses.end();
+            for( ; itr != end; ++itr ) {
+               options += ( *itr ) + " ";
+            }
+         }
 
          m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options )
                   << msg::endmsg;

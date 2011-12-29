@@ -133,11 +133,13 @@ namespace cdastat {
          subwin->setMaximumSize( window->width() + 20,
                                  window->height() + 30 );
 
-         // Connec the signals of this new sub-window:
+         // Connect the signals of this new sub-window:
          connect( window, SIGNAL( newRateAvailable( const QString&, qreal ) ),
                   this, SLOT( updateRateTable( const QString&, qreal ) ) );
          connect( window, SIGNAL( aboutToClose( const QString& ) ),
                   this, SLOT( handleWindowClose( const QString& ) ) );
+         connect( subwin, SIGNAL( aboutToActivate() ),
+                  window, SLOT( update() ) );
 
          // Show the sub-window:
          window->show();

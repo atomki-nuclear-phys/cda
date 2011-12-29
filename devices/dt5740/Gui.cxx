@@ -691,6 +691,16 @@ namespace dt5740 {
       m_extTrigOutEnabledWidget->setChecked( m_extTrigOutEnabled );
       m_extTrigOutEnabledWidget->setEnabled( true );
 
+      // Set the high impedance GPO:
+      m_highImpedanceGPOWidget->setEnabled( false );
+      m_highImpedanceGPOWidget->setChecked( m_highImpedanceGPO );
+      m_highImpedanceGPOWidget->setEnabled( true );
+
+      // Set the percentage of post trigger samples:
+      m_postTrigPercentageWidget->setEnabled( false );
+      m_postTrigPercentageWidget->setValue( m_postTrigPercentage );
+      m_postTrigPercentageWidget->setEnabled( true );
+
       // Set the trigger mode:
       m_trigModeWidget->setEnabled( false );
       switch( m_trigMode ) {
@@ -707,10 +717,21 @@ namespace dt5740 {
       }
       m_trigModeWidget->setEnabled( true );
 
-      // Set the percentage of post trigger samples:
-      m_postTrigPercentageWidget->setEnabled( false );
-      m_postTrigPercentageWidget->setValue( m_postTrigPercentage );
-      m_postTrigPercentageWidget->setEnabled( true );
+      // Set the front panel signal type:
+      m_signalTypeWidget->setEnabled( false );
+      switch( m_signalType ) {
+
+      case SGNL_NIM:
+         m_signalTypeWidget->setCurrentIndex( 0 );
+         break;
+      case SGNL_TTL:
+         m_signalTypeWidget->setCurrentIndex( 1 );
+         break;
+      default:
+         REPORT_ERROR( tr( "Signal type not recognized" ) );
+         break;
+      }
+      m_signalTypeWidget->setEnabled( true );
 
       // Set the state of the pattern generation:
       m_patGenEnabledWidget->setEnabled( false );

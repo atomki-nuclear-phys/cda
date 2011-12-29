@@ -117,7 +117,7 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
    m_caenReader->setGeometry( QRect( 310, 5, 300, 150 ) );
    m_caenReader->setConfigFileName( confFileName );
    m_caenReader->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
-   m_caenReader->setStatServerAddress( Const::STAT_SERVER_ADDRESS );
+   m_caenReader->setStatServerAddress( true, Const::STAT_SERVER_ADDRESS );
    m_caenReader->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_caenReader->setEnabled( false );
@@ -250,6 +250,8 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName, msg::Level verbosity 
    if( confFileName.isEmpty() ) {
       m_removeStatReceiver->setEnabled( false );
    }
+   connect( m_removeStatReceiver, SIGNAL( pressed() ),
+            this, SLOT( removeStatReceiverSlot() ) );
 
    // Draw the menus of the window:
    drawMenus();
@@ -390,14 +392,15 @@ void CaenDAQWindow::eventReceiverTextChangedSlot( const QString& text ) {
 
 void CaenDAQWindow::removeEventReceiverSlot() {
 
+   // Remove the event receiver from the CAEN reader runner:
+   m_caenReader->setWriterRunning( false, m_eventReceivers->currentText() );
+
    if( m_eventReceivers->count() > 1 ) {
       // Remove the current entry from the list:
-      m_caenReader->setWriterRunning( false, m_eventReceivers->currentText() );
       m_eventReceivers->removeItem( m_eventReceivers->currentIndex() );
       m_currentEventReceiver = m_eventReceivers->currentText();
    } else {
       // Just clear the last entry:
-      m_caenReader->setWriterRunning( false, m_eventReceivers->currentText() );
       m_eventReceivers->setItemText( m_eventReceivers->currentIndex(),
                                      "" );
       m_currentEventReceiver = "";
@@ -414,7 +417,45 @@ void CaenDAQWindow::statReceiverIndexChangedSlot( const QString& text ) {
    return;
 }
 
-void CaenDAQWindow::statReceiverTextChangedSlot( const QString& /*text*/ ) {
+void CaenDAQWindow::statReceiverTextChangedSlot( const QString& text ) {
+
+   // Remove the previous address from the event receiver list:
+   m_caenReader->setStatServerAddress( false, m_currentStatReceiver );
+   m_glomemWriter->setStatServerAddress( false, m_currentStatReceiver );
+   m_hbookWriter->setStatServerAddress( false, m_currentStatReceiver );
+   m_rootWriter->setStatServerAddress( false, m_currentStatReceiver );
+   m_rawWriter->setStatServerAddress( false, m_currentStatReceiver );
+   // Add the current address as an event receiver:
+   m_caenReader->setStatServerAddress( true, text );
+   m_glomemWriter->setStatServerAddress( true, text );
+   m_hbookWriter->setStatServerAddress( true, text );
+   m_rootWriter->setStatServerAddress( true, text );
+   m_rawWriter->setStatServerAddress( true, text );
+   // Update the current event receiver address:
+   m_currentStatReceiver = text;
+
+   return;
+}
+
+void CaenDAQWindow::removeStatReceiverSlot() {
+
+   // Remove the current entry from the "runners":
+   m_caenReader->setStatServerAddress( false, m_statReceivers->currentText() );
+   m_glomemWriter->setStatServerAddress( false, m_statReceivers->currentText() );
+   m_hbookWriter->setStatServerAddress( false, m_statReceivers->currentText() );
+   m_rootWriter->setStatServerAddress( false, m_statReceivers->currentText() );
+   m_rawWriter->setStatServerAddress( false, m_statReceivers->currentText() );
+
+   if( m_statReceivers->count() > 1 ) {
+      // Remove the current entry from the list:
+      m_statReceivers->removeItem( m_statReceivers->currentIndex() );
+      m_currentStatReceiver = m_statReceivers->currentText();
+   } else {
+      // Just clear the last entry:
+      m_statReceivers->setItemText( m_statReceivers->currentIndex(),
+                                    "" );
+      m_currentStatReceiver = "";
+   }
 
    return;
 }

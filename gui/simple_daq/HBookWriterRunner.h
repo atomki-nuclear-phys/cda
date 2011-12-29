@@ -3,6 +3,9 @@
 #ifndef CDA_GUI_SIMPLE_DAQ_HBOOKWRITERRUNNER_H
 #define CDA_GUI_SIMPLE_DAQ_HBOOKWRITERRUNNER_H
 
+// STL include(s):
+#include <set>
+
 // Qt include(s):
 #include <QtCore/QString>
 #include <QtGui/QWidget>
@@ -22,7 +25,6 @@ QT_FORWARD_DECLARE_CLASS( QPushButton )
 QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QLineEdit )
 QT_FORWARD_DECLARE_CLASS( QSpinBox )
-QT_FORWARD_DECLARE_CLASS( QTimer )
 
 namespace simple_daq {
 
@@ -32,7 +34,6 @@ namespace simple_daq {
    using QT_PREPEND_NAMESPACE( QLabel );
    using QT_PREPEND_NAMESPACE( QLineEdit );
    using QT_PREPEND_NAMESPACE( QSpinBox );
-   using QT_PREPEND_NAMESPACE( QTimer );
 
    /**
     *  @short Widget for starting cda-hbook-writer on the local machine
@@ -84,6 +85,10 @@ namespace simple_daq {
       /// Signal sending the event receiver address of this application
       void receiverRunning( bool, const QString& );
 
+   public slots:
+      /// Set the address of a statistics receiver
+      void setStatServerAddress( bool status, const QString& address );
+
    private slots:
       /// Internal function starting and stopping cda-hbook-writer
       void startApp( bool start );
@@ -100,6 +105,8 @@ namespace simple_daq {
       QString m_configFileName;   ///< Name of the configuration file
       QString m_msgServerAddress; ///< Address of the message server(s)
       QString m_eventAddress;     ///< Address of cda-hbook-writer
+      /// Address(es) of the statistics server(s)
+      std::set< QString > m_statServerAddresses;
       msg::Level m_level;         ///< Output level of cda-hbook-writer
 
       mutable daq::AppRunner m_runner; ///< The object starting cda-hbook-writer

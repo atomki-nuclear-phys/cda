@@ -24,7 +24,6 @@ namespace simple_daq {
 
    HBookWriterRunner::HBookWriterRunner( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        m_msgServerAddress( "127.0.0.1:50000" ),
         m_runner(),
         m_logger( "sd::HBookWriterRunner" ) {
 
@@ -162,6 +161,20 @@ namespace simple_daq {
       return;
    }
 
+   /**
+    * @param status Selects whether the address should be added or removed
+    * @param address The statistics server address to be used by the application
+    */
+   void HBookWriterRunner::setStatServerAddress( bool status, const QString& address ) {
+
+      if( status ) {
+         m_statServerAddresses.insert( address );
+      } else {
+         m_statServerAddresses.erase( address );
+      }
+      return;
+   }
+
    void HBookWriterRunner::startApp( bool start ) {
 
       if( start ) {
@@ -183,6 +196,18 @@ namespace simple_daq {
          options += " -e " + m_eventAddress;
          options += " -o " + m_fileNameEdit->text();
          options += " -u " + QString::number( m_updateFrequency->value() );
+
+         //
+         // Collect where the application should send statistics information to:
+         //
+         if( m_statServerAddresses.size() ) {
+            options += " -s ";
+            std::set< QString >::const_iterator itr = m_statServerAddresses.begin();
+            std::set< QString >::const_iterator end = m_statServerAddresses.end();
+            for( ; itr != end; ++itr ) {
+               options += ( *itr ) + " ";
+            }
+         }
 
          m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options )
                   << msg::endmsg;
@@ -248,7 +273,7 @@ namespace simple_daq {
          }
 
          emit running( false );
-         emit receiverRunning( true, m_eventAddress );
+         emit receiverRunning( false, m_eventAddress );
          m_starterButton->setText( tr( "Start hbook writer" ) );
          m_starterButton->setIcon( QIcon::fromTheme( "media-playback-start" ) );
 
