@@ -246,7 +246,7 @@ namespace moni {
       // Draw the white background:
       painter.setPen( Qt::SolidLine );
       painter.setBrush( Qt::white );
-      painter.drawRect( QRect( 0, 0, width(), height() ) );
+      painter.drawRect( QRect( 0, 0, width() - 1, height() - 1 ) );
 
       // Draw the rectangle of the histogram:
       painter.drawRect( QRect( Y_AXIS_SPACING, 20, width() - ( Y_AXIS_SPACING + 20 ),
@@ -585,17 +585,17 @@ namespace moni {
 
       // Return right away if the widget is not large enough to hold the statistics
       // information:
-      if( ( width() < 400 ) || ( height() < 300 ) ) {
+      if( ( width() < 400 ) || ( height() < 150 ) ) {
          return;
       }
 
       // Draw the frame of the statistics info:
       painter.setPen( Qt::SolidLine );
       painter.setBrush( Qt::white );
-      painter.drawRect( QRect( width() - 170, 20, 150, 80 ) );
+      painter.drawRect( QRect( width() - 170, 20, 150, 60 ) );
 
       // Draw the statistics as simple text:
-      painter.drawText( QRect( width() - 160, 25, 130, 70 ),
+      painter.drawText( QRect( width() - 160, 20, 130, 60 ),
                         Qt::AlignLeft | Qt::AlignVCenter,
                         tr( "Entries: %1\n"
                             "Underflows: %2\n"

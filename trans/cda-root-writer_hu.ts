@@ -6,45 +6,47 @@
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="123"/>
         <source>Couldn&apos;t load the translations!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem lehetett beolvasni a fordításokat!</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="144"/>
         <source>Didn&apos;t recognise verbosity level setting
 Terminating...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem ismertem fel a kimeneti üzenet szintet
+Leállítás...</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="156"/>
         <source>Successfully loaded all available devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Sikeresen betöltöttem minden elérhetö fordítást</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="161"/>
         <source>There was an error loading the devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt az eszközök betöltése közben</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="183"/>
         <source>Couldn&apos;t read configuration from address: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem lehetett beolvasni a konfigurációt a(z) %1 címröl</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="195"/>
         <source>Couldn&apos;t process configuration coming from address: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem lehetett feldolgozni a(z) %1 címröl érkezö konfigurációt</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="202"/>
         <location filename="../apps/cda-root-writer/main.cxx" line="264"/>
         <source>Read the configuration from: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfiguráció beolvasva a(z) %1 címröl</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="216"/>
         <source>The specified configuration file (&quot;%1&quot;)
 could not be opened!</source>
-        <translation type="unfinished"></translation>
+        <translation>A megadott konfigurációs fájlt (&quot;%1&quot;)
+nem lehetett megnyitni!</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="233"/>
@@ -52,23 +54,27 @@ could not be opened!</source>
   Error message: %2
   Error line   : %3
   Error column : %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba &quot;%1&quot; feldolgozásával
+  Hiba üzenet: %2
+  Hiba sor   : %3
+  Hiba oszlop: %4</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="244"/>
         <source>Successfully parsed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 sikeresen feldolgozva</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="257"/>
         <source>Failed to read configuration file!
 See previous messages for more information...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem lehetett beolvasni a konfigurációs fájlt!
+Lásd a korábbi üzeneteket a részletekért...</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="311"/>
         <source>ROOT writing running...</source>
-        <translation type="unfinished"></translation>
+        <translation>A ROOT írás fut...</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="332"/>

@@ -25,6 +25,9 @@ namespace dt5740 {
       : dev::QtHist( parent, flags ),
         m_logger( "dt5740::QtHist" ) {
 
+      // Declare a minimum size for this widget:
+      setMinimumSize( 220, 450 );
+
       // Reset all the object pointers as a start:
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;

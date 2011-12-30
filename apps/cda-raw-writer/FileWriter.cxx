@@ -61,9 +61,8 @@ namespace raw {
       // Run the thread:
       int retval = 0;
       if( ( retval = exec() ) ) {
-         m_logger << msg::FATAL
-                  << tr( "Thread exited with return code: %1" ).arg( retval )
-                  << msg::endmsg;
+         REPORT_FATAL( tr( "Thread exited with return code: %1" )
+                       .arg( retval ) );
       }
 
       return;
@@ -81,9 +80,7 @@ namespace raw {
 
          // Write this event to the file using the crate:
          if( ! m_crate.writeEvent( event ) ) {
-            m_logger << msg::FATAL
-                     << tr( "There was a problem writing an event" )
-                     << msg::endmsg;
+            REPORT_FATAL( tr( "There was a problem writing an event" ) );
             exit( 1 );
          }
 

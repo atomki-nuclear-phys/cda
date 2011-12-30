@@ -131,12 +131,12 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
     <message>
         <location filename="../apps/cda-hbook-writer/Crate.cxx" line="79"/>
         <source>Failed to assign fragment with module ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A %1 modul azonosítóval rendelkezö fragmentumot nem lehetett eszközköz rendelni</translation>
     </message>
     <message>
         <location filename="../apps/cda-hbook-writer/Crate.cxx" line="87"/>
         <source>There was a problem writing the data from device with ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt a(z) %1 azonosítóval rendelkezö eszköz adatainak kiírásakor</translation>
     </message>
     <message>
         <source>Failed to assign fragment with module number: %1</source>

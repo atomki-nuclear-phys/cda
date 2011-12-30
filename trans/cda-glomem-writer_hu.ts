@@ -107,32 +107,32 @@ Lásd a korábbi üzeneteket további információért...</translation>
     <message>
         <location filename="../apps/cda-glomem-writer/Crate.cxx" line="26"/>
         <source>Object constructed</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektum létrehozva</translation>
     </message>
     <message>
         <location filename="../apps/cda-glomem-writer/Crate.cxx" line="34"/>
         <source>Object destructed</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektum törölve</translation>
     </message>
     <message>
         <location filename="../apps/cda-glomem-writer/Crate.cxx" line="50"/>
         <source>Initializing histograms in global memory</source>
-        <translation type="unfinished"></translation>
+        <translation>A hisztogramok elökészítése a globális memóriában</translation>
     </message>
     <message>
         <location filename="../apps/cda-glomem-writer/Crate.cxx" line="68"/>
         <source>There was a problem initializing one of the devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt az egyik eszköz elökészítése közben</translation>
     </message>
     <message>
         <location filename="../apps/cda-glomem-writer/Crate.cxx" line="108"/>
         <source>Failed to assign fragment with module ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A %1 modul azonosítóval rendelkezö fragmentumot nem lehetett eszközhöz rendelni</translation>
     </message>
     <message>
         <location filename="../apps/cda-glomem-writer/Crate.cxx" line="116"/>
         <source>There was a problem displaying the data from device with ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történz a(z) %1 azonosítóval rendelkezö eszköz adatainak megjelenítésével</translation>
     </message>
 </context>
 <context>

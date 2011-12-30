@@ -8,10 +8,12 @@
 #   include "cdacore/event/Fragment.h"
 #   include "cdacore/common/errorcheck.h"
 #   include "cdacore/common/Sleep.h"
+#   include "cdacore/caen/StopAcquisition.h"
 #else
 #   include "event/Fragment.h"
 #   include "common/errorcheck.h"
 #   include "common/Sleep.h"
+#   include "caen/StopAcquisition.h"
 #endif
 
 // Local include(s):
@@ -166,6 +168,13 @@ namespace dt5740 {
             // If there are events available, exit the loop:
             if( m_numEvents ) {
                break;
+            }
+            // If the acquisition is to be stopped, return an empty
+            // fragment:
+            if( g_stopAcquisition ) {
+               REPORT_VERBOSE( tr( "The acquisition is to be stopped. Returning "
+                                   "empty event fragment." ) );
+               return result;
             }
             // If not, then wait a bit and then try again:
             common::SleepMin();

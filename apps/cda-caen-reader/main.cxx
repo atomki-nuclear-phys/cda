@@ -25,6 +25,7 @@
 #   include "cdacore/common/Address.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/Sender.h"
+#   include "cdacore/caen/StopAcquisition.h"
 #   include "cdadaq/stat/Sender.h"
 #   include "cdadaq/config/ConfReader.h"
 #else
@@ -36,6 +37,7 @@
 #   include "common/Address.h"
 #   include "event/Event.h"
 #   include "event/Sender.h"
+#   include "caen/StopAcquisition.h"
 #   include "stat/Sender.h"
 #   include "config/ConfReader.h"
 #endif
@@ -52,7 +54,6 @@ void prepareShutDown( int );
 // Global variable(s):
 static msg::Logger g_logger( "cda-caen-reader" );
 static caen_reader::Crate* g_crate = 0;
-static bool g_shouldStop = false;
 
 /// Description for the executable
 static const char* description =
@@ -345,6 +346,11 @@ int main( int argc, char* argv[] ) {
 
       // Read and send an event:
       const ev::Event event = g_crate->readEvent();
+
+      // Exit data acquisition is there was an interrupt:
+      if( g_stopAcquisition ) break;
+
+      // Send the event to the receivers:
       sigprocmask( SIG_BLOCK, &blockedSignals, NULL );
       if( ! ev_sender.send( event ) ) {
          g_logger << msg::FATAL
@@ -361,9 +367,6 @@ int main( int argc, char* argv[] ) {
       if( ! ( g_evcount % 10 ) ) {
          stat_sender.update( cdastat::Statistics( g_evcount, statSource ) );
       }
-
-      // Exit data acquisition is there was an interrupt:
-      if( g_shouldStop ) break;
    }
 
    // Shut down cleanly:
@@ -372,6 +375,10 @@ int main( int argc, char* argv[] ) {
    return 0;
 }
 
+/**
+ * This function is used to clean up after the application, once the user
+ * sends an interrupt to it.
+ */
 void shutDown( int ) {
 
    g_logger << msg::DEBUG
@@ -419,9 +426,13 @@ void shutDown( int ) {
    return;
 }
 
+/**
+ * Modifies the global variable <code>g_stopAcquisition</code> to tell all
+ * parts of this application that the application should stop as soon as
+ * possible.
+ */
 void prepareShutDown( int ) {
 
-   g_shouldStop = true;
-
+   g_stopAcquisition = true;
    return;
 }
