@@ -194,15 +194,15 @@ namespace moni {
       }; // class AxisBinning
 
       /// Get the bin representing this value
-      size_t getBin( double value ) const;
+      virtual size_t getBin( double value ) const;
       /// Draw the X axis
-      void drawXAxis( QPainter& painter ) const;
+      virtual void drawXAxis( QPainter& painter ) const;
       /// Draw the Y axis
-      void drawYAxis( QPainter& painter ) const;
+      virtual void drawYAxis( QPainter& painter ) const;
       /// Draw the histogram itself
-      void drawHist( QPainter& painter ) const;
+      virtual void drawHist( QPainter& painter ) const;
       /// Draw some statistics on top of the histogram
-      void drawStat( QPainter& painter ) const;
+      virtual void drawStat( QPainter& painter ) const;
       /// Function determining the visual binning for a linear axis
       AxisBinning getLinearAxisBinning( double low, double up,
                                         double alength, int tdist ) const;

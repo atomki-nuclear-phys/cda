@@ -70,7 +70,8 @@ int main( int argc, char* argv[] ) {
    //
    QtMonitoringWindow window;
    window.show();
-   splash.showMessage( "Qt DAQ Monitoring Ready",
+   splash.showMessage( qApp->translate( "cda-qt-monitoring",
+                                        "Qt DAQ Monitoring Ready" ),
                        Qt::AlignHCenter | Qt::AlignBottom,
                        Qt::white );
 

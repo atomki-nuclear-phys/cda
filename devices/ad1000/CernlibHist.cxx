@@ -1,15 +1,16 @@
 // $Id$
 
-// System include(s):
-#include <cstdio>
-
 // Qt include(s):
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#   include "cdacore/cernlib/HistMgr.h"
 #   include "cdacore/event/Fragment.h"
 #else
+#   include "common/errorcheck.h"
+#   include "cernlib/HistMgr.h"
 #   include "event/Fragment.h"
 #endif
 
@@ -25,24 +26,19 @@ namespace ad1000 {
 
    bool CernlibHist::initialize( cernlib::HistMgr& hmgr ) {
 
-      m_logger << msg::DEBUG << tr( "Initialising histogram(s)" ) << msg::endmsg;
-
-      // Create a fancy name for the histogram:
-      char name[ 80 ];
-      sprintf( name, "%s (%s slot %i)",
-               m_channel.getName().toLatin1().constData(),
-               deviceName().toLatin1().constData(), getID() );
+      m_logger << msg::DEBUG
+               << tr( "Initialising histogram(s)" )
+               << msg::endmsg;
 
       // Book the histogram and remember its ID:
-      m_histNumber = hmgr.book_1d( name,
+      m_histNumber = hmgr.book_1d( tr( "%1 (%2 slot %3)" ).arg( m_channel.getName() )
+                                   .arg( deviceName() ).arg( getID() ).toLatin1().constData(),
                                    m_channel.getNumberOfChannels(),
                                    m_channel.getLowerBound(),
                                    m_channel.getUpperBound() );
 
-      m_logger << msg::VERBOSE
-               << tr( "Created histogram %1 with name: \"%2\"" )
-         .arg( m_histNumber ).arg( name )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Created histogram %1 with name: \"%2\"" )
+                      .arg( m_histNumber ).arg( m_channel.getName() ) );
 
       return true;
    }
@@ -50,20 +46,22 @@ namespace ad1000 {
    bool CernlibHist::displayEvent( const ev::Fragment& fragment,
                                    const cernlib::HistMgr& hmgr ) const {
 
+      // Access the data words:
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 
       // Sanity check:
       if( dataWords.size() != 1 ) {
-         m_logger << msg::ERROR << "Received " << dataWords.size() << " data words. "
-                  << "Was supposed to receive 1." << msg::endmsg;
+         REPORT_ERROR( tr( "Received %1 data words. "
+                           "Was supposed to receive 1." )
+                       .arg( dataWords.size() ) );
          return false;
       }
 
       // Decode the data word:
-      unsigned int data = ( dataWords.front() & 0xffffff );
+      const unsigned int data = ( dataWords.front() & 0xffffff );
 
       // Fill the histogram:
-      hmgr.fill_1d( m_histNumber, data, 1. );
+      hmgr.fill_1d( m_histNumber, ( double ) data, 1.0 );
 
       return true;
    }

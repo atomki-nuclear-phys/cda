@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "Device.h"
@@ -29,8 +35,7 @@ namespace ad1000 {
 
    bool Device::readConfig( QIODevice* dev ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from binary input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
@@ -40,23 +45,19 @@ namespace ad1000 {
       input >> m_slot;
       input >> m_generateLam;
 
-      m_logger << msg::VERBOSE << " - Slot        : " << m_slot << std::endl
-               << " - GenerateLAM : " << m_generateLam << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Slot        : %1\n"
+                          " - GenerateLAM : %2" )
+                      .arg( m_slot ).arg( m_generateLam ) );
 
-      // Now read the properties of the channel class:
-      if( ! m_channel.readConfig( dev ) ) {
-         m_logger << msg::ERROR << "The configuration of the channel couldn't be "
-                  << "read!" << msg::endmsg;
-         return false;
-      }
+      // Now read the properties of the one channel:
+      CHECK( m_channel.readConfig( dev ) );
 
       return true;
    }
 
    bool Device::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to binary output"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       // Write the properties of this class:
       QDataStream output( dev );
@@ -65,47 +66,28 @@ namespace ad1000 {
       output << m_generateLam;
 
       // Write the properties of the channel:
-      if( ! m_channel.writeConfig( dev ) ) {
-         m_logger << msg::ERROR << "A problem happened while writing out the "
-                  << "channel configuration" << msg::endmsg;
-         return false;
-      }
+      CHECK( m_channel.writeConfig( dev ) );
 
       return true;
    }
 
    bool Device::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from XML input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
       clear();
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
 
       bool ok;
 
       m_slot = element.attribute( "Slot", "0" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading the "
-                  << "\"Slot\" property!" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_generateLam = element.attribute( "GenerateLAM", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading the "
-                  << "\"generate LAM\" property!" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
-      m_logger << msg::VERBOSE << " - Slot       : " << m_slot << std::endl
-               << " - GenerateLAM: " << m_generateLam << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Slot        : %1\n"
+                          " - GenerateLAM : %2" )
+                      .arg( m_slot ).arg( m_generateLam ) );
 
       bool channelFound = false;
       for( int i = 0; i < element.childNodes().size(); ++i ) {
@@ -117,34 +99,30 @@ namespace ad1000 {
 
          // Sanity check:
          if( channelFound ) {
-            m_logger << msg::WARNING << "Multiple channel configurations detected. "
-                     << "Will use the first one!" << msg::endmsg;
+            m_logger << msg::WARNING
+                     << tr( "Multiple channel configurations detected. "
+                            "Will use the first one!" )
+                     << msg::endmsg;
             continue;
          }
 
+         // Another sanity check:
+         CHECK( element.childNodes().at( i ).isElement() );
+
          // Now read the configuration of the channel:
-         if( ! m_channel.readConfig( element.childNodes().at( i ).toElement() ) ) {
-            m_logger << msg::ERROR << "The configuration of the channel couldn't be "
-                     << "read!" << msg::endmsg;
-            return false;
-         }
+         CHECK( m_channel.readConfig( element.childNodes().at( i ).toElement() ) );
          channelFound = true; // Note that we managed to read the channel configuration
       }
+
+      // Check whether the channel's configuration was found:
+      CHECK( channelFound );
 
       return true;
    }
 
    bool Device::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to XML output"
-               << msg::endmsg;
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
+      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       // Write the properties of the device class:
       element.setAttribute( "Slot", m_slot );
@@ -153,11 +131,7 @@ namespace ad1000 {
       // Create a new node for the configuration of the channel:
       QDomElement ch_element =
          element.ownerDocument().createElement( "Channel" );
-      if( ! m_channel.writeConfig( ch_element ) ) {
-         m_logger << msg::ERROR << "A problem happened while writing out the "
-                  << "channel configuration" << msg::endmsg;
-         return false;
-      }
+      CHECK( m_channel.writeConfig( ch_element ) );
       element.appendChild( ch_element );
 
       return true;

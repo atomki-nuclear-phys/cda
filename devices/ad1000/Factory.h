@@ -9,10 +9,8 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Factory.h"
-#   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Factory.h"
-#   include "msg/Logger.h"
 #endif
 
 // There is no bloody way to tell qmake to add a -F... flag when running
@@ -27,7 +25,7 @@
  *         This namespace holds all the classes that handle the AD1000
  *         CAMAC ADC device.
  *
- * @author Attila Krasznahorkay Jr.
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
@@ -48,7 +46,7 @@ namespace ad1000 {
     *         This factory is used when loading the AD1000 plugin to access
     *         all the classes provided by the plugin.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

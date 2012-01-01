@@ -89,4 +89,12 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>cda-stat-server</name>
+    <message>
+        <location filename="../apps/cda-stat-server/main.cxx" line="66"/>
+        <source>Statistics Server Ready</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

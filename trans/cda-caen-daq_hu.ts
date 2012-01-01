@@ -136,5 +136,10 @@ Terminating...</source>
         <translation>Nem ismertem fel a verbozitási beállítást
 Leállás...</translation>
     </message>
+    <message>
+        <location filename="../apps/cda-caen-daq/main.cxx" line="134"/>
+        <source>CAEN DAQ Ready</source>
+        <translation>A CAEN DAQ készen áll</translation>
+    </message>
 </context>
 </TS>

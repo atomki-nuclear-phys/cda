@@ -9,6 +9,7 @@
 #include "Readout.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
+#include "RootDisk.h"
 
 namespace ad1000 {
 
@@ -19,7 +20,7 @@ namespace ad1000 {
 
    QString Factory::longName() const {
 
-      return "Atomki AD1000 ADC";
+      return tr( "Atomki AD1000 ADC" );
    }
 
    void* Factory::createDevice( const std::type_info& ti ) const {
@@ -39,6 +40,10 @@ namespace ad1000 {
       } else if( ti == typeid( dev::CernlibDisk ) ) {
 
          return dynamic_cast< dev::CernlibDisk* >( new CernlibDisk() );
+
+      } else if( ti == typeid( dev::RootDisk ) ) {
+
+         return dynamic_cast< dev::RootDisk* >( new RootDisk() );
 
       }
 

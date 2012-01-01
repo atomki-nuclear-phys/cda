@@ -8,6 +8,7 @@
 #include "Readout.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
+#include "RootDisk.h"
 
 namespace ad2249a {
 
@@ -18,7 +19,7 @@ namespace ad2249a {
 
    QString Factory::longName() const {
 
-      return "LeCroy 2249A ADC";
+      return tr( "LeCroy 2249A ADC" );
    }
 
    void* Factory::createDevice( const std::type_info& ti ) const {
@@ -38,6 +39,10 @@ namespace ad2249a {
       } else if( ti == typeid( dev::CernlibDisk ) ) {
 
          return dynamic_cast< dev::CernlibDisk* >( new CernlibDisk() );
+
+      } else if( ti == typeid( dev::RootDisk ) ) {
+
+         return dynamic_cast< dev::RootDisk* >( new RootDisk() );
 
       }
 

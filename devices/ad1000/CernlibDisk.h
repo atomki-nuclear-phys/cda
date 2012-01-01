@@ -4,17 +4,15 @@
 #define CDA_DEVICES_AD1000_CERNLIBDISK_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CernlibDisk.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/cernlib/NTupleMgr.h"
 #else
 #   include "device/CernlibDisk.h"
 #   include "msg/Logger.h"
-#   include "cernlib/NTupleMgr.h"
 #endif
 
 // Local include(s):
@@ -28,13 +26,16 @@ namespace ad1000 {
     *         This class can be used to write the data read out of an AD1000
     *         ADC into a CERNLIB ntuple for further analysis.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
    class CernlibDisk : public virtual dev::CernlibDisk,
                        public virtual Device {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( ad1000::CernlibDisk )
 
    public:
       /// Constructor

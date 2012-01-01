@@ -4,7 +4,7 @@
 #define CDA_DEVICES_AD2249A_DEVICE_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -27,12 +27,15 @@ namespace ad2249a {
     *         and takes care of reading and writing this configuration
     *         in all the necessary formats.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
    class Device : virtual public dev::Device {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( ad2249a::Device )
 
    public:
       /// Constructor

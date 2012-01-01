@@ -26,7 +26,7 @@
  *         This namespace holds all the classes that handle the a AD2249A
  *         CAMAC ADC device.
  *
- * @author Attila Krasznahorkay Jr.
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
@@ -47,7 +47,7 @@ namespace ad2249a {
     *         This factory is used when loading the AD2249A plugin to access
     *         all the classes provided by the plugin.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

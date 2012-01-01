@@ -54,6 +54,8 @@ namespace dt5740 {
       /// Re-implemented function, used to draw the histogram
       virtual void paintEvent( QPaintEvent* event );
 
+      /// Draw some statistics on top of the histogram
+      virtual void drawStat( QPainter& painter ) const;
       /// Get the minimum and maximum for the Y axis
       virtual std::pair< double, double > getYAxisLimits() const;
 

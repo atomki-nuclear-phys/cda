@@ -68,7 +68,7 @@ int main( int argc, char* argv[] ) {
    msg::Sender::addAddress( Address( Const::MSG_SERVER_ADDRESS ) );
 
    // Logger object used to print messages directly from this function:
-   msg::Logger logger( "cda-simple-daq" );
+   msg::Logger logger( "cda-caen-daq" );
 
    //
    // Create a splash screen:
@@ -131,7 +131,8 @@ int main( int argc, char* argv[] ) {
    //
    CaenDAQWindow window( ( const char* ) config, lvl );
    window.show();
-   splash.showMessage( "CAEN DAQ Ready",
+   splash.showMessage( qApp->translate( "cda-caen-daq",
+                                        "CAEN DAQ Ready" ),
                        Qt::AlignHCenter | Qt::AlignBottom,
                        Qt::white );
 

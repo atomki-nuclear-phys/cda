@@ -72,7 +72,8 @@ int main( int argc, char* argv[] ) {
    //
    ConfigEditorWindow editor;
    editor.show();
-   splash.showMessage( "Configuration Editor Ready",
+   splash.showMessage( qApp->translate( "cda-config-editor",
+                                        "Configuration Editor Ready" ),
                        Qt::AlignHCenter | Qt::AlignBottom,
                        Qt::white );
 

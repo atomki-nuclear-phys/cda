@@ -9,8 +9,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CamacGui.h"
+#   include "cdacore/msg/Logger.h"
 #else
 #   include "device/CamacGui.h"
+#   include "msg/Logger.h"
 #endif
 
 // Local include(s):
@@ -35,7 +37,7 @@ namespace ad1000 {
     *         This widget is used to change the settings of an Atomki
     *         AD1000 ADC.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
@@ -86,6 +88,8 @@ namespace ad1000 {
       ChannelGui* m_gchannel; ///< The graphical channel representation
 
       QCheckBox*  m_generateLamEdit; ///< Widget for changing the LAM setting
+
+      mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Gui
 

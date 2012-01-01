@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "Device.h"
@@ -38,8 +44,7 @@ namespace ad2249a {
 
    bool Device::readConfig( QIODevice* dev ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from binary input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
@@ -50,31 +55,35 @@ namespace ad2249a {
       quint32 number_of_channels;
       input >> number_of_channels;
 
-      m_logger << msg::VERBOSE << " - Slot        : " << m_slot << std::endl
-               << " - GenerateLAM : " << m_generateLam << std::endl
-               << " - Subaddresses: " << number_of_channels
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Slot        : %1\n"
+                          " - GenerateLAM : %2\n"
+                          " - Subaddresses: %3" )
+                      .arg( m_slot ).arg( m_generateLam )
+                      .arg( number_of_channels ) );
 
       for( quint32 i = 0; i < number_of_channels; ++i ) {
          ChannelConfig* channel = new ChannelConfig();
          if( ! channel->readConfig( dev ) ) {
-            m_logger << msg::ERROR << "The configuration of a channel couldn't be "
-                     << "read!" << msg::endmsg;
+            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
+                              "read!" ) );
             delete channel;
             return false;
          }
          if( ( channel->getSubaddress() >= 0 ) &&
              ( channel->getSubaddress() < NUMBER_OF_SUBADDRESSES ) ) {
             if( m_channels[ channel->getSubaddress() ] ) {
-               m_logger << msg::WARNING << "Redefining channel number: "
-                        << channel->getSubaddress() << msg::endmsg;
+               m_logger << msg::WARNING
+                        << tr( "Redefining channel number: %1" )
+                  .arg( channel->getSubaddress() )
+                        << msg::endmsg;
                delete m_channels[ channel->getSubaddress() ];
             }
             m_channels[ channel->getSubaddress() ] = channel;
          } else {
-            m_logger << msg::ERROR << "There was a problem reading the configuration "
-                     << "of one channel" << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem reading the configuration "
+                              "of one channel" ) );
             delete channel;
+            return false;
          }
       }
 
@@ -83,8 +92,7 @@ namespace ad2249a {
 
    bool Device::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to binary output"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
@@ -103,11 +111,7 @@ namespace ad2249a {
       // Write the channel configurations:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-            if( ! m_channels[ i ]->writeConfig( dev ) ) {
-               m_logger << msg::ERROR << "A problem happened while writing out a "
-                        << "channel configuration" << msg::endmsg;
-               return false;
-            }
+            CHECK( m_channels[ i ]->writeConfig( dev ) );
          }
       }
 
@@ -116,36 +120,21 @@ namespace ad2249a {
 
    bool Device::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from XML input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
       clear();
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
 
       bool ok;
 
       m_slot = element.attribute( "Slot", "0" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading the "
-                  << "\"Slot\" property!" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_generateLam = element.attribute( "GenerateLAM", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading the "
-                  << "\"generate LAM\" property!" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
-      m_logger << msg::VERBOSE << " - Slot       : " << m_slot << std::endl
-               << " - GenerateLAM: " << m_generateLam << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Slot       : %1\n"
+                          " - GenerateLAM: %2" )
+                      .arg( m_slot ).arg( m_generateLam ) );
 
       for( int i = 0; i < element.childNodes().size(); ++i ) {
 
@@ -154,25 +143,31 @@ namespace ad2249a {
             continue;
          }
 
+         // Read in this channel's configuration:
          ChannelConfig* channel = new ChannelConfig();
          if( ! channel->readConfig( element.childNodes().at( i ).toElement() ) ) {
-            m_logger << msg::ERROR << "The configuration of a channel couldn't be "
-                     << "read!" << msg::endmsg;
+            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
+                              "read!" ) );
             delete channel;
             return false;
          }
+
+         // Store this object:
          if( ( channel->getSubaddress() >= 0 ) &&
              ( channel->getSubaddress() < NUMBER_OF_SUBADDRESSES ) ) {
             if( m_channels[ channel->getSubaddress() ] ) {
-               m_logger << msg::WARNING << "Redefining channel number: "
-                        << channel->getSubaddress() << msg::endmsg;
+               m_logger << msg::WARNING
+                        << tr( "Redefining channel number: %1" )
+                  .arg( channel->getSubaddress() )
+                        << msg::endmsg;
                delete m_channels[ channel->getSubaddress() ];
             }
             m_channels[ channel->getSubaddress() ] = channel;
          } else {
-            m_logger << msg::ERROR << "There was a problem reading the configuration "
-                     << "of one channel" << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem reading the configuration "
+                              "of one channel" ) );
             delete channel;
+            return false;
          }
       }
 
@@ -181,15 +176,7 @@ namespace ad2249a {
 
    bool Device::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to XML output"
-               << msg::endmsg;
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
+      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       element.setAttribute( "Slot", m_slot );
       element.setAttribute( "GenerateLAM", m_generateLam );
@@ -199,16 +186,10 @@ namespace ad2249a {
       //
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-
             QDomElement ch_element =
                element.ownerDocument().createElement( "Channel" );
-            if( ! m_channels[ i ]->writeConfig( ch_element ) ) {
-               m_logger << msg::ERROR << "A problem happened while writing out a "
-                        << "channel configuration" << msg::endmsg;
-               return false;
-            }
+            CHECK( m_channels[ i ]->writeConfig( ch_element ) );
             element.appendChild( ch_element );
-
          }
       }
 
@@ -218,7 +199,6 @@ namespace ad2249a {
    unsigned int Device::getID() const {
 
       return m_slot;
-
    }
 
    void Device::setID( unsigned int value ) {
@@ -237,7 +217,6 @@ namespace ad2249a {
       }
 
       return;
-
    }
 
 } // namespace ad2249a

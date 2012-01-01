@@ -18,7 +18,6 @@
 
 // Qt include(s):
 #include <QtGui/QApplication>
-#include <QtGui/QFont>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -64,7 +63,8 @@ int main( int argc, char* argv[] ) {
    //
    MsgServerWindow window;
    window.show();
-   splash.showMessage( "Message Server Ready",
+   splash.showMessage( qApp->translate( "cda-msgserver",
+                                        "Message Server Ready" ),
                        Qt::AlignHCenter | Qt::AlignBottom,
                        Qt::white );
 

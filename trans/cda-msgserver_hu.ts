@@ -129,4 +129,12 @@
         <translation>Kimeneti fájl</translation>
     </message>
 </context>
+<context>
+    <name>cda-msgserver</name>
+    <message>
+        <location filename="../apps/cda-msgserver/main.cxx" line="66"/>
+        <source>Message Server Ready</source>
+        <translation>Az üzenet szerver készen áll</translation>
+    </message>
+</context>
 </TS>

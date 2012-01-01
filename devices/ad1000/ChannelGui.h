@@ -29,7 +29,7 @@ namespace ad1000 {
     *         This is a fixed size widget that has a Qt widget for changing
     *         each property of the channel.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

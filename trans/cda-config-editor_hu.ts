@@ -287,4 +287,12 @@ Hiba oszlopa: %3</translation>
         <translation>A kiválasztott fájlt nem lehetett megnyitni írásra. Ellenőrizze a hozzáférési jogokat!</translation>
     </message>
 </context>
+<context>
+    <name>cda-config-editor</name>
+    <message>
+        <location filename="../apps/cda-config-editor/main.cxx" line="75"/>
+        <source>Configuration Editor Ready</source>
+        <translation>A konfiguráció szerkesztő készen áll</translation>
+    </message>
+</context>
 </TS>

@@ -4,7 +4,7 @@
 #define CDA_DEVICES_AD1000_CHANNELCONFIG_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -26,12 +26,15 @@ namespace ad1000 {
     *         The one channel of an AD1000 module has a number of properties.
     *         All these properties are stored in such objects.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
    class ChannelConfig : virtual public dev::Config {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( ad1000::ChannelConfig )
 
       /// Declare the Device class a friend of this class
       friend class ad1000::Device;

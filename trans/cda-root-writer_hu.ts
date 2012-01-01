@@ -81,30 +81,30 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
         <location filename="../apps/cda-root-writer/main.cxx" line="378"/>
         <location filename="../apps/cda-root-writer/main.cxx" line="402"/>
         <source>Failed to initialise ROOT file for data acquisition</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült a ROOT fájlt az adatgyüjtéshez elökészíteni</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="339"/>
         <location filename="../apps/cda-root-writer/main.cxx" line="385"/>
         <location filename="../apps/cda-root-writer/main.cxx" line="409"/>
         <source>Initialised ROOT file for data acquisition</source>
-        <translation type="unfinished"></translation>
+        <translation>A ROOT fájl az adatgyüjtéshez elökészítve</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="353"/>
         <location filename="../apps/cda-root-writer/main.cxx" line="422"/>
         <source>The file writing thread unexpectedly died</source>
-        <translation type="unfinished"></translation>
+        <translation>A fájl író programszál váratlanul leállt</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="457"/>
         <source>Total number of events processed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Feldolgozott események száma: %1</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/main.cxx" line="462"/>
         <source>Terminating application...</source>
-        <translation type="unfinished"></translation>
+        <translation>A program leállítása...</translation>
     </message>
 </context>
 <context>
@@ -112,12 +112,12 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
     <message>
         <location filename="../apps/cda-root-writer/Crate.cxx" line="66"/>
         <source>Failed to assign fragment with module ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 modul azonosítóval rendelkezö fragmentumot nem lehetett eszközköz rendelni</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/Crate.cxx" line="74"/>
         <source>There was a problem writing the data from device with ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt a(z) %1 azonosítóval rendelkezö eszköz adatainak kiírásakor</translation>
     </message>
 </context>
 <context>
@@ -125,17 +125,17 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
     <message>
         <location filename="../apps/cda-root-writer/FileWriter.cxx" line="42"/>
         <source>Stopping thread after processing %1 events</source>
-        <translation type="unfinished"></translation>
+        <translation>Végrehajtási szál leállítása %1 esemény feldolgozása után</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/FileWriter.cxx" line="64"/>
         <source>Thread exited with return code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A végrehajtási szál %1 értékkel tért vissza</translation>
     </message>
     <message>
         <location filename="../apps/cda-root-writer/FileWriter.cxx" line="83"/>
         <source>There was a problem writing an event</source>
-        <translation type="unfinished"></translation>
+        <translation>Probléma történt az egyik esemény kiírásával</translation>
     </message>
 </context>
 </TS>

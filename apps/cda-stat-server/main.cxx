@@ -63,7 +63,8 @@ int main( int argc, char* argv[] ) {
    //
    StatServerWindow window;
    window.show();
-   splash.showMessage( "Statistics Server Ready",
+   splash.showMessage( qApp->translate( "cda-stat-server",
+                                        "Statistics Server Ready" ),
                        Qt::AlignHCenter | Qt::AlignBottom,
                        Qt::white );
 

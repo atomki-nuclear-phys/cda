@@ -35,12 +35,16 @@ namespace ad1000 {
       crate.writeWord( m_slot, 0, 9, 0 );
 
       if( m_generateLam ) {
-         m_logger << msg::DEBUG << "Initialising AD1000 ADC in slot "
-                  << m_slot << " to generate LAM" << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Initialising AD1000 ADC in slot %1 "
+                         "to generate LAM" ).arg( m_slot )
+                  << msg::endmsg;
          crate.writeWord( m_slot, 2, 24, 0 );
       } else {
-         m_logger << msg::DEBUG << "Initialising AD1000 ADC in slot "
-                  << m_slot << " NOT to generate LAM" << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Initialising AD1000 ADC in slot %1 "
+                         "NOT to generate LAM" ).arg( m_slot )
+                  << msg::endmsg;
          crate.writeWord( m_slot, 0, 24, 0 );
       }
 
@@ -55,13 +59,14 @@ namespace ad1000 {
     */
    ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
 
+      // Create the new event fragment:
       ev::Fragment* fragment = new ev::Fragment();
       fragment->setModuleID( m_slot );
 
       // Read the channel data:
       crate.writeWord( m_slot, 0, 16, 0 ); // I think this command initiates the data conversion...
-      uint32_t channel = crate.readWord( m_slot, 0, 0 );
-      uint32_t dword = channel & 0xffffff;
+      const uint32_t channel = crate.readWord( m_slot, 0, 0 );
+      const uint32_t dword = channel & 0xffffff;
       fragment->addDataWord( dword );
 
       return fragment;
@@ -78,7 +83,7 @@ namespace ad1000 {
          crate.writeWord( m_slot, 0, 24, 0 );
       }
 
-      m_logger << msg::VERBOSE << "Cleared module" << msg::endmsg;
+      REPORT_VERBOSE( tr( "Cleared module" ) );
 
       return true;
    }

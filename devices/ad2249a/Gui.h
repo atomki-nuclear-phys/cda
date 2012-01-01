@@ -9,8 +9,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CamacGui.h"
+#   include "cdacore/msg/Logger.h"
 #else
 #   include "device/CamacGui.h"
+#   include "msg/Logger.h"
 #endif
 
 // Local include(s):
@@ -43,7 +45,7 @@ namespace ad2249a {
     *         rules described in the dev::Gui and dev::CrateWidget
     *         classes.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
@@ -101,6 +103,8 @@ namespace ad2249a {
       ChannelGui* m_gchannels[ NUMBER_OF_SUBADDRESSES ];
 
       QCheckBox*  m_generateLamEdit; ///< Widget for changing the LAM setting
+
+      mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Gui
 

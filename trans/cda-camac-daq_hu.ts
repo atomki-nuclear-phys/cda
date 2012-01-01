@@ -120,5 +120,10 @@ Terminating...</source>
         <translation>Nem ismertem fel az üzenet kimeneti szintet
 Leállítás...</translation>
     </message>
+    <message>
+        <location filename="../apps/cda-camac-daq/main.cxx" line="124"/>
+        <source>CAMAC DAQ Ready</source>
+        <translation>A CAMAC DAQ készen áll</translation>
+    </message>
 </context>
 </TS>

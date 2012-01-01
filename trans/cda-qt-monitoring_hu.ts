@@ -205,4 +205,12 @@ Hiba oszlopa: %3</translation>
         <translation>Esemény szerver port</translation>
     </message>
 </context>
+<context>
+    <name>cda-qt-monitoring</name>
+    <message>
+        <location filename="../apps/cda-qt-monitoring/main.cxx" line="73"/>
+        <source>Qt DAQ Monitoring Ready</source>
+        <translation>A Qt DAQ Monitorozás készen áll</translation>
+    </message>
+</context>
 </TS>

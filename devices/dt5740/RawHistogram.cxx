@@ -130,6 +130,34 @@ namespace dt5740 {
       return;
    }
 
+   /**
+    * This function is re-implemented in order not to show any statistics on top
+    * of such "raw histograms". The values would always be zero, so they'd just
+    * be confusing.
+    *
+    * @param painter Dummy painter object, not used by the function
+    */
+   void RawHistogram::drawStat( QPainter& /*painter*/ ) const {
+
+      return;
+   }
+
+   /**
+    * This function is re-implemented in order to take the limits of the transformed
+    * raw distribution into account.
+    *
+    * We store the original raw distribution in the base object. In order for the
+    * histogram not to cut off the parts of the transformed distribution where it
+    * goes outside of the limits of the raw distribution, this re-implemented function
+    * constructs the limits such that both distributions would fit inside of it.
+    *
+    * At the same time, the function determines a scale factor for the transformed
+    * distribution. Since the absolute scale of the transformed distribution is
+    * not important, it is always shown with an amplitude 80% that of the raw
+    * distribution's amplitude.
+    *
+    * @returns The minimum an maximum values that should be shown on the Y axis
+    */
    std::pair< double, double >
    RawHistogram::getYAxisLimits() const {
 

@@ -4,7 +4,7 @@
 #define CDA_DEVICES_AD2249A_CHANNELCONFIG_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -23,12 +23,15 @@ namespace ad2249a {
     *         Each channel of a AD2249A module has a number of properties.
     *         All these properties are stored in such objects.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
    class ChannelConfig : virtual public dev::Config {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( ad2249a::ChannelConfig )
 
    public:
       /// Constructor

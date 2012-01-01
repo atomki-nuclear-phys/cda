@@ -121,7 +121,8 @@ int main( int argc, char* argv[] ) {
    CamacDAQWindow window( ( const char* ) config,
                           v_map.find( verbosity )->second );
    window.show();
-   splash.showMessage( "CAMAC DAQ Ready",
+   splash.showMessage( qApp->translate( "cda-camac-daq",
+                                        "CAMAC DAQ Ready" ),
                        Qt::AlignHCenter | Qt::AlignBottom,
                        Qt::white );
 

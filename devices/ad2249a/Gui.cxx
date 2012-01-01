@@ -9,6 +9,13 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QScrollArea>
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
+
 // Local include(s):
 #include "Gui.h"
 #include "ChannelGui.h"
@@ -35,13 +42,13 @@ namespace ad2249a {
       // Embed the previous widget into a scroll area:
       //
       m_scrollArea = new QScrollArea( this );
-      m_scrollArea->setGeometry( QRect( 0, 10, WIDGET_WIDTH, WIDGET_HEIGHT - 10 ) );
+      m_scrollArea->setGeometry( QRect( 0, 20, WIDGET_WIDTH, WIDGET_HEIGHT - 20 ) );
       m_scrollArea->setWidget( m_scrollWidget );
 
       //
       // Create a label telling us what kind of device this is:
       //
-      m_topLabel = new QLabel( tr( "LeCroy 2249A 12 channel  Analog-to-Digital Converter" ),
+      m_topLabel = new QLabel( tr( "LeCroy 2249A 12 channel Analog-to-Digital Converter" ),
                                m_scrollWidget );
       m_topLabel->setAlignment( Qt::AlignCenter );
       m_topLabel->setGeometry( QRect( 25, 30, 430, 25 ) );
@@ -136,9 +143,7 @@ namespace ad2249a {
     */
    bool Gui::readConfig( QIODevice* dev ) {
 
-      if( ! Device::readConfig( dev ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( dev ) );
       sync();
       return true;
    }
@@ -150,9 +155,7 @@ namespace ad2249a {
     */
    bool Gui::readConfig( const QDomElement& node ) {
 
-      if( ! Device::readConfig( node ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( node ) );
       sync();
       return true;
    }
@@ -185,7 +188,7 @@ namespace ad2249a {
       painter.setPen( Qt::white );
       painter.setBrush( Qt::white );
       painter.drawText( QRect( 0, 0, 20, 15 ), Qt::AlignCenter,
-                        "ADC" );
+                        tr( "ADC" ) );
       painter.drawLine( QLine( 3, 15, 17, 15 ) );
 
       //
@@ -231,7 +234,7 @@ namespace ad2249a {
          painter.setPen( Qt::green );
          painter.setBrush( Qt::green );
          painter.drawText( QRect( 0, 185, 20, 15 ), Qt::AlignCenter,
-                           "LAM" );
+                           tr( "LAM" ) );
       }
 
       return;

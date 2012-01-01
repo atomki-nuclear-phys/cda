@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "ChannelConfig.h"
@@ -26,13 +32,12 @@ namespace ad1000 {
         m_lowerBound( 0. ), m_upperBound( 100. ), m_name( "time" ),
         m_logger( "ad1000::ChannelConfig" ) {
 
-      m_logger << msg::VERBOSE << "Object created" << msg::endmsg;
+      REPORT_VERBOSE( tr( "Object created" ) );
    }
 
    bool ChannelConfig::readConfig( QIODevice* dev ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from binary input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
@@ -50,8 +55,7 @@ namespace ad1000 {
 
    bool ChannelConfig::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to binary output"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
@@ -65,41 +69,23 @@ namespace ad1000 {
 
    bool ChannelConfig::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from XML input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
       clear();
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
 
       bool ok;
 
       m_numberOfChannels = element.attribute( "NumberOfChannels",
                                               "100" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"number of channels\" value" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
-      m_lowerBound = element.attribute( "LowerBound", "0." ).toDouble( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"lower bound\" value" << msg::endmsg;
-         return false;
-      }
+      m_lowerBound = element.attribute( "LowerBound",
+                                        "0." ).toDouble( &ok );
+      CHECK( ok );
 
-      m_upperBound = element.attribute( "UpperBound", "100." ).toDouble( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading an "
-                  << "\"upper bound\" value" << msg::endmsg;
-         return false;
-      }
+      m_upperBound = element.attribute( "UpperBound",
+                                        "100." ).toDouble( &ok );
+      CHECK( ok );
 
       m_name = element.attribute( "Name", "" );
 
@@ -110,15 +96,7 @@ namespace ad1000 {
 
    bool ChannelConfig::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to XML output"
-               << msg::endmsg;
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
+      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       element.setAttribute( "NumberOfChannels", m_numberOfChannels );
       element.setAttribute( "LowerBound", m_lowerBound );
@@ -173,19 +151,19 @@ namespace ad1000 {
    }
 
    /**
-    * @param level The message level in which the channel configuration should
+    * @param level The message level with which the channel configuration should
     *              be printed
     */
    void ChannelConfig::printConfig( msg::Level level ) const {
 
-      m_logger << level << " - Number of channels: "
-               << m_numberOfChannels << std::endl;
-      m_logger << " - Lower bound       : "
-               << m_lowerBound << std::endl;
-      m_logger << " - Upper bound       : "
-               << m_upperBound << std::endl;
-      m_logger << " - Name              : "
-               << m_name << msg::endmsg;
+      m_logger << level
+               << tr( " - Number of channels: %1\n"
+                      " - Lower bound       : %2\n"
+                      " - Upper bound       : %3\n"
+                      " - Name              : %4" )
+         .arg( m_numberOfChannels ).arg( m_lowerBound )
+         .arg( m_upperBound ).arg( m_name )
+               << msg::endmsg;
 
       return;
    }
