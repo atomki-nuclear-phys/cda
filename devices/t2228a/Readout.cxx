@@ -35,12 +35,16 @@ namespace t2228a {
       crate.writeWord( m_slot, 0, 9, 0 );
 
       if( m_generateLam ) {
-         m_logger << msg::DEBUG << "Initialising T2228A TDC in slot "
-                  << m_slot << " to generate LAM" << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Initialising T2228A TDC in slot %1 "
+                         "to generate LAM" ).arg( m_slot )
+                  << msg::endmsg;
          crate.writeWord( m_slot, 0, 26, 0 );
       } else {
-         m_logger << msg::DEBUG << "Initialising T2228A TDC in slot "
-                  << m_slot << " NOT to generate LAM" << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Initialising T2228A TDC in slot %1 "
+                         "NOT to generate LAM" ).arg( m_slot )
+                  << msg::endmsg;
          crate.writeWord( m_slot, 0, 24, 0 );
       }
 
@@ -64,13 +68,15 @@ namespace t2228a {
     */
    ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
 
+      // Create the event fragment:
       ev::Fragment* fragment = new ev::Fragment();
       fragment->setModuleID( m_slot );
 
+      // Read out all the configured channels:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-            uint32_t channel = crate.readWord( m_slot, i, 0 );
-            uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
+            const uint32_t channel = crate.readWord( m_slot, i, 0 );
+            const uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
             fragment->addDataWord( dword );
          }
       }
@@ -84,8 +90,6 @@ namespace t2228a {
       // Clear the module:
       //
       crate.writeWord( m_slot, 0, 10, 0 );
-
-      m_logger << msg::VERBOSE << "Cleared module" << msg::endmsg;
 
       return true;
    }

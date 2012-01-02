@@ -4,50 +4,46 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
+#ifdef Q_WS_DARWIN
 #   include "cdacore/common/errorcheck.h"
+#   include "cdacore/root/NTupleMgr.h"
 #   include "cdacore/event/Fragment.h"
-#   include "cdacore/cernlib/NTupleMgr.h"
 #else
 #   include "common/errorcheck.h"
+#   include "root/NTupleMgr.h"
 #   include "event/Fragment.h"
-#   include "cernlib/NTupleMgr.h"
 #endif
 
 // Local include(s):
-#include "CernlibDisk.h"
+#include "RootDisk.h"
 
 namespace t2228a {
 
-   CernlibDisk::CernlibDisk()
-      : m_logger( "t2228a::CernlibDisk" ) {
+   RootDisk::RootDisk()
+      : m_logger( "t2228a::RootDisk" ) {
 
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         m_ntupleTable[ i ] = 0;
-      }
    }
 
-   bool CernlibDisk::initialize( cernlib::NTupleMgr& nmgr ) {
-
-      m_logger << msg::DEBUG
-               << tr( "Initialising ntuple output" )
-               << msg::endmsg;
+   bool RootDisk::initialize( root::NTupleMgr& nmgr ) {
 
       // Loop over all configured subaddresses:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-            // Book this variable:
-            m_ntupleTable[ i ] = nmgr.addVar( m_channels[ i ]->getName() );
+            CHECK( nmgr.addVar( m_values[ i ], m_channels[ i ]->getName() ) );
          }
       }
 
       return true;
    }
 
-   bool CernlibDisk::writeEvent( const ev::Fragment& fragment,
-                                 cernlib::NTupleMgr& nmgr ) const {
+   bool RootDisk::writeEvent( const ev::Fragment& fragment ) const {
 
-      // Access the data words:
+      // Reset all the ntuple variables:
+      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
+         m_values[ i ] = 0;
+      }
+
+      // The data words in the event fragment:
       const std::vector< uint32_t >& dataWords = fragment.getDataWords();
 
       // Loop over all data words in the event fragment:
@@ -65,9 +61,8 @@ namespace t2228a {
             return false;
          }
 
-         // Fill the subaddress data in the ntuple manager:
-         CHECK( nmgr.setVar( m_ntupleTable[ subaddress ],
-                             ( float ) chdata ) );
+         // Set the variable:
+         m_values[ subaddress ] = chdata;
       }
 
       return true;

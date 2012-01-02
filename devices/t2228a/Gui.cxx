@@ -8,6 +8,13 @@
 #include <QtGui/QLabel>
 #include <QtGui/QCheckBox>
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
+
 // Local include(s):
 #include "Gui.h"
 #include "ChannelGui.h"
@@ -22,7 +29,7 @@ namespace t2228a {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CamacGui( parent, flags ) {
+      : dev::CamacGui( parent, flags ), m_logger( "t2228a::Gui" ) {
 
       //
       // Create a label telling us what kind of device this is:
@@ -120,9 +127,7 @@ namespace t2228a {
     */
    bool Gui::readConfig( QIODevice* dev ) {
 
-      if( ! Device::readConfig( dev ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( dev ) );
       sync();
       return true;
    }
@@ -134,9 +139,7 @@ namespace t2228a {
     */
    bool Gui::readConfig( const QDomElement& node ) {
 
-      if( ! Device::readConfig( node ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( node ) );
       sync();
       return true;
    }
@@ -169,7 +172,7 @@ namespace t2228a {
       painter.setPen( Qt::white );
       painter.setBrush( Qt::white );
       painter.drawText( QRect( 0, 0, 20, 15 ), Qt::AlignCenter,
-                        "TDC" );
+                        tr( "TDC" ) );
       painter.drawLine( QLine( 3, 15, 17, 15 ) );
 
       //
@@ -215,7 +218,7 @@ namespace t2228a {
          painter.setPen( Qt::green );
          painter.setBrush( Qt::green );
          painter.drawText( QRect( 0, 185, 20, 15 ), Qt::AlignCenter,
-                           "LAM" );
+                           tr( "LAM" ) );
       }
 
       return;

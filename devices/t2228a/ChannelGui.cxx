@@ -37,8 +37,8 @@ namespace t2228a {
       //
       // Create the widget enabling/disabling the channel:
       //
-      m_enabledEdit = new QCheckBox( QString::number( m_subaddress ) +
-                                     tr( ". subaddress" ), this );
+      m_enabledEdit = new QCheckBox( tr( "%1. subaddress" ).arg( m_subaddress ),
+                                     this );
       m_enabledEdit->setGeometry( QRect( 0, 0, 110, 25 ) );
       connect( m_enabledEdit, SIGNAL( toggled( bool ) ),
                this, SLOT( enableChangedSlot( bool ) ) );
@@ -102,20 +102,17 @@ namespace t2228a {
       delete m_channelsEdit;
       delete m_lowerBoundEdit;
       delete m_upperBoundEdit;
-
    }
 
    int ChannelGui::getSubaddress() const {
 
       return m_subaddress;
-
    }
 
    void ChannelGui::setSubaddress( int value ) {
 
       m_subaddress = value;
       return;
-
    }
 
    /**
@@ -131,35 +128,30 @@ namespace t2228a {
       m_lowerBoundEdit->setEnabled( on );
       m_upperBoundEdit->setEnabled( on );
       return;
-
    }
 
    void ChannelGui::setName( const QString& text ) {
 
       m_nameEdit->setText( text );
       return;
-
    }
 
    void ChannelGui::setChannels( int channels ) {
 
       m_channelsEdit->setValue( channels );
       return;
-
    }
 
    void ChannelGui::setLowerBound( double value ) {
 
       m_lowerBoundEdit->setValue( value );
       return;
-
    }
 
    void ChannelGui::setUpperBound( double value ) {
 
       m_upperBoundEdit->setValue( value );
       return;
-
    }
 
    /**
@@ -190,35 +182,30 @@ namespace t2228a {
       }
 
       return;
-
    }
 
    void ChannelGui::nameChangedSlot( const QString& text ) {
 
       emit nameChanged( m_subaddress, text );
       return;
-
    }
 
    void ChannelGui::channelsChangedSlot( int channels ) {
 
       emit channelsChanged( m_subaddress, channels );
       return;
-
    }
 
    void ChannelGui::lowerBoundChangedSlot( double value ) {
 
       emit lowerBoundChanged( m_subaddress, value );
       return;
-
    }
 
    void ChannelGui::upperBoundChangedSlot( double value ) {
 
       emit upperBoundChanged( m_subaddress, value );
       return;
-
    }
 
 } // namespace t2228a

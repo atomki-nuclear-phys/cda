@@ -4,17 +4,15 @@
 #define CDA_DEVICES_T2228A_CERNLIBDISK_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CernlibDisk.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/cernlib/NTupleMgr.h"
 #else
 #   include "device/CernlibDisk.h"
 #   include "msg/Logger.h"
-#   include "cernlib/NTupleMgr.h"
 #endif
 
 // Local include(s):
@@ -36,6 +34,9 @@ namespace t2228a {
     */
    class CernlibDisk : public virtual dev::CernlibDisk,
                        public virtual Device {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( t2228a::CernlibDisk )
 
    public:
       /// Constructor

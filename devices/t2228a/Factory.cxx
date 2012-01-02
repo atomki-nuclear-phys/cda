@@ -9,6 +9,7 @@
 #include "Readout.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
+#include "RootDisk.h"
 
 namespace t2228a {
 
@@ -19,7 +20,7 @@ namespace t2228a {
 
    QString Factory::longName() const {
 
-      return "LeCroy 2228A TDC";
+      return tr( "LeCroy 2228A TDC" );
    }
 
    void* Factory::createDevice( const std::type_info& ti ) const {
@@ -39,6 +40,10 @@ namespace t2228a {
       } else if( ti == typeid( dev::CernlibDisk ) ) {
 
          return dynamic_cast< dev::CernlibDisk* >( new CernlibDisk() );
+
+      } else if( ti == typeid( dev::RootDisk ) ) {
+
+         return dynamic_cast< dev::RootDisk* >( new RootDisk() );
 
       }
 

@@ -26,7 +26,7 @@
  *         This namespace holds all the classes that handle the a T2228A
  *         CAMAC TDC device.
  *
- * @author Attila Krasznahorkay Jr.
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
@@ -47,7 +47,7 @@ namespace t2228a {
     *         This factory is used when loading the T2228A plugin to access
     *         all the classes provided by the plugin.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

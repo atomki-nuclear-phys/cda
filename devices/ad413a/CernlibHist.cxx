@@ -76,7 +76,7 @@ namespace ad413a {
          }
 
          // Fill the histogram:
-         hmgr.fill_1d( m_histTable[ subaddress ], data, 1. );
+         hmgr.fill_1d( m_histTable[ subaddress ], ( double ) data, 1. );
       }
 
       return true;

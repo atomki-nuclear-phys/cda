@@ -5,11 +5,9 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/common/errorcheck.h"
 #   include "cdacore/cernlib/HistMgr.h"
 #   include "cdacore/event/Fragment.h"
 #else
-#   include "common/errorcheck.h"
 #   include "cernlib/HistMgr.h"
 #   include "event/Fragment.h"
 #endif

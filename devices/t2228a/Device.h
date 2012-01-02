@@ -4,7 +4,7 @@
 #define CDA_DEVICES_T2228A_DEVICE_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -33,6 +33,9 @@ namespace t2228a {
     * $Date$
     */
    class Device : virtual public dev::Device {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( t2228a::Device )
 
    public:
       /// Constructor

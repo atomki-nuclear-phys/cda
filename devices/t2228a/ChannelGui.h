@@ -27,7 +27,7 @@ namespace t2228a {
     *
     *         @image html t2228a_ChannelGui.png
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

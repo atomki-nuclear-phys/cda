@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "ChannelConfig.h"
@@ -18,7 +24,6 @@ namespace t2228a {
    //
    using QT_PREPEND_NAMESPACE( QIODevice );
    using QT_PREPEND_NAMESPACE( QDataStream );
-   using QT_PREPEND_NAMESPACE( QDomNode );
    using QT_PREPEND_NAMESPACE( QDomElement );
 
    ChannelConfig::ChannelConfig()
@@ -26,14 +31,12 @@ namespace t2228a {
         m_lowerBound( 0. ), m_upperBound( 100. ), m_name( "time" ),
         m_logger( "t2228a::ChannelConfig" ) {
 
-      m_logger << msg::VERBOSE << "Object created" << msg::endmsg;
-
+      REPORT_VERBOSE( tr( "Object created" ) );
    }
 
    bool ChannelConfig::readConfig( QIODevice* dev ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from binary input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
@@ -48,13 +51,11 @@ namespace t2228a {
       printConfig( msg::VERBOSE );
 
       return true;
-
    }
 
    bool ChannelConfig::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to binary output"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
@@ -65,73 +66,39 @@ namespace t2228a {
       output << m_name;
 
       return true;
-
    }
 
    bool ChannelConfig::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE << "Reading configuration from XML input"
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
       clear();
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
 
       bool ok;
 
       m_subaddress = element.attribute( "Subaddress", "" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"subaddress\" value" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_numberOfChannels = element.attribute( "NumberOfChannels",
                                               "100" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"number of channels\" value" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_lowerBound = element.attribute( "LowerBound", "0." ).toDouble( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading a "
-                  << "\"lower bound\" value" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_upperBound = element.attribute( "UpperBound", "100." ).toDouble( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << "There was a problem reading an "
-                  << "\"upper bound\" value" << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_name = element.attribute( "Name", "" );
 
       printConfig( msg::VERBOSE );
 
       return true;
-
    }
 
    bool ChannelConfig::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << "Writing configuration to XML output"
-               << msg::endmsg;
-
-      // The element has to be an element:
-      if( ! element.isElement() ) {
-         m_logger << msg::ERROR << "Node received is not a DomElement"
-                  << msg::endmsg;
-         return false;
-      }
+      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       element.setAttribute( "Subaddress", m_subaddress );
       element.setAttribute( "NumberOfChannels", m_numberOfChannels );
@@ -140,72 +107,61 @@ namespace t2228a {
       element.setAttribute( "Name", m_name );
 
       return true;
-
    }
 
    int ChannelConfig::getSubaddress() const {
 
       return m_subaddress;
-
    }
 
    int ChannelConfig::getNumberOfChannels() const {
 
       return m_numberOfChannels;
-
    }
 
    double ChannelConfig::getLowerBound() const {
 
       return m_lowerBound;
-
    }
 
    double ChannelConfig::getUpperBound() const {
 
       return m_upperBound;
-
    }
 
    const QString& ChannelConfig::getName() const {
 
       return m_name;
-
    }
 
    void ChannelConfig::setSubaddress( int value ) {
 
       m_subaddress = value;
       return;
-
    }
 
    void ChannelConfig::setNumberOfChannels( int value ) {
 
       m_numberOfChannels = value;
       return;
-
    }
 
    void ChannelConfig::setLowerBound( double value ) {
 
       m_lowerBound = value;
       return;
-
    }
 
    void ChannelConfig::setUpperBound( double value ) {
 
       m_upperBound = value;
       return;
-
    }
 
    void ChannelConfig::setName( const QString& value ) {
 
       m_name = value;
       return;
-
    }
 
    /**
@@ -214,19 +170,17 @@ namespace t2228a {
     */
    void ChannelConfig::printConfig( msg::Level level ) const {
 
-      m_logger << level << " - Subaddress        : "
-               << m_subaddress << std::endl;
-      m_logger << " - Number of channels: "
-               << m_numberOfChannels << std::endl;
-      m_logger << " - Lower bound       : "
-               << m_lowerBound << std::endl;
-      m_logger << " - Upper bound       : "
-               << m_upperBound << std::endl;
-      m_logger << " - Name              : "
-               << m_name << msg::endmsg;
+      m_logger << level
+               << tr( " - Subaddress        : %1\n"
+                      " - Number of channels: %2\n"
+                      " - Lower bound       : %3\n"
+                      " - Upper bound       : %4\n"
+                      " - Name              : %5" )
+         .arg( m_subaddress ).arg( m_numberOfChannels )
+         .arg( m_lowerBound ).arg( m_upperBound ).arg( m_name )
+               << msg::endmsg;
 
       return;
-
    }
 
    void ChannelConfig::clear() {
@@ -238,7 +192,6 @@ namespace t2228a {
       m_name = "";
 
       return;
-
    }
 
 } // namespace t2228a
