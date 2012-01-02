@@ -21,7 +21,7 @@ namespace dt5740 {
 
    QString Factory::longName() const {
 
-      return "CAEN DT5740 Desktop Digitizer";
+      return tr( "CAEN DT5740 Desktop Digitizer" );
    }
 
    void* Factory::createDevice( const std::type_info& ti ) const {

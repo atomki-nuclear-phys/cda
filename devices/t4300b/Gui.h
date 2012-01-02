@@ -43,7 +43,7 @@ namespace t4300b {
     *         rules described in the dev::Gui and dev::CrateWidget
     *         classes.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
@@ -101,6 +101,8 @@ namespace t4300b {
       ChannelGui* m_gchannels[ NUMBER_OF_SUBADDRESSES ];
 
       QCheckBox*  m_generateLamEdit; ///< Widget for changing the LAM setting
+
+      mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Gui
 

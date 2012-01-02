@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "GroupConfig.h"
@@ -116,6 +122,7 @@ namespace dt5740 {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
             delete channel;
+            return false;
          }
       }
 
@@ -170,47 +177,23 @@ namespace dt5740 {
       // Read in the group-wide configurations:
       //
       m_groupNumber = node.attribute( "Number", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"group number\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_trigThreshold = node.attribute( "TrigThreshold", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger threshold\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_dcOffset = node.attribute( "DCOffset", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"DC offset\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_trigMask = node.attribute( "TrigMask", "0" ).toUInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger mask\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_trigEnabled = node.attribute( "TrigEnabled", "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger enabled\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_trigOutEnabled = node.attribute( "TrigOutEnabled",
                                          "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"trigger output enabled\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       //
       // Configure the channels:
@@ -273,16 +256,10 @@ namespace dt5740 {
       //
       for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
          if( m_channels[ i ] ) {
-
             QDomElement ch_element =
                node.ownerDocument().createElement( "Channel" );
-            if( ! m_channels[ i ]->writeConfig( ch_element ) ) {
-               REPORT_ERROR( tr( "A problem happened while writing out a "
-                                 "channel configuration" ) );
-               return false;
-            }
+            CHECK( m_channels[ i ]->writeConfig( ch_element ) );
             node.appendChild( ch_element );
-
          }
       }
 
@@ -393,7 +370,8 @@ namespace dt5740 {
          return m_channels[ channel ];
       }
 
-      REPORT_ERROR( tr( "Channel with invalid index (%1) requested" ).arg( channel ) );
+      REPORT_ERROR( tr( "Channel with invalid index (%1) requested" )
+                    .arg( channel ) );
       return 0;
    }
 

@@ -4,7 +4,7 @@
 #define CDA_CORE_DEVICES_T4300B_READOUT_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -28,13 +28,16 @@ namespace t4300b {
     *         out event fragments from it when a LAM signal arrived at
     *         the application.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
    class Readout : virtual public dev::CamacReadout,
                    virtual public Device {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( t4300b::Readout )
 
    public:
       /// Constructor

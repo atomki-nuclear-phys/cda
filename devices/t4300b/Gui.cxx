@@ -9,6 +9,13 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QScrollArea>
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
+
 // Local include(s):
 #include "Gui.h"
 #include "ChannelGui.h"
@@ -23,7 +30,7 @@ namespace t4300b {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CamacGui( parent, flags ) {
+      : dev::CamacGui( parent, flags ), m_logger( "t4300b::Gui" ) {
 
       //
       // Create the widget that will hold all the configuration widgets:
@@ -35,7 +42,7 @@ namespace t4300b {
       // Embed the previous widget into a scroll area:
       //
       m_scrollArea = new QScrollArea( this );
-      m_scrollArea->setGeometry( QRect( 0, 10, WIDGET_WIDTH, WIDGET_HEIGHT - 10 ) );
+      m_scrollArea->setGeometry( QRect( 0, 20, WIDGET_WIDTH, WIDGET_HEIGHT - 20 ) );
       m_scrollArea->setWidget( m_scrollWidget );
 
       //
@@ -136,9 +143,7 @@ namespace t4300b {
     */
    bool Gui::readConfig( QIODevice* dev ) {
 
-      if( ! Device::readConfig( dev ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( dev ) );
       sync();
       return true;
    }
@@ -150,9 +155,7 @@ namespace t4300b {
     */
    bool Gui::readConfig( const QDomElement& node ) {
 
-      if( ! Device::readConfig( node ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( node ) );
       sync();
       return true;
    }
@@ -185,7 +188,7 @@ namespace t4300b {
       painter.setPen( Qt::white );
       painter.setBrush( Qt::white );
       painter.drawText( QRect( 0, 0, 20, 15 ), Qt::AlignCenter,
-                        "QDC" );
+                        tr( "QDC" ) );
       painter.drawLine( QLine( 3, 15, 17, 15 ) );
 
       //
@@ -278,7 +281,7 @@ namespace t4300b {
          painter.setPen( Qt::green );
          painter.setBrush( Qt::green );
          painter.drawText( QRect( 0, 185, 20, 15 ), Qt::AlignCenter,
-                           "LAM" );
+                           tr( "LAM" ) );
       }
 
       return;

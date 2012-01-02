@@ -4,16 +4,13 @@
 #define CDA_DEVICES_T4300B_CERNLIBHIST_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/cernlib/HistMgr.h"
 #   include "cdacore/device/CernlibHist.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "cernlib/HistMgr.h"
 #   include "device/CernlibHist.h"
 #   include "msg/Logger.h"
 #endif
@@ -31,7 +28,7 @@ namespace t4300b {
     *         QDC device. It uses CERNLIB for allocating and filling
     *         the histograms.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
@@ -39,7 +36,8 @@ namespace t4300b {
    class CernlibHist : public virtual dev::CernlibHist,
                        public virtual Device {
 
-      Q_DECLARE_TR_FUNCTIONS( t2228a::CernlibHist )
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( t4300b::CernlibHist )
 
    public:
       /// Constructor

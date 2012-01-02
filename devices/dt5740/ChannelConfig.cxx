@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "ChannelConfig.h"
@@ -104,63 +110,35 @@ namespace dt5740 {
 
       m_timeNumberOfChannels = element.attribute( "NumberOfTimeChannels",
                                                   "100" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"number of time channels\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_timeLowerBound = element.attribute( "TimeLowerBound",
                                             "0." ).toDouble( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"time lower bound\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_timeUpperBound = element.attribute( "TimeUpperBound",
                                             "100." ).toDouble( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading an "
-                           "\"time upper bound\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_timeName = element.attribute( "TimeName", "" );
 
       m_energyNumberOfChannels = element.attribute( "NumberOfEnergyChannels",
                                                     "100" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"number of energy channels\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_energyLowerBound = element.attribute( "EnergyLowerBound",
                                               "0." ).toDouble( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"energy lower bound\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_energyUpperBound = element.attribute( "EnergyUpperBound",
                                               "100." ).toDouble( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading an "
-                           "\"energy upper bound\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       m_energyName = element.attribute( "EnergyName", "" );
 
       m_channelNumber = element.attribute( "ChannelNumber",
                                            "0" ).toInt( &ok );
-      if( ! ok ) {
-         REPORT_ERROR( tr( "There was a problem reading a "
-                           "\"channel number\" value" ) );
-         return false;
-      }
+      CHECK( ok );
 
       printConfig( msg::VERBOSE );
 

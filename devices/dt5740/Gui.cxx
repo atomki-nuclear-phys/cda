@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4400 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4410 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -192,8 +192,8 @@ namespace dt5740 {
 
       m_acqModeWidget = new QComboBox( m_acquisitionBox );
       m_acqModeWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
-      m_acqModeWidget->addItem( "Register controlled" );
-      m_acqModeWidget->addItem( "GPI controlled" );
+      m_acqModeWidget->addItem( tr( "Register controlled" ) );
+      m_acqModeWidget->addItem( tr( "GPI controlled" ) );
       connect( m_acqModeWidget, SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( acqModeSlot( int ) ) );
 
@@ -203,8 +203,8 @@ namespace dt5740 {
 
       m_gateModeWidget = new QComboBox( m_acquisitionBox );
       m_gateModeWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
-      m_gateModeWidget->addItem( "Window" );
-      m_gateModeWidget->addItem( "Single shot" );
+      m_gateModeWidget->addItem( tr( "Window" ) );
+      m_gateModeWidget->addItem( tr( "Single shot" ) );
       connect( m_gateModeWidget, SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( gateModeSlot( int ) ) );
 
@@ -302,7 +302,7 @@ namespace dt5740 {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 965 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 975 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
 

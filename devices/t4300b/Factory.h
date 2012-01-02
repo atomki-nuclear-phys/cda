@@ -27,7 +27,7 @@
  *         This namespace holds all the classes that handle the a T4300B
  *         CAMAC QDC device.
  *
- * @author Attila Krasznahorkay Jr.
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
@@ -48,7 +48,7 @@ namespace t4300b {
     *         This factory is used when loading the T4300B plugin to access
     *         all the classes provided by the plugin.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

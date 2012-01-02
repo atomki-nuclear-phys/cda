@@ -22,7 +22,7 @@ namespace t4300b {
     *         properties that are stored in the t4300b::ChannelConfig
     *         class.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

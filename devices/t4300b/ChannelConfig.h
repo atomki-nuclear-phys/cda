@@ -4,7 +4,7 @@
 #define CDA_DEVICES_T4300B_CHANNELCONFIG_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -23,12 +23,15 @@ namespace t4300b {
     *         Each channel of a T4300B module has a number of properties.
     *         All these properties are stored in such objects.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
    class ChannelConfig : virtual public dev::Config {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( t4300b::ChannelConfig )
 
    public:
       /// Constructor

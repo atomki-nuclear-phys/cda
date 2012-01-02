@@ -6,7 +6,6 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
 
 // CDA include(s):
@@ -770,7 +769,7 @@ namespace dt5740 {
          return EV_CountAllTriggers;
       }
 
-      REPORT_ERROR( tr( "Event count mode (%1) not recognized" ).arg( value ) );
+      REPORT_ERROR( tr( "Event counting mode (%1) not recognized" ).arg( value ) );
       return EV_CountAcceptedTriggers;
    }
 
