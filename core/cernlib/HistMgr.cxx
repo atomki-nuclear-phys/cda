@@ -12,7 +12,7 @@ extern "C" {
 #include "HistMgr.h"
 
 /// Size of the PAW global memory
-#define PAWC_SIZE 100000
+#define PAWC_SIZE 1000000
 
 namespace cernlib {
 

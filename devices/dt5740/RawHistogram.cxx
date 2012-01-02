@@ -2,6 +2,7 @@
 
 // System include(s):
 #include <cmath>
+#include <algorithm>
 
 // Qt include(s):
 #include <QtCore/QLine>
