@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "ChannelConfig.h"
@@ -18,7 +24,6 @@ namespace ad413a {
    //
    using QT_PREPEND_NAMESPACE( QIODevice );
    using QT_PREPEND_NAMESPACE( QDataStream );
-   using QT_PREPEND_NAMESPACE( QDomNode );
    using QT_PREPEND_NAMESPACE( QDomElement );
 
    ChannelConfig::ChannelConfig()
@@ -26,14 +31,12 @@ namespace ad413a {
         m_lowerBound( 0. ), m_upperBound( 100. ), m_name( "time" ),
         m_logger( "ad413a::ChannelConfig" ) {
 
-      m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
-
+      REPORT_VERBOSE( tr( "Object created" ) );
    }
 
    bool ChannelConfig::readConfig( QIODevice* dev ) {
 
-      m_logger << msg::VERBOSE << tr( "Reading configuration from binary input" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
@@ -53,8 +56,7 @@ namespace ad413a {
 
    bool ChannelConfig::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << tr( "Writing configuration to binary output" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
@@ -70,53 +72,27 @@ namespace ad413a {
 
    bool ChannelConfig::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE << tr( "Reading configuration from XML input" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
       clear();
 
       bool ok;
 
       m_subaddress = element.attribute( "Subaddress", "" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << tr( "There was a problem reading a "
-                                       "\"subaddress\" value" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_lld = element.attribute( "LowLevelDiscriminant", "0" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << tr( "There was a problem reading a "
-                                       "\"low level discriminant\" value" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_numberOfChannels = element.attribute( "NumberOfChannels",
                                               "100" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << tr( "There was a problem reading a "
-                                       "\"number of channels\" value" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_lowerBound = element.attribute( "LowerBound", "0." ).toDouble( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << tr( "There was a problem reading a "
-                                       "\"lower bound\" value" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_upperBound = element.attribute( "UpperBound", "100." ).toDouble( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR << tr( "There was a problem reading an "
-                                       "\"upper bound\" value" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_name = element.attribute( "Name", "" );
 
@@ -127,8 +103,7 @@ namespace ad413a {
 
    bool ChannelConfig::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << tr( "Writing configuration to XML output" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       element.setAttribute( "Subaddress", m_subaddress );
       element.setAttribute( "LowLevelDiscriminant", m_lld );

@@ -28,7 +28,7 @@ namespace ad413a {
     *         out event fragments from it when a LAM signal arrived at
     *         the application.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

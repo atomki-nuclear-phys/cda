@@ -10,6 +10,13 @@
 #include <QtGui/QSpinBox>
 #include <QtGui/QScrollArea>
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
+
 // Local include(s):
 #include "Gui.h"
 #include "ChannelGui.h"
@@ -24,7 +31,7 @@ namespace ad413a {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CamacGui( parent, flags ) {
+      : dev::CamacGui( parent, flags ), m_logger( "ad413a::Gui" ) {
 
       //
       // Create the widget that will hold all the configuration widgets:
@@ -36,7 +43,7 @@ namespace ad413a {
       // Embed the previous widget into a scroll area:
       //
       m_scrollArea = new QScrollArea( this );
-      m_scrollArea->setGeometry( QRect( 0, 10, WIDGET_WIDTH, WIDGET_HEIGHT - 10 ) );
+      m_scrollArea->setGeometry( QRect( 0, 20, WIDGET_WIDTH, WIDGET_HEIGHT - 20 ) );
       m_scrollArea->setWidget( m_scrollWidget );
 
       //
@@ -127,7 +134,6 @@ namespace ad413a {
       m_gateEdit->setValue( 0 );
       connect( m_gateEdit, SIGNAL( valueChanged( int ) ),
                this, SLOT( gateChangedSlot( int ) ) );
-
    }
 
    /**
@@ -162,9 +168,7 @@ namespace ad413a {
     */
    bool Gui::readConfig( QIODevice* dev ) {
 
-      if( ! Device::readConfig( dev ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( dev ) );
       sync();
       return true;
    }
@@ -176,9 +180,7 @@ namespace ad413a {
     */
    bool Gui::readConfig( const QDomElement& node ) {
 
-      if( ! Device::readConfig( node ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( node ) );
       sync();
       return true;
    }
@@ -211,7 +213,7 @@ namespace ad413a {
       painter.setPen( Qt::white );
       painter.setBrush( Qt::white );
       painter.drawText( QRect( -20, 0, 40, 15 ), Qt::AlignCenter,
-                        "AD413A" );
+                        tr( "AD413A" ) );
 
       // Draw a LED above the top ECL connector:
       painter.setPen( Qt::gray );
@@ -302,7 +304,7 @@ namespace ad413a {
          painter.setPen( Qt::green );
          painter.setBrush( Qt::green );
          painter.drawText( QRect( -20, 185, 40, 15 ), Qt::AlignCenter,
-                           "LAM" );
+                           tr( "LAM" ) );
       }
 
       return;

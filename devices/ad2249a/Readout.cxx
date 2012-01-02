@@ -91,8 +91,6 @@ namespace ad2249a {
       //
       crate.writeWord( m_slot, 0, 10, 0 );
 
-      REPORT_VERBOSE( tr( "Cleared module" ) );
-
       return true;
    }
 

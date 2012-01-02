@@ -22,12 +22,7 @@ namespace ad413a {
     *         properties that are stored in the ad413a::ChannelConfig
     *         class.
     *
-    *         This is a fixed size widget that has a Qt widget for changing
-    *         each property of a channel. It looks like this on a Mac:
-    *
-    *         @image html t2228a_ChannelGui.png
-    *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

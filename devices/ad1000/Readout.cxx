@@ -83,8 +83,6 @@ namespace ad1000 {
          crate.writeWord( m_slot, 0, 24, 0 );
       }
 
-      REPORT_VERBOSE( tr( "Cleared module" ) );
-
       return true;
    }
 

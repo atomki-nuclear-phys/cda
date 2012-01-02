@@ -4,7 +4,6 @@
 #define CDA_DEVICES_AD413A_CHANNELCONFIG_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
@@ -24,7 +23,7 @@ namespace ad413a {
     *         Each channel of a AD413A module has a number of properties.
     *         All these properties are stored in such objects.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

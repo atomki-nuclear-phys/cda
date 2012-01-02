@@ -29,7 +29,7 @@ namespace ad1000 {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CamacGui( parent, flags ) {
+      : dev::CamacGui( parent, flags ), m_logger( "ad1000::Gui" ) {
 
       //
       // Create a label telling us what kind of device this is:

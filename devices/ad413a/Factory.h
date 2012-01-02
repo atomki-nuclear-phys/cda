@@ -27,7 +27,7 @@
  *         This namespace holds all the classes that handle the an AD413A
  *         CAMAC ADC device.
  *
- * @author Attila Krasznahorkay Jr.
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
@@ -48,7 +48,7 @@ namespace ad413a {
     *         This factory is used when loading the AD413A plugin to access
     *         all the classes provided by the plugin.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$

@@ -4,7 +4,6 @@
 #define CDA_DEVICES_AD413A_DEVICE_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
@@ -27,6 +26,11 @@ namespace ad413a {
     *         This class stores the configuration of a AD413A CAMAC device
     *         and takes care of reading and writing this configuration
     *         in all the necessary formats.
+    *
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+    *
+    * $Revision$
+    * $Date$
     */
    class Device : virtual public dev::Device {
 

@@ -3,8 +3,14 @@
 // Qt include(s):
 #include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
-#include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
+
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
 
 // Local include(s):
 #include "Device.h"
@@ -18,7 +24,6 @@ namespace ad413a {
    //
    using QT_PREPEND_NAMESPACE( QIODevice );
    using QT_PREPEND_NAMESPACE( QDataStream );
-   using QT_PREPEND_NAMESPACE( QDomNode );
    using QT_PREPEND_NAMESPACE( QDomElement );
 
    Device::Device()
@@ -29,7 +34,6 @@ namespace ad413a {
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          m_channels[ i ] = 0;
       }
-
    }
 
    Device::~Device() {
@@ -39,8 +43,7 @@ namespace ad413a {
 
    bool Device::readConfig( QIODevice* dev ) {
 
-      m_logger << msg::VERBOSE << tr( "Reading configuration from binary input" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
@@ -52,20 +55,17 @@ namespace ad413a {
       quint32 number_of_channels;
       input >> number_of_channels;
 
-      m_logger << msg::VERBOSE
-               << tr( " - Slot        : %1\n"
-                      " - GenerateLAM : %2\n"
-                      " - Gate        : %3\n"
-                      " - Subaddresses: %4" )
-         .arg( m_slot ).arg( m_generateLam ).arg( m_gate ).arg( number_of_channels )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Slot        : %1\n"
+                          " - GenerateLAM : %2\n"
+                          " - Gate        : %3\n"
+                          " - Subaddresses: %4" )
+                      .arg( m_slot ).arg( m_generateLam )
+                      .arg( m_gate ).arg( number_of_channels ) );
 
       for( quint32 i = 0; i < number_of_channels; ++i ) {
          ChannelConfig* channel = new ChannelConfig();
          if( ! channel->readConfig( dev ) ) {
-            m_logger << msg::ERROR
-                     << tr( "The configuration of a channel couldn't be read!" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "The configuration of a channel couldn't be read!" ) );
             delete channel;
             return false;
          }
@@ -73,16 +73,17 @@ namespace ad413a {
              ( channel->getSubaddress() < NUMBER_OF_SUBADDRESSES ) ) {
             if( m_channels[ channel->getSubaddress() ] ) {
                m_logger << msg::WARNING
-                        << tr( "Redefining channel number: %1" ).arg( channel->getSubaddress() )
+                        << tr( "Redefining channel number: %1" )
+                  .arg( channel->getSubaddress() )
                         << msg::endmsg;
                delete m_channels[ channel->getSubaddress() ];
             }
             m_channels[ channel->getSubaddress() ] = channel;
          } else {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem reading the configuration of one channel" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem reading the configuration of "
+                              "one channel" ) );
             delete channel;
+            return false;
          }
       }
 
@@ -91,8 +92,7 @@ namespace ad413a {
 
    bool Device::writeConfig( QIODevice* dev ) const {
 
-      m_logger << msg::VERBOSE << tr( "Writing configuration to binary output" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       QDataStream output( dev );
       output.setVersion( QDataStream::Qt_4_0 );
@@ -112,12 +112,7 @@ namespace ad413a {
       // Write the channel configurations:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-            if( ! m_channels[ i ]->writeConfig( dev ) ) {
-               m_logger << msg::ERROR
-                        << tr( "A problem happened while writing out a channel configuration" )
-                        << msg::endmsg;
-               return false;
-            }
+            CHECK( m_channels[ i ]->writeConfig( dev ) );
          }
       }
 
@@ -126,43 +121,26 @@ namespace ad413a {
 
    bool Device::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE << tr( "Reading configuration from XML input" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
       clear();
 
       bool ok;
 
       m_slot = element.attribute( "Slot", "0" ).toInt( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the \"Slot\" property!" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_generateLam = element.attribute( "GenerateLAM", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the \"generate LAM\" property!" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_gate = element.attribute( "Gate", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the \"Gate\" property!" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
-      m_logger << msg::VERBOSE
-               << tr( " - Slot       : %1\n"
-                      " - GenerateLAM: %2\n"
-                      " - Gate       : %3" )
-         .arg( m_slot ).arg( m_generateLam ).arg( m_gate )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Slot       : %1\n"
+                          " - GenerateLAM: %2\n"
+                          " - Gate       : %3" )
+                      .arg( m_slot ).arg( m_generateLam )
+                      .arg( m_gate ) );
 
       for( int i = 0; i < element.childNodes().size(); ++i ) {
 
@@ -173,9 +151,7 @@ namespace ad413a {
 
          ChannelConfig* channel = new ChannelConfig();
          if( ! channel->readConfig( element.childNodes().at( i ).toElement() ) ) {
-            m_logger << msg::ERROR
-                     << tr( "The configuration of a channel couldn't be read!" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "The configuration of a channel couldn't be read!" ) );
             delete channel;
             return false;
          }
@@ -183,16 +159,17 @@ namespace ad413a {
              ( channel->getSubaddress() < NUMBER_OF_SUBADDRESSES ) ) {
             if( m_channels[ channel->getSubaddress() ] ) {
                m_logger << msg::WARNING
-                        << tr( "Redefining channel number: %1" ).arg( channel->getSubaddress() )
+                        << tr( "Redefining channel number: %1" )
+                  .arg( channel->getSubaddress() )
                         << msg::endmsg;
                delete m_channels[ channel->getSubaddress() ];
             }
             m_channels[ channel->getSubaddress() ] = channel;
          } else {
-            m_logger << msg::ERROR
-                     << tr( "There was a problem reading the configuration of one channel" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "There was a problem reading the configuration of "
+                              "one channel" ) );
             delete channel;
+            return false;
          }
       }
 
@@ -201,8 +178,7 @@ namespace ad413a {
 
    bool Device::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE << tr( "Writing configuration to XML output" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       element.setAttribute( "Slot", m_slot );
       element.setAttribute( "GenerateLAM", m_generateLam );
@@ -213,17 +189,10 @@ namespace ad413a {
       //
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-
             QDomElement ch_element =
                element.ownerDocument().createElement( "Channel" );
-            if( ! m_channels[ i ]->writeConfig( ch_element ) ) {
-               m_logger << msg::ERROR
-                        << tr( "A problem happened while writing out a channel configuration" )
-                        << msg::endmsg;
-               return false;
-            }
+            CHECK( m_channels[ i ]->writeConfig( ch_element ) );
             element.appendChild( ch_element );
-
          }
       }
 

@@ -4,18 +4,15 @@
 #define CDA_DEVICES_AD413A_CERNLIBDISK_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CernlibDisk.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/cernlib/NTupleMgr.h"
 #else
 #   include "device/CernlibDisk.h"
 #   include "msg/Logger.h"
-#   include "cernlib/NTupleMgr.h"
 #endif
 
 // Local include(s):

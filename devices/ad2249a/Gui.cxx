@@ -30,7 +30,7 @@ namespace ad2249a {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CamacGui( parent, flags ) {
+      : dev::CamacGui( parent, flags ), m_logger( "ad2249a::Gui" ) {
 
       //
       // Create the widget that will hold all the configuration widgets:

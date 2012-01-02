@@ -61,9 +61,9 @@ namespace ad413a {
       } else if( m_gate == 4 ) {
          crate.writeWord( m_slot, 1, 16, 0x17 );
       } else {
-         m_logger << msg::WARNING << tr( "Gate value is %1" ).arg( m_gate )
-                  << msg::endmsg;
-         m_logger << msg::WARNING << tr( "Will enable all gates for now..." )
+         m_logger << msg::WARNING
+                  << tr( "Gate value is %1\n"
+                         "Will enable all gates for now..." ).arg( m_gate )
                   << msg::endmsg;
          crate.writeWord( m_slot, 1, 16, 0x0 );
       }
@@ -96,13 +96,15 @@ namespace ad413a {
     */
    ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
 
+      // Create the event fragment:
       ev::Fragment* fragment = new ev::Fragment();
       fragment->setModuleID( m_slot );
 
+      // Read out all the configured channels:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
          if( m_channels[ i ] ) {
-            uint32_t channel = crate.readWord( m_slot, i, 2 );
-            uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
+            const uint32_t channel = crate.readWord( m_slot, i, 2 );
+            const uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
             fragment->addDataWord( dword );
          }
       }
@@ -116,8 +118,6 @@ namespace ad413a {
       // Clear the module:
       //
       crate.writeWord( m_slot, 0, 10, 0 );
-
-      m_logger << msg::VERBOSE << tr( "Cleared module" ) << msg::endmsg;
 
       return true;
    }
