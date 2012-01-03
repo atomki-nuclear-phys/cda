@@ -32,6 +32,10 @@ namespace root {
 
    void FileWriter::stopProcessing() {
 
+      // Disconnect the event server's signal(s):
+      disconnect( SIGNAL( eventAvailable() ),
+                  this, SLOT( writeEvent() ) );
+
       // Signal the thread that it should stop, and wait for
       // it to happen:
       quit();
@@ -69,6 +73,9 @@ namespace root {
    }
 
    void FileWriter::writeEvent() {
+
+      // Check if we are running right now:
+      if( ! isRunning() ) return;
 
       // Read out all the events that are in the buffer at the moment:
       for( size_t i = 0; i < m_evserver.bufferSize(); ++i ) {
