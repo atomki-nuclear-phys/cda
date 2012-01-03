@@ -51,29 +51,24 @@ namespace dt5740 {
             const ChannelConfig* ch = m_groups[ group ].getChannel( channel );
             if( ! ch ) continue;
 
-            // Create a fancy name for the time histogram:
-            char name[ 80 ];
-            sprintf( name, "%s (%s with device ID %i, channel %i)",
-                     ch->getTimeName().toLatin1().constData(),
-                     deviceName().toLatin1().constData(), getID(),
-                     group * GroupConfig::CHANNELS_IN_GROUP + channel );
-
             // Book the time histogram:
             m_histMap[ group ][ channel ][ 0 ] =
-               hmgr.book_1d( name,
+               hmgr.book_1d( tr( "%1 (%2 with device ID %3, channel %4)" )
+                             .arg( ch->getTimeName() ).arg( deviceName() )
+                             .arg( getID() ).arg( group * GroupConfig::CHANNELS_IN_GROUP +
+                                                  channel )
+                             .toLatin1().constData(),
                              ch->getTimeNumberOfChannels(),
                              ch->getTimeLowerBound(),
                              ch->getTimeUpperBound() );
 
-            // Create a fancy name for the energy histogram:
-            sprintf( name, "%s (%s with device ID %i, channel %i)",
-                     ch->getEnergyName().toLatin1().constData(),
-                     deviceName().toLatin1().constData(), getID(),
-                     group * GroupConfig::CHANNELS_IN_GROUP + channel );
-
             // Book the energy histogram:
             m_histMap[ group ][ channel ][ 1 ] =
-               hmgr.book_1d( name,
+               hmgr.book_1d( tr( "%1 (%2 with device ID %3, channel %4)" )
+                             .arg( ch->getEnergyName() ).arg( deviceName() )
+                             .arg( getID() ).arg( group * GroupConfig::CHANNELS_IN_GROUP +
+                                                  channel )
+                             .toLatin1().constData(),
                              ch->getEnergyNumberOfChannels(),
                              ch->getEnergyLowerBound(),
                              ch->getEnergyUpperBound() );

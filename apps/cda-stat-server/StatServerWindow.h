@@ -38,8 +38,6 @@ public:
    ~StatServerWindow();
 
 private slots:
-   /// Slot showing a window about Qt
-   void aboutQtSlot();
    /// Slot showing a window about cda-stat-server
    void aboutStatServerSlot();
    /// Slot showing a window about CDA

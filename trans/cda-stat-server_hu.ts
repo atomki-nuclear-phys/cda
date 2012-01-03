@@ -4,89 +4,84 @@
 <context>
     <name>StatServerWindow</name>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="42"/>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="107"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="43"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="102"/>
         <source>CDA Statistics Server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="74"/>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="135"/>
-        <source>Error starting server</source>
-        <translation type="unfinished"></translation>
+        <translation>CDA Statisztika Szerver</translation>
     </message>
     <message>
         <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="75"/>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="136"/>
-        <source>The TCP/IP statistics server could not be started on port %1. Please select another port!</source>
-        <translation type="unfinished"></translation>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="128"/>
+        <source>Error starting server</source>
+        <translation>Hiba a szerver indításával</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="77"/>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="139"/>
-        <source>The server is stopped</source>
-        <translation type="unfinished"></translation>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="76"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="129"/>
+        <source>The TCP/IP statistics server could not be started on port %1. Please select another port!</source>
+        <translation>A TCP/IP szervert nem lehetett a(z) %1 porton elindítani. Válasszon egy másik portot!</translation>
     </message>
     <message>
         <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="79"/>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="141"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="132"/>
+        <source>The server is stopped</source>
+        <translation>A szerver áll</translation>
+    </message>
+    <message>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="81"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="134"/>
         <source>The server is running on port %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A szerver a(z) %1 porton fut</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="100"/>
-        <source>CDA Statistics Server - built on Qt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="108"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="103"/>
         <source>The CDA Statistics Server can be used to monitor a &quot;full-blown&quot; CDA DAQ system, composed of applications running on multiple computers. The status of the event processing in each of these applications can be monitored in this application.</source>
-        <translation type="unfinished"></translation>
+        <translation>A CDA Statisztika Szervert egy &quot;teljes&quot; CDA DAQ rendszer monitorozására lehet használni, ami különböző számítógépeken futó programokból épül fel. Minden ilyen program esemény feldolgozását lehet megfigyelni ebben az alkalmazásban.</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="160"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="154"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fájl</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="163"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="157"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kilépés</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="173"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="167"/>
         <source>&amp;Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Beállítások</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="175"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="169"/>
         <source>Show port setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Port beállítás megmutatása</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="190"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="184"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Segítség</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="192"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="186"/>
         <source>About &amp;Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>A &amp;Qt-ról</translation>
+    </message>
+    <message>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="191"/>
+        <source>&amp;About Statistics Server</source>
+        <translation>A &amp;Statisztika Szerverről</translation>
     </message>
     <message>
         <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="196"/>
-        <source>&amp;About Statistics Server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="201"/>
         <source>About &amp;CDA</source>
-        <translation type="unfinished"></translation>
+        <translation>A &amp;CDA-ról</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="230"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="224"/>
         <source>Server port</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerver port</translation>
     </message>
 </context>
 <context>
@@ -94,7 +89,7 @@
     <message>
         <location filename="../apps/cda-stat-server/main.cxx" line="66"/>
         <source>Statistics Server Ready</source>
-        <translation type="unfinished"></translation>
+        <translation>A Statisztika Szerver készen áll</translation>
     </message>
 </context>
 </TS>

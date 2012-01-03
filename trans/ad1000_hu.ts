@@ -17,22 +17,22 @@
 <context>
     <name>ad1000::CernlibHist</name>
     <message>
-        <location filename="../devices/ad1000/CernlibHist.cxx" line="30"/>
+        <location filename="../devices/ad1000/CernlibHist.cxx" line="28"/>
         <source>Initialising histogram(s)</source>
         <translation>Hisztogram(ok) elökészítése</translation>
     </message>
     <message>
-        <location filename="../devices/ad1000/CernlibHist.cxx" line="34"/>
+        <location filename="../devices/ad1000/CernlibHist.cxx" line="32"/>
         <source>%1 (%2 slot %3)</source>
         <translation>%1 (%2, %3 aljzat)</translation>
     </message>
     <message>
-        <location filename="../devices/ad1000/CernlibHist.cxx" line="40"/>
+        <location filename="../devices/ad1000/CernlibHist.cxx" line="38"/>
         <source>Created histogram %1 with name: &quot;%2&quot;</source>
         <translation>A(z) %1 hisztogram &quot;%2&quot; névvel létrehozva</translation>
     </message>
     <message>
-        <location filename="../devices/ad1000/CernlibHist.cxx" line="54"/>
+        <location filename="../devices/ad1000/CernlibHist.cxx" line="52"/>
         <source>Received %1 data words. Was supposed to receive 1.</source>
         <translation>%1 adat szót kaptam. Csak egyet kellett volna.</translation>
     </message>
@@ -122,9 +122,8 @@
         <translation>AD1000 ADC elökészítése a(z) %1 aljzatban LAM generálás nélkül</translation>
     </message>
     <message>
-        <location filename="../devices/ad1000/Readout.cxx" line="86"/>
         <source>Cleared module</source>
-        <translation>Objektum kitörölve</translation>
+        <translation type="obsolete">Objektum kitörölve</translation>
     </message>
 </context>
 <context>

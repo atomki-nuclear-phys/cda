@@ -215,9 +215,8 @@
         <translation>AD2249A ADC elökészítése a(z) %1 aljzatban LAM generálás nélkül</translation>
     </message>
     <message>
-        <location filename="../devices/ad2249a/Readout.cxx" line="94"/>
         <source>Cleared module</source>
-        <translation>Modul kitörölve</translation>
+        <translation type="obsolete">Modul kitörölve</translation>
     </message>
 </context>
 </TS>

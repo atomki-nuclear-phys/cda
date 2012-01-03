@@ -4,7 +4,13 @@
 <context>
     <name>dt5740::CernlibHist</name>
     <message>
-        <location filename="../devices/dt5740/CernlibHist.cxx" line="81"/>
+        <location filename="../devices/dt5740/CernlibHist.cxx" line="56"/>
+        <location filename="../devices/dt5740/CernlibHist.cxx" line="67"/>
+        <source>%1 (%2 with device ID %3, channel %4)</source>
+        <translation>%1 (%2, %3 ID-vel, %4. csatorna)</translation>
+    </message>
+    <message>
+        <location filename="../devices/dt5740/CernlibHist.cxx" line="76"/>
         <source>Created time and energy monitoring histograms for channel with raw name %1</source>
         <translation>Az energia és idö monitorozó hisztogramok létrehozva a &quot;%1&quot; nyers névvel rendelkezö csatornához</translation>
     </message>
@@ -317,7 +323,7 @@
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="94"/>
         <source>In USB mode this means the ID given by the OS to the USB connection. If this is the only such device connected by USB, it will be &quot;0&quot;.</source>
-        <translation>UDB módban ez az operációs rendszer által az USB kapcsolatnak adott azonosító. Ha ez az egyetlen ilyen eszköz USB-n csatlakoztatva, ez &quot;0&quot;.</translation>
+        <translation>USB módban ez az operációs rendszer által az USB kapcsolatnak adott azonosító. Ha ez az egyetlen ilyen eszköz USB-n csatlakoztatva, ez &quot;0&quot;.</translation>
     </message>
     <message>
         <location filename="../devices/dt5740/Gui.cxx" line="103"/>

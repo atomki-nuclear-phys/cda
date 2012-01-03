@@ -1,6 +1,7 @@
 // $Id$
 
 // Qt include(s):
+#include <QtCore/QCoreApplication>
 #include <QtGui/QSpinBox>
 #include <QtGui/QDockWidget>
 #include <QtGui/QMessageBox>
@@ -73,10 +74,12 @@ StatServerWindow::StatServerWindow()
    if( ! m_server->listen( Address( "0.0.0.0", 35000 ) ) ) {
       QMessageBox::critical( this, tr( "Error starting server" ),
                              tr( "The TCP/IP statistics server could not be started "
-                                 "on port %1. Please select another port!" ).arg( 35000 ) );
+                                 "on port %1. Please select another port!" )
+                             .arg( 35000 ) );
       statusBar()->showMessage( tr( "The server is stopped" ) );
    } else {
-      statusBar()->showMessage( tr( "The server is running on port %1" ).arg( 35000 ) );
+      statusBar()->showMessage( tr( "The server is running on port %1" )
+                                .arg( 35000 ) );
    }
 
 }
@@ -92,14 +95,6 @@ StatServerWindow::~StatServerWindow() {
    //
    delete m_server;
    delete m_view;
-
-}
-
-void StatServerWindow::aboutQtSlot() {
-
-   QMessageBox::aboutQt( this, tr( "CDA Statistics Server - built on Qt" ) );
-   return;
-
 }
 
 void StatServerWindow::aboutStatServerSlot() {
@@ -111,14 +106,12 @@ void StatServerWindow::aboutStatServerSlot() {
                            "processing in each of these applications can be monitored "
                            "in this application." ) );
    return;
-
 }
 
 void StatServerWindow::aboutCDASlot() {
 
    aboutCDA( this );
    return;
-
 }
 
 void StatServerWindow::portChangedSlot() {
@@ -138,7 +131,8 @@ void StatServerWindow::portChangedSlot() {
                                  "port!" ).arg( port ) );
       statusBar()->showMessage( tr( "The server is stopped" ) );
    } else {
-      statusBar()->showMessage( tr( "The server is running on port %1" ).arg( port ) );
+      statusBar()->showMessage( tr( "The server is running on port %1" )
+                                .arg( port ) );
    }
    return;
 
@@ -191,9 +185,10 @@ void StatServerWindow::createMenus() {
 
    QAction* aboutQtAction = helpMenu->addAction( tr( "About &Qt" ) );
    connect( aboutQtAction, SIGNAL( triggered() ),
-            this, SLOT( aboutQtSlot() ) );
+            qApp, SLOT( aboutQt() ) );
 
-   QAction* aboutStatServerAction = helpMenu->addAction( tr( "&About Statistics Server" ) );
+   QAction* aboutStatServerAction =
+      helpMenu->addAction( tr( "&About Statistics Server" ) );
    connect( aboutStatServerAction, SIGNAL( triggered() ),
             this, SLOT( aboutStatServerSlot() ) );
 
@@ -203,7 +198,6 @@ void StatServerWindow::createMenus() {
             this, SLOT( aboutCDASlot() ) );
 
    return;
-
 }
 
 /**
@@ -235,5 +229,4 @@ void StatServerWindow::createDockWidgets() {
    addDockWidget( Qt::TopDockWidgetArea, m_portDock );
 
    return;
-
 }
