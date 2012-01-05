@@ -59,6 +59,9 @@ namespace root {
          REPORT_ERROR( tr( "Failed creating output file with name: %1" )
                        .arg( fileName ) );
          return false;
+      } else {
+         m_logger << msg::INFO << tr( "\"%1\" opened" ).arg( fileName )
+                  << msg::endmsg;
       }
       m_file->cd();
 
@@ -244,14 +247,18 @@ namespace root {
    }
 
    bool NTupleMgr::makeBranch( const char* name, void* address,
-                               const char* leaflist ) {
+                               const char* leaflist, const char* title ) {
 
 #ifdef HAVE_ROOT_LIBS
-      if( ! m_tree->Branch( name, address, leaflist ) ) {
+      // Create the branch:
+      TBranch* br = m_tree->Branch( name, address, leaflist );
+      if( ! br ) {
          REPORT_ERROR( tr( "Failed creating branch with name: %1" )
                        .arg( name ) );
          return false;
       }
+      // Set its title:
+      br->SetTitle( title );
 #else
       REPORT_VERBOSE( tr( "Creating primitive branch with name \"%1\" and "
                           "leaf-list \"%2\"" ).arg( name ).arg( leaflist ) );
@@ -260,14 +267,19 @@ namespace root {
       return true;
    }
 
-   bool NTupleMgr::makeBronch( const char* name, const char* classname, void* ptr ) {
+   bool NTupleMgr::makeBronch( const char* name, const char* classname, void* ptr,
+                               const char* title ) {
 
 #ifdef HAVE_ROOT_LIBS
-      if( ! m_tree->Bronch( name, classname, ptr ) ) {
+      // Create the branch:
+      TBranch* br = m_tree->Bronch( name, classname, ptr );
+      if( ! br ) {
          REPORT_ERROR( tr( "Failed creating branch with name: %1" )
                        .arg( name ) );
          return false;
       }
+      // Set its title:
+      br->SetTitle( title );
 #else
       REPORT_VERBOSE( tr( "Creating object branch with name \"%1\" and "
                           "classname \"%2\"" ).arg( name ).arg( classname ) );

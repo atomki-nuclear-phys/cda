@@ -15,6 +15,9 @@
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QWidget )
+QT_FORWARD_DECLARE_CLASS( QLabel )
+QT_FORWARD_DECLARE_CLASS( QComboBox )
+QT_FORWARD_DECLARE_CLASS( QPushButton )
 namespace msg {
    class Server;
    class TextView;
@@ -60,6 +63,20 @@ private slots:
    /// Slot for displaying a window about CDA
    void aboutCDASlot();
 
+   /// Slot for handling changes to the current event receiver
+   void eventReceiverIndexChangedSlot( const QString& text );
+   /// Slot for handling changes to the event receiver's address
+   void eventReceiverTextChangedSlot( const QString& text );
+   /// Slot for removing the current event receiver
+   void removeEventReceiverSlot();
+
+   /// Slot for handling changes to the current statistics receiver
+   void statReceiverIndexChangedSlot( const QString& text );
+   /// Slot for handling changes to the statistics receiver's address
+   void statReceiverTextChangedSlot( const QString& text );
+   /// Slot for removing the current event receiver
+   void removeStatReceiverSlot();
+
 private:
    /// Private function drawing the menus of the window
    void drawMenus();
@@ -75,6 +92,16 @@ private:
    simple_daq::HBookWriterRunner*  m_hbookWriter;  ///< Widget controlling cda-hbook-writer
    simple_daq::RootWriterRunner*   m_rootWriter;   ///< Widget controlling cda-root-writer
    simple_daq::RawWriterRunner*    m_rawWriter;    ///< Widget controlling cda-raw-writer
+
+   QLabel*      m_eventReceiversLabel; ///< Description of the extra event receivers
+   QComboBox*   m_eventReceivers; ///< Widget specifying the extra event receivers
+   QPushButton* m_removeEventReceiver; ///< Button for removing an event receiver
+   QString      m_currentEventReceiver; ///< Address of the currently selected event receiver
+
+   QLabel*      m_statReceiversLabel; ///< Description of the extra statistics receivers
+   QComboBox*   m_statReceivers; ///< Widget specifying the extra statistics receivers
+   QPushButton* m_removeStatReceiver; ///< Button for removing an statistics receiver
+   QString      m_currentStatReceiver; ///< Address of the currently selected stat. receiver
 
    mutable msg::Logger m_logger; ///< Private message logger
 

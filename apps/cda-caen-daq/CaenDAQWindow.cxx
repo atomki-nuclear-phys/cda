@@ -356,7 +356,7 @@ void CaenDAQWindow::aboutCaenDAQSlot() {
                        tr( "This application is a simplified interface for running "
                            "a CDA CAEN data acquisition session. While the CDA "
                            "executables can be started on multiple separate computers, "
-                           "this application starts one instance of the 4 CDA "
+                           "this application starts one instance of the command line CDA "
                            "applications that can be used in CAEN data taking, on the "
                            "local computer." ) );
    QApplication::setFont( gui::DefaultFont() );

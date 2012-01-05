@@ -22,7 +22,7 @@ extern "C" {
 namespace root {
 
    template< typename TYPE >
-   bool NTupleMgr::addVar( TYPE& obj, const QString& name ) {
+   bool NTupleMgr::addVar( TYPE& obj, const QString& name, const QString& title ) {
 
       // Tell the user what we're doing:
       m_logger << msg::DEBUG
@@ -45,7 +45,8 @@ namespace root {
          std::ostringstream leaflist;
          leaflist << name.toLatin1().constData() << "/" << rootType( type_name );
          CHECK( makeBranch( name.toLatin1().constData(), &obj,
-                            leaflist.str().c_str() ) );
+                            leaflist.str().c_str(),
+                            title.toLatin1().constData() ) );
 
       } else {
 
@@ -74,7 +75,8 @@ namespace root {
          TYPE* pointer = &obj;
          m_outputVarPointers.push_back( pointer );
          CHECK( makeBronch( name.toLatin1().constData(), real_type_name,
-                            &m_outputVarPointers.back() ) );
+                            &m_outputVarPointers.back(),
+                            title.toLatin1().constData() ) );
 
          // Free the previously allocated memory:
          ::free( real_type_name );

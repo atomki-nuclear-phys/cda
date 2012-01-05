@@ -55,7 +55,7 @@ namespace root {
 
       /// Define a new variable for the ntuple
       template< typename TYPE >
-      bool addVar( TYPE& obj, const QString& name );
+      bool addVar( TYPE& obj, const QString& name, const QString& title = "" );
 
    private:
       /// Translate a typeid primitive type to something ROOT understands
@@ -63,9 +63,11 @@ namespace root {
       /// Check that it is realistic to create the branch
       bool checkBranch( const char* name ) const;
       /// Create a primitive branch into the output TTree
-      bool makeBranch( const char* name, void* address, const char* leaflist );
+      bool makeBranch( const char* name, void* address, const char* leaflist,
+                       const char* title );
       /// Create an object branch into the output TTree
-      bool makeBronch( const char* name, const char* classname, void* ptr );
+      bool makeBronch( const char* name, const char* classname, void* ptr,
+                       const char* title );
 
       bool m_fileOpen; ///< Flag telling whether a ROOT file is open at the moment
 

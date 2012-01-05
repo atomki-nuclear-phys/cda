@@ -389,58 +389,58 @@
 <context>
     <name>simple_daq::CamacReaderRunner</name>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="39"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="38"/>
         <source>Camac acquisition control</source>
         <translation>Camac adatgyüjtés vezérlés</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="45"/>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="312"/>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="318"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="44"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="316"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="322"/>
         <source>Camac reader stopped</source>
         <translation>A camac olvasó leállítva</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="86"/>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="330"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="85"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="334"/>
         <source>Start camac reader</source>
         <translation>Camac olvasó indítása</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="98"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="97"/>
         <source>cda-camac-reader not found. Data acquisition is not possible.</source>
         <translation>A cda-camac-reader nem található. Az adatgyüjtés nem lehetséges.</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="249"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="253"/>
         <source>Using options: %1</source>
         <translation>&quot;%1&quot; opciók használata</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="254"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="258"/>
         <source>Couldn&apos;t start camac reader!</source>
         <translation>Nem lehetett elindítani a camac olvasót!</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="259"/>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="303"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="263"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="307"/>
         <source>ERROR</source>
         <translation>HIBA</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="63"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="62"/>
         <source>Start time:</source>
         <translation>Indítási idő:</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="67"/>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="78"/>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="287"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="66"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="77"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="291"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="74"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="73"/>
         <source>Stop time:</source>
         <translation>Leállítási idő:</translation>
     </message>
@@ -461,27 +461,27 @@
         <translation type="obsolete">cda-camac-olvasó újraindítva</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="267"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="271"/>
         <source>Reset</source>
         <translation>Újraindítás</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="271"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="275"/>
         <source>Camac reader started</source>
         <translation>Camac olvasó elindítva</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="277"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="281"/>
         <source>Camac reader running</source>
         <translation>A camac olvasó fut</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="289"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="293"/>
         <source>Stop camac reader</source>
         <translation>Camac olvasó leállítása</translation>
     </message>
     <message>
-        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="297"/>
+        <location filename="../gui/simple_daq/CamacReaderRunner.cxx" line="301"/>
         <source>The camac reader could not be stopped successfully</source>
         <translation>A camac olvasót nem lehetett sikeresen elindítani</translation>
     </message>

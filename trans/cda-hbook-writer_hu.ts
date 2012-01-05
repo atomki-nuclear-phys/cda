@@ -150,17 +150,17 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
 <context>
     <name>hbook::FileWriter</name>
     <message>
-        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="42"/>
+        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="46"/>
         <source>Stopping thread after processing %1 events</source>
         <translation>Végrehajtási szál leállítása %1 esemény feldolgozása után</translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="65"/>
+        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="69"/>
         <source>Thread exited with return code: %1</source>
         <translation>A végrehajtási szál %1 értékkel tért vissza</translation>
     </message>
     <message>
-        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="85"/>
+        <location filename="../apps/cda-hbook-writer/FileWriter.cxx" line="92"/>
         <source>There was a problem writing an event</source>
         <translation>Probléma történt az egyik esemény kiírásával</translation>
     </message>

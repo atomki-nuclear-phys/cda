@@ -712,4 +712,22 @@
         <translation>Nem lehetett az eseményt az esemény fragmentumba tömöríteni</translation>
     </message>
 </context>
+<context>
+    <name>dt5740::RootDisk</name>
+    <message>
+        <location filename="../devices/dt5740/RootDisk.cxx" line="44"/>
+        <source>Time of channel %1 of group %2 in a %3 with device ID %4</source>
+        <translation>A(z) %2. csoport %1. csatornájának idöjele egy %4 azonosítójú %3 eszközben</translation>
+    </message>
+    <message>
+        <location filename="../devices/dt5740/RootDisk.cxx" line="49"/>
+        <source>Energy of channel %1 of group %2 in a %3 with device ID %4</source>
+        <translation>A(z) %2. csoport %1. csatornájának energiajele egy %4 azonosítójú %3 eszközben</translation>
+    </message>
+    <message>
+        <location filename="../devices/dt5740/RootDisk.cxx" line="58"/>
+        <source>Raw data of channel %1 of group %2 in a %3 with device ID %4</source>
+        <translation>A(z) %2. csoport %1. csatornájának nyers adatai egy %4 azonosítójú %3 eszközben</translation>
+    </message>
+</context>
 </TS>

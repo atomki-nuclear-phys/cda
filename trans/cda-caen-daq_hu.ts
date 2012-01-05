@@ -83,8 +83,12 @@
     </message>
     <message>
         <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="356"/>
+        <source>This application is a simplified interface for running a CDA CAEN data acquisition session. While the CDA executables can be started on multiple separate computers, this application starts one instance of the command line CDA applications that can be used in CAEN data taking, on the local computer.</source>
+        <translation>Ez a program egy egyszerűsített felület egy CDA CAEN adatgyűjtés futtatásához. Amíg a CDA programokat különálló számítógépeken is el lehet indítani, ez a program csupán a helyi számítógépen indít el egyet-egyet a CDA parancssori, CAEN adatgyűjtéshez használható programjaiból.</translation>
+    </message>
+    <message>
         <source>This application is a simplified interface for running a CDA CAEN data acquisition session. While the CDA executables can be started on multiple separate computers, this application starts one instance of the 4 CDA applications that can be used in CAEN data taking, on the local computer.</source>
-        <translation>Ez a program egy egyszerűsített felület egy CDA CAEN adatgyűjtés futtatásához. Amíg a CDA programokat különálló számítógépeken is el lehet indítani, ez a program a helyi számítógépen tud elindítani egyet-egyet a fő CDA adatgyűjtő programokból.</translation>
+        <translation type="obsolete">Ez a program egy egyszerűsített felület egy CDA CAEN adatgyűjtés futtatásához. Amíg a CDA programokat különálló számítógépeken is el lehet indítani, ez a program a helyi számítógépen tud elindítani egyet-egyet a fő CDA adatgyűjtő programokból.</translation>
     </message>
     <message>
         <location filename="../apps/cda-caen-daq/CaenDAQWindow.cxx" line="474"/>

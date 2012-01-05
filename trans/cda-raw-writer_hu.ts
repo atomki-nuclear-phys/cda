@@ -159,17 +159,17 @@ Lásd a korábbi üzeneteket a részletekért...</translation>
 <context>
     <name>raw::FileWriter</name>
     <message>
-        <location filename="../apps/cda-raw-writer/FileWriter.cxx" line="42"/>
+        <location filename="../apps/cda-raw-writer/FileWriter.cxx" line="46"/>
         <source>Stopping thread after processing %1 events</source>
         <translation>A programszál leállítása %1 esemény feldolgozása után</translation>
     </message>
     <message>
-        <location filename="../apps/cda-raw-writer/FileWriter.cxx" line="64"/>
+        <location filename="../apps/cda-raw-writer/FileWriter.cxx" line="68"/>
         <source>Thread exited with return code: %1</source>
         <translation>A programszál %1 visszatérési értékkel lépett ki</translation>
     </message>
     <message>
-        <location filename="../apps/cda-raw-writer/FileWriter.cxx" line="83"/>
+        <location filename="../apps/cda-raw-writer/FileWriter.cxx" line="90"/>
         <source>There was a problem writing an event</source>
         <translation>Hiba történt egy esemény kiírása közben</translation>
     </message>

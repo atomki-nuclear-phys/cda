@@ -40,15 +40,24 @@ namespace dt5740 {
 
             // Declare the time and energy variables:
             CHECK( nmgr.addVar( m_times[ group ][ channel ],
-                                ch->getTimeName() ) );
+                                ch->getTimeName(),
+                                tr( "Time of channel %1 of group %2 in a %3 with device "
+                                    "ID %4" ).arg( channel ).arg( group ).arg( deviceName() )
+                                .arg( getID() ) ) );
             CHECK( nmgr.addVar( m_energies[ group ][ channel ],
-                                ch->getEnergyName() ) );
+                                ch->getEnergyName(),
+                                tr( "Energy of channel %1 of group %2 in a %3 with device "
+                                    "ID %4" ).arg( channel ).arg( group ).arg( deviceName() )
+                                .arg( getID() ) ) );
 
             // Declare the raw data variable if needed:
             if( m_saveRawNtuple ) {
                m_channelData[ group ][ channel ].resize( getSamples(), 0 );
                CHECK( nmgr.addVar( m_channelData[ group ][ channel ],
-                                   ch->getRawName() ) );
+                                   ch->getRawName(),
+                                   tr( "Raw data of channel %1 of group %2 in a %3 with device "
+                                       "ID %4" ).arg( channel ).arg( group ).arg( deviceName() )
+                                   .arg( getID() ) ) );
             }
          }
       }

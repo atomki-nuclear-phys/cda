@@ -899,79 +899,84 @@ Eldobom a bejövö eseményt!</translation>
         <translation>Nem sikerült megnyitni a kimeneti fájlt &quot;%1&quot; névvel</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="90"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="63"/>
+        <source>&quot;%1&quot; opened</source>
+        <translation type="unfinished">&quot;%1&quot; megnyitva</translation>
+    </message>
+    <message>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="93"/>
         <source>No output file is open at the moment</source>
         <translation>Nincs kimeneti fájl megnyitva jelenleg</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="101"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="104"/>
         <source>The object is in an inconsistent state</source>
         <translation>Az objektum inknonzisztens állapotban van</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="107"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="110"/>
         <source>An error happened while writing out the final events</source>
         <translation>Hiba történt az utolsó események kiírása közben</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="126"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="129"/>
         <source>Closed output file after writing %1 events</source>
         <translation>Kimeneti fájl lezárva %1 esemény kiírása után</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="145"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="148"/>
         <source>A file is not open at the moment</source>
         <translation>Nincsen fájl megnyitva jelenleg</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="152"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="155"/>
         <source>A TTree is not available at the moment</source>
         <translation>A TTree nem elérhetö jelenleg</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="158"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="161"/>
         <source>An error happened while writing the current event</source>
         <translation>Hiba történt a jelenlegi esemény kiírása közben</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="170"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="173"/>
         <source>Received a complex object description</source>
         <translation>Egy komplex objektum leírását kaptam</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="211"/>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="217"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="214"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="220"/>
         <source>Unknown primitive type encountered: %1</source>
         <translation>Ismeretlen egyszerü típust találtam: %1</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="227"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="230"/>
         <source>You have to open an output file before declaring variables</source>
         <translation>Meg kell nyitni egy kimeneti fájlt a változók deklarálása elött</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="234"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="237"/>
         <source>A branch with name &quot;%1&quot; already exists</source>
         <translation>Egy &quot;%1&quot; nevü ág már létezik</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="239"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="242"/>
         <source>Checking if branch with name &quot;%1&quot; can be added</source>
         <translation>Annak ellenörzése, hogy egy &quot;%1&quot; nevü ágat létre lehet-e hozni</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="251"/>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="267"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="256"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="277"/>
         <source>Failed creating branch with name: %1</source>
         <translation>Nem sikerült a &quot;%1&quot; nevü ágat létrehozni</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="256"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="263"/>
         <source>Creating primitive branch with name &quot;%1&quot; and leaf-list &quot;%2&quot;</source>
         <translation>A &quot;%1&quot; primitív ág létrehozása &quot;%2&quot; levél-listával</translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="272"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="284"/>
         <source>Creating object branch with name &quot;%1&quot; and classname &quot;%2&quot;</source>
         <translation>A &quot;%1&quot; objektum ág létrehozása &quot;%2&quot; osztály-névvel</translation>
     </message>

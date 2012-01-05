@@ -23,7 +23,6 @@ namespace simple_daq {
 
    CamacReaderRunner::CamacReaderRunner( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        m_msgServerAddress( "127.0.0.1:50000" ),
         m_runner(),
         m_logger( "sd::CamacReaderRunner" ) {
 
@@ -145,23 +144,6 @@ namespace simple_daq {
    }
 
    /**
-    * @param address The statistics server address to be used by the application
-    */
-   void CamacReaderRunner::setStatServerAddress( const QString& address ) {
-
-      m_statServerAddress = address;
-      return;
-   }
-
-   /**
-    * @returns The statistics server address to be used by the application
-    */
-   const QString& CamacReaderRunner::getStatServerAddress() const {
-
-      return m_statServerAddress;
-   }
-
-   /**
     * @param verbosity The output verbosity of cda-camac-reader
     */
    void CamacReaderRunner::setVerbosity( msg::Level verbosity ) {
@@ -208,6 +190,20 @@ namespace simple_daq {
    }
 
    /**
+    * @param status Selects whether the address should be added or removed
+    * @param address The statistics server address to be used by the application
+    */
+   void CamacReaderRunner::setStatServerAddress( bool status, const QString& address ) {
+
+      if( status ) {
+         m_statServerAddresses.insert( address );
+      } else {
+         m_statServerAddresses.erase( address );
+      }
+      return;
+   }
+
+   /**
     * This is the function doing most of the work in this class. It puts the
     * command line options together to start cda-camac-reader correctly, then
     * it starts the application in a new process.
@@ -227,8 +223,16 @@ namespace simple_daq {
          options += " -c " + m_configFileName;
          options += " -v " + QString::number( m_level );
 
-         if( ! m_statServerAddress.isEmpty() ) {
-            options += " -s " + m_statServerAddress;
+         //
+         // Collect where the application should send statistics information to:
+         //
+         if( m_statServerAddresses.size() ) {
+            options += " -s ";
+            std::set< QString >::const_iterator itr = m_statServerAddresses.begin();
+            std::set< QString >::const_iterator end = m_statServerAddresses.end();
+            for( ; itr != end; ++itr ) {
+               options += ( *itr ) + " ";
+            }
          }
 
          //
