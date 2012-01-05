@@ -11,12 +11,12 @@
     <message>
         <location filename="../gui/common/aboutCDA.cxx" line="21"/>
         <source>CDA - Common Data Acquisition</source>
-        <translation>CDA - Egységes Adat Gyüjtö</translation>
+        <translation>CDA - Egységes Adat Gyűjtő</translation>
     </message>
     <message>
         <location filename="../gui/common/aboutCDA.cxx" line="23"/>
         <source>CDA is an application suite built for the Experimental Nuclear Physics department of the Atomki. It is composed of multiple executables that work together in the data acquisition.</source>
-        <translation>A CDA egy program-együttes az Atomki Kísérleti Magfizikai Osztálya részére fejlesztve. Több futtatható programból épül fel amik együtt végzik az adatgyüjtést.</translation>
+        <translation>A CDA egy program-együttes az Atomki Kísérleti Magfizikai Osztálya részére fejlesztve. Több futtatható programból épül fel amik együtt végzik az adatgyűjtést.</translation>
     </message>
 </context>
 <context>

@@ -21,12 +21,12 @@
     <message>
         <location filename="../daq/stat/Sender.cxx" line="94"/>
         <source>Connected to statistics receiver on %1:%2</source>
-        <translation>Kapcsolódtam egy statisztika vevöhöz a %1:%2 címen</translation>
+        <translation>Kapcsolódtam egy statisztika vevöhöz a(z) %1:%2 címen</translation>
     </message>
     <message>
         <location filename="../daq/stat/Sender.cxx" line="146"/>
         <source>Could not connect to statistics receiver on address &quot;%1&quot;, port &quot;%2&quot;</source>
-        <translation>Nem sikerült statisztika vevövel kapcsolódni a &quot;%1&quot; címen a &quot;%2&quot; port-on</translation>
+        <translation>Nem sikerült statisztika vevövel kapcsolódni a(z) &quot;%1&quot; címen a(z) &quot;%2&quot; porton</translation>
     </message>
 </context>
 <context>
@@ -49,12 +49,12 @@
     <message>
         <location filename="../daq/config/ConfReader.cxx" line="56"/>
         <source>Couldn&apos;t connect to configuration server on: %1:%2</source>
-        <translation>Nem lehetett konfigurációs szerverhez kapcsolódni a %1:%2 címen</translation>
+        <translation>Nem lehetett konfigurációs szerverhez kapcsolódni a(z) %1:%2 címen</translation>
     </message>
     <message>
         <location filename="../daq/config/ConfReader.cxx" line="61"/>
         <source>Connected to configuration server on: %1:%2</source>
-        <translation>Konfigurációs szerverhez kapcsolódtam a %1:%2 címen</translation>
+        <translation>Konfigurációs szerverhez kapcsolódtam a(z) %1:%2 címen</translation>
     </message>
     <message>
         <location filename="../daq/config/ConfReader.cxx" line="70"/>
@@ -126,7 +126,7 @@
     <message>
         <location filename="../daq/common/PathResolver.cxx" line="52"/>
         <source>Environment variable &quot;%1&quot; already cached</source>
-        <translation>A &quot;%1&quot; környezeti változó már be van olvasva</translation>
+        <translation>A(z) &quot;%1&quot; környezeti változó már be van olvasva</translation>
     </message>
     <message>
         <location filename="../daq/common/PathResolver.cxx" line="55"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../daq/common/PathResolver.cxx" line="62"/>
         <source>Adding &quot;%1&quot; to environment %2</source>
-        <translation>&quot;%1&quot; hozzáadása a %2 környezeti változóhoz</translation>
+        <translation>&quot;%1&quot; hozzáadása a(z) %2 környezeti változóhoz</translation>
     </message>
     <message>
         <location filename="../daq/common/PathResolver.cxx" line="74"/>
@@ -156,17 +156,17 @@
     <message>
         <location filename="../daq/common/PathResolver.cxx" line="94"/>
         <source>&quot;%1&quot; found in directory: %2</source>
-        <translation>Megtaláltam a &quot;%1&quot; programot a(z) %2 könyvtárban</translation>
+        <translation>Megtaláltam a(z) &quot;%1&quot; programot a(z) %2 könyvtárban</translation>
     </message>
     <message>
         <location filename="../daq/common/PathResolver.cxx" line="113"/>
         <source>&quot;%1&quot; found under &quot;%2/bin&quot;</source>
-        <translation>&quot;%1&quot; megtalálva a &quot;%2/bin&quot; könyvtárban</translation>
+        <translation>&quot;%1&quot; megtalálva a(z) &quot;%2/bin&quot; könyvtárban</translation>
     </message>
     <message>
         <location filename="../daq/common/PathResolver.cxx" line="123"/>
         <source>Failed to find &quot;%1&quot; in environment: %2</source>
-        <translation>Nem sikerult megtalálni &quot;%1&quot;-et a %2 környezeti változóban</translation>
+        <translation>Nem sikerult megtalálni &quot;%1&quot;-t a(z) %2 környezeti változóban</translation>
     </message>
     <message>
         <source>Failed to find &quot;%1&quot; in environment: %2
@@ -180,7 +180,7 @@ Feltételezzük, hogy a &quot;%3/bin&quot; könyvtárban van</translation>
     <message>
         <location filename="../daq/moni/Histogram.cxx" line="203"/>
         <source>The upper bound of histogram &apos;%1&apos; is not larger than its lower bound</source>
-        <translation>A &apos;%1&apos; hisztogram felsö korlátja nem magasabb az alsó korlátjánál</translation>
+        <translation>A(z) &apos;%1&apos; hisztogram felsö korlátja nem magasabb az alsó korlátjánál</translation>
     </message>
     <message>
         <location filename="../daq/moni/Histogram.cxx" line="224"/>
@@ -226,7 +226,7 @@ Túlcsordulás: %3</translation>
     <message>
         <location filename="../daq/moni/Histogram.cxx" line="716"/>
         <source>Unable to use logarithmic style with limits [%1,%2]</source>
-        <translation>Nem lehet logaritmikus stílust használni a [%1,%2] limitekkel</translation>
+        <translation>Nem lehet logaritmikus stílust használni a(z) [%1,%2] limitekkel</translation>
     </message>
     <message>
         <location filename="../daq/moni/Histogram.cxx" line="833"/>

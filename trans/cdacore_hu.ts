@@ -7,13 +7,13 @@
         <location filename="../core/common/Address.cxx" line="39"/>
         <source>Constructing address from string: &quot;%1&quot;</source>
         <translatorcomment>Using &quot;ö&quot; instead of &quot;ő&quot; as the encoding doesn&apos;t like the latter.</translatorcomment>
-        <translation>Cím létrehozása a &quot;%1&quot; névböl</translation>
+        <translation>Cím létrehozása a(z) &quot;%1&quot; névböl</translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="47"/>
         <source>Couldn&apos;t decode address: &quot;%1&quot;
 Setting to 127.0.0.1:50000</source>
-        <translation>Nem lehetett értelmezni a &quot;%1&quot; címet
+        <translation>Nem lehetett értelmezni a(z) &quot;%1&quot; címet
 Beállítva 127.0.0.1:50000 címre</translation>
     </message>
     <message>
@@ -25,7 +25,7 @@ Beállítva 127.0.0.1:50000 címre</translation>
         <location filename="../core/common/Address.cxx" line="68"/>
         <source>Couldn&apos;t decode port: %1
 Setting it to 50000</source>
-        <translation>Nem lehetett a &quot;%1&quot; portot értelmezni
+        <translation>Nem lehetett a(z) &quot;%1&quot; portot értelmezni
 Beállítva 50000-re</translation>
     </message>
 </context>
@@ -63,7 +63,7 @@ Beállítva 50000-re</translation>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="571"/>
         <source>Opening connection type %1 on link number %2,  CONET node %3, VME address %4</source>
-        <translation>Kapcsolat megnyitása %1 típussal a %2 link számon, %3 CONET egységgel, %4 VME címmel</translation>
+        <translation>Kapcsolat megnyitása %1 típussal a(z) %2 link számon, %3 CONET egységgel, %4 VME címmel</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="579"/>
@@ -104,8 +104,8 @@ Beállítva 50000-re</translation>
   PCB rev.   : %9
   ADC NBits  : %10</source>
         <translation>Digitalizáló eszköz információ:
-  model név   : %1
-  model       : %2
+  modell név  : %1
+  modell      : %2
   csatornák   : %3
   forma faktor: %4
   család-kód  : %5
@@ -159,22 +159,22 @@ Beállítva 50000-re</translation>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="927"/>
         <source>Setting channel %1 self-trigger mode to %2</source>
-        <translation>A %1. csatorna ön-trigger módja %2-ra/re állítva</translation>
+        <translation>A(z) %1. csatorna ön-trigger módja %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="944"/>
         <source>Requesting channel %1&apos;s self-trigger mode</source>
-        <translation>A %1. csatorna ön-trigger módjának lekérdezése</translation>
+        <translation>A(z) %1. csatorna ön-trigger módjának lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="960"/>
         <source>Setting group %1 self-trigger mode to %2</source>
-        <translation>A %1. csoport ön trigger módja %2-ra/re állítva</translation>
+        <translation>A(z) %1. csoport ön trigger módja %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="977"/>
         <source>Requesting group %1&apos;s self-trigger mode</source>
-        <translation>A %1. csoport ön-trigger módjának lekérdezése</translation>
+        <translation>A(z) %1. csoport ön-trigger módjának lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="991"/>
@@ -184,12 +184,12 @@ Beállítva 50000-re</translation>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1005"/>
         <source>Setting group %1&apos;s channel mask to %2</source>
-        <translation>A %1. csoport csatorna maszkja %2-ra/re állítva</translation>
+        <translation>A(z) %1. csoport csatorna maszkja %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1020"/>
         <source>Requestuing group %1&apos;s channel mask</source>
-        <translation>A %1. csoport csatorna maszkjának lekérdezése</translation>
+        <translation>A(z) %1. csoport csatorna maszkjának lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1036"/>
@@ -433,7 +433,7 @@ Használja a Crate::open(...) függvényt!</translation>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="43"/>
         <source>Booking global memory block: %1</source>
-        <translation>A %1 globális memória blokk lefoglalása</translation>
+        <translation>A(z) %1 globális memória blokk lefoglalása</translation>
     </message>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="56"/>
@@ -464,12 +464,12 @@ Használja a Crate::open(...) függvényt!</translation>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="179"/>
         <source>Filling histogram %1 with data: %2, weight: %3</source>
-        <translation>A %1 hisztogram feltöltése %2 helyen %3 súllyal</translation>
+        <translation>A(z) %1 hisztogram feltöltése %2 helyen %3 súllyal</translation>
     </message>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="210"/>
         <source>Filling histogram %1 with xdata: %2, ydata: %3, weight: %4</source>
-        <translation>A %1 hisztogram feltöltése %2 X- ées %3 Y-koordinátákkal és %4 súllyal</translation>
+        <translation>A(z) %1 hisztogram feltöltése %2 X- ées %3 Y-koordinátákkal és %4 súllyal</translation>
     </message>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="237"/>
@@ -507,7 +507,7 @@ már meg van nyitva!</translation>
     <message>
         <location filename="../core/cernlib/NTupleMgr.cxx" line="104"/>
         <source>Opening output file: %1</source>
-        <translation>A &quot;%1&quot; kimeneti fájl megnyitása</translation>
+        <translation>A(z) &quot;%1&quot; kimeneti fájl megnyitása</translation>
     </message>
     <message>
         <location filename="../core/cernlib/NTupleMgr.cxx" line="112"/>
@@ -517,7 +517,7 @@ már meg van nyitva!</translation>
     <message>
         <location filename="../core/cernlib/NTupleMgr.cxx" line="126"/>
         <source>Variable name &quot;%1&quot; too long. It was shortened to &quot;%2&quot;</source>
-        <translation>A &quot;%1&quot; változó név túl hosszú. Le lett rövidítve &quot;%2&quot;-re</translation>
+        <translation>A(z) &quot;%1&quot; változó név túl hosszú. Le lett rövidítve &quot;%2&quot;-ra/re</translation>
     </message>
     <message>
         <location filename="../core/cernlib/NTupleMgr.cxx" line="140"/>
@@ -557,7 +557,7 @@ már meg van nyitva!</translation>
     <message>
         <location filename="../core/cernlib/NTupleMgr.cxx" line="243"/>
         <source>Setting variable %1 to: %2</source>
-        <translation>A &quot;%1&quot; változó %2-re/ra állítva </translation>
+        <translation>A(z) &quot;%1&quot; változó %2-re/ra állítva</translation>
     </message>
     <message>
         <location filename="../core/cernlib/NTupleMgr.cxx" line="250"/>
@@ -614,7 +614,7 @@ kimeneti fájl már meg van nyitva!</translation>
     <message>
         <location filename="../core/device/Loader.cxx" line="128"/>
         <source>%1 could not be loaded</source>
-        <translation>%1-et nem lehetett betölteni</translation>
+        <translation>%1-t nem lehetett betölteni</translation>
     </message>
     <message>
         <location filename="../core/device/Loader.cxx" line="159"/>
@@ -696,12 +696,12 @@ Ez elég veszélyes lehet...</translation>
     <message>
         <location filename="../core/event/EventServer.cxx" line="108"/>
         <source>Server is listening on host &quot;%1&quot; and port %2</source>
-        <translation>A szerver a &quot;%1&quot; néven és %2 port-on figyel</translation>
+        <translation>A szerver a(z) &quot;%1&quot; néven és %2 porton figyel</translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="112"/>
         <source>Server could not be started on host &quot;%1&quot; and port &quot;%2&quot;</source>
-        <translation>A szervert nem lehetett elindítani a &quot;%1&quot; címen és &quot;%2&quot; port-on</translation>
+        <translation>A szervert nem lehetett elindítani a(z) &quot;%1&quot; címen és &quot;%2&quot; porton</translation>
     </message>
     <message>
         <source>Received new incoming connection</source>
@@ -753,12 +753,12 @@ Eldobom a bejövö eseményt!</translation>
     <message>
         <location filename="../core/event/Sender_ev.cxx" line="56"/>
         <source>Connecting to %1:%2</source>
-        <translation>Kapcsolódás a %1:%2 címhez</translation>
+        <translation>Kapcsolódás a(z) %1:%2 címhez</translation>
     </message>
     <message>
         <location filename="../core/event/Sender_ev.cxx" line="80"/>
         <source>Connected to event receiver on %1:%2</source>
-        <translation>Kapcsolódás sikeres egy esemény fogadóval a %1:%2 címen</translation>
+        <translation>Kapcsolódás sikeres egy esemény fogadóval a(z) %1:%2 címen</translation>
     </message>
     <message>
         <source>Bytes to write: %1</source>
@@ -767,7 +767,7 @@ Eldobom a bejövö eseményt!</translation>
     <message>
         <location filename="../core/event/Sender_ev.cxx" line="136"/>
         <source>Could not connect to event receiver on address &quot;%1&quot;, port &quot;%2&quot;</source>
-        <translation>Nem sikerült egy esemény-olvasóhoz kapcsolódni a &quot;%1&quot; címen, &quot;%2&quot; port-on</translation>
+        <translation>Nem sikerült egy esemény-olvasóhoz kapcsolódni a(z) &quot;%1&quot; címen, &quot;%2&quot; porton</translation>
     </message>
 </context>
 <context>
@@ -847,12 +847,12 @@ Eldobom a bejövö eseményt!</translation>
     <message>
         <location filename="../core/i18n/Loader_i18n.cxx" line="98"/>
         <source>Couldn&apos;t load translation file: %1</source>
-        <translation>Nem sikerült betölteni a %1 fordítási fájlt</translation>
+        <translation>Nem sikerült betölteni a(z) %1 fordítási fájlt</translation>
     </message>
     <message>
         <location filename="../core/i18n/Loader_i18n.cxx" line="103"/>
         <source>Loaded translation file: %1</source>
-        <translation>A %1 fordítási fájl betöltve</translation>
+        <translation>A(z) %1 fordítási fájl betöltve</translation>
     </message>
     <message>
         <location filename="../core/i18n/Loader_i18n.cxx" line="111"/>
@@ -886,7 +886,7 @@ Eldobom a bejövö eseményt!</translation>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="43"/>
         <source>Opening output file with name &quot;%1&quot; and tree name &quot;%2&quot;</source>
-        <translation>A &quot;%1&quot; kimeneti fájl megnyitása &quot;%2&quot; &quot;fa&quot; névvel</translation>
+        <translation>A(z) &quot;%1&quot; kimeneti fájl megnyitása &quot;%2&quot; &quot;fa&quot; névvel</translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="50"/>
@@ -901,7 +901,7 @@ Eldobom a bejövö eseményt!</translation>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="63"/>
         <source>&quot;%1&quot; opened</source>
-        <translation type="unfinished">&quot;%1&quot; megnyitva</translation>
+        <translation>&quot;%1&quot; megnyitva</translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="93"/>
@@ -968,17 +968,17 @@ Eldobom a bejövö eseményt!</translation>
         <location filename="../core/root/NTupleMgr_root.cxx" line="256"/>
         <location filename="../core/root/NTupleMgr_root.cxx" line="277"/>
         <source>Failed creating branch with name: %1</source>
-        <translation>Nem sikerült a &quot;%1&quot; nevü ágat létrehozni</translation>
+        <translation>Nem sikerült a(z) &quot;%1&quot; nevü ágat létrehozni</translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="263"/>
         <source>Creating primitive branch with name &quot;%1&quot; and leaf-list &quot;%2&quot;</source>
-        <translation>A &quot;%1&quot; primitív ág létrehozása &quot;%2&quot; levél-listával</translation>
+        <translation>A(z) &quot;%1&quot; primitív ág létrehozása &quot;%2&quot; levél-listával</translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="284"/>
         <source>Creating object branch with name &quot;%1&quot; and classname &quot;%2&quot;</source>
-        <translation>A &quot;%1&quot; objektum ág létrehozása &quot;%2&quot; osztály-névvel</translation>
+        <translation>A(z) &quot;%1&quot; objektum ág létrehozása &quot;%2&quot; osztály-névvel</translation>
     </message>
 </context>
 <context>
