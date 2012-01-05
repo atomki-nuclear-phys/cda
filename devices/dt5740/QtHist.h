@@ -44,7 +44,7 @@ namespace dt5740 {
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
-    * $Revison$
+    * $Revision$
     * $Date$
     */
    class QtHist : public dev::QtHist,

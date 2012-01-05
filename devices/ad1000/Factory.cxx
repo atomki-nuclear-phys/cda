@@ -10,6 +10,7 @@
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
 #include "RootDisk.h"
+#include "QtHist.h"
 
 namespace ad1000 {
 
@@ -44,6 +45,10 @@ namespace ad1000 {
       } else if( ti == typeid( dev::RootDisk ) ) {
 
          return dynamic_cast< dev::RootDisk* >( new RootDisk() );
+
+      } else if( ti == typeid( dev::QtHist ) ) {
+
+         return dynamic_cast< dev::QtHist* >( new QtHist() );
 
       }
 

@@ -129,7 +129,7 @@
 <context>
     <name>ad1000::Factory</name>
     <message>
-        <location filename="../devices/ad1000/Factory.cxx" line="23"/>
+        <location filename="../devices/ad1000/Factory.cxx" line="24"/>
         <source>Atomki AD1000 ADC</source>
         <translation>Atomki AD1000 ADC</translation>
     </message>
@@ -175,6 +175,14 @@
         <location filename="../devices/ad1000/Gui.cxx" line="191"/>
         <source>LAM</source>
         <translation>LAM</translation>
+    </message>
+</context>
+<context>
+    <name>ad1000::QtHist</name>
+    <message>
+        <location filename="../devices/ad1000/QtHist.cxx" line="74"/>
+        <source>Received %1 data words. Was supposed to receive 1.</source>
+        <translation>%1 adat szót kaptam. Csak egyet kellett volna.</translation>
     </message>
 </context>
 </TS>
