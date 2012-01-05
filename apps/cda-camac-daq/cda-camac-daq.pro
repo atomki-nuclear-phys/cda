@@ -1,4 +1,4 @@
-# Dear emacs, this is normal -*- text -*-
+# Dear emacs, this is -*- fundamental -*- text
 ##############################################################
 #                                                            #
 # This project file compiles the cda-camac-daq front-end     #
@@ -23,43 +23,6 @@ TRANSLATIONS = ../../trans/cda-camac-daq_hu.ts
 # The application uses some Qt resources:
 RESOURCES = cda-camac-daq.qrc
 
-#
-# These are the specific configuration options for compiling the code
-# on Mac OS X.
-#
 mac {
-   message(*)
-   message(* Configuring to build the \"cda-camac-daq\" application on Mac OS X)
-   message(*)
-
-   QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore -framework cdadaq -framework cdagui
-
    ICON = ../../images/cda-daq.icns
-}
-
-#
-# These are the specific configuration options for compiling the code
-# on Linux.
-#
-unix:!mac {
-   message(*)
-   message(* Configuring to build the \"cda-camac-daq\" application on Linux)
-   message(*)
-
-   INCLUDEPATH += ../../core ../../gui ../../daq
-   LIBS        += -L../../lib -lcdacore -lcdadaq -lcdagui
-}
-
-#
-# These are the specific configuration options for compiling the code
-# on Windows.
-#
-win32 {
-   message(*)
-   message(* Configuring to build the \"cda-camac-daq\" application on Windows)
-   message(*)
-
-   INCLUDEPATH += ../../core ../../gui ../../daq
-   LIBS        += -L../../lib -lcdagui -lcdadaq -lcdacore
 }

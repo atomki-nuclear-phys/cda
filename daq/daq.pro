@@ -35,10 +35,6 @@ MOC_DIR     = ./.obj
 # on Mac OS X.
 #
 mac {
-   message(*)
-   message(* Configuring to build the \"cdadaq\" framework on Mac OS X)
-   message(*)
-
    # We create a library bundle and create a file storing the dependencies
    # of this bundle:
    CONFIG += lib_bundle create_prl link_prl
@@ -84,10 +80,6 @@ mac {
 # Way simpler than the Mac OS X ones...
 #
 unix:!mac {
-   message(*)
-   message(* Configuring to build the \"cdadaq\" shared library on Linux)
-   message(*)
-
    # Create a shared library and link it against the cdacore library:
    CONFIG      += shared
    INCLUDEPATH += ../core
@@ -101,10 +93,6 @@ unix:!mac {
 # These are the configuration options for compiling the code on Windows:
 #
 win32 {
-   message(*)
-   message(* Configuring to build the \"cdadaq\" static library on Windows)
-   message(*)
-
    # Create a static library and link it against the cdacore library:
    CONFIG      += static
    INCLUDEPATH += ../core

@@ -41,7 +41,7 @@
 # should not carry around the debug information... (Add "debug" in the following
 # list if you want to debug the code!)
 #
-CONFIG += warn_on release
+CONFIG += warn_on release ordered
 
 #
 # Check that the CDASYS environment variable exists. The value of

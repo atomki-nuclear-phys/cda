@@ -6,9 +6,9 @@
 #ifdef HAVE_ROOT_LIBS
 // System include(s):
 extern "C" {
-#   include <string.h>
 #   include <cxxabi.h>
 }
+#include <cstring>
 #include <cstdlib>
 
 // STL include(s):

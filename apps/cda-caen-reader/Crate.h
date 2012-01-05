@@ -48,6 +48,7 @@ namespace caen_reader {
     */
    class Crate : public dev::Crate< dev::CaenReadout > {
 
+      // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( caen_reader::Crate )
 
    public:

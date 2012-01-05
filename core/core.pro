@@ -43,10 +43,6 @@ DEFINES += unix_style
 # on Mac OS X.
 #
 mac {
-   message(*)
-   message(* Configuring to build the \"cdacore\" framework on Mac OS X)
-   message(*)
-
    # We create a library bundle and create a file storing the dependencies
    # of this bundle:
    CONFIG += lib_bundle create_prl
@@ -144,10 +140,6 @@ mac {
 # Way simpler than the Mac OS X ones...
 #
 unix:!mac {
-   message(*)
-   message(* Configuring to build the \"cdacore\" shared library on Linux)
-   message(*)
-
    CONFIG += shared
    DESTDIR = ../lib
 }
@@ -156,10 +148,6 @@ unix:!mac {
 # These are the configuration options for compiling the code on Windows:
 #
 win32 {
-   message(*)
-   message(* Configuring to build the \"cdacore\" static library on Windows)
-   message(*)
-
    CONFIG += static
    DESTDIR = ../lib
 }

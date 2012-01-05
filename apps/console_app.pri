@@ -1,4 +1,4 @@
-# Dear emacs, this is normal -*- text -*-
+# Dear emacs, this is -*- fundamental -*- text
 ##############################################################
 #                                                            #
 # This project file fragment should be used by all "console" #
@@ -19,3 +19,15 @@ QT     = core network xml gui
 OBJECTS_DIR = ./.obj
 MOC_DIR     = ./.obj
 DESTDIR     = ../../bin
+
+# The include paths:
+INCLUDEPATH += ../../core ../../daq ../../gui
+
+# The library dependencies:
+mac {
+   QMAKE_CXXFLAGS += -F../../lib
+   LIBS           += -F../../lib -framework cdacore -framework cdadaq
+}
+!mac {
+   LIBS += -L../../lib -lcdadaq -lcdacore
+}

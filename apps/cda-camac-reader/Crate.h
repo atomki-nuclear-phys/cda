@@ -47,12 +47,15 @@ namespace reader {
     *         configuration of the devices in the crate, this class
     *         only has to take care of performing the data readout.
     *
-    * @author Attila Krasznahorkay Jr.
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
    class Crate : public dev::Crate< dev::CamacReadout > {
+
+      // To get the tr() function:
+      Q_DECLARE_TR_FUNCTIONS( reader::Crate )
 
    public:
       /// Constructor

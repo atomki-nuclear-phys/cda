@@ -1,4 +1,4 @@
-# Dear emacs, this is normal -*- text -*-
+# Dear emacs, this is -*- fundamental -*- text
 ##############################################################
 #                                                            #
 # This project file fragment should be used by all GUI       #
@@ -22,3 +22,15 @@ DESTDIR     = ../../bin
 
 # Special linking setup for Windows:
 QMAKE_LFLAGS_WINDOWS += --enable-auto-import
+
+# The include paths:
+INCLUDEPATH += ../../core ../../daq ../../gui
+
+# The library dependencies:
+mac {
+   QMAKE_CXXFLAGS += -F../../lib
+   LIBS           += -F../../lib -framework cdacore -framework cdadaq -framework cdagui
+}
+!mac {
+   LIBS += -L../../lib -lcdagui -lcdadaq -lcdacore
+}

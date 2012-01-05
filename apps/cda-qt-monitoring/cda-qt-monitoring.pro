@@ -1,7 +1,8 @@
-# Dear emacs, this is normal -*- text -*-
+# Dear emacs, this is -*- fundamental -*- text
 ##############################################################
 #                                                            #
-# This project file compiles the cda-qt-monitoring application.          #
+# This project file compiles the cda-qt-monitoring           #
+# application.                                               #
 #                                                            #
 # Attila Krasznahorkay Jr.                                   #
 #                                                            #
@@ -25,43 +26,6 @@ RESOURCES = cda-qt-monitoring.qrc
 # The translation file for the application:
 TRANSLATIONS = ../../trans/cda-qt-monitoring_hu.ts
 
-#
-# These are the specific configuration options for compiling the code
-# on Mac OS X.
-#
 mac {
-   message(*)
-   message(* Configuring to build the \"cda-qt-monitoring\" application on Mac OS X)
-   message(*)
-
-   QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore -framework cdadaq -framework cdagui
-
    ICON = ../../images/cda-qt-monitoring.icns
-}
-
-#
-# These are the specific configuration options for compiling the code
-# on Linux.
-#
-unix:!mac {
-   message(*)
-   message(* Configuring to build the \"cda-qt-monitoring\" application on Linux)
-   message(*)
-
-   INCLUDEPATH += ../../core ../../gui
-   LIBS        += -L../../lib -lcdacore -lcdadaq -lcdagui
-}
-
-#
-# These are the specific configuration options for compiling the code
-# on Windows.
-#
-win32 {
-   message(*)
-   message(* Configuring to build the \"cda-qt-monitoring\" application on Windows)
-   message(*)
-
-   INCLUDEPATH += ../../core ../../gui
-   LIBS        += -L../../lib -lcdagui -lcdadaq -lcdagui
 }

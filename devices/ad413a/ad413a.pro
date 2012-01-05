@@ -1,4 +1,4 @@
-# Dear emacs, this is normal -*- text -*-
+# Dear emacs, this is -*- fundamental -*- text
 ##############################################################
 #                                                            #
 # This is the project file for compiling the ad413a         #
@@ -20,34 +20,3 @@ TARGET   = ad413a
 HEADERS = *.h
 SOURCES = *.cxx
 TRANSLATIONS = ../../trans/ad413a_hu.ts
-
-mac {
-   message(*)
-   message(* Configuring to build the \"ad413a\" plugin on Mac OS X)
-   message(*)
-
-   # The plugin has to be linked against the cdacore framework:
-   INCLUDEPATH    += ../../core
-   QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore
-}
-
-unix:!mac {
-   message(*)
-   message(* Configuring to build the \"ad413a\" plugin on Linux)
-   message(*)
-
-   # The plugin has to be linked against the cdacore library:
-   INCLUDEPATH += ../../core
-   LIBS         = -L../../lib -lcdacore
-}
-
-win32 {
-   message(*)
-   message(* Configuring to build the \"ad413a\" plugin on Windows)
-   message(*)
-
-   # The plugin has to be linked against the cdacore library:
-   INCLUDEPATH += ../../core
-   LIBS         = ../../lib/libcdacore1.a
-}
