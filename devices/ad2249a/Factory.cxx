@@ -1,3 +1,4 @@
+// $Id$
 
 // Qt include(s):
 #include <QtCore/QtPlugin>
@@ -9,6 +10,7 @@
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
 #include "RootDisk.h"
+#include "QtHist.h"
 
 namespace ad2249a {
 
@@ -43,6 +45,10 @@ namespace ad2249a {
       } else if( ti == typeid( dev::RootDisk ) ) {
 
          return dynamic_cast< dev::RootDisk* >( new RootDisk() );
+
+      } else if( ti == typeid( dev::QtHist ) ) {
+
+         return dynamic_cast< dev::QtHist* >( new QtHist() );
 
       }
 

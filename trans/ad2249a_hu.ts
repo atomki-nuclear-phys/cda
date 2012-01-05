@@ -154,7 +154,7 @@
 <context>
     <name>ad2249a::Factory</name>
     <message>
-        <location filename="../devices/ad2249a/Factory.cxx" line="22"/>
+        <location filename="../devices/ad2249a/Factory.cxx" line="24"/>
         <source>LeCroy 2249A ADC</source>
         <translation>LeCroy 2249A ADC</translation>
     </message>
@@ -200,6 +200,19 @@
         <location filename="../devices/ad2249a/Gui.cxx" line="237"/>
         <source>LAM</source>
         <translation>LAM</translation>
+    </message>
+</context>
+<context>
+    <name>ad2249a::QtHist</name>
+    <message>
+        <location filename="../devices/ad2249a/QtHist.cxx" line="98"/>
+        <source>Received data word from unknown channel</source>
+        <translation>Egy ismeretlen csatornától kaptam adatot</translation>
+    </message>
+    <message>
+        <location filename="../devices/ad2249a/QtHist.cxx" line="129"/>
+        <source>channel %1</source>
+        <translation>%1. csatorna</translation>
     </message>
 </context>
 <context>
