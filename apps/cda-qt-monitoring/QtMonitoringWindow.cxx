@@ -132,6 +132,8 @@ void QtMonitoringWindow::readConfigSlot() {
    for( ; itr != end; ++itr ) {
       QMdiSubWindow* window = m_view->addSubWindow( itr->second );
       window->setAttribute( Qt::WA_DeleteOnClose, false );
+      window->setWindowTitle( tr( "%1 with ID %2" ).arg( itr->second->deviceName() )
+                              .arg( itr->second->getID() ) );
       connect( window, SIGNAL( aboutToActivate() ),
                itr->second, SLOT( update() ) );
       itr->second->show();
@@ -143,7 +145,12 @@ void QtMonitoringWindow::readConfigSlot() {
 void QtMonitoringWindow::aboutQtMonitoringSlot() {
 
    QMessageBox::about( this, tr( "CDA Qt Monitoring" ),
-                       tr( "Will write a description soon..." ) );
+                       tr( "This application can be used to monitor a data taking "
+                           "session without the need for any external libraries.\n\n"
+                           "Normally the data taking is monitored using PAW/CERNLIB, "
+                           "with the help of the cda-glomem-writer application. "
+                           "This application is most useful when CERNLIB is not "
+                           "avalable." ) );
 
    // Make sure Qt remembers what is its default font.
    // (There seems to be a bug in Qt...)
