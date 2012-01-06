@@ -11,7 +11,7 @@
 #   include "cdacore/i18n/Loader.h"
 #   include "cdacore/msg/Sender.h"
 #   include "cdacore/common/Address.h"
-#   include "cdagui/moni/Histogram.h"
+#   include "cdadaq/moni/Histogram.h"
 #else
 #   include "i18n/Loader.h"
 #   include "msg/Sender.h"

@@ -283,25 +283,33 @@ namespace moni {
                                                          xAxisMenu );
       connect( xLinAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
                this, SLOT( setXAxisStyle( Histogram::AxisStyle ) ) );
-      AxisStyleAction* xLogAction = new AxisStyleAction( Logarithmic,
-                                                         tr( "Logarithmic" ),
-                                                         xAxisMenu );
-      connect( xLogAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
-               this, SLOT( setXAxisStyle( Histogram::AxisStyle ) ) );
+      // Only offer the logarithmic axis style if it makes sense:
+      AxisStyleAction* xLogAction = 0;
+      if( getLogXPossible() ) {
+         xLogAction = new AxisStyleAction( Logarithmic,
+                                           tr( "Logarithmic" ),
+                                           xAxisMenu );
+         connect( xLogAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
+                  this, SLOT( setXAxisStyle( Histogram::AxisStyle ) ) );
+      }
 
       // Group these actions together:
       QActionGroup* xAxisStyleGroup = new QActionGroup( xAxisMenu );
       xAxisStyleGroup->addAction( xLinAction );
-      xAxisStyleGroup->addAction( xLogAction );
+      if( xLogAction ) {
+         xAxisStyleGroup->addAction( xLogAction );
+      }
       if( getXAxisStyle() == Linear ) {
          xLinAction->setChecked( true );
-      } else if( getXAxisStyle() == Logarithmic ) {
+      } else if( ( getXAxisStyle() == Logarithmic ) && xLogAction ) {
          xLogAction->setChecked( true );
       }
 
       // Add the two actions to the sub-menu:
       xAxisMenu->addAction( xLinAction );
-      xAxisMenu->addAction( xLogAction );
+      if( xLogAction ) {
+         xAxisMenu->addAction( xLogAction );
+      }
 
       // Sub-menu for changing the Y axis style:
       QMenu* yAxisMenu = menu->addMenu( tr( "Set Y axis style" ) );
@@ -309,25 +317,33 @@ namespace moni {
                                                          yAxisMenu );
       connect( yLinAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
                this, SLOT( setYAxisStyle( Histogram::AxisStyle ) ) );
-      AxisStyleAction* yLogAction = new AxisStyleAction( Logarithmic,
-                                                         tr( "Logarithmic" ),
-                                                         yAxisMenu );
-      connect( yLogAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
-               this, SLOT( setYAxisStyle( Histogram::AxisStyle ) ) );
+      // Only offer the logarithmic axis style if it makes sense:
+      AxisStyleAction* yLogAction = 0;
+      if( getLogYPossible() ) {
+         yLogAction = new AxisStyleAction( Logarithmic,
+                                           tr( "Logarithmic" ),
+                                           yAxisMenu );
+         connect( yLogAction, SIGNAL( triggered( Histogram::AxisStyle ) ),
+                  this, SLOT( setYAxisStyle( Histogram::AxisStyle ) ) );
+      }
 
       // Group these actions together:
       QActionGroup* yAxisStyleGroup = new QActionGroup( yAxisMenu );
       yAxisStyleGroup->addAction( yLinAction );
-      yAxisStyleGroup->addAction( yLogAction );
+      if( yLogAction ) {
+         yAxisStyleGroup->addAction( yLogAction );
+      }
       if( getYAxisStyle() == Linear ) {
          yLinAction->setChecked( true );
-      } else if( getYAxisStyle() == Logarithmic ) {
+      } else if( ( getYAxisStyle() == Logarithmic ) && yLogAction ) {
          yLogAction->setChecked( true );
       }
 
       // Add the two actions to the sub-menu:
       yAxisMenu->addAction( yLinAction );
-      yAxisMenu->addAction( yLogAction );
+      if( yLogAction ) {
+         yAxisMenu->addAction( yLogAction );
+      }
 
       // Action clearing the histogram:
       QAction* resetAction = menu->addAction( tr( "Clear histogram" ) );
@@ -540,15 +556,12 @@ namespace moni {
       // Draw the histogram:
       int prev_pos = -1;
       for( int i = 0; i < m_nbins; ++i ) {
-         // Security check:
-         if( ybin.getDrawPosition( m_values[ i + 1 ] ) < 0.0 ) {
-            prev_pos = y_axis_start;
-            continue;
-         }
 
          const int y_bin_pos =
-            static_cast< int >( std::floor( y_axis_start -
-                                            ybin.getDrawPosition( m_values[ i + 1 ] ) ) );
+            ( ybin.getDrawPosition( m_values[ i + 1 ] ) > 0.0 ?
+              static_cast< int >( std::floor( y_axis_start -
+                                              ybin.getDrawPosition( m_values[ i + 1 ] ) ) ) :
+              y_axis_start );
          const int x_bin_low_pos =
             static_cast< int >( std::floor( xbin.getDrawPosition( m_low +
                                                                   i * bin_width ) ) );
@@ -556,7 +569,7 @@ namespace moni {
             static_cast< int >( std::floor( xbin.getDrawPosition( m_low +
                                                                   ( i + 1 ) * bin_width ) ) );
 
-         // Another security check:
+         // A security check:
          if( ( x_bin_low_pos < 0.0 ) || ( x_bin_up_pos < 0.0 ) ) continue;
 
          if( prev_pos > 0 ) {
@@ -712,7 +725,7 @@ namespace moni {
                                          double alength, int tdist ) const {
 
       // Check if this binning is possible:
-      if( ! ( low > 0.0 ) ) {
+      if( ( ! ( low > 0.0 ) ) || ( up < low ) ) {
          REPORT_ERROR( tr( "Unable to use logarithmic style with limits [%1,%2]" )
                        .arg( low ).arg( up ) );
          AxisBinning result( Logarithmic, low, up, alength );
@@ -729,64 +742,38 @@ namespace moni {
       //
       // The major tick distance in the axis units:
       //
-      double tick_major_exponent_unit =
-         std::pow( 10.0, std::ceil( std::log10( up_log -
-                                                low_log ) ) - 1.0 );
+      double tick_major_exponent_unit = 1.0;
       while( tick_major_exponent_unit * axis_unit < tdist ) {
-         tick_major_exponent_unit *= 2.0;
+         tick_major_exponent_unit += 1.0;
       }
-      while( ( tick_major_exponent_unit * axis_unit / 2 ) > tdist ) {
-         tick_major_exponent_unit /= 2.0;
-      }
-
-      //
-      // Unit(s) for the drawing:
-      //
-      const double tick_major_draw_unit = tick_major_exponent_unit * axis_unit;
-
-      //
-      // Number of ticks for the axis:
-      //
-      const int n_major_ticks =
-         static_cast< int >( std::ceil( ( up_log - low_log ) /
-                                        tick_major_exponent_unit ) + 1.0 );
-
-      //
-      // Offset of the first major tick mark:
-      //
-      const double tick_major_offset =
-         std::fmod( std::abs( low_log ), tick_major_exponent_unit ) * axis_unit;
 
       //
       // The value associated with the first major tick mark:
       //
       const double first_major_tick_value =
-         std::fmod( std::abs( low_log ), tick_major_exponent_unit ) + low_log;
+         std::ceil( std::fmod( std::abs( low_log ), tick_major_exponent_unit ) + low_log );
 
       // Create the result structure:
       AxisBinning result( Logarithmic, low, up, alength );
 
       // ...and now fill it:
-      for( int i = 0; i < n_major_ticks; ++i ) {
-         const double position = tick_major_offset + i * tick_major_draw_unit;
-         if( ( position < 0.0 ) || ( position > alength ) ) continue;
-         result.addMajorTick( AxisBinning::MajorTick( tick_major_offset +
-                                                      i * tick_major_draw_unit,
-                                                      std::pow( 10.0,
-                                                                first_major_tick_value +
-                                                                i * tick_major_exponent_unit ) ) );
-      }
-      for( int i = 0; i < n_major_ticks + 1; ++i ) {
-         const double previous =
-            std::pow( 10.0, first_major_tick_value +
-                      ( i - 1 ) * tick_major_exponent_unit );
-         const double current  =
-            std::pow( 10.0, first_major_tick_value + i * tick_major_exponent_unit );
-         for( int j = 0; j < 9; ++j ) {
-            const double value = previous + j * ( current - previous ) / 9.0;
-            if( ( value < low ) || ( value > up ) ) continue;
+      int exponent = static_cast< int >( std::floor( first_major_tick_value -
+                                                     tick_major_exponent_unit + 0.5 ) );
+      double value = std::pow( 10.0, exponent );
+      while( value < up ) {
+         const double mvalue = std::pow( 10.0, exponent );
+         if( ( mvalue > low ) && ( mvalue < up ) &&
+             ( ! ( exponent % static_cast< int >( tick_major_exponent_unit ) ) ) ) {
+            result.addMajorTick( AxisBinning::MajorTick( result.getDrawPosition( mvalue ),
+                                                         mvalue ) );
+         }
+         for( int i = 1; i < 10; ++i ) {
+            value = i * std::pow( 10.0, exponent );
+            if( value > up ) break;
+            if( value < low ) continue;
             result.addMinorTick( AxisBinning::MinorTick( result.getDrawPosition( value ) ) );
          }
+         ++exponent;
       }
 
       return result;
@@ -836,6 +823,25 @@ namespace moni {
       }
 
       return std::make_pair( view_minimum, view_maximum );
+   }
+
+   bool Histogram::getLogXPossible() const {
+
+      return ( ( m_low > 0.0 ) && ( m_up > m_low ) );
+   }
+
+   bool Histogram::getLogYPossible() const {
+
+      // Get the minimum to be shown in the plot:
+      const double minimum =
+         *( std::min_element( m_values.begin(), m_values.end() ) );
+
+      // Only negative values exclude using logarithmic style for the Y axis:
+      if( minimum < 0.0 ) {
+         return false;
+      } else {
+         return true;
+      }
    }
 
    Histogram::AxisBinning Histogram::getXAxisBinning() const {

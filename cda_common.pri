@@ -1,4 +1,4 @@
-# Dear emacs, this is normal -*- text -*-
+# Dear emacs, this is -*- fundamental -*- text
 ##############################################################
 #                                                            #
 # This project file fragment has to be included by all the   #
@@ -26,22 +26,12 @@
 }
 
 #
-# CDA is only supported on Linux and Mac OS X (the two systems
-# I use for development). This code snippet doesn't allow to
-# compile it on Windows:
-#
-#QMAKE_CXXFLAGS_DEBUG="-ggdb -O0 -fno-inline -W -Wall"
-#!unix:!mac {
-#   error(CDA is only supported on Linux and Mac OS X!)
-#}
-
-#
 # During development the code is compiled in debug mode to make it easier
 # to find problems in it. But the programs used for real data acquisition
 # should not carry around the debug information... (Add "debug" in the following
 # list if you want to debug the code!)
 #
-CONFIG += warn_on release ordered
+CONFIG += warn_on release ordered silent
 
 #
 # Check that the CDASYS environment variable exists. The value of

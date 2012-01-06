@@ -208,4 +208,13 @@ namespace dt5740 {
       return std::make_pair( view_minimum, view_maximum );
    }
 
+   /**
+    * In principle I don't see a scenario when looking at this distribution in log-scale
+    * would make too much sense.
+    */
+   bool RawHistogram::getLogYPossible() const {
+
+      return false;
+   }
+
 } // namespace dt5740

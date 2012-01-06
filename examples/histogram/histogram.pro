@@ -4,11 +4,10 @@
 include(../../cda_common.pri)
 include(../../apps/gui_app.pri)
 
-# This will be an application with the name "cda-config-editor":
+# This will be an application with the name "histogram":
 TARGET = histogram
 
 # These are the header and source files:
-HEADERS = *.h
 SOURCES = *.cxx
 
 #
@@ -21,7 +20,7 @@ mac {
    message(*)
 
    QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore -framework cdagui
+   LIBS           += -F../../lib -framework cdacore -framework cdadaq
 }
 
 #
@@ -34,5 +33,5 @@ unix:!mac {
    message(*)
 
    INCLUDEPATH += ../../core ../../gui
-   LIBS        += -L../../lib -lcdacore -lcdagui
+   LIBS        += -L../../lib -lcdacore -lcdadaq
 }

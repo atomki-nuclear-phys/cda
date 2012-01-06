@@ -211,6 +211,10 @@ namespace moni {
                                              double alength, int tdist ) const;
       /// Get the minimum and maximum for the Y axis
       virtual std::pair< double, double > getYAxisLimits() const;
+      /// Get whether logarithmic axis binning is possible for the X axis
+      virtual bool getLogXPossible() const;
+      /// Get whether logarithmic axis binning is possible for the Y axis
+      virtual bool getLogYPossible() const;
       /// Get the binning for the X axis
       virtual AxisBinning getXAxisBinning() const;
       /// Get the binning for the Y axis

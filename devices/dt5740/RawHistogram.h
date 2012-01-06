@@ -58,6 +58,8 @@ namespace dt5740 {
       virtual void drawStat( QPainter& painter ) const;
       /// Get the minimum and maximum for the Y axis
       virtual std::pair< double, double > getYAxisLimits() const;
+      /// Get whether logarithmic axis binning is possible for the Y axis
+      virtual bool getLogYPossible() const;
 
    private:
       double m_time; ///< Reconstructed time
