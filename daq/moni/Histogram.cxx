@@ -683,9 +683,9 @@ namespace moni {
          first_major_tick_value = 0.0;
       } else {
          if( low < 0.0 ) {
-            first_major_tick_value = std::fmod( std::abs( low ), tick_major_unit ) + low;
+            first_major_tick_value = std::ceil( low / tick_major_unit ) * tick_major_unit;
          } else {
-            first_major_tick_value = std::fmod( std::abs( low ), tick_major_unit ) - low;
+            first_major_tick_value = std::floor( low / tick_major_unit ) * tick_major_unit;
          }
       }
 
@@ -996,7 +996,7 @@ namespace moni {
 
    double Histogram::AxisBinning::getDrawPosition( double pos ) const {
 
-      if( ( pos < m_low ) || ( pos > m_up ) ) {
+      if( ( pos < ( m_low - 0.001 ) ) || ( pos > ( m_up + 0.001 ) ) ) {
          return -1.0;
       }
 

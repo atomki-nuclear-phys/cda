@@ -42,11 +42,11 @@ int main( int argc, char* argv[] ) {
    //
    // Create and show the configuration editor window:
    //
-   moni::Histogram hist( "Test histogram", 50, 2.0, 52.5 );
+   moni::Histogram hist( "Test histogram", 50, -200.0, -100.0 );
    //   hist.setXAxisStyle( moni::Histogram::Linear );
    hist.setYAxisStyle( moni::Histogram::Logarithmic );
-   hist.fill( 18.0, 12010.4 );
-   hist.fill( 30.5, 5.3 );
+   hist.fill( -118.0, 12010.4 );
+   hist.fill( -130.5, 5.3 );
    hist.show();
 
    //
