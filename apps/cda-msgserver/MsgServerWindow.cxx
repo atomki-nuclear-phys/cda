@@ -270,11 +270,14 @@ void MsgServerWindow::createMenus() {
    menuBar()->addSeparator();
    QMenu* helpMenu = menuBar()->addMenu( tr( "Help" ) );
 
-   m_aboutQtAction = helpMenu->addAction( tr( "About Qt" ) );
+   m_aboutQtAction = helpMenu->addAction( QIcon( ":/img/qt-logo.jpg" ),
+                                          tr( "About Qt" ) );
    connect( m_aboutQtAction, SIGNAL( triggered() ),
             this, SLOT( aboutQtSlot() ) );
 
-   m_aboutMsgServerAction = helpMenu->addAction( tr( "About Message Server" ) );
+   m_aboutMsgServerAction =
+      helpMenu->addAction( QIcon( ":/img/cda-msgserver.png" ),
+                           tr( "About Message Server" ) );
    connect( m_aboutMsgServerAction, SIGNAL( triggered() ),
             this, SLOT( aboutMsgServerSlot() ) );
 

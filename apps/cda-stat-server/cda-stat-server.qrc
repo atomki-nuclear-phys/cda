@@ -2,6 +2,8 @@
 <qresource prefix="/img">
    <file alias="cda-stat-server.png">../../images/cda-stat-server.png</file>
    <file alias="warning.png">../../images/warning.png</file>
+   <file alias="qt-logo.jpg">../../images/qt-logo.jpg</file>
+   <file alias="logo.png">../../images/logo.png</file>
    <file alias="splash.png">../../images/splash.png</file>
 </qresource>
 </RCC>

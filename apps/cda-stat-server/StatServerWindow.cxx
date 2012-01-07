@@ -183,12 +183,14 @@ void StatServerWindow::createMenus() {
    menuBar()->addSeparator();
    QMenu* helpMenu = menuBar()->addMenu( tr( "&Help" ) );
 
-   QAction* aboutQtAction = helpMenu->addAction( tr( "About &Qt" ) );
+   QAction* aboutQtAction = helpMenu->addAction( QIcon( ":/img/qt-logo.jpg" ),
+                                                 tr( "About &Qt" ) );
    connect( aboutQtAction, SIGNAL( triggered() ),
             qApp, SLOT( aboutQt() ) );
 
    QAction* aboutStatServerAction =
-      helpMenu->addAction( tr( "&About Statistics Server" ) );
+      helpMenu->addAction( QIcon( ":/img/cda-stat-server.png" ),
+                           tr( "&About Statistics Server" ) );
    connect( aboutStatServerAction, SIGNAL( triggered() ),
             this, SLOT( aboutStatServerSlot() ) );
 

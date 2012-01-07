@@ -64,22 +64,22 @@
         <translation>&amp;Segítség</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="186"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="187"/>
         <source>About &amp;Qt</source>
         <translation>A &amp;Qt-ról</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="191"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="193"/>
         <source>&amp;About Statistics Server</source>
         <translation>A &amp;Statisztika Szerverről</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="196"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="198"/>
         <source>About &amp;CDA</source>
         <translation>A &amp;CDA-ról</translation>
     </message>
     <message>
-        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="224"/>
+        <location filename="../apps/cda-stat-server/StatServerWindow.cxx" line="226"/>
         <source>Server port</source>
         <translation>Szerver port</translation>
     </message>

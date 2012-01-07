@@ -84,47 +84,47 @@
         <translation>Segítség</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="273"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="274"/>
         <source>About Qt</source>
         <translation>A Qt-ról</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="277"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="280"/>
         <source>About Message Server</source>
         <translation>Az Üzenet Szerverről</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="282"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="285"/>
         <source>About CDA</source>
         <translation>A CDA-ról</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="311"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="314"/>
         <source>Server port</source>
         <translation>Szerver port</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="331"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="334"/>
         <source>Max. number of messages</source>
         <translation>Üzenetek max. száma</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="355"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="358"/>
         <source>Min. message level</source>
         <translation>Üzenetek min. szintje</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="379"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="382"/>
         <source>Write output file</source>
         <translation>Kimeneti fájl írása</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="388"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="391"/>
         <source>File name:</source>
         <translation>Fájl név:</translation>
     </message>
     <message>
-        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="396"/>
+        <location filename="../apps/cda-msgserver/MsgServerWindow.cxx" line="399"/>
         <source>Output file</source>
         <translation>Kimeneti fájl</translation>
     </message>
