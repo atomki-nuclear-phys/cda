@@ -110,14 +110,21 @@ namespace moni {
       /// Reset the contents of the histogram
       void reset();
 
+      /// Un-zoom the X axis
+      void unzoom();
+
       /// Fill the histogram
       void fill( double value, double weight = 1.0 );
 
    protected:
       /// Re-implemented function, used to draw the histogram
       virtual void paintEvent( QPaintEvent* event );
-      /// Re-implemented function, used to draw the pop-up menu
+      /// Re-implemented function, used to draw the pop-up menu and to zoom
       virtual void mousePressEvent( QMouseEvent* event );
+      /// Re-implemented function, used to zoom on the X axis
+      virtual void mouseReleaseEvent( QMouseEvent* event );
+      /// Re-implemented function, used to zoom on the X axis
+      virtual void mouseMoveEvent( QMouseEvent* event );
 
       /**
        *  @short Internal class used in displaying the axis binning
@@ -182,7 +189,9 @@ namespace moni {
          AxisStyle getStyle() const;
 
          /// Get the position of where to draw a given value
-         double getDrawPosition( double pos ) const;
+         double getDrawPosition( double value ) const;
+         /// Get the value associated with a draw position
+         double getValue( double drawPos ) const;
 
       private:
          std::vector< MajorTick > m_majors; ///< Description of the "major" ticks
@@ -201,6 +210,8 @@ namespace moni {
       virtual void drawYAxis( QPainter& painter ) const;
       /// Draw the histogram itself
       virtual void drawHist( QPainter& painter ) const;
+      /// Draw the zoom status
+      virtual void drawZoom( QPainter& painter ) const;
       /// Draw some statistics on top of the histogram
       virtual void drawStat( QPainter& painter ) const;
       /// Function determining the visual binning for a linear axis
@@ -240,6 +251,12 @@ namespace moni {
       int m_nbins; ///< The number of channels
       double m_low; ///< The lower bound of the histogram
       double m_up; ///< The upper bound of the histogram
+      double m_viewLow; ///< Lowest value shown on the X axis
+      double m_viewUp; ///< Largest value shown on the X axis
+
+      bool m_isZooming; ///< Turned on while the user is zooming
+      int m_zoomStart; ///< Start position of the zooming
+      int m_zoomCurrent; ///< Current position of the zooming
 
       QColor m_hColor; ///< Color for the histogram
 

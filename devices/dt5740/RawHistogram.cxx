@@ -162,21 +162,36 @@ namespace dt5740 {
    std::pair< double, double >
    RawHistogram::getYAxisLimits() const {
 
+      // Get the first and final bins that are shown:
+      const size_t start = getBin( m_viewLow );
+      const size_t end   = getBin( m_viewUp );
+
+      // Get the maximum values within the limits:
       const double maximum =
-         *( std::max_element( m_values.begin(), m_values.end() ) );
+         *( std::max_element( ( m_values.begin() + start ),
+                              ( m_values.begin() + end ) ) );
       const double tmaximum = ( m_trans.size() ?
-                                *( std::max_element( m_trans.begin(), m_trans.end() ) ) :
+                                *( std::max_element( ( m_trans.begin() + start ),
+                                                     ( m_trans.begin() + end ) ) ) :
                                 0.0 );
       m_transScale = ( std::abs( tmaximum ) > 0.001 ?
                        0.8 * maximum / tmaximum : 1.0 );
 
       double view_maximum = 0.0;
+
+      // Get the minimum value within the limits:
       const double minimum =
          ( m_trans.size() ?
-           std::min( *( std::min_element( m_values.begin(), m_values.end() ) ),
-                     m_transScale * ( *std::min_element( m_trans.begin(), m_trans.end() ) ) ) :
-           *( std::min_element( m_values.begin(), m_values.end() ) ) );
+           std::min( *( std::min_element( ( m_values.begin() + start ),
+                                          ( m_values.begin() + end ) ) ),
+                     m_transScale * ( *std::min_element( ( m_trans.begin() + start ),
+                                                         ( m_trans.begin() + end ) ) ) ) :
+           *( std::min_element( ( m_values.begin() + start ),
+                                ( m_values.end() + start ) ) ) );
       double view_minimum = 0.0;
+
+      // Choose smart limits for the Y axis, so that the histogram can be seen
+      // nicely:
       if( m_yAxisStyle == Linear ) {
          if( maximum > 0.0 ) {
             view_maximum = ( std::abs( maximum ) > 0.001 ? maximum * 1.2 : 10.0 );

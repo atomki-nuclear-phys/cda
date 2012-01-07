@@ -178,44 +178,49 @@ Feltételezzük, hogy a &quot;%3/bin&quot; könyvtárban van</translation>
 <context>
     <name>moni::Histogram</name>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="203"/>
+        <location filename="../daq/moni/Histogram.cxx" line="219"/>
         <source>The upper bound of histogram &apos;%1&apos; is not larger than its lower bound</source>
         <translation>A(z) &apos;%1&apos; hisztogram felsö korlátja nem magasabb az alsó korlátjánál</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="224"/>
+        <location filename="../daq/moni/Histogram.cxx" line="240"/>
         <source>fill( value = %1, weight = %2 ): NaN received</source>
         <translation>fill( érték = %1, súly = %2 ): NaN értéket kaptam</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="281"/>
+        <location filename="../daq/moni/Histogram.cxx" line="319"/>
         <source>Set X axis style</source>
         <translation>X tengely stílusának beállítása</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="282"/>
-        <location filename="../daq/moni/Histogram.cxx" line="316"/>
+        <location filename="../daq/moni/Histogram.cxx" line="320"/>
+        <location filename="../daq/moni/Histogram.cxx" line="354"/>
         <source>Linear</source>
         <translation>Lineáris</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="290"/>
-        <location filename="../daq/moni/Histogram.cxx" line="324"/>
+        <location filename="../daq/moni/Histogram.cxx" line="328"/>
+        <location filename="../daq/moni/Histogram.cxx" line="362"/>
         <source>Logarithmic</source>
         <translation>Logaritmikus</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="315"/>
+        <location filename="../daq/moni/Histogram.cxx" line="353"/>
         <source>Set Y axis style</source>
         <translation>Y tengely stílusának beállítása</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="349"/>
+        <location filename="../daq/moni/Histogram.cxx" line="387"/>
+        <source>Un-zoom</source>
+        <translation>Ráközelítés vége</translation>
+    </message>
+    <message>
+        <location filename="../daq/moni/Histogram.cxx" line="392"/>
         <source>Clear histogram</source>
         <translation>Hisztogram törlése</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="613"/>
+        <location filename="../daq/moni/Histogram.cxx" line="763"/>
         <source>Entries: %1
 Underflows: %2
 Overflows: %3</source>
@@ -224,27 +229,27 @@ Alulcsordulás: %2
 Túlcsordulás: %3</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="729"/>
+        <location filename="../daq/moni/Histogram.cxx" line="879"/>
         <source>Unable to use logarithmic style with limits [%1,%2]</source>
         <translation>Nem lehet logaritmikus stílust használni a(z) [%1,%2] limitekkel</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="820"/>
+        <location filename="../daq/moni/Histogram.cxx" line="980"/>
         <source>Unknown Y axis style!</source>
         <translation>Ismeretlen Y tengely stílus!</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="862"/>
+        <location filename="../daq/moni/Histogram.cxx" line="1023"/>
         <source>Binning style for the X axis (%1) not understood, using linear binning</source>
         <translation>Az X tengely csatornabeosztása (%1) nem felismerhetö, lineáris csatornabeosztás lesz használva</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="886"/>
+        <location filename="../daq/moni/Histogram.cxx" line="1047"/>
         <source>Binning style for the Y axis (%1) not understood, using linear binning</source>
         <translation>Az Y tengely csatornabeosztása (%1) nem felismerhetö, lineáris csatornabeosztás lesz használva</translation>
     </message>
     <message>
-        <location filename="../daq/moni/Histogram.cxx" line="925"/>
+        <location filename="../daq/moni/Histogram.cxx" line="1086"/>
         <source>Unknown axis style encountered</source>
         <translation>Ismeretlen tengely stílust találtam</translation>
     </message>

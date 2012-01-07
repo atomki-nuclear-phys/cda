@@ -40,7 +40,8 @@ namespace moni {
     */
    Histogram::Histogram( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( "N/A" ), m_nbins( 100 ),
-        m_low( 0.0 ), m_up( 100.0 ), m_hColor( Qt::darkRed ),
+        m_low( 0.0 ), m_up( 100.0 ), m_viewLow( 0.0 ), m_viewUp( 100.0 ),
+        m_hColor( Qt::darkRed ),
         m_refreshTimer( this ),
         m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
         m_values( 102, 0.0 ), m_entries( 0 ),
@@ -76,7 +77,8 @@ namespace moni {
                          int refreshTimeout,
                          QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( title ), m_nbins( bins ),
-        m_low( low ), m_up( up ), m_hColor( Qt::darkRed ),
+        m_low( low ), m_up( up ), m_viewLow( low ), m_viewUp( up ),
+        m_hColor( Qt::darkRed ),
         m_refreshTimer( this ),
         m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
         m_values( bins + 2, 0.0 ), m_entries( 0 ),
@@ -155,6 +157,7 @@ namespace moni {
    void Histogram::setLowerBound( double low ) {
 
       m_low = low;
+      m_viewLow = low;
       reset();
       return;
    }
@@ -162,6 +165,7 @@ namespace moni {
    void Histogram::setUpperBound( double up ) {
 
       m_up = up;
+      m_viewUp = up;
       reset();
       return;
    }
@@ -187,6 +191,16 @@ namespace moni {
       return;
    }
 
+   void Histogram::unzoom() {
+
+      // Reset the view options:
+      m_viewLow = m_low;
+      m_viewUp = m_up;
+
+      update();
+      return;
+   }
+
    /**
     * This function clears the contents of the histogram, updating
     * its internal cache to be in sync with the current configuration.
@@ -197,6 +211,8 @@ namespace moni {
       m_values.clear();
       m_values.resize( m_nbins + 2, 0.0 );
       m_entries = 0;
+      m_viewLow = m_low;
+      m_viewUp = m_up;
 
       // Check if the configured values make sense:
       if( ! ( m_up > m_low ) ) {
@@ -256,6 +272,7 @@ namespace moni {
       drawXAxis( painter );
       drawYAxis( painter );
       drawHist( painter );
+      drawZoom( painter );
       drawStat( painter );
 
       // Finally, show the title of the histogram:
@@ -269,7 +286,28 @@ namespace moni {
 
    void Histogram::mousePressEvent( QMouseEvent* event ) {
 
-      // Return right away if it's not a right click:
+      // If it's the left button, enter zooming mode:
+      if( event->button() == Qt::LeftButton ) {
+         // Check that the cursor is around the X axis:
+         if( ( event->y() < ( height() - X_AXIS_SPACING - 20 ) ) ||
+             ( event->y() > ( height() - X_AXIS_SPACING + 20 ) ) ||
+             ( event->x() < Y_AXIS_SPACING ) ||
+             ( event->x() > width() - 20 ) ) {
+            return;
+         }
+         // Check that the X axis is drawn in linear mode:
+         if( m_xAxisStyle != Linear ) {
+            return;
+         }
+         // Enter zooming mode:
+         m_isZooming = true;
+         m_zoomStart = event->x() - Y_AXIS_SPACING;
+         m_zoomCurrent = m_zoomStart;
+         update();
+         return;
+      }
+
+      // Return if it's not a right click:
       if( event->button() != Qt::RightButton ) {
          return;
       }
@@ -345,6 +383,11 @@ namespace moni {
          yAxisMenu->addAction( yLogAction );
       }
 
+      // Action canceling the zoom on the X axis:
+      QAction* unzoomAction = menu->addAction( tr( "Un-zoom" ) );
+      connect( unzoomAction, SIGNAL( triggered() ),
+               this, SLOT( unzoom() ) );
+
       // Action clearing the histogram:
       QAction* resetAction = menu->addAction( tr( "Clear histogram" ) );
       connect( resetAction, SIGNAL( triggered() ),
@@ -353,6 +396,87 @@ namespace moni {
       // Display the menu under the cursor:
       menu->exec( mapToGlobal( QPoint( event->x(), event->y() ) ) );
 
+      return;
+   }
+
+   void Histogram::mouseReleaseEvent( QMouseEvent* event ) {
+
+      // Check that we are in zooming mode:
+      if( ! m_isZooming ) {
+         return;
+      }
+
+      // Only handle the left mouse button:
+      if( event->button() != Qt::LeftButton ) {
+         return;
+      }
+
+      // Check that the X axis is drawn in linear mode:
+      if( m_xAxisStyle != Linear ) {
+         return;
+      }
+
+      // Leave zooming mode:
+      m_isZooming = false;
+
+      // Decide on the final point of the zoom:
+      if( event->x() > ( width() - 20 ) ) {
+         m_zoomCurrent = width() - 20;
+      } else if( event->x() < Y_AXIS_SPACING ) {
+         m_zoomCurrent = Y_AXIS_SPACING;
+      } else {
+         m_zoomCurrent = event->x() - Y_AXIS_SPACING;
+      }
+
+      // Check that the zoom distance makes sense:
+      if( fabs( m_zoomCurrent - m_zoomStart ) < 5 ) {
+         return;
+      }
+
+      // Get the X axis binning:
+      const AxisBinning abin = getXAxisBinning();
+
+      // Translate the zoom positions into values on the axis:
+      const double tempLow = abin.getValue( m_zoomStart );
+      const double tempUp  = abin.getValue( m_zoomCurrent );
+
+      // Now update the view limits:
+      if( tempUp > tempLow ) {
+         m_viewLow = tempLow;
+         m_viewUp  = tempUp;
+      } else {
+         m_viewLow = tempUp;
+         m_viewUp  = tempLow;
+      }
+
+      // Draw the histogram:
+      update();
+
+      return;
+   }
+
+   void Histogram::mouseMoveEvent( QMouseEvent* event ) {
+
+      // Check that we are in zooming mode:
+      if( ! m_isZooming ) {
+         return;
+      }
+
+      // Check that the X axis is drawn in linear mode:
+      if( m_xAxisStyle != Linear ) {
+         return;
+      }
+
+      // Decide on the final point of the zoom:
+      if( event->x() > ( width() - 20 ) ) {
+         m_zoomCurrent = width() - 20;
+      } else if( event->x() < Y_AXIS_SPACING ) {
+         m_zoomCurrent = Y_AXIS_SPACING;
+      } else {
+         m_zoomCurrent = event->x() - Y_AXIS_SPACING;
+      }
+
+      update();
       return;
    }
 
@@ -588,6 +712,32 @@ namespace moni {
       return;
    }
 
+   void Histogram::drawZoom( QPainter& painter ) const {
+
+      // Check that we are in zooming mode:
+      if( ! m_isZooming ) {
+         return;
+      }
+
+      // Draw a line at the start of the zoom:
+      painter.setPen( QPen( QBrush( Qt::blue ), 1 ) );
+      painter.drawLine( QLine( Y_AXIS_SPACING + m_zoomStart, 20,
+                               Y_AXIS_SPACING + m_zoomStart,
+                               height() - X_AXIS_SPACING ) );
+
+      // Draw a line at the current location of the zoom:
+      painter.setPen( QPen( QBrush( Qt::red ), 1 ) );
+      painter.drawLine( QLine( Y_AXIS_SPACING + m_zoomCurrent, 20,
+                               Y_AXIS_SPACING + m_zoomCurrent,
+                               height() - X_AXIS_SPACING ) );
+
+      // Reset the painter settings:
+      painter.setPen( Qt::SolidLine );
+      painter.setBrush( Qt::white );
+
+      return;
+   }
+
    /**
     * This function is used to draw some minimal statistics about the histogram
     * into the frame when the widget is large enough for it.
@@ -788,12 +938,22 @@ namespace moni {
     */
    std::pair< double, double > Histogram::getYAxisLimits() const {
 
+      // Get the first and final bins that are shown:
+      const size_t start = getBin( m_viewLow );
+      const size_t end   = getBin( m_viewUp );
+
+      // Get the maximum and minimum values within the limits:
       const double maximum =
-         *( std::max_element( m_values.begin(), m_values.end() ) );
+         *( std::max_element( ( m_values.begin() + start ),
+                              ( m_values.begin() + end ) ) );
       double view_maximum = 0.0;
       const double minimum =
-         *( std::min_element( m_values.begin(), m_values.end() ) );
+         *( std::min_element( ( m_values.begin() + start ),
+                              ( m_values.begin() + end ) ) );
       double view_minimum = 0.0;
+
+      // Choose smart limits for the Y axis, so that the histogram can be seen
+      // nicely:
       if( m_yAxisStyle == Linear ) {
          if( maximum > 0.0 ) {
             view_maximum = ( std::abs( maximum ) > 0.001 ? maximum * 1.1 : 10.0 );
@@ -822,6 +982,7 @@ namespace moni {
          view_minimum = minimum;
       }
 
+      // Return the calculated numbers:
       return std::make_pair( view_minimum, view_maximum );
    }
 
@@ -851,7 +1012,7 @@ namespace moni {
 
       // Decide upon the correct axis binning:
       if( m_xAxisStyle == Linear ) {
-         return getLinearAxisBinning( m_low, m_up, axis_length,
+         return getLinearAxisBinning( m_viewLow, m_viewUp, axis_length,
                                       MIN_X_TICK_DISTANCE );
       } else if( m_xAxisStyle == Logarithmic ) {
          return getLogarithmicAxisBinning( m_low, m_up, axis_length,
@@ -862,7 +1023,7 @@ namespace moni {
       REPORT_ERROR( tr( "Binning style for the X axis (%1) "
                         "not understood, using linear binning" )
                     .arg( m_xAxisStyle ) );
-      return getLinearAxisBinning( m_low, m_up, axis_length,
+      return getLinearAxisBinning( m_viewLow, m_viewUp, axis_length,
                                    MIN_X_TICK_DISTANCE );
    }
 
@@ -1006,6 +1167,22 @@ namespace moni {
          if( ( m_low < 0.0 ) || ( pos < 0.0 ) ) return -1.0;
          return ( std::log10( pos ) - std::log10( m_low ) ) /
             ( std::log10( m_up ) - std::log10( m_low ) ) * m_alength;
+      } else {
+         return -1.0;
+      }
+   }
+
+   double Histogram::AxisBinning::getValue( double drawPos ) const {
+
+      if( ( drawPos < 0.001 ) || ( drawPos > ( m_alength + 0.001 ) ) ) {
+         return -1.0;
+      }
+
+      if( m_style == Linear ) {
+         return ( ( drawPos / m_alength ) * ( m_up - m_low ) + m_low );
+      } else if( m_style == Logarithmic ) {
+         // This should be calculated correctly later on:
+         return -1.0;
       } else {
          return -1.0;
       }

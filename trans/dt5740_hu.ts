@@ -624,7 +624,7 @@
 <context>
     <name>dt5740::RawHistogram</name>
     <message>
-        <location filename="../devices/dt5740/RawHistogram.cxx" line="203"/>
+        <location filename="../devices/dt5740/RawHistogram.cxx" line="218"/>
         <source>Unknown Y axis style!</source>
         <translation>Ismeretlen Y tengely stílus!</translation>
     </message>
