@@ -488,9 +488,11 @@ namespace caen {
         m_logger( "caen::Digitizer" ) {
 
       // Initialize the blocked signal list:
+#ifndef Q_OS_WIN32
       sigfillset( &m_blockedSignals );
       sigaddset( &m_blockedSignals, SIGINT );
       sigaddset( &m_blockedSignals, SIGTERM );
+#endif // Q_OS_WIN32
    }
 
    Digitizer::~Digitizer() {

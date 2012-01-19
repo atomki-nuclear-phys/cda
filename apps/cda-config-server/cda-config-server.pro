@@ -10,8 +10,8 @@
 
 # Include the common project options:
 include(../../cda_common.pri)
-include(../console_app.pri)
 include(../plugin_app.pri)
+include(../console_app.pri)
 
 # This will be an application with the name "cda-config-server":
 TARGET = cda-config-server

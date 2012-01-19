@@ -407,7 +407,8 @@ void QtMonitoringWindow::createMenus() {
             qApp, SLOT( aboutQt() ) );
 
    QAction* aboutQtMonitoringAction =
-      helpMenu->addAction( tr( "&About Qt DAQ Monitoring" ) );
+      helpMenu->addAction( QIcon( ":/img/cda-qt-monitoring.png" ),
+                           tr( "&About Qt DAQ Monitoring" ) );
    connect( aboutQtMonitoringAction, SIGNAL( triggered() ),
             this, SLOT( aboutQtMonitoringSlot() ) );
 

@@ -10,8 +10,8 @@
 
 # Include the common project options:
 include(../../cda_common.pri)
-include(../gui_app.pri)
 include(../plugin_app.pri)
+include(../gui_app.pri)
 
 # This will be an application with the name "cda-qt-monitoring":
 TARGET = cda-qt-monitoring

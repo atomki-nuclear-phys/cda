@@ -323,12 +323,14 @@ int main( int argc, char* argv[] ) {
    //
    // Connect the interrupt signal to the shutDown function:
    //
+#ifndef Q_OS_WIN32
    signal( SIGINT, prepareShutDown );
    signal( SIGTERM, prepareShutDown );
    sigset_t blockedSignals;
    sigfillset( &blockedSignals );
    sigaddset( &blockedSignals, SIGINT );
    sigaddset( &blockedSignals, SIGTERM );
+#endif // Q_OS_WIN32
 
    //
    // Let the user know what we're doing:
@@ -347,11 +349,13 @@ int main( int argc, char* argv[] ) {
       // Read and send an event:
       const ev::Event event = g_crate->readEvent();
 
-      // Exit data acquisition is there was an interrupt:
+      // Exit data acquisition if there was an interrupt:
       if( g_stopAcquisition ) break;
 
       // Send the event to the receivers:
+#ifndef Q_OS_WIN32
       sigprocmask( SIG_BLOCK, &blockedSignals, NULL );
+#endif // Q_OS_WIN32
       if( ! ev_sender.send( event ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-caen-reader",
@@ -360,7 +364,9 @@ int main( int argc, char* argv[] ) {
                   << msg::endmsg;
          shutDown( 0 );
       }
+#ifndef Q_OS_WIN32
       sigprocmask( SIG_UNBLOCK, &blockedSignals, NULL );
+#endif // Q_OS_WIN32
 
       // Update the statistics information after 10 events were sent out:
       ++g_evcount;
