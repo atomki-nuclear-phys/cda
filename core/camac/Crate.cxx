@@ -122,7 +122,7 @@ namespace camac {
                << tr( "readWord(...) called with: N = %1, A = %2, "
                       "F = %3" ).arg( N ).arg( A ).arg( F )
                << msg::endmsg;
-      return ( A * 10 );
+      return static_cast< uint16_t >( A * 10 );
 #endif // HAVE_CAMAC_LIB
    }
 
@@ -356,7 +356,8 @@ namespace camac {
       cc32_write_long( m_handle, 28, 1, 16, mask );
 #else
       m_logger << msg::DEBUG
-               << tr( "LAM mask set to: 0x%1" ).arg( QString::number( mask, 16 ) )
+               << tr( "LAM mask set to: 0x%1" )
+               .arg( QString::number( mask, 16 ) )
                << msg::endmsg;
 #endif // HAVE_CAMAC_LIB
 

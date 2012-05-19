@@ -309,10 +309,10 @@ namespace vme {
             ( eventCounter * 100 + 100 );
          ++eventCounter;
       } else if( eventCounter == 33 ) {
-         *data = fifoEmty;
+         *data = static_cast< int32_t >( fifoEmty );
          eventCounter = 0;
       } else if( eventCounter == 32 ) {
-         *data = eEvent;
+         *data = static_cast< int32_t >( eEvent );
          ++eventCounter;
       }
 #endif // HAVE_VME_LIB

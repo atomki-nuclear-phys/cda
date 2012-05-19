@@ -29,7 +29,6 @@ namespace msg {
 
       m_sender = sender;
       return;
-
    }
 
    /**
@@ -39,7 +38,6 @@ namespace msg {
 
       m_text = text;
       return;
-
    }
 
    /**
@@ -49,7 +47,6 @@ namespace msg {
 
       m_level = level;
       return;
-
    }
 
    /**
@@ -59,7 +56,6 @@ namespace msg {
 
       m_time = time;
       return;
-
    }
 
    /**
@@ -68,7 +64,6 @@ namespace msg {
    const QString& Message::getSender() const {
 
       return m_sender;
-
    }
 
    /**
@@ -77,7 +72,6 @@ namespace msg {
    const QString& Message::getText() const {
 
       return m_text;
-
    }
 
    /**
@@ -86,7 +80,6 @@ namespace msg {
    Level Message::getLevel() const {
 
       return m_level;
-
    }
 
    /**
@@ -95,7 +88,6 @@ namespace msg {
    const MsgTime& Message::getTime() const {
 
       return m_time;
-
    }
 
 } // namespace msg

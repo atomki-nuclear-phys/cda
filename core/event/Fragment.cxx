@@ -60,8 +60,9 @@ namespace ev {
     */
    uint32_t Fragment::sizeInBytes() const {
 
-      return ( m_dataWords.size() * sizeof( Payload_t::value_type ) +
-               sizeof( Identifier_t ) );
+      return static_cast< uint32_t >( m_dataWords.size() *
+                                      sizeof( Payload_t::value_type ) +
+                                      sizeof( Identifier_t ) );
    }
 
    /**

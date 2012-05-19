@@ -27,13 +27,21 @@ namespace ev {
     */
    Sender::~Sender() {
 
-      // Close and delete all the sockets:
-      for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
-           socket != m_sockets.end(); ++socket ) {
+      // Get rid of the streams first:
+      std::list< BinaryStream* >::iterator stream_itr = m_streams.begin();
+      std::list< BinaryStream* >::iterator stream_end = m_streams.end();
+      for( ; stream_itr != stream_end; ++stream_itr ) {
+         delete ( *stream_itr );
+      }
 
-	   	( *socket )->disconnectFromHost();
-         ( *socket )->waitForDisconnected();
-         delete ( *socket );
+      // Close and delete all the sockets:
+      std::list< QTcpSocket* >::iterator socket_itr = m_sockets.begin();
+      std::list< QTcpSocket* >::iterator socket_end = m_sockets.end();
+      for( ; socket_itr != socket_end; ++socket_itr ) {
+
+	   	( *socket_itr )->disconnectFromHost();
+         ( *socket_itr )->waitForDisconnected();
+         delete ( *socket_itr );
 	   }
 
       REPORT_VERBOSE( tr( "Object deleted" ) );
@@ -74,9 +82,10 @@ namespace ev {
       }
 
       //
-      // Save the socket for later:
+      // Save the socket and stream for later:
       //
       m_sockets.push_back( socket );
+      m_streams.push_back( new BinaryStream( socket ) );
       m_logger << msg::INFO << tr( "Connected to event receiver on %1:%2" )
          .arg( address.getHost().toString() ).arg( address.getPort() )
                << msg::endmsg;
@@ -99,17 +108,25 @@ namespace ev {
       // Result of sending the event to all recepients:
       bool result = true;
 
+      // Check the object's status:
+      if( m_sockets.size() != m_streams.size() ) {
+         REPORT_FATAL( tr( "There is a coding error in this class!" ) );
+         return false;
+      }
+
       //
       // Loop over all the specified addresses:
       //
-      for( std::list< QTcpSocket* >::const_iterator socket = m_sockets.begin();
-           socket != m_sockets.end(); ++socket ) {
+      std::list< QTcpSocket* >::const_iterator socket_itr = m_sockets.begin();
+      std::list< QTcpSocket* >::const_iterator socket_end = m_sockets.end();
+      std::list< BinaryStream* >::const_iterator stream_itr = m_streams.begin();
+      for( ; socket_itr != socket_end; ++socket_itr, ++stream_itr ) {
 
          //
          // Check the validity of the socket:
          //
-         if( ! ( *socket )->isValid() ) {
-            printError( **socket );
+         if( ! ( *socket_itr )->isValid() ) {
+            printError( **socket_itr );
             result = false;
             continue;
          }
@@ -117,9 +134,8 @@ namespace ev {
          //
          // Send the event:
          //
-         BinaryStream out( *socket );
-         out << event;
-         CHECK( ( *socket )->waitForBytesWritten( 500 ) );
+         ( **stream_itr ) << event;
+         CHECK( ( *socket_itr )->waitForBytesWritten( 500 ) );
       }
 
       return result;

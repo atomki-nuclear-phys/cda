@@ -15,6 +15,7 @@
 
 // Local include(s):
 #include "Event.h"
+#include "BinaryStream.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QTcpSocket )
@@ -62,7 +63,8 @@ namespace ev {
       /// Internal function for printing error messages
       void printError( const QTcpSocket& socket ) const;
 
-      std::list< QTcpSocket* > m_sockets; ///< List of sockets to send messages to
+      std::list< QTcpSocket* > m_sockets; ///< List of sockets to send events to
+      std::list< BinaryStream* > m_streams; ///< List of streams to send events to
       mutable msg::Logger m_logger; ///< Message logger object
 
    }; // class Sender

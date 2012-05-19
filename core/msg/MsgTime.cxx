@@ -77,7 +77,6 @@ namespace msg {
    const QTime& MsgTime::getTime() const {
 
       return m_time;
-
    }
 
    /**
@@ -86,7 +85,6 @@ namespace msg {
    const QDate& MsgTime::getDate() const {
 
       return m_date;
-
    }
 
    /**
@@ -103,7 +101,6 @@ namespace msg {
       m_time = time.m_time;
 
       return *this;
-
    }
 
 } // namespace msg

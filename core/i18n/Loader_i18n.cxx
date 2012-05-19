@@ -40,22 +40,22 @@ namespace i18n {
          //
          char* env_path = getenv( "CDASYS" );
          if( ! env_path ) {
-            // In case CDASYS is not in the environment, try using the directory where
-            // the code was compiled:
+            // In case CDASYS is not in the environment, try using the
+            // directory where the code was compiled:
             m_path = CDASYS_PATH;
             m_path.append( "/trans" );
          } else {
             m_path = env_path;
             m_path.append( "/trans" );
          }
-         m_logger << msg::DEBUG << tr( "Setting translation directory "
-                                       "to: %1" ).arg( m_path ) << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Setting translation directory to: %1" ).arg( m_path )
+                  << msg::endmsg;
 
          //
          // Delete the return value of getenv():
          //
-         // Mac OS X complains about this call, so it's removed for the moment.
-         //         if( env_path ) free( env_path );
+         if( env_path ) free( env_path );
       }
 
    }
@@ -94,14 +94,12 @@ namespace i18n {
          QFileInfo finfo( *pname );
          QTranslator* trans = new QTranslator();
          if( ! trans->load( finfo.fileName(), m_path ) ) {
-            m_logger << msg::ERROR
-                     << tr( "Couldn't load translation file: %1" ).arg( finfo.fileName() )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "Couldn't load translation file: %1" )
+                          .arg( finfo.fileName() ) );
             return false;
          }
-         m_logger << msg::VERBOSE
-                  << tr( "Loaded translation file: %1" ).arg( finfo.fileName() )
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "Loaded translation file: %1" )
+                         .arg( finfo.fileName() ) );
 
          qApp->installTranslator( trans );
          m_translators.push_back( trans );

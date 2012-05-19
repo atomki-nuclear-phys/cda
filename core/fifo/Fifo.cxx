@@ -32,14 +32,13 @@ Fifo::~Fifo() {
  */
 bool Fifo::open( QIODevice::OpenMode ) {
 
-   msg::Logger logger( "Fifo::open()" );
+   msg::Logger m_logger( "Fifo::open()" );
    if( exists() ) {
-      logger << msg::VERBOSE << tr( "%1 exists" ).arg( fileName() )
-             << msg::endmsg;
+      REPORT_VERBOSE( tr( "%1 exists" ).arg( fileName() ) );
       return QT_PREPEND_NAMESPACE( QFile )::open( QIODevice::ReadWrite );
    } else {
-      logger << msg::WARNING << tr( "%1 does not exist" ).arg( fileName() )
-             << msg::endmsg;
+      m_logger << msg::WARNING << tr( "%1 does not exist" ).arg( fileName() )
+               << msg::endmsg;
       return false;
    }
 }

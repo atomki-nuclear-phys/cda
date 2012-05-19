@@ -82,7 +82,7 @@ namespace cernlib {
       }
 
       // Add this name to the variable list:
-      int index = m_varNames.size();
+      int index = static_cast< int >( m_varNames.size() );
       m_varNames.push_back( name );
 
       return index;
@@ -121,7 +121,8 @@ namespace cernlib {
       for( std::vector< QString >::const_iterator name = m_varNames.begin();
            name != m_varNames.end(); ++name, ++i ) {
          if( snprintf( varNames[ i ], sizeof( varNames[ i ] ), "%s",
-                       name->toLatin1().constData() ) > ( int ) sizeof( varNames[ i ] ) ) {
+                       name->toLatin1().constData() ) >
+             ( int ) sizeof( varNames[ i ] ) ) {
             m_logger << msg::WARNING
                      << tr( "Variable name \"%1\" too long. It was shortened "
                             "to \"%2\"" ).arg( *name ).arg( varNames[ i ] )
@@ -136,7 +137,8 @@ namespace cernlib {
       sprintf( data, "Data" );
       sprintf( n, "N" );
       if( snprintf( hname, sizeof( hname ), "%s",
-                    fileName.toLatin1().constData() ) > ( int ) sizeof( hname ) ) {
+                    fileName.toLatin1().constData() ) >
+          ( int ) sizeof( hname ) ) {
          REPORT_ERROR( tr( "Output file name too long. File not opened!" ) );
          return false;
       }
@@ -207,7 +209,8 @@ namespace cernlib {
       HROUT( 0, icycle, t );
 
       m_logger << msg::DEBUG
-               << tr( "A total of %1 events written to the ntuple" ).arg( m_events )
+               << tr( "A total of %1 events written to the ntuple" )
+               .arg( m_events )
                << msg::endmsg;
 
       // Close the file:

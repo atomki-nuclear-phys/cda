@@ -44,10 +44,12 @@ namespace ev {
     */
    TextStream& TextStream::operator<< ( const Event& event ) {
 
-      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                      "-------- Event record --------\n" );
-      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                      " Number of fragments: %1\n\n" )
+      ( * ( QTextStream* ) this )
+         << qApp->translate( "ev::TextStream",
+                             "-------- Event record --------\n" );
+      ( * ( QTextStream* ) this )
+         << qApp->translate( "ev::TextStream",
+                             " Number of fragments: %1\n\n" )
          .arg( event.getFragments().size() );
 
       if( event.getFragments().size() ) {
@@ -59,8 +61,9 @@ namespace ev {
             *this << *( *itr ) << "\n";
          }
       } else {
-         ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                         " No event fragments!\n" );
+         ( * ( QTextStream* ) this )
+            << qApp->translate( "ev::TextStream",
+                                " No event fragments!\n" );
       }
 
       ( * ( QTextStream* ) this ) << "------------------------------";
@@ -78,10 +81,12 @@ namespace ev {
     */
    TextStream& TextStream::operator<< ( const Fragment& fragment ) {
 
-      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                      "  ---- Fragment record ----\n" );
-      ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                      "   Module ID   : %1\n\n" )
+      ( * ( QTextStream* ) this )
+         << qApp->translate( "ev::TextStream",
+                             "  ---- Fragment record ----\n" );
+      ( * ( QTextStream* ) this )
+         << qApp->translate( "ev::TextStream",
+                             "   Module ID   : %1\n\n" )
          .arg( fragment.getModuleID() );
 
       if( fragment.getDataWords().size() ) {
@@ -90,13 +95,15 @@ namespace ev {
          std::vector< uint32_t >::const_iterator end =
             fragment.getDataWords().end();
          for( ; itr != end; ++itr ) {
-            ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                            "   Data word: 0x%1\n" )
-               .arg( QString::number( *itr, 16 ) );
+            ( * ( QTextStream* ) this )
+               << qApp->translate( "ev::TextStream",
+                                   "   Data word: 0x%1\n" )
+                  .arg( QString::number( *itr, 16 ) );
          }
       } else {
-         ( * ( QTextStream* ) this ) << qApp->translate( "ev::TextStream",
-                                                         "   No data words!\n" );
+         ( * ( QTextStream* ) this )
+            << qApp->translate( "ev::TextStream",
+                                "   No data words!\n" );
       }
 
       ( * ( QTextStream* ) this ) << "  -------------------------";

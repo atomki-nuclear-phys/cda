@@ -63,7 +63,7 @@ Address::Address( const QString& address )
    // Try to decode the port number:
    //
    bool ok = false;
-   m_port = split.at( 1 ).toUInt( &ok );
+   m_port = static_cast< quint16 >( split.at( 1 ).toUInt( &ok ) );
    if( ! ok ) {
       REPORT_ERROR( tr( "Couldn't decode port: %1\n"
                         "Setting it to 50000" ).arg( split.at( 1 ) ) );

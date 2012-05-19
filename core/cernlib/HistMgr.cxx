@@ -61,7 +61,8 @@ namespace cernlib {
          HLIMAP( PAWC_SIZE, name );
 #endif // HAVE_CERNLIB
          m_logger << msg::DEBUG
-                  << tr( "Created PAW global memory with name: \"%1\"" ).arg( name )
+                  << tr( "Created PAW global memory with name: \"%1\"" )
+                  .arg( name )
                   << msg::endmsg;
          m_initialized = true;
 
@@ -133,8 +134,9 @@ namespace cernlib {
 
       // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
-      REPORT_VERBOSE( tr( "Booking 2D histogram with name \"%1\", x-channels: %2, "
-                          "x-low: %3, x-up: %4, y-channels: %5, y-low: %6, y-up: %7" )
+      REPORT_VERBOSE( tr( "Booking 2D histogram with name \"%1\", "
+                          "x-channels: %2, x-low: %3, x-up: %4, "
+                          "y-channels: %5, y-low: %6, y-up: %7" )
                       .arg( name ).arg( xchannels ).arg( xlow ).arg( xup )
                       .arg( ychannels ).arg( ylow ).arg( yup ) );
       return -1;

@@ -32,7 +32,6 @@ namespace msg {
       : QTextStream( device ) {
 
       initMap();
-
    }
 
    /**
@@ -46,7 +45,6 @@ namespace msg {
       : QTextStream( handle, QIODevice::WriteOnly ) {
 
       initMap();
-
    }
 
    /**
@@ -59,7 +57,6 @@ namespace msg {
       : QTextStream( string, QIODevice::WriteOnly ) {
 
       initMap();
-
    }
 
    /**
@@ -73,7 +70,6 @@ namespace msg {
       : QTextStream( array, QIODevice::WriteOnly ) {
 
       initMap();
-
    }
 
    /**
@@ -99,9 +95,11 @@ namespace msg {
       //
       QString sender;
       if( message.getSender().length() < MAXIMUM_SENDER_LENGTH ) {
-         sender = message.getSender().leftJustified( MAXIMUM_SENDER_LENGTH, ' ', true );
+         sender = message.getSender().leftJustified( MAXIMUM_SENDER_LENGTH,
+                                                     ' ', true );
       } else {
-         sender = message.getSender().leftJustified( MAXIMUM_SENDER_LENGTH - 3, ' ', true );
+         sender = message.getSender().leftJustified( MAXIMUM_SENDER_LENGTH - 3,
+                                                     ' ', true );
          sender += "...";
       }
 
@@ -132,12 +130,12 @@ namespace msg {
 
          ( * ( QTextStream* ) this ) << time << " " << sender << " " << level
                                      << " " << *text
-                                     << ( ( text + 1 == texts.end() ) ? "" : "\n" );
+                                     << ( ( text + 1 == texts.end() ) ?
+                                          "" : "\n" );
 
       }
 
       return *this;
-
    }
 
    /**
@@ -152,9 +150,12 @@ namespace msg {
 
       QTextStream::operator<<( text );
       return *this;
-
    }
 
+   /**
+    * Since the class has multiple constructors, it saves space
+    * to have this initialisation in a separate function.
+    */
    void TextStream::initMap() {
 
       m_levelMap[ VERBOSE ] = "VERBOSE";
@@ -166,7 +167,6 @@ namespace msg {
       m_levelMap[ ALWAYS ]  = "ALWAYS ";
 
       return;
-
    }
 
 } // namespace msg
