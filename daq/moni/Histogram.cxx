@@ -81,7 +81,7 @@ namespace moni {
         m_hColor( Qt::darkRed ),
         m_refreshTimer( this ),
         m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
-        m_values( bins + 2, 0.0 ), m_entries( 0 ),
+        m_values( static_cast< size_t >( bins + 2 ), 0.0 ), m_entries( 0 ),
         m_logger( "moni::Histogram" ) {
 
       setMinimumSize( 220, 150 );
@@ -209,7 +209,7 @@ namespace moni {
    void Histogram::reset() {
 
       m_values.clear();
-      m_values.resize( m_nbins + 2, 0.0 );
+      m_values.resize( static_cast< size_t >( m_nbins + 2 ), 0.0 );
       m_entries = 0;
       m_viewLow = m_low;
       m_viewUp = m_up;
@@ -265,7 +265,8 @@ namespace moni {
       painter.drawRect( QRect( 0, 0, width() - 1, height() - 1 ) );
 
       // Draw the rectangle of the histogram:
-      painter.drawRect( QRect( Y_AXIS_SPACING, 20, width() - ( Y_AXIS_SPACING + 20 ),
+      painter.drawRect( QRect( Y_AXIS_SPACING, 20,
+                               width() - ( Y_AXIS_SPACING + 20 ),
                                height() - ( X_AXIS_SPACING + 20 ) ) );
 
       // Draw the different parts of the historgam:
@@ -490,10 +491,11 @@ namespace moni {
    size_t Histogram::getBin( double value ) const {
 
       if( value < m_low ) return 0;
-      if( value > m_up ) return ( m_nbins + 1 );
+      if( value > m_up ) return static_cast< size_t >( m_nbins + 1 );
 
       return static_cast< size_t >( std::floor( ( value - m_low ) /
-                                                ( ( m_up - m_low ) / m_nbins ) ) + 1 );
+                                                ( ( m_up - m_low ) / m_nbins ) )
+                                                + 1 );
    }
 
    /**
@@ -522,7 +524,8 @@ namespace moni {
 
          // Calculate the position of the tick:
          const int tick_location =
-            static_cast< int >( std::floor( axis_start + major_itr->position() ) );
+            static_cast< int >( std::floor( axis_start +
+                                            major_itr->position() ) );
          if( ( tick_location < axis_start ) ||
              ( tick_location > ( width() - 20 ) ) ) continue;
 
@@ -539,8 +542,8 @@ namespace moni {
          }
          // Now draw it on the axis:
          painter.drawText( QRect( tick_location - MIN_X_TICK_DISTANCE / 2,
-                                  height() - ( X_AXIS_SPACING - 20 ), MIN_X_TICK_DISTANCE,
-                                  20 ),
+                                  height() - ( X_AXIS_SPACING - 20 ),
+                                  MIN_X_TICK_DISTANCE, 20 ),
                            Qt::AlignCenter, QString::number( tick_value ) );
 
          // Draw the dotted line across the pad:
@@ -566,7 +569,8 @@ namespace moni {
          abin.minors().end();
       for( ; minor_itr != minor_end; ++minor_itr ) {
          const int tick_location =
-            static_cast< int >( std::floor( axis_start + minor_itr->position() ) );
+            static_cast< int >( std::floor( axis_start +
+                                            minor_itr->position() ) );
          if( ( tick_location < axis_start ) ||
              ( tick_location > ( width() - 20 ) ) ) continue;
          painter.drawLine( QLine( tick_location, height() - X_AXIS_SPACING,
@@ -603,12 +607,15 @@ namespace moni {
 
          // Calculate the position of the tick:
          const int tick_location =
-            static_cast< int >( std::floor( axis_start - major_itr->position() ) );
-         if( ( tick_location < 20 ) || ( tick_location > axis_start ) ) continue;
+            static_cast< int >( std::floor( axis_start -
+                                            major_itr->position() ) );
+         if( ( tick_location < 20 ) ||
+             ( tick_location > axis_start ) ) continue;
 
          // Draw the line of the tick:
          painter.setPen( Qt::SolidLine );
-         painter.drawLine( QLine( Y_AXIS_SPACING - TICK_LENGTH_MAJOR, tick_location,
+         painter.drawLine( QLine( Y_AXIS_SPACING - TICK_LENGTH_MAJOR,
+                                  tick_location,
                                   Y_AXIS_SPACING, tick_location ) );
 
          // Construct the proper tick value:
@@ -644,9 +651,12 @@ namespace moni {
          abin.minors().end();
       for( ; minor_itr != minor_end; ++minor_itr ) {
          const int tick_location =
-            static_cast< int >( std::floor( axis_start - minor_itr->position() ) );
-         if( ( tick_location < 20 ) || ( tick_location > axis_start ) ) continue;
-         painter.drawLine( QLine( Y_AXIS_SPACING - TICK_LENGTH_MINOR, tick_location,
+            static_cast< int >( std::floor( axis_start -
+                                            minor_itr->position() ) );
+         if( ( tick_location < 20 ) ||
+             ( tick_location > axis_start ) ) continue;
+         painter.drawLine( QLine( Y_AXIS_SPACING - TICK_LENGTH_MINOR,
+                                  tick_location,
                                   Y_AXIS_SPACING, tick_location ) );
       }
 
@@ -667,7 +677,8 @@ namespace moni {
       //
       const int x_axis_start = Y_AXIS_SPACING;
       const int y_axis_start = height() - X_AXIS_SPACING;
-      const double bin_width = ( m_up - m_low ) / static_cast< double >( m_nbins );
+      const double bin_width = ( ( m_up - m_low ) /
+                                 static_cast< double >( m_nbins ) );
 
       // Determine the binning for the X axis:
       const AxisBinning xbin = getXAxisBinning();
@@ -681,10 +692,12 @@ namespace moni {
       int prev_pos = -1;
       for( int i = 0; i < m_nbins; ++i ) {
 
+         const size_t ihelp = static_cast< size_t >( i + 1 );
+
          const int y_bin_pos =
-            ( ybin.getDrawPosition( m_values[ i + 1 ] ) > 0.0 ?
+            ( ybin.getDrawPosition( m_values[ ihelp ] ) > 0.0 ?
               static_cast< int >( std::floor( y_axis_start -
-                                              ybin.getDrawPosition( m_values[ i + 1 ] ) ) ) :
+                                              ybin.getDrawPosition( m_values[ ihelp ] ) ) ) :
               y_axis_start );
          const int x_bin_low_pos =
             static_cast< int >( std::floor( xbin.getDrawPosition( m_low +
@@ -746,8 +759,8 @@ namespace moni {
     */
    void Histogram::drawStat( QPainter& painter ) const {
 
-      // Return right away if the widget is not large enough to hold the statistics
-      // information:
+      // Return right away if the widget is not large enough to hold the
+      // statistics information:
       if( ( width() < 400 ) || ( height() < 150 ) ) {
          return;
       }
@@ -762,8 +775,8 @@ namespace moni {
                         Qt::AlignLeft | Qt::AlignVCenter,
                         tr( "Entries: %1\n"
                             "Underflows: %2\n"
-                            "Overflows: %3" ).arg( m_entries ).arg( m_values.front() )
-                        .arg( m_values.back() ) );
+                            "Overflows: %3" ).arg( m_entries )
+                        .arg( m_values.front() ).arg( m_values.back() ) );
 
       return;
    }
@@ -789,7 +802,8 @@ namespace moni {
       //
       // The major tick distance in the axis units:
       //
-      double tick_major_unit = std::pow( 10.0, std::ceil( std::log10( up - low ) ) -
+      double tick_major_unit = std::pow( 10.0,
+                                         std::ceil( std::log10( up - low ) ) -
                                          1.0 );
       while( tick_major_unit * axis_unit < tdist ) {
          tick_major_unit *= 2.0;
@@ -813,17 +827,21 @@ namespace moni {
       // Number of ticks for the axis:
       //
       const int n_major_ticks =
-         static_cast< int >( std::ceil( ( up - low ) / tick_major_unit ) + 1.0 );
+         static_cast< int >( std::ceil( ( up - low ) / tick_major_unit ) +
+                             1.0 );
       const int n_minor_ticks =
-         static_cast< int >( std::floor( ( up - low ) / tick_minor_unit ) + 1.0 );
+         static_cast< int >( std::floor( ( up - low ) / tick_minor_unit ) +
+                             1.0 );
 
       //
       // Offsets of the first major and minor tick marks:
       //
-      const double tick_major_offset = std::fmod( -1.0 * low, tick_major_unit ) *
-         axis_unit;
-      const double tick_minor_offset = std::fmod( -1.0 * low, tick_minor_unit ) *
-         axis_unit;
+      const double tick_major_offset = ( std::fmod( -1.0 * low,
+                                                    tick_major_unit ) *
+                                         axis_unit );
+      const double tick_minor_offset = ( std::fmod( -1.0 * low,
+                                                    tick_minor_unit ) *
+                                         axis_unit );
 
       //
       // The value associated with the first major tick mark:
@@ -833,9 +851,11 @@ namespace moni {
          first_major_tick_value = 0.0;
       } else {
          if( low < 0.0 ) {
-            first_major_tick_value = std::ceil( low / tick_major_unit ) * tick_major_unit;
+            first_major_tick_value = ( std::ceil( low / tick_major_unit ) *
+                                       tick_major_unit );
          } else {
-            first_major_tick_value = std::floor( low / tick_major_unit ) * tick_major_unit;
+            first_major_tick_value = ( std::floor( low / tick_major_unit ) *
+                                       tick_major_unit );
          }
       }
 
@@ -861,8 +881,8 @@ namespace moni {
 
    /**
     * This function figures out how to draw the labels onto an axis with a
-    * logarithmic layout. The returned structure describes how the axis should be
-    * drawn.
+    * logarithmic layout. The returned structure describes how the axis should
+    * be drawn.
     *
     * @param low The lower edge on the axis
     * @param up  The upper edge on the axis
@@ -901,14 +921,16 @@ namespace moni {
       // The value associated with the first major tick mark:
       //
       const double first_major_tick_value =
-         std::ceil( std::fmod( std::abs( low_log ), tick_major_exponent_unit ) + low_log );
+         std::ceil( std::fmod( std::abs( low_log ),
+                               tick_major_exponent_unit ) + low_log );
 
       // Create the result structure:
       AxisBinning result( Logarithmic, low, up, alength );
 
       // ...and now fill it:
       int exponent = static_cast< int >( std::floor( first_major_tick_value -
-                                                     tick_major_exponent_unit + 0.5 ) );
+                                                     tick_major_exponent_unit +
+                                                     0.5 ) );
       double value = std::pow( 10.0, exponent );
       while( value < up ) {
          const double mvalue = std::pow( 10.0, exponent );
@@ -930,17 +952,19 @@ namespace moni {
    }
 
    /**
-    * This function is used internally to figure out the minimum and maximum values for the
-    * Y axis. The return value's first element stores the minimum value on the Y axis, while
-    * the second element stores the maximum value.
+    * This function is used internally to figure out the minimum and maximum
+    * values for the Y axis. The return value's first element stores the minimum
+    * value on the Y axis, while the second element stores the maximum value.
     *
     * @returns The limits for the Y axis
     */
    std::pair< double, double > Histogram::getYAxisLimits() const {
 
       // Get the first and final bins that are shown:
-      const size_t start = getBin( m_viewLow );
-      const size_t end   = getBin( m_viewUp );
+      const std::vector< double >::difference_type start =
+         static_cast< std::vector< double >::difference_type >( getBin( m_viewLow ) );
+      const std::vector< double >::difference_type end =
+         static_cast< std::vector< double >::difference_type >( getBin( m_viewUp ) );
 
       // Get the maximum and minimum values within the limits:
       const double maximum =
@@ -1058,7 +1082,7 @@ namespace moni {
          if( ( abin.majors().front().value() < -1000.0 ) ||
              ( abin.majors().back().value() > 1000.0 ) ) {
             // Decide on the exponent based on the largest major tick:
-            int exponent =
+            const int exponent =
                static_cast< int >( std::floor( std::log10( std::max( std::abs( abin.majors().front().value() ),
                                                                      std::abs( abin.majors().back().value() ) ) ) ) );
             return std::make_pair( true, exponent );

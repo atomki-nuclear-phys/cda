@@ -78,7 +78,8 @@ namespace daq {
       } else {
 
          // Split the options at whitespaces. This is needed for using "execve":
-         QStringList optionList = m_options.split( " ", QString::SkipEmptyParts );
+         QStringList optionList = m_options.split( " ",
+                                                   QString::SkipEmptyParts );
          m_process.setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
 
          m_process.start( m_execName, optionList );
@@ -105,7 +106,8 @@ namespace daq {
          m_process.terminate();
          return true;
       } else {
-         m_logger << msg::WARNING << tr( "Stop requested for a stopped process" )
+         m_logger << msg::WARNING
+                  << tr( "Stop requested for a stopped process" )
                   << msg::endmsg;
       }
 

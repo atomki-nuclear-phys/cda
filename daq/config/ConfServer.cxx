@@ -12,9 +12,11 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/common/Address.h"
+#   include "cdacore/common/errorcheck.h"
 #   include "cdacore/device/Loader.h"
 #else
 #   include "common/Address.h"
+#   include "common/errorcheck.h"
 #   include "device/Loader.h"
 #endif
 
@@ -23,7 +25,8 @@ namespace conf {
    /**
     * The constructor sets up all the member variables.
     *
-    * @param confFileName Optional name of the configuration file that should be served
+    * @param confFileName Optional name of the configuration file that should
+    *        be served
     * @param parent Qt parent of the server object
     */
    ConfServer::ConfServer( const QString& configFileName, QObject* parent )
@@ -34,22 +37,21 @@ namespace conf {
       // Load all the device plugins:
       //
       if( dev::Loader::instance()->loadAll() ) {
-         m_logger << msg::DEBUG << "Successfully loaded all available devices"
+         m_logger << msg::DEBUG
+                  << tr( "Successfully loaded all available devices" )
                   << msg::endmsg;
       } else {
-         m_logger << msg::FATAL << "There was an error loading the devices"
-                  << msg::endmsg;
+         REPORT_FATAL( "There was an error loading the devices" );
       }
 
       //
       // Open the internal buffer for reading and writing:
       //
       if( m_buffer.open( QBuffer::ReadWrite ) ) {
-         m_logger << msg::VERBOSE << "Opened internal buffer in read/write mode"
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "Opened internal buffer in read/write mode" ) );
       } else {
-         m_logger << msg::ERROR << "Internal buffer could not be read in read/write mode!"
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Internal buffer could not be read in read/write "
+                           "mode!" ) );
       }
 
       //
@@ -62,40 +64,40 @@ namespace conf {
       //
       connect( this, SIGNAL( newConnection() ),
                this, SLOT( sendConfiguration() ) );
-
    }
 
    /**
-    * This function puts the server into a listening state, after which it will be
-    * able to serve incoming connections.
+    * This function puts the server into a listening state, after which it will
+    * be able to serve incoming connections.
     *
-    * @param address The address on which the incoming connections should be handled
+    * @param address The address on which the incoming connections should be
+    *                handled
     * @returns <code>true</code> if the server could be started,
     *          <code>false</code> otherwise
     */
    bool ConfServer::listen( const Address& address ) {
 
       return QTcpServer::listen( address.getHost(), address.getPort() );
-
    }
 
    /**
-    * This function should be used to specify a new configuration file that should
-    * be broadcast. If it differs from the configuration file currently loaded,
-    * then the buffer is rewritten with the new configuration information.
+    * This function should be used to specify a new configuration file that
+    * should be broadcast. If it differs from the configuration file currently
+    * loaded, then the buffer is rewritten with the new configuration
+    * information.
     *
     * @param fileName Name of the configuration file to cache
-    * @returns <code>true</code> if the configuration could be cached successfully,
-    *          <code>false</code> otherwise
+    * @returns <code>true</code> if the configuration could be cached
+    *          successfully, <code>false</code> otherwise
     */
    bool ConfServer::setConfigFileName( const QString& fileName ) {
 
-      // If it's the same as the current configuration, don't bother doing anything:
+      // If it's the same as the current configuration, don't bother doing
+      // anything:
       if( fileName == m_configFileName ) return true;
 
       m_configFileName = fileName;
       return readConfiguration();
-
    }
 
    /**
@@ -104,13 +106,12 @@ namespace conf {
    const QString& ConfServer::getConfigFileName() const {
 
       return m_configFileName;
-
    }
 
    /**
-    * This is a very simple slot, that sends the configuration to all the clients that
-    * connect to this server. It's pretty much a copy of the "fortune server" Qt code
-    * example...
+    * This is a very simple slot, that sends the configuration to all the
+    * clients that connect to this server. It's pretty much a copy of the
+    * "fortune server" Qt code example...
     */
    void ConfServer::sendConfiguration() {
 
@@ -125,15 +126,16 @@ namespace conf {
       // Write the configuration from the buffer into the socket:
       //
       connection->write( m_buffer.buffer() );
-      m_logger << msg::VERBOSE << "Bytes to be written: "
-               << connection->bytesToWrite() << msg::endmsg;
+      REPORT_VERBOSE( tr( "Bytes to be written: %1" )
+                      .arg( connection->bytesToWrite() ) );
 
       //
       // Make sure to actually send the data:
       //
       connection->flush();
-      m_logger << msg::DEBUG << "Served configuration to: "
-               << connection->peerName() << ":" << connection->peerPort()
+      m_logger << msg::DEBUG
+               << tr( "Served configuration to: %1:%2" )
+               .arg( connection->peerName() ).arg( connection->peerPort() )
                << msg::endmsg;
 
       //
@@ -142,7 +144,6 @@ namespace conf {
       connection->disconnectFromHost();
 
       return;
-
    }
 
    /**
@@ -152,31 +153,31 @@ namespace conf {
     * of the configuration file name. If it ends in ".cbin", it's assumed to be
     * in binary format. In all other cases it's assumed to be an XML file.
     *
-    * @returns <code>true</code> if the configuration could be cached successfully,
-    *          <code>false</code> otherwise
+    * @returns <code>true</code> if the configuration could be cached
+    *          successfully, <code>false</code> otherwise
     */
    bool ConfServer::readConfiguration() {
 
-      bool retval;
       if( m_configFileName.endsWith( ".cbin" ) ) {
-         retval = readBinaryConfig();
+         CHECK( readBinaryConfig() );
       } else {
-         retval = readXMLConfig();
+         CHECK( readXMLConfig() );
       }
 
-      m_logger << msg::DEBUG << "Size of configuration buffer: "
-               << m_buffer.buffer().size() << msg::endmsg;
+      m_logger << msg::DEBUG
+               << tr( "Size of configuration buffer: %1" )
+               .arg( m_buffer.buffer().size() )
+               << msg::endmsg;
 
-      return retval;
-
+      return true;
    }
 
    /**
     * This function caches the configuration from the currently configured
     * binary file.
     *
-    * @returns <code>true</code> if the configuration could be cached successfully,
-    *          <code>false</code> otherwise
+    * @returns <code>true</code> if the configuration could be cached
+    *          successfully, <code>false</code> otherwise
     */
    bool ConfServer::readBinaryConfig() {
 
@@ -184,13 +185,7 @@ namespace conf {
       // Open the file for (binary) reading:
       //
       QFile configFile( m_configFileName );
-      if( ! configFile.open( QFile::ReadOnly ) ) {
-         m_logger << msg::ERROR << "Couldn't open file: " << m_configFileName
-                  << msg::endmsg;
-         return false;
-      } else {
-         m_logger << msg::VERBOSE << "Opened file: " << m_configFileName << msg::endmsg;
-      }
+      CHECK( configFile.open( QFile::ReadOnly ) );
 
       //
       // Use a temporary crate object to read this configuration:
@@ -198,13 +193,13 @@ namespace conf {
       Crate crate;
       crate.setLoader( dev::Loader::instance() );
       if( ! crate.readConfig( &configFile ) ) {
-         m_logger << msg::ERROR << "Some error happened while reading the (binary) file: "
-                  << m_configFileName << std::endl
-                  << "Configuration for the server was not updated!" << msg::endmsg;
+         REPORT_ERROR( tr( "Some error happened while reading the (binary)"
+                           "file: %1\n"
+                           "Configuration for the server was not updated!" )
+                       .arg( m_configFileName ) );
          return false;
       } else {
-         m_logger << msg::VERBOSE << "Successfully read the binary configuration"
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "Successfully read the binary configuration" ) );
       }
 
       //
@@ -216,27 +211,28 @@ namespace conf {
       // Write the configuration into the internal buffer:
       //
       if( ! crate.writeConfig( &m_buffer ) ) {
-         m_logger << msg::ERROR << "Some error happened while writing the configuration"
-                  << std::endl
-                  << "into the internal buffer." << std::endl
-                  << "Configuration buffer cleared!" << msg::endmsg;
+         REPORT_ERROR( tr( "Some error happened while writing the "
+                           "configuration\n"
+                           "into the internal buffer.\n"
+                           "Configuration buffer cleared!" ) );
          m_buffer.buffer().clear();
          return false;
       } else {
-         m_logger << msg::DEBUG << "Updated internal buffer from: "
-                  << m_configFileName << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Updated internal buffer from: %1" )
+                  .arg( m_configFileName )
+                  << msg::endmsg;
       }
 
       return true;
-
    }
 
    /**
     * This function caches the configuration from the currently configured
     * XML file.
     *
-    * @returns <code>true</code> if the configuration could be cached successfully,
-    *          <code>false</code> otherwise
+    * @returns <code>true</code> if the configuration could be cached
+    *          successfully, <code>false</code> otherwise
     */
    bool ConfServer::readXMLConfig() {
 
@@ -244,13 +240,7 @@ namespace conf {
       // Open the file for (textual) reading:
       //
       QFile configFile( m_configFileName );
-      if( ! configFile.open( QFile::ReadOnly | QFile::Text ) ) {
-         m_logger << msg::ERROR << "Couldn't open file: " << m_configFileName
-                  << msg::endmsg;
-         return false;
-      } else {
-         m_logger << msg::VERBOSE << "Opened file: " << m_configFileName << msg::endmsg;
-      }
+      CHECK( configFile.open( QFile::ReadOnly | QFile::Text ) );
 
       //
       // Parse the file as an XML document:
@@ -258,16 +248,18 @@ namespace conf {
       QDomDocument doc;
       QString errorMsg;
       int errorLine, errorColumn;
-      if( ! doc.setContent( &configFile, false, &errorMsg, &errorLine, &errorColumn ) ) {
-         m_logger << msg::ERROR << "Error in parsing \"" << m_configFileName << "\""
-                  << std::endl
-                  << "  Error message: " << errorMsg << std::endl
-                  << "  Error line   : " << errorLine << std::endl
-                  << "  Error column : " << errorColumn << msg::endmsg;
+      if( ! doc.setContent( &configFile, false, &errorMsg, &errorLine,
+                            &errorColumn ) ) {
+         REPORT_ERROR( tr( "Error in parsing \"%1\"\n"
+                           "  Error message: %2\n"
+                           "  Error line   : %3\n"
+                           "  Error column : %4" )
+                       .arg( m_configFileName ).arg( errorMsg )
+                       .arg( errorLine ).arg( errorColumn ) );
          return false;
       } else {
-         m_logger << msg::VERBOSE << "Successfully parsed: " << m_configFileName
-                  << msg::endmsg;
+         REPORT_VERBOSE( tr( "Successfully parsed: %1" )
+                         .arg( m_configFileName ) );
       }
 
       //
@@ -275,12 +267,7 @@ namespace conf {
       //
       Crate crate;
       crate.setLoader( dev::Loader::instance() );
-      if( ! crate.readConfig( doc.documentElement() ) ) {
-         m_logger << msg::ERROR << "Failed to read configuration file!" << msg::endmsg;
-         return false;
-      } else {
-         m_logger << msg::VERBOSE << "Successfully read configuration file" << msg::endmsg;
-      }
+      CHECK( crate.readConfig( doc.documentElement() ) );
 
       //
       // Clear out the internal buffer:
@@ -291,19 +278,20 @@ namespace conf {
       // Write the configuration into the internal buffer:
       //
       if( ! crate.writeConfig( &m_buffer ) ) {
-         m_logger << msg::ERROR << "Some error happened while writing the configuration"
-                  << std::endl
-                  << "into the internal buffer." << std::endl
-                  << "Configuration buffer cleared!" << msg::endmsg;
+         REPORT_ERROR( tr( "Some error happened while writing the "
+                           "configuration\n"
+                           "into the internal buffer.\n"
+                           "Configuration buffer cleared!" ) );
          m_buffer.buffer().clear();
          return false;
       } else {
-         m_logger << msg::DEBUG << "Updated internal buffer from: "
-                  << m_configFileName << msg::endmsg;
+         m_logger << msg::DEBUG
+                  << tr( "Updated internal buffer from: %1" )
+                  .arg( m_configFileName )
+                  << msg::endmsg;
       }
 
       return true;
-
    }
 
 } // namespace conf

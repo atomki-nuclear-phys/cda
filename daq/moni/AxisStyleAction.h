@@ -19,8 +19,8 @@ namespace moni {
    /**
     *  @short Action modifying the style of one of the axes
     *
-    *         This "action" is used internally by the pop-up menu of the Histogram
-    *         class to change the style of one of its axes.
+    *         This "action" is used internally by the pop-up menu of the
+    *         Histogram class to change the style of one of its axes.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *

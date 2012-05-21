@@ -10,14 +10,12 @@ namespace cdastat {
       : QDataStream( device ) {
 
       setVersion( QDataStream::Qt_4_0 );
-
    }
 
    BinaryStream::BinaryStream( QByteArray* array, QIODevice::OpenMode openMode )
       : QDataStream( array, openMode ) {
 
       setVersion( QDataStream::Qt_4_0 );
-
    }
 
    /**
@@ -37,12 +35,11 @@ namespace cdastat {
       ( * ( QDataStream* ) this ) << stat.getStatTime();
 
       return *this;
-
    }
 
    /**
-    * This operator reads data from the input and translates it into the properties
-    * of a stat::Statistics object.
+    * This operator reads data from the input and translates it into the
+    * properties of a stat::Statistics object.
     *
     * @param stat Object to fill with the data from the input stream
     * @returns This same stream object
@@ -64,7 +61,6 @@ namespace cdastat {
       stat.setStatTime( statTime );
 
       return *this;
-
    }
 
 } // namespace cdastat

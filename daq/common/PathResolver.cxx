@@ -120,7 +120,8 @@ namespace daq {
       //
       // If we reached this point then we failed to find the file:
       //
-      m_logger << msg::WARNING << tr( "Failed to find \"%1\" in environment: %2" )
+      m_logger << msg::WARNING
+               << tr( "Failed to find \"%1\" in environment: %2" )
          .arg( name ).arg( env ) << msg::endmsg;
 
       return "";
