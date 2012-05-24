@@ -20,7 +20,7 @@ HEADERS = *.h ../win32/plugins.h
 SOURCES = *.cxx
 
 # The application uses some resources:
-RESOURCES = cda-config-editor.qrc
+RESOURCES += cda-config-editor.qrc
 
 # The translation file for the application:
 TRANSLATIONS = ../../trans/cda-config-editor_hu.ts
