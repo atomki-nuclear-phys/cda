@@ -8,6 +8,7 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QDir>
 #include <QtCore/QLibrary>
+#include <QtCore/QProcessEnvironment>
 
 // Local include(s):
 #include "Loader.h"
@@ -156,7 +157,8 @@ namespace dev {
       QPluginLoader ploader( m_path + "/" + plugin_name );
       QObject* plugin = ploader.instance();
       if( ! plugin ) {
-         REPORT_ERROR( tr( "Couldn't load plugin with name: %1" ).arg( plugin_name ) );
+         REPORT_ERROR( tr( "Couldn't load plugin with name: %1" )
+                       .arg( plugin_name ) );
          return false;
       } else {
          m_logger << msg::DEBUG
@@ -175,7 +177,8 @@ namespace dev {
          return false;
       } else {
          m_logger << msg::DEBUG
-                  << tr( "Accessed dev::Factory interface in plugin: %1" ).arg( plugin_name )
+                  << tr( "Accessed dev::Factory interface in plugin: %1" )
+            .arg( plugin_name )
                   << msg::endmsg;
       }
 
@@ -193,7 +196,8 @@ namespace dev {
       m_deviceMap[ factory->shortName() ] = factory;
       m_logger << msg::INFO
                << tr( "Loaded device \"%1\" from "
-                      "plugin: %2" ).arg( factory->longName() ).arg( plugin_name )
+                      "plugin: %2" ).arg( factory->longName() )
+         .arg( plugin_name )
                << msg::endmsg;
 
       return true;
@@ -301,30 +305,24 @@ namespace dev {
       // Check if a directory name has been specified:
       //
       if( m_path.isEmpty() ) {
-         //
-         // Get the CDASYS environment variable. Remember that the
-         // return value is in our responsibility...
-         //
-         char* env_path = getenv( "CDASYS" );
-         if( ! env_path ) {
-            // In case CDASYS is not in the environment, try using the directory where
-            // the code was compiled:
-            m_path = CDASYS_PATH;
-            m_path.append( "/dev" );
+
+         // Get the process environment in a Qt way:
+         const QProcessEnvironment env =
+            QProcessEnvironment::systemEnvironment();
+
+         // Look for CDASYS in the environment:
+         if( env.contains( "CDASYS" ) ) {
+            m_path = env.value( "CDASYS" );
          } else {
-            m_path = env_path;
-            m_path.append( "/dev" );
+            // In case CDASYS is not in the environment, try using the
+            // directory where the code was compiled:
+            m_path = CDASYS_PATH;
          }
+         m_path.append( "/dev" );
+
          m_logger << msg::DEBUG << tr( "Setting device plugin directory "
                                        "to: %1" ).arg( m_path ) << msg::endmsg;
-
-         //
-         // Delete the return value of getenv():
-         //
-         // Mac OS X complains about this call, so it's removed for the moment.
-         //         if( env_path ) free( env_path );
       }
-
    }
 
 } // namespace dev

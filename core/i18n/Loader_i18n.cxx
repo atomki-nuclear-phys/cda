@@ -5,6 +5,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
 #include <QtCore/QTranslator>
+#include <QtCore/QProcessEnvironment>
 
 // Local include(s):
 #include "Loader.h"
@@ -34,30 +35,25 @@ namespace i18n {
       // Check if a directory name has been specified:
       //
       if( m_path.isEmpty() ) {
-         //
-         // Get the CDASYS environment variable. Remember that the
-         // return value is in our responsibility...
-         //
-         char* env_path = getenv( "CDASYS" );
-         if( ! env_path ) {
+
+         // Get the process environment in a Qt way:
+         const QProcessEnvironment env =
+            QProcessEnvironment::systemEnvironment();
+
+         // Look for CDASYS in the environment:
+         if( env.contains( "CDASYS" ) ) {
+            m_path = env.value( "CDASYS" );
+         } else {
             // In case CDASYS is not in the environment, try using the
             // directory where the code was compiled:
             m_path = CDASYS_PATH;
-            m_path.append( "/trans" );
-         } else {
-            m_path = env_path;
-            m_path.append( "/trans" );
          }
+         m_path.append( "/trans" );
+
          m_logger << msg::DEBUG
                   << tr( "Setting translation directory to: %1" ).arg( m_path )
                   << msg::endmsg;
-
-         //
-         // Delete the return value of getenv():
-         //
-         if( env_path ) free( env_path );
       }
-
    }
 
    Loader::~Loader() {
