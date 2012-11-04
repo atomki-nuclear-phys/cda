@@ -27,7 +27,7 @@ namespace reader {
     * function to create these devices when reading a configuration.
     */
    Crate::Crate()
-      : dev::Crate< dev::CamacReadout >(),
+      : dev::Crate< dev::CamacReadout >( "CAMAC", true ),
         m_logger( "reader::Crate" ) {
 
       REPORT_VERBOSE( tr( "Object constructed" ) );
