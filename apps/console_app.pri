@@ -12,7 +12,7 @@
 TEMPLATE = app
 
 # The application uses a bunch of Qt libraries:
-CONFIG = qt warn_on release silent
+CONFIG = qt warn_on release silent exceptions rtti
 QT     = core network xml gui
 
 # The places to put the intermediate and final build results:

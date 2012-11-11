@@ -21,7 +21,7 @@ MOC_DIR     = ./.obj
 DESTDIR     = ../../bin
 
 # Special linking setup for Windows:
-QMAKE_LFLAGS_WINDOWS += --enable-auto-import
+QMAKE_LFLAGS_WINDOWS += -Wl,--enable-auto-import
 
 # The include paths:
 INCLUDEPATH += ../../core ../../daq ../../gui

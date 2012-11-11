@@ -16,14 +16,14 @@
 # Check the version of Qt. The code currently only supports
 # Qt 4.X.
 #
-!contains(QT_MAJOR_VERSION,4) {
-   isEmpty($$QT_VERSION) {
-      message(Your Qt version is too old. Probably 3.X...)
-   } else {
-      message(Your Qt version is $$QT_VERSION)
-   }
-   error(CDA has to be built with Qt version 4.X!)
-}
+#!contains(QT_MAJOR_VERSION,4) {
+#   isEmpty($$QT_VERSION) {
+#      message(Your Qt version is too old. Probably 3.X...)
+#   } else {
+#      message(Your Qt version is $$QT_VERSION)
+#   }
+#   error(CDA has to be built with Qt version 4.X!)
+#}
 
 #
 # During development the code is compiled in debug mode to make it easier
@@ -31,7 +31,7 @@
 # should not carry around the debug information... (Add "debug" in the following
 # list if you want to debug the code!)
 #
-CONFIG += warn_on release ordered silent
+CONFIG += warn_on release ordered exceptions rtti silent
 
 #
 # Check that the CDASYS environment variable exists. The value of

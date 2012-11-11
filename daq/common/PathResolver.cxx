@@ -9,7 +9,6 @@ extern "C" {
 
 // Qt include(s):
 #include <QtCore/QStringList>
-#include <QtCore/QFileInfo>
 
 // Local include(s):
 #include "PathResolver.h"
@@ -56,7 +55,13 @@ namespace daq {
                   << msg::endmsg;
          QString envarray = ::getenv( env.toLatin1().constData() );
          REPORT_VERBOSE( tr( "%1 = %2" ).arg( env ).arg( envarray ) );
-         QStringList envsplit = envarray.split( ":", QString::SkipEmptyParts );
+#ifdef QT_ARCH_WINDOWS
+         const QString separator = ";";
+#else
+         const QString separator = ":";
+#endif // QT_ARCH_WINDOW
+         QStringList envsplit = envarray.split( separator,
+                                                QString::SkipEmptyParts );
          for( QStringList::const_iterator element = envsplit.begin();
               element != envsplit.end(); ++element ) {
             REPORT_VERBOSE( tr( "Adding \"%1\" to environment %2" )
@@ -107,14 +112,15 @@ namespace daq {
       //
       if( env == "PATH" ) {
          // Check if the file exists under $CDASYS/bin/:
-         QFileInfo finfo( CDASYS_PATH + ( "/bin/" + name ) );
-         if( finfo.exists() && finfo.isExecutable() ) {
-            m_logger << msg::DEBUG
-                     << tr( "\"%1\" found under \"%2/bin\"" )
-               .arg( name ).arg( CDASYS_PATH )
-                     << msg::endmsg;
-            return ( CDASYS_PATH + ( "/bin/" + name ) );
-         }
+         QString path = CDASYS_PATH + ( "/bin/" + name );
+#ifdef QT_ARCH_WINDOWS
+         path.replace( "/", "\\" );
+#endif // QT_ARCH_WINDOWS
+         m_logger << msg::DEBUG
+                  << tr( "Assuming that \"%1\" is under \"%2/bin\"" )
+            .arg( name ).arg( CDASYS_PATH )
+                  << msg::endmsg;
+         return path;
       }
 
       //

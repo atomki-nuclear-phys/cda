@@ -55,15 +55,15 @@ CamacDAQWindow::CamacDAQWindow( const QString& confFileName, msg::Level verbosit
 
    // The size of the window depends on the architecture. The menu on MacOS X is not part
    // of the window, so the window can be smaller by 30 pixels...
-   if( menuBar()->isNativeMenuBar() ) {
-      resize( 920, 610 );
-      setMinimumSize( 920, 610 );
-      setMaximumSize( 920, 610 );
-   } else {
-      resize( 920, 640 );
-      setMinimumSize( 920, 640 );
-      setMaximumSize( 920, 640 );
-   }
+#ifdef Q_OS_DARWIN
+   resize( 920, 610 );
+   setMinimumSize( 920, 610 );
+   setMaximumSize( 920, 610 );
+#else
+   resize( 920, 640 );
+   setMinimumSize( 920, 640 );
+   setMaximumSize( 920, 640 );
+#endif
 
    // Set up the window according to whether a configuration file was already specified:
    if( ! confFileName.isEmpty() ) {

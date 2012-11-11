@@ -323,9 +323,9 @@ int main( int argc, char* argv[] ) {
    //
    // Connect the interrupt signal to the shutDown function:
    //
-#ifndef Q_OS_WIN32
    signal( SIGINT, prepareShutDown );
    signal( SIGTERM, prepareShutDown );
+#ifndef Q_OS_WIN32
    sigset_t blockedSignals;
    sigfillset( &blockedSignals );
    sigaddset( &blockedSignals, SIGINT );

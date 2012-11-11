@@ -4,6 +4,13 @@
 #include <QtCore/QStringList>
 #include <QtCore/QProcessEnvironment>
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
+
 // Local include(s):
 #include "AppRunner.h"
 
@@ -75,16 +82,19 @@ namespace daq {
          m_logger << msg::WARNING << tr( "Trying to start a running process" )
                   << msg::endmsg;
          return false;
-      } else {
-
-         // Split the options at whitespaces. This is needed for using "execve":
-         QStringList optionList = m_options.split( " ",
-                                                   QString::SkipEmptyParts );
-         m_process.setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
-
-         m_process.start( m_execName, optionList );
       }
 
+      // Split the options at whitespaces. This is needed for using "execve":
+      QStringList optionList = m_options.split( " ",
+                                                QString::SkipEmptyParts );
+      m_process.setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
+
+      // Start the process:
+      m_process.start( m_execName, optionList );
+      // Check that the process started successfully:
+      CHECK( m_process.waitForStarted() );
+
+      // We were successful:
       return true;
    }
 
@@ -103,14 +113,24 @@ namespace daq {
       // Only do something if the process has already been started:
       //
       if( m_process.state() == QProcess::Running ) {
+         // Stop the process:
+#ifndef QT_ARCH_WINDOWS
          m_process.terminate();
+#else
+         // Windows can't kill the console applications with terminate()...
+         // One more good reason for not using Windows seriously with this
+         // code.
+         m_process.kill();
+#endif
+         // Check that the process finished successfully:
+         CHECK( m_process.waitForFinished() );
+         // We were successful:
          return true;
-      } else {
-         m_logger << msg::WARNING
-                  << tr( "Stop requested for a stopped process" )
-                  << msg::endmsg;
       }
 
+      m_logger << msg::WARNING
+               << tr( "Stop requested for a stopped process" )
+               << msg::endmsg;
       return false;
    }
 
