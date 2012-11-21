@@ -9,6 +9,7 @@ extern "C" {
 
 // Qt include(s):
 #include <QtCore/QStringList>
+#include <QtCore/QFileInfo>
 
 // Local include(s):
 #include "PathResolver.h"
@@ -113,14 +114,27 @@ namespace daq {
       if( env == "PATH" ) {
          // Check if the file exists under $CDASYS/bin/:
          QString path = CDASYS_PATH + ( "/bin/" + name );
+
+         // This check doesn't quite work on Windows, so let's just assume
+         // that the application is available...
 #ifdef QT_ARCH_WINDOWS
          path.replace( "/", "\\" );
-#endif // QT_ARCH_WINDOWS
          m_logger << msg::DEBUG
                   << tr( "Assuming that \"%1\" is under \"%2/bin\"" )
             .arg( name ).arg( CDASYS_PATH )
                   << msg::endmsg;
          return path;
+#endif // QT_ARCH_WINDOWS
+
+         // Check if the file exists:
+         QFileInfo finfo( path );
+         if( finfo.exists() && finfo.isExecutable() ) {
+            m_logger << msg::DEBUG
+                     << tr( "\"%1\" found under \"%2/bin\"" )
+               .arg( name ).arg( CDASYS_PATH )
+                     << msg::endmsg;
+            return path;
+         }
       }
 
       //
