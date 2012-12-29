@@ -62,6 +62,9 @@ namespace dt5740 {
       virtual bool getLogYPossible() const;
 
    private:
+      /// Function setting up the tool-tip of the object
+      void configureToolTip();
+
       double m_time; ///< Reconstructed time
       double m_energy; ///< Reconstructed energy
 

@@ -37,6 +37,7 @@ namespace dt5740 {
       // In the first loop smooth the data if needed:
       if( std::abs( m_smoothWidth ) > 0.001 ) {
          for( size_t i = 0; i < data.size(); ++i ) {
+            // Start from zero:
             m_smooth[ i ] = 0.0;
             for( size_t j = 0; j < data.size(); ++j ) {
                // The distance of this point from the one being smoothed:
@@ -146,6 +147,12 @@ namespace dt5740 {
          } else {
             return 0.0;
          }
+      }
+
+      // For distances larger than 5 sigma, let's not do the calculation:
+      if( std::abs( static_cast< double >( x ) ) >
+          5 * std::abs( m_smoothWidth ) ) {
+         return 0.0;
       }
 
       // I've stolen this calculation from TMath::Gaus in the ROOT source code:

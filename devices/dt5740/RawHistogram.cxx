@@ -26,6 +26,7 @@ namespace dt5740 {
         m_time( 0.0 ), m_energy( 0.0 ),
         m_transScale( 1.0 ) {
 
+      configureToolTip();
    }
 
    RawHistogram::RawHistogram( const QString& title, int bins, double low,
@@ -37,6 +38,7 @@ namespace dt5740 {
         m_time( 0.0 ), m_energy( 0.0 ),
         m_transScale( 1.0 ) {
 
+      configureToolTip();
    }
 
    bool RawHistogram::reconstruct( const std::vector< uint16_t >& data,
@@ -264,6 +266,23 @@ namespace dt5740 {
    bool RawHistogram::getLogYPossible() const {
 
       return false;
+   }
+
+   /**
+    * This function just gives a useful tool-tip for the histograms. Since there
+    * are a number of lines drawn on top of each other, it's easy to forget
+    * what each of them show.
+    */
+   void RawHistogram::configureToolTip() {
+
+      setToolTip( tr( "The lines/histograms mean the following:\n"
+                      " - dark red: The original digitized sample\n"
+                      " - dark yellow: The smoothed distribution\n"
+                      " - dark magenta: The CFD-transformed distribution\n"
+                      " - dark green: The reconstructed signal \"energy\"\n"
+                      " - dark blue: The reconstructed signal \"time\"" ) );
+
+      return;
    }
 
 } // namespace dt5740
