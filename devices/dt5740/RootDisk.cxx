@@ -29,6 +29,7 @@ namespace dt5740 {
       m_processor.setFraction( m_cfdFraction );
       m_processor.setDelay( m_cfdDelay );
       m_processor.setLength( m_cfdLength );
+      m_processor.setSmoothWidth( m_gaussSmoothWidth );
 
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;

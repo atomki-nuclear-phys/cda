@@ -39,6 +39,7 @@ namespace dt5740 {
       m_processor.setFraction( m_cfdFraction );
       m_processor.setDelay( m_cfdDelay );
       m_processor.setLength( m_cfdLength );
+      m_processor.setSmoothWidth( m_gaussSmoothWidth );
 
       //
       // Book histograms for all the active channels:

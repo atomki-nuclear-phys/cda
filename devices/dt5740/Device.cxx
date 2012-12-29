@@ -46,6 +46,7 @@ namespace dt5740 {
         m_acqMode( caen::Digitizer::ACQ_SW_Controlled ),
         m_saveRawNtuple( false ),
         m_cfdFraction( 0.1 ), m_cfdDelay( 10 ), m_cfdLength( 5 ),
+        m_gaussSmoothWidth( 0.0 ),
         m_logger( "dt5740::Device" ) {
 
       // Set the ID of each group:
@@ -100,6 +101,7 @@ namespace dt5740 {
       input >> m_cfdFraction;
       input >> m_cfdDelay;
       input >> m_cfdLength;
+      input >> m_gaussSmoothWidth;
 
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -146,6 +148,7 @@ namespace dt5740 {
       output << m_cfdFraction;
       output << m_cfdDelay;
       output << m_cfdLength;
+      output << m_gaussSmoothWidth;
 
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
@@ -235,6 +238,10 @@ namespace dt5740 {
       m_cfdLength = element.attribute( "CFDLength", "0" ).toInt( &ok );
       CHECK( ok );
 
+      m_gaussSmoothWidth = element.attribute( "GaussSmoothWidth",
+                                              "0.0" ).toDouble( &ok );
+      CHECK( ok );
+
       //
       // Configure the groups:
       //
@@ -288,6 +295,7 @@ namespace dt5740 {
       element.setAttribute( "CFDFraction", m_cfdFraction );
       element.setAttribute( "CFDDelay", m_cfdDelay );
       element.setAttribute( "CFDLength", m_cfdLength );
+      element.setAttribute( "GaussSmoothWidth", m_gaussSmoothWidth );
 
       //
       // Create a new node for the configuration of each group:
@@ -354,6 +362,16 @@ namespace dt5740 {
       m_evCountMode = EV_CountAcceptedTriggers;
       m_signalType = SGNL_NIM;
       m_highImpedanceGPO = false;
+
+      m_acqMode = caen::Digitizer::ACQ_SW_Controlled;
+
+      m_saveRawNtuple = false;
+
+      m_cfdFraction = 0.1;
+      m_cfdDelay = 10;
+      m_cfdLength = 5;
+
+      m_gaussSmoothWidth = 0.0;
 
       // Clear all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {

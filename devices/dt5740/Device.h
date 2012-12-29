@@ -189,6 +189,8 @@ namespace dt5740 {
       int    m_cfdDelay; ///< Delay parameter of the digital CFD
       int    m_cfdLength; ///< Length parameter of the digital CFD
 
+      double m_gaussSmoothWidth; ///< Width of the Gaussian smoothing
+
    private:
       mutable msg::Logger m_logger; ///< Message logger object
 

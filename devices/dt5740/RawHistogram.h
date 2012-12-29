@@ -21,7 +21,7 @@ namespace dt5740 {
    /**
     *  @short Specialized histogram for the raw DT5740 data
     *
-    *         This small extension on top of the moni::Histogram class
+    *         This "small" extension on top of the moni::Histogram class
     *         makes it possible to nicely display the reconstructed time
     *         and energy values on top of the raw signal shape.
     *

@@ -111,6 +111,9 @@ namespace dt5740 {
       /// Slot handling the CFD length changes
       void cfdLengthSlot( int value );
 
+      /// Slot handling the Gauss. smooth width changes
+      void gaussSmoothWidthSlot( double value );
+
    private:
       /// Function "syncing" the configuration
       void sync();
@@ -160,6 +163,10 @@ namespace dt5740 {
       QSpinBox*       m_cfdDelayWidget;    ///< Digital CFD delay setting
       QLabel*         m_cfdLengthLabel;    ///< Description of the CFD length setting
       QSpinBox*       m_cfdLengthWidget;   ///< Digital CFD length setting
+      /// Description of the Gaussian smoothing width setting
+      QLabel*         m_gaussSmoothWidthLabel;
+      /// Gaussian smoothing width setting
+      QDoubleSpinBox* m_gaussSmoothWidthWidget;
 
       /// The graphical representation of channel groups
       GroupGui* m_ggroups[ NUMBER_OF_GROUPS ];

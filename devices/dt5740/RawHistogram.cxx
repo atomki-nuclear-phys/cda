@@ -73,9 +73,43 @@ namespace dt5740 {
       const int y_axis_start = height() - X_AXIS_SPACING;
       const double bin_width = ( m_up - m_low ) / static_cast< double >( m_nbins );
 
+      // Draw the smoothed distribution:
+      if( m_smooth.size() ) {
+         painter.setPen( QPen( QBrush( QColor( Qt::darkYellow ) ), 1 ) );
+         int prev_pos = -1;
+         for( size_t i = 0; i < m_smooth.size() - 1; ++i ) {
+            // Security check:
+            if( ybin.getDrawPosition( m_smooth[ i ] ) < 0.0 ) {
+               prev_pos = y_axis_start;
+               continue;
+            }
+
+            const int y_bin_pos =
+               static_cast< int >( std::floor( y_axis_start -
+                                               ybin.getDrawPosition( m_smooth[ i ] ) ) );
+            const int x_bin_low_pos =
+               static_cast< int >( std::floor( xbin.getDrawPosition( m_low +
+                                                                     i * bin_width ) ) );
+            const int x_bin_up_pos =
+               static_cast< int >( std::floor( xbin.getDrawPosition( m_low +
+                                                                     ( i + 1 ) * bin_width ) ) );
+
+            // Another security check:
+            if( ( x_bin_low_pos < 0.0 ) || ( x_bin_up_pos < 0.0 ) ) continue;
+
+            if( prev_pos > 0 ) {
+               painter.drawLine( QLine( x_axis_start + x_bin_low_pos, prev_pos,
+                                        x_axis_start + x_bin_low_pos, y_bin_pos ) );
+            }
+            prev_pos = y_bin_pos;
+            painter.drawLine( QLine( x_axis_start + x_bin_low_pos, y_bin_pos,
+                                     x_axis_start + x_bin_up_pos, y_bin_pos ) );
+         }
+      }
+
       // Draw the CFD transformed distribution:
       if( m_trans.size() ) {
-         painter.setPen( QPen( QBrush( QColor( Qt::darkMagenta ) ), 2 ) );
+         painter.setPen( QPen( QBrush( QColor( Qt::darkMagenta ) ), 1 ) );
          int prev_pos = -1;
          for( size_t i = 0; i < m_trans.size() - 1; ++i ) {
             // Security check:

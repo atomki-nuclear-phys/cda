@@ -9,7 +9,7 @@
 namespace dt5740 {
 
    Processor::Processor()
-      : m_fraction( 0.2 ), m_delay( 20 ), m_length( 10 ), m_smoothArea( 0.0 ),
+      : m_fraction( 0.2 ), m_delay( 20 ), m_length( 10 ), m_smoothWidth( 0.0 ),
         m_logger( "dt5740::Processor" ) {
 
    }
@@ -35,7 +35,7 @@ namespace dt5740 {
       m_trans.resize( data.size(), 0.0 );
 
       // In the first loop smooth the data if needed:
-      if( std::abs( m_smoothArea ) > 0.001 ) {
+      if( std::abs( m_smoothWidth ) > 0.001 ) {
          for( size_t i = 0; i < data.size(); ++i ) {
             m_smooth[ i ] = 0.0;
             for( size_t j = 0; j < data.size(); ++j ) {
@@ -118,21 +118,21 @@ namespace dt5740 {
       return;
    }
 
-   double Processor::getSmoothArea() const {
+   double Processor::getSmoothWidth() const {
 
-      return m_smoothArea;
+      return m_smoothWidth;
    }
 
-   void Processor::setSmoothArea( double value ) {
+   void Processor::setSmoothWidth( double value ) {
 
-      m_smoothArea = value;
+      m_smoothWidth = value;
       return;
    }
 
    /**
     * A Gaussian distribution is used for smoothing the digitised data points.
     * The used distribution is always centered at zero, and its width (sigma)
-    * is defined by <code>m_smoothArea</code>. If the area is set to zero, it
+    * is defined by <code>m_smoothWidth</code>. If the area is set to zero, it
     * means that no signal smoothing needs to happen.
     *
     * @param x Distance of measurement point from the point to be smoothed
@@ -140,7 +140,7 @@ namespace dt5740 {
    double Processor::gauss( int x ) const {
 
       // First let's deal with the case when no smoothing needs to happen:
-      if( std::abs( m_smoothArea ) < 0.001 ) {
+      if( std::abs( m_smoothWidth ) < 0.001 ) {
          if( x == 0 ) {
             return 1.0;
          } else {
@@ -149,10 +149,10 @@ namespace dt5740 {
       }
 
       // I've stolen this calculation from TMath::Gaus in the ROOT source code:
-      const double arg = static_cast< double >( x ) / m_smoothArea;
+      const double arg = static_cast< double >( x ) / m_smoothWidth;
       const double res = std::exp( -0.5 * arg * arg );
       static const double SQRT_2PI = 2.50662827463100024;
-      return res / ( SQRT_2PI * m_smoothArea );
+      return res / ( SQRT_2PI * m_smoothWidth );
    }
 
 } // namespace dt5740

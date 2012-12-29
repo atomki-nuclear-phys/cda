@@ -1,7 +1,7 @@
 <!DOCTYPE CDA_SETUP PUBLIC '' ''>
 <Setup xmlns="">
    <Crate Type="CAEN">
-      <DT5740 PostTrigPercentage="50" BufferMode="NBuffers1024" TrigMode="InputOverThreshold" LinkNumber="0" GateMode="Window" ConnType="0" TrigOvlpEnabled="1" ExtTrigOutEnabled="0" SignalType="NIM" SaveRawNtuple="1" AcqMode="1" ClockSource="Internal" PatGenEnabled="0" CFDDelay="40" CFDLength="20" CFDFraction="0.4" EvCountMode="AcceptedTriggers" ExtTrigEnabled="0" HighImpedanceGPO="1">
+      <DT5740 GaussSmoothWidth="4" PostTrigPercentage="50" BufferMode="NBuffers1024" TrigMode="InputOverThreshold" LinkNumber="0" GateMode="Window" ConnType="0" TrigOvlpEnabled="1" ExtTrigOutEnabled="0" SignalType="NIM" SaveRawNtuple="1" AcqMode="1" ClockSource="Internal" PatGenEnabled="0" CFDDelay="40" CFDLength="20" CFDFraction="0.4" EvCountMode="AcceptedTriggers" ExtTrigEnabled="0" HighImpedanceGPO="1">
          <Group TrigMask="3" Number="0" TrigOutEnabled="1" TrigEnabled="1" DCOffset="32000" TrigThreshold="500">
             <Channel EnergyName="a1ene" TimeName="a1time" EnergyLowerBound="0" ChannelNumber="0" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a1" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
             <Channel EnergyName="a2ene" TimeName="a2time" EnergyLowerBound="0" ChannelNumber="1" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a2" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
@@ -17,7 +17,7 @@
          <Group TrigMask="0" Number="2" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
          <Group TrigMask="0" Number="3" TrigOutEnabled="0" TrigEnabled="0" DCOffset="0" TrigThreshold="0"/>
       </DT5740>
-      <DT5740 PostTrigPercentage="80" BufferMode="NBuffers1024" TrigMode="InputOverThreshold" LinkNumber="1" GateMode="Window" ConnType="0" TrigOvlpEnabled="0" ExtTrigOutEnabled="1" SignalType="NIM" SaveRawNtuple="1" AcqMode="1" ClockSource="Internal" PatGenEnabled="0" CFDDelay="40" CFDLength="20" CFDFraction="0.4" EvCountMode="AcceptedTriggers" ExtTrigEnabled="1" HighImpedanceGPO="1">
+      <DT5740 GaussSmoothWidth="0" PostTrigPercentage="80" BufferMode="NBuffers1024" TrigMode="InputOverThreshold" LinkNumber="1" GateMode="Window" ConnType="0" TrigOvlpEnabled="0" ExtTrigOutEnabled="1" SignalType="NIM" SaveRawNtuple="1" AcqMode="1" ClockSource="Internal" PatGenEnabled="0" CFDDelay="40" CFDLength="20" CFDFraction="0.4" EvCountMode="AcceptedTriggers" ExtTrigEnabled="1" HighImpedanceGPO="1">
          <Group TrigMask="0" Number="0" TrigOutEnabled="0" TrigEnabled="0" DCOffset="35000" TrigThreshold="0">
             <Channel EnergyName="a9ene" TimeName="a9time" EnergyLowerBound="0" ChannelNumber="0" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a9" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>
             <Channel EnergyName="a10ene" TimeName="a10time" EnergyLowerBound="0" ChannelNumber="1" TimeLowerBound="0" NumberOfEnergyChannels="100" RawName="a10" TimeUpperBound="200" NumberOfTimeChannels="100" EnergyUpperBound="5000"/>

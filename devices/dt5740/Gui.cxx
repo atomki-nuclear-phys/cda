@@ -34,7 +34,7 @@ namespace dt5740 {
       // Create the widget that will hold all the configuration widgets:
       //
       m_scrollWidget = new QWidget( 0, flags );
-      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4410 ) );
+      m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4440 ) );
 
       //
       // Embed the previous widget into a scroll area:
@@ -263,7 +263,7 @@ namespace dt5740 {
       //
       m_recoBox = new QGroupBox( tr( "Signal reconstruction settings" ),
                                  m_scrollWidget );
-      m_recoBox->setGeometry( QRect( 10, 845, WIDGET_WIDTH - 40, 120 ) );
+      m_recoBox->setGeometry( QRect( 10, 845, WIDGET_WIDTH - 40, 150 ) );
 
       m_cfdFractionLabel = new QLabel( tr( "CFD fraction:" ),
                                        m_recoBox );
@@ -295,6 +295,16 @@ namespace dt5740 {
       connect( m_cfdLengthWidget, SIGNAL( valueChanged( int ) ),
                this, SLOT( cfdLengthSlot( int ) ) );
 
+      m_gaussSmoothWidthLabel = new QLabel( tr( "Gauss. smooth width:" ),
+                                            m_recoBox );
+      m_gaussSmoothWidthLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
+
+      m_gaussSmoothWidthWidget = new QDoubleSpinBox( m_recoBox );
+      m_gaussSmoothWidthWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
+      m_gaussSmoothWidthWidget->setRange( 0.0, 10.0 );
+      connect( m_gaussSmoothWidthWidget, SIGNAL( valueChanged( double ) ),
+               this, SLOT( gaussSmoothWidthSlot( double ) ) );
+
       //
       // Create the channel groups:
       //
@@ -302,7 +312,7 @@ namespace dt5740 {
 
          // Create a new channel group:
          m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 975 + i * ( GroupGui::HEIGHT + 10 ),
+         m_ggroups[ i ]->setGeometry( QRect( 5, 1005 + i * ( GroupGui::HEIGHT + 10 ),
                                              GroupGui::WIDTH, GroupGui::HEIGHT ) );
       }
 
@@ -643,6 +653,12 @@ namespace dt5740 {
       return;
    }
 
+   void Gui::gaussSmoothWidthSlot( double value ) {
+
+      m_gaussSmoothWidth = value;
+      return;
+   }
+
    /**
     * After a configuration is read from file, the graphical objects have
     * to be synced to show this new configuration. This function takes
@@ -864,6 +880,11 @@ namespace dt5740 {
       m_cfdLengthWidget->setEnabled( false );
       m_cfdLengthWidget->setValue( m_cfdLength );
       m_cfdLengthWidget->setEnabled( true );
+
+      // Set the Gaussian smoothing width:
+      m_gaussSmoothWidthWidget->setEnabled( false );
+      m_gaussSmoothWidthWidget->setValue( m_gaussSmoothWidth );
+      m_gaussSmoothWidthWidget->setEnabled( true );
 
       // Synchronize all the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
