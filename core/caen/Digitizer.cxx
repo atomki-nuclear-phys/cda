@@ -2,6 +2,7 @@
 
 // System include(s):
 #include <cmath>
+#include <cstdlib>
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
@@ -435,7 +436,10 @@ namespace {
     *
     * It generates a Gaussian distribution with a peak value of 2100,
     * a minimum value of 100, a sigma of 1/16-th of the total samples,
-    * and a random mean value between 1/4 - 3/4 of the samples.
+    * and a mean value at the middle of the readout window.
+    *
+    * A +-100 random noise is also put on top of the distribution in order
+    * to check the performance of the signal processing "offline".
     *
     * @param samples Total number of samples read out
     * @param sample The current sample to be simulated
@@ -450,7 +454,7 @@ namespace {
       return ( static_cast< uint16_t >( std::floor( peak *
                                                     std::exp( -0.5 * arg *
                                                               arg ) ) ) +
-               100 );
+               ( rand() % 200 ) );
    }
 
    /// 8-bit gaussian distribution generator
@@ -458,9 +462,12 @@ namespace {
     * When generating a pattern in test mode, this function is used
     * for simulating an 8-bit device.
     *
-    * It generates a Gaussian distribution with a peak value of 2100,
-    * a minimum value of 100, a sigma of 1/16-th of the total samples,
-    * and a random mean value between 1/4 - 3/4 of the samples.
+    * It generates a Gaussian distribution with a peak value of 210,
+    * a minimum value of 10, a sigma of 1/16-th of the total samples,
+    * and a mean value at the middle of the readout window.
+    *
+    * A +-10 random noise is also put on top of the distribution in order
+    * to check the performance of the signal processing "offline".
     *
     * @param samples Total number of samples read out
     * @param sample The current sample to be simulated
@@ -475,7 +482,7 @@ namespace {
       return ( static_cast< uint8_t >( std::floor( peak *
                                                    std::exp( -0.5 * arg *
                                                              arg ) ) ) +
-               10 );
+               ( rand() % 20 ) );
    }
 
 } // private namespace

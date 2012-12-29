@@ -79,11 +79,22 @@ namespace dt5740 {
       /// Set the length of the samples used by the digital CFD
       void setLength( int value );
 
+      /// Get the width of the signal smoothing area
+      double getSmoothArea() const;
+      /// Set the width of the signal smoothing area
+      void setSmoothArea( double value );
+
    protected:
+      /// Function calculating the 1-normalized Gaussian distribution
+      double gauss( int x ) const;
+
       double m_fraction; ///< "Fraction" used by the digital CFD
       int    m_delay;    ///< Delay used by the digital CFD
       int    m_length;   ///< Length used by the digital CFD
 
+      double m_smoothArea; ///< Width of the signal smoothing area
+
+      std::vector< double > m_smooth; ///< Smoothed values
       std::vector< double > m_trans; ///< CFD transformed values
 
    private:
