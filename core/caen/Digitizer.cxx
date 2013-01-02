@@ -1332,7 +1332,11 @@ namespace caen {
       return true;
    }
 
-   bool Digitizer::getNumEvents( char* buffer, uint32_t bufferSize,
+   bool Digitizer::getNumEvents( char*
+#ifdef HAVE_CAEN_LIBS
+                                       buffer
+#endif // HAVE_CAEN_LIBS
+                                 , uint32_t bufferSize,
                                  uint32_t& numEvents ) const {
 
 #ifdef HAVE_CAEN_LIBS
@@ -1348,7 +1352,11 @@ namespace caen {
       return true;
    }
 
-   bool Digitizer::getEvent( char* buffer, uint32_t bufferSize,
+   bool Digitizer::getEvent( char*
+#ifdef HAVE_CAEN_LIBS
+                                   buffer
+#endif // HAVE_CAEN_LIBS
+                             , uint32_t bufferSize,
                              int32_t event, EventInfo& eventInfo,
                              EventData16Bit& eventData ) {
 
@@ -1405,7 +1413,11 @@ namespace caen {
       return true;
    }
 
-   bool Digitizer::getEvent( char* buffer, uint32_t bufferSize,
+   bool Digitizer::getEvent( char*
+#ifdef HAVE_CAEN_LIBS
+                                   buffer
+#endif // HAVE_CAEN_LIBS
+                             , uint32_t bufferSize,
                              int32_t event, EventInfo& eventInfo,
                              EventData8Bit& eventData ) {
 

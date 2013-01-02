@@ -213,8 +213,11 @@ namespace vme {
     * @returns <code>0</code> if the operation was successful,
     *          something else otherwise
     */
-   int VmeBus::write( Address_t address, void* data,
-                      unsigned int length ) {
+   int VmeBus::write( Address_t address, void*
+#ifdef HAVE_VME_LIB
+                                               data
+#endif // HAVE_VME_LIB
+                      , unsigned int length ) {
 
       if( ! isOpen() ) {
          REPORT_ERROR( tr( "VME bus not open yet" ) );
@@ -329,8 +332,11 @@ namespace vme {
     * @returns <code>0</code> if the operation was successful,
     *          something else otherwise
     */
-   int VmeBus::read( Address_t address, void* data,
-                     unsigned int length ) const {
+   int VmeBus::read( Address_t address, void*
+#ifdef HAVE_VME_LIB
+                                              data
+#endif // HAVE_VME_LIB
+                     , unsigned int length ) const {
 
       if( ! isOpen() ) {
          REPORT_ERROR( tr( "VME bus not open yet" ) );

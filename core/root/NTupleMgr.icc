@@ -22,11 +22,16 @@ extern "C" {
 namespace root {
 
    template< typename TYPE >
-   bool NTupleMgr::addVar( TYPE& obj, const QString& name, const QString& title ) {
+   bool NTupleMgr::addVar( TYPE&
+#ifdef HAVE_ROOT_LIBS
+                                 obj
+#endif // HAVE_ROOT_LIBS
+                           , const QString& name, const QString& title ) {
 
       // Tell the user what we're doing:
       m_logger << msg::DEBUG
-               << tr( "Creating new output branch with name: %1" ).arg( name )
+               << tr( "Creating new output branch with name \"%1\" and title "
+                      "\"%2\"" ).arg( name ).arg( title )
                << msg::endmsg;
 
 #ifdef HAVE_ROOT_LIBS

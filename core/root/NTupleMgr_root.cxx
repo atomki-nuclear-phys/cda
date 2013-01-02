@@ -246,8 +246,11 @@ namespace root {
       return true;
    }
 
-   bool NTupleMgr::makeBranch( const char* name, void* address,
-                               const char* leaflist, const char* title ) {
+   bool NTupleMgr::makeBranch( const char* name, void*
+#ifdef HAVE_ROOT_LIBS
+                                                       address
+#endif // HAVE_ROOT_LIBS
+                               , const char* leaflist, const char* title ) {
 
 #ifdef HAVE_ROOT_LIBS
       // Create the branch:
@@ -260,15 +263,20 @@ namespace root {
       // Set its title:
       br->SetTitle( title );
 #else
-      REPORT_VERBOSE( tr( "Creating primitive branch with name \"%1\" and "
-                          "leaf-list \"%2\"" ).arg( name ).arg( leaflist ) );
+      REPORT_VERBOSE( tr( "Creating primitive branch with name \"%1\" , "
+                          "title \"%2\" and leaf-list \"%3\"" ).arg( name )
+                      .arg( title ).arg( leaflist ) );
 #endif // HAVE_ROOT_LIBS
 
       return true;
    }
 
-   bool NTupleMgr::makeBronch( const char* name, const char* classname, void* ptr,
-                               const char* title ) {
+   bool NTupleMgr::makeBronch( const char* name, const char* classname,
+                               void*
+#ifdef HAVE_ROOT_LIBS
+                                     ptr
+#endif // HAVE_ROOT_LIBS
+                               , const char* title ) {
 
 #ifdef HAVE_ROOT_LIBS
       // Create the branch:
@@ -281,8 +289,9 @@ namespace root {
       // Set its title:
       br->SetTitle( title );
 #else
-      REPORT_VERBOSE( tr( "Creating object branch with name \"%1\" and "
-                          "classname \"%2\"" ).arg( name ).arg( classname ) );
+      REPORT_VERBOSE( tr( "Creating object branch with name \"%1\", title "
+                          "\"%2\" and classname \"%3\"" ).arg( name )
+                      .arg( title ).arg( classname ) );
 #endif // HAVE_ROOT_LIBS
 
       return true;
