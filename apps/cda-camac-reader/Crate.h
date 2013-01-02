@@ -70,6 +70,9 @@ namespace reader {
       /// Clear the crate to receive a new event
       bool clear( camac::Crate& crate ) const;
 
+      // Pull in the clear() function from the base class:
+      using dev::Crate< dev::CamacReadout >::clear;
+
    private:
       mutable msg::Logger m_logger; ///< Message logging object
 
