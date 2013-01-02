@@ -86,7 +86,13 @@ namespace msg {
 
    protected:
       /// Re-implemented function from the base class
-      virtual void incomingConnection( int socketDescriptor );
+      virtual void incomingConnection(
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+                                       int     socketDescriptor
+#else
+                                       qintptr socketDescriptor
+#endif
+                                                                );
 
    private:
       bool    m_writeOutputFile; ///< Switch for writing an output file

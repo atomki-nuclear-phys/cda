@@ -29,7 +29,7 @@ TRANSLATIONS = ../trans/cdacore_hu.ts
 
 # The library uses the QtCore, QtNetwork and QtGui libraries:
 CONFIG += qt
-QT      = core network gui
+QT      = core network gui widgets
 
 # The place to put the intermediate build results:
 OBJECTS_DIR = ./.obj

@@ -122,7 +122,13 @@ namespace msg {
     * @param socketDescriptor The socket descriptor on which a message
     *                         can be read
     */
-   void Server::incomingConnection( int socketDescriptor ) {
+   void Server::incomingConnection(
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+                                    int     socketDescriptor
+#else
+                                    qintptr socketDescriptor
+#endif
+                                                             ) {
 
       Socket* socket = new Socket( this );
       socket->setSocketDescriptor( socketDescriptor );

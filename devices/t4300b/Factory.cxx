@@ -53,4 +53,6 @@ namespace t4300b {
 } // namespace t4300b
 
 // Declare this plugin to Qt:
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
 Q_EXPORT_PLUGIN2( t4300b, t4300b::Factory )
+#endif

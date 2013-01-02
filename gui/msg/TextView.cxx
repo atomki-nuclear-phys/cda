@@ -3,7 +3,7 @@
 // Qt include(s):
 #include <QtCore/QString>
 #include <QtGui/QStackedLayout>
-#include <QtGui/QTextEdit>
+#include <QTextEdit>
 #include <QtGui/QTextDocument>
 
 // CDA include(s):

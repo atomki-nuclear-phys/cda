@@ -5,7 +5,7 @@
 
 // Qt include(s):
 #include <QtCore/QString>
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

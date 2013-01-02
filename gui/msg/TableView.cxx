@@ -4,9 +4,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QSize>
 #include <QtGui/QStackedLayout>
-#include <QtGui/QTableWidget>
-#include <QtGui/QTableWidgetItem>
-#include <QtGui/QHeaderView>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QHeaderView>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -67,9 +67,9 @@ namespace msg {
                               QSizePolicy::Expanding );
       m_table->setEditTriggers( QAbstractItemView::NoEditTriggers );
       m_table->setSelectionMode( QAbstractItemView::NoSelection );
-      m_table->horizontalHeader()->setMovable( false );
-      m_table->horizontalHeader()->setClickable( false );
-      m_table->horizontalHeader()->setResizeMode( QHeaderView::Fixed );
+//      m_table->horizontalHeader()->setMovable( false );
+//      m_table->horizontalHeader()->setClickable( false );
+//      m_table->horizontalHeader()->setResizeMode( QHeaderView::Fixed );
       m_table->verticalHeader()->hide();
       m_table->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
       m_table->setHorizontalScrollMode( QAbstractItemView::ScrollPerPixel );

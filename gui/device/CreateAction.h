@@ -5,7 +5,7 @@
 
 // Qt include(s):
 #include <QtCore/QString>
-#include <QtGui/QAction>
+#include <QAction>
 
 namespace dev {
 

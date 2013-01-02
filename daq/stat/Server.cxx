@@ -62,7 +62,13 @@ namespace cdastat {
     * all incoming connections, and connects the signals of this Socket
     * object to various slots.
     */
-   void Server::incomingConnection( int socketDescriptor ) {
+   void Server::incomingConnection(
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+                                    int     socketDescriptor
+#else
+                                    qintptr socketDescriptor
+#endif
+                                                             ) {
 
       Socket* socket = new Socket( this );
       socket->setSocketDescriptor( socketDescriptor );

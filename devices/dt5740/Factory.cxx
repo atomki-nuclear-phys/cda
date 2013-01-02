@@ -58,4 +58,6 @@ namespace dt5740 {
 } // namespace dt5740
 
 // Declare this plugin to Qt:
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
 Q_EXPORT_PLUGIN2( dt5740, dt5740::Factory )
+#endif

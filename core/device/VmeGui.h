@@ -4,7 +4,7 @@
 #define CDA_CORE_DEVICES_VMEGUI_H
 
 // Qt include(s):
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // Local include(s):
 #include "Device.h"

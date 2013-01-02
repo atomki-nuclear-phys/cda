@@ -8,7 +8,7 @@
 
 // Qt include(s):
 #include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

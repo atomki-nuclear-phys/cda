@@ -4,7 +4,7 @@
 #define CDA_APPS_CDA_QT_MONITORING_QTMONITORINGWINDOW_H
 
 // Qt include(s):
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

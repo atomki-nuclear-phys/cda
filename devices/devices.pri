@@ -13,7 +13,7 @@ TEMPLATE = lib
 
 # The plugins use the QtCore, QtGui and QtXml libraries:
 CONFIG += qt
-QT      = core gui xml network
+QT      = core gui widgets xml network
 
 # On Windows we compile static plugins, but on Linux/MacOS X,
 # we compile dynamic loading plugins instead.

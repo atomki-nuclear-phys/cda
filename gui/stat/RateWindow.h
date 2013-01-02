@@ -4,7 +4,7 @@
 #define CDA_GUI_STAT_RATEWINDOW_H
 
 // Qt include(s):
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

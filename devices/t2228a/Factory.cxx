@@ -53,4 +53,6 @@ namespace t2228a {
 } // namespace t2228a
 
 // Declare this plugin to Qt:
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
 Q_EXPORT_PLUGIN2( t2228a, t2228a::Factory )
+#endif

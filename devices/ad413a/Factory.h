@@ -58,6 +58,9 @@ namespace ad413a {
 
       Q_OBJECT
       Q_INTERFACES( dev::Factory )
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.ad413a/1.0" )
+#endif
 
    public:
       /// Give the short name of the device implemented in the plug-in

@@ -50,7 +50,13 @@ namespace cdastat {
 
    protected:
       /// Reimplemented function handling incoming connections
-      virtual void incomingConnection( int socketDescriptor );
+      virtual void incomingConnection(
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
+                                       int     socketDescriptor
+#else
+                                       qintptr socketDescriptor
+#endif
+                                                                );
 
    }; // class Server
 

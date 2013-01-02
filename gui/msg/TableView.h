@@ -8,7 +8,7 @@
 
 // Qt include(s):
 #include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtGui/QBrush>
 
 // CDA include(s):

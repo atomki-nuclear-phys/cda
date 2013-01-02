@@ -58,4 +58,6 @@ namespace ad1000 {
 } // namespace ad1000
 
 // Declare this plugin to Qt:
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
 Q_EXPORT_PLUGIN2( ad1000, ad1000::Factory )
+#endif

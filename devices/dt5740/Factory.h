@@ -58,6 +58,9 @@ namespace dt5740 {
 
       Q_OBJECT
       Q_INTERFACES( dev::Factory )
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
+      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.dt5740/1.0" )
+#endif
 
    public:
       /// Get the shortened name of the device

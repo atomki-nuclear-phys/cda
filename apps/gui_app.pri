@@ -13,7 +13,7 @@ TEMPLATE = app
 
 # The application uses a bunch of Qt libraries:
 CONFIG += qt
-QT      = core network xml gui
+QT      = core network xml gui widgets
 
 # The places to put the intermediate and final build results:
 OBJECTS_DIR = ./.obj

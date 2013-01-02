@@ -4,7 +4,7 @@
 #define CDA_DEVICES_AD413A_CHANNELGUI_H
 
 // Qt include(s):
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QCheckBox )

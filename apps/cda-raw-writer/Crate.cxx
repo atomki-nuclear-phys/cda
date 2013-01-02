@@ -6,10 +6,8 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Factory.h"
 #   include "cdacore/event/BinaryStream.h"
 #else
-#   include "device/Factory.h"
 #   include "event/BinaryStream.h"
 #endif
 

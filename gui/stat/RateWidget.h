@@ -7,7 +7,7 @@
 #include <list>
 
 // Qt include(s):
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace cdastat {
 

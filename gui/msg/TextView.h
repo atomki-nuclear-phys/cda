@@ -7,7 +7,7 @@
 #include <map>
 
 // Qt include(s):
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtGui/QColor>
 
 // CDA include(s):

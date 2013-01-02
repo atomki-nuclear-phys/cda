@@ -4,7 +4,7 @@
 #define CDA_APPS_CDA_STAT_SERVER_STATSERVERWINDOW_H
 
 // Qt include(s):
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QSpinBox )

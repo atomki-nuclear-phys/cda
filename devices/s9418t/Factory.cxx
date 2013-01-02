@@ -16,7 +16,7 @@ namespace s9418t {
 
    QString Factory::longName() const {
 
-      return "Silena 9418 TDC";
+      return tr( "Silena 9418 TDC" );
    }
 
    void* Factory::createDevice( const std::type_info& ti ) const {
@@ -33,4 +33,6 @@ namespace s9418t {
 } // namespace s9418t
 
 // Declare this plugin to Qt:
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
 Q_EXPORT_PLUGIN2( s9418t, s9418t::Factory )
+#endif

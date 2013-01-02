@@ -6,7 +6,7 @@
 // Qt include(s):
 #include <QtCore/QMap>
 #include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedLayout )

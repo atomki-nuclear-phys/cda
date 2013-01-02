@@ -4,7 +4,7 @@
 #define CDA_GUI_DEVICE_CLEARACTION_H
 
 // Qt include(s):
-#include <QtGui/QAction>
+#include <QAction>
 
 namespace dev {
 

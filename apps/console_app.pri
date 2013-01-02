@@ -12,8 +12,9 @@
 TEMPLATE = app
 
 # The application uses a bunch of Qt libraries:
-CONFIG = qt warn_on release silent exceptions rtti
-QT     = core network xml gui
+CONFIG += qt
+CONFIG -= app_bundle
+QT      = core network xml gui widgets
 
 # The places to put the intermediate and final build results:
 OBJECTS_DIR = ./.obj

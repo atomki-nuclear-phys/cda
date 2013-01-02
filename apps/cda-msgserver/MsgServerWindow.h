@@ -4,7 +4,7 @@
 #define CDA_APPS_CDA_MSGSERVER_MSGSERVERWINDOW_H
 
 // Qt include(s):
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QDockWidget )

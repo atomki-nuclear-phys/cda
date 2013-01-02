@@ -4,7 +4,7 @@
 #define CDA_APPS_CDA_CAEN_DAQ_CAENDAQWINDOW_H
 
 // Qt include(s):
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

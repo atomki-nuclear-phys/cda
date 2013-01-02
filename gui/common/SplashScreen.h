@@ -4,7 +4,7 @@
 #define CDA_GUI_COMMON_SPLASHSCREEN_H
 
 // Qt include(s):
-#include <QtGui/QSplashScreen>
+#include <QSplashScreen>
 
 namespace gui {
 

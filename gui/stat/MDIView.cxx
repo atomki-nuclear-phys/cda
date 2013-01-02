@@ -9,9 +9,9 @@
 #include <QtGui/QSplitter>
 #include <QtGui/QMdiArea>
 #include <QtGui/QMdiSubWindow>
-#include <QtGui/QTableWidget>
-#include <QtGui/QTableWidgetItem>
-#include <QtGui/QHeaderView>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QHeaderView>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -80,8 +80,8 @@ namespace cdastat {
       m_rateTable->setHorizontalScrollMode( QAbstractItemView::ScrollPerPixel );
       m_rateTable->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
       m_rateTable->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
-      m_rateTable->horizontalHeader()->setMovable( false );
-      m_rateTable->horizontalHeader()->setResizeMode( QHeaderView::Fixed );
+//      m_rateTable->horizontalHeader()->setMovable( false );
+//      m_rateTable->horizontalHeader()->setResizeMode( QHeaderView::Fixed );
       m_rateTable->verticalHeader()->hide();
 
       QStringList headerLabels;

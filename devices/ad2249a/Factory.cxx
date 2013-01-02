@@ -58,4 +58,6 @@ namespace ad2249a {
 } // namespace ad2249a
 
 // Declare this plugin to Qt:
+#if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
 Q_EXPORT_PLUGIN2( ad2249a, ad2249a::Factory )
+#endif

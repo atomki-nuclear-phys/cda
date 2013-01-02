@@ -4,7 +4,7 @@
 #define CDA_DEVICES_DT5740_GROUPGUI_H
 
 // Qt include(s):
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
