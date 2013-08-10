@@ -3,7 +3,7 @@
 // Qt include(s):
 #include <QtCore/QStringList>
 #include <QtCore/QSize>
-#include <QtGui/QStackedLayout>
+#include <QStackedLayout>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QHeaderView>

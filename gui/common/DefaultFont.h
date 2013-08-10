@@ -5,7 +5,7 @@
 
 // Qt include(s):
 #include <QtGui/QFont>
-#include <QtGui/QApplication>
+#include <QApplication>
 
 namespace gui {
 

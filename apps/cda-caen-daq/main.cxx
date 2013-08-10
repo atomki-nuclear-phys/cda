@@ -14,7 +14,7 @@
  */
 
 // Qt include(s):
-#include <QtGui/QApplication>
+#include <QApplication>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

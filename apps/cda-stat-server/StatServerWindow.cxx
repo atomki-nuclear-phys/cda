@@ -2,14 +2,14 @@
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
-#include <QtGui/QSpinBox>
-#include <QtGui/QDockWidget>
-#include <QtGui/QMessageBox>
-#include <QtGui/QStatusBar>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QAction>
-#include <QtGui/QIcon>
+#include <QSpinBox>
+#include <QDockWidget>
+#include <QMessageBox>
+#include <QStatusBar>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
+#include <QIcon>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

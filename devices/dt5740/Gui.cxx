@@ -3,14 +3,14 @@
 // Qt include(s):
 #include <QtCore/QRect>
 #include <QtCore/QLine>
-#include <QtGui/QFont>
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
-#include <QtGui/QScrollArea>
-#include <QtGui/QPixmap>
-#include <QtGui/QGroupBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QSpinBox>
+#include <QFont>
+#include <QLabel>
+#include <QCheckBox>
+#include <QScrollArea>
+#include <QPixmap>
+#include <QGroupBox>
+#include <QComboBox>
+#include <QSpinBox>
 
 // Local include(s):
 #include "Gui.h"

@@ -2,10 +2,10 @@
 
 // Qt include(s):
 #include <QtCore/QRect>
-#include <QtGui/QCheckBox>
-#include <QtGui/QLineEdit>
-#include <QtGui/QSpinBox>
-#include <QtGui/QDoubleSpinBox>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 // Local include(s):
 #include "ChannelGui.h"

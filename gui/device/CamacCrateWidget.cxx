@@ -6,10 +6,10 @@
 #include <QtCore/QLine>
 #include <QtCore/QString>
 #include <QtCore/QPoint>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QMenu>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <QMenu>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

@@ -2,12 +2,12 @@
 
 // Qt include(s):
 #include <QtCore/QTime>
-#include <QtGui/QGroupBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QPalette>
-#include <QtGui/QFont>
-#include <QtGui/QIcon>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QLabel>
+#include <QPalette>
+#include <QFont>
+#include <QIcon>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

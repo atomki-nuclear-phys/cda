@@ -3,8 +3,8 @@
 // Qt include(s):
 #include <QtCore/QString>
 #include <QtCore/QTimer>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
+#include <QGroupBox>
+#include <QLabel>
 
 // Local include(s):
 #include "Statistics.h"

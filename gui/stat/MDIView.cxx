@@ -5,10 +5,10 @@
 
 // Qt include(s):
 #include <QtCore/QStringList>
-#include <QtGui/QStackedLayout>
-#include <QtGui/QSplitter>
-#include <QtGui/QMdiArea>
-#include <QtGui/QMdiSubWindow>
+#include <QStackedLayout>
+#include <QSplitter>
+#include <QMdiArea>
+#include <QMdiSubWindow>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QHeaderView>

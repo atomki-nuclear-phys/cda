@@ -1,18 +1,18 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QSpinBox>
-#include <QtGui/QDockWidget>
-#include <QtGui/QMessageBox>
-#include <QtGui/QStatusBar>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QAction>
-#include <QtGui/QIcon>
-#include <QtGui/QApplication>
-#include <QtGui/QMdiArea>
-#include <QtGui/QMdiSubWindow>
-#include <QtGui/QFileDialog>
+#include <QSpinBox>
+#include <QDockWidget>
+#include <QMessageBox>
+#include <QStatusBar>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
+#include <QIcon>
+#include <QApplication>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+#include <QFileDialog>
 #include <QtXml/QDomImplementation>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -132,6 +132,7 @@ void QtMonitoringWindow::readConfigSlot() {
    for( ; itr != end; ++itr ) {
       QMdiSubWindow* window = m_view->addSubWindow( itr->second );
       window->setAttribute( Qt::WA_DeleteOnClose, false );
+      window->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
       window->setWindowTitle( tr( "%1 with ID %2" ).arg( itr->second->deviceName() )
                               .arg( itr->second->getID() ) );
       connect( window, SIGNAL( aboutToActivate() ),

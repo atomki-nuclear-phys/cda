@@ -1,8 +1,8 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QStackedLayout>
-#include <QtGui/QTabWidget>
+#include <QStackedLayout>
+#include <QTabWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

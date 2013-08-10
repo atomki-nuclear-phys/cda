@@ -3,12 +3,12 @@
 // Qt include(s):
 #include <QtCore/QRect>
 #include <QtCore/QLine>
-#include <QtGui/QPainter>
-#include <QtGui/QFont>
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
-#include <QtGui/QSpinBox>
-#include <QtGui/QScrollArea>
+#include <QPainter>
+#include <QFont>
+#include <QLabel>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QScrollArea>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

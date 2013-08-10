@@ -1,12 +1,5 @@
 // $Id$
 
-// System include(s):
-#include <cstdlib>
-extern "C" {
-#   include <sys/types.h>
-#   include <dirent.h>
-}
-
 // Qt include(s):
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
@@ -90,21 +83,15 @@ namespace daq {
       for( std::list< QString >::const_iterator dir = envlist->second.begin();
            dir != envlist->second.end(); ++dir ) {
 
-         //
-         // This is something I've found on the web. Google does work...
-         //
-         DIR* d = ::opendir( dir->toLatin1().constData() );
-         struct dirent* file;
-         while( ( file = ::readdir( d ) ) != NULL ) {
-            if( name == file->d_name ) {
-               m_logger << msg::DEBUG << tr( "\"%1\" found in directory: %2" )
-                  .arg( name ).arg( *dir ) << msg::endmsg;
-               ::closedir( d );
-               return ( *dir + "/" + name );
-            }
+         // Check if the file exists:
+         QFileInfo finfo( *dir + "/" + name );
+         if( finfo.exists() ) {
+            m_logger << msg::DEBUG
+                     << tr( "\"%1\" found under \"%2\"" )
+               .arg( name ).arg( *dir )
+                     << msg::endmsg;
+            return finfo.filePath();
          }
-         ::closedir( d );
-
       }
 
       //

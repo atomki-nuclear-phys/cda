@@ -1,10 +1,10 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QTabWidget>
-#include <QtGui/QComboBox>
-#include <QtGui/QIcon>
-#include <QtGui/QMessageBox>
+#include <QTabWidget>
+#include <QComboBox>
+#include <QIcon>
+#include <QMessageBox>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

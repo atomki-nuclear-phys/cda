@@ -1,16 +1,16 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QWidget>
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
-#include <QtGui/QIcon>
-#include <QtGui/QMenuBar>
-#include <QtGui/QMenu>
-#include <QtGui/QApplication>
-#include <QtGui/QLabel>
-#include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
+#include <QWidget>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QIcon>
+#include <QMenuBar>
+#include <QMenu>
+#include <QApplication>
+#include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

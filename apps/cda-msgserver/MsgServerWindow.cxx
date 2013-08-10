@@ -1,21 +1,21 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QDockWidget>
-#include <QtGui/QSpinBox>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QAction>
-#include <QtGui/QMessageBox>
-#include <QtGui/QIcon>
-#include <QtGui/QStatusBar>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
+#include <QDockWidget>
+#include <QSpinBox>
+#include <QMenu>
+#include <QMenuBar>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QAction>
+#include <QMessageBox>
+#include <QIcon>
+#include <QStatusBar>
+#include <QCheckBox>
+#include <QComboBox>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

@@ -2,9 +2,9 @@
 
 // Qt include(s):
 #include <QtCore/QString>
-#include <QtGui/QStackedLayout>
+#include <QStackedLayout>
 #include <QTextEdit>
-#include <QtGui/QTextDocument>
+#include <QTextDocument>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

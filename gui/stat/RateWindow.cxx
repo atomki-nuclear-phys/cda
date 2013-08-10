@@ -3,8 +3,8 @@
 // Qt include(s):
 #include <QtCore/QString>
 #include <QtCore/QTimer>
-#include <QtGui/QLabel>
-#include <QtGui/QCloseEvent>
+#include <QLabel>
+#include <QCloseEvent>
 
 // Local include(s):
 #include "RateWindow.h"

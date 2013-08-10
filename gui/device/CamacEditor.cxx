@@ -2,8 +2,8 @@
 
 // Qt include(s):
 #include <QtCore/QRect>
-#include <QtGui/QGroupBox>
-#include <QtGui/QStackedWidget>
+#include <QGroupBox>
+#include <QStackedWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

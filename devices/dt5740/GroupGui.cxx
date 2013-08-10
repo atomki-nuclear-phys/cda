@@ -1,11 +1,11 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QGroupBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QLabel>
-#include <QtGui/QComboBox>
-#include <QtGui/QSpinBox>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QComboBox>
+#include <QSpinBox>
 
 // Local include(s):
 #include "GroupGui.h"

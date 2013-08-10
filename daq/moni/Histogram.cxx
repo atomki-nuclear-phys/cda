@@ -10,8 +10,8 @@
 #include <QtCore/QRect>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QMenu>
-#include <QtGui/QActionGroup>
+#include <QMenu>
+#include <QActionGroup>
 
 // Local include(s):
 #include "Histogram.h"

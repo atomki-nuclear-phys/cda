@@ -2,8 +2,8 @@
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
-#include <QtGui/QMessageBox>
-#include <QtGui/QApplication>
+#include <QMessageBox>
+#include <QApplication>
 
 // Local include(s):
 #include "aboutCDA.h"

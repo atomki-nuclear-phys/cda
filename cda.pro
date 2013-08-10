@@ -33,6 +33,9 @@ CDA_TR.path  = $$CDA_INSTALL_PREFIX/trans
 CDA_TR.files = $$files(trans/*.qm)
 INSTALLS += CDA_TR
 
+# Cache the configuration of the build:
+cache()
+
 #
 # Instruct the user:
 #

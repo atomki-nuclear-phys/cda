@@ -1,11 +1,11 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QCheckBox>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QSpinBox>
-#include <QtGui/QDoubleSpinBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 // Local include(s):
 #include "ChannelGui.h"

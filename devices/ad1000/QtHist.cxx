@@ -1,7 +1,7 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QStackedLayout>
+#include <QStackedLayout>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN

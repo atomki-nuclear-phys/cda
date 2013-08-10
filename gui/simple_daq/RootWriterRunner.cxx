@@ -1,14 +1,14 @@
 // $Id$
 
 // Qt include(s):
-#include <QtGui/QGroupBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QPalette>
-#include <QtGui/QFont>
-#include <QtGui/QLineEdit>
-#include <QtGui/QSpinBox>
-#include <QtGui/QIcon>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QLabel>
+#include <QPalette>
+#include <QFont>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QIcon>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
