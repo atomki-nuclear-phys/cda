@@ -4,22 +4,22 @@
 #include <QtCore/QtPlugin>
 
 // Local include(s):
-#include "Factory.h"
+#include "S9418tFactory.h"
 #include "Readout.h"
 
 namespace s9418t {
 
-   QString Factory::shortName() const {
+   QString S9418tFactory::shortName() const {
 
       return "S9418T";
    }
 
-   QString Factory::longName() const {
+   QString S9418tFactory::longName() const {
 
       return tr( "Silena 9418 TDC" );
    }
 
-   void* Factory::createDevice( const std::type_info& ti ) const {
+   void* S9418tFactory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::VmeReadout ) ) {
 
@@ -34,5 +34,5 @@ namespace s9418t {
 
 // Declare this plugin to Qt:
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-Q_EXPORT_PLUGIN2( s9418t, s9418t::Factory )
+Q_EXPORT_PLUGIN2( s9418t, s9418t::S9418tFactory )
 #endif

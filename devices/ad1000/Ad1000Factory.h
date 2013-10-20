@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_DT5740_FACTORY_H
-#define CDA_DEVICES_DT5740_FACTORY_H
+#ifndef CDA_DEVICES_AD1000_AD1000FACTORY_H
+#define CDA_DEVICES_AD1000_AD1000FACTORY_H
 
 // Qt include(s):
 #include <QtCore/QObject>
@@ -9,10 +9,8 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Factory.h"
-#   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Factory.h"
-#   include "msg/Logger.h"
 #endif
 
 // There is no bloody way to tell qmake to add a -F... flag when running
@@ -22,17 +20,17 @@
 #endif
 
 /**
- *  @short Namespace for the CAEN DT5740 digitizer
+ *  @short Namespace for the AD1000 ADC device
  *
- *         This namespace holds all the classes that handle the DT5740
- *         CAEN digitizer.
+ *         This namespace holds all the classes that handle the AD1000
+ *         CAMAC ADC device.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
  */
-namespace dt5740 {
+namespace ad1000 {
 
    //
    // Make sure that the following Qt classes are available in the
@@ -43,9 +41,9 @@ namespace dt5740 {
    using QT_PREPEND_NAMESPACE( QString );
 
    /**
-    *  @short Factory creating all the DT5740 objects
+    *  @short Factory creating all the AD1000 objects
     *
-    *         This factory is used when loading the DT5740 plugin to access
+    *         This factory is used when loading the AD1000 plugin to access
     *         all the classes provided by the plugin.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
@@ -53,13 +51,13 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class Factory : public QObject,
-                   virtual public dev::Factory {
+   class Ad1000Factory : public QObject,
+                         virtual public dev::Factory {
 
       Q_OBJECT
       Q_INTERFACES( dev::Factory )
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.dt5740/1.0" )
+      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.ad1000/1.0" )
 #endif
 
    public:
@@ -71,8 +69,8 @@ namespace dt5740 {
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 
-   }; // class Factory
+   }; // class Ad1000Factory
 
-} // namespace dt5740
+} // namespace ad1000
 
-#endif // CDA_DEVICES_DT5740_FACTORY_H
+#endif // CDA_DEVICES_AD1000_AD1000FACTORY_H

@@ -4,26 +4,27 @@
 #include <QtCore/QtPlugin>
 
 // Local include(s):
-#include "Factory.h"
+#include "Ad2249aFactory.h"
 #include "Gui.h"
 #include "Readout.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
 #include "RootDisk.h"
+#include "QtHist.h"
 
-namespace t2228a {
+namespace ad2249a {
 
-   QString Factory::shortName() const {
+   QString Ad2249aFactory::shortName() const {
 
-      return "T2228A";
+      return "AD2249A";
    }
 
-   QString Factory::longName() const {
+   QString Ad2249aFactory::longName() const {
 
-      return tr( "LeCroy 2228A TDC" );
+      return tr( "LeCroy 2249A ADC" );
    }
 
-   void* Factory::createDevice( const std::type_info& ti ) const {
+   void* Ad2249aFactory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::CamacGui ) ) {
 
@@ -45,14 +46,18 @@ namespace t2228a {
 
          return dynamic_cast< dev::RootDisk* >( new RootDisk() );
 
+      } else if( ti == typeid( dev::QtHist ) ) {
+
+         return dynamic_cast< dev::QtHist* >( new QtHist() );
+
       }
 
       return 0;
    }
 
-} // namespace t2228a
+} // namespace ad2249a
 
 // Declare this plugin to Qt:
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-Q_EXPORT_PLUGIN2( t2228a, t2228a::Factory )
+Q_EXPORT_PLUGIN2( ad2249a, ad2249a::Ad2249aFactory )
 #endif

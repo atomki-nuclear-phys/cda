@@ -1,6 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
-#ifndef CDA_DEVICES_AD2249A_FACTORY_H
-#define CDA_DEVICES_AD2249A_FACTORY_H
+// $Id$
+#ifndef CDA_DEVICES_DT5740_DT5740FACTORY_H
+#define CDA_DEVICES_DT5740_DT5740FACTORY_H
 
 // Qt include(s):
 #include <QtCore/QObject>
@@ -21,17 +22,17 @@
 #endif
 
 /**
- *  @short Namespace for the AD2249A ADC device
+ *  @short Namespace for the CAEN DT5740 digitizer
  *
- *         This namespace holds all the classes that handle the a AD2249A
- *         CAMAC ADC device.
+ *         This namespace holds all the classes that handle the DT5740
+ *         CAEN digitizer.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
  */
-namespace ad2249a {
+namespace dt5740 {
 
    //
    // Make sure that the following Qt classes are available in the
@@ -42,9 +43,9 @@ namespace ad2249a {
    using QT_PREPEND_NAMESPACE( QString );
 
    /**
-    *  @short Factory creating all the AD2249A objects
+    *  @short Factory creating all the DT5740 objects
     *
-    *         This factory is used when loading the AD2249A plugin to access
+    *         This factory is used when loading the DT5740 plugin to access
     *         all the classes provided by the plugin.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
@@ -52,26 +53,26 @@ namespace ad2249a {
     * $Revision$
     * $Date$
     */
-   class Factory : public QObject,
-                   virtual public dev::Factory {
+   class Dt5740Factory : public QObject,
+                         virtual public dev::Factory {
 
       Q_OBJECT
       Q_INTERFACES( dev::Factory )
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.ad2249/1.0" )
+      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.dt5740/1.0" )
 #endif
 
    public:
-      /// Give the short name of the device implemented in the plug-in
+      /// Get the shortened name of the device
       virtual QString shortName() const;
-      /// Give the long name of the device implemented in the plug-in
+      /// Get the long name of the device
       virtual QString longName() const;
 
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 
-   }; // class Factory
+   }; // class Dt5740Factory
 
-} // namespace ad2249a
+} // namespace dt5740
 
-#endif // CDA_DEVICES_AD2249A_FACTORY_H
+#endif // CDA_DEVICES_DT5740_DT5740FACTORY_H

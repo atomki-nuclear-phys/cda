@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_T4300B_FACTORY_H
-#define CDA_DEVICES_T4300B_FACTORY_H
+#ifndef CDA_DEVICES_T4300B_T4300BFACTORY_H
+#define CDA_DEVICES_T4300B_T4300BFACTORY_H
 
 // Qt include(s):
 #include <QtCore/QObject>
@@ -53,8 +53,8 @@ namespace t4300b {
     * $Revision$
     * $Date$
     */
-   class Factory : public QObject,
-                   virtual public dev::Factory {
+   class T4300bFactory : public QObject,
+                         virtual public dev::Factory {
 
       Q_OBJECT
       Q_INTERFACES( dev::Factory )
@@ -71,8 +71,8 @@ namespace t4300b {
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 
-   }; // class Factory
+   }; // class T4300bFactory
 
 } // namespace t4300b
 
-#endif // CDA_DEVICES_T4300B_FACTORY_H
+#endif // CDA_DEVICES_T4300B_T4300BFACTORY_H

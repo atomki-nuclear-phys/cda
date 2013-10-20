@@ -4,27 +4,26 @@
 #include <QtCore/QtPlugin>
 
 // Local include(s):
-#include "Factory.h"
+#include "Ad413aFactory.h"
 #include "Gui.h"
 #include "Readout.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
 #include "RootDisk.h"
-#include "QtHist.h"
 
-namespace ad2249a {
+namespace ad413a {
 
-   QString Factory::shortName() const {
+   QString Ad413aFactory::shortName() const {
 
-      return "AD2249A";
+      return "AD413A";
    }
 
-   QString Factory::longName() const {
+   QString Ad413aFactory::longName() const {
 
-      return tr( "LeCroy 2249A ADC" );
+      return tr( "ORTEC AD413A Quad 8k ADC" );
    }
 
-   void* Factory::createDevice( const std::type_info& ti ) const {
+   void* Ad413aFactory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::CamacGui ) ) {
 
@@ -46,18 +45,14 @@ namespace ad2249a {
 
          return dynamic_cast< dev::RootDisk* >( new RootDisk() );
 
-      } else if( ti == typeid( dev::QtHist ) ) {
-
-         return dynamic_cast< dev::QtHist* >( new QtHist() );
-
       }
 
       return 0;
    }
 
-} // namespace ad2249a
+} // namespace ad413a
 
 // Declare this plugin to Qt:
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-Q_EXPORT_PLUGIN2( ad2249a, ad2249a::Factory )
+Q_EXPORT_PLUGIN2( ad413a, ad413a::Ad413aFactory )
 #endif

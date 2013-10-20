@@ -50,9 +50,9 @@ namespace daq {
          QString envarray = ::getenv( env.toLatin1().constData() );
          REPORT_VERBOSE( tr( "%1 = %2" ).arg( env ).arg( envarray ) );
 #ifdef QT_ARCH_WINDOWS
-         const QString separator = ";";
+         static const QString separator = ";";
 #else
-         const QString separator = ":";
+         static const QString separator = ":";
 #endif // QT_ARCH_WINDOW
          QStringList envsplit = envarray.split( separator,
                                                 QString::SkipEmptyParts );
@@ -99,19 +99,19 @@ namespace daq {
       // the CDASYS path set at compilation time:
       //
       if( env == "PATH" ) {
-         // Check if the file exists under $CDASYS/bin/:
-         QString path = CDASYS_PATH + ( "/bin/" + name );
+         // First check if the binary is in the current directory:
+         QString path = "./" + name;
 
          // This check doesn't quite work on Windows, so let's just assume
          // that the application is available...
-#ifdef QT_ARCH_WINDOWS
-         path.replace( "/", "\\" );
+#ifdef Q_OS_WIN
+//         path.replace( "/", "\\" );
          m_logger << msg::DEBUG
-                  << tr( "Assuming that \"%1\" is under \"%2/bin\"" )
-            .arg( name ).arg( CDASYS_PATH )
+                  << tr( "Assuming that \"%1\" is in the current directory" )
+            .arg( name )
                   << msg::endmsg;
          return path;
-#endif // QT_ARCH_WINDOWS
+#endif // Q_OS_WIN
 
          // Check if the file exists:
          QFileInfo finfo( path );
@@ -119,6 +119,17 @@ namespace daq {
             m_logger << msg::DEBUG
                      << tr( "\"%1\" found under \"%2/bin\"" )
                .arg( name ).arg( CDASYS_PATH )
+                     << msg::endmsg;
+            return path;
+         }
+
+         // As a final test, check if it's under $CDASYS/bin:
+         path = CDASYS_PATH + ( "/bin/" + name );
+         QFileInfo finfo2( path );
+         if( finfo2.exists() && finfo2.isExecutable() ) {
+            m_logger << msg::DEBUG
+                     << tr( "\"%1\" found under \"./\"" )
+               .arg( name )
                      << msg::endmsg;
             return path;
          }

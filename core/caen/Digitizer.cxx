@@ -380,6 +380,23 @@ namespace {
 
 } // private namespace
 
+#ifdef Q_OS_WIN
+
+/// Macro checking the return value of a CAEN Digitizer function
+#define CHECK( CMD ) {                                                  \
+      CAEN_DGTZ_ErrorCode code = CMD;                                   \
+      if( code != CAEN_DGTZ_Success ) {                                 \
+         REPORT_ERROR( qApp->translate( "Digitizer_CHECK",              \
+                                        "Failed executing \"%1\", "     \
+                                        "Return value: %2" )            \
+                       .arg( #CMD )                                     \
+                       .arg( toString( code ) ) );                      \
+         return false;                                                  \
+      }                                                                 \
+   } while( 0 ){}
+
+#else
+
 /// Macro checking the return value of a CAEN Digitizer function
 #define CHECK( CMD ) {                                                  \
       sigprocmask( SIG_BLOCK, &m_blockedSignals, NULL );                \
@@ -395,6 +412,7 @@ namespace {
       }                                                                 \
    } while( 0 ){}
 
+#endif // Q_OS_WIN
 #endif // HAVE_CAEN_LIBS
 
 namespace {
@@ -497,7 +515,7 @@ namespace caen {
         m_logger( "caen::Digitizer" ) {
 
       // Initialize the blocked signal list:
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
       sigfillset( &m_blockedSignals );
       sigaddset( &m_blockedSignals, SIGINT );
       sigaddset( &m_blockedSignals, SIGTERM );

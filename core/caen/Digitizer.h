@@ -257,7 +257,9 @@ namespace caen {
       uint32_t m_recordLength; ///< Record length to read out in test mode
 #endif // HAVE_CAEN_LIBS
 
+#ifndef Q_OS_WIN
       sigset_t m_blockedSignals; ///< Signals to block during hardware communication
+#endif // Q_OS_WIN
 
       mutable msg::Logger m_logger; ///< Message logger object
 

@@ -4,31 +4,35 @@
 #include <QtCore/QtPlugin>
 
 // Local include(s):
-#include "Factory.h"
+#include "Ad1000Factory.h"
 #include "Gui.h"
+#include "Readout.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
-#include "Readout.h"
 #include "RootDisk.h"
 #include "QtHist.h"
 
-namespace dt5740 {
+namespace ad1000 {
 
-   QString Factory::shortName() const {
+   QString Ad1000Factory::shortName() const {
 
-      return "DT5740";
+      return "AD1000";
    }
 
-   QString Factory::longName() const {
+   QString Ad1000Factory::longName() const {
 
-      return tr( "CAEN DT5740 Desktop Digitizer" );
+      return tr( "Atomki AD1000 ADC" );
    }
 
-   void* Factory::createDevice( const std::type_info& ti ) const {
+   void* Ad1000Factory::createDevice( const std::type_info& ti ) const {
 
-      if( ti == typeid( dev::CaenGui ) ) {
+      if( ti == typeid( dev::CamacGui ) ) {
 
-         return dynamic_cast< dev::CaenGui* >( new Gui() );
+         return dynamic_cast< dev::CamacGui* >( new Gui() );
+
+      } else if( ti == typeid( dev::CamacReadout ) ) {
+
+         return dynamic_cast< dev::CamacReadout* >( new Readout() );
 
       } else if( ti == typeid( dev::CernlibHist ) ) {
 
@@ -37,10 +41,6 @@ namespace dt5740 {
       } else if( ti == typeid( dev::CernlibDisk ) ) {
 
          return dynamic_cast< dev::CernlibDisk* >( new CernlibDisk() );
-
-      } else if( ti == typeid( dev::CaenReadout ) ) {
-
-         return dynamic_cast< dev::CaenReadout* >( new Readout() );
 
       } else if( ti == typeid( dev::RootDisk ) ) {
 
@@ -55,9 +55,9 @@ namespace dt5740 {
       return 0;
    }
 
-} // namespace dt5740
+} // namespace ad1000
 
 // Declare this plugin to Qt:
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-Q_EXPORT_PLUGIN2( dt5740, dt5740::Factory )
+Q_EXPORT_PLUGIN2( ad1000, ad1000::Ad1000Factory )
 #endif

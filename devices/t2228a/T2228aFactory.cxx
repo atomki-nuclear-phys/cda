@@ -4,26 +4,26 @@
 #include <QtCore/QtPlugin>
 
 // Local include(s):
-#include "Factory.h"
+#include "T2228aFactory.h"
 #include "Gui.h"
 #include "Readout.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
 #include "RootDisk.h"
 
-namespace t4300b {
+namespace t2228a {
 
-   QString Factory::shortName() const {
+   QString T2228aFactory::shortName() const {
 
-      return "T4300B";
+      return "T2228A";
    }
 
-   QString Factory::longName() const {
+   QString T2228aFactory::longName() const {
 
-      return tr( "LeCroy 4300B FERA QDC" );
+      return tr( "LeCroy 2228A TDC" );
    }
 
-   void* Factory::createDevice( const std::type_info& ti ) const {
+   void* T2228aFactory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::CamacGui ) ) {
 
@@ -50,9 +50,9 @@ namespace t4300b {
       return 0;
    }
 
-} // namespace t4300b
+} // namespace t2228a
 
 // Declare this plugin to Qt:
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-Q_EXPORT_PLUGIN2( t4300b, t4300b::Factory )
+Q_EXPORT_PLUGIN2( t2228a, t2228a::T2228aFactory )
 #endif

@@ -114,7 +114,7 @@ namespace daq {
       //
       if( m_process.state() == QProcess::Running ) {
          // Stop the process:
-#ifndef QT_ARCH_WINDOWS
+#ifndef Q_OS_WIN
          m_process.terminate();
 #else
          // Windows can't kill the console applications with terminate()...
