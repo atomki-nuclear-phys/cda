@@ -153,7 +153,9 @@ CmdLine::strindent(ostream    & os,
    os.width(margin);
    os << "" ;
 
-#if __GNUC__ >= 3 || defined(__ICC)
+#if __cplusplus >= 201100
+   auto save_flags = os.flags();
+#elif __GNUC__ >= 3 || defined(__ICC)
    std::_Ios_Fmtflags save_flags = os.flags();
 #else
    long save_flags = os.flags();

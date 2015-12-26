@@ -212,14 +212,11 @@ void QtMonitoringWindow::processEvents() {
 
       // Access the fragments coming from the different modules that
       // are used in data acquisition:
-      const std::vector< std::tr1::shared_ptr< ev::Fragment > >& fragments =
-         event.getFragments();
+      const ev::Event::Base_t& fragments = event.getFragments();
 
       // Loop over the fragments:
-      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
-         frag_itr = fragments.begin();
-      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
-         frag_end = fragments.end();
+      ev::Event::Base_t::const_iterator frag_itr = fragments.begin();
+      ev::Event::Base_t::const_iterator frag_end = fragments.end();
       for( ; frag_itr != frag_end; ++frag_itr ) {
 
          // Find the device that is expecting this event fragment:

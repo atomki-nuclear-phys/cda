@@ -53,10 +53,8 @@ namespace ev {
          .arg( event.getFragments().size() );
 
       if( event.getFragments().size() ) {
-         std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator itr =
-            event.getFragments().begin();
-         std::vector< std::tr1::shared_ptr< Fragment > >::const_iterator end =
-            event.getFragments().end();
+         Event::Base_t::const_iterator itr = event.getFragments().begin();
+         Event::Base_t::const_iterator end = event.getFragments().end();
          for( ; itr != end; ++itr ) {
             *this << *( *itr ) << "\n";
          }

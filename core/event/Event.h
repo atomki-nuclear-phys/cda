@@ -5,7 +5,13 @@
 
 // STL include(s):
 #include <vector>
-#include <tr1/memory>
+#if __cplusplus < 201100
+#   include <tr1/memory>
+namespace MEMORY_NS = std::tr1;
+#else
+#   include <memory>
+namespace MEMORY_NS = std;
+#endif
 
 // Local include(s):
 #include "Fragment.h"
@@ -26,11 +32,11 @@ namespace ev {
     * $Date$
     */
    class Event :
-      public std::vector< std::tr1::shared_ptr< Fragment > > {
+      public std::vector< MEMORY_NS::shared_ptr< Fragment > > {
 
    public:
       /// Type of the base class
-      typedef std::vector< std::tr1::shared_ptr< Fragment > > Base_t;
+      typedef std::vector< MEMORY_NS::shared_ptr< Fragment > > Base_t;
 
       /// Default constructor
       Event();
