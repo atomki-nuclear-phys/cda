@@ -67,12 +67,12 @@ mac {
    QMAKE_BUNDLE_DATA += DUMMY_HEADERS
 
    # This framework has to be linked against the cdacore framework:
-   QMAKE_CXXFLAGS += -F../lib
-   LIBS           += -F../lib -framework cdacore
+   QMAKE_CXXFLAGS += -F$$OUT_PWD/../lib
+   LIBS           += -F$$OUT_PWD/../lib -framework cdacore
 
    # Here we do the same trick as with cdacore. See core/core.pro for details.
    DESTDIR                     = /
-   QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdadaq
+   QMAKE_FRAMEWORK_BUNDLE_NAME = $$OUT_PWD/../lib/cdadaq
 }
 
 #

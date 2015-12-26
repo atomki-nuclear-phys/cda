@@ -430,7 +430,7 @@ namespace moni {
       }
 
       // Check that the zoom distance makes sense:
-      if( fabs( m_zoomCurrent - m_zoomStart ) < 5 ) {
+      if( std::abs( m_zoomCurrent - m_zoomStart ) < 5 ) {
          return;
       }
 

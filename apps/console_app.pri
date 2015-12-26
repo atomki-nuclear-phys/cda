@@ -26,8 +26,8 @@ INCLUDEPATH += ../../core ../../daq ../../gui
 
 # The library dependencies:
 mac {
-   QMAKE_CXXFLAGS += -F../../lib
-   LIBS           += -F../../lib -framework cdacore -framework cdadaq
+   QMAKE_CXXFLAGS += -F$$OUT_PWD/../../lib
+   LIBS           += -F$$OUT_PWD/../../lib -framework cdacore -framework cdadaq
 }
 !mac {
    LIBS += -L../../lib -lcdadaq -lcdacore

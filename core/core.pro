@@ -131,7 +131,7 @@ mac {
    # will be looking for it in its correct directory. (Of course moving the
    # framework after compilation will make the applications unusable.)
    DESTDIR                     = /
-   QMAKE_FRAMEWORK_BUNDLE_NAME = $$CDASYS/lib/cdacore
+   QMAKE_FRAMEWORK_BUNDLE_NAME = $$OUT_PWD/../lib/cdacore
 
 }
 
@@ -231,4 +231,3 @@ contains(DEFINES,HAVE_CAEN_LIBS) {
 contains(DEFINES,HAVE_VME_LIB) {
    LIBS += -lpcivme
 }
-
