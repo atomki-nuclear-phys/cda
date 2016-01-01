@@ -45,5 +45,4 @@ mac {
 # If cernlib is being used, the plugins must be built as static libraries:
 contains(DEFINES,HAVE_CERNLIB) {
    CONFIG += static
-   LIBS += $$system(cernlib packlib)
 }

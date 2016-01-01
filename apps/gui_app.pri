@@ -36,4 +36,16 @@ mac {
 }
 contains(DEFINES,HAVE_CERNLIB) {
    LIBS += $$system(cernlib packlib)
+   contains(DEFINES,HAVE_ROOT_LIBS) {
+      LIBS += $$system(root-config --libs) -lMathCore
+   }
+   contains(DEFINES,HAVE_CAMAC_LIB) {
+      LIBS += -lcc32
+   }
+   contains(DEFINES,HAVE_CAEN_LIBS) {
+      LIBS += -lCAENVME -lCAENComm -lCAENDigitizer
+   }
+   contains(DEFINES,HAVE_VME_LIB) {
+      LIBS += -lpcivme
+   }
 }

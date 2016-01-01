@@ -33,7 +33,7 @@ namespace hbook {
    void FileWriter::stopProcessing() {
 
       // Disconnect the event server's signal(s):
-      disconnect( SIGNAL( eventAvailable() ),
+      disconnect( &m_evserver, SIGNAL( eventAvailable() ),
                   this, SLOT( writeEvent() ) );
 
       // Signal the thread that it should stop, and wait for
