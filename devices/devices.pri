@@ -16,7 +16,8 @@ CONFIG += qt
 QT      = core gui widgets xml network
 
 # On Windows we compile static plugins, but on Linux/MacOS X,
-# we compile dynamic loading plugins instead.
+# we compile dynamic loading plugins instead. Unless cernlib is
+# being used...
 win32 {
    CONFIG += static plugin
 }
@@ -39,4 +40,10 @@ mac {
 }
 !mac {
    LIBS += -L../../lib -lcdacore -lcdadaq
+}
+
+# If cernlib is being used, the plugins must be built as static libraries:
+contains(DEFINES,HAVE_CERNLIB) {
+   CONFIG += static
+   LIBS += $$system(cernlib packlib)
 }

@@ -34,3 +34,6 @@ mac {
 !mac {
    LIBS += -L../../lib -lcdagui -lcdadaq -lcdacore
 }
+contains(DEFINES,HAVE_CERNLIB) {
+   LIBS += $$system(cernlib packlib)
+}

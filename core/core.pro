@@ -160,6 +160,7 @@ contains(DEFINES,HAVE_CERNLIB) {
       CERNLIB_PATH = /sw
    }
    unix:!mac {
+      CONFIG += staticlib
       exists(/cern/pro){
          CERNLIB_PATH = /cern/pro
       } else {
@@ -168,37 +169,14 @@ contains(DEFINES,HAVE_CERNLIB) {
    }
    DEFINES     += LINUX f2cFortran
    INCLUDEPATH += $$CERNLIB_PATH/include $$CERNLIB_PATH/include/cfortran
-   LIBS   += -L$$CERNLIB_PATH/lib
-
-   system(g77 --version) {
-      system(gfortran --version) {
-         message(Both g77 and gfortran are available. Adding gfortran to link list...)
-         LIBS += -lgfortran
-      } else {
-         LIBS += -lg2c
-      }
-   } else {
-      !system(gfortran --version) {
-         warning(Could not determine which fortran library to use)
-      }
-      LIBS += -lgfortran
-   }
-   exists($$CERNLIB_PATH/lib/libpacklib_noshift.a) {
-      LIBS += -lpacklib_noshift
-   } else {
-      !exists($$CERNLIB_PATH/lib/libpacklib.a) {
-         warning(Could not determine the packlib library name)
-      }
-      LIBS += -lpacklib
-   }
 }
 
 #
 # Decide whether to link the library against the ROOT libraries:
 #
 contains(DEFINES,HAVE_ROOT_LIBS) {
-   QMAKE_CXXFLAGS += `root-config --cflags`
-   LIBS += `root-config --libs` -lMathCore
+   QMAKE_CXXFLAGS += $$system(root-config --cflags)
+   LIBS += $$system(root-config --libs) -lMathCore
 }
 
 #
