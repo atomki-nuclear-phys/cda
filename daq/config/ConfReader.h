@@ -48,7 +48,7 @@ namespace conf {
       bool readFrom( const Address& address );
 
       /// Access the binary configuration
-      QIODevice* buffer();
+      QIODevice& buffer();
 
    private:
       QBuffer m_buffer; ///< Buffer caching the read configuration

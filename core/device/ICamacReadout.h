@@ -1,17 +1,16 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_CAMACREADOUT_H
-#define CDA_CORE_DEVICE_CAMACREADOUT_H
+#ifndef CDA_CORE_DEVICE_ICAMACREADOUT_H
+#define CDA_CORE_DEVICE_ICAMACREADOUT_H
 
 // Local include(s):
-#include "Device.h"
+#include "IDevice.h"
+#include "../common/UniquePtr.h"
+#include "../event/Fragment.h"
 
 // Forward declaration(s):
 namespace camac {
    class Crate;
-}
-namespace ev {
-   class Fragment;
 }
 
 namespace dev {
@@ -29,7 +28,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class CamacReadout : virtual public Device {
+   class ICamacReadout : virtual public IDevice {
 
    public:
       /// Function initializing the device
@@ -46,17 +45,15 @@ namespace dev {
 
       /// Function reading the current data from the device
       /**
-       * I'm just guessing here. It would probably make sense to define
-       * an "event" structure. Then the whole event could be transmitted
-       * between the processes. (Through a fifo or whatever...)
-       *
-       * Note that the caller of the function is responsible for
-       * eventually deleting the received object.
+       * The device creates an event fragment object in memory, and passes
+       * that back to the caller. It's the caller's responsibility to delete
+       * the object from the heap.
        *
        * @param crate The object to access the CAMAC crate with
        * @returns The event fragment coming from this device
        */
-      virtual ev::Fragment* readEvent( camac::Crate& crate ) const = 0;
+      virtual UniquePtr< ev::Fragment >::Type
+      readEvent( camac::Crate& crate ) const = 0;
 
       /// Clear the module to receive a new event
       /**
@@ -70,8 +67,8 @@ namespace dev {
        */
       virtual bool clear( camac::Crate& crate ) const = 0;
 
-   }; // class CamacReadout
+   }; // class ICamacReadout
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_CAMACREADOUT_H
+#endif // CDA_CORE_DEVICE_ICAMACREADOUT_H

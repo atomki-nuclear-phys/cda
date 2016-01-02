@@ -2,8 +2,6 @@
 
 // Qt include(s):
 #include <QtCore/QRect>
-#include <QGroupBox>
-#include <QStackedWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
@@ -16,7 +14,6 @@
 
 // Local include(s):
 #include "CamacEditor.h"
-#include "CamacCrateWidget.h"
 
 namespace dev {
 
@@ -37,41 +34,31 @@ namespace dev {
       Loader::instance()->loadAll();
 
       // Create and arrange the crate object:
-      m_crateView = new CamacCrateWidget( this );
+      m_crateView.reset( new CamacCrateWidget( this ) );
       m_crateView->setLoader( Loader::instance() );
       m_crateView->setGeometry( QRect( 0, 0, CamacCrateWidget::WIDTH,
                                        CamacCrateWidget::HEIGHT ) );
-      connect( m_crateView, SIGNAL( doubleClicked( int ) ),
+      connect( m_crateView.get(), SIGNAL( doubleClicked( int ) ),
                this, SLOT( showDeviceSlot( int ) ) );
 
       // Create the box surrounding the device configuration:
-      m_deviceBox = new QGroupBox( tr( "No slot selected" ), this );
+      m_deviceBox.reset( new QGroupBox( tr( "No slot selected" ), this ) );
       m_deviceBox->setGeometry( QRect( 0, 270, 520, 370 ) );
 
       /// Create the widget showing the device configuration:
-      m_deviceWidget = new QStackedWidget( m_deviceBox );
+      m_deviceWidget.reset( new QStackedWidget( m_deviceBox.get() ) );
       m_deviceWidget->setGeometry( QRect( 10, 10, CamacGui::WIDGET_WIDTH,
                                           CamacGui::WIDGET_HEIGHT ) );
-      connect( m_deviceWidget, SIGNAL( widgetRemoved( int ) ),
+      connect( m_deviceWidget.get(), SIGNAL( widgetRemoved( int ) ),
                this, SLOT( removeDeviceSlot( int ) ) );
 
-   }
-
-   /**
-    * The destructor deletes all objects created in the constructor.
-    */
-   CamacEditor::~CamacEditor() {
-
-      delete m_crateView;
-      delete m_deviceWidget;
-      delete m_deviceBox;
    }
 
    /**
     * The configuration reading is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool CamacEditor::readConfig( QIODevice* dev ) {
+   bool CamacEditor::readConfig( QIODevice& dev ) {
 
       return m_crateView->readConfig( dev );
    }
@@ -80,7 +67,7 @@ namespace dev {
     * The configuration writing is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool CamacEditor::writeConfig( QIODevice* dev ) const {
+   bool CamacEditor::writeConfig( QIODevice& dev ) const {
 
       return m_crateView->writeConfig( dev );
    }
@@ -107,7 +94,7 @@ namespace dev {
     * The function call is simply forvarded to the
     * CamacCrateWidget.
     */
-   bool CamacEditor::canRead( QIODevice* dev ) const {
+   bool CamacEditor::canRead( QIODevice& dev ) const {
 
       return m_crateView->canRead( dev );
    }

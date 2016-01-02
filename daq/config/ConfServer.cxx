@@ -192,7 +192,7 @@ namespace conf {
       //
       Crate crate;
       crate.setLoader( dev::Loader::instance() );
-      if( ! crate.readConfig( &configFile ) ) {
+      if( ! crate.readConfig( configFile ) ) {
          REPORT_ERROR( tr( "Some error happened while reading the (binary)"
                            "file: %1\n"
                            "Configuration for the server was not updated!" )
@@ -210,7 +210,7 @@ namespace conf {
       //
       // Write the configuration into the internal buffer:
       //
-      if( ! crate.writeConfig( &m_buffer ) ) {
+      if( ! crate.writeConfig( m_buffer ) ) {
          REPORT_ERROR( tr( "Some error happened while writing the "
                            "configuration\n"
                            "into the internal buffer.\n"
@@ -277,7 +277,7 @@ namespace conf {
       //
       // Write the configuration into the internal buffer:
       //
-      if( ! crate.writeConfig( &m_buffer ) ) {
+      if( ! crate.writeConfig( m_buffer ) ) {
          REPORT_ERROR( tr( "Some error happened while writing the "
                            "configuration\n"
                            "into the internal buffer.\n"

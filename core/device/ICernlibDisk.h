@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_ROOTDISK_H
-#define CDA_CORE_DEVICE_ROOTDISK_H
+#ifndef CDA_CORE_DEVICE_ICERNLIBDISK_H
+#define CDA_CORE_DEVICE_ICERNLIBDISK_H
 
 // STL include(s):
 #include <vector>
@@ -10,10 +10,10 @@
 #include <QtCore/QString>
 
 // Local include(s):
-#include "Device.h"
+#include "IDevice.h"
 
 // Forward include(s):
-namespace root {
+namespace cernlib {
    class NTupleMgr;
 } // namespace cernlib
 namespace ev {
@@ -25,43 +25,48 @@ namespace dev {
    /**
     *  @short Interface for writing an output file from the readout data
     *
-    *         This interface is used to write a ROOT file from the data
-    *         collected by the CDA devices.
+    *         This interface needs to be implemented by the devices to be
+    *         able to write their collected data into HBOOK ntuples.
     *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+    * @author Attila Krasznahorkay Jr.
     *
     * $Revision$
     * $Date$
     */
-   class RootDisk : virtual public Device {
+   class ICernlibDisk : virtual public IDevice {
 
    public:
       /// Function initializing the device
       /**
-       * The device has to declare its member variables that it wants to write
-       * out during the event processing.
+       * Prepare the writing of the data read from this device. When
+       * creating a row-wise ntuple using CERNLIB, one has to pass an
+       * array of variable names to the function creating the ntuple.
+       * Plus, the device object has to remember in which array element
+       * to put which subaddress data.
        *
        * @param nmgr NTupleMgr object that can be used at the initialisation
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool initialize( root::NTupleMgr& nmgr ) = 0;
+      virtual bool initialize( cernlib::NTupleMgr& nmgr ) = 0;
 
       /// Function filling the ntuple
       /**
        * Write an event record to the output file. It should receive an
        * event fragment that was read out by the dev::Readout object.
        * This function doesn't write the data to the file itself, it just
-       * sets its members to the value that it wants to write to the file.
+       * sets the appropriate members of the array given to the function.
        *
        * @param fragment Event fragment that should be processed
+       * @param nmgr NTupleMgr that should be filled with the data
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool writeEvent( const ev::Fragment& fragment ) const = 0;
+      virtual bool writeEvent( const ev::Fragment& fragment,
+                               cernlib::NTupleMgr& nmgr ) const = 0;
 
-   }; // class RootDisk
+   }; // class ICernlibDisk
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_ROOTDISK_H
+#endif // CDA_CORE_DEVICE_ICERNLIBDISK_H

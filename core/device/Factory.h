@@ -10,6 +10,9 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
+// Local include(s):
+#include "../common/UniquePtr.h"
+
 namespace dev {
 
    //
@@ -61,8 +64,8 @@ namespace dev {
       virtual QString longName() const = 0;
 
       /// Helper function for creating a new device of a given type
-      template< class Type >
-      Type* createDevice() const;
+      template< class T >
+      typename UniquePtr< T >::Type createDevice() const;
 
       /// Universal function for creating a device object of this type
       /**
@@ -83,7 +86,7 @@ namespace dev {
 
 // Declare the dev::Factory interface to Qt:
 QT_BEGIN_NAMESPACE
-Q_DECLARE_INTERFACE( dev::Factory, "hu.atomki.CDA.dev.Factory/0.1.0" )
+Q_DECLARE_INTERFACE( dev::Factory, "hu.atomki.CDA.dev.Factory/1.1.0" )
 QT_END_NAMESPACE
 
 #endif // CDA_CORE_DEVICE_FACTORY_H

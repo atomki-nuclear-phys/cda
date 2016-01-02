@@ -5,16 +5,12 @@
 
 // STL include(s):
 #include <vector>
-#if __cplusplus < 201100
-#   include <tr1/memory>
-namespace MEMORY_NS = std::tr1;
-#else
-#   include <memory>
-namespace MEMORY_NS = std;
-#endif
+#include <memory>
 
 // Local include(s):
 #include "Fragment.h"
+#include "../common/UniquePtr.h"
+#include "../common/SharedPtr.h"
 
 namespace ev {
 
@@ -32,11 +28,11 @@ namespace ev {
     * $Date$
     */
    class Event :
-      public std::vector< MEMORY_NS::shared_ptr< Fragment > > {
+      public std::vector< SharedPtr< Fragment >::Type > {
 
    public:
       /// Type of the base class
-      typedef std::vector< MEMORY_NS::shared_ptr< Fragment > > Base_t;
+      typedef std::vector< SharedPtr< Fragment >::Type > Base_t;
 
       /// Default constructor
       Event();
@@ -49,9 +45,9 @@ namespace ev {
       /// Get all the event fragments
       const Base_t& getFragments() const;
       /// Add one more event fragment
-      void addFragment( Fragment* fragment );
+      void addFragment( UniquePtr< Fragment >::Type fragment );
       /// Add one more event fragment
-      void push_back( Fragment* fragment );
+      void push_back( UniquePtr< Fragment >::Type fragment );
 
       /// Get the size of this event in bytes
       uint32_t sizeInBytes() const;

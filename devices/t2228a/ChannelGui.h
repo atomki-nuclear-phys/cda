@@ -5,12 +5,17 @@
 
 // Qt include(s):
 #include <QWidget>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QCheckBox )
-QT_FORWARD_DECLARE_CLASS( QLineEdit )
-QT_FORWARD_DECLARE_CLASS( QSpinBox )
-QT_FORWARD_DECLARE_CLASS( QDoubleSpinBox )
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/UniquePtr.h"
+#else
+#   include "common/UniquePtr.h"
+#endif
 
 namespace t2228a {
 
@@ -40,8 +45,6 @@ namespace t2228a {
       /// Constructor
       ChannelGui( int subaddress, QWidget* parent = 0,
                   Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~ChannelGui();
 
       /// Get the subaddress described by this widget
       int getSubaddress() const;
@@ -110,13 +113,18 @@ namespace t2228a {
       void upperBoundChangedSlot( double value );
 
    private:
-      int             m_subaddress; ///< The subaddress described by this widget
+      int m_subaddress; ///< The subaddress described by this widget
 
-      QCheckBox*      m_enabledEdit; ///< Widget turning the channel on or off
-      QLineEdit*      m_nameEdit; ///< Widget setting the channel's name
-      QSpinBox*       m_channelsEdit; ///< Widget setting the histogram's channels
-      QDoubleSpinBox* m_lowerBoundEdit; ///< Widget setting the histogram's lower bound
-      QDoubleSpinBox* m_upperBoundEdit; ///< Widget setting the histogram's upper bound
+      /// Widget turning the channel on or off
+      UniquePtr< QCheckBox >::Type m_enabledEdit;
+      /// Widget setting the channel's name
+      UniquePtr< QLineEdit >::Type m_nameEdit;
+      /// Widget setting the monitoring histogram's channels
+      UniquePtr< QSpinBox >::Type m_channelsEdit;
+      /// Widget setting the monitoring histogram's lower bound
+      UniquePtr< QDoubleSpinBox >::Type m_lowerBoundEdit;
+      /// Widget setting the monitoring histogram's upper bound
+      UniquePtr< QDoubleSpinBox >::Type m_upperBoundEdit;
 
    }; // class ChannelGui
 

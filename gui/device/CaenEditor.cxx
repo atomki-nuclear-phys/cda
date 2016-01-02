@@ -46,17 +46,15 @@ namespace dev {
          // Check if this particular device could be inserted into this
          // crate slot:
          //
-         CaenGui* device =
-            m_loader->getFactory( *dev )->createDevice< CaenGui >();
-         // Check if this is a CAMAC device:
-         if( ! device ) {
+         UniquePtr< CaenGui >::Type device =
+            m_loader->getFactory( *dev ).createDevice< CaenGui >();
+         // Check if this is a CAEN device:
+         if( ! device.get() ) {
             continue;
          }
-         // We don't need the device anymore:
-         delete device;
 
          // Add this device to the list:
-         m_createDevice->addItem( m_loader->getFactory( *dev )->longName(),
+         m_createDevice->addItem( m_loader->getFactory( *dev ).longName(),
                                   *dev );
       }
 
@@ -80,15 +78,20 @@ namespace dev {
 
       // The tab widget thinks that it actually owns its widgets,
       // so it deletes them in the end. To avoid crashes because of
-      // a double-delete, let's not allow the base class to try
-      // to delete these objects itself.
+      // a double-delete, let's not allow the smart pointers to delete
+      // their objects.
+      DeviceMap_t::iterator itr = m_devices.begin();
+      DeviceMap_t::iterator end = m_devices.end();
+      for( ; itr != end; ++itr ) {
+         itr->second.release();
+      }
       m_devices.clear();
 
       delete m_createDevice;
       delete m_deviceTab;
    }
 
-   bool CaenEditor::readConfig( QIODevice* dev ) {
+   bool CaenEditor::readConfig( QIODevice& dev ) {
 
       // Read the configuration using the base class:
       if( ! dev::Crate< dev::CaenGui >::readConfig( dev ) ) {
@@ -97,15 +100,13 @@ namespace dev {
       }
 
       // Now show the device(s):
-      std::map< unsigned int, dev::CaenGui* >::const_iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenGui* >::const_iterator end =
-         m_devices.end();
+      DeviceMap_t::const_iterator itr = m_devices.begin();
+      DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          // Display the device:
-         m_deviceTab->addTab( itr->second, itr->second->deviceName() );
+         m_deviceTab->addTab( itr->second.get(), itr->second->deviceName() );
          // Connect its signal(s):
-         connect( itr->second, SIGNAL( idChanged() ),
+         connect( itr->second.get(), SIGNAL( idChanged() ),
                   this, SLOT( idChangedSlot() ) );
       }
 
@@ -129,15 +130,13 @@ namespace dev {
       }
 
       // Now show the device(s):
-      std::map< unsigned int, dev::CaenGui* >::const_iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenGui* >::const_iterator end =
-         m_devices.end();
+      DeviceMap_t::const_iterator itr = m_devices.begin();
+      DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          // Display the device:
-         m_deviceTab->addTab( itr->second, itr->second->deviceName() );
+         m_deviceTab->addTab( itr->second.get(), itr->second->deviceName() );
          // Connect its signal(s):
-         connect( itr->second, SIGNAL( idChanged() ),
+         connect( itr->second.get(), SIGNAL( idChanged() ),
                   this, SLOT( idChangedSlot() ) );
       }
 
@@ -190,34 +189,30 @@ namespace dev {
       //
       // Try to access the Factory of this device type:
       //
-      Factory* factory = m_loader->getFactory( type );
-      if( ! factory ) {
-         REPORT_ERROR( tr( "No factory found for device type \"%1\"" ).arg( type ) );
-         return;
-      } else {
-         REPORT_VERBOSE( tr( "Factory found for device type \"%1\"" ).arg( type ) );
-      }
+      Factory& factory = m_loader->getFactory( type );
 
       //
       // Try to create the new device:
       //
-      CaenGui* device = factory->createDevice< CaenGui >();
-      if( ! device ) {
+      UniquePtr< CaenGui >::Type device = factory.createDevice< CaenGui >();
+      if( ! device.get() ) {
          REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" ).arg( type ) );
          return;
       } else {
-         REPORT_VERBOSE( tr( "GUI object created for device type \"%1\"" ).arg( type ) );
+         REPORT_VERBOSE( tr( "GUI object created for device type \"%1\"" )
+                         .arg( type ) );
       }
 
       // Connect its signal(s):
-      connect( device, SIGNAL( idChanged() ),
+      connect( device.get(), SIGNAL( idChanged() ),
                this, SLOT( idChangedSlot() ) );
 
-      // Store the device with a "random" ID first:
-      m_devices[ 10000 + m_devices.size() ] = device;
-
       // Show the device:
-      m_deviceTab->addTab( device, device->deviceName() );
+      m_deviceTab->addTab( device.get(), device->deviceName() );
+
+      // Store the device with a "random" ID first:
+      UniquePtr< CaenGui >::swap( m_devices[ 10000 + m_devices.size() ],
+                                  device );
 
       // Check if the GUI is still "consistent":
       if( ! consistent() ) {
@@ -235,7 +230,8 @@ namespace dev {
       if( ! m_devices.size() ) return;
 
       // Get the pointer of the currently shown device:
-      CaenGui* device = dynamic_cast< CaenGui* >( m_deviceTab->widget( index ) );
+      CaenGui* device =
+         dynamic_cast< CaenGui* >( m_deviceTab->widget( index ) );
       if( ! device ) {
          REPORT_ERROR( tr( "No device selected currently" ) );
          return;
@@ -247,16 +243,15 @@ namespace dev {
       // Now remove it from the base class, and delete it. Have
       // to do it in such a complicated way, because the devices
       // are not necessarily keyed correctly at this point...
-      std::map< unsigned int, dev::CaenGui* >::iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenGui* >::iterator end =
-         m_devices.end();
+      DeviceMap_t::iterator itr = m_devices.begin();
+      DeviceMap_t::iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
-         if( itr->second != device ) continue;
+         if( itr->second.get() != device ) continue;
          m_devices.erase( itr );
          break;
       }
-      delete device;
+      // Note that the removal of the element from the map also deletes
+      // the object.
 
       // Make sure the combo box is in the correct position:
       m_createDevice->setCurrentIndex( 0 );
@@ -283,10 +278,8 @@ namespace dev {
          bool repeat = false;
 
          // Loop over the devices:
-         std::map< unsigned int, dev::CaenGui* >::iterator itr =
-            m_devices.begin();
-         std::map< unsigned int, dev::CaenGui* >::iterator end =
-            m_devices.end();
+         DeviceMap_t::iterator itr = m_devices.begin();
+         DeviceMap_t::iterator end = m_devices.end();
          for( ; itr != end; ++itr ) {
 
             // If this device's ID didn't change, then leave it in peace:
@@ -295,17 +288,19 @@ namespace dev {
             // Check that nobody else is using this ID:
             if( m_devices.find( itr->second->getID() ) != m_devices.end() ) {
                QMessageBox::warning( this, tr( "Clash between devices" ),
-                                     tr( "The connection parameters configured for the "
-                                         "device clash with those of another device. "
-                                         "Please fix this before continuing." ) );
+                                     tr( "The connection parameters "
+                                         "configured for the device clash "
+                                         "with those of another device. "
+                                         "Please fix this before "
+                                         "continuing." ) );
                break;
             }
 
-            // If it now has an ID that is not used by others, then let's re-add it with
-            // this ID to the base class:
-            CaenGui* device = itr->second;
+            // If it now has an ID that is not used by others, then let's
+            // re-add it with this ID to the base class:
+            UniquePtr< CaenGui >::swap( m_devices[ itr->second->getID() ],
+                                        itr->second );
             m_devices.erase( itr );
-            m_devices[ device->getID() ] = device;
 
             // Let's start the algorithm once more:
             repeat = true;

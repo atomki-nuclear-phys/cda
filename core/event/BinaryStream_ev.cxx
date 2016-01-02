@@ -11,6 +11,8 @@
 
 // Local include(s):
 #include "BinaryStream.h"
+#include "Event.h"
+#include "Fragment.h"
 
 namespace ev {
 
@@ -73,9 +75,9 @@ namespace ev {
       ( * ( QDataStream* ) this ) >> nFragments;
 
       for( quint32 i = 0; i < nFragments; ++i ) {
-         Fragment* fragment = new Fragment();
+         UniquePtr< Fragment >::Type fragment( new Fragment() );
          *this >> *fragment;
-         event.push_back( fragment );
+         event.push_back( UNIQUE_PTR_MOVE( fragment ) );
       }
 
       return *this;

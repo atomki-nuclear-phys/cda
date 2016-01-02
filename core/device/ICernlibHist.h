@@ -4,7 +4,7 @@
 #define CDA_CORE_DEVICE_CERNLIBHIST_H
 
 // Local include(s):
-#include "Device.h"
+#include "IDevice.h"
 
 // Forward declaration(s):
 namespace cernlib {
@@ -19,15 +19,15 @@ namespace dev {
    /**
     *  @short Interface for creating histograms from the readout data
     *
-    *         This class is similar in function to dev::Disk. It is used
-    *         to instruct the histogram writing objects.
+    *         This class describes how devices can fill monitoring histograms
+    *         with their readout data.
     *
     * @author Attila Krasznahorkay Jr.
     *
     * $Revision$
     * $Date$
     */
-   class CernlibHist : virtual public Device {
+   class ICernlibHist : virtual public IDevice {
 
    public:
       /// Function initializing the device
@@ -59,8 +59,8 @@ namespace dev {
       virtual bool displayEvent( const ev::Fragment& fragment,
                                  const cernlib::HistMgr& hmgr ) const = 0;
 
-   }; // class CernlibHist
+   }; // class ICernlibHist
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_CERNLIBHIST_H
+#endif // CDA_CORE_DEVICE_ICERNLIBHIST_H

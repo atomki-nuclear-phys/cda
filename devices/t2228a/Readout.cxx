@@ -66,15 +66,16 @@ namespace t2228a {
     * 11-bit TDC (as far as I remember), this should leave plenty of space
     * for both quantities...
     */
-   ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
+   UniquePtr< ev::Fragment >::Type
+   Readout::readEvent( camac::Crate& crate ) const {
 
       // Create the event fragment:
-      ev::Fragment* fragment = new ev::Fragment();
+      UniquePtr< ev::Fragment >::Type fragment( new ev::Fragment() );
       fragment->setModuleID( m_slot );
 
       // Read out all the configured channels:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ] ) {
+         if( m_channels[ i ].get() ) {
             const uint32_t channel = crate.readWord( m_slot, i, 0 );
             const uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
             fragment->addDataWord( dword );

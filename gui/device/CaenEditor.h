@@ -46,7 +46,7 @@ namespace dev {
       ~CaenEditor();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );
 

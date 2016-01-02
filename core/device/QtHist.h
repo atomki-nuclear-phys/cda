@@ -7,7 +7,7 @@
 #include <QWidget>
 
 // Local include(s):
-#include "Device.h"
+#include "IDevice.h"
 
 // Forward declaration(s):
 namespace ev {
@@ -41,7 +41,7 @@ namespace dev {
     * $Date$
     */
    class QtHist : public QWidget,
-                  virtual public Device {
+                  virtual public IDevice {
 
       Q_OBJECT
 

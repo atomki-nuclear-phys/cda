@@ -86,18 +86,18 @@ namespace ev {
     *
     * @param fragment The event fragment to be added to the event
     */
-   void Event::addFragment( Fragment* fragment ) {
+   void Event::addFragment( UniquePtr< Fragment >::Type fragment ) {
 
-      Base_t::push_back( Base_t::value_type( fragment ) );
+      Base_t::push_back( Base_t::value_type( fragment.release() ) );
       return;
    }
 
    /**
     * @param fragment The event fragment to be added to the event
     */
-   void Event::push_back( Fragment* fragment ) {
+   void Event::push_back( UniquePtr< Fragment >::Type fragment ) {
 
-      Base_t::push_back( Base_t::value_type( fragment ) );
+      Base_t::push_back( Base_t::value_type( fragment.release() ) );
       return;
    }
 

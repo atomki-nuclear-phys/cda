@@ -1,17 +1,16 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_VMEREADOUT_H
-#define CDA_CORE_DEVICE_VMEREADOUT_H
+#ifndef CDA_CORE_DEVICE_IVMEREADOUT_H
+#define CDA_CORE_DEVICE_IVMEREADOUT_H
 
 // Local include(s):
-#include "Device.h"
+#include "IDevice.h"
+#include "../event/Fragment.h"
+#include "../event/Event.h"
 
 // Forward declaration(s):
 namespace vme {
    class VmeBus;
-}
-namespace ev {
-   class Fragment;
 }
 
 namespace dev {
@@ -27,7 +26,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class VmeReadout : virtual public Device {
+   class IVmeReadout : virtual public IDevice {
 
    public:
       /// Function starting the readout of the device
@@ -58,10 +57,11 @@ namespace dev {
        * @param bus The object to access the VME bus with
        * @returns The event fragment coming from this device
        */
-      virtual ev::Fragment* readEvent( vme::VmeBus& bus ) const = 0;
+      virtual UNIQUE_PTR< ev::Fragment >
+      readEvent( vme::VmeBus& bus ) const = 0;
 
-   }; // class VmeReadout
+   }; // class IVmeReadout
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_VMEREADOUT_H
+#endif // CDA_CORE_DEVICE_IVMEREADOUT_H

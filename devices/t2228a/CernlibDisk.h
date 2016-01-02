@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CernlibDisk.h"
+#   include "cdacore/device/ICernlibDisk.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CernlibDisk.h"
+#   include "device/ICernlibDisk.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -32,7 +32,7 @@ namespace t2228a {
     * $Revision$
     * $Date$
     */
-   class CernlibDisk : public virtual dev::CernlibDisk,
+   class CernlibDisk : public virtual dev::ICernlibDisk,
                        public virtual Device {
 
       // To get the tr() function:
@@ -54,7 +54,7 @@ namespace t2228a {
 
       mutable msg::Logger m_logger; ///< Message logging object
 
-   }; // class Disk
+   }; // class CernlibDisk
 
 } // namespace t2228a
 

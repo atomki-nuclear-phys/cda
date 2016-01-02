@@ -7,7 +7,7 @@
 #include <QWidget>
 
 // Local include(s):
-#include "Device.h"
+#include "IDevice.h"
 
 namespace dev {
 
@@ -28,7 +28,7 @@ namespace dev {
     * $Date$
     */
    class VmeGui : public QWidget,
-                  virtual public Device {
+                  virtual public IDevice {
 
       Q_OBJECT
 

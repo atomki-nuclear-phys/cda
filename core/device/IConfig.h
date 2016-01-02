@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_CONFIG_H
-#define CDA_CORE_DEVICE_CONFIG_H
+#ifndef CDA_CORE_DEVICE_ICONFIG_H
+#define CDA_CORE_DEVICE_ICONFIG_H
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
@@ -36,27 +36,27 @@ namespace dev {
    using QT_PREPEND_NAMESPACE( QDomElement );
 
    /**
-    *  @short Base interface for configuring a CAMAC device
+    *  @short Base interface for configuring a device
     *
-    *         Each CAMAC device has to be able to read and write its
+    *         Each device has to be able to read and write its
     *         configuration. This interface class defines the functions
     *         that have to be implemented in each device class to achieve
     *         this functionality.
     *
     *         There are two pairs of functions, as the configuration has to
     *         be sent over binary connections (TCP for instance) and also
-    *         written out to user readable format.
+    *         written out to a user readable format.
     *
     * @author Attila Krasznahorkay Jr.
     *
     * $Revision$
     * $Date$
     */
-   class Config {
+   class IConfig {
 
    public:
       /// Destructor
-      virtual ~Config() {}
+      virtual ~IConfig() {}
 
       /// Function reading the configuration in binary format
       /**
@@ -69,7 +69,7 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool readConfig( QIODevice* dev ) = 0;
+      virtual bool readConfig( QIODevice& dev ) = 0;
       /// Function writing the configuration in binary format
       /**
        * This function can be used to write the configuration of a device
@@ -82,7 +82,7 @@ namespace dev {
        * @returns <code>true</code> if the operation was successful,
        *          <code>false</code> otherwise
        */
-      virtual bool writeConfig( QIODevice* dev ) const = 0;
+      virtual bool writeConfig( QIODevice& dev ) const = 0;
 
       /// Function reading the configuration in XML format
       /**
@@ -109,8 +109,8 @@ namespace dev {
        */
       virtual bool writeConfig( QDomElement& node ) const = 0;
 
-   }; // class Config
+   }; // class IConfig
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_CONFIG_H
+#endif // CDA_CORE_DEVICE_ICONFIG_H

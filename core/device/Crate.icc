@@ -52,11 +52,10 @@ namespace dev {
    template< class DEVICE >
    Crate< DEVICE >::~Crate() {
 
-      clear();
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::readConfig( QIODevice* dev ) {
+   bool Crate< DEVICE >::readConfig( QIODevice& dev ) {
 
       // Check that a correct loader is set:
       if( ! checkLoader() ) return false;
@@ -65,7 +64,7 @@ namespace dev {
 
       clear();
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
 
       // Check if the configuration is of the right type:
@@ -89,9 +88,10 @@ namespace dev {
 
          if( m_loader->isLoaded( type ) ) {
 
-            Factory* factory = m_loader->getFactory( type );
-            DEVICE* device = factory->createDevice< DEVICE >();
-            if( ! device ) {
+            Factory& factory = m_loader->getFactory( type );
+            typename UniquePtr< DEVICE >::Type device =
+               factory.createDevice< DEVICE >();
+            if( ! device.get() ) {
                m_logger << msg::WARNING
                         << tr( "No implementation found for type %1" )
                   .arg( type )
@@ -101,20 +101,18 @@ namespace dev {
             if( ! device->readConfig( dev ) ) {
                REPORT_ERROR( tr( "There was a problem reading the "
                                  "configuration of one of the devices!" ) );
-               delete device;
                return false;
             }
 
-            typename std::map< unsigned int, DEVICE* >::iterator it;
+            typename DeviceMap_t::iterator it;
             if( ( it = m_devices.find( device->getID() ) ) !=
                 m_devices.end() ) {
                m_logger << msg::WARNING
                         << tr( "Redefining the device with 'id': %1" )
                   .arg( device->getID() ) << msg::endmsg;
-               delete it->second;
             }
 
-            m_devices[ device->getID() ] = device;
+            UniquePtr< DEVICE >::swap( m_devices[ device->getID() ], device );
 
          } else {
             REPORT_ERROR( tr( "Device type \"%1\" unknown.\n"
@@ -136,21 +134,19 @@ namespace dev {
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::writeConfig( QIODevice* dev ) const {
+   bool Crate< DEVICE >::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       // Write the "header" of the configuration:
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_type;
       output << ( quint32 ) m_devices.size();
 
       // Write the configuration of each device:
-      typename std::map< unsigned int, DEVICE* >::const_iterator itr =
-         m_devices.begin();
-      typename std::map< unsigned int, DEVICE* >::const_iterator end =
-         m_devices.end();
+      typename DeviceMap_t::const_iterator itr = m_devices.begin();
+      typename DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
 
          output << itr->second->deviceName();
@@ -242,9 +238,10 @@ namespace dev {
          }
 
          // If we do, let's try loading the configuration:
-         Factory* factory = m_loader->getFactory( type );
-         DEVICE* device = factory->createDevice< DEVICE >();
-         if( ! device ) {
+         Factory& factory = m_loader->getFactory( type );
+         typename UniquePtr< DEVICE >::Type device =
+            factory.createDevice< DEVICE >();
+         if( ! device.get() ) {
             m_logger << msg::WARNING
                      << tr( "No implementation found for type %1" )
                .arg( type )
@@ -256,21 +253,19 @@ namespace dev {
          if( ! device->readConfig( conf ) ) {
             REPORT_ERROR( tr( "There was a problem reading the "
                               "configuration of one of the devices!" ) );
-            delete device;
             return false;
          }
 
          // Add this new device to the crate:
-         typename std::map< unsigned int, DEVICE* >::iterator it;
+         typename DeviceMap_t::iterator it;
          if( ( it = m_devices.find( device->getID() ) ) !=
              m_devices.end() ) {
             m_logger << msg::WARNING
                      << tr( "Redefining the device with 'id': %1" )
                .arg( device->getID() )
                      << msg::endmsg;
-            delete it->second;
          }
-         m_devices[ device->getID() ] = device;
+         UniquePtr< DEVICE >::swap( m_devices[ device->getID() ], device );
 
       }
 
@@ -299,10 +294,8 @@ namespace dev {
 
       // Loop over the devices, and add their configuration to the
       // crate node:
-      typename std::map< unsigned int, DEVICE* >::const_iterator itr =
-         m_devices.begin();
-      typename std::map< unsigned int, DEVICE* >::const_iterator end =
-         m_devices.end();
+      typename DeviceMap_t::const_iterator itr = m_devices.begin();
+      typename DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
 
          QDomElement dev_element =
@@ -321,13 +314,13 @@ namespace dev {
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::canRead( QIODevice* dev ) const {
+   bool Crate< DEVICE >::canRead( QIODevice& dev ) const {
 
       // If the type is not important, then the answer is always
       // yes:
       if( ! m_isTypeImportant ) return true;
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
 
       // Check if the configuration is of the right type:
@@ -381,7 +374,7 @@ namespace dev {
    }
 
    template< class DEVICE >
-   Loader* Crate< DEVICE >::getLoader() const {
+   const Loader* Crate< DEVICE >::getLoader() const {
 
       return m_loader;
    }
@@ -408,13 +401,7 @@ namespace dev {
    template< class DEVICE >
    void Crate< DEVICE >::clear() {
 
-      for( typename std::map< unsigned int, DEVICE* >::iterator device_it =
-              m_devices.begin(); device_it != m_devices.end();
-           ++device_it ) {
-         delete device_it->second;
-      }
       m_devices.clear();
-
       return;
    }
 
@@ -439,13 +426,13 @@ namespace dev {
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::readCrateConfig( QIODevice* ) {
+   bool Crate< DEVICE >::readCrateConfig( QIODevice& ) {
 
       return true;
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::writeCrateConfig( QIODevice* ) const {
+   bool Crate< DEVICE >::writeCrateConfig( QIODevice& ) const {
 
       return true;
    }

@@ -101,11 +101,11 @@ namespace conf {
     *
     * @returns The cached configuration data
     */
-   QIODevice* ConfReader::buffer() {
+   QIODevice& ConfReader::buffer() {
 
       // Jump to the beginning of the buffer:
       m_buffer.reset();
-      return &m_buffer;
+      return m_buffer;
    }
 
 } // namespace conf

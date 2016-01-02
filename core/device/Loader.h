@@ -63,7 +63,7 @@ namespace dev {
       /// Get the names of the loaded devices
       QStringList getDeviceNames() const;
       /// Get the factory for a specific device
-      Factory*    getFactory( const QString& name ) const;
+      Factory&    getFactory( const QString& name ) const;
 
    private:
       /// Constructor specifying the directory of the plugins

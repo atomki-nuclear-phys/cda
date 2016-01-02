@@ -3,6 +3,7 @@
 // System include(s):
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 
 // Qt include(s):
 #include <QtCore/QPluginLoader>
@@ -275,18 +276,18 @@ namespace dev {
     * @returns A pointer to the device factory if it is available,
     *          or <code>0</code> if it isn't
     */
-   Factory* Loader::getFactory( const QString& name ) const {
+   Factory& Loader::getFactory( const QString& name ) const {
 
       if( ! isLoaded( name ) ) {
          REPORT_ERROR( tr( "No device with name \"%1\" loaded "
                            "currently" ).arg( name ) );
-         return 0;
+         throw std::runtime_error( "Factory for unknown device requested" );
       }
 
       std::map< QString, Factory* >::const_iterator it =
          m_deviceMap.find( name );
 
-      return it->second;
+      return *( it->second );
    }
 
    /**

@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CernlibHist.h"
+#   include "cdacore/device/ICernlibHist.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CernlibHist.h"
+#   include "device/ICernlibHist.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -33,10 +33,10 @@ namespace t2228a {
     * $Revision$
     * $Date$
     */
-   class CernlibHist : public virtual dev::CernlibHist,
+   class CernlibHist : public virtual dev::ICernlibHist,
                        public virtual Device {
 
-      Q_DECLARE_TR_FUNCTIONS( t2228a::Hist )
+      Q_DECLARE_TR_FUNCTIONS( t2228a::CernlibHist )
 
    public:
       /// Constructor

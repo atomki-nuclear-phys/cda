@@ -14,8 +14,9 @@
 #include "../msg/Logger.h"
 
 // Local include(s):
-#include "Config.h"
+#include "IConfig.h"
 #include "Factory.h"
+#include "../common/UniquePtr.h"
 
 namespace dev {
 
@@ -47,7 +48,7 @@ namespace dev {
     * $Date$
     */
    template< class DEVICE >
-   class Crate : public virtual Config {
+   class Crate : public virtual IConfig {
 
       Q_DECLARE_TR_FUNCTIONS( dev::Crate )
 
@@ -59,9 +60,9 @@ namespace dev {
       ~Crate();
 
       /// Read the configuration of the crate from a binary device
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Write the configuration of the crate to a binary device
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
 
       /// Read the configuration of the crate from an XML node
       virtual bool readConfig( const QDomElement& node );
@@ -69,12 +70,12 @@ namespace dev {
       virtual bool writeConfig( QDomElement& node ) const;
 
       /// Check if this object can read this binary configuration
-      bool canRead( QIODevice* dev ) const;
+      bool canRead( QIODevice& dev ) const;
       /// Check if this object can read this XML configuration
       bool canRead( const QDomElement& node ) const;
 
       /// Get the dev::Loader object used by the crate
-      Loader* getLoader() const;
+      const Loader* getLoader() const;
       /// Set the dev::Loader object used by the crate
       void setLoader( const Loader* loader );
 
@@ -86,14 +87,18 @@ namespace dev {
       virtual bool checkLoader() const;
 
       /// Read the crate specific options from binary input
-      virtual bool readCrateConfig( QIODevice* dev );
+      virtual bool readCrateConfig( QIODevice& dev );
       /// Write the crate specific options to binary output
-      virtual bool writeCrateConfig( QIODevice* dev ) const;
+      virtual bool writeCrateConfig( QIODevice& dev ) const;
 
       /// Read the crate specific options from XML input
       virtual bool readCrateConfig( const QDomElement& node );
       /// Write the crate specific options to XML output
       virtual bool writeCrateConfig( QDomElement& node ) const;
+
+      /// Type of the device container
+      typedef std::map< unsigned int,
+                        typename UniquePtr< DEVICE >::Type > DeviceMap_t;
 
       /// Container for the devices
       /**
@@ -102,7 +107,7 @@ namespace dev {
        * In the CAEN case we only have one device, so the key is not too
        * important...
        */
-      std::map< unsigned int, DEVICE* > m_devices;
+      DeviceMap_t m_devices;
 
       /// XML node name for the crate
       static const char* XML_NODE_NAME;

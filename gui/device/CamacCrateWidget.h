@@ -11,10 +11,12 @@
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/device/CamacGui.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/Crate.h"
 #   include "device/CamacGui.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
 #endif
 
 namespace dev {
@@ -58,12 +60,14 @@ namespace dev {
       CamacCrateWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Extended configuration reading from binary file
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Extended configuration reading from XML file
       virtual bool readConfig( const QDomElement& element );
 
       /// Get the CAMAC device in a given slot
       CamacGui* getDevice( int slot );
+      /// Set the device in a given slot
+      void setDevice( int slot, UniquePtr< CamacGui >::Type device );
 
       /// Maximal number of slots the devices can use
       static const int NUMBER_OF_SLOTS;
@@ -98,10 +102,6 @@ namespace dev {
        *  @param slot The crate slot that was double-clicked
        */
       void doubleClicked( int slot );
-
-   public slots:
-      /// Set the device in a given slot
-      void setDevice( int slot, CamacGui* device );
 
    private slots:
       /// Create a new device in a given slot

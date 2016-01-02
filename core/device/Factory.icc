@@ -13,18 +13,16 @@ namespace dev {
      * @returns A device object of the requested type, or <code>0</code>
      *          if the plugin doesn't support this device
      */
-   template< class Type >
-   Type* Factory::createDevice() const {
+   template< class T >
+   typename UniquePtr< T >::Type Factory::createDevice() const {
 
       // Ask for the creation of the new device:
-      void* ret = createDevice( typeid( Type ) );
+      void* ret = createDevice( typeid( T ) );
 
       // Only try the casting if an object was created:
-      if( ret ) {
-         return reinterpret_cast< Type* >( ret );
-      } else {
-         return 0;
-      }
+      typename UniquePtr< T >::Type
+         result( ret ? reinterpret_cast< T* >( ret ) : 0 );
+      return result;
    }
 
 } // namespace dev

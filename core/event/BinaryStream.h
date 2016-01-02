@@ -11,7 +11,6 @@
 #include "../msg/Logger.h"
 
 // Local include(s):
-#include "Event.h"
 #include "IncompleteEvent.h"
 
 // Forward declaration(s):
@@ -28,6 +27,10 @@ namespace ev {
    using QT_PREPEND_NAMESPACE( QDataStream );
    using QT_PREPEND_NAMESPACE( QIODevice );
    using QT_PREPEND_NAMESPACE( QByteArray );
+
+   // Local forward declaration(s):
+   class Event;
+   class Fragment;
 
    /**
     *  @short Class for transmitting CAMAC events in binary form

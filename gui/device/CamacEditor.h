@@ -5,25 +5,24 @@
 
 // Qt include(s):
 #include <QWidget>
+#include <QGroupBox>
+#include <QStackedWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Config.h"
+#   include "cdacore/device/IConfig.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
 #else
-#   include "device/Config.h"
+#   include "device/IConfig.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
 #endif
 
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QGroupBox )
-QT_FORWARD_DECLARE_CLASS( QStackedWidget )
+// Local include(s):
+#include "CamacCrateWidget.h"
 
 namespace dev {
-
-   // Forward declaration(s):
-   class Loader;
-   class CamacCrateWidget;
 
    /**
     *  @short Class used for editing the CAMAC crate setup
@@ -39,27 +38,25 @@ namespace dev {
     * $Date$
     */
    class CamacEditor : public QWidget,
-                       public Config {
+                       public IConfig {
 
       Q_OBJECT
 
    public:
       /// Constructor
       CamacEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~CamacEditor();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );
       /// Function writing the configuration in XML format
       virtual bool writeConfig( QDomElement& node ) const;
 
       /// Check if this object can read this binary configuration
-      bool canRead( QIODevice* dev ) const;
+      bool canRead( QIODevice& dev ) const;
       /// Check if this object can read this XML configuration
       bool canRead( const QDomElement& node ) const;
 
@@ -73,9 +70,12 @@ namespace dev {
       void removeDeviceSlot( int slot );
 
    private:
-      CamacCrateWidget* m_crateView; ///< Widget representing the CAMAC crate
-      QGroupBox*        m_deviceBox; ///< Area for showing the detailed config.
-      QStackedWidget*   m_deviceWidget; ///< Widget for showing the config.
+      /// Widget representing the CAMAC crate
+      UniquePtr< CamacCrateWidget >::Type m_crateView;
+      /// Area for showing the detailed config
+      UniquePtr< QGroupBox >::Type m_deviceBox;
+      /// Widget for showing the config
+      UniquePtr< QStackedWidget >::Type m_deviceWidget;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

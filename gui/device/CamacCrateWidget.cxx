@@ -69,7 +69,7 @@ namespace dev {
     *
     * @param dev Device to read the binary configuration from
     */
-   bool CamacCrateWidget::readConfig( QIODevice* dev ) {
+   bool CamacCrateWidget::readConfig( QIODevice& dev ) {
 
       //
       // Read the configuration using the base class:
@@ -80,12 +80,10 @@ namespace dev {
       //
       // Connect the signals coming from the configured modules:
       //
-      std::map< unsigned int, CamacGui* >::const_iterator dev_itr =
-         m_devices.begin();
-      std::map< unsigned int, CamacGui* >::const_iterator dev_end =
-         m_devices.end();
+      DeviceMap_t::const_iterator dev_itr = m_devices.begin();
+      DeviceMap_t::const_iterator dev_end = m_devices.end();
       for( ; dev_itr != dev_end; ++dev_itr ) {
-         connect( dev_itr->second, SIGNAL( redrawModule() ),
+         connect( dev_itr->second.get(), SIGNAL( redrawModule() ),
                   this, SLOT( update() ) );
       }
       //
@@ -116,12 +114,10 @@ namespace dev {
       //
       // Connect the signals coming from the configured modules:
       //
-      std::map< unsigned int, CamacGui* >::const_iterator dev_itr =
-         m_devices.begin();
-      std::map< unsigned int, CamacGui* >::const_iterator dev_end =
-         m_devices.end();
+      DeviceMap_t::const_iterator dev_itr = m_devices.begin();
+      DeviceMap_t::const_iterator dev_end = m_devices.end();
       for( ; dev_itr != dev_end; ++dev_itr ) {
-         connect( dev_itr->second, SIGNAL( redrawModule() ),
+         connect( dev_itr->second.get(), SIGNAL( redrawModule() ),
                   this, SLOT( update() ) );
       }
       //
@@ -143,9 +139,9 @@ namespace dev {
     */
    CamacGui* CamacCrateWidget::getDevice( int slot ) {
 
-      std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
+      DeviceMap_t::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
-         return dev->second;
+         return dev->second.get();
       } else {
          return 0;
       }
@@ -161,25 +157,24 @@ namespace dev {
     * @param slot The crate slot to configure
     * @param device Pointer to the device that we now want to use
     */
-   void CamacCrateWidget::setDevice( int slot, CamacGui* device ) {
+   void CamacCrateWidget::setDevice( int slot,
+                                     UniquePtr< CamacGui >::Type device ) {
 
       //
       // Save the pointer to the new device:
       //
-      std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
+      DeviceMap_t::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
          m_logger << msg::WARNING
                   << tr( "Redefining device in slot %1" ).arg( slot )
                   << msg::endmsg;
-         delete dev->second;
-         dev->second = device;
-      } else {
-         m_devices[ slot ] = device;
       }
+      CamacGui* ptr = device.get(); // Remember the pointer...
+      UniquePtr< CamacGui >::swap( m_devices[ slot ], device );
       //
       // Take care of correctly displaying the new device:
       //
-      connect( device, SIGNAL( redrawModule() ),
+      connect( ptr, SIGNAL( redrawModule() ),
                this, SLOT( update() ) );
       update();
 
@@ -207,30 +202,28 @@ namespace dev {
       //
       // Try to access the Factory of this device type:
       //
-      Factory* factory = m_loader->getFactory( type );
-      if( ! factory ) {
-         REPORT_ERROR( tr( "No factory found for device type \"%1\"" ).arg( type ) );
-         return;
-      } else {
-         REPORT_VERBOSE( tr( "Factory found for device type \"%1\"" ).arg( type ) );
-      }
+      Factory& factory = m_loader->getFactory( type );
+      REPORT_VERBOSE( tr( "Factory found for device type \"%1\"" )
+                      .arg( type ) );
 
       //
       // Try to create the new device:
       //
-      CamacGui* device = factory->createDevice< CamacGui >();
-      if( ! device ) {
-         REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" ).arg( type ) );
+      UniquePtr< CamacGui >::Type device = factory.createDevice< CamacGui >();
+      if( ! device.get() ) {
+         REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" )
+                       .arg( type ) );
          return;
       } else {
-         REPORT_VERBOSE( tr( "GUI object created for device type \"%1\"" ).arg( type ) );
+         REPORT_VERBOSE( tr( "GUI object created for device type \"%1\"" )
+                         .arg( type ) );
       }
 
       //
       // Configure and register the new device:
       //
       device->setID( slot );
-      setDevice( slot, device );
+      setDevice( slot, UNIQUE_PTR_MOVE( device ) );
       emit doubleClicked( slot );
 
       return;
@@ -248,10 +241,9 @@ namespace dev {
 
       REPORT_VERBOSE( tr( "Clearing slot %1" ).arg( slot ) );
 
-      std::map< unsigned int, CamacGui* >::iterator dev = m_devices.find( slot );
+      DeviceMap_t::iterator dev = m_devices.find( slot );
       if( dev != m_devices.end() ) {
          m_devices.erase( dev );
-         delete dev->second;
       } else {
          m_logger << msg::DEBUG << tr( "Slot was empty..." ) << msg::endmsg;
       }
@@ -352,17 +344,17 @@ namespace dev {
       //
       // Draw the CAMAC devices:
       //
-      for( std::map< unsigned int, CamacGui* >::const_iterator dev =
-              m_devices.begin();
-           dev != m_devices.end(); ++dev ) {
+      DeviceMap_t::const_iterator dev_itr = m_devices.begin();
+      DeviceMap_t::const_iterator dev_end = m_devices.end();
+      for( ; dev_itr != dev_end; ++dev_itr ) {
 
          painter.translate( BORDER_SIZE +
-                            ( static_cast< int >( dev->first ) - 1 ) *
+                            ( static_cast< int >( dev_itr->first ) - 1 ) *
                             SLOT_WIDTH,
                             BORDER_SIZE );
-         dev->second->drawModule( painter );
+         dev_itr->second->drawModule( painter );
          painter.translate( - ( BORDER_SIZE +
-                                ( static_cast< int >( dev->first ) - 1 ) *
+                                ( static_cast< int >( dev_itr->first ) - 1 ) *
                                 SLOT_WIDTH ),
                             - BORDER_SIZE );
 
@@ -421,7 +413,7 @@ namespace dev {
       } else if( event->button() == Qt::RightButton ) {
 
          //
-         // Create a contect-menu. The menu always lists all the available
+         // Create a context-menu. The menu always lists all the available
          // module types for adding to the given slot, and if the slot is
          // already occupied, it lists an item for removing that device.
          //
@@ -440,10 +432,10 @@ namespace dev {
                // Check if this particular device could be inserted into this
                // crate slot:
                //
-               CamacGui* device =
-                  m_loader->getFactory( *dev )->createDevice< CamacGui >();
+               UniquePtr< CamacGui >::Type device =
+                  m_loader->getFactory( *dev ).createDevice< CamacGui >();
                // Check if this is a CAMAC device:
-               if( ! device ) {
+               if( ! device.get() ) {
                   continue;
                }
                bool offerDevice = true;
@@ -458,15 +450,13 @@ namespace dev {
                      break;
                   }
                }
-               // We don't need the device anymore:
-               delete device;
                // Skip this offer if the device can't be put into this slot:
                if( ! offerDevice ) {
                   continue;
                }
 
-               QString name = m_loader->getFactory( *dev )->longName();
-
+               // Create a menu item for the device:
+               QString name = m_loader->getFactory( *dev ).longName();
                CreateAction* ac = new CreateAction( name, slot, *dev, this );
                connect( ac, SIGNAL( triggered( int, const QString& ) ),
                         this, SLOT( createSlot( int, const QString& ) ) );

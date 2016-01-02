@@ -17,7 +17,6 @@
 
 // Local include(s):
 #include "Gui.h"
-#include "ChannelGui.h"
 
 namespace t2228a {
 
@@ -34,37 +33,37 @@ namespace t2228a {
       //
       // Create a label telling us what kind of device this is:
       //
-      m_topLabel = new QLabel( tr( "LeCroy 2228A Octal Time-to-Digital Converter" ),
-                               this );
+      m_topLabel.reset( new QLabel(
+                           tr( "LeCroy 2228A Octal Time-to-Digital Converter" ),
+                           this ) );
       m_topLabel->setAlignment( Qt::AlignCenter );
       m_topLabel->setGeometry( QRect( 35, 30, 430, 25 ) );
-
 
       //
       // Create a label identifying the channel name settings:
       //
-      m_nameLabel = new QLabel( tr( "Name" ), this );
+      m_nameLabel.reset( new QLabel( tr( "Name" ), this ) );
       m_nameLabel->setAlignment( Qt::AlignCenter );
       m_nameLabel->setGeometry( QRect( 150, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram channel settings:
       //
-      m_channelsLabel = new QLabel( tr( "Channels" ), this );
+      m_channelsLabel.reset( new QLabel( tr( "Channels" ), this ) );
       m_channelsLabel->setAlignment( Qt::AlignCenter );
       m_channelsLabel->setGeometry( QRect( 230, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram lower bound settings:
       //
-      m_lowerBoundLabel = new QLabel( tr( "Lower" ), this );
+      m_lowerBoundLabel.reset( new QLabel( tr( "Lower" ), this ) );
       m_lowerBoundLabel->setAlignment( Qt::AlignCenter );
       m_lowerBoundLabel->setGeometry( QRect( 310, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram upper bound settings:
       //
-      m_upperBoundLabel = new QLabel( tr( "Upper" ), this );
+      m_upperBoundLabel.reset( new QLabel( tr( "Upper" ), this ) );
       m_upperBoundLabel->setAlignment( Qt::AlignCenter );
       m_upperBoundLabel->setGeometry( QRect( 390, 75, 75, 25 ) );
 
@@ -73,20 +72,22 @@ namespace t2228a {
       //
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
 
-         m_gchannels[ i ] = new ChannelGui( i, this );
+         m_gchannels[ i ].reset( new ChannelGui( i, this ) );
          m_gchannels[ i ]->setGeometry( QRect( 35, 100 + i * 25,
                                                ChannelGui::WIDTH,
                                                ChannelGui::HEIGHT ) );
-         connect( m_gchannels[ i ], SIGNAL( enableChanged( int, bool ) ),
+         connect( m_gchannels[ i ].get(), SIGNAL( enableChanged( int, bool ) ),
                   this, SLOT( channelEnabledSlot( int, bool ) ) );
-         connect( m_gchannels[ i ],
+         connect( m_gchannels[ i ].get(),
                   SIGNAL( nameChanged( int, const QString& ) ),
                   this, SLOT( nameChangedSlot( int, const QString& ) ) );
-         connect( m_gchannels[ i ], SIGNAL( channelsChanged( int, int ) ),
+         connect( m_gchannels[ i ].get(), SIGNAL( channelsChanged( int, int ) ),
                   this, SLOT( channelsChangedSlot( int, int ) ) );
-         connect( m_gchannels[ i ], SIGNAL( lowerBoundChanged( int, double ) ),
+         connect( m_gchannels[ i ].get(),
+                  SIGNAL( lowerBoundChanged( int, double ) ),
                   this, SLOT( lowerBoundChangedSlot( int, double ) ) );
-         connect( m_gchannels[ i ], SIGNAL( upperBoundChanged( int, double ) ),
+         connect( m_gchannels[ i ].get(),
+                  SIGNAL( upperBoundChanged( int, double ) ),
                   this, SLOT( upperBoundChangedSlot( int, double ) ) );
 
       }
@@ -94,38 +95,19 @@ namespace t2228a {
       //
       // Create the widget modifying the LAM generation setting:
       //
-      m_generateLamEdit = new QCheckBox( tr( "Generate LAM" ), this );
+      m_generateLamEdit.reset( new QCheckBox( tr( "Generate LAM" ), this ) );
       m_generateLamEdit->setGeometry( QRect( 35, 310, 120, 25 ) );
-      connect( m_generateLamEdit, SIGNAL( toggled( bool ) ),
+      connect( m_generateLamEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( generateLamChangedSlot( bool ) ) );
 
    }
 
    /**
-    * The destructor deletes all the objects created in the constructor.
-    */
-   Gui::~Gui() {
-
-      delete m_topLabel;
-
-      delete m_nameLabel;
-      delete m_channelsLabel;
-      delete m_lowerBoundLabel;
-      delete m_upperBoundLabel;
-
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         delete m_gchannels[ i ];
-      }
-
-      delete m_generateLamEdit;
-   }
-
-   /**
-    * The function calls the t2228a::Device::readConfig(QIODevice*) function
+    * The function calls the t2228a::Device::readConfig(QIODevice&) function
     * to read the device configuration and then calls sync() to show the
     * new configuration correctly.
     */
-   bool Gui::readConfig( QIODevice* dev ) {
+   bool Gui::readConfig( QIODevice& dev ) {
 
       CHECK( Device::readConfig( dev ) );
       sync();
@@ -192,7 +174,7 @@ namespace t2228a {
       //
       painter.setPen( Qt::black );
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ] ) {
+         if( m_channels[ i ].get() ) {
             painter.setBrush( Qt::green );
          } else {
             painter.setBrush( Qt::red );
@@ -232,11 +214,10 @@ namespace t2228a {
    void Gui::channelEnabledSlot( int subaddress, bool on ) {
 
       if( on ) {
-         m_channels[ subaddress ] = new ChannelConfig();
+         m_channels[ subaddress ].reset( new ChannelConfig() );
          m_channels[ subaddress ]->setSubaddress( subaddress );
       } else {
-         delete m_channels[ subaddress ];
-         m_channels[ subaddress ] = 0;
+         m_channels[ subaddress ].reset();
       }
 
       emit redrawModule();
@@ -289,10 +270,11 @@ namespace t2228a {
       // "strange" effects.
       //
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ] ) {
+         if( m_channels[ i ].get() ) {
             m_gchannels[ i ]->setEnabled( false );
             m_gchannels[ i ]->setName( m_channels[ i ]->getName() );
-            m_gchannels[ i ]->setChannels( m_channels[ i ]->getNumberOfChannels() );
+            m_gchannels[ i ]->setChannels(
+                     m_channels[ i ]->getNumberOfChannels() );
             m_gchannels[ i ]->setLowerBound( m_channels[ i ]->getLowerBound() );
             m_gchannels[ i ]->setUpperBound( m_channels[ i ]->getUpperBound() );
             m_gchannels[ i ]->setEnabled( true );

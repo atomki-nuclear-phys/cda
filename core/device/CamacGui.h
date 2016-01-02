@@ -7,7 +7,7 @@
 #include <QWidget>
 
 // Local include(s):
-#include "Device.h"
+#include "IDevice.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QPainter )
@@ -35,7 +35,7 @@ namespace dev {
     * $Date$
     */
    class CamacGui : public QWidget,
-                    virtual public Device {
+                    virtual public IDevice {
 
       Q_OBJECT
 

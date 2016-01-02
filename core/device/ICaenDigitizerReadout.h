@@ -1,15 +1,12 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_CAENREADOUT_H
-#define CDA_CORE_DEVICE_CAENREADOUT_H
+#ifndef CDA_CORE_DEVICE_ICAENDIGITIZERREADOUT_H
+#define CDA_CORE_DEVICE_ICAENDIGITIZERREADOUT_H
 
 // Local include(s):
-#include "Device.h"
-
-// Forward declaration(s):
-namespace ev {
-   class Fragment;
-}
+#include "IDevice.h"
+#include "../event/Fragment.h"
+#include "../event/Event.h"
 
 namespace dev {
 
@@ -25,7 +22,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class CaenReadout : virtual public Device {
+   class ICaenDigitizerReadout : virtual public IDevice {
 
    public:
       /// Function initializing the device
@@ -93,10 +90,10 @@ namespace dev {
        *
        * @returns The event fragment coming from this device
        */
-      virtual ev::Fragment* readEvent() = 0;
+      virtual UNIQUE_PTR< ev::Fragment > readEvent() = 0;
 
-   }; // class CaenReadout
+   }; // class ICaenDigitizerReadout
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_CAENREADOUT_H
+#endif // CDA_CORE_DEVICE_ICAENDIGITIZERREADOUT_H
