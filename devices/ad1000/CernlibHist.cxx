@@ -29,8 +29,10 @@ namespace ad1000 {
                << msg::endmsg;
 
       // Book the histogram and remember its ID:
-      m_histNumber = hmgr.book_1d( tr( "%1 (%2 slot %3)" ).arg( m_channel.getName() )
-                                   .arg( deviceName() ).arg( getID() ).toLatin1().constData(),
+      m_histNumber = hmgr.book_1d( tr( "%1 (%2 slot %3)" )
+                                   .arg( m_channel.getName() )
+                                   .arg( deviceName() )
+                                   .arg( getID() ).toLatin1().constData(),
                                    m_channel.getNumberOfChannels(),
                                    m_channel.getLowerBound(),
                                    m_channel.getUpperBound() );
@@ -45,7 +47,7 @@ namespace ad1000 {
                                    const cernlib::HistMgr& hmgr ) const {
 
       // Access the data words:
-      const std::vector< uint32_t >& dataWords = fragment.getDataWords();
+      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
       // Sanity check:
       if( dataWords.size() != 1 ) {

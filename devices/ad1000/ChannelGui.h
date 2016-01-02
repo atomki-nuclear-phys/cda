@@ -5,11 +5,16 @@
 
 // Qt include(s):
 #include <QWidget>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QLineEdit )
-QT_FORWARD_DECLARE_CLASS( QSpinBox )
-QT_FORWARD_DECLARE_CLASS( QDoubleSpinBox )
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/UniquePtr.h"
+#else
+#   include "common/UniquePtr.h"
+#endif
 
 namespace ad1000 {
 
@@ -42,8 +47,6 @@ namespace ad1000 {
       /// Constructor
       ChannelGui( QWidget* parent = 0,
                   Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~ChannelGui();
 
       /// Total width of the widget
       static const int WIDTH;
@@ -102,10 +105,14 @@ namespace ad1000 {
       void upperBoundChangedSlot( double value );
 
    private:
-      QLineEdit*      m_nameEdit; ///< Widget setting the channel's name
-      QSpinBox*       m_channelsEdit; ///< Widget setting the histogram's channels
-      QDoubleSpinBox* m_lowerBoundEdit; ///< Widget setting the histogram's lower bound
-      QDoubleSpinBox* m_upperBoundEdit; ///< Widget setting the histogram's upper bound
+      /// Widget setting the channel's name
+      UniquePtr< QLineEdit >::Type m_nameEdit;
+      /// Widget setting the monitoring histogram's channels
+      UniquePtr< QSpinBox >::Type m_channelsEdit;
+      /// Widget setting the monitoring histogram's lower bound
+      UniquePtr< QDoubleSpinBox >::Type m_lowerBoundEdit;
+      /// Widget setting the monitoring histogram's upper bound
+      UniquePtr< QDoubleSpinBox >::Type m_upperBoundEdit;
 
    }; // class ChannelGui
 

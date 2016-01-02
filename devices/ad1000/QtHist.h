@@ -5,24 +5,23 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QStackedLayout>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/QtHist.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
+#   include "cdadaq/moni/Histogram.h"
 #else
 #   include "device/QtHist.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
+#   include "moni/Histogram.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QStackedLayout )
-namespace moni {
-   class Histogram;
-}
 
 namespace ad1000 {
 
@@ -47,11 +46,9 @@ namespace ad1000 {
    public:
       /// Qt Widget constructor
       QtHist( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~QtHist();
 
       /// Read the device configuration from a binary file
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Read the device configuration from an XML file
       virtual bool readConfig( const QDomElement& node );
 
@@ -62,8 +59,10 @@ namespace ad1000 {
       /// Initialize the device after reading a configuration
       bool initialize();
 
-      QStackedLayout* m_layout; ///< Layout needed for the histogram
-      moni::Histogram* m_hist; ///< Histogram of the one available variable
+      /// Layout needed for the histogram
+      UniquePtr< QStackedLayout >::Type m_layout;
+      /// Histogram of the one available variable
+      UniquePtr< moni::Histogram >::Type m_hist;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

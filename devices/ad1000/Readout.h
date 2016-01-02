@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CamacReadout.h"
+#   include "cdacore/device/ICamacReadout.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CamacReadout.h"
+#   include "device/ICamacReadout.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -33,7 +33,7 @@ namespace ad1000 {
     * $Revision$
     * $Date$
     */
-   class Readout : virtual public dev::CamacReadout,
+   class Readout : virtual public dev::ICamacReadout,
                    virtual public Device {
 
       // To get the tr() function:
@@ -46,7 +46,8 @@ namespace ad1000 {
       /// Initialise the CAMAC device for data acquisition
       virtual bool initialize( camac::Crate& crate ) const;
       /// Read the contents of the device
-      virtual ev::Fragment* readEvent( camac::Crate& crate ) const;
+      virtual UniquePtr< ev::Fragment >::Type
+      readEvent( camac::Crate& crate ) const;
       /// Clear the module to receive a new event
       virtual bool clear( camac::Crate& crate ) const;
 

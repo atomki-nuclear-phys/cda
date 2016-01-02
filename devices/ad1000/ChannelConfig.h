@@ -8,17 +8,14 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Config.h"
+#   include "cdacore/device/IConfig.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/Config.h"
+#   include "device/IConfig.h"
 #   include "msg/Logger.h"
 #endif
 
 namespace ad1000 {
-
-   // Forward declaration(s):
-   class Device;
 
    /**
     *  @short Class describing *the* one channel of an AD1000 module
@@ -31,22 +28,19 @@ namespace ad1000 {
     * $Revision$
     * $Date$
     */
-   class ChannelConfig : virtual public dev::Config {
+   class ChannelConfig : virtual public dev::IConfig {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( ad1000::ChannelConfig )
-
-      /// Declare the Device class a friend of this class
-      friend class ad1000::Device;
 
    public:
       /// Constructor
       ChannelConfig();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
 
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );
@@ -74,10 +68,10 @@ namespace ad1000 {
       /// Print the configuration of the channel
       void printConfig( msg::Level level = msg::INFO ) const;
 
-   private:
       /// Clear the channel's configuration
       void clear();
 
+   private:
       int     m_numberOfChannels; ///< Number of channels in the created histogram
       double  m_lowerBound;       ///< Lower bound of the created histogram
       double  m_upperBound;       ///< Upper bound of the created histogram

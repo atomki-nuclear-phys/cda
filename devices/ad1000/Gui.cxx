@@ -17,7 +17,6 @@
 
 // Local include(s):
 #include "Gui.h"
-#include "ChannelGui.h"
 
 namespace ad1000 {
 
@@ -34,44 +33,43 @@ namespace ad1000 {
       //
       // Create a label telling us what kind of device this is:
       //
-      m_topLabel = new QLabel( tr( "AD1000 Analog-to-Digital Converter" ),
-                               this );
+      m_topLabel.reset( new QLabel( tr( "AD1000 Analog-to-Digital Converter" ),
+                                    this ) );
       m_topLabel->setAlignment( Qt::AlignCenter );
       m_topLabel->setGeometry( QRect( 35, 30, 430, 25 ) );
-
 
       //
       // Create a label identifying the channel name settings:
       //
-      m_nameLabel = new QLabel( tr( "Name" ), this );
+      m_nameLabel.reset( new QLabel( tr( "Name" ), this ) );
       m_nameLabel->setAlignment( Qt::AlignCenter );
       m_nameLabel->setGeometry( QRect( 35, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram channel settings:
       //
-      m_channelsLabel = new QLabel( tr( "Channels" ), this );
+      m_channelsLabel.reset( new QLabel( tr( "Channels" ), this ) );
       m_channelsLabel->setAlignment( Qt::AlignCenter );
       m_channelsLabel->setGeometry( QRect( 115, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram lower bound settings:
       //
-      m_lowerBoundLabel = new QLabel( tr( "Lower" ), this );
+      m_lowerBoundLabel.reset( new QLabel( tr( "Lower" ), this ) );
       m_lowerBoundLabel->setAlignment( Qt::AlignCenter );
       m_lowerBoundLabel->setGeometry( QRect( 195, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram upper bound settings:
       //
-      m_upperBoundLabel = new QLabel( tr( "Upper" ), this );
+      m_upperBoundLabel.reset( new QLabel( tr( "Upper" ), this ) );
       m_upperBoundLabel->setAlignment( Qt::AlignCenter );
       m_upperBoundLabel->setGeometry( QRect( 275, 75, 75, 25 ) );
 
       //
       // Create the widget modifying the settings of the input channel:
       //
-      m_gchannel = new ChannelGui( this );
+      m_gchannel.reset( new ChannelGui( this ) );
       m_gchannel->setGeometry( QRect( 35, 100,
                                       ChannelGui::WIDTH,
                                       ChannelGui::HEIGHT ) );
@@ -84,40 +82,23 @@ namespace ad1000 {
       m_channel.setUpperBound( m_gchannel->getUpperBound() );
 
       // Now connect the signals:
-      connect( m_gchannel,
+      connect( m_gchannel.get(),
                SIGNAL( nameChanged( const QString& ) ),
                this, SLOT( nameChangedSlot( const QString& ) ) );
-      connect( m_gchannel, SIGNAL( channelsChanged( int ) ),
+      connect( m_gchannel.get(), SIGNAL( channelsChanged( int ) ),
                this, SLOT( channelsChangedSlot( int ) ) );
-      connect( m_gchannel, SIGNAL( lowerBoundChanged( double ) ),
+      connect( m_gchannel.get(), SIGNAL( lowerBoundChanged( double ) ),
                this, SLOT( lowerBoundChangedSlot( double ) ) );
-      connect( m_gchannel, SIGNAL( upperBoundChanged( double ) ),
+      connect( m_gchannel.get(), SIGNAL( upperBoundChanged( double ) ),
                this, SLOT( upperBoundChangedSlot( double ) ) );
 
       //
       // Create the widget modifying the LAM generation setting:
       //
-      m_generateLamEdit = new QCheckBox( tr( "Generate LAM" ), this );
+      m_generateLamEdit.reset( new QCheckBox( tr( "Generate LAM" ), this ) );
       m_generateLamEdit->setGeometry( QRect( 35, 175, 120, 25 ) );
-      connect( m_generateLamEdit, SIGNAL( toggled( bool ) ),
+      connect( m_generateLamEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( generateLamChangedSlot( bool ) ) );
-   }
-
-   /**
-    * The destructor deletes all the objects created in the constructor.
-    */
-   Gui::~Gui() {
-
-      delete m_topLabel;
-
-      delete m_nameLabel;
-      delete m_channelsLabel;
-      delete m_lowerBoundLabel;
-      delete m_upperBoundLabel;
-
-      delete m_gchannel;
-
-      delete m_generateLamEdit;
    }
 
    /**
@@ -125,7 +106,7 @@ namespace ad1000 {
     * to read the device configuration and then calls sync() to show the
     * new configuration correctly.
     */
-   bool Gui::readConfig( QIODevice* dev ) {
+   bool Gui::readConfig( QIODevice& dev ) {
 
       CHECK( Device::readConfig( dev ) );
       sync();

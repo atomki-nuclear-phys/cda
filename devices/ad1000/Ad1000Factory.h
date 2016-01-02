@@ -62,10 +62,11 @@ namespace ad1000 {
 
    public:
       /// Get the shortened name of the device
-      virtual QString shortName() const;
+      virtual const QString& shortName() const;
       /// Get the long name of the device
-      virtual QString longName() const;
+      virtual const QString& longName() const;
 
+   protected:
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 

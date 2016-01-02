@@ -27,22 +27,16 @@ namespace ad1000 {
       setMinimumSize( 220, 200 );
 
       // Create the "layout" for the histogram:
-      m_layout = new QStackedLayout( this );
+      m_layout.reset( new QStackedLayout( this ) );
 
       // Create the only histogram:
-      m_hist = new moni::Histogram();
+      m_hist.reset( new moni::Histogram() );
 
       // Add the histogram to the layout:
-      m_layout->addWidget( m_hist );
+      m_layout->addWidget( m_hist.get() );
    }
 
-   QtHist::~QtHist() {
-
-      delete m_hist;
-      delete m_layout;
-   }
-
-   bool QtHist::readConfig( QIODevice* dev ) {
+   bool QtHist::readConfig( QIODevice& dev ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( dev ) );
@@ -67,7 +61,7 @@ namespace ad1000 {
    bool QtHist::displayEvent( const ev::Fragment& fragment ) {
 
       // Access the data words:
-      const std::vector< uint32_t >& dataWords = fragment.getDataWords();
+      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
       // Sanity check:
       if( dataWords.size() != 1 ) {

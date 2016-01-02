@@ -33,14 +33,14 @@ namespace ad1000 {
 
    }
 
-   bool Device::readConfig( QIODevice* dev ) {
+   bool Device::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
       // Read the properties of this class:
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_slot;
       input >> m_generateLam;
@@ -55,12 +55,12 @@ namespace ad1000 {
       return true;
    }
 
-   bool Device::writeConfig( QIODevice* dev ) const {
+   bool Device::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       // Write the properties of this class:
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_slot;
       output << m_generateLam;
@@ -110,8 +110,10 @@ namespace ad1000 {
          CHECK( element.childNodes().at( i ).isElement() );
 
          // Now read the configuration of the channel:
-         CHECK( m_channel.readConfig( element.childNodes().at( i ).toElement() ) );
-         channelFound = true; // Note that we managed to read the channel configuration
+         CHECK( m_channel.readConfig(
+                   element.childNodes().at( i ).toElement() ) );
+         // Note that we managed to read the channel configuration:
+         channelFound = true;
       }
 
       // Check whether the channel's configuration was found:
@@ -135,6 +137,12 @@ namespace ad1000 {
       element.appendChild( ch_element );
 
       return true;
+   }
+
+   const QString& Device::deviceName() const {
+
+      static const QString name( "AD1000" );
+      return name;
    }
 
    unsigned int Device::getID() const {

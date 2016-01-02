@@ -57,10 +57,11 @@ namespace ad1000 {
     * of the device, and adds it as a single data word (without much
     * encoding) to the event fragment.
     */
-   ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
+   UniquePtr< ev::Fragment >::Type
+   Readout::readEvent( camac::Crate& crate ) const {
 
       // Create the new event fragment:
-      ev::Fragment* fragment = new ev::Fragment();
+      UniquePtr< ev::Fragment >::Type fragment( new ev::Fragment() );
       fragment->setModuleID( m_slot );
 
       // Read the channel data:

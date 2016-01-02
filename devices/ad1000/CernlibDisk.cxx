@@ -40,7 +40,7 @@ namespace ad1000 {
                                  cernlib::NTupleMgr& nmgr ) const {
 
       // Access the data words:
-      const std::vector< uint32_t >& dataWords = fragment.getDataWords();
+      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
       // Sanity check:
       if( dataWords.size() != 1 ) {

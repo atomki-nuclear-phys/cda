@@ -35,7 +35,7 @@ namespace ad1000 {
    bool RootDisk::writeEvent( const ev::Fragment& fragment ) const {
 
       // The data words in the event fragment:
-      const std::vector< uint32_t >& dataWords = fragment.getDataWords();
+      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
       // Check that the fragment has only one data word:
       CHECK( dataWords.size() == 1 );

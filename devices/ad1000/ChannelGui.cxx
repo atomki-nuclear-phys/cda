@@ -36,56 +36,45 @@ namespace ad1000 {
       //
       // Create the widget changing the name of the channel:
       //
-      m_nameEdit = new QLineEdit( this );
+      m_nameEdit.reset( new QLineEdit( this ) );
       m_nameEdit->setGeometry( QRect( 0, 2, 75, 21 ) );
-      connect( m_nameEdit, SIGNAL( textChanged( const QString& ) ),
+      connect( m_nameEdit.get(), SIGNAL( textChanged( const QString& ) ),
                this, SLOT( nameChangedSlot( const QString& ) ) );
 
       //
       // Create the widget changing the number of channels in the
       // monitoring histogram:
       //
-      m_channelsEdit = new QSpinBox( this );
+      m_channelsEdit.reset( new QSpinBox( this ) );
       m_channelsEdit->setGeometry( QRect( 80, 0, 75, 25 ) );
       m_channelsEdit->setRange( 10, 8192 );
       m_channelsEdit->setValue( 8192 );
-      connect( m_channelsEdit, SIGNAL( valueChanged( int ) ),
+      connect( m_channelsEdit.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( channelsChangedSlot( int ) ) );
 
       //
       // Create the widget changing the lower bound of the monitoring
       // histogram:
       //
-      m_lowerBoundEdit = new QDoubleSpinBox( this );
+      m_lowerBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_lowerBoundEdit->setGeometry( QRect( 160, 0, 75, 25 ) );
       m_lowerBoundEdit->setDecimals( 1 );
       m_lowerBoundEdit->setRange( -100000., 100000. );
       m_lowerBoundEdit->setValue( 0. );
-      connect( m_lowerBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_lowerBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( lowerBoundChangedSlot( double ) ) );
 
       //
       // Create the widget changing the upper bound of the monitoring
       // histogram:
       //
-      m_upperBoundEdit = new QDoubleSpinBox( this );
+      m_upperBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_upperBoundEdit->setGeometry( QRect( 240, 0, 75, 25 ) );
       m_upperBoundEdit->setDecimals( 1 );
       m_upperBoundEdit->setRange( -100000., 100000. );
       m_upperBoundEdit->setValue( 8192. );
-      connect( m_upperBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_upperBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( upperBoundChangedSlot( double ) ) );
-   }
-
-   /**
-    * The destructor deletes all the constituent widgets.
-    */
-   ChannelGui::~ChannelGui() {
-
-      delete m_nameEdit;
-      delete m_channelsEdit;
-      delete m_lowerBoundEdit;
-      delete m_upperBoundEdit;
    }
 
    QString ChannelGui::getName() const {
