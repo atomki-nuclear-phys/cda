@@ -94,10 +94,11 @@ namespace ad413a {
     * 10-bit ADC (as far as I remember), this should leave plenty of space
     * for both quantities...
     */
-   ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
+   UniquePtr< ev::Fragment >::Type
+   Readout::readEvent( camac::Crate& crate ) const {
 
       // Create the event fragment:
-      ev::Fragment* fragment = new ev::Fragment();
+      UniquePtr< ev::Fragment >::Type fragment( new ev::Fragment() );
       fragment->setModuleID( m_slot );
 
       // Read out all the configured channels:
