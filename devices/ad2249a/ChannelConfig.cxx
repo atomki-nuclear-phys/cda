@@ -35,13 +35,13 @@ namespace ad2249a {
       REPORT_VERBOSE( tr( "Object created" ) );
    }
 
-   bool ChannelConfig::readConfig( QIODevice* dev ) {
+   bool ChannelConfig::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_subaddress;
       input >> m_numberOfChannels;
@@ -54,11 +54,11 @@ namespace ad2249a {
       return true;
    }
 
-   bool ChannelConfig::writeConfig( QIODevice* dev ) const {
+   bool ChannelConfig::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_subaddress;
       output << m_numberOfChannels;

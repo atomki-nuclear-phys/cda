@@ -5,25 +5,24 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QStackedLayout>
+#include <QTabWidget>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/QtHist.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
+#   include "cdadaq/moni/Histogram.h"
 #else
 #   include "device/QtHist.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
+#   include "moni/Histogram.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QStackedLayout )
-QT_FORWARD_DECLARE_CLASS( QTabWidget )
-namespace moni {
-   class Histogram;
-}
 
 namespace ad2249a {
 
@@ -47,11 +46,9 @@ namespace ad2249a {
    public:
       /// Qt Widget constructor
       QtHist( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~QtHist();
 
       /// Read the device configuration from a binary file
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Read the device configuration from an XML file
       virtual bool readConfig( const QDomElement& node );
 
@@ -64,10 +61,12 @@ namespace ad2249a {
       /// Reset the device
       bool reset();
 
-      QStackedLayout* m_channelLayout; ///< Layout for the tab widget
-      QTabWidget* m_channelTab; ///< Separate tabs for the channels
+      /// Layout for the tab widget
+      UniquePtr< QStackedLayout >::Type m_channelLayout;
+      /// Separate tabs for the channels
+      UniquePtr< QTabWidget >::Type m_channelTab;
       /// The histograms
-      moni::Histogram* m_histograms[ NUMBER_OF_SUBADDRESSES ];
+      UniquePtr< moni::Histogram >::Type m_histograms[ NUMBER_OF_SUBADDRESSES ];
 
       mutable msg::Logger m_logger; ///< Message logger object
 

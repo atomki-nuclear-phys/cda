@@ -8,10 +8,8 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Factory.h"
-#   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Factory.h"
-#   include "msg/Logger.h"
 #endif
 
 // There is no bloody way to tell qmake to add a -F... flag when running
@@ -70,7 +68,7 @@ namespace t2228a {
        *
        * @returns The short name of the device
        */
-      virtual QString shortName() const;
+      virtual const QString& shortName() const;
       /// Give the long name of the device implemented in the plug-in
       /**
        * Besides the short names, the devices should also provide a longer,
@@ -80,8 +78,9 @@ namespace t2228a {
        *
        * @returns The long name of the device
        */
-      virtual QString longName() const;
+      virtual const QString& longName() const;
 
+   protected:
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 

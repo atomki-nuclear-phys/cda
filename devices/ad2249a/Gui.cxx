@@ -18,7 +18,6 @@
 
 // Local include(s):
 #include "Gui.h"
-#include "ChannelGui.h"
 
 namespace ad2249a {
 
@@ -35,49 +34,55 @@ namespace ad2249a {
       //
       // Create the widget that will hold all the configuration widgets:
       //
-      m_scrollWidget = new QWidget( 0, flags );
+      m_scrollWidget.reset( new QWidget( 0, flags ) );
       m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 450 ) );
 
       //
       // Embed the previous widget into a scroll area:
       //
-      m_scrollArea = new QScrollArea( this );
-      m_scrollArea->setGeometry( QRect( 0, 20, WIDGET_WIDTH, WIDGET_HEIGHT - 20 ) );
-      m_scrollArea->setWidget( m_scrollWidget );
+      m_scrollArea.reset( new QScrollArea( this ) );
+      m_scrollArea->setGeometry( QRect( 0, 20, WIDGET_WIDTH,
+                                        WIDGET_HEIGHT - 20 ) );
+      m_scrollArea->setWidget( m_scrollWidget.get() );
 
       //
       // Create a label telling us what kind of device this is:
       //
-      m_topLabel = new QLabel( tr( "LeCroy 2249A 12 channel Analog-to-Digital Converter" ),
-                               m_scrollWidget );
+      m_topLabel.reset(
+               new QLabel(
+                  tr( "LeCroy 2249A 12 channel Analog-to-Digital Converter" ),
+                  m_scrollWidget.get() ) );
       m_topLabel->setAlignment( Qt::AlignCenter );
       m_topLabel->setGeometry( QRect( 25, 30, 430, 25 ) );
 
       //
       // Create a label identifying the channel name settings:
       //
-      m_nameLabel = new QLabel( tr( "Name" ), m_scrollWidget );
+      m_nameLabel.reset( new QLabel( tr( "Name" ), m_scrollWidget.get() ) );
       m_nameLabel->setAlignment( Qt::AlignCenter );
       m_nameLabel->setGeometry( QRect( 140, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram channel settings:
       //
-      m_channelsLabel = new QLabel( tr( "Channels" ), m_scrollWidget );
+      m_channelsLabel.reset( new QLabel( tr( "Channels" ),
+                                         m_scrollWidget.get() ) );
       m_channelsLabel->setAlignment( Qt::AlignCenter );
       m_channelsLabel->setGeometry( QRect( 220, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram lower bound settings:
       //
-      m_lowerBoundLabel = new QLabel( tr( "Lower" ), m_scrollWidget );
+      m_lowerBoundLabel.reset( new QLabel( tr( "Lower" ),
+                                           m_scrollWidget.get() ) );
       m_lowerBoundLabel->setAlignment( Qt::AlignCenter );
       m_lowerBoundLabel->setGeometry( QRect( 300, 75, 75, 25 ) );
 
       //
       // Create a label identifying the histogram upper bound settings:
       //
-      m_upperBoundLabel = new QLabel( tr( "Upper" ), m_scrollWidget );
+      m_upperBoundLabel.reset( new QLabel( tr( "Upper" ),
+                                           m_scrollWidget.get() ) );
       m_upperBoundLabel->setAlignment( Qt::AlignCenter );
       m_upperBoundLabel->setGeometry( QRect( 380, 75, 75, 25 ) );
 
@@ -86,20 +91,22 @@ namespace ad2249a {
       //
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
 
-         m_gchannels[ i ] = new ChannelGui( i, m_scrollWidget );
+         m_gchannels[ i ].reset( new ChannelGui( i, m_scrollWidget.get() ) );
          m_gchannels[ i ]->setGeometry( QRect( 25, 100 + i * 25,
                                                ChannelGui::WIDTH,
                                                ChannelGui::HEIGHT ) );
-         connect( m_gchannels[ i ], SIGNAL( enableChanged( int, bool ) ),
+         connect( m_gchannels[ i ].get(), SIGNAL( enableChanged( int, bool ) ),
                   this, SLOT( channelEnabledSlot( int, bool ) ) );
-         connect( m_gchannels[ i ],
+         connect( m_gchannels[ i ].get(),
                   SIGNAL( nameChanged( int, const QString& ) ),
                   this, SLOT( nameChangedSlot( int, const QString& ) ) );
-         connect( m_gchannels[ i ], SIGNAL( channelsChanged( int, int ) ),
+         connect( m_gchannels[ i ].get(), SIGNAL( channelsChanged( int, int ) ),
                   this, SLOT( channelsChangedSlot( int, int ) ) );
-         connect( m_gchannels[ i ], SIGNAL( lowerBoundChanged( int, double ) ),
+         connect( m_gchannels[ i ].get(),
+                  SIGNAL( lowerBoundChanged( int, double ) ),
                   this, SLOT( lowerBoundChangedSlot( int, double ) ) );
-         connect( m_gchannels[ i ], SIGNAL( upperBoundChanged( int, double ) ),
+         connect( m_gchannels[ i ].get(),
+                  SIGNAL( upperBoundChanged( int, double ) ),
                   this, SLOT( upperBoundChangedSlot( int, double ) ) );
 
       }
@@ -107,33 +114,12 @@ namespace ad2249a {
       //
       // Create the widget modifying the LAM generation setting:
       //
-      m_generateLamEdit = new QCheckBox( tr( "Generate LAM" ), m_scrollWidget );
+      m_generateLamEdit.reset( new QCheckBox( tr( "Generate LAM" ),
+                                              m_scrollWidget.get() ) );
       m_generateLamEdit->setGeometry( QRect( 25, 410, 120, 25 ) );
-      connect( m_generateLamEdit, SIGNAL( toggled( bool ) ),
+      connect( m_generateLamEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( generateLamChangedSlot( bool ) ) );
 
-   }
-
-   /**
-    * The destructor deletes all the objects created in the constructor.
-    */
-   Gui::~Gui() {
-
-      delete m_topLabel;
-
-      delete m_nameLabel;
-      delete m_channelsLabel;
-      delete m_lowerBoundLabel;
-      delete m_upperBoundLabel;
-
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         delete m_gchannels[ i ];
-      }
-
-      delete m_generateLamEdit;
-
-      delete m_scrollWidget;
-      delete m_scrollArea;
    }
 
    /**
@@ -141,7 +127,7 @@ namespace ad2249a {
     * to read the device configuration and then calls sync() to show the
     * new configuration correctly.
     */
-   bool Gui::readConfig( QIODevice* dev ) {
+   bool Gui::readConfig( QIODevice& dev ) {
 
       CHECK( Device::readConfig( dev ) );
       sync();
@@ -248,11 +234,10 @@ namespace ad2249a {
    void Gui::channelEnabledSlot( int subaddress, bool on ) {
 
       if( on ) {
-         m_channels[ subaddress ] = new ChannelConfig();
+         m_channels[ subaddress ].reset( new ChannelConfig() );
          m_channels[ subaddress ]->setSubaddress( subaddress );
       } else {
-         delete m_channels[ subaddress ];
-         m_channels[ subaddress ] = 0;
+         m_channels[ subaddress ].reset();
       }
 
       emit redrawModule();
@@ -308,7 +293,8 @@ namespace ad2249a {
          if( m_channels[ i ] ) {
             m_gchannels[ i ]->setEnabled( false );
             m_gchannels[ i ]->setName( m_channels[ i ]->getName() );
-            m_gchannels[ i ]->setChannels( m_channels[ i ]->getNumberOfChannels() );
+            m_gchannels[ i ]->setChannels(
+                     m_channels[ i ]->getNumberOfChannels() );
             m_gchannels[ i ]->setLowerBound( m_channels[ i ]->getLowerBound() );
             m_gchannels[ i ]->setUpperBound( m_channels[ i ]->getUpperBound() );
             m_gchannels[ i ]->setEnabled( true );

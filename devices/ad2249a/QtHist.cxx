@@ -8,11 +8,9 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/common/errorcheck.h"
 #   include "cdacore/event/Fragment.h"
-#   include "cdadaq/moni/Histogram.h"
 #else
 #   include "common/errorcheck.h"
 #   include "event/Fragment.h"
-#   include "moni/Histogram.h"
 #endif
 
 // Local include(s):
@@ -27,17 +25,11 @@ namespace ad2249a {
       // Declare a minimum size for this widget:
       setMinimumSize( 300, 300 );
 
-      // Reset all the object pointers as a start:
-      for( int channel = 0; channel < NUMBER_OF_SUBADDRESSES;
-           ++channel ) {
-         m_histograms[ channel ] = 0;
-      }
-
       // Create the "layout" for the tab widget:
-      m_channelLayout = new QStackedLayout( this );
+      m_channelLayout.reset( new QStackedLayout( this ) );
 
       // Set up the tabs for the channels:
-      m_channelTab = new QTabWidget();
+      m_channelTab.reset( new QTabWidget() );
       m_channelTab->setMinimumSize( 300, 300 );
       m_channelTab->setMaximumSize( 20000, 20000 );
       m_channelTab->setSizePolicy( QSizePolicy::Expanding,
@@ -45,19 +37,11 @@ namespace ad2249a {
       m_channelTab->setUsesScrollButtons( true );
 
       // Add the tabs to the layout:
-      m_channelLayout->addWidget( m_channelTab );
+      m_channelLayout->addWidget( m_channelTab.get() );
 
    }
 
-   QtHist::~QtHist() {
-
-      reset();
-
-      delete m_channelTab;
-      delete m_channelLayout;
-   }
-
-   bool QtHist::readConfig( QIODevice* dev ) {
+   bool QtHist::readConfig( QIODevice& dev ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( dev ) );
@@ -82,18 +66,20 @@ namespace ad2249a {
    bool QtHist::displayEvent( const ev::Fragment& fragment ) {
 
       // Access the data words:
-      const std::vector< uint32_t >& dataWords = fragment.getDataWords();
+      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
       // Loop over all data words in the event fragment:
-      for( std::vector< uint32_t >::const_iterator dword = dataWords.begin();
-           dword != dataWords.end(); ++dword ) {
+      ev::Fragment::Payload_t::const_iterator dword_itr = dataWords.begin();
+      ev::Fragment::Payload_t::const_iterator dword_end = dataWords.end();
+      for( ; dword_itr != dword_end; ++dword_itr ) {
 
          // Decode the data word:
-         const int subaddress    = ( *dword >> 24 ) & 0xff;
-         const unsigned int data = ( *dword & 0xffffff );
+         const int subaddress    = ( *dword_itr >> 24 ) & 0xff;
+         const unsigned int data = ( *dword_itr & 0xffffff );
 
          // Check that the decoded information makes sense:
-         if( ! ( ( subaddress >= 0 ) && ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
+         if( ! ( ( subaddress >= 0 ) &&
+                 ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
                  m_histograms[ subaddress ] ) ) {
             REPORT_ERROR( tr( "Received data word from unknown channel" ) );
             return false;
@@ -116,16 +102,16 @@ namespace ad2249a {
            ++channel ) {
 
          // Check if the channel is active:
-         const ChannelConfig* ch = m_channels[ channel ];
+         const ChannelConfig* ch = m_channels[ channel ].get();
          if( ! ch ) continue;
 
          // Create a histogram for this channel:
-         m_histograms[ channel ] =
+         m_histograms[ channel ].reset(
             new moni::Histogram( ch->getName(), ch->getNumberOfChannels(),
-                                 ch->getLowerBound(), ch->getUpperBound() );
+                                 ch->getLowerBound(), ch->getUpperBound() ) );
 
          // Add it as a new tab:
-         m_channelTab->addTab( m_histograms[ channel ],
+         m_channelTab->addTab( m_histograms[ channel ].get(),
                                tr( "channel %1" ).arg( channel ) );
       }
 
@@ -140,10 +126,7 @@ namespace ad2249a {
       // Delete all conditionally created objects:
       for( int channel = 0; channel < NUMBER_OF_SUBADDRESSES;
            ++channel ) {
-         if( m_histograms[ channel ] ) {
-            delete m_histograms[ channel ];
-            m_histograms[ channel ] = 0;
-         }
+         m_histograms[ channel ].reset();
       }
 
       return true;

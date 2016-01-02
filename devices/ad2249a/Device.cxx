@@ -31,24 +31,15 @@ namespace ad2249a {
       : m_slot( -1 ), m_generateLam( false ),
         m_logger( "ad2249a::Device" ) {
 
-      // Reset all the pointers in the array:
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         m_channels[ i ] = 0;
-      }
    }
 
-   Device::~Device() {
-
-      clear();
-   }
-
-   bool Device::readConfig( QIODevice* dev ) {
+   bool Device::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_slot;
       input >> m_generateLam;
@@ -62,11 +53,10 @@ namespace ad2249a {
                       .arg( number_of_channels ) );
 
       for( quint32 i = 0; i < number_of_channels; ++i ) {
-         ChannelConfig* channel = new ChannelConfig();
+         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
          if( ! channel->readConfig( dev ) ) {
             REPORT_ERROR( tr( "The configuration of a channel couldn't be "
                               "read!" ) );
-            delete channel;
             return false;
          }
          if( ( channel->getSubaddress() >= 0 ) &&
@@ -76,13 +66,12 @@ namespace ad2249a {
                         << tr( "Redefining channel number: %1" )
                   .arg( channel->getSubaddress() )
                         << msg::endmsg;
-               delete m_channels[ channel->getSubaddress() ];
             }
-            m_channels[ channel->getSubaddress() ] = channel;
+            UniquePtr< ChannelConfig >::swap(
+                     m_channels[ channel->getSubaddress() ], channel );
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            delete channel;
             return false;
          }
       }
@@ -90,11 +79,11 @@ namespace ad2249a {
       return true;
    }
 
-   bool Device::writeConfig( QIODevice* dev ) const {
+   bool Device::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_slot;
       output << m_generateLam;
@@ -144,11 +133,11 @@ namespace ad2249a {
          }
 
          // Read in this channel's configuration:
-         ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( element.childNodes().at( i ).toElement() ) ) {
+         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         if( ! channel->readConfig(
+                element.childNodes().at( i ).toElement() ) ) {
             REPORT_ERROR( tr( "The configuration of a channel couldn't be "
                               "read!" ) );
-            delete channel;
             return false;
          }
 
@@ -160,13 +149,12 @@ namespace ad2249a {
                         << tr( "Redefining channel number: %1" )
                   .arg( channel->getSubaddress() )
                         << msg::endmsg;
-               delete m_channels[ channel->getSubaddress() ];
             }
-            m_channels[ channel->getSubaddress() ] = channel;
+            UniquePtr< ChannelConfig >::swap(
+                     m_channels[ channel->getSubaddress() ], channel );
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            delete channel;
             return false;
          }
       }
@@ -196,6 +184,12 @@ namespace ad2249a {
       return true;
    }
 
+   const QString& Device::deviceName() const {
+
+      static const QString name( "AD2249A" );
+      return name;
+   }
+
    unsigned int Device::getID() const {
 
       return m_slot;
@@ -212,8 +206,7 @@ namespace ad2249a {
       m_slot = 0;
       m_generateLam = false;
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ] ) delete m_channels[ i ];
-         m_channels[ i ] = 0;
+         m_channels[ i ].reset();
       }
 
       return;

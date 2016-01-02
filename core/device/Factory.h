@@ -50,7 +50,7 @@ namespace dev {
        *
        * @returns The short name of the device
        */
-      virtual QString shortName() const = 0;
+      virtual const QString& shortName() const = 0;
 
       /// Give the long name of the device implemented in the plug-in
       /**
@@ -61,12 +61,13 @@ namespace dev {
        *
        * @returns The long name of the device
        */
-      virtual QString longName() const = 0;
+      virtual const QString& longName() const = 0;
 
       /// Helper function for creating a new device of a given type
       template< class T >
       typename UniquePtr< T >::Type createDevice() const;
 
+   protected:
       /// Universal function for creating a device object of this type
       /**
        * All the plugins are supposed to provide their different device

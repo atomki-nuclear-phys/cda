@@ -183,7 +183,7 @@ namespace t2228a {
 
    const QString& Device::deviceName() const {
 
-      static QString name( "T2228A" );
+      static const QString name( "T2228A" );
       return name;
    }
 

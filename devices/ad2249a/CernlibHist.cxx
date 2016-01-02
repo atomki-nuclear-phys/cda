@@ -39,7 +39,8 @@ namespace ad2249a {
             // Book the histogram and register it in the ID table:
             m_histTable[ i ] =
                hmgr.book_1d( tr( "%1 (%2 slot %3 channel %4)" )
-                             .arg( m_channels[ i ]->getName() ).arg( deviceName() )
+                             .arg( m_channels[ i ]->getName() )
+                             .arg( deviceName() )
                              .arg( getID() ).arg( i ).toLatin1().constData(),
                              m_channels[ i ]->getNumberOfChannels(),
                              m_channels[ i ]->getLowerBound(),
@@ -58,18 +59,20 @@ namespace ad2249a {
                                    const cernlib::HistMgr& hmgr ) const {
 
       // Access the data words:
-      const std::vector< uint32_t >& dataWords = fragment.getDataWords();
+      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
       // Loop over all data words in the event fragment:
-      for( std::vector< uint32_t >::const_iterator dword = dataWords.begin();
-           dword != dataWords.end(); ++dword ) {
+      ev::Fragment::Payload_t::const_iterator dword_itr = dataWords.begin();
+      ev::Fragment::Payload_t::const_iterator dword_end = dataWords.end();
+      for( ; dword_itr != dword_end; ++dword_itr ) {
 
          // Decode the data word:
-         const int subaddress    = ( *dword >> 24 ) & 0xff;
-         const unsigned int data = ( *dword & 0xffffff );
+         const int subaddress    = ( *dword_itr >> 24 ) & 0xff;
+         const unsigned int data = ( *dword_itr & 0xffffff );
 
          // Check that the decoded information makes sense:
-         if( ! ( ( subaddress >= 0 ) && ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
+         if( ! ( ( subaddress >= 0 ) &&
+                 ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
                  m_channels[ subaddress ] ) ) {
             REPORT_ERROR( tr( "Received data word from unknown channel" ) );
             return false;

@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/RootDisk.h"
+#   include "cdacore/device/IRootDisk.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/RootDisk.h"
+#   include "device/IRootDisk.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -31,11 +31,11 @@ namespace ad2249a {
     * $Revision$
     * $Date$
     */
-   class RootDisk : public virtual dev::RootDisk,
+   class RootDisk : public virtual dev::IRootDisk,
                     public virtual Device {
 
       // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( ad2249A::RootDisk )
+      Q_DECLARE_TR_FUNCTIONS( ad2249a::RootDisk )
 
    public:
       /// Constructor

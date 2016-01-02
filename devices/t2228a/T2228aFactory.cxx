@@ -13,14 +13,16 @@
 
 namespace t2228a {
 
-   QString T2228aFactory::shortName() const {
+   const QString& T2228aFactory::shortName() const {
 
-      return "T2228A";
+      static const QString name( "T2228A" );
+      return name;
    }
 
-   QString T2228aFactory::longName() const {
+   const QString& T2228aFactory::longName() const {
 
-      return tr( "LeCroy 2228A TDC" );
+      static const QString name( tr( "LeCroy 2228A TDC" ) );
+      return name;
    }
 
    void* T2228aFactory::createDevice( const std::type_info& ti ) const {
