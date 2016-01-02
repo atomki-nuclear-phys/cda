@@ -27,7 +27,7 @@ namespace reader {
     * function to create these devices when reading a configuration.
     */
    Crate::Crate()
-      : dev::Crate< dev::CamacReadout >( "CAMAC", true ),
+      : dev::Crate< dev::ICamacReadout >( "CAMAC", true ),
         m_logger( "reader::Crate" ) {
 
       REPORT_VERBOSE( tr( "Object constructed" ) );
@@ -57,10 +57,8 @@ namespace reader {
       crate.initialize();
       crate.clear();
 
-      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_end =
-         m_devices.end();
+      DeviceMap_t::const_iterator dev_itr = m_devices.begin();
+      DeviceMap_t::const_iterator dev_end = m_devices.end();
       for( ; dev_itr != dev_end; ++dev_itr ) {
 
          if( ! dev_itr->second->initialize( crate ) ) {
@@ -109,12 +107,9 @@ namespace reader {
       //
       // Read out the event fragments from all the devices:
       //
-      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CamacReadout* >::const_iterator dev_end =
-         m_devices.end();
+      DeviceMap_t::const_iterator dev_itr = m_devices.begin();
+      DeviceMap_t::const_iterator dev_end = m_devices.end();
       for( ; dev_itr != dev_end; ++dev_itr ) {
-
          event.addFragment( dev_itr->second->readEvent( crate ) );
       }
 

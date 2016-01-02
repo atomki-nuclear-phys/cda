@@ -42,6 +42,11 @@ namespace dt5740 {
       m_channelLayout->addWidget( m_channelTab.get() );
    }
 
+   QtHist::~QtHist() {
+
+      reset();
+   }
+
    bool QtHist::readConfig( QIODevice& dev ) {
 
       // Read in the configuration using the base class:

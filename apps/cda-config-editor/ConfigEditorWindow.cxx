@@ -436,9 +436,9 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
    //
    // Read the configuration from this file:
    //
-   if( input_file.seek( 0 ) && m_camacEdit->canRead( &input_file ) ) {
+   if( input_file.seek( 0 ) && m_camacEdit->canRead( input_file ) ) {
       input_file.seek( 0 );
-      if( ! m_camacEdit->readConfig( &input_file ) ) {
+      if( ! m_camacEdit->readConfig( input_file ) ) {
          REPORT_ERROR( tr( "Some error happened while reading the "
                            "binary configuration" ) );
          QMessageBox::critical( this, tr( "Configuration reading error" ),
@@ -447,9 +447,9 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
          return;
       }
       showCamacConfigSlot();
-   } else if( input_file.seek( 0 ) && m_caenEdit->canRead( &input_file ) ) {
+   } else if( input_file.seek( 0 ) && m_caenEdit->canRead( input_file ) ) {
       input_file.seek( 0 );
-      if( ! m_caenEdit->readConfig( &input_file ) ) {
+      if( ! m_caenEdit->readConfig( input_file ) ) {
          REPORT_ERROR( tr( "Some error happened while reading the "
                            "binary configuration" ) );
          QMessageBox::critical( this, tr( "Configuration reading error" ),
@@ -562,7 +562,7 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
    // Write the configuration to this file:
    //
    if( m_editStack->currentWidget() == m_camacEdit ) {
-      if( ! m_camacEdit->writeConfig( &output_file ) ) {
+      if( ! m_camacEdit->writeConfig( output_file ) ) {
          REPORT_ERROR( tr( "Some error happened while creating the "
                            "binary configuration" ) );
          QMessageBox::critical( this, tr( "Configuration writing error" ),
@@ -571,7 +571,7 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
          return;
       }
    } else if( m_editStack->currentWidget() == m_caenEdit ) {
-      if( ! m_caenEdit->writeConfig( &output_file ) ) {
+      if( ! m_caenEdit->writeConfig( output_file ) ) {
          REPORT_ERROR( tr( "Some error happened while creating the "
                            "binary configuration" ) );
          QMessageBox::critical( this, tr( "Configuration writing error" ),

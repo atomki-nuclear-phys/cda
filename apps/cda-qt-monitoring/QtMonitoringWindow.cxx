@@ -86,6 +86,14 @@ QtMonitoringWindow::~QtMonitoringWindow() {
    m_view->closeAllSubWindows();
    delete m_view;
 
+   // At this point the dev::QtHist objects are doubly owned by the base class
+   // and the Qt GUI objects. So now we need to make the base class let go of
+   // them, so that Qt could delete them in peace.
+   DeviceMap_t::iterator itr = m_devices.begin();
+   DeviceMap_t::iterator end = m_devices.end();
+   for( ; itr != end; ++itr ) {
+      itr->second.release();
+   }
    m_devices.clear();
 
    delete m_showPortDock;
@@ -127,16 +135,17 @@ void QtMonitoringWindow::readConfigSlot() {
    m_view->closeAllSubWindows();
 
    // Create a new QMdiSubWindow for each device:
-   std::map< unsigned int, dev::QtHist* >::const_iterator itr = m_devices.begin();
-   std::map< unsigned int, dev::QtHist* >::const_iterator end = m_devices.end();
+   DeviceMap_t::const_iterator itr = m_devices.begin();
+   DeviceMap_t::const_iterator end = m_devices.end();
    for( ; itr != end; ++itr ) {
-      QMdiSubWindow* window = m_view->addSubWindow( itr->second );
+      QMdiSubWindow* window = m_view->addSubWindow( itr->second.get() );
       window->setAttribute( Qt::WA_DeleteOnClose, false );
       window->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-      window->setWindowTitle( tr( "%1 with ID %2" ).arg( itr->second->deviceName() )
+      window->setWindowTitle( tr( "%1 with ID %2" )
+                              .arg( itr->second->deviceName() )
                               .arg( itr->second->getID() ) );
       connect( window, SIGNAL( aboutToActivate() ),
-               itr->second, SLOT( update() ) );
+               itr->second.get(), SLOT( update() ) );
       itr->second->show();
    }
 
@@ -220,7 +229,7 @@ void QtMonitoringWindow::processEvents() {
       for( ; frag_itr != frag_end; ++frag_itr ) {
 
          // Find the device that is expecting this event fragment:
-         std::map< unsigned int, dev::QtHist* >::iterator device =
+         DeviceMap_t::iterator device =
             m_devices.find( ( *frag_itr )->getModuleID() );
          if( device == m_devices.end() ) {
             REPORT_ERROR( tr( "Failed to assign fragment with "
@@ -327,7 +336,7 @@ bool QtMonitoringWindow::readBinaryConfig( const QString& filename ) {
    //
    // Read the configuration from this file:
    //
-   if( ! readConfig( &input_file ) ) {
+   if( ! readConfig( input_file ) ) {
       REPORT_ERROR( tr( "Some error happened while reading the "
                         "binary configuration" ) );
       QMessageBox::critical( this, tr( "Configuration reading error" ),

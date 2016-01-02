@@ -8,12 +8,12 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CamacReadout.h"
+#   include "cdacore/device/ICamacReadout.h"
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CamacReadout.h"
+#   include "device/ICamacReadout.h"
 #   include "device/Crate.h"
 #   include "event/Event.h"
 #   include "msg/Logger.h"
@@ -52,7 +52,7 @@ namespace reader {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::CamacReadout > {
+   class Crate : public dev::Crate< dev::ICamacReadout > {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( reader::Crate )
@@ -71,7 +71,7 @@ namespace reader {
       bool clear( camac::Crate& crate ) const;
 
       // Pull in the clear() function from the base class:
-      using dev::Crate< dev::CamacReadout >::clear;
+      using dev::Crate< dev::ICamacReadout >::clear;
 
    private:
       mutable msg::Logger m_logger; ///< Message logging object

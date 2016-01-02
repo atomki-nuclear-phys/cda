@@ -18,7 +18,7 @@
 namespace caen_reader {
 
    Crate::Crate()
-      : dev::Crate< dev::CaenReadout >( "CAEN", true ),
+      : dev::Crate< dev::ICaenDigitizerReadout >( "CAEN", true ),
         m_initialized( false ),
         m_logger( "caen_reader::Crate" ) {
 
@@ -39,10 +39,8 @@ namespace caen_reader {
    bool Crate::initialize() {
 
       // Initialize all the devices:
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator end =
-         m_devices.end();
+      DeviceMap_t::const_iterator itr = m_devices.begin();
+      DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          if( ! itr->second->initialize() ) {
             REPORT_ERROR( tr( "Couldn't initialize one of the CAEN devices" ) );
@@ -68,10 +66,8 @@ namespace caen_reader {
       }
 
       // Finalize all the devices:
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator end =
-         m_devices.end();
+      DeviceMap_t::const_iterator itr = m_devices.begin();
+      DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          if( ! itr->second->finalize() ) {
             REPORT_ERROR( tr( "Couldn't finalize one of the CAEN devices" ) );
@@ -89,10 +85,8 @@ namespace caen_reader {
    bool Crate::start() {
 
       // Start all the devices:
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator end =
-         m_devices.end();
+      DeviceMap_t::const_iterator itr = m_devices.begin();
+      DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          CHECK( itr->second->start() );
       }
@@ -104,10 +98,8 @@ namespace caen_reader {
    bool Crate::stop() {
 
       // Stop all the devices:
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator end =
-         m_devices.end();
+      DeviceMap_t::const_iterator itr = m_devices.begin();
+      DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          CHECK( itr->second->stop() );
       }
@@ -130,10 +122,8 @@ namespace caen_reader {
       ev::Event event;
 
       // Read out all the devices:
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CaenReadout* >::const_iterator end =
-         m_devices.end();
+      DeviceMap_t::const_iterator itr = m_devices.begin();
+      DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          // Read out the event from a single constituent:
          event.addFragment( itr->second->readEvent() );

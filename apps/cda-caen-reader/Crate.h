@@ -8,12 +8,12 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CaenReadout.h"
+#   include "cdacore/device/ICaenDigitizerReadout.h"
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CaenReadout.h"
+#   include "device/ICaenDigitizerReadout.h"
 #   include "device/Crate.h"
 #   include "event/Event.h"
 #   include "msg/Logger.h"
@@ -46,7 +46,7 @@ namespace caen_reader {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::CaenReadout > {
+   class Crate : public dev::Crate< dev::ICaenDigitizerReadout > {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( caen_reader::Crate )

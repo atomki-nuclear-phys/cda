@@ -17,7 +17,7 @@
 namespace raw {
 
    Crate::Crate()
-      : dev::Crate< dev::CernlibDisk >(),
+      : dev::Crate< dev::ICernlibDisk >(),
         m_file( 0 ), m_stream( 0 ), m_evCounter( 0 ),
         m_logger( "raw::Crate" ) {
 
@@ -54,7 +54,7 @@ namespace raw {
       // As a first thing write the configuration used for the
       // data taking to the file:
       //
-      if( ! writeConfig( m_file ) ) {
+      if( ! writeConfig( *m_file ) ) {
          REPORT_ERROR( tr( "Couldn't write the configuration into the "
                            "output file" ) );
          return false;
