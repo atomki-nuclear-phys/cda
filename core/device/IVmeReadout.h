@@ -6,7 +6,7 @@
 // Local include(s):
 #include "IDevice.h"
 #include "../event/Fragment.h"
-#include "../event/Event.h"
+#include "../common/UniquePtr.h"
 
 // Forward declaration(s):
 namespace vme {
@@ -57,7 +57,7 @@ namespace dev {
        * @param bus The object to access the VME bus with
        * @returns The event fragment coming from this device
        */
-      virtual UNIQUE_PTR< ev::Fragment >
+      virtual UniquePtr< ev::Fragment >::Type
       readEvent( vme::VmeBus& bus ) const = 0;
 
    }; // class IVmeReadout

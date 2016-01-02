@@ -30,7 +30,7 @@ namespace s9418t {
       m_logger << msg::VERBOSE << tr( "Object created" ) << msg::endmsg;
    }
 
-   bool ChannelConfig::readConfig( QIODevice* dev ) {
+   bool ChannelConfig::readConfig( QIODevice& dev ) {
 
       m_logger << msg::VERBOSE
                << tr( "Reading configuration from binary input" )
@@ -38,7 +38,7 @@ namespace s9418t {
 
       clear();
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_channel;
       input >> m_numberOfChannels;
@@ -52,13 +52,13 @@ namespace s9418t {
       return true;
    }
 
-   bool ChannelConfig::writeConfig( QIODevice* dev ) const {
+   bool ChannelConfig::writeConfig( QIODevice& dev ) const {
 
       m_logger << msg::VERBOSE
                << tr( "Writing configuration to binary output" )
                << msg::endmsg;
 
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_channel;
       output << m_numberOfChannels;

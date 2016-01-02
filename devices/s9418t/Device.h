@@ -8,11 +8,13 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Device.h"
+#   include "cdacore/device/IDevice.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
 #else
-#   include "device/Device.h"
+#   include "device/IDevice.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -32,7 +34,7 @@ namespace s9418t {
     * $Revision$
     * $Date$
     */
-   class Device : virtual public dev::Device {
+   class Device : virtual public dev::IDevice {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( s9418t::Device )
@@ -40,13 +42,11 @@ namespace s9418t {
    public:
       /// Default constructor
       Device();
-      /// Destructor
-      ~Device();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
 
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );
@@ -54,11 +54,11 @@ namespace s9418t {
       virtual bool writeConfig( QDomElement& node ) const;
 
       /// The type of the device
-      virtual QString deviceName() const { return "S9418T"; }
+      virtual const QString& deviceName() const;
 
-      /// Get the slot of the device in the CAMAC crate, or address of a VME device
+      /// Get the address of the VME device
       virtual unsigned int getID() const;
-      /// Set the slot of the device in the CAMAC crate, or address of the VME device
+      /// Set the address of the VME device
       virtual void setID( unsigned int value );
 
    protected:
@@ -82,7 +82,7 @@ namespace s9418t {
       OpMode m_opMode; ///< Operating mode of the module
 
       /// Configuration of the input channels of the device
-      ChannelConfig* m_channels[ NUMBER_OF_CHANNELS ];
+      UniquePtr< ChannelConfig >::Type m_channels[ NUMBER_OF_CHANNELS ];
 
    private:
       mutable msg::Logger m_logger; ///< Message logger object

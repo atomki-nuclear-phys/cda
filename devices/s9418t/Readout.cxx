@@ -34,9 +34,7 @@ namespace s9418t {
             bus.write( m_address + CONTROL_REGISTER_ADDR,
                        ( short )( START_ACQ_VALUE + COMMON_STOP_MASK ) );
          } else {
-            m_logger << msg::ERROR
-                     << tr( "Operating mode not recognized" )
-                     << msg::endmsg;
+            REPORT_ERROR( tr( "Operating mode not recognized" ) );
             return false;
          }
       } else {
@@ -91,10 +89,11 @@ namespace s9418t {
       return true;
    }
 
-   ev::Fragment* Readout::readEvent( vme::VmeBus& bus ) const {
+   UniquePtr< ev::Fragment >::Type
+   Readout::readEvent( vme::VmeBus& bus ) const {
 
       // Create the event fragment object:
-      ev::Fragment* fragment = new ev::Fragment();
+      UniquePtr< ev::Fragment >::Type fragment( new ev::Fragment() );
       fragment->setModuleID( m_address );
 
       // Temporary data used in the readout:

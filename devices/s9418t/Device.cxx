@@ -6,6 +6,13 @@
 #include <QtXml/QDomNode>
 #include <QtXml/QDomElement>
 
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
+
 // Local include(s):
 #include "Device.h"
 
@@ -16,18 +23,9 @@ namespace s9418t {
         m_offset( 0 ), m_opMode( CommonStart ),
         m_logger( "s9418t::Device" ) {
 
-      // Reset all the pointers in the array:
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         m_channels[ i ] = 0;
-      }
    }
 
-   Device::~Device() {
-
-      clear();
-   }
-
-   bool Device::readConfig( QIODevice* dev ) {
+   bool Device::readConfig( QIODevice& dev ) {
 
       m_logger << msg::VERBOSE
                << tr( "Reading the configuration from binary input" )
@@ -35,7 +33,7 @@ namespace s9418t {
 
       clear();
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
 
       input >> m_address;
@@ -51,36 +49,27 @@ namespace s9418t {
       } else if( opmode == 1 ) {
          m_opMode = CommonStop;
       } else {
-         m_logger << msg::ERROR
-                  << tr( "Operating mode not recognised" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Operating mode not recognised" ) );
          return false;
       }
 
       quint32 number_of_channels;
       input >> number_of_channels;
 
-      m_logger << msg::VERBOSE
-               << tr( " - Address        : %1\n"
-                      " - VSN            : %2\n"
-                      " - Calib amplitude: %3\n"
-                      " - Meas. range    : %4\n"
-                      " - Meas. offset   : %5\n"
-                      " - Operation mode : %6" )
-         .arg( m_address, 8, 16 ).arg( m_vsn ).arg( m_calib )
-         .arg( m_range ).arg( m_offset )
-         .arg( m_opMode == CommonStart ? "common start" : "common stop" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Address        : %1\n"
+                          " - VSN            : %2\n"
+                          " - Calib amplitude: %3\n"
+                          " - Meas. range    : %4\n"
+                          " - Meas. offset   : %5\n"
+                          " - Operation mode : %6" )
+                      .arg( m_address, 8, 16 ).arg( m_vsn ).arg( m_calib )
+                      .arg( m_range ).arg( m_offset )
+                      .arg( m_opMode == CommonStart ?
+                               "common start" : "common stop" ) );
 
       for( quint32 i = 0; i < number_of_channels; ++i ) {
-         ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( dev ) ) {
-            m_logger << msg::ERROR
-                     << tr( "The configuration of a channel couldn't be read!" )
-                     << msg::endmsg;
-            delete channel;
-            return false;
-         }
+         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         CHECK( channel->readConfig( dev ) );
          if( ( channel->getChannel() >= 0 ) &&
              ( channel->getChannel() < NUMBER_OF_CHANNELS ) ) {
             if( m_channels[ channel->getChannel() ] ) {
@@ -88,14 +77,12 @@ namespace s9418t {
                         << tr( "Re-defining channel number: %1" )
                   .arg( channel->getChannel() )
                         << msg::endmsg;
-               delete m_channels[ channel->getChannel() ];
             }
-            m_channels[ channel->getChannel() ] = channel;
+            UniquePtr< ChannelConfig >::swap(
+                     m_channels[ channel->getChannel() ], channel );
          } else {
-            m_logger << msg::ERROR
-                     << tr( "The configuration of a channel couldn't be read!" )
-                     << msg::endmsg;
-            delete channel;
+            REPORT_ERROR( tr( "The configuration of a channel couldn't "
+                              "be read!" ) );
             return false;
          }
       }
@@ -103,13 +90,13 @@ namespace s9418t {
       return true;
    }
 
-   bool Device::writeConfig( QIODevice* dev ) const {
+   bool Device::writeConfig( QIODevice& dev ) const {
 
       m_logger << msg::VERBOSE
                << tr( "Writing the configuration to binary output" )
                << msg::endmsg;
 
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
 
       output << m_address;
@@ -144,12 +131,7 @@ namespace s9418t {
       // Write the configuration of the channels:
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          if( ! m_channels[ i ] ) continue;
-         if( ! m_channels[ i ]->writeConfig( dev ) ) {
-            m_logger << msg::ERROR
-                     << tr( "A problem happened while writing out a channel config" )
-                     << msg::endmsg;
-            return false;
-         }
+         CHECK( m_channels[ i ]->writeConfig( dev ) );
       }
 
       return true;
@@ -157,53 +139,26 @@ namespace s9418t {
 
    bool Device::readConfig( const QDomElement& element ) {
 
-      m_logger << msg::VERBOSE
-               << tr( "Reading the configuration from XML input" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Reading the configuration from XML input" ) );
 
       clear();
 
       bool ok;
 
       m_address = element.attribute( "Address", "0" ).toUInt( &ok, 16 );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the address of the module" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_vsn = element.attribute( "VSN", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the VSN of the module" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_calib = element.attribute( "Calib", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the calibration amplitude" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_range = element.attribute( "Range", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the measurement range" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       m_offset = element.attribute( "Offset", "0" ).toShort( &ok );
-      if( ! ok ) {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the measurement offset" )
-                  << msg::endmsg;
-         return false;
-      }
+      CHECK( ok );
 
       const QString opmode = element.attribute( "OpMode", "CommonStart" );
       if( opmode == "CommonStart" ) {
@@ -211,23 +166,20 @@ namespace s9418t {
       } else if( opmode == "CommonStop" ) {
          m_opMode = CommonStop;
       } else {
-         m_logger << msg::ERROR
-                  << tr( "There was a problem reading the operating mode" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "There was a problem reading the operating mode" ) );
          return false;
       }
 
-      m_logger << msg::VERBOSE
-               << tr( " - Address        : %1\n"
-                      " - VSN            : %2\n"
-                      " - Calib amplitude: %3\n"
-                      " - Meas. range    : %4\n"
-                      " - Meas. offset   : %5\n"
-                      " - Operation mode : %6" )
-         .arg( m_address, 8, 16 ).arg( m_vsn ).arg( m_calib )
-         .arg( m_range ).arg( m_offset )
-         .arg( m_opMode == CommonStart ? "common start" : "common stop" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( " - Address        : %1\n"
+                          " - VSN            : %2\n"
+                          " - Calib amplitude: %3\n"
+                          " - Meas. range    : %4\n"
+                          " - Meas. offset   : %5\n"
+                          " - Operation mode : %6" )
+                      .arg( m_address, 8, 16 ).arg( m_vsn ).arg( m_calib )
+                      .arg( m_range ).arg( m_offset )
+                      .arg( m_opMode == CommonStart ?
+                               "common start" : "common stop" ) );
 
       for( int i = 0; i < element.childNodes().size(); ++i ) {
 
@@ -237,14 +189,10 @@ namespace s9418t {
          }
 
          // Read in the channel's configuration:
-         ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( element.childNodes().at( i ).toElement() ) ) {
-            m_logger << msg::ERROR
-                     << tr( "The configuration of a channel couldn't be read" )
-                     << msg::endmsg;
-            delete channel;
-            return false;
-         }
+         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         CHECK( channel->readConfig(
+                   element.childNodes().at( i ).toElement() ) );
+
          if( ( channel->getChannel() >= 0 ) &&
              ( channel->getChannel() < NUMBER_OF_CHANNELS ) ) {
             if( m_channels[ channel->getChannel() ] ) {
@@ -252,14 +200,12 @@ namespace s9418t {
                         << tr( "Re-defining channel number: %1" )
                   .arg( channel->getChannel() )
                         << msg::endmsg;
-               delete m_channels[ channel->getChannel() ];
             }
-            m_channels[ channel->getChannel() ] = channel;
+            UniquePtr< ChannelConfig >::swap(
+                     m_channels[ channel->getChannel() ], channel );
          } else {
-            m_logger << msg::ERROR
-                     << tr( "The configuration of a channel couldn't be read!" )
-                     << msg::endmsg;
-            delete channel;
+            REPORT_ERROR( tr( "The configuration of a channel couldn't "
+                              "be read!" ) );
             return false;
          }
       }
@@ -269,9 +215,7 @@ namespace s9418t {
 
    bool Device::writeConfig( QDomElement& element ) const {
 
-      m_logger << msg::VERBOSE
-               << tr( "Writing the configuration to XML output" )
-               << msg::endmsg;
+      REPORT_VERBOSE( tr( "Writing the configuration to XML output" ) );
 
       element.setAttribute( "Address", QString::number( m_address, 16 ) );
       element.setAttribute( "VSN", m_vsn );
@@ -283,9 +227,7 @@ namespace s9418t {
       } else if( m_opMode == CommonStop ) {
          element.setAttribute( "OpMode", "CommonStop" );
       } else {
-         m_logger << msg::ERROR
-                  << tr( "Operating mode not recognised" )
-                  << msg::endmsg;
+         REPORT_ERROR( tr( "Operating mode not recognised" ) );
          return false;
       }
 
@@ -297,16 +239,17 @@ namespace s9418t {
 
          QDomElement ch_element =
             element.ownerDocument().createElement( "Channel" );
-         if( ! m_channels[ i ]->writeConfig( ch_element ) ) {
-            m_logger << msg::ERROR
-                     << tr( "A problem happened while writing out a channel config" )
-                     << msg::endmsg;
-            return false;
-         }
+         CHECK( m_channels[ i ]->writeConfig( ch_element ) );
          element.appendChild( ch_element );
       }
 
       return true;
+   }
+
+   const QString& Device::deviceName() const {
+
+      static const QString name( "S9418T" );
+      return name;
    }
 
    unsigned int Device::getID() const {
@@ -329,8 +272,7 @@ namespace s9418t {
       m_offset = 0;
       m_opMode = CommonStart;
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         if( m_channels[ i ] ) delete m_channels[ i ];
-         m_channels[ i ] = 0;
+         m_channels[ i ].reset();
       }
 
       return;

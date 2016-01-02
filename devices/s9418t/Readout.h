@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/VmeReadout.h"
+#   include "cdacore/device/IVmeReadout.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/VmeReadout.h"
+#   include "device/IVmeReadout.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -28,7 +28,7 @@ namespace s9418t {
     * $Revision$
     * $Date$
     */
-   class Readout : virtual public dev::VmeReadout,
+   class Readout : virtual public dev::IVmeReadout,
                    virtual public Device {
 
       // To get the tr() function:
@@ -46,7 +46,8 @@ namespace s9418t {
       /// Function initializing the device
       virtual bool initialize( vme::VmeBus& bus ) const;
       /// Function reading the current data from the device
-      virtual ev::Fragment* readEvent( vme::VmeBus& bus ) const;
+      virtual UniquePtr< ev::Fragment >::Type
+      readEvent( vme::VmeBus& bus ) const;
 
    private:
       static const short CONTROL_REGISTER_ADDR = 0x44;

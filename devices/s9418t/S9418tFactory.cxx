@@ -9,21 +9,23 @@
 
 namespace s9418t {
 
-   QString S9418tFactory::shortName() const {
+   const QString& S9418tFactory::shortName() const {
 
-      return "S9418T";
+      static const QString name( "S9418T" );
+      return name;
    }
 
-   QString S9418tFactory::longName() const {
+   const QString& S9418tFactory::longName() const {
 
-      return tr( "Silena 9418 TDC" );
+      static const QString name( tr( "Silena 9418 TDC" ) );
+      return name;
    }
 
    void* S9418tFactory::createDevice( const std::type_info& ti ) const {
 
-      if( ti == typeid( dev::VmeReadout ) ) {
+      if( ti == typeid( dev::IVmeReadout ) ) {
 
-         return dynamic_cast< dev::VmeReadout* >( new Readout() );
+         return static_cast< dev::IVmeReadout* >( new Readout() );
 
       }
 
