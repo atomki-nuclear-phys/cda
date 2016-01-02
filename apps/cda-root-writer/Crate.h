@@ -10,13 +10,13 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Crate.h"
-#   include "cdacore/device/RootDisk.h"
+#   include "cdacore/device/IRootDisk.h"
 #   include "cdacore/root/NTupleMgr.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Crate.h"
-#   include "device/RootDisk.h"
+#   include "device/IRootDisk.h"
 #   include "root/NTupleMgr.h"
 #   include "event/Event.h"
 #   include "msg/Logger.h"
@@ -48,7 +48,7 @@ namespace root {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::RootDisk > {
+   class Crate : public dev::Crate< dev::IRootDisk > {
 
       Q_DECLARE_TR_FUNCTIONS( root::Crate )
 

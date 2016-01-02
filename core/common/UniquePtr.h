@@ -45,7 +45,7 @@ struct UniquePtr {
 }; // struct UniquePtr
 
 /// Helper macro for using std::move in c++11 mode
-#if __cplusplus < 2011
+#if __cplusplus < 201100
 #   define UNIQUE_PTR_MOVE( X ) X
 #else
 #   define UNIQUE_PTR_MOVE( X ) std::move( X )

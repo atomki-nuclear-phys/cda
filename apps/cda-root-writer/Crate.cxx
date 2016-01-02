@@ -16,7 +16,7 @@
 namespace root {
 
    Crate::Crate()
-      : dev::Crate< dev::RootDisk >(),
+      : dev::Crate< dev::IRootDisk >(),
         m_nmgr(), m_logger( "root::Crate" ) {
 
    }
@@ -34,10 +34,8 @@ namespace root {
       //
       // Create the output variables of each device:
       //
-      std::map< unsigned int, dev::RootDisk* >::const_iterator dev_itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::RootDisk* >::const_iterator dev_end =
-         m_devices.end();
+      DeviceMap_t::const_iterator dev_itr = m_devices.begin();
+      DeviceMap_t::const_iterator dev_end = m_devices.end();
       for( ; dev_itr != dev_end; ++dev_itr ) {
          CHECK( dev_itr->second->initialize( m_nmgr ) );
       }
@@ -49,18 +47,15 @@ namespace root {
 
       // Access the fragments coming from the different modules that
       // are used in data acquisition:
-      const std::vector< std::tr1::shared_ptr< ev::Fragment > >& fragments =
-         event.getFragments();
+      const ev::Event::Base_t& fragments = event.getFragments();
 
       // Loop over the fragments:
-      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
-         fragment_itr = fragments.begin();
-      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
-         fragment_end = fragments.end();
+      ev::Event::Base_t::const_iterator fragment_itr = fragments.begin();
+      ev::Event::Base_t::const_iterator fragment_end = fragments.end();
       for( ; fragment_itr != fragment_end; ++fragment_itr ) {
 
          // Find the device that is expecting this event fragment:
-         std::map< unsigned int, dev::RootDisk* >::iterator device =
+         DeviceMap_t::iterator device =
             m_devices.find( ( *fragment_itr )->getModuleID() );
          if( device == m_devices.end() ) {
             REPORT_ERROR( tr( "Failed to assign fragment with "

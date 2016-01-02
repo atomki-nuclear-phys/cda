@@ -6,8 +6,10 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Factory.h"
+#   include "cdacore/common/errorcheck.h"
 #else
 #   include "device/Factory.h"
+#   include "common/errorcheck.h"
 #endif
 
 // Local include(s):
@@ -20,18 +22,10 @@ namespace glomem {
     * this, it doesn't have to do much.
     */
    Crate::Crate()
-      : dev::Crate< dev::CernlibHist >(),
+      : dev::Crate< dev::ICernlibHist >(),
         m_hmgr(), m_logger( "glomem::Crate" ) {
 
       REPORT_VERBOSE( tr( "Object constructed" ) );
-   }
-
-   /**
-    * The destructor doesn't really have to do anything...
-    */
-   Crate::~Crate() {
-
-      REPORT_VERBOSE( tr( "Object destructed" ) );
    }
 
    /**
@@ -58,18 +52,10 @@ namespace glomem {
       //
       // Let the devices create their own monitoring histograms:
       //
-      std::map< unsigned int, dev::CernlibHist* >::const_iterator dev_itr =
-         m_devices.begin();
-      std::map< unsigned int, dev::CernlibHist* >::const_iterator dev_end =
-         m_devices.end();
+      DeviceMap_t::const_iterator dev_itr = m_devices.begin();
+      DeviceMap_t::const_iterator dev_end = m_devices.end();
       for( ; dev_itr != dev_end; ++dev_itr ) {
-
-         if( ! dev_itr->second->initialize( m_hmgr ) ) {
-            REPORT_ERROR( tr( "There was a problem initializing one of "
-                              "the devices" ) );
-            return false;
-         }
-
+         CHECK( dev_itr->second->initialize( m_hmgr ) );
       }
 
       return true;
@@ -91,18 +77,15 @@ namespace glomem {
 
       // Access the fragments coming from the different modules that
       // are used in data acquisition:
-      const std::vector< std::tr1::shared_ptr< ev::Fragment > >& fragments =
-         event.getFragments();
+      const ev::Event::Base_t& fragments = event.getFragments();
 
       // Loop over the fragments:
-      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
-         frag_itr = fragments.begin();
-      std::vector< std::tr1::shared_ptr< ev::Fragment > >::const_iterator
-         frag_end = fragments.end();
+      ev::Event::Base_t::const_iterator frag_itr = fragments.begin();
+      ev::Event::Base_t::const_iterator frag_end = fragments.end();
       for( ; frag_itr != frag_end; ++frag_itr ) {
 
          // Find the device that is expecting this event fragment:
-         std::map< unsigned int, dev::CernlibHist* >::iterator device =
+         DeviceMap_t::iterator device =
             m_devices.find( ( *frag_itr )->getModuleID() );
          if( device == m_devices.end() ) {
             REPORT_ERROR( tr( "Failed to assign fragment with "

@@ -8,13 +8,13 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CernlibHist.h"
+#   include "cdacore/device/ICernlibHist.h"
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/cernlib/HistMgr.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CernlibHist.h"
+#   include "device/ICernlibHist.h"
 #   include "device/Crate.h"
 #   include "event/Event.h"
 #   include "cernlib/HistMgr.h"
@@ -47,15 +47,13 @@ namespace glomem {
     * $Revision$
     * $Date$
     */
-   class Crate : public dev::Crate< dev::CernlibHist > {
+   class Crate : public dev::Crate< dev::ICernlibHist > {
 
       Q_DECLARE_TR_FUNCTIONS( glomem::Crate )
 
    public:
       /// Constructor
       Crate();
-      /// Destructor
-      ~Crate();
 
       /// Initialise the monitoring histograms
       bool initialize();
