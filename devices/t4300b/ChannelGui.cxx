@@ -37,71 +37,60 @@ namespace t4300b {
       //
       // Create the widget enabling/disabling the channel:
       //
-      m_enabledEdit = new QCheckBox( tr( "%1. subaddress" ).arg( m_subaddress ),
-                                     this );
+      m_enabledEdit.reset( new QCheckBox( tr( "%1. subaddress" )
+                                          .arg( m_subaddress ),
+                                          this ) );
       m_enabledEdit->setGeometry( QRect( 0, 0, 110, 25 ) );
-      connect( m_enabledEdit, SIGNAL( toggled( bool ) ),
+      connect( m_enabledEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( enableChangedSlot( bool ) ) );
 
       //
       // Create the widget changing the name of the channel:
       //
-      m_nameEdit = new QLineEdit( this );
+      m_nameEdit.reset( new QLineEdit( this ) );
       m_nameEdit->setEnabled( false );
       m_nameEdit->setGeometry( QRect( 115, 2, 75, 21 ) );
-      connect( m_nameEdit, SIGNAL( textChanged( const QString& ) ),
+      connect( m_nameEdit.get(), SIGNAL( textChanged( const QString& ) ),
                this, SLOT( nameChangedSlot( const QString& ) ) );
 
       //
       // Create the widget changing the number of channels in the
       // monitoring histogram:
       //
-      m_channelsEdit = new QSpinBox( this );
+      m_channelsEdit.reset( new QSpinBox( this ) );
       m_channelsEdit->setEnabled( false );
       m_channelsEdit->setGeometry( QRect( 195, 0, 75, 25 ) );
       m_channelsEdit->setRange( 10, 1024 );
       m_channelsEdit->setValue( 1024 );
-      connect( m_channelsEdit, SIGNAL( valueChanged( int ) ),
+      connect( m_channelsEdit.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( channelsChangedSlot( int ) ) );
 
       //
       // Create the widget changing the lower bound of the monitoring
       // histogram:
       //
-      m_lowerBoundEdit = new QDoubleSpinBox( this );
+      m_lowerBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_lowerBoundEdit->setEnabled( false );
       m_lowerBoundEdit->setGeometry( QRect( 275, 0, 75, 25 ) );
       m_lowerBoundEdit->setDecimals( 1 );
       m_lowerBoundEdit->setRange( -100000., 100000. );
       m_lowerBoundEdit->setValue( 0. );
-      connect( m_lowerBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_lowerBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( lowerBoundChangedSlot( double ) ) );
 
       //
       // Create the widget changing the upper bound of the monitoring
       // histogram:
       //
-      m_upperBoundEdit = new QDoubleSpinBox( this );
+      m_upperBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_upperBoundEdit->setEnabled( false );
       m_upperBoundEdit->setGeometry( QRect( 355, 0, 75, 25 ) );
       m_upperBoundEdit->setDecimals( 1 );
       m_upperBoundEdit->setRange( -100000., 100000. );
       m_upperBoundEdit->setValue( 1024. );
-      connect( m_upperBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_upperBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( upperBoundChangedSlot( double ) ) );
 
-   }
-
-   /**
-    * The destructor deletes all the constituent widgets.
-    */
-   ChannelGui::~ChannelGui() {
-
-      delete m_enabledEdit;
-      delete m_nameEdit;
-      delete m_channelsEdit;
-      delete m_lowerBoundEdit;
-      delete m_upperBoundEdit;
    }
 
    int ChannelGui::getSubaddress() const {

@@ -5,26 +5,24 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QLabel>
+#include <QCheckBox>
+#include <QScrollArea>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CamacGui.h"
+#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/CamacGui.h"
+#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QLabel )
-QT_FORWARD_DECLARE_CLASS( QCheckBox )
-QT_FORWARD_DECLARE_CLASS( QScrollArea )
+#include "ChannelGui.h"
 
 namespace t4300b {
-
-   // Forward declaration(s):
-   class ChannelGui;
 
    //
    // Make sure that the following Qt classes are available in the
@@ -56,11 +54,9 @@ namespace t4300b {
    public:
       /// Constructor
       Gui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~Gui();
 
       /// Read the device configuration from a binary file
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Read the device configuration from an XML file
       virtual bool readConfig( const QDomElement& node );
 
@@ -87,20 +83,28 @@ namespace t4300b {
       /// Function "syncing" the configuration
       void sync();
 
-      QScrollArea* m_scrollArea; ///< Object providing the scrolling functions
-      QWidget*     m_scrollWidget; ///< Main widget that is scrolled
+      /// Object providing the scrolling functions
+      UniquePtr< QScrollArea >::Type m_scrollArea;
+      /// Main widget that is scrolled
+      UniquePtr< QWidget >::Type m_scrollWidget;
 
-      QLabel*     m_topLabel; ///< Text label at the top
+      /// Text label at the top
+      UniquePtr< QLabel >::Type m_topLabel;
 
-      QLabel*     m_nameLabel; ///< Label above channel names
-      QLabel*     m_channelsLabel; ///< Label above histogram channels
-      QLabel*     m_lowerBoundLabel; ///< Label above histogram lower bounds
-      QLabel*     m_upperBoundLabel; ///< Label above histogram upper bounds
+      /// Label above channel names
+      UniquePtr< QLabel >::Type m_nameLabel;
+      /// Label above histogram channels
+      UniquePtr< QLabel >::Type m_channelsLabel;
+      /// Label above histogram lower bounds
+      UniquePtr< QLabel >::Type m_lowerBoundLabel;
+      /// Label above histogram upper bounds
+      UniquePtr< QLabel >::Type m_upperBoundLabel;
 
       /// The graphical channel representations
-      ChannelGui* m_gchannels[ NUMBER_OF_SUBADDRESSES ];
+      UniquePtr< ChannelGui >::Type m_gchannels[ NUMBER_OF_SUBADDRESSES ];
 
-      QCheckBox*  m_generateLamEdit; ///< Widget for changing the LAM setting
+      /// Widget for changing the LAM setting
+      UniquePtr< QCheckBox >::Type  m_generateLamEdit;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

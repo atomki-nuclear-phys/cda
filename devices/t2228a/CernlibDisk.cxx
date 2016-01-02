@@ -35,7 +35,7 @@ namespace t2228a {
 
       // Loop over all configured subaddresses:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
             // Book this variable:
             m_ntupleTable[ i ] = nmgr.addVar( m_channels[ i ]->getName() );
          }
@@ -60,8 +60,9 @@ namespace t2228a {
          const unsigned int chdata = ( *dword_itr & 0xffffff );
 
          // Check that the decoded information makes sense:
-         if( ! ( ( subaddress >= 0 ) && ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
-                 m_channels[ subaddress ].get() ) ) {
+         if( ! ( ( subaddress >= 0 ) &&
+                 ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
+                 m_channels[ subaddress ] ) ) {
             REPORT_ERROR( tr( "Received data word from unknown channel" ) );
             return false;
          }

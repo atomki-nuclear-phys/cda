@@ -28,7 +28,7 @@ namespace t2228a {
 
       // Loop over all configured subaddresses:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
             CHECK( nmgr.addVar( m_values[ i ], m_channels[ i ]->getName() ) );
          }
       }
@@ -58,7 +58,7 @@ namespace t2228a {
          // Check that the decoded information makes sense:
          if( ! ( ( subaddress >= 0 ) &&
                  ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
-                 m_channels[ subaddress ].get() ) ) {
+                 m_channels[ subaddress ] ) ) {
             REPORT_ERROR( tr( "Received data word from unknown channel" ) );
             return false;
          }

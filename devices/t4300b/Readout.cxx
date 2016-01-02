@@ -57,10 +57,11 @@ namespace t4300b {
     *   - uppermost 8 bits: Subaddress number
     *   - lower 24 bits: Data
     */
-   ev::Fragment* Readout::readEvent( camac::Crate& crate ) const {
+   UniquePtr< ev::Fragment >::Type
+   Readout::readEvent( camac::Crate& crate ) const {
 
       // Create a new event fragment:
-      ev::Fragment* fragment = new ev::Fragment();
+      UniquePtr< ev::Fragment >::Type fragment( new ev::Fragment() );
       fragment->setModuleID( m_slot );
 
       // Read out all the configured channels:

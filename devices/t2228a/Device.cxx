@@ -62,7 +62,7 @@ namespace t2228a {
          }
          if( ( channel->getSubaddress() >= 0 ) &&
              ( channel->getSubaddress() < NUMBER_OF_SUBADDRESSES ) ) {
-            if( m_channels[ channel->getSubaddress() ].get() ) {
+            if( m_channels[ channel->getSubaddress() ] ) {
                m_logger << msg::WARNING
                         << tr( "Redefining channel number: %1" )
                   .arg( channel->getSubaddress() )
@@ -92,7 +92,7 @@ namespace t2228a {
       // Count the number of configured channels:
       quint32 number_of_channels = 0;
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) ++number_of_channels;
+         if( m_channels[ i ] ) ++number_of_channels;
       }
 
       // Write the number of channels to follow:
@@ -100,7 +100,7 @@ namespace t2228a {
 
       // Write the channel configurations:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
             CHECK( m_channels[ i ]->writeConfig( dev ) );
          }
       }
@@ -141,7 +141,7 @@ namespace t2228a {
          }
          if( ( channel->getSubaddress() >= 0 ) &&
              ( channel->getSubaddress() < NUMBER_OF_SUBADDRESSES ) ) {
-            if( m_channels[ channel->getSubaddress() ].get() ) {
+            if( m_channels[ channel->getSubaddress() ] ) {
                m_logger << msg::WARNING
                         << tr( "Redefining channel number: %1" )
                   .arg( channel->getSubaddress() )
@@ -170,7 +170,7 @@ namespace t2228a {
       // Create a new node for the configuration of each channel:
       //
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
             QDomElement ch_element =
                element.ownerDocument().createElement( "Channel" );
             CHECK( m_channels[ i ]->writeConfig( ch_element ) );

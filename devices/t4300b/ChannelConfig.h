@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Config.h"
+#   include "cdacore/device/IConfig.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/Config.h"
+#   include "device/IConfig.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -28,7 +28,7 @@ namespace t4300b {
     * $Revision$
     * $Date$
     */
-   class ChannelConfig : virtual public dev::Config {
+   class ChannelConfig : virtual public dev::IConfig {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( t4300b::ChannelConfig )
@@ -38,9 +38,9 @@ namespace t4300b {
       ChannelConfig();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
 
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );

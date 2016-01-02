@@ -34,7 +34,7 @@ namespace t2228a {
 
       // Loop over all configured subaddresses:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
 
             // Book the histogram and register it in the ID table:
             m_histTable[ i ] =
@@ -70,8 +70,9 @@ namespace t2228a {
          const unsigned int data = ( *dword_itr & 0xffffff );
 
          // Check that the decoded information makes sense:
-         if( ! ( ( subaddress >= 0 ) && ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
-                 m_channels[ subaddress ].get() ) ) {
+         if( ! ( ( subaddress >= 0 ) &&
+                 ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
+                 m_channels[ subaddress ] ) ) {
             REPORT_ERROR( tr( "Received data word from unknown channel" ) );
             return false;
          }

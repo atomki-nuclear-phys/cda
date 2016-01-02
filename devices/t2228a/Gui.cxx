@@ -174,7 +174,7 @@ namespace t2228a {
       //
       painter.setPen( Qt::black );
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
             painter.setBrush( Qt::green );
          } else {
             painter.setBrush( Qt::red );
@@ -270,7 +270,7 @@ namespace t2228a {
       // "strange" effects.
       //
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
             m_gchannels[ i ]->setEnabled( false );
             m_gchannels[ i ]->setName( m_channels[ i ]->getName() );
             m_gchannels[ i ]->setChannels(

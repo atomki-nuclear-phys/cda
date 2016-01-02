@@ -75,7 +75,7 @@ namespace t2228a {
 
       // Read out all the configured channels:
       for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ].get() ) {
+         if( m_channels[ i ] ) {
             const uint32_t channel = crate.readWord( m_slot, i, 0 );
             const uint32_t dword = ( i << 24 ) | ( channel & 0xffffff );
             fragment->addDataWord( dword );
