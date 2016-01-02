@@ -5,32 +5,30 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QLabel>
+#include <QCheckBox>
+#include <QScrollArea>
+#include <QGroupBox>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CaenGui.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/CaenGui.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QLabel )
-QT_FORWARD_DECLARE_CLASS( QCheckBox )
-QT_FORWARD_DECLARE_CLASS( QScrollArea )
-QT_FORWARD_DECLARE_CLASS( QGroupBox )
-QT_FORWARD_DECLARE_CLASS( QComboBox )
-QT_FORWARD_DECLARE_CLASS( QSpinBox )
-QT_FORWARD_DECLARE_CLASS( QDoubleSpinBox )
+#include "GroupGui.h"
 
 namespace dt5740 {
-
-   // Forward declaration(s):
-   class GroupGui;
 
    //
    // Make sure that the following Qt classes are available in the
@@ -60,11 +58,9 @@ namespace dt5740 {
    public:
       /// Constructor
       Gui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~Gui();
 
       /// Read the device configuration from a binary file
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Read the device configuration from an XML file
       virtual bool readConfig( const QDomElement& node );
 
@@ -118,58 +114,98 @@ namespace dt5740 {
       /// Function "syncing" the configuration
       void sync();
 
-      QScrollArea* m_scrollArea; ///< Object providing the scrolling functions
-      QWidget*     m_scrollWidget; ///< Main widget that is scrolled
+      /// Object providing the scrolling functions
+      UniquePtr< QScrollArea >::Type m_scrollArea;
+      /// Main widget that is scrolled
+      UniquePtr< QWidget >::Type m_scrollWidget;
 
-      QLabel*     m_image; ///< Image of the digitizer itself
-      QLabel*     m_topLabel; ///< Text label at the top
+      /// Image of the digitizer itself
+      UniquePtr< QLabel >::Type m_image;
+      /// Text label at the top
+      UniquePtr< QLabel >::Type m_topLabel;
 
-      QGroupBox* m_connectionBox; ///< Box for the connection parameters
-      QLabel*    m_connModeLabel; ///< Description for conn. mode setting
-      QComboBox* m_connMode;      ///< Connection mode chooser
-      QLabel*    m_connLinkLabel; ///< Description for conn. link setting
-      QSpinBox*  m_connLink;      ///< Connection link chooser
+      /// Box for the connection parameters
+      UniquePtr< QGroupBox >::Type m_connectionBox;
+      /// Description for conn. mode setting
+      UniquePtr< QLabel >::Type m_connModeLabel;
+      /// Connection mode chooser
+      UniquePtr< QComboBox >::Type m_connMode;
+      /// Description for conn. link setting
+      UniquePtr< QLabel >::Type m_connLinkLabel;
+      /// Connection link chooser
+      UniquePtr< QSpinBox >::Type m_connLink;
 
-      QGroupBox* m_triggerBox;               ///< Box for the trigger settings
-      QCheckBox* m_trigOvlpEnabledWidget;    ///< Setting for enabling trigger overlaps
-      QCheckBox* m_extTrigEnabledWidget;     ///< External trigger setting
-      QCheckBox* m_extTrigOutEnabledWidget;  ///< External trigger forward setting
-      QCheckBox* m_highImpedanceGPOWidget;   ///< GPO impedance level setting
-      QLabel*    m_postTrigPercentageLabel;  ///< Description for post trigger fraction
-      QSpinBox*  m_postTrigPercentageWidget; ///< Post trigger fraction setting
-      QLabel*    m_trigModeLabel;            ///< Description of the trigger mode setting
-      QComboBox* m_trigModeWidget;           ///< Trigger mode chooser
-      QLabel*    m_signalTypeLabel;          ///< Description for front panel signal type
-      QComboBox* m_signalTypeWidget;         ///< Front panel signal type setting
+      /// Box for the trigger settings
+      UniquePtr< QGroupBox >::Type m_triggerBox;
+      /// Setting for enabling trigger overlaps
+      UniquePtr< QCheckBox >::Type m_trigOvlpEnabledWidget;
+      /// External trigger setting
+      UniquePtr< QCheckBox >::Type m_extTrigEnabledWidget;
+      /// External trigger forward setting
+      UniquePtr< QCheckBox >::Type m_extTrigOutEnabledWidget;
+      /// GPO impedance level setting
+      UniquePtr< QCheckBox >::Type m_highImpedanceGPOWidget;
+      /// Description for post trigger fraction
+      UniquePtr< QLabel >::Type m_postTrigPercentageLabel;
+      /// Post trigger fraction setting
+      UniquePtr< QSpinBox >::Type m_postTrigPercentageWidget;
+      /// Description of the trigger mode setting
+      UniquePtr< QLabel >::Type m_trigModeLabel;
+      /// Trigger mode chooser
+      UniquePtr< QComboBox >::Type m_trigModeWidget;
+      /// Description for front panel signal type
+      UniquePtr< QLabel >::Type m_signalTypeLabel;
+      /// Front panel signal type setting
+      UniquePtr< QComboBox >::Type m_signalTypeWidget;
 
-      QGroupBox* m_acquisitionBox;      ///< Box for the acquisition settings
-      QCheckBox* m_patGenEnabledWidget; ///< Pattern generation setting
-      QCheckBox* m_saveRawNtupleWidget; ///< RAW ntuple save setting
-      QLabel*    m_acqModeLabel;        ///< Description of the acquisition mode setting
-      QComboBox* m_acqModeWidget;       ///< Acquisition mode chooser
-      QLabel*    m_gateModeLabel;       ///< Description of the gate mode setting
-      QComboBox* m_gateModeWidget;      ///< Gate mode chooser
-      QLabel*    m_bufferModeLabel;     ///< Description of buffer mode setting
-      QComboBox* m_bufferModeWidget;    ///< Buffer mode chooser
-      QLabel*    m_clockSourceLabel;    ///< Description of the clock source setting
-      QComboBox* m_clockSourceWidget;   ///< Clock source chooser
-      QLabel*    m_evCountModeLabel;    ///< Description of the event counting mode setting
-      QComboBox* m_evCountModeWidget;   ///< Event counting mode chooser
+      /// Box for the acquisition settings
+      UniquePtr< QGroupBox >::Type m_acquisitionBox;
+      /// Pattern generation setting
+      UniquePtr< QCheckBox >::Type m_patGenEnabledWidget;
+      /// RAW ntuple save setting
+      UniquePtr< QCheckBox >::Type m_saveRawNtupleWidget;
+      /// Description of the acquisition mode setting
+      UniquePtr< QLabel >::Type m_acqModeLabel;
+      /// Acquisition mode chooser
+      UniquePtr< QComboBox >::Type m_acqModeWidget;
+      /// Description of the gate mode setting
+      UniquePtr< QLabel >::Type m_gateModeLabel;
+      /// Gate mode chooser
+      UniquePtr< QComboBox >::Type m_gateModeWidget;
+      /// Description of buffer mode setting
+      UniquePtr< QLabel >::Type m_bufferModeLabel;
+      /// Buffer mode chooser
+      UniquePtr< QComboBox >::Type m_bufferModeWidget;
+      /// Description of the clock source setting
+      UniquePtr< QLabel >::Type m_clockSourceLabel;
+      /// Clock source chooser
+      UniquePtr< QComboBox >::Type m_clockSourceWidget;
+      /// Description of the event counting mode setting
+      UniquePtr< QLabel >::Type m_evCountModeLabel;
+      /// Event counting mode chooser
+      UniquePtr< QComboBox >::Type m_evCountModeWidget;
 
-      QGroupBox*      m_recoBox;           ///< Box for the signal reconstruction settings
-      QLabel*         m_cfdFractionLabel;  ///< Description of the CFD fraction setting
-      QDoubleSpinBox* m_cfdFractionWidget; ///< Digital CFD fraction setting
-      QLabel*         m_cfdDelayLabel;     ///< Description of the CFD delay setting
-      QSpinBox*       m_cfdDelayWidget;    ///< Digital CFD delay setting
-      QLabel*         m_cfdLengthLabel;    ///< Description of the CFD length setting
-      QSpinBox*       m_cfdLengthWidget;   ///< Digital CFD length setting
+      /// Box for the signal reconstruction settings
+      UniquePtr< QGroupBox >::Type m_recoBox;
+      /// Description of the CFD fraction setting
+      UniquePtr< QLabel >::Type m_cfdFractionLabel;
+      /// Digital CFD fraction setting
+      UniquePtr< QDoubleSpinBox >::Type m_cfdFractionWidget;
+      /// Description of the CFD delay setting
+      UniquePtr< QLabel >::Type m_cfdDelayLabel;
+      /// Digital CFD delay setting
+      UniquePtr< QSpinBox >::Type m_cfdDelayWidget;
+      /// Description of the CFD length setting
+      UniquePtr< QLabel >::Type m_cfdLengthLabel;
+      /// Digital CFD length setting
+      UniquePtr< QSpinBox >::Type m_cfdLengthWidget;
       /// Description of the Gaussian smoothing width setting
-      QLabel*         m_gaussSmoothWidthLabel;
+      UniquePtr< QLabel >::Type m_gaussSmoothWidthLabel;
       /// Gaussian smoothing width setting
-      QDoubleSpinBox* m_gaussSmoothWidthWidget;
+      UniquePtr< QDoubleSpinBox >::Type m_gaussSmoothWidthWidget;
 
       /// The graphical representation of channel groups
-      GroupGui* m_ggroups[ NUMBER_OF_GROUPS ];
+      UniquePtr< GroupGui >::Type m_ggroups[ NUMBER_OF_GROUPS ];
 
       mutable msg::Logger m_logger; ///< Message logger object
 

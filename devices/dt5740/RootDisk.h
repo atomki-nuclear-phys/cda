@@ -8,11 +8,11 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/RootDisk.h"
+#   include "cdacore/device/IRootDisk.h"
 #   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/RootDisk.h"
+#   include "device/IRootDisk.h"
 #   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
 #endif
@@ -37,7 +37,7 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class RootDisk : public virtual dev::RootDisk,
+   class RootDisk : public virtual dev::IRootDisk,
                     public virtual Device {
 
       Q_DECLARE_TR_FUNCTIONS( dt5740::RootDisk )

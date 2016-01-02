@@ -14,41 +14,43 @@
 
 namespace dt5740 {
 
-   QString Dt5740Factory::shortName() const {
+   const QString& Dt5740Factory::shortName() const {
 
-      return "DT5740";
+      static const QString name( "DT5740" );
+      return name;
    }
 
-   QString Dt5740Factory::longName() const {
+   const QString& Dt5740Factory::longName() const {
 
-      return tr( "CAEN DT5740 Desktop Digitizer" );
+      static const QString name( tr( "CAEN DT5740 Desktop Digitizer" ) );
+      return name;
    }
 
    void* Dt5740Factory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::CaenGui ) ) {
 
-         return dynamic_cast< dev::CaenGui* >( new Gui() );
+         return static_cast< dev::CaenGui* >( new Gui() );
 
-      } else if( ti == typeid( dev::CernlibHist ) ) {
+      } else if( ti == typeid( dev::ICernlibHist ) ) {
 
-         return dynamic_cast< dev::CernlibHist* >( new CernlibHist() );
+         return static_cast< dev::ICernlibHist* >( new CernlibHist() );
 
-      } else if( ti == typeid( dev::CernlibDisk ) ) {
+      } else if( ti == typeid( dev::ICernlibDisk ) ) {
 
-         return dynamic_cast< dev::CernlibDisk* >( new CernlibDisk() );
+         return static_cast< dev::ICernlibDisk* >( new CernlibDisk() );
 
-      } else if( ti == typeid( dev::CaenReadout ) ) {
+      } else if( ti == typeid( dev::ICaenDigitizerReadout ) ) {
 
-         return dynamic_cast< dev::CaenReadout* >( new Readout() );
+         return static_cast< dev::ICaenDigitizerReadout* >( new Readout() );
 
-      } else if( ti == typeid( dev::RootDisk ) ) {
+      } else if( ti == typeid( dev::IRootDisk ) ) {
 
-         return dynamic_cast< dev::RootDisk* >( new RootDisk() );
+         return static_cast< dev::IRootDisk* >( new RootDisk() );
 
       } else if( ti == typeid( dev::QtHist ) ) {
 
-         return dynamic_cast< dev::QtHist* >( new QtHist() );
+         return static_cast< dev::QtHist* >( new QtHist() );
 
       }
 

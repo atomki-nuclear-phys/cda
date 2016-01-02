@@ -8,11 +8,11 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CaenReadout.h"
+#   include "cdacore/device/ICaenDigitizerReadout.h"
 #   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CaenReadout.h"
+#   include "device/ICaenDigitizerReadout.h"
 #   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
 #endif
@@ -34,7 +34,7 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class Readout : public virtual dev::CaenReadout,
+   class Readout : public virtual dev::ICaenDigitizerReadout,
                    public virtual Device {
 
       // To get the tr() function:
@@ -57,7 +57,7 @@ namespace dt5740 {
       virtual bool stop();
 
       /// Function reading a single event from the device
-      virtual ev::Fragment* readEvent();
+      virtual UniquePtr< ev::Fragment >::Type readEvent();
 
    private:
       /// Get the external trigger mode

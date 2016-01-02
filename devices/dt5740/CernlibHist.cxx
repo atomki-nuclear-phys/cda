@@ -18,7 +18,7 @@
 namespace dt5740 {
 
    CernlibHist::CernlibHist()
-      : dev::CernlibHist(), Device(),
+      : dev::ICernlibHist(), Device(),
         m_processor(),
         m_logger( "dt5740::CernlibHist" ) {
 

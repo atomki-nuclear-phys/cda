@@ -22,7 +22,7 @@
 namespace dt5740 {
 
    Readout::Readout()
-      : dev::CaenReadout(), Device(), m_digitizer(),
+      : dev::ICaenDigitizerReadout(), Device(), m_digitizer(),
         m_buffer( NULL ), m_bufferSize( 0 ), m_eventSize( 0 ),
         m_numEvents( 0 ), m_currentEvent( 0 ),
         m_logger( "dt5740::Readout" ) {
@@ -59,17 +59,19 @@ namespace dt5740 {
          REPORT_VERBOSE( tr( "Setting trigger threshold for group %1 to %2" )
                          .arg( i ).arg( m_groups[ i ].getTrigThreshold() ) );
          CHECK( m_digitizer.setGroupTriggerThreshold( i,
-                                               m_groups[ i ].getTrigThreshold() ) );
+                                           m_groups[ i ].getTrigThreshold() ) );
          REPORT_VERBOSE( tr( "Setting self trigger mode for group %1 to %2" )
                          .arg( i ).arg( trigMode( m_groups[ i ] ) ) );
          CHECK( m_digitizer.setGroupSelfTriggerMode( i,
-                                                     trigMode( m_groups[ i ] ) ) );
+                                                  trigMode( m_groups[ i ] ) ) );
          REPORT_VERBOSE( tr( "Setting channel mask of group %1 to %2" )
                          .arg( i ).arg( m_groups[ i ].getTrigMask() ) );
-         CHECK( m_digitizer.setChannelGroupMask( i, m_groups[ i ].getTrigMask() ) );
+         CHECK( m_digitizer.setChannelGroupMask( i,
+                                                m_groups[ i ].getTrigMask() ) );
          REPORT_VERBOSE( tr( "Setting DC offset of group %1 to %2" )
                          .arg( i ).arg( m_groups[ i ].getDCOffset() ) );
-         CHECK( m_digitizer.setGroupDCOffset( i, m_groups[ i ].getDCOffset() ) );
+         CHECK( m_digitizer.setGroupDCOffset( i,
+                                              m_groups[ i ].getDCOffset() ) );
       }
 
       // Set the device wide trigger parameters:
@@ -138,10 +140,10 @@ namespace dt5740 {
       return true;
    }
 
-   ev::Fragment* Readout::readEvent() {
+   UniquePtr< ev::Fragment >::Type Readout::readEvent() {
 
       // Create the new event fragment:
-      ev::Fragment* result = new ev::Fragment();
+      UniquePtr< ev::Fragment >::Type result( new ev::Fragment() );
       result->setModuleID( getID() );
 
       // Read a new (set of) event(s) if the event buffer is empty:

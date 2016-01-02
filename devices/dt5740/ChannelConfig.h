@@ -8,10 +8,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Config.h"
+#   include "cdacore/device/IConfig.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/Config.h"
+#   include "device/IConfig.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -31,7 +31,7 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class ChannelConfig : virtual public dev::Config {
+   class ChannelConfig : virtual public dev::IConfig {
 
       /// Declare the Device class a friend of this class
       friend class dt5740::Device;
@@ -42,13 +42,11 @@ namespace dt5740 {
    public:
       /// Constructor
       ChannelConfig();
-      /// Copy constructor
-      ChannelConfig( const ChannelConfig& parent );
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
 
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );

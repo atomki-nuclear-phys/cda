@@ -8,17 +8,19 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Config.h"
+#   include "cdacore/device/IConfig.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
 #else
-#   include "device/Config.h"
+#   include "device/IConfig.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
 #endif
 
-namespace dt5740 {
+// Local include(s):
+#include "ChannelConfig.h"
 
-   // Forward declaration(s):
-   class ChannelConfig;
+namespace dt5740 {
 
    /**
     *  @short Configuration for a single channel group
@@ -34,7 +36,7 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class GroupConfig : virtual public dev::Config {
+   class GroupConfig : virtual public dev::IConfig {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( dt5740::GroupConfig )
@@ -44,8 +46,6 @@ namespace dt5740 {
       GroupConfig();
       /// Copy constructor
       GroupConfig( const GroupConfig& parent );
-      /// Destructor
-      ~GroupConfig();
 
       /// Assignment operator
       GroupConfig& operator= ( const GroupConfig& rh );
@@ -54,9 +54,9 @@ namespace dt5740 {
       static const int CHANNELS_IN_GROUP = 8;
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
 
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );
@@ -113,7 +113,7 @@ namespace dt5740 {
       bool         m_trigOutEnabled; ///< Enable to send triggers to front panel
 
       /// Configuration of the input channels belonging to this group
-      ChannelConfig* m_channels[ CHANNELS_IN_GROUP ];
+      UniquePtr< ChannelConfig >::Type m_channels[ CHANNELS_IN_GROUP ];
 
       mutable msg::Logger m_logger; ///< Message logger object
 

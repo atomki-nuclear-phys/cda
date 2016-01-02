@@ -5,28 +5,26 @@
 
 // Qt include(s):
 #include <QWidget>
+#include <QGroupBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QSpinBox>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
 #include "GroupConfig.h"
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QGroupBox )
-QT_FORWARD_DECLARE_CLASS( QLabel )
-QT_FORWARD_DECLARE_CLASS( QCheckBox )
-QT_FORWARD_DECLARE_CLASS( QComboBox )
-QT_FORWARD_DECLARE_CLASS( QSpinBox )
+#include "ChannelGui.h"
 
 namespace dt5740 {
-
-   // Forward declaration(s):
-   class ChannelGui;
 
    /**
     *  @short Graphical representation of a channel group
@@ -47,8 +45,6 @@ namespace dt5740 {
       /// Constructor
       GroupGui( GroupConfig& group, QWidget* parent = 0,
                 Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~GroupGui();
 
       /// Total width of the widget
       static const int WIDTH;
@@ -101,27 +97,32 @@ namespace dt5740 {
       GroupConfig& m_group;
       bool m_syncing; ///< Flag showing when a syncing operation is going on
 
-      QGroupBox* m_groupBox;
+      UniquePtr< QGroupBox >::Type m_groupBox;
 
-      QCheckBox* m_trigEnabled;
-      QCheckBox* m_trigOutEnabled;
+      UniquePtr< QCheckBox >::Type m_trigEnabled;
+      UniquePtr< QCheckBox >::Type m_trigOutEnabled;
 
-      QLabel*   m_trigThresholdLabel;
-      QSpinBox* m_trigThreshold;
+      UniquePtr< QLabel >::Type   m_trigThresholdLabel;
+      UniquePtr< QSpinBox >::Type m_trigThreshold;
 
-      QGroupBox* m_trigMaskBox;
-      QCheckBox* m_trigMask[ GroupConfig::CHANNELS_IN_GROUP ];
+      UniquePtr< QGroupBox >::Type m_trigMaskBox;
+      UniquePtr< QCheckBox >::Type m_trigMask[ GroupConfig::CHANNELS_IN_GROUP ];
 
-      QLabel*   m_dcOffsetLabel;
-      QSpinBox* m_dcOffset;
+      UniquePtr< QLabel >::Type   m_dcOffsetLabel;
+      UniquePtr< QSpinBox >::Type m_dcOffset;
 
-      QLabel* m_nameLabel; ///< Label above channel names
-      QLabel* m_channelsLabel; ///< Label above histogram channels
-      QLabel* m_lowerBoundLabel; ///< Label above histogram lower bounds
-      QLabel* m_upperBoundLabel; ///< Label above histogram upper bounds
+      /// Label above channel names
+      UniquePtr< QLabel >::Type m_nameLabel;
+      /// Label above histogram channels
+      UniquePtr< QLabel >::Type m_channelsLabel;
+      /// Label above histogram lower bounds
+      UniquePtr< QLabel >::Type m_lowerBoundLabel;
+      /// Label above histogram upper bounds
+      UniquePtr< QLabel >::Type m_upperBoundLabel;
 
       /// Graphical representation of channels in the group
-      ChannelGui* m_channels[ GroupConfig::CHANNELS_IN_GROUP ];
+      UniquePtr< ChannelGui >::Type
+      m_channels[ GroupConfig::CHANNELS_IN_GROUP ];
 
       mutable msg::Logger m_logger; ///< Message logger object
 

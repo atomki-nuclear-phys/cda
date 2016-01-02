@@ -37,151 +37,129 @@ namespace dt5740 {
       //
       // Create the widget enabling/disabling the channel:
       //
-      m_enabledEdit = new QCheckBox( tr( "%1. channel" ).arg( m_channelNumber ),
-                                     this );
+      m_enabledEdit.reset( new QCheckBox( tr( "%1. channel" )
+                                          .arg( m_channelNumber ),
+                                          this ) );
       m_enabledEdit->setGeometry( QRect( 0, 0, 110, 25 ) );
-      connect( m_enabledEdit, SIGNAL( toggled( bool ) ),
+      connect( m_enabledEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( enableChangedSlot( bool ) ) );
 
       //
       // Create the widget editing the "raw name" of the channel:
       //
-      m_rawNameEdit = new QLineEdit( this );
+      m_rawNameEdit.reset( new QLineEdit( this ) );
       m_rawNameEdit->setEnabled( false );
       m_rawNameEdit->setGeometry( QRect( 115, 2, 75, 22 ) );
-      connect( m_rawNameEdit, SIGNAL( textChanged( const QString& ) ),
+      connect( m_rawNameEdit.get(), SIGNAL( textChanged( const QString& ) ),
                this, SLOT( rawNameChangedSlot( const QString& ) ) );
 
       //
       // Create a description for the time channel:
       //
-      m_timeLabel = new QLabel( tr( "Time" ),
-                                this );
+      m_timeLabel.reset( new QLabel( tr( "Time" ), this ) );
       m_timeLabel->setGeometry( QRect( 15, 25, 95, 25 ) );
       m_timeLabel->setEnabled( false );
 
       //
       // Create the widget changing the name of the time channel:
       //
-      m_timeNameEdit = new QLineEdit( this );
+      m_timeNameEdit.reset( new QLineEdit( this ) );
       m_timeNameEdit->setEnabled( false );
       m_timeNameEdit->setGeometry( QRect( 115, 27, 75, 22 ) );
-      connect( m_timeNameEdit, SIGNAL( textChanged( const QString& ) ),
+      connect( m_timeNameEdit.get(), SIGNAL( textChanged( const QString& ) ),
                this, SLOT( timeNameChangedSlot( const QString& ) ) );
 
       //
       // Create the widget changing the number of channels in the
       // time monitoring histogram:
       //
-      m_timeChannelsEdit = new QSpinBox( this );
+      m_timeChannelsEdit.reset( new QSpinBox( this ) );
       m_timeChannelsEdit->setEnabled( false );
       m_timeChannelsEdit->setGeometry( QRect( 195, 25, 75, 25 ) );
       m_timeChannelsEdit->setRange( 10, 4096 );
       m_timeChannelsEdit->setValue( 4096 );
-      connect( m_timeChannelsEdit, SIGNAL( valueChanged( int ) ),
+      connect( m_timeChannelsEdit.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( timeChannelsChangedSlot( int ) ) );
 
       //
       // Create the widget changing the lower bound of the
       // time monitoring histogram:
       //
-      m_timeLowerBoundEdit = new QDoubleSpinBox( this );
+      m_timeLowerBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_timeLowerBoundEdit->setEnabled( false );
       m_timeLowerBoundEdit->setGeometry( QRect( 275, 25, 75, 25 ) );
       m_timeLowerBoundEdit->setDecimals( 1 );
       m_timeLowerBoundEdit->setRange( -100000., 100000. );
       m_timeLowerBoundEdit->setValue( 0. );
-      connect( m_timeLowerBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_timeLowerBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( timeLowerBoundChangedSlot( double ) ) );
 
       //
       // Create the widget changing the upper bound of the
       // time monitoring histogram:
       //
-      m_timeUpperBoundEdit = new QDoubleSpinBox( this );
+      m_timeUpperBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_timeUpperBoundEdit->setEnabled( false );
       m_timeUpperBoundEdit->setGeometry( QRect( 355, 25, 75, 25 ) );
       m_timeUpperBoundEdit->setDecimals( 1 );
       m_timeUpperBoundEdit->setRange( -100000., 100000. );
       m_timeUpperBoundEdit->setValue( 4096. );
-      connect( m_timeUpperBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_timeUpperBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( timeUpperBoundChangedSlot( double ) ) );
 
       //
       // Create a description for the energy channel:
       //
-      m_energyLabel = new QLabel( tr( "Energy" ),
-                                  this );
+      m_energyLabel.reset( new QLabel( tr( "Energy" ), this ) );
       m_energyLabel->setGeometry( QRect( 15, 50, 95, 25 ) );
       m_energyLabel->setEnabled( false );
 
       //
       // Create the widget changing the name of the energy channel:
       //
-      m_energyNameEdit = new QLineEdit( this );
+      m_energyNameEdit.reset( new QLineEdit( this ) );
       m_energyNameEdit->setEnabled( false );
       m_energyNameEdit->setGeometry( QRect( 115, 52, 75, 22 ) );
-      connect( m_energyNameEdit, SIGNAL( textChanged( const QString& ) ),
+      connect( m_energyNameEdit.get(), SIGNAL( textChanged( const QString& ) ),
                this, SLOT( energyNameChangedSlot( const QString& ) ) );
 
       //
       // Create the widget changing the number of channels in the
       // energy monitoring histogram:
       //
-      m_energyChannelsEdit = new QSpinBox( this );
+      m_energyChannelsEdit.reset( new QSpinBox( this ) );
       m_energyChannelsEdit->setEnabled( false );
       m_energyChannelsEdit->setGeometry( QRect( 195, 50, 75, 25 ) );
       m_energyChannelsEdit->setRange( 10, 4096 );
       m_energyChannelsEdit->setValue( 4096 );
-      connect( m_energyChannelsEdit, SIGNAL( valueChanged( int ) ),
+      connect( m_energyChannelsEdit.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( energyChannelsChangedSlot( int ) ) );
 
       //
       // Create the widget changing the lower bound of the
       // energy monitoring histogram:
       //
-      m_energyLowerBoundEdit = new QDoubleSpinBox( this );
+      m_energyLowerBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_energyLowerBoundEdit->setEnabled( false );
       m_energyLowerBoundEdit->setGeometry( QRect( 275, 50, 75, 25 ) );
       m_energyLowerBoundEdit->setDecimals( 1 );
       m_energyLowerBoundEdit->setRange( -100000., 100000. );
       m_energyLowerBoundEdit->setValue( 0. );
-      connect( m_energyLowerBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_energyLowerBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( energyLowerBoundChangedSlot( double ) ) );
 
       //
       // Create the widget changing the upper bound of the
       // energy monitoring histogram:
       //
-      m_energyUpperBoundEdit = new QDoubleSpinBox( this );
+      m_energyUpperBoundEdit.reset( new QDoubleSpinBox( this ) );
       m_energyUpperBoundEdit->setEnabled( false );
       m_energyUpperBoundEdit->setGeometry( QRect( 355, 50, 75, 25 ) );
       m_energyUpperBoundEdit->setDecimals( 1 );
       m_energyUpperBoundEdit->setRange( -100000., 100000. );
       m_energyUpperBoundEdit->setValue( 4096. );
-      connect( m_energyUpperBoundEdit, SIGNAL( valueChanged( double ) ),
+      connect( m_energyUpperBoundEdit.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( energyUpperBoundChangedSlot( double ) ) );
-   }
-
-   /**
-    * The destructor deletes all the constituent widgets.
-    */
-   ChannelGui::~ChannelGui() {
-
-      delete m_enabledEdit;
-      delete m_rawNameEdit;
-
-      delete m_timeLabel;
-      delete m_timeNameEdit;
-      delete m_timeChannelsEdit;
-      delete m_timeLowerBoundEdit;
-      delete m_timeUpperBoundEdit;
-
-      delete m_energyLabel;
-      delete m_energyNameEdit;
-      delete m_energyChannelsEdit;
-      delete m_energyLowerBoundEdit;
-      delete m_energyUpperBoundEdit;
    }
 
    int ChannelGui::getChannelNumber() const {
@@ -309,14 +287,20 @@ namespace dt5740 {
          emit rawNameChanged( m_channelNumber, m_rawNameEdit->text() );
 
          emit timeNameChanged( m_channelNumber, m_timeNameEdit->text() );
-         emit timeChannelsChanged( m_channelNumber, m_timeChannelsEdit->value() );
-         emit timeLowerBoundChanged( m_channelNumber, m_timeLowerBoundEdit->value() );
-         emit timeUpperBoundChanged( m_channelNumber, m_timeUpperBoundEdit->value() );
+         emit timeChannelsChanged( m_channelNumber,
+                                   m_timeChannelsEdit->value() );
+         emit timeLowerBoundChanged( m_channelNumber,
+                                     m_timeLowerBoundEdit->value() );
+         emit timeUpperBoundChanged( m_channelNumber,
+                                     m_timeUpperBoundEdit->value() );
 
          emit energyNameChanged( m_channelNumber, m_energyNameEdit->text() );
-         emit energyChannelsChanged( m_channelNumber, m_energyChannelsEdit->value() );
-         emit energyLowerBoundChanged( m_channelNumber, m_energyLowerBoundEdit->value() );
-         emit energyUpperBoundChanged( m_channelNumber, m_energyUpperBoundEdit->value() );
+         emit energyChannelsChanged( m_channelNumber,
+                                     m_energyChannelsEdit->value() );
+         emit energyLowerBoundChanged( m_channelNumber,
+                                       m_energyLowerBoundEdit->value() );
+         emit energyUpperBoundChanged( m_channelNumber,
+                                       m_energyUpperBoundEdit->value() );
       }
 
       return;

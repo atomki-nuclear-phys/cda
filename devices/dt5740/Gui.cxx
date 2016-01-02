@@ -12,6 +12,12 @@
 #include <QComboBox>
 #include <QSpinBox>
 
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/errorcheck.h"
+#else
+#   include "common/errorcheck.h"
+#endif
+
 // Local include(s):
 #include "Gui.h"
 #include "GroupGui.h"
@@ -33,20 +39,20 @@ namespace dt5740 {
       //
       // Create the widget that will hold all the configuration widgets:
       //
-      m_scrollWidget = new QWidget( 0, flags );
+      m_scrollWidget.reset( new QWidget( 0, flags ) );
       m_scrollWidget->setGeometry( QRect( 0, 0, WIDGET_WIDTH - 20, 4440 ) );
 
       //
       // Embed the previous widget into a scroll area:
       //
-      m_scrollArea = new QScrollArea( this );
+      m_scrollArea.reset( new QScrollArea( this ) );
       m_scrollArea->setGeometry( QRect( 0, 0, WIDGET_WIDTH, WIDGET_HEIGHT ) );
-      m_scrollArea->setWidget( m_scrollWidget );
+      m_scrollArea->setWidget( m_scrollWidget.get() );
 
       //
       // Put a picture of the digitizer at the top:
       //
-      m_image = new QLabel( m_scrollWidget );
+      m_image.reset( new QLabel( m_scrollWidget.get() ) );
       m_image->setGeometry( QRect( 50, 10, 400, 181 ) );
       m_image->setPixmap( QPixmap( ":/img/dt5740.png" ) );
       m_image->setScaledContents( true );
@@ -54,9 +60,9 @@ namespace dt5740 {
       //
       // Create a label telling us what kind of device this is:
       //
-      m_topLabel = new QLabel( tr( "CAEN DT5740 32 Channel 12 bit "
-                                   "62.5MS/s Digitizer" ),
-                               m_scrollWidget );
+      m_topLabel.reset( new QLabel( tr( "CAEN DT5740 32 Channel 12 bit "
+                                        "62.5MS/s Digitizer" ),
+                                    m_scrollWidget.get() ) );
       m_topLabel->setAlignment( Qt::AlignCenter );
       m_topLabel->setGeometry( QRect( 20, 200, WIDGET_WIDTH - 40, 35 ) );
       QFont titleFont( m_topLabel->font() );
@@ -67,156 +73,164 @@ namespace dt5740 {
       //
       // Create the device connection settings:
       //
-      m_connectionBox = new QGroupBox( tr( "Connection parameters" ),
-                                       m_scrollWidget );
+      m_connectionBox.reset( new QGroupBox( tr( "Connection parameters" ),
+                                            m_scrollWidget.get() ) );
       m_connectionBox->setGeometry( QRect( 10, 245, WIDGET_WIDTH - 40, 90 ) );
 
-      m_connModeLabel = new QLabel( tr( "Connection mode:" ),
-                                    m_connectionBox);
+      m_connModeLabel.reset( new QLabel( tr( "Connection mode:" ),
+                                         m_connectionBox.get() ) );
       m_connModeLabel->setGeometry( QRect( 10, 25, 130, 25 ) );
 
-      m_connMode = new QComboBox( m_connectionBox );
+      m_connMode.reset( new QComboBox( m_connectionBox.get() ) );
       m_connMode->setGeometry( QRect( 180, 25, 250, 25 ) );
       m_connMode->addItem( tr( "USB" ) );
       m_connMode->addItem( tr( "PCI Optical Link" ) );
       m_connMode->addItem( tr( "PCIe Optical Link" ) );
       m_connMode->addItem( tr( "PCIe Embedded Digitizer" ) );
-      connect( m_connMode, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_connMode.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( connectionModeSlot( int ) ) ); 
 
-      m_connLinkLabel = new QLabel( tr( "Link number:" ),
-                                    m_connectionBox );
+      m_connLinkLabel.reset( new QLabel( tr( "Link number:" ),
+                                         m_connectionBox.get() ) );
       m_connLinkLabel->setGeometry( QRect( 10, 55, 130, 25 ) );
 
-      m_connLink = new QSpinBox( m_connectionBox );
+      m_connLink.reset( new QSpinBox( m_connectionBox.get() ) );
       m_connLink->setGeometry( QRect( 180, 55, 150, 25 ) );
       m_connLink->setRange( 0, 10 );
-      m_connLink->setToolTip( tr( "In USB mode this means the ID given by the OS "
-                                  "to the USB connection. If this is the only such "
-                                  "device connected by USB, it will be \"0\"." ) );
-      connect( m_connLink, SIGNAL( valueChanged( int ) ),
+      m_connLink->setToolTip( tr( "In USB mode this means the ID given by "
+                                  "the OS to the USB connection. If this is "
+                                  "the only such device connected by USB, "
+                                  "it will be \"0\"." ) );
+      connect( m_connLink.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( connectionLinkSlot( int ) ) );
 
       //
       // Create the trigger settings:
       //
-      m_triggerBox = new QGroupBox( tr( "Trigger settings" ),
-                                    m_scrollWidget );
+      m_triggerBox.reset( new QGroupBox( tr( "Trigger settings" ),
+                                         m_scrollWidget.get() ) );
       m_triggerBox->setGeometry( QRect( 10, 345, WIDGET_WIDTH - 40, 240 ) );
 
-      m_trigOvlpEnabledWidget = new QCheckBox( tr( "Enable trigger overlaps" ),
-                                               m_triggerBox );
+      m_trigOvlpEnabledWidget.reset( new QCheckBox( tr( "Enable trigger "
+                                                        "overlaps" ),
+                                                    m_triggerBox.get() ) );
       m_trigOvlpEnabledWidget->setGeometry( QRect( 10, 25, 400, 25 ) );
-      connect( m_trigOvlpEnabledWidget, SIGNAL( toggled( bool ) ),
+      connect( m_trigOvlpEnabledWidget.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( trigOvlpEnabledSlot( bool ) ) );
 
-      m_extTrigEnabledWidget = new QCheckBox( tr( "Enable external trigger" ),
-                                              m_triggerBox );
+      m_extTrigEnabledWidget.reset( new QCheckBox( tr( "Enable external "
+                                                       "trigger" ),
+                                                   m_triggerBox.get() ) );
       m_extTrigEnabledWidget->setGeometry( QRect( 10, 55, 400, 25 ) );
-      connect( m_extTrigEnabledWidget, SIGNAL( toggled( bool ) ),
+      connect( m_extTrigEnabledWidget.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( extTrigEnabledSlot( bool ) ) );
 
-      m_extTrigOutEnabledWidget =
-         new QCheckBox( tr( "Forward external trigger to front panel" ),
-                        m_triggerBox );
+      m_extTrigOutEnabledWidget.reset( new QCheckBox( tr( "Forward external "
+                                                          "trigger to front "
+                                                          "panel" ),
+                                                      m_triggerBox.get() ) );
       m_extTrigOutEnabledWidget->setGeometry( QRect( 10, 85, 400, 25 ) );
-      connect( m_extTrigOutEnabledWidget, SIGNAL( toggled( bool ) ),
+      connect( m_extTrigOutEnabledWidget.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( extTrigOutEnabledSlot( bool ) ) );
 
-      m_highImpedanceGPOWidget =
-         new QCheckBox( tr( "Assert high impedance on GPO output" ),
-                        m_triggerBox );
+      m_highImpedanceGPOWidget.reset( new QCheckBox( tr( "Assert high "
+                                                         "impedance on GPO "
+                                                         "output" ),
+                                                     m_triggerBox.get() ) );
       m_highImpedanceGPOWidget->setGeometry( QRect( 10, 115, 400, 25 ) );
-      connect( m_highImpedanceGPOWidget, SIGNAL( toggled( bool ) ),
+      connect( m_highImpedanceGPOWidget.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( highImpedanceGPOSlot( bool ) ) );
 
-      m_postTrigPercentageLabel = new QLabel( tr( "Post trigger percentage:" ),
-                                              m_triggerBox );
+      m_postTrigPercentageLabel.reset( new QLabel( tr( "Post trigger "
+                                                       "percentage:" ),
+                                                   m_triggerBox.get() ) );
       m_postTrigPercentageLabel->setGeometry( QRect( 10, 145, 150, 25 ) );
 
-      m_postTrigPercentageWidget = new QSpinBox( m_triggerBox );
+      m_postTrigPercentageWidget.reset( new QSpinBox( m_triggerBox.get() ) );
       m_postTrigPercentageWidget->setGeometry( QRect( 180, 145, 150, 25 ) );
       m_postTrigPercentageWidget->setRange( 0, 100 );
       m_postTrigPercentageWidget->setValue( 100 );
-      m_postTrigPercentageWidget->setToolTip( tr( "You can set here how many of "
-                                                  "the collected samples should be "
-                                                  "taken after the trigger "
-                                                  "signal." ) );
-      connect( m_postTrigPercentageWidget, SIGNAL( valueChanged( int ) ),
+      m_postTrigPercentageWidget->setToolTip( tr( "You can set here how many "
+                                                  "of the collected samples "
+                                                  "should be taken after the "
+                                                  "trigger signal." ) );
+      connect( m_postTrigPercentageWidget.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( postTrigPercentageSlot( int ) ) );
 
-      m_trigModeLabel = new QLabel( tr( "Trigger mode:" ),
-                                    m_triggerBox );
+      m_trigModeLabel.reset( new QLabel( tr( "Trigger mode:" ),
+                                         m_triggerBox.get() ) );
       m_trigModeLabel->setGeometry( QRect( 10, 175, 150, 25 ) );
 
-      m_trigModeWidget = new QComboBox( m_triggerBox );
+      m_trigModeWidget.reset( new QComboBox( m_triggerBox.get() ) );
       m_trigModeWidget->setGeometry( QRect( 180, 175, 250, 25 ) );
       m_trigModeWidget->addItem( tr( "Trigger on input over threshold" ) );
       m_trigModeWidget->addItem( tr( "Trigger on input under threshold" ) );
-      connect( m_trigModeWidget, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_trigModeWidget.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( trigModeSlot( int ) ) );
 
-      m_signalTypeLabel = new QLabel( tr( "Front panel signal type:" ),
-                                      m_triggerBox );
+      m_signalTypeLabel.reset( new QLabel( tr( "Front panel signal type:" ),
+                                           m_triggerBox.get() ) );
       m_signalTypeLabel->setGeometry( QRect( 10, 205, 150, 25 ) );
 
-      m_signalTypeWidget = new QComboBox( m_triggerBox );
+      m_signalTypeWidget.reset( new QComboBox( m_triggerBox.get() ) );
       m_signalTypeWidget->setGeometry( QRect( 180, 205, 250, 25 ) );
       m_signalTypeWidget->addItem( tr( "NIM" ) );
       m_signalTypeWidget->addItem( tr( "TTL" ) );
-      connect( m_signalTypeWidget, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_signalTypeWidget.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( signalTypeSlot( int ) ) );
 
       //
       // Create the data acquisition settings:
       //
-      m_acquisitionBox = new QGroupBox( tr( "Data acquisition settings" ),
-                                        m_scrollWidget );
+      m_acquisitionBox.reset( new QGroupBox( tr( "Data acquisition settings" ),
+                                             m_scrollWidget.get() ) );
       m_acquisitionBox->setGeometry( QRect( 10, 595, WIDGET_WIDTH - 40, 240 ) );
 
-      m_patGenEnabledWidget = new QCheckBox( tr( "Enable test pattern generation" ),
-                                             m_acquisitionBox );
+      m_patGenEnabledWidget.reset( new QCheckBox( tr( "Enable test pattern "
+                                                      "generation" ),
+                                                  m_acquisitionBox.get() ) );
       m_patGenEnabledWidget->setGeometry( QRect( 10, 25, 400, 25 ) );
-      connect( m_patGenEnabledWidget, SIGNAL( toggled( bool ) ),
+      connect( m_patGenEnabledWidget.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( patGenEnabledSlot( bool ) ) );
 
-      m_saveRawNtupleWidget = new QCheckBox( tr( "Save raw data to ntuple" ),
-                                             m_acquisitionBox );
+      m_saveRawNtupleWidget.reset( new QCheckBox( tr( "Save raw data to "
+                                                      "ntuple" ),
+                                                  m_acquisitionBox.get() ) );
       m_saveRawNtupleWidget->setGeometry( QRect( 10, 55, 400, 25 ) );
-      connect( m_saveRawNtupleWidget, SIGNAL( toggled( bool ) ),
+      connect( m_saveRawNtupleWidget.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( saveRawNtupleSlot( bool ) ) );
 
-      m_acqModeLabel = new QLabel( tr( "Acquisition mode:" ),
-                                   m_acquisitionBox );
+      m_acqModeLabel.reset( new QLabel( tr( "Acquisition mode:" ),
+                                        m_acquisitionBox.get() ) );
       m_acqModeLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
 
-      m_acqModeWidget = new QComboBox( m_acquisitionBox );
+      m_acqModeWidget.reset( new QComboBox( m_acquisitionBox.get() ) );
       m_acqModeWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
       m_acqModeWidget->addItem( tr( "Register controlled" ) );
       m_acqModeWidget->addItem( tr( "GPI controlled" ) );
-      connect( m_acqModeWidget, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_acqModeWidget.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( acqModeSlot( int ) ) );
 
-      m_gateModeLabel = new QLabel( tr( "Gate mode:" ),
-                                    m_acquisitionBox );
+      m_gateModeLabel.reset( new QLabel( tr( "Gate mode:" ),
+                                         m_acquisitionBox.get() ) );
       m_gateModeLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
 
-      m_gateModeWidget = new QComboBox( m_acquisitionBox );
+      m_gateModeWidget.reset( new QComboBox( m_acquisitionBox.get() ) );
       m_gateModeWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
       m_gateModeWidget->addItem( tr( "Window" ) );
       m_gateModeWidget->addItem( tr( "Single shot" ) );
-      connect( m_gateModeWidget, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_gateModeWidget.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( gateModeSlot( int ) ) );
 
-      m_bufferModeLabel = new QLabel( tr( "Buffer mode:" ),
-                                      m_acquisitionBox );
+      m_bufferModeLabel.reset( new QLabel( tr( "Buffer mode:" ),
+                                           m_acquisitionBox.get() ) );
       m_bufferModeLabel->setGeometry( QRect( 10, 145, 150, 25 ) );
 
-      m_bufferModeWidget = new QComboBox( m_acquisitionBox );
+      m_bufferModeWidget.reset( new QComboBox( m_acquisitionBox.get() ) );
       m_bufferModeWidget->setGeometry( QRect( 180, 145, 250, 25 ) );
-      m_bufferModeWidget->setToolTip( tr( "You can choose how many samples should be "
-                                          "collected after each trigger, using this "
-                                          "property." ) );
+      m_bufferModeWidget->setToolTip( tr( "You can choose how many samples "
+                                          "should be collected after each "
+                                          "trigger, using this property." ) );
       m_bufferModeWidget->addItem( tr( "1 buffer with 192k samples" ) );
       m_bufferModeWidget->addItem( tr( "2 buffers with 96k samples" ) );
       m_bufferModeWidget->addItem( tr( "4 buffers with 48k samples" ) );
@@ -228,81 +242,82 @@ namespace dt5740 {
       m_bufferModeWidget->addItem( tr( "256 buffers with 768 samples" ) );
       m_bufferModeWidget->addItem( tr( "512 buffers with 384 samples" ) );
       m_bufferModeWidget->addItem( tr( "1024 buffers with 192 samples" ) );
-      connect( m_bufferModeWidget, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_bufferModeWidget.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( bufferModeSlot( int ) ) );
 
-      m_clockSourceLabel = new QLabel( tr( "Clock source:" ),
-                                       m_acquisitionBox );
+      m_clockSourceLabel.reset( new QLabel( tr( "Clock source:" ),
+                                            m_acquisitionBox.get() ) );
       m_clockSourceLabel->setGeometry( QRect( 10, 175, 150, 25 ) );
 
-      m_clockSourceWidget = new QComboBox( m_acquisitionBox );
+      m_clockSourceWidget.reset( new QComboBox( m_acquisitionBox.get() ) );
       m_clockSourceWidget->setGeometry( QRect( 180, 175, 250, 25 ) );
-      m_clockSourceWidget->setToolTip( tr( "You can choose where the device should "
-                                           "get its clock for the digitization "
-                                           "timing." ) );
+      m_clockSourceWidget->setToolTip( tr( "You can choose where the device "
+                                           "should get its clock for the "
+                                           "digitization timing." ) );
       m_clockSourceWidget->addItem( tr( "Internal" ) );
       m_clockSourceWidget->addItem( tr( "External" ) );
-      connect( m_clockSourceWidget, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_clockSourceWidget.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( clockSourceSlot( int ) ) );
 
-      m_evCountModeLabel = new QLabel( tr( "Event count mode:" ),
-                                       m_acquisitionBox );
+      m_evCountModeLabel.reset( new QLabel( tr( "Event count mode:" ),
+                                            m_acquisitionBox.get() ) );
       m_evCountModeLabel->setGeometry( QRect( 10, 205, 150, 25 ) );
 
-      m_evCountModeWidget = new QComboBox( m_acquisitionBox );
+      m_evCountModeWidget.reset( new QComboBox( m_acquisitionBox.get() ) );
       m_evCountModeWidget->setGeometry( QRect( 180, 205, 250, 25 ) );
-      m_evCountModeWidget->setToolTip( tr( "You can choose how the number of events "
-                                           "should be counted by the device." ) );
+      m_evCountModeWidget->setToolTip( tr( "You can choose how the number of "
+                                           "events should be counted by the "
+                                           "device." ) );
       m_evCountModeWidget->addItem( tr( "Count accepted triggers" ) );
       m_evCountModeWidget->addItem( tr( "Count all triggers" ) );
-      connect( m_evCountModeWidget, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_evCountModeWidget.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( evCountModeSlot( int ) ) );
 
       //
       // Create the signal reconstruction settings:
       //
-      m_recoBox = new QGroupBox( tr( "Signal reconstruction settings" ),
-                                 m_scrollWidget );
+      m_recoBox.reset( new QGroupBox( tr( "Signal reconstruction settings" ),
+                                      m_scrollWidget.get() ) );
       m_recoBox->setGeometry( QRect( 10, 845, WIDGET_WIDTH - 40, 150 ) );
 
-      m_cfdFractionLabel = new QLabel( tr( "CFD fraction:" ),
-                                       m_recoBox );
+      m_cfdFractionLabel.reset( new QLabel( tr( "CFD fraction:" ),
+                                            m_recoBox.get() ) );
       m_cfdFractionLabel->setGeometry( QRect( 10, 25, 150, 25 ) );
 
-      m_cfdFractionWidget = new QDoubleSpinBox( m_recoBox );
+      m_cfdFractionWidget.reset( new QDoubleSpinBox( m_recoBox.get() ) );
       m_cfdFractionWidget->setGeometry( QRect( 180, 25, 250, 25 ) );
       m_cfdFractionWidget->setRange( -100.0, 100.0 );
-      connect( m_cfdFractionWidget, SIGNAL( valueChanged( double ) ),
+      connect( m_cfdFractionWidget.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( cfdFractionSlot( double ) ) );
 
-      m_cfdDelayLabel = new QLabel( tr( "CFD delay:" ),
-                                    m_recoBox );
+      m_cfdDelayLabel.reset( new QLabel( tr( "CFD delay:" ),
+                                         m_recoBox.get() ) );
       m_cfdDelayLabel->setGeometry( QRect( 10, 55, 150, 25 ) );
 
-      m_cfdDelayWidget = new QSpinBox( m_recoBox );
+      m_cfdDelayWidget.reset( new QSpinBox( m_recoBox.get() ) );
       m_cfdDelayWidget->setGeometry( QRect( 180, 55, 250, 25 ) );
       m_cfdDelayWidget->setRange( 0, 1000 );
-      connect( m_cfdDelayWidget, SIGNAL( valueChanged( int ) ),
+      connect( m_cfdDelayWidget.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( cfdDelaySlot( int ) ) );
 
-      m_cfdLengthLabel = new QLabel( tr( "CFD length:" ),
-                                     m_recoBox );
+      m_cfdLengthLabel.reset( new QLabel( tr( "CFD length:" ),
+                                          m_recoBox.get() ) );
       m_cfdLengthLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
 
-      m_cfdLengthWidget = new QSpinBox( m_recoBox );
+      m_cfdLengthWidget.reset( new QSpinBox( m_recoBox.get() ) );
       m_cfdLengthWidget->setGeometry( QRect( 180, 85, 250, 25 ) );
       m_cfdLengthWidget->setRange( 2, 1000 );
-      connect( m_cfdLengthWidget, SIGNAL( valueChanged( int ) ),
+      connect( m_cfdLengthWidget.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( cfdLengthSlot( int ) ) );
 
-      m_gaussSmoothWidthLabel = new QLabel( tr( "Gauss. smooth width:" ),
-                                            m_recoBox );
+      m_gaussSmoothWidthLabel.reset( new QLabel( tr( "Gauss. smooth width:" ),
+                                                 m_recoBox.get() ) );
       m_gaussSmoothWidthLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
 
-      m_gaussSmoothWidthWidget = new QDoubleSpinBox( m_recoBox );
+      m_gaussSmoothWidthWidget.reset( new QDoubleSpinBox( m_recoBox.get() ) );
       m_gaussSmoothWidthWidget->setGeometry( QRect( 180, 115, 250, 25 ) );
       m_gaussSmoothWidthWidget->setRange( 0.0, 10.0 );
-      connect( m_gaussSmoothWidthWidget, SIGNAL( valueChanged( double ) ),
+      connect( m_gaussSmoothWidthWidget.get(), SIGNAL( valueChanged( double ) ),
                this, SLOT( gaussSmoothWidthSlot( double ) ) );
 
       //
@@ -311,9 +326,12 @@ namespace dt5740 {
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
 
          // Create a new channel group:
-         m_ggroups[ i ] = new GroupGui( m_groups[ i ], m_scrollWidget );
-         m_ggroups[ i ]->setGeometry( QRect( 5, 1005 + i * ( GroupGui::HEIGHT + 10 ),
-                                             GroupGui::WIDTH, GroupGui::HEIGHT ) );
+         m_ggroups[ i ].reset( new GroupGui( m_groups[ i ],
+                                             m_scrollWidget.get() ) );
+         m_ggroups[ i ]->setGeometry( QRect( 5, 1005 +
+                                             i * ( GroupGui::HEIGHT + 10 ),
+                                             GroupGui::WIDTH,
+                                             GroupGui::HEIGHT ) );
       }
 
       // Take the default values set in the base class:
@@ -321,63 +339,13 @@ namespace dt5740 {
    }
 
    /**
-    * The destructor deletes all the objects created in the constructor.
-    */
-   Gui::~Gui() {
-
-      delete m_image;
-      delete m_topLabel;
-
-      delete m_connModeLabel;
-      delete m_connMode;
-      delete m_connLinkLabel;
-      delete m_connLink;
-      delete m_connectionBox;
-
-      delete m_trigOvlpEnabledWidget;
-      delete m_extTrigEnabledWidget;
-      delete m_extTrigOutEnabledWidget;
-      delete m_trigModeLabel;
-      delete m_trigModeWidget;
-      delete m_postTrigPercentageLabel;
-      delete m_postTrigPercentageWidget;
-      delete m_highImpedanceGPOWidget;
-      delete m_signalTypeLabel;
-      delete m_signalTypeWidget;
-      delete m_triggerBox;
-
-      delete m_patGenEnabledWidget;
-      delete m_saveRawNtupleWidget;
-      delete m_acqModeLabel;
-      delete m_acqModeWidget;
-      delete m_gateModeLabel;
-      delete m_gateModeWidget;
-      delete m_bufferModeLabel;
-      delete m_bufferModeWidget;
-      delete m_clockSourceLabel;
-      delete m_clockSourceWidget;
-      delete m_evCountModeLabel;
-      delete m_evCountModeWidget;
-      delete m_acquisitionBox;
-
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         delete m_ggroups[ i ];
-      }
-
-      delete m_scrollWidget;
-      delete m_scrollArea;
-   }
-
-   /**
     * The function calls the ad2249a::Device::readConfig(QIODevice*) function
     * to read the device configuration and then calls sync() to show the
     * new configuration correctly.
     */
-   bool Gui::readConfig( QIODevice* dev ) {
+   bool Gui::readConfig( QIODevice& dev ) {
 
-      if( ! Device::readConfig( dev ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( dev ) );
       sync();
       return true;
    }
@@ -389,9 +357,7 @@ namespace dt5740 {
     */
    bool Gui::readConfig( const QDomElement& node ) {
 
-      if( ! Device::readConfig( node ) ) {
-         return false;
-      }
+      CHECK( Device::readConfig( node ) );
       sync();
       return true;
    }

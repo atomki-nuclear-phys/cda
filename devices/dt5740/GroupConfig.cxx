@@ -24,14 +24,10 @@ namespace dt5740 {
         m_trigEnabled( false ), m_trigOutEnabled( false ),
         m_logger( "dt5740::GroupConfig" ) {
 
-      // Reset all the pointers in the array:
-      for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
-         m_channels[ i ] = 0;
-      }
    }
 
    GroupConfig::GroupConfig( const GroupConfig& parent )
-      : dev::Config(),
+      : dev::IConfig(),
         m_groupNumber( parent.m_groupNumber ),
         m_trigThreshold( parent.m_trigThreshold ),
         m_dcOffset( parent.m_dcOffset ),
@@ -43,16 +39,12 @@ namespace dt5740 {
       // Copy the channel configuration:
       for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
          if( parent.m_channels[ i ] ) {
-            m_channels[ i ] = new ChannelConfig( *( parent.m_channels[ i ] ) );
+            m_channels[ i ].reset(
+                     new ChannelConfig( *( parent.m_channels[ i ] ) ) );
          } else {
-            m_channels[ i ] = 0;
+            m_channels[ i ].reset();
          }
       }
-   }
-
-   GroupConfig::~GroupConfig() {
-
-      clear();
    }
 
    GroupConfig& GroupConfig::operator= ( const GroupConfig& rh ) {
@@ -67,20 +59,21 @@ namespace dt5740 {
       // Copy the channel configuration:
       for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
          if( rh.m_channels[ i ] ) {
-            m_channels[ i ] = new ChannelConfig( *( rh.m_channels[ i ] ) );
+            m_channels[ i ].reset(
+                     new ChannelConfig( *( rh.m_channels[ i ] ) ) );
          } else {
-            m_channels[ i ] = 0;
+            m_channels[ i ].reset();
          }
       }
 
       return *this;
    }
 
-   bool GroupConfig::readConfig( QIODevice* dev ) {
+   bool GroupConfig::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
 
       // Read in the group-wide configurations:
@@ -97,14 +90,12 @@ namespace dt5740 {
 
       // Read in the configuration of all the channels:
       for( quint32 i = 0; i < number_of_channels; ++i ) {
-         ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( dev ) ) {
-            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
-                              "read!" ) );
-            delete channel;
-            return false;
-         }
-         if( ( channel->getChannelNumber() >= ( m_groupNumber * CHANNELS_IN_GROUP ) ) &&
+
+         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         CHECK( channel->readConfig( dev ) );
+
+         if( ( channel->getChannelNumber() >=
+               ( m_groupNumber * CHANNELS_IN_GROUP ) ) &&
              ( channel->getChannelNumber() <
                ( ( m_groupNumber + 1 ) * CHANNELS_IN_GROUP ) ) ) {
             if( m_channels[ channel->getChannelNumber() -
@@ -113,15 +104,14 @@ namespace dt5740 {
                         << tr( "Redefining channel number: %1" )
                   .arg( channel->getChannelNumber() )
                         << msg::endmsg;
-               delete m_channels[ channel->getChannelNumber() -
-                                  ( m_groupNumber * CHANNELS_IN_GROUP ) ];
             }
-            m_channels[ channel->getChannelNumber() -
-                        ( m_groupNumber * CHANNELS_IN_GROUP ) ] = channel;
+            UniquePtr< ChannelConfig >::swap(
+                     m_channels[ channel->getChannelNumber() -
+                                 ( m_groupNumber * CHANNELS_IN_GROUP ) ],
+                     channel );
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            delete channel;
             return false;
          }
       }
@@ -129,11 +119,11 @@ namespace dt5740 {
       return true;
    }
 
-   bool GroupConfig::writeConfig( QIODevice* dev ) const {
+   bool GroupConfig::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
 
       // Write out the group-wide configurations:
@@ -156,11 +146,7 @@ namespace dt5740 {
       // Write the channel configurations:
       for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
          if( m_channels[ i ] ) {
-            if( ! m_channels[ i ]->writeConfig( dev ) ) {
-               REPORT_ERROR( tr( "A problem happened while writing out a "
-                                 "channel configuration" ) );
-               return false;
-            }
+            CHECK( m_channels[ i ]->writeConfig( dev ) );
          }
       }
 
@@ -205,14 +191,11 @@ namespace dt5740 {
             continue;
          }
 
-         ChannelConfig* channel = new ChannelConfig();
-         if( ! channel->readConfig( node.childNodes().at( i ).toElement() ) ) {
-            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
-                              "read!" ) );
-            delete channel;
-            return false;
-         }
-         if( ( channel->getChannelNumber() >= ( m_groupNumber * CHANNELS_IN_GROUP ) ) &&
+         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         CHECK( channel->readConfig( node.childNodes().at( i ).toElement() ) );
+
+         if( ( channel->getChannelNumber() >=
+               ( m_groupNumber * CHANNELS_IN_GROUP ) ) &&
              ( channel->getChannelNumber() <
                ( ( m_groupNumber + 1 ) * CHANNELS_IN_GROUP ) ) ) {
             if( m_channels[ channel->getChannelNumber() -
@@ -221,15 +204,14 @@ namespace dt5740 {
                         << tr( "Redefining channel number: %1" )
                   .arg( channel->getChannelNumber() )
                         << msg::endmsg;
-               delete m_channels[ channel->getChannelNumber() -
-                                  ( m_groupNumber * CHANNELS_IN_GROUP ) ];
             }
-            m_channels[ channel->getChannelNumber() -
-                        ( m_groupNumber * CHANNELS_IN_GROUP ) ] = channel;
+            UniquePtr< ChannelConfig >::swap(
+                     m_channels[ channel->getChannelNumber() -
+                                 ( m_groupNumber * CHANNELS_IN_GROUP ) ],
+                     channel );
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            delete channel;
             return false;
          }
       }
@@ -335,17 +317,12 @@ namespace dt5740 {
    void GroupConfig::enableChannel( int channel, bool enable ) {
 
       if( enable ) {
-         if( ! m_channels[ channel ] ) {
-            m_channels[ channel ] = new ChannelConfig();
-            m_channels[ channel ]->setChannelNumber( channel +
-                                                     m_groupNumber *
-                                                     CHANNELS_IN_GROUP );
-         }
+         m_channels[ channel ].reset( new ChannelConfig() );
+         m_channels[ channel ]->setChannelNumber( channel +
+                                                  m_groupNumber *
+                                                  CHANNELS_IN_GROUP );
       } else {
-         if( m_channels[ channel ] ) {
-            delete m_channels[ channel ];
-            m_channels[ channel ] = 0;
-         }
+         m_channels[ channel ].reset();
       }
 
       return;
@@ -355,7 +332,7 @@ namespace dt5740 {
 
       if( ( channel >= 0 ) &&
           ( channel < CHANNELS_IN_GROUP ) ) {
-         return m_channels[ channel ];
+         return m_channels[ channel ].get();
       }
 
       REPORT_ERROR( tr( "Channel with invalid index (%1) requested" )
@@ -367,7 +344,7 @@ namespace dt5740 {
 
       if( ( channel >= 0 ) &&
           ( channel < CHANNELS_IN_GROUP ) ) {
-         return m_channels[ channel ];
+         return m_channels[ channel ].get();
       }
 
       REPORT_ERROR( tr( "Channel with invalid index (%1) requested" )
@@ -386,8 +363,7 @@ namespace dt5740 {
 
       // Delete all the channels:
       for( int i = 0; i < CHANNELS_IN_GROUP; ++i ) {
-         if( m_channels[ i ] ) delete m_channels[ i ];
-         m_channels[ i ] = 0;
+         m_channels[ i ].reset();
       }
 
       return;

@@ -18,7 +18,7 @@
 namespace dt5740 {
 
    CernlibDisk::CernlibDisk()
-      : dev::CernlibDisk(), Device(),
+      : dev::ICernlibDisk(), Device(),
         m_processor(),
         m_logger( "dt5740::CernlibDisk" ) {
 

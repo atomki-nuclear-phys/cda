@@ -8,11 +8,11 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/Device.h"
+#   include "cdacore/device/IDevice.h"
 #   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/Device.h"
+#   include "device/IDevice.h"
 #   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
 #endif
@@ -40,7 +40,7 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class Device : virtual public dev::Device {
+   class Device : virtual public dev::IDevice {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( dt5740::Device )
@@ -48,13 +48,11 @@ namespace dt5740 {
    public:
       /// Constructor
       Device();
-      /// Destructor
-      ~Device();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice* dev ) const;
+      virtual bool writeConfig( QIODevice& dev ) const;
 
       /// Function reading the configuration in XML format
       virtual bool readConfig( const QDomElement& node );
@@ -62,7 +60,7 @@ namespace dt5740 {
       virtual bool writeConfig( QDomElement& node ) const;
 
       /// The type of the child class
-      virtual QString deviceName() const { return "DT5740"; }
+      virtual const QString& deviceName() const;
 
       /// ID of the USB connection
       virtual unsigned int getID() const;

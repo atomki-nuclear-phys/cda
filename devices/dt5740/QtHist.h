@@ -5,33 +5,30 @@
 
 // Qt include(s):
 #include <QtCore/QtGlobal>
+#include <QStackedLayout>
+#include <QTabWidget>
+#include <QVBoxLayout>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/QtHist.h"
 #   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
+#   include "cdacore/common/UniquePtr.h"
+#   include "cdadaq/moni/Histogram.h"
 #else
 #   include "device/QtHist.h"
 #   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
+#   include "common/UniquePtr.h"
+#   include "moni/Histogram.h"
 #endif
 
 // Local include(s):
 #include "Device.h"
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QStackedLayout )
-QT_FORWARD_DECLARE_CLASS( QTabWidget )
-QT_FORWARD_DECLARE_CLASS( QVBoxLayout )
-namespace moni {
-   class Histogram;
-}
+#include "RawHistogram.h"
 
 namespace dt5740 {
-
-   // Forward declaration(s):
-   class RawHistogram;
 
    /**
     *  @short Qt-only monitoring for a DT5740 device
@@ -55,11 +52,9 @@ namespace dt5740 {
    public:
       /// Qt Widget constructor
       QtHist( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~QtHist();
 
       /// Read the device configuration from a binary file
-      virtual bool readConfig( QIODevice* dev );
+      virtual bool readConfig( QIODevice& dev );
       /// Read the device configuration from an XML file
       virtual bool readConfig( const QDomElement& node );
 
@@ -72,19 +67,21 @@ namespace dt5740 {
       /// Reset the device
       bool reset();
 
-      QStackedLayout* m_channelLayout; ///< Layout for the tab widget
-      QTabWidget* m_channelTab; ///< Separate tabs for the channels
+      /// Layout for the tab widget
+      UniquePtr< QStackedLayout >::Type m_channelLayout;
+      /// Separate tabs for the channels
+      UniquePtr< QTabWidget >::Type m_channelTab;
       /// The possibly created raw histograms
-      RawHistogram*
+      UniquePtr< RawHistogram >::Type
       m_rawHistograms[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
       /// The possibly created reconstructed histograms
-      moni::Histogram*
+      UniquePtr< moni::Histogram >::Type
       m_histograms[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 2 ];
       /// Widgets for the tabs
-      QWidget*
+      UniquePtr< QWidget >::Type
       m_widgets[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
       /// Layouts for the tabs
-      QVBoxLayout*
+      UniquePtr< QVBoxLayout >::Type
       m_layouts[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
 
       mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info

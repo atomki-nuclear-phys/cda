@@ -33,90 +33,92 @@ namespace dt5740 {
       //
       // Create the group box for the widget:
       //
-      m_groupBox =
-         new QGroupBox( tr( "Channel group %1" ).arg( m_group.getGroupNumber() ),
-                        this );
+      m_groupBox.reset( new QGroupBox( tr( "Channel group %1" )
+                                       .arg( m_group.getGroupNumber() ),
+                                       this ) );
       m_groupBox->setGeometry( QRect( 5, 0, WIDTH - 10, HEIGHT ) );
 
       //
       // Create the trigger enabling checkboxes:
       //
-      m_trigEnabled = new QCheckBox( tr( "Enable self trigger" ),
-                                     m_groupBox );
+      m_trigEnabled.reset( new QCheckBox( tr( "Enable self trigger" ),
+                                          m_groupBox.get() ) );
       m_trigEnabled->setGeometry( QRect( 10, 25, 400, 25 ) );
-      connect( m_trigEnabled, SIGNAL( toggled( bool ) ),
+      connect( m_trigEnabled.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( trigEnabledSlot( bool ) ) );
 
-      m_trigOutEnabled = new QCheckBox( tr( "Forward self trigger to front panel" ),
-                                        m_groupBox );
+      m_trigOutEnabled.reset( new QCheckBox( tr( "Forward self trigger to "
+                                                 "front panel" ),
+                                             m_groupBox.get() ) );
       m_trigOutEnabled->setGeometry( QRect( 10, 55, 400, 25 ) );
-      connect( m_trigOutEnabled, SIGNAL( toggled( bool ) ),
+      connect( m_trigOutEnabled.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( trigOutEnabledSlot( bool ) ) );
 
       //
       // Create the trigger threshold selector:
       //
-      m_trigThresholdLabel = new QLabel( tr( "Trigger threshold:" ),
-                                         m_groupBox );
+      m_trigThresholdLabel.reset( new QLabel( tr( "Trigger threshold:" ),
+                                              m_groupBox.get() ) );
       m_trigThresholdLabel->setGeometry( QRect( 10, 85, 150, 25 ) );
 
-      m_trigThreshold = new QSpinBox( m_groupBox );
+      m_trigThreshold.reset( new QSpinBox( m_groupBox.get() ) );
       m_trigThreshold->setGeometry( QRect( 180, 85, 150, 25 ) );
       m_trigThreshold->setRange( 0, 4095 ); // We have 12 bits for this setting
-      connect( m_trigThreshold, SIGNAL( valueChanged( int ) ),
+      connect( m_trigThreshold.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( trigThresholdSlot( int ) ) );
 
       //
       // Create the DC offset setting:
       //
-      m_dcOffsetLabel = new QLabel( tr( "DC offset:" ),
-                                    m_groupBox );
+      m_dcOffsetLabel.reset( new QLabel( tr( "DC offset:" ),
+                                         m_groupBox.get() ) );
       m_dcOffsetLabel->setGeometry( QRect( 10, 115, 150, 25 ) );
 
-      m_dcOffset = new QSpinBox( m_groupBox );
+      m_dcOffset.reset( new QSpinBox( m_groupBox.get() ) );
       m_dcOffset->setGeometry( QRect( 180, 115, 150, 25 ) );
       m_dcOffset->setRange( 0, 65535 ); // We have 16 bits for this setting
-      connect( m_dcOffset, SIGNAL( valueChanged( int ) ),
+      connect( m_dcOffset.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( dcOffsetSlot( int ) ) );
 
       //
       // Create the trigger mask setting:
       //
-      m_trigMaskBox = new QGroupBox( tr( "Trigger mask (channels enabled)" ),
-                                     m_groupBox );
+      m_trigMaskBox.reset( new QGroupBox( tr( "Trigger mask (channels "
+                                              "enabled)" ),
+                                          m_groupBox.get() ) );
       m_trigMaskBox->setGeometry( QRect( 10, 145, WIDTH - 30, 50 ) );
-      m_trigMaskBox->setToolTip( "You can set here which channels should contribute "
-                                 "to the self triggering of the device. Note that "
-                                 "this setting is independent of which channels you "
+      m_trigMaskBox->setToolTip( "You can set here which channels should "
+                                 "contribute to the self triggering of the "
+                                 "device. Note that this setting is "
+                                 "independent of which channels you "
                                  "actually choose to read out." );
 
       for( int i = 0; i < GroupConfig::CHANNELS_IN_GROUP; ++i ) {
-         m_trigMask[ i ] =
-            new QCheckBox( tr( "%1." )
-                           .arg( m_group.getGroupNumber() *
-                                 GroupConfig::CHANNELS_IN_GROUP + i ),
-                           m_trigMaskBox );
+         m_trigMask[ i ].reset( new QCheckBox( tr( "%1." )
+                                     .arg( m_group.getGroupNumber() *
+                                           GroupConfig::CHANNELS_IN_GROUP + i ),
+                                               m_trigMaskBox.get() ) );
          m_trigMask[ i ]->setGeometry( QRect( 5 + i * 55, 25, 50, 25 ) );
-         connect( m_trigMask[ i ], SIGNAL( toggled( bool ) ),
+         connect( m_trigMask[ i ].get(), SIGNAL( toggled( bool ) ),
                   this, SLOT( trigMaskSlot( bool ) ) );
       }
 
       //
       // Create the channel labels:
       //
-      m_nameLabel = new QLabel( tr( "Name" ), m_groupBox );
+      m_nameLabel.reset( new QLabel( tr( "Name" ), m_groupBox.get() ) );
       m_nameLabel->setAlignment( Qt::AlignCenter );
       m_nameLabel->setGeometry( QRect( 125, 205, 75, 25 ) );
 
-      m_channelsLabel = new QLabel( tr( "Channels" ), m_groupBox );
+      m_channelsLabel.reset( new QLabel( tr( "Channels" ), m_groupBox.get() ) );
       m_channelsLabel->setAlignment( Qt::AlignCenter );
       m_channelsLabel->setGeometry( QRect( 205, 205, 75, 25 ) );
 
-      m_lowerBoundLabel = new QLabel( tr( "Lower" ), m_groupBox );
+      m_lowerBoundLabel.reset( new QLabel( tr( "Lower" ), m_groupBox.get() ) );
       m_lowerBoundLabel->setAlignment( Qt::AlignCenter );
       m_lowerBoundLabel->setGeometry( QRect( 285, 205, 75, 25 ) );
 
-      m_upperBoundLabel = new QLabel( tr( "Upper" ), m_groupBox );
+      m_upperBoundLabel.reset( new QLabel( tr( "Upper" ), m_groupBox.get() ) );
       m_upperBoundLabel->setAlignment( Qt::AlignCenter );
       m_upperBoundLabel->setGeometry( QRect( 365, 205, 75, 25 ) );
 
@@ -125,76 +127,57 @@ namespace dt5740 {
       //
       for( int i = 0; i < GroupConfig::CHANNELS_IN_GROUP; ++i ) {
 
-         m_channels[ i ] =
-            new ChannelGui( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP + i,
-                            m_groupBox );
+         m_channels[ i ].reset( new ChannelGui( m_group.getGroupNumber() *
+                                                GroupConfig::CHANNELS_IN_GROUP +
+                                                i, m_groupBox.get() ) );
          m_channels[ i ]->setGeometry( QRect( 10, 240 + i * 75,
                                               ChannelGui::WIDTH,
                                               ChannelGui::HEIGHT ) );
 
-         connect( m_channels[ i ], SIGNAL( enableChanged( int, bool ) ),
+         connect( m_channels[ i ].get(), SIGNAL( enableChanged( int, bool ) ),
                   this, SLOT( channelEnabledSlot( int, bool ) ) );
-         connect( m_channels[ i ], SIGNAL( rawNameChanged( int, const QString& ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( rawNameChanged( int, const QString& ) ),
                   this, SLOT( rawNameChangedSlot( int, const QString& ) ) );
 
-         connect( m_channels[ i ], SIGNAL( timeNameChanged( int, const QString& ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( timeNameChanged( int, const QString& ) ),
                   this, SLOT( timeNameChangedSlot( int, const QString& ) ) );
-         connect( m_channels[ i ], SIGNAL( timeChannelsChanged( int, int ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( timeChannelsChanged( int, int ) ),
                   this, SLOT( timeChannelsChangedSlot( int, int ) ) );
-         connect( m_channels[ i ], SIGNAL( timeLowerBoundChanged( int, double ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( timeLowerBoundChanged( int, double ) ),
                   this, SLOT( timeLowerBoundChangedSlot( int, double ) ) );
-         connect( m_channels[ i ], SIGNAL( timeUpperBoundChanged( int, double ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( timeUpperBoundChanged( int, double ) ),
                   this, SLOT( timeUpperBoundChangedSlot( int, double ) ) );
 
-         connect( m_channels[ i ], SIGNAL( energyNameChanged( int, const QString& ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( energyNameChanged( int, const QString& ) ),
                   this, SLOT( energyNameChangedSlot( int, const QString& ) ) );
-         connect( m_channels[ i ], SIGNAL( energyChannelsChanged( int, int ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( energyChannelsChanged( int, int ) ),
                   this, SLOT( energyChannelsChangedSlot( int, int ) ) );
-         connect( m_channels[ i ], SIGNAL( energyLowerBoundChanged( int, double ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( energyLowerBoundChanged( int, double ) ),
                   this, SLOT( energyLowerBoundChangedSlot( int, double ) ) );
-         connect( m_channels[ i ], SIGNAL( energyUpperBoundChanged( int, double ) ),
+         connect( m_channels[ i ].get(),
+                  SIGNAL( energyUpperBoundChanged( int, double ) ),
                   this, SLOT( energyUpperBoundChangedSlot( int, double ) ) );
       }
 
-   }
-
-   GroupGui::~GroupGui() {
-
-      delete m_trigEnabled;
-      delete m_trigOutEnabled;
-
-      delete m_trigThresholdLabel;
-      delete m_trigThreshold;
-
-      for( int i = 0; i < GroupConfig::CHANNELS_IN_GROUP; ++i ) {
-         delete m_trigMask[ i ];
-      }
-      delete m_trigMaskBox;
-
-      delete m_dcOffsetLabel;
-      delete m_dcOffset;
-
-      delete m_nameLabel;
-      delete m_channelsLabel;
-      delete m_lowerBoundLabel;
-      delete m_upperBoundLabel;
-
-      for( int i = 0; i < GroupConfig::CHANNELS_IN_GROUP; ++i ) {
-         delete m_channels[ i ];
-      }
-
-      delete m_groupBox;
    }
 
    ChannelGui* GroupGui::getChannel( int index ) const {
 
       if( ( index >= 0 ) &&
           ( index < GroupConfig::CHANNELS_IN_GROUP ) ) {
-         return m_channels[ index ];
+         return m_channels[ index ].get();
       }
 
-      REPORT_ERROR( tr( "Channel with invalid index (%1) requested" ).arg( index ) );
+      REPORT_ERROR( tr( "Channel with invalid index (%1) requested" )
+                    .arg( index ) );
       return 0;
    }
 
@@ -233,17 +216,26 @@ namespace dt5740 {
          if( m_group.getChannel( i ) ) {
             m_channels[ i ]->setEnabled( false );
 
-            m_channels[ i ]->setRawName( m_group.getChannel( i )->getRawName() );
+            m_channels[ i ]->setRawName(
+                     m_group.getChannel( i )->getRawName() );
 
-            m_channels[ i ]->setTimeName( m_group.getChannel( i )->getTimeName() );
-            m_channels[ i ]->setTimeChannels( m_group.getChannel( i )->getTimeNumberOfChannels() );
-            m_channels[ i ]->setTimeLowerBound( m_group.getChannel( i )->getTimeLowerBound() );
-            m_channels[ i ]->setTimeUpperBound( m_group.getChannel( i )->getTimeUpperBound() );
+            m_channels[ i ]->setTimeName(
+                     m_group.getChannel( i )->getTimeName() );
+            m_channels[ i ]->setTimeChannels(
+                     m_group.getChannel( i )->getTimeNumberOfChannels() );
+            m_channels[ i ]->setTimeLowerBound(
+                     m_group.getChannel( i )->getTimeLowerBound() );
+            m_channels[ i ]->setTimeUpperBound(
+                     m_group.getChannel( i )->getTimeUpperBound() );
 
-            m_channels[ i ]->setEnergyName( m_group.getChannel( i )->getEnergyName() );
-            m_channels[ i ]->setEnergyChannels( m_group.getChannel( i )->getEnergyNumberOfChannels() );
-            m_channels[ i ]->setEnergyLowerBound( m_group.getChannel( i )->getEnergyLowerBound() );
-            m_channels[ i ]->setEnergyUpperBound( m_group.getChannel( i )->getEnergyUpperBound() );
+            m_channels[ i ]->setEnergyName(
+                     m_group.getChannel( i )->getEnergyName() );
+            m_channels[ i ]->setEnergyChannels(
+                     m_group.getChannel( i )->getEnergyNumberOfChannels() );
+            m_channels[ i ]->setEnergyLowerBound(
+                     m_group.getChannel( i )->getEnergyLowerBound() );
+            m_channels[ i ]->setEnergyUpperBound(
+                     m_group.getChannel( i )->getEnergyUpperBound() );
 
             m_channels[ i ]->setEnabled( true );
          } else {
@@ -326,73 +318,91 @@ namespace dt5740 {
 
    void GroupGui::rawNameChangedSlot( int channel, const QString& text ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setRawName( text );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setRawName( text );
       return;
    }
 
    void GroupGui::timeNameChangedSlot( int channel, const QString& text ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeName( text );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setTimeName( text );
       return;
    }
 
    void GroupGui::timeChannelsChangedSlot( int channel, int channels ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeNumberOfChannels( channels );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setTimeNumberOfChannels( channels );
       return;
    }
 
    void GroupGui::timeLowerBoundChangedSlot( int channel, double value ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeLowerBound( value );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setTimeLowerBound( value );
       return;
    }
 
    void GroupGui::timeUpperBoundChangedSlot( int channel, double value ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setTimeUpperBound( value );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setTimeUpperBound( value );
       return;
    }
 
    void GroupGui::energyNameChangedSlot( int channel, const QString& text ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyName( text );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setEnergyName( text );
       return;
    }
 
    void GroupGui::energyChannelsChangedSlot( int channel, int channels ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyNumberOfChannels( channels );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setEnergyNumberOfChannels( channels );
       return;
    }
 
    void GroupGui::energyLowerBoundChangedSlot( int channel, double value ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyLowerBound( value );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setEnergyLowerBound( value );
       return;
    }
 
    void GroupGui::energyUpperBoundChangedSlot( int channel, double value ) {
 
-      m_group.getChannel( channel -
-                          ( m_group.getGroupNumber() *
-                            GroupConfig::CHANNELS_IN_GROUP ) )->setEnergyUpperBound( value );
+      ChannelConfig* c =
+            m_group.getChannel( channel -
+                                ( m_group.getGroupNumber() *
+                                  GroupConfig::CHANNELS_IN_GROUP ) );
+      c->setEnergyUpperBound( value );
       return;
    }
 

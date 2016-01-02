@@ -17,7 +17,6 @@
 
 // Local include(s):
 #include "QtHist.h"
-#include "RawHistogram.h"
 
 namespace dt5740 {
 
@@ -28,24 +27,11 @@ namespace dt5740 {
       // Declare a minimum size for this widget:
       setMinimumSize( 220, 450 );
 
-      // Reset all the object pointers as a start:
-      for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
-         for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
-              ++channel ) {
-            m_layouts[ group ][ channel ] = 0;
-            m_widgets[ group ][ channel ] = 0;
-            m_rawHistograms[ group ][ channel ] = 0;
-            for( int i = 0; i < 2; ++i ) {
-               m_histograms[ group ][ channel ][ i ] = 0;
-            }
-         }
-      }
-
       // Create the "layout" for the tab widget:
-      m_channelLayout = new QStackedLayout( this );
+      m_channelLayout.reset( new QStackedLayout( this ) );
 
       // Set up the tabs for the channels:
-      m_channelTab = new QTabWidget();
+      m_channelTab.reset( new QTabWidget() );
       m_channelTab->setMinimumSize( 300, 300 );
       m_channelTab->setMaximumSize( 20000, 20000 );
       m_channelTab->setSizePolicy( QSizePolicy::Expanding,
@@ -53,18 +39,10 @@ namespace dt5740 {
       m_channelTab->setUsesScrollButtons( true );
 
       // Add the tabs to the layout:
-      m_channelLayout->addWidget( m_channelTab );
+      m_channelLayout->addWidget( m_channelTab.get() );
    }
 
-   QtHist::~QtHist() {
-
-      reset();
-
-      delete m_channelTab;
-      delete m_channelLayout;
-   }
-
-   bool QtHist::readConfig( QIODevice* dev ) {
+   bool QtHist::readConfig( QIODevice& dev ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( dev ) );
@@ -135,38 +113,45 @@ namespace dt5740 {
             if( ! ch ) continue;
 
             // Create a widget for the tab:
-            m_widgets[ group ][ channel ] = new QWidget();
+            m_widgets[ group ][ channel ].reset( new QWidget() );
 
             // Create the simple layout for the tab:
-            m_layouts[ group ][ channel ] =
-               new QVBoxLayout( m_widgets[ group ][ channel ] );
+            m_layouts[ group ][ channel ].reset(
+               new QVBoxLayout( m_widgets[ group ][ channel ].get() ) );
 
             // Create the 3 histograms:
-            m_rawHistograms[ group ][ channel ] =
+            m_rawHistograms[ group ][ channel ].reset(
                new RawHistogram( ch->getRawName(), getSamples(),
-                                 -0.5, getSamples() - 0.5, 5000 );
+                                 -0.5, getSamples() - 0.5, 5000 ) );
             m_rawHistograms[ group ][ channel ]->setFraction( m_cfdFraction );
             m_rawHistograms[ group ][ channel ]->setDelay( m_cfdLength );
             m_rawHistograms[ group ][ channel ]->setLength( m_cfdLength );
             m_rawHistograms[ group ][ channel ]->setSmoothWidth( m_gaussSmoothWidth );
-            m_layouts[ group ][ channel ]->addWidget( m_rawHistograms[ group ][ channel ] );
+            m_layouts[ group ][ channel ]->addWidget(
+                     m_rawHistograms[ group ][ channel ].get() );
 
-            m_histograms[ group ][ channel ][ 0 ] =
-               new moni::Histogram( ch->getTimeName(), ch->getTimeNumberOfChannels(),
+            m_histograms[ group ][ channel ][ 0 ].reset(
+               new moni::Histogram( ch->getTimeName(),
+                                    ch->getTimeNumberOfChannels(),
                                     ch->getTimeLowerBound(),
-                                    ch->getTimeUpperBound() );
-            m_histograms[ group ][ channel ][ 0 ]->setHistColor( QColor( Qt::darkBlue ) );
-            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 0 ] );
+                                    ch->getTimeUpperBound() ) );
+            m_histograms[ group ][ channel ][ 0 ]->setHistColor(
+                     QColor( Qt::darkBlue ) );
+            m_layouts[ group ][ channel ]->addWidget(
+                     m_histograms[ group ][ channel ][ 0 ].get() );
 
-            m_histograms[ group ][ channel ][ 1 ] =
-               new moni::Histogram( ch->getEnergyName(), ch->getEnergyNumberOfChannels(),
+            m_histograms[ group ][ channel ][ 1 ].reset(
+               new moni::Histogram( ch->getEnergyName(),
+                                    ch->getEnergyNumberOfChannels(),
                                     ch->getEnergyLowerBound(),
-                                    ch->getEnergyUpperBound() );
-            m_histograms[ group ][ channel ][ 1 ]->setHistColor( QColor( Qt::darkGreen ) );
-            m_layouts[ group ][ channel ]->addWidget( m_histograms[ group ][ channel ][ 1 ] );
+                                    ch->getEnergyUpperBound() ) );
+            m_histograms[ group ][ channel ][ 1 ]->setHistColor(
+                     QColor( Qt::darkGreen ) );
+            m_layouts[ group ][ channel ]->addWidget(
+                     m_histograms[ group ][ channel ][ 1 ].get() );
 
             // Add the top widget as a tab:
-            m_channelTab->addTab( m_widgets[ group ][ channel ],
+            m_channelTab->addTab( m_widgets[ group ][ channel ].get(),
                                   tr( "Group %1, channel %2 (%3)" )
                                   .arg( group ).arg( channel )
                                   .arg( ch->getRawName() ) );
@@ -186,24 +171,12 @@ namespace dt5740 {
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
          for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
               ++channel ) {
-            if( m_rawHistograms[ group ][ channel ] ) {
-               delete m_rawHistograms[ group ][ channel ];
-               m_rawHistograms[ group ][ channel ] = 0;
-            }
+            m_rawHistograms[ group ][ channel ].reset();
             for( int i = 0; i < 2; ++i ) {
-               if( m_histograms[ group ][ channel ][ i ] ) {
-                  delete m_histograms[ group ][ channel ][ i ];
-                  m_histograms[ group ][ channel ][ i ] = 0;
-               }
+               m_histograms[ group ][ channel ][ i ].reset();
             }
-            if( m_layouts[ group ][ channel ] ) {
-               delete m_layouts[ group ][ channel ];
-               m_layouts[ group ][ channel ] = 0;
-            }
-            if( m_widgets[ group ][ channel ] ) {
-               delete m_widgets[ group ][ channel ];
-               m_widgets[ group ][ channel ] = 0;
-            }
+            m_layouts[ group ][ channel ].reset();
+            m_widgets[ group ][ channel ].reset();
          }
       }
 

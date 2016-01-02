@@ -6,7 +6,7 @@
 // Local include(s):
 #include "IDevice.h"
 #include "../event/Fragment.h"
-#include "../event/Event.h"
+#include "../common/UniquePtr.h"
 
 namespace dev {
 
@@ -90,7 +90,7 @@ namespace dev {
        *
        * @returns The event fragment coming from this device
        */
-      virtual UNIQUE_PTR< ev::Fragment > readEvent() = 0;
+      virtual UniquePtr< ev::Fragment >::Type readEvent() = 0;
 
    }; // class ICaenDigitizerReadout
 

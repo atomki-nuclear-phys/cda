@@ -29,38 +29,22 @@ namespace dt5740 {
 
    ChannelConfig::ChannelConfig()
       : m_rawName( "raw" ),
-        m_timeNumberOfChannels( 100 ), m_timeLowerBound( 0. ), m_timeUpperBound( 100. ),
-        m_timeName( "time" ),
-        m_energyNumberOfChannels( 100 ), m_energyLowerBound( 0. ), m_energyUpperBound( 100. ),
-        m_energyName( "energy" ),
+        m_timeNumberOfChannels( 100 ), m_timeLowerBound( 0. ),
+        m_timeUpperBound( 100. ), m_timeName( "time" ),
+        m_energyNumberOfChannels( 100 ), m_energyLowerBound( 0. ),
+        m_energyUpperBound( 100. ), m_energyName( "energy" ),
         m_channelNumber( -1 ),
         m_logger( "dt5740::ChannelConfig" ) {
 
    }
 
-   ChannelConfig::ChannelConfig( const ChannelConfig& parent )
-      : dev::Config(),
-        m_rawName( parent.m_rawName ),
-        m_timeNumberOfChannels( parent.m_timeNumberOfChannels ),
-        m_timeLowerBound( parent.m_timeLowerBound ),
-        m_timeUpperBound( parent.m_timeUpperBound ),
-        m_timeName( parent.m_timeName ),
-        m_energyNumberOfChannels( parent.m_energyNumberOfChannels ),
-        m_energyLowerBound( parent.m_energyLowerBound ),
-        m_energyUpperBound( parent.m_energyUpperBound ),
-        m_energyName( parent.m_energyName ),
-        m_channelNumber( parent.m_channelNumber ),
-        m_logger( "dt5740::ChannelConfig" ) {
-
-   }
-
-   bool ChannelConfig::readConfig( QIODevice* dev ) {
+   bool ChannelConfig::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
       clear();
 
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_rawName;
       input >> m_timeNumberOfChannels;
@@ -78,11 +62,11 @@ namespace dt5740 {
       return true;
    }
 
-   bool ChannelConfig::writeConfig( QIODevice* dev ) const {
+   bool ChannelConfig::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_rawName;
       output << m_timeNumberOfChannels;
@@ -154,7 +138,8 @@ namespace dt5740 {
       element.setAttribute( "TimeLowerBound", m_timeLowerBound );
       element.setAttribute( "TimeUpperBound", m_timeUpperBound );
       element.setAttribute( "TimeName", m_timeName );
-      element.setAttribute( "NumberOfEnergyChannels", m_energyNumberOfChannels );
+      element.setAttribute( "NumberOfEnergyChannels",
+                            m_energyNumberOfChannels );
       element.setAttribute( "EnergyLowerBound", m_energyLowerBound );
       element.setAttribute( "EnergyUpperBound", m_energyUpperBound );
       element.setAttribute( "EnergyName", m_energyName );

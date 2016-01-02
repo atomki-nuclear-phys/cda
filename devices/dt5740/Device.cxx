@@ -55,12 +55,7 @@ namespace dt5740 {
       }
    }
 
-   Device::~Device() {
-
-      clear();
-   }
-
-   bool Device::readConfig( QIODevice* dev ) {
+   bool Device::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -69,7 +64,7 @@ namespace dt5740 {
       QString temp;
 
       // Read the properties of this class:
-      QDataStream input( dev );
+      QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
 
       // Read the connection parameters of the device:
@@ -105,27 +100,19 @@ namespace dt5740 {
 
       // Read in the configuration of the groups:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         if( ! m_groups[ i ].readConfig( dev ) ) {
-            REPORT_ERROR( tr( "The configuration of a group couldn't be "
-                              "read!" ) );
-            return false;
-         }
-         if( m_groups[ i ].getGroupNumber() != i ) {
-            REPORT_ERROR( tr( "There was an error reading the configuration "
-                              "of a group" ) );
-            return false;
-         }
+         CHECK( m_groups[ i ].readConfig( dev ) );
+         CHECK( m_groups[ i ].getGroupNumber() != i );
       }
 
       return true;
    }
 
-   bool Device::writeConfig( QIODevice* dev ) const {
+   bool Device::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
       // Write the properties of this class:
-      QDataStream output( dev );
+      QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
 
       // Write out the connection parameters of the device:
@@ -152,11 +139,7 @@ namespace dt5740 {
 
       // Write out the group configurations:
       for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         if( ! m_groups[ i ].writeConfig( dev ) ) {
-            REPORT_ERROR( tr( "A problem happened while writing out a "
-                              "group's configuration" ) );
-            return false;
-         }
+         CHECK( m_groups[ i ].writeConfig( dev ) );
       }
 
       return true;
@@ -183,7 +166,8 @@ namespace dt5740 {
       m_trigMode = toTriggerMode( element.attribute( "TrigMode",
                                                      "InputOverThreshold" ) );
 
-      m_trigOvlpEnabled = element.attribute( "TrigOvlpEnabled", "0" ).toInt( &ok );
+      m_trigOvlpEnabled = element.attribute( "TrigOvlpEnabled",
+                                             "0" ).toInt( &ok );
       CHECK( ok );
 
       m_patGenEnabled = element.attribute( "PatGenEnabled", "0" ).toInt( &ok );
@@ -309,6 +293,12 @@ namespace dt5740 {
       }
 
       return true;
+   }
+
+   const QString& Device::deviceName() const {
+
+      static const QString name( "DT5740" );
+      return name;
    }
 
    unsigned int Device::getID() const {
@@ -461,7 +451,7 @@ namespace dt5740 {
       CHECK( fragment.getDataWords().size() == size );
 
       // Easy access to the data words:
-      const std::vector< uint32_t >& data = fragment.getDataWords();
+      const ev::Fragment::Payload_t& data = fragment.getDataWords();
 
       // Set the event information:
       ei.eventSize      = data[ 0 ];
@@ -479,7 +469,8 @@ namespace dt5740 {
               ++channel ) {
 
             // Index of this channel:
-            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP + channel;
+            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP +
+                  channel;
 
             // Clear the data in the inactive channels:
             if( ! m_groups[ group ].getChannel( channel ) ) {
@@ -495,7 +486,8 @@ namespace dt5740 {
                   ed.chData[ chIndex ][ sample ] = data[ index ] & 0xffff;
                   low_bits = false;
                } else {
-                  ed.chData[ chIndex ][ sample ] = ( data[ index ] >> 16 ) & 0xffff;
+                  ed.chData[ chIndex ][ sample ] =
+                        ( data[ index ] >> 16 ) & 0xffff;
                   low_bits = true;
                   ++index;
                }
@@ -544,7 +536,8 @@ namespace dt5740 {
             }
 
             // Index of this channel:
-            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP + channel;
+            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP +
+                  channel;
 
             // A security check:
             CHECK( static_cast< int >( ed.chData[ chIndex ].size() ) ==
@@ -557,7 +550,8 @@ namespace dt5740 {
                   dataWord |= ed.chData[ chIndex ][ sample ] & 0xffff;
                   low_bits = false;
                } else {
-                  dataWord |= ( ed.chData[ chIndex ][ sample ] << 16 ) & 0xffff0000;
+                  dataWord |=
+                        ( ed.chData[ chIndex ][ sample ] << 16 ) & 0xffff0000;
                   fragment.addDataWord( dataWord );
                   low_bits = true;
                }
@@ -683,7 +677,8 @@ namespace dt5740 {
          return "AllTriggers";
          break;
       default:
-         REPORT_ERROR( tr( "Event counting mode (%1) not recognized" ).arg( mode ) );
+         REPORT_ERROR( tr( "Event counting mode (%1) not recognized" )
+                       .arg( mode ) );
          break;
       }
 
@@ -787,7 +782,8 @@ namespace dt5740 {
          return EV_CountAllTriggers;
       }
 
-      REPORT_ERROR( tr( "Event counting mode (%1) not recognized" ).arg( value ) );
+      REPORT_ERROR( tr( "Event counting mode (%1) not recognized" )
+                    .arg( value ) );
       return EV_CountAcceptedTriggers;
    }
 

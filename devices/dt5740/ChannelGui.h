@@ -5,18 +5,20 @@
 
 // Qt include(s):
 #include <QWidget>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QCheckBox )
-QT_FORWARD_DECLARE_CLASS( QLabel )
-QT_FORWARD_DECLARE_CLASS( QLineEdit )
-QT_FORWARD_DECLARE_CLASS( QSpinBox )
-QT_FORWARD_DECLARE_CLASS( QDoubleSpinBox )
+// CDA include(s):
+#ifdef Q_OS_DARWIN
+#   include "cdacore/common/UniquePtr.h"
+#else
+#   include "common/UniquePtr.h"
+#endif
 
 namespace dt5740 {
-
-   // Forward declaration(s):
-   class ChannelConfig;
 
    /**
     *  @short Class for modifying the properties of one input channel
@@ -42,8 +44,6 @@ namespace dt5740 {
       /// Constructor
       ChannelGui( int channel, QWidget* parent = 0,
                   Qt::WindowFlags flags = 0 );
-      /// Destructor
-      ~ChannelGui();
 
       /// Get the subaddress described by this widget
       int getChannelNumber() const;
@@ -168,22 +168,34 @@ namespace dt5740 {
       void energyUpperBoundChangedSlot( double value );
 
    private:
-      int             m_channelNumber; ///< The channel described by this widget
+      int m_channelNumber; ///< The channel described by this widget
 
-      QCheckBox*      m_enabledEdit; ///< Widget turning the channel on or off
-      QLineEdit*      m_rawNameEdit; ///< Widget setting the channel's raw name
+      /// Widget turning the channel on or off
+      UniquePtr< QCheckBox >::Type m_enabledEdit;
+      /// Widget setting the channel's raw name
+      UniquePtr< QLineEdit >::Type m_rawNameEdit;
 
-      QLabel*         m_timeLabel; ///< Description of the time channel
-      QLineEdit*      m_timeNameEdit; ///< Widget setting the time channel's name
-      QSpinBox*       m_timeChannelsEdit; ///< Widget setting the time histogram's channels
-      QDoubleSpinBox* m_timeLowerBoundEdit; ///< Widget setting the time histogram's lower bound
-      QDoubleSpinBox* m_timeUpperBoundEdit; ///< Widget setting the time histogram's upper bound
+      /// Description of the time channel
+      UniquePtr< QLabel >::Type m_timeLabel;
+      /// Widget setting the time channel's name
+      UniquePtr< QLineEdit >::Type m_timeNameEdit;
+      /// Widget setting the time histogram's channels
+      UniquePtr< QSpinBox >::Type m_timeChannelsEdit;
+      /// Widget setting the time histogram's lower bound
+      UniquePtr< QDoubleSpinBox >::Type m_timeLowerBoundEdit;
+      /// Widget setting the time histogram's upper bound
+      UniquePtr< QDoubleSpinBox >::Type m_timeUpperBoundEdit;
 
-      QLabel*         m_energyLabel; ///< Description of the energy channel
-      QLineEdit*      m_energyNameEdit; ///< Widget setting the energy channel's name
-      QSpinBox*       m_energyChannelsEdit; ///< Widget setting the energy histogram's channels
-      QDoubleSpinBox* m_energyLowerBoundEdit; ///< Widget setting the energy histogram's lower bound
-      QDoubleSpinBox* m_energyUpperBoundEdit; ///< Widget setting the energy histogram's upper bound
+      /// Description of the energy channel
+      UniquePtr< QLabel >::Type m_energyLabel;
+      /// Widget setting the energy channel's name
+      UniquePtr< QLineEdit >::Type m_energyNameEdit;
+      /// Widget setting the energy histogram's channels
+      UniquePtr< QSpinBox >::Type m_energyChannelsEdit;
+      /// Widget setting the energy histogram's lower bound
+      UniquePtr< QDoubleSpinBox >::Type m_energyLowerBoundEdit;
+      /// Widget setting the energy histogram's upper bound
+      UniquePtr< QDoubleSpinBox >::Type m_energyUpperBoundEdit;
 
    }; // class ChannelGui
 

@@ -8,11 +8,11 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CernlibHist.h"
+#   include "cdacore/device/ICernlibHist.h"
 #   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CernlibHist.h"
+#   include "device/ICernlibHist.h"
 #   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
 #endif
@@ -34,7 +34,7 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class CernlibHist : public virtual dev::CernlibHist,
+   class CernlibHist : public virtual dev::ICernlibHist,
                        public virtual Device {
 
       Q_DECLARE_TR_FUNCTIONS( dt5740::CernlibHist )
