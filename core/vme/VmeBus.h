@@ -80,6 +80,7 @@ namespace vme {
       /// Default path to the VME bus device
       QString m_path;
 
+#ifdef HAVE_VME_LIB
       /// VME bus address modifier of the PCIVME driver.
       /**
        * With the pcivme module, the data transfer setup is done in
@@ -88,6 +89,7 @@ namespace vme {
        * writing and readout works, and I'm using that all the time...
        */
       unsigned char m_addressModifier;
+#endif // HAVE_VME_LIB
 
       /// Variable signaling the device's state.
       /**

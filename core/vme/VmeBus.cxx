@@ -28,7 +28,10 @@ namespace vme {
     * default state.
     */
    VmeBus::VmeBus( const char* dev_path )
-      : m_vmeFD( 0 ), m_path( dev_path ), m_addressModifier( 0x39 ),
+      : m_vmeFD( 0 ), m_path( dev_path ),
+#ifdef HAVE_VME_LIB
+        m_addressModifier( 0x39 ),
+#endif // HAVE_VME_LIB
         m_opened( false ), m_logger( "VmeBus" ) {
 
       REPORT_VERBOSE( tr( "Creating object" ) );
