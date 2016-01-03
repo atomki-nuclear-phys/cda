@@ -187,9 +187,9 @@ contains(DEFINES,HAVE_CAMAC_LIB) {
 }
 
 #
-# Decide whether to link the library against the CAEN libraries:
+# Decide whether to link the library against the CAEN digitiser libraries:
 #
-contains(DEFINES,HAVE_CAEN_LIBS) {
+contains(DEFINES,HAVE_CAEN_DIGITIZER_LIBS) {
    win32 {
       INCLUDEPATH += "/Program Files/CAEN/Digitizers/Library/include" \
                      "/Program Files/CAEN/Comm/include" \
@@ -201,6 +201,13 @@ contains(DEFINES,HAVE_CAEN_LIBS) {
    } else {
       LIBS += -lCAENVME -lCAENComm -lCAENDigitizer
    }
+}
+
+#
+# Decide whether to link the library against the CAEN QTP libraries:
+#
+contains(DEFINES,HAVE_CAEN_QTP_LIBS) {
+   LIBS += -lCAENVME -lCAENqtpSDK
 }
 
 #

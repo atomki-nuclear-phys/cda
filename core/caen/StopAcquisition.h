@@ -10,7 +10,7 @@
  * are left in an inconsistent state...
  *
  * To solve this, the CAEN library using plugins have to keep an eye on
- * this variable to device whether they should continue waiting for an
+ * this variable to devise whether they should continue waiting for an
  * incoming event. If the variable is set to <code>true</code>, the device
  * should just return an empty event fragment and let the cda-caen-reader
  * application exit gracefully.

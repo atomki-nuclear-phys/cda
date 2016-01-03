@@ -40,7 +40,7 @@ contains(DEFINES,HAVE_CERNLIB) {
    contains(DEFINES,HAVE_CAMAC_LIB) {
       LIBS += -lcc32
    }
-   contains(DEFINES,HAVE_CAEN_LIBS) {
+   contains(DEFINES,HAVE_CAEN_DIGITIZER_LIBS) {
       LIBS += -lCAENVME -lCAENComm -lCAENDigitizer
    }
    contains(DEFINES,HAVE_VME_LIB) {

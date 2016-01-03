@@ -163,10 +163,10 @@ namespace dt5740 {
                                  "current readout buffer" ) );
                return result;
             }
-#ifndef HAVE_CAEN_LIBS
+#ifndef HAVE_CAEN_DIGITIZER_LIBS
             // When in testing mode, let's not wait around here...
             m_numEvents = 1;
-#endif // HAVE_CAEN_LIBS
+#endif // HAVE_CAEN_DIGITIZER_LIBS
             // If there are events available, exit the loop:
             if( m_numEvents ) {
                break;

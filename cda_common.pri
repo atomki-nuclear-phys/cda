@@ -18,7 +18,7 @@
 # should not carry around the debug information... (Add "debug" in the following
 # list if you want to debug the code!)
 #
-CONFIG += warn_on release ordered exceptions rtti silent c++11 debug
+CONFIG += warn_on release ordered exceptions rtti silent c++11
 
 #
 # With Qt 4.X the c++11 configuration option doesn't work yet. One has to
@@ -44,10 +44,16 @@ DEFINES += CDASYS=$$CDASYS
 #DEFINES += HAVE_CAMAC_LIB
 
 #
-# Uncomment the following if you have the CAEN libraries installed
+# Uncomment the following if you have the CAEN Digitizer library installed
 # on your system.
 #
-#DEFINES += HAVE_CAEN_LIBS
+#DEFINES += HAVE_CAEN_DIGITIZER_LIBS
+
+#
+# Uncomment the following if you have the CAEN qtp library installed
+# on your system.
+#
+#DEFINES += HAVE_CAEN_QTP_LIBS
 
 #
 # Uncomment the following if you have the VME library installed
