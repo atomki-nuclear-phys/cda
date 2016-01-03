@@ -18,7 +18,15 @@
 # should not carry around the debug information... (Add "debug" in the following
 # list if you want to debug the code!)
 #
-CONFIG += warn_on release ordered exceptions rtti silent c++11
+CONFIG += warn_on release ordered exceptions rtti silent c++11 debug
+
+#
+# With Qt 4.X the c++11 configuration option doesn't work yet. One has to
+# use a more explicit setting.
+#
+contains(QT_MAJOR_VERSION,4) {
+   QMAKE_CXXFLAGS += -std=c++0x
+}
 
 #
 # The CDASYS variable value is compiled into the applications as a fallback
