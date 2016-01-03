@@ -13,7 +13,7 @@ include(cda_common.pri)
 
 # Define how (where) to compile the sources:
 TEMPLATE = subdirs
-SUBDIRS  = core daq gui devices apps
+SUBDIRS  = cache_gen.pro core daq gui devices apps
 
 # Define where to install the full software:
 CDA_INSTALL_PREFIX = /usr/local/cda
@@ -34,7 +34,7 @@ CDA_TR.files = $$files(trans/*.qm)
 INSTALLS += CDA_TR
 
 # Cache the configuration of the build:
-cache()
+#cache()
 
 #
 # Instruct the user:

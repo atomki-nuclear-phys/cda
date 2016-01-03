@@ -21,7 +21,7 @@ SUBDIRS  = cda-msgserver cda-config-editor \
 SUBDIRS += cda-camac-reader cda-camac-daq
 
 # CAEN specific application(s):
-SUBDIRS +=  cda-caen-reader cda-caen-daq
+SUBDIRS += cda-caen-reader cda-caen-daq
 
 # Only compile the applications needing CERNLIB if that is in fact
 # available:

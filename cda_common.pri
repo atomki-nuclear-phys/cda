@@ -13,19 +13,6 @@
 ##############################################################
 
 #
-# Check the version of Qt. The code currently only supports
-# Qt 4.X.
-#
-#!contains(QT_MAJOR_VERSION,4) {
-#   isEmpty($$QT_VERSION) {
-#      message(Your Qt version is too old. Probably 3.X...)
-#   } else {
-#      message(Your Qt version is $$QT_VERSION)
-#   }
-#   error(CDA has to be built with Qt version 4.X!)
-#}
-
-#
 # During development the code is compiled in debug mode to make it easier
 # to find problems in it. But the programs used for real data acquisition
 # should not carry around the debug information... (Add "debug" in the following
@@ -34,22 +21,13 @@
 CONFIG += warn_on release ordered exceptions rtti silent c++11
 
 #
-# Check that the CDASYS environment variable exists. The value of
-# the CDASYS environment variable is compiled into the applications
-# as a fallback solution if it is not set when running them. Also,
-# this variable is heavily used when compiling the code on
-# Mac OS X. All in all, compilation can't commence without it.
+# The CDASYS variable value is compiled into the applications as a fallback
+# solution in case one wants to run the code from the build area. But can be
+# overridden with the CDASYS environment variable after moving/installing the
+# code. But this way it's no longer necessary to source the setup script in
+# order to build the code.
 #
-unix {
-   CDASYS = $$system(echo $CDASYS)
-   isEmpty(CDASYS) {
-      error(CDASYS not defined. Please source one of the setup scripts!)
-   }
-   DEFINES += CDASYS=$$CDASYS
-}
-win32 {
-   DEFINES += CDASYS=$$PWD
-}
+DEFINES += CDASYS=$$CDASYS
 
 #
 # Uncomment the following if you have the CAMAC library on your

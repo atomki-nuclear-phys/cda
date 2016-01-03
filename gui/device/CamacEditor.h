@@ -45,6 +45,8 @@ namespace dev {
    public:
       /// Constructor
       CamacEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      /// Destructor
+      ~CamacEditor();
 
       /// Function reading the configuration in binary format
       virtual bool readConfig( QIODevice& dev );

@@ -1,0 +1,9 @@
+# Dear emacs, this is -*- fundamental -*- text
+#
+# $Id$
+#
+# File used to define the CDASYS variable for the QMake project files
+# during the build.
+#
+
+CDASYS=$$OUT_PWD

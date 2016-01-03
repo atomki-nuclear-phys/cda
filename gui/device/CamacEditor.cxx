@@ -54,6 +54,16 @@ namespace dev {
 
    }
 
+   CamacEditor::~CamacEditor() {
+
+      // Since QStackedWidget owns the widgets that were added to it, and
+      // the dev::Crate object does so too, we need to do something explicit
+      // here. Luckily QStackedWidget gets notified when one of its objects
+      // get deleted, so we just need to make sure that the dev::Crate
+      // object is deleted before the QStackedWidget object is.
+      m_crateView.reset();
+   }
+
    /**
     * The configuration reading is simply forwarded to the CamacCrateWidget
     * object.
@@ -120,7 +130,7 @@ namespace dev {
    }
 
    /**
-    * This function takes care of diplaying the detailed configuration
+    * This function takes care of displaying the detailed configuration
     * options of a CAMAC device if it's been selected.
     *
     * @param slot The crate slot in which the device can be found

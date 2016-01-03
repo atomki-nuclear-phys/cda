@@ -26,8 +26,8 @@ INCLUDEPATH += ../../core ../../daq ../../gui
 
 # The library dependencies:
 mac {
-   QMAKE_CXXFLAGS += -F$$OUT_PWD/../../lib
-   LIBS           += -F$$OUT_PWD/../../lib -framework cdacore -framework cdadaq
+   QMAKE_CXXFLAGS += -F$$CDASYS/lib
+   LIBS           += -F$$CDASYS/lib -framework cdacore -framework cdadaq
 }
 !mac {
    LIBS += -L../../lib -lcdadaq -lcdacore
@@ -47,3 +47,8 @@ contains(DEFINES,HAVE_CERNLIB) {
       LIBS += -lpcivme
    }
 }
+
+# Make the built executables work without an environment setting in the
+# build dir:
+QMAKE_RPATHDIR += $$CDASYS/lib
+QMAKE_RPATHLINKDIR += $$CDASYS/lib
