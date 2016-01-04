@@ -3,6 +3,9 @@
 #ifndef CDA_GUI_DEVICE_CAMACEDITOR_H
 #define CDA_GUI_DEVICE_CAMACEDITOR_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QWidget>
 #include <QGroupBox>
@@ -12,11 +15,9 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/IConfig.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/IConfig.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -73,11 +74,11 @@ namespace dev {
 
    private:
       /// Widget representing the CAMAC crate
-      UniquePtr< CamacCrateWidget >::Type m_crateView;
+      std::unique_ptr< CamacCrateWidget > m_crateView;
       /// Area for showing the detailed config
-      UniquePtr< QGroupBox >::Type m_deviceBox;
+      std::unique_ptr< QGroupBox > m_deviceBox;
       /// Widget for showing the config
-      UniquePtr< QStackedWidget >::Type m_deviceWidget;
+      std::unique_ptr< QStackedWidget > m_deviceWidget;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

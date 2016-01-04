@@ -91,7 +91,7 @@ namespace dt5740 {
       // Read in the configuration of all the channels:
       for( quint32 i = 0; i < number_of_channels; ++i ) {
 
-         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         std::unique_ptr< ChannelConfig > channel( new ChannelConfig() );
          CHECK( channel->readConfig( dev ) );
 
          if( ( channel->getChannelNumber() >=
@@ -105,10 +105,8 @@ namespace dt5740 {
                   .arg( channel->getChannelNumber() )
                         << msg::endmsg;
             }
-            UniquePtr< ChannelConfig >::swap(
-                     m_channels[ channel->getChannelNumber() -
-                                 ( m_groupNumber * CHANNELS_IN_GROUP ) ],
-                     channel );
+            m_channels[ channel->getChannelNumber() -
+                  ( m_groupNumber * CHANNELS_IN_GROUP ) ].swap( channel );
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
@@ -191,7 +189,7 @@ namespace dt5740 {
             continue;
          }
 
-         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         std::unique_ptr< ChannelConfig > channel( new ChannelConfig() );
          CHECK( channel->readConfig( node.childNodes().at( i ).toElement() ) );
 
          if( ( channel->getChannelNumber() >=
@@ -205,10 +203,8 @@ namespace dt5740 {
                   .arg( channel->getChannelNumber() )
                         << msg::endmsg;
             }
-            UniquePtr< ChannelConfig >::swap(
-                     m_channels[ channel->getChannelNumber() -
-                                 ( m_groupNumber * CHANNELS_IN_GROUP ) ],
-                     channel );
+            m_channels[ channel->getChannelNumber() -
+                  ( m_groupNumber * CHANNELS_IN_GROUP ) ].swap( channel );
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );

@@ -158,7 +158,7 @@ namespace dev {
     * @param device Pointer to the device that we now want to use
     */
    void CamacCrateWidget::setDevice( int slot,
-                                     UniquePtr< CamacGui >::Type device ) {
+                                     std::unique_ptr< CamacGui > device ) {
 
       //
       // Save the pointer to the new device:
@@ -170,7 +170,7 @@ namespace dev {
                   << msg::endmsg;
       }
       CamacGui* ptr = device.get(); // Remember the pointer...
-      UniquePtr< CamacGui >::swap( m_devices[ slot ], device );
+      m_devices[ slot ].swap( device );
       //
       // Take care of correctly displaying the new device:
       //
@@ -209,7 +209,7 @@ namespace dev {
       //
       // Try to create the new device:
       //
-      UniquePtr< CamacGui >::Type device = factory.createDevice< CamacGui >();
+      std::unique_ptr< CamacGui > device = factory.createDevice< CamacGui >();
       if( ! device.get() ) {
          REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" )
                        .arg( type ) );
@@ -223,7 +223,7 @@ namespace dev {
       // Configure and register the new device:
       //
       device->setID( slot );
-      setDevice( slot, UNIQUE_PTR_MOVE( device ) );
+      setDevice( slot, std::move( device ) );
       emit doubleClicked( slot );
 
       return;
@@ -432,7 +432,7 @@ namespace dev {
                // Check if this particular device could be inserted into this
                // crate slot:
                //
-               UniquePtr< CamacGui >::Type device =
+               std::unique_ptr< CamacGui > device =
                   m_loader->getFactory( *dev ).createDevice< CamacGui >();
                // Check if this is a CAMAC device:
                if( ! device.get() ) {

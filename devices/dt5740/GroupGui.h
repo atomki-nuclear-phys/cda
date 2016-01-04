@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_DT5740_GROUPGUI_H
 #define CDA_DEVICES_DT5740_GROUPGUI_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QWidget>
 #include <QGroupBox>
@@ -14,10 +17,8 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -97,31 +98,31 @@ namespace dt5740 {
       GroupConfig& m_group;
       bool m_syncing; ///< Flag showing when a syncing operation is going on
 
-      UniquePtr< QGroupBox >::Type m_groupBox;
+      std::unique_ptr< QGroupBox > m_groupBox;
 
-      UniquePtr< QCheckBox >::Type m_trigEnabled;
-      UniquePtr< QCheckBox >::Type m_trigOutEnabled;
+      std::unique_ptr< QCheckBox > m_trigEnabled;
+      std::unique_ptr< QCheckBox > m_trigOutEnabled;
 
-      UniquePtr< QLabel >::Type   m_trigThresholdLabel;
-      UniquePtr< QSpinBox >::Type m_trigThreshold;
+      std::unique_ptr< QLabel >   m_trigThresholdLabel;
+      std::unique_ptr< QSpinBox > m_trigThreshold;
 
-      UniquePtr< QGroupBox >::Type m_trigMaskBox;
-      UniquePtr< QCheckBox >::Type m_trigMask[ GroupConfig::CHANNELS_IN_GROUP ];
+      std::unique_ptr< QGroupBox > m_trigMaskBox;
+      std::unique_ptr< QCheckBox > m_trigMask[ GroupConfig::CHANNELS_IN_GROUP ];
 
-      UniquePtr< QLabel >::Type   m_dcOffsetLabel;
-      UniquePtr< QSpinBox >::Type m_dcOffset;
+      std::unique_ptr< QLabel >   m_dcOffsetLabel;
+      std::unique_ptr< QSpinBox > m_dcOffset;
 
       /// Label above channel names
-      UniquePtr< QLabel >::Type m_nameLabel;
+      std::unique_ptr< QLabel > m_nameLabel;
       /// Label above histogram channels
-      UniquePtr< QLabel >::Type m_channelsLabel;
+      std::unique_ptr< QLabel > m_channelsLabel;
       /// Label above histogram lower bounds
-      UniquePtr< QLabel >::Type m_lowerBoundLabel;
+      std::unique_ptr< QLabel > m_lowerBoundLabel;
       /// Label above histogram upper bounds
-      UniquePtr< QLabel >::Type m_upperBoundLabel;
+      std::unique_ptr< QLabel > m_upperBoundLabel;
 
       /// Graphical representation of channels in the group
-      UniquePtr< ChannelGui >::Type
+      std::unique_ptr< ChannelGui >
       m_channels[ GroupConfig::CHANNELS_IN_GROUP ];
 
       mutable msg::Logger m_logger; ///< Message logger object

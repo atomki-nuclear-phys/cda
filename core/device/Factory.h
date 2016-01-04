@@ -5,13 +5,11 @@
 
 // System include(s):
 #include <typeinfo>
+#include <memory>
 
 // Qt include(s):
 #include <QtCore/QObject>
 #include <QtCore/QString>
-
-// Local include(s):
-#include "../common/UniquePtr.h"
 
 namespace dev {
 
@@ -65,7 +63,7 @@ namespace dev {
 
       /// Helper function for creating a new device of a given type
       template< class T >
-      typename UniquePtr< T >::Type createDevice() const;
+      std::unique_ptr< T > createDevice() const;
 
    protected:
       /// Universal function for creating a device object of this type

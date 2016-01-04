@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_DT5740_GROUPCONFIG_H
 #define CDA_DEVICES_DT5740_GROUPCONFIG_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QCoreApplication>
 
@@ -10,11 +13,9 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/IConfig.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/IConfig.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -113,7 +114,7 @@ namespace dt5740 {
       bool         m_trigOutEnabled; ///< Enable to send triggers to front panel
 
       /// Configuration of the input channels belonging to this group
-      UniquePtr< ChannelConfig >::Type m_channels[ CHANNELS_IN_GROUP ];
+      std::unique_ptr< ChannelConfig > m_channels[ CHANNELS_IN_GROUP ];
 
       mutable msg::Logger m_logger; ///< Message logger object
 

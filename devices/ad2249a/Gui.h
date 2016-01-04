@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_AD2249A_GUI_H
 #define CDA_DEVICES_AD2249A_GUI_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QtGlobal>
 #include <QLabel>
@@ -13,11 +16,9 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CamacGui.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/CamacGui.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -86,27 +87,27 @@ namespace ad2249a {
       void sync();
 
       /// Object providing the scrolling functions
-      UniquePtr< QScrollArea >::Type m_scrollArea;
+      std::unique_ptr< QScrollArea > m_scrollArea;
       /// Main widget that is scrolled
-      UniquePtr< QWidget >::Type     m_scrollWidget;
+      std::unique_ptr< QWidget >     m_scrollWidget;
 
       /// Text label at the top
-      UniquePtr< QLabel >::Type     m_topLabel;
+      std::unique_ptr< QLabel >     m_topLabel;
 
       /// Label above channel names
-      UniquePtr< QLabel >::Type     m_nameLabel;
+      std::unique_ptr< QLabel >     m_nameLabel;
       /// Label above histogram channels
-      UniquePtr< QLabel >::Type     m_channelsLabel;
+      std::unique_ptr< QLabel >     m_channelsLabel;
       /// Label above histogram lower bounds
-      UniquePtr< QLabel >::Type     m_lowerBoundLabel;
+      std::unique_ptr< QLabel >     m_lowerBoundLabel;
       /// Label above histogram upper bounds
-      UniquePtr< QLabel >::Type     m_upperBoundLabel;
+      std::unique_ptr< QLabel >     m_upperBoundLabel;
 
       /// The graphical channel representations
-      UniquePtr< ChannelGui >::Type m_gchannels[ NUMBER_OF_SUBADDRESSES ];
+      std::unique_ptr< ChannelGui > m_gchannels[ NUMBER_OF_SUBADDRESSES ];
 
       /// Widget for changing the LAM setting
-      UniquePtr< QCheckBox >::Type  m_generateLamEdit;
+      std::unique_ptr< QCheckBox >  m_generateLamEdit;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

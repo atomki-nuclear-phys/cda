@@ -3,9 +3,11 @@
 #ifndef CDA_CORE_DEVICE_ICAMACREADOUT_H
 #define CDA_CORE_DEVICE_ICAMACREADOUT_H
 
+// System include(s):
+#include <memory>
+
 // Local include(s):
 #include "IDevice.h"
-#include "../common/UniquePtr.h"
 #include "../event/Fragment.h"
 
 // Forward declaration(s):
@@ -52,7 +54,7 @@ namespace dev {
        * @param crate The object to access the CAMAC crate with
        * @returns The event fragment coming from this device
        */
-      virtual UniquePtr< ev::Fragment >::Type
+      virtual std::unique_ptr< ev::Fragment >
       readEvent( camac::Crate& crate ) const = 0;
 
       /// Clear the module to receive a new event

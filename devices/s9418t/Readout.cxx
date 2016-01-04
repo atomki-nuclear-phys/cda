@@ -89,11 +89,11 @@ namespace s9418t {
       return true;
    }
 
-   UniquePtr< ev::Fragment >::Type
+   std::unique_ptr< ev::Fragment >
    Readout::readEvent( vme::VmeBus& bus ) const {
 
       // Create the event fragment object:
-      UniquePtr< ev::Fragment >::Type fragment( new ev::Fragment() );
+      std::unique_ptr< ev::Fragment > fragment( new ev::Fragment() );
       fragment->setModuleID( m_address );
 
       // Temporary data used in the readout:

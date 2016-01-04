@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_DT5740_CHANNELGUI_H
 #define CDA_DEVICES_DT5740_CHANNELGUI_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QWidget>
 #include <QCheckBox>
@@ -10,13 +13,6 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
-
-// CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/UniquePtr.h"
-#else
-#   include "common/UniquePtr.h"
-#endif
 
 namespace dt5740 {
 
@@ -171,31 +167,31 @@ namespace dt5740 {
       int m_channelNumber; ///< The channel described by this widget
 
       /// Widget turning the channel on or off
-      UniquePtr< QCheckBox >::Type m_enabledEdit;
+      std::unique_ptr< QCheckBox > m_enabledEdit;
       /// Widget setting the channel's raw name
-      UniquePtr< QLineEdit >::Type m_rawNameEdit;
+      std::unique_ptr< QLineEdit > m_rawNameEdit;
 
       /// Description of the time channel
-      UniquePtr< QLabel >::Type m_timeLabel;
+      std::unique_ptr< QLabel > m_timeLabel;
       /// Widget setting the time channel's name
-      UniquePtr< QLineEdit >::Type m_timeNameEdit;
+      std::unique_ptr< QLineEdit > m_timeNameEdit;
       /// Widget setting the time histogram's channels
-      UniquePtr< QSpinBox >::Type m_timeChannelsEdit;
+      std::unique_ptr< QSpinBox > m_timeChannelsEdit;
       /// Widget setting the time histogram's lower bound
-      UniquePtr< QDoubleSpinBox >::Type m_timeLowerBoundEdit;
+      std::unique_ptr< QDoubleSpinBox > m_timeLowerBoundEdit;
       /// Widget setting the time histogram's upper bound
-      UniquePtr< QDoubleSpinBox >::Type m_timeUpperBoundEdit;
+      std::unique_ptr< QDoubleSpinBox > m_timeUpperBoundEdit;
 
       /// Description of the energy channel
-      UniquePtr< QLabel >::Type m_energyLabel;
+      std::unique_ptr< QLabel > m_energyLabel;
       /// Widget setting the energy channel's name
-      UniquePtr< QLineEdit >::Type m_energyNameEdit;
+      std::unique_ptr< QLineEdit > m_energyNameEdit;
       /// Widget setting the energy histogram's channels
-      UniquePtr< QSpinBox >::Type m_energyChannelsEdit;
+      std::unique_ptr< QSpinBox > m_energyChannelsEdit;
       /// Widget setting the energy histogram's lower bound
-      UniquePtr< QDoubleSpinBox >::Type m_energyLowerBoundEdit;
+      std::unique_ptr< QDoubleSpinBox > m_energyLowerBoundEdit;
       /// Widget setting the energy histogram's upper bound
-      UniquePtr< QDoubleSpinBox >::Type m_energyUpperBoundEdit;
+      std::unique_ptr< QDoubleSpinBox > m_energyUpperBoundEdit;
 
    }; // class ChannelGui
 

@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_AD1000_QTHIST_H
 #define CDA_DEVICES_AD1000_QTHIST_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QtGlobal>
 #include <QStackedLayout>
@@ -11,12 +14,10 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/QtHist.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #   include "cdadaq/moni/Histogram.h"
 #else
 #   include "device/QtHist.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #   include "moni/Histogram.h"
 #endif
 
@@ -60,9 +61,9 @@ namespace ad1000 {
       bool initialize();
 
       /// Layout needed for the histogram
-      UniquePtr< QStackedLayout >::Type m_layout;
+      std::unique_ptr< QStackedLayout > m_layout;
       /// Histogram of the one available variable
-      UniquePtr< moni::Histogram >::Type m_hist;
+      std::unique_ptr< moni::Histogram > m_hist;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

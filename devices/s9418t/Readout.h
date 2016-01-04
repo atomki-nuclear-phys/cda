@@ -46,7 +46,7 @@ namespace s9418t {
       /// Function initializing the device
       virtual bool initialize( vme::VmeBus& bus ) const;
       /// Function reading the current data from the device
-      virtual UniquePtr< ev::Fragment >::Type
+      virtual std::unique_ptr< ev::Fragment >
       readEvent( vme::VmeBus& bus ) const;
 
    private:

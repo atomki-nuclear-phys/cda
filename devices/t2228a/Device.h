@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_T2228A_DEVICE_H
 #define CDA_DEVICES_T2228A_DEVICE_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QCoreApplication>
 
@@ -10,11 +13,9 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/IDevice.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/IDevice.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -71,7 +72,7 @@ namespace t2228a {
       unsigned int   m_slot; ///< Slot of the device in the CAMAC crate
       bool           m_generateLam; ///< Generate LAM signal at readout
       /// Configuration of the input channels of the device
-      UniquePtr< ChannelConfig >::Type m_channels[ NUMBER_OF_SUBADDRESSES ];
+      std::unique_ptr< ChannelConfig > m_channels[ NUMBER_OF_SUBADDRESSES ];
 
    private:
       mutable msg::Logger m_logger; ///< Message logger object

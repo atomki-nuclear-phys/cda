@@ -3,10 +3,12 @@
 #ifndef CDA_CORE_DEVICE_ICAENDIGITIZERREADOUT_H
 #define CDA_CORE_DEVICE_ICAENDIGITIZERREADOUT_H
 
+// System include(s):
+#include <memory>
+
 // Local include(s):
 #include "IDevice.h"
 #include "../event/Fragment.h"
-#include "../common/UniquePtr.h"
 
 namespace dev {
 
@@ -90,7 +92,7 @@ namespace dev {
        *
        * @returns The event fragment coming from this device
        */
-      virtual UniquePtr< ev::Fragment >::Type readEvent() = 0;
+      virtual std::unique_ptr< ev::Fragment > readEvent() = 0;
 
    }; // class ICaenDigitizerReadout
 

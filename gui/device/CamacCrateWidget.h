@@ -3,6 +3,9 @@
 #ifndef CDA_GUI_DEVICE_CAMACCRATEWIDGET_H
 #define CDA_GUI_DEVICE_CAMACCRATEWIDGET_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QWidget>
 
@@ -11,12 +14,10 @@
 #   include "cdacore/device/Crate.h"
 #   include "cdacore/device/CamacGui.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/Crate.h"
 #   include "device/CamacGui.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 namespace dev {
@@ -67,7 +68,7 @@ namespace dev {
       /// Get the CAMAC device in a given slot
       CamacGui* getDevice( int slot );
       /// Set the device in a given slot
-      void setDevice( int slot, UniquePtr< CamacGui >::Type device );
+      void setDevice( int slot, std::unique_ptr< CamacGui > device );
 
       /// Maximal number of slots the devices can use
       static const int NUMBER_OF_SLOTS;

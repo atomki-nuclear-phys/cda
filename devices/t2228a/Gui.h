@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_T2228A_GUI_H
 #define CDA_DEVICES_T2228A_GUI_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QtGlobal>
 #include <QLabel>
@@ -12,11 +15,9 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CamacGui.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/CamacGui.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -80,21 +81,21 @@ namespace t2228a {
       /// Function "syncing" the configuration
       void sync();
 
-      UniquePtr< QLabel >::Type m_topLabel; ///< Text label at the top
+      std::unique_ptr< QLabel > m_topLabel; ///< Text label at the top
 
       /// Label above channel names
-      UniquePtr< QLabel >::Type m_nameLabel;
+      std::unique_ptr< QLabel > m_nameLabel;
       /// Label above histogram channels
-      UniquePtr< QLabel >::Type m_channelsLabel;
+      std::unique_ptr< QLabel > m_channelsLabel;
       /// Label above histogram lower bounds
-      UniquePtr< QLabel >::Type m_lowerBoundLabel;
+      std::unique_ptr< QLabel > m_lowerBoundLabel;
       /// Label above histogram upper bounds
-      UniquePtr< QLabel >::Type m_upperBoundLabel;
+      std::unique_ptr< QLabel > m_upperBoundLabel;
       /// The graphical channel representations
-      UniquePtr< ChannelGui >::Type m_gchannels[ NUMBER_OF_SUBADDRESSES ];
+      std::unique_ptr< ChannelGui > m_gchannels[ NUMBER_OF_SUBADDRESSES ];
 
       /// Widget for changing the LAM setting
-      UniquePtr< QCheckBox >::Type  m_generateLamEdit;
+      std::unique_ptr< QCheckBox >  m_generateLamEdit;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

@@ -46,7 +46,7 @@ namespace dev {
          // Check if this particular device could be inserted into this
          // crate slot:
          //
-         UniquePtr< CaenGui >::Type device =
+         std::unique_ptr< CaenGui > device =
             m_loader->getFactory( *dev ).createDevice< CaenGui >();
          // Check if this is a CAEN device:
          if( ! device.get() ) {
@@ -194,7 +194,7 @@ namespace dev {
       //
       // Try to create the new device:
       //
-      UniquePtr< CaenGui >::Type device = factory.createDevice< CaenGui >();
+      std::unique_ptr< CaenGui > device = factory.createDevice< CaenGui >();
       if( ! device.get() ) {
          REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" ).arg( type ) );
          return;
@@ -211,8 +211,7 @@ namespace dev {
       m_deviceTab->addTab( device.get(), device->deviceName() );
 
       // Store the device with a "random" ID first:
-      UniquePtr< CaenGui >::swap( m_devices[ 10000 + m_devices.size() ],
-                                  device );
+      m_devices[ 10000 + m_devices.size() ].swap( device );
 
       // Check if the GUI is still "consistent":
       if( ! consistent() ) {
@@ -298,8 +297,7 @@ namespace dev {
 
             // If it now has an ID that is not used by others, then let's
             // re-add it with this ID to the base class:
-            UniquePtr< CaenGui >::swap( m_devices[ itr->second->getID() ],
-                                        itr->second );
+            m_devices[ itr->second->getID() ].swap( itr->second );
             m_devices.erase( itr );
 
             // Let's start the algorithm once more:

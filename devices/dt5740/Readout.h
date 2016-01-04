@@ -57,7 +57,7 @@ namespace dt5740 {
       virtual bool stop();
 
       /// Function reading a single event from the device
-      virtual UniquePtr< ev::Fragment >::Type readEvent();
+      virtual std::unique_ptr< ev::Fragment > readEvent();
 
    private:
       /// Get the external trigger mode

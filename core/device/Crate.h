@@ -5,6 +5,7 @@
 
 // STL include(s):
 #include <map>
+#include <memory>
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
@@ -16,7 +17,6 @@
 // Local include(s):
 #include "IConfig.h"
 #include "Factory.h"
-#include "../common/UniquePtr.h"
 
 namespace dev {
 
@@ -98,7 +98,7 @@ namespace dev {
 
       /// Type of the device container
       typedef std::map< unsigned int,
-                        typename UniquePtr< DEVICE >::Type > DeviceMap_t;
+                        std::unique_ptr< DEVICE > > DeviceMap_t;
 
       /// Container for the devices
       /**

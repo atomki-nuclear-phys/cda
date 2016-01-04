@@ -9,8 +9,6 @@
 
 // Local include(s):
 #include "Fragment.h"
-#include "../common/UniquePtr.h"
-#include "../common/SharedPtr.h"
 
 namespace ev {
 
@@ -28,11 +26,11 @@ namespace ev {
     * $Date$
     */
    class Event :
-      public std::vector< SharedPtr< Fragment >::Type > {
+      public std::vector< std::shared_ptr< Fragment > > {
 
    public:
       /// Type of the base class
-      typedef std::vector< SharedPtr< Fragment >::Type > Base_t;
+      typedef std::vector< std::shared_ptr< Fragment > > Base_t;
 
       /// Default constructor
       Event();
@@ -45,9 +43,9 @@ namespace ev {
       /// Get all the event fragments
       const Base_t& getFragments() const;
       /// Add one more event fragment
-      void addFragment( UniquePtr< Fragment >::Type fragment );
+      void addFragment( std::unique_ptr< Fragment > fragment );
       /// Add one more event fragment
-      void push_back( UniquePtr< Fragment >::Type fragment );
+      void push_back( std::unique_ptr< Fragment > fragment );
 
       /// Get the size of this event in bytes
       uint32_t sizeInBytes() const;

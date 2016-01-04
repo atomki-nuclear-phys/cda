@@ -46,7 +46,7 @@ namespace ad1000 {
       /// Initialise the CAMAC device for data acquisition
       virtual bool initialize( camac::Crate& crate ) const;
       /// Read the contents of the device
-      virtual UniquePtr< ev::Fragment >::Type
+      virtual std::unique_ptr< ev::Fragment >
       readEvent( camac::Crate& crate ) const;
       /// Clear the module to receive a new event
       virtual bool clear( camac::Crate& crate ) const;

@@ -75,9 +75,9 @@ namespace ev {
       ( * ( QDataStream* ) this ) >> nFragments;
 
       for( quint32 i = 0; i < nFragments; ++i ) {
-         UniquePtr< Fragment >::Type fragment( new Fragment() );
+         std::unique_ptr< Fragment > fragment( new Fragment() );
          *this >> *fragment;
-         event.push_back( UNIQUE_PTR_MOVE( fragment ) );
+         event.push_back( std::move( fragment ) );
       }
 
       return *this;

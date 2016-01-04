@@ -3,10 +3,12 @@
 #ifndef CDA_CORE_DEVICE_IVMEREADOUT_H
 #define CDA_CORE_DEVICE_IVMEREADOUT_H
 
+// System include(s):
+#include <memory>
+
 // Local include(s):
 #include "IDevice.h"
 #include "../event/Fragment.h"
-#include "../common/UniquePtr.h"
 
 // Forward declaration(s):
 namespace vme {
@@ -57,7 +59,7 @@ namespace dev {
        * @param bus The object to access the VME bus with
        * @returns The event fragment coming from this device
        */
-      virtual UniquePtr< ev::Fragment >::Type
+      virtual std::unique_ptr< ev::Fragment >
       readEvent( vme::VmeBus& bus ) const = 0;
 
    }; // class IVmeReadout

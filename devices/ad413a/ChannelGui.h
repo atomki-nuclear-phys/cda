@@ -3,19 +3,15 @@
 #ifndef CDA_DEVICES_AD413A_CHANNELGUI_H
 #define CDA_DEVICES_AD413A_CHANNELGUI_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QWidget>
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
-
-// CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/UniquePtr.h"
-#else
-#   include "common/UniquePtr.h"
-#endif
 
 namespace ad413a {
 
@@ -121,17 +117,17 @@ namespace ad413a {
       int m_subaddress; ///< The subaddress described by this widget
 
       /// Widget turning the channel on or off
-      UniquePtr< QCheckBox >::Type m_enabledEdit;
+      std::unique_ptr< QCheckBox > m_enabledEdit;
       /// Widget setting the channel's name
-      UniquePtr< QLineEdit >::Type m_nameEdit;
+      std::unique_ptr< QLineEdit > m_nameEdit;
       /// Widget setting the low level discriminant of the channel
-      UniquePtr< QSpinBox >::Type m_lldEdit;
+      std::unique_ptr< QSpinBox > m_lldEdit;
       /// Widget setting the histogram's channels
-      UniquePtr< QSpinBox >::Type m_channelsEdit;
+      std::unique_ptr< QSpinBox > m_channelsEdit;
       /// Widget setting the histogram's lower bound
-      UniquePtr< QDoubleSpinBox >::Type m_lowerBoundEdit;
+      std::unique_ptr< QDoubleSpinBox > m_lowerBoundEdit;
       /// Widget setting the histogram's upper bound
-      UniquePtr< QDoubleSpinBox >::Type m_upperBoundEdit;
+      std::unique_ptr< QDoubleSpinBox > m_upperBoundEdit;
 
    }; // class ChannelGui
 

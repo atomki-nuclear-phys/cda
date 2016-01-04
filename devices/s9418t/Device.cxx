@@ -68,7 +68,7 @@ namespace s9418t {
                                "common start" : "common stop" ) );
 
       for( quint32 i = 0; i < number_of_channels; ++i ) {
-         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         std::unique_ptr< ChannelConfig > channel( new ChannelConfig() );
          CHECK( channel->readConfig( dev ) );
          if( ( channel->getChannel() >= 0 ) &&
              ( channel->getChannel() < NUMBER_OF_CHANNELS ) ) {
@@ -78,8 +78,7 @@ namespace s9418t {
                   .arg( channel->getChannel() )
                         << msg::endmsg;
             }
-            UniquePtr< ChannelConfig >::swap(
-                     m_channels[ channel->getChannel() ], channel );
+            m_channels[ channel->getChannel() ].swap( channel );
          } else {
             REPORT_ERROR( tr( "The configuration of a channel couldn't "
                               "be read!" ) );
@@ -189,7 +188,7 @@ namespace s9418t {
          }
 
          // Read in the channel's configuration:
-         UniquePtr< ChannelConfig >::Type channel( new ChannelConfig() );
+         std::unique_ptr< ChannelConfig > channel( new ChannelConfig() );
          CHECK( channel->readConfig(
                    element.childNodes().at( i ).toElement() ) );
 
@@ -201,8 +200,7 @@ namespace s9418t {
                   .arg( channel->getChannel() )
                         << msg::endmsg;
             }
-            UniquePtr< ChannelConfig >::swap(
-                     m_channels[ channel->getChannel() ], channel );
+            m_channels[ channel->getChannel() ].swap( channel );
          } else {
             REPORT_ERROR( tr( "The configuration of a channel couldn't "
                               "be read!" ) );

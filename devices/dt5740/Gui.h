@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_DT5740_GUI_H
 #define CDA_DEVICES_DT5740_GUI_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QtGlobal>
 #include <QLabel>
@@ -17,11 +20,9 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/CaenGui.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #else
 #   include "device/CaenGui.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #endif
 
 // Local include(s):
@@ -115,97 +116,97 @@ namespace dt5740 {
       void sync();
 
       /// Object providing the scrolling functions
-      UniquePtr< QScrollArea >::Type m_scrollArea;
+      std::unique_ptr< QScrollArea > m_scrollArea;
       /// Main widget that is scrolled
-      UniquePtr< QWidget >::Type m_scrollWidget;
+      std::unique_ptr< QWidget > m_scrollWidget;
 
       /// Image of the digitizer itself
-      UniquePtr< QLabel >::Type m_image;
+      std::unique_ptr< QLabel > m_image;
       /// Text label at the top
-      UniquePtr< QLabel >::Type m_topLabel;
+      std::unique_ptr< QLabel > m_topLabel;
 
       /// Box for the connection parameters
-      UniquePtr< QGroupBox >::Type m_connectionBox;
+      std::unique_ptr< QGroupBox > m_connectionBox;
       /// Description for conn. mode setting
-      UniquePtr< QLabel >::Type m_connModeLabel;
+      std::unique_ptr< QLabel > m_connModeLabel;
       /// Connection mode chooser
-      UniquePtr< QComboBox >::Type m_connMode;
+      std::unique_ptr< QComboBox > m_connMode;
       /// Description for conn. link setting
-      UniquePtr< QLabel >::Type m_connLinkLabel;
+      std::unique_ptr< QLabel > m_connLinkLabel;
       /// Connection link chooser
-      UniquePtr< QSpinBox >::Type m_connLink;
+      std::unique_ptr< QSpinBox > m_connLink;
 
       /// Box for the trigger settings
-      UniquePtr< QGroupBox >::Type m_triggerBox;
+      std::unique_ptr< QGroupBox > m_triggerBox;
       /// Setting for enabling trigger overlaps
-      UniquePtr< QCheckBox >::Type m_trigOvlpEnabledWidget;
+      std::unique_ptr< QCheckBox > m_trigOvlpEnabledWidget;
       /// External trigger setting
-      UniquePtr< QCheckBox >::Type m_extTrigEnabledWidget;
+      std::unique_ptr< QCheckBox > m_extTrigEnabledWidget;
       /// External trigger forward setting
-      UniquePtr< QCheckBox >::Type m_extTrigOutEnabledWidget;
+      std::unique_ptr< QCheckBox > m_extTrigOutEnabledWidget;
       /// GPO impedance level setting
-      UniquePtr< QCheckBox >::Type m_highImpedanceGPOWidget;
+      std::unique_ptr< QCheckBox > m_highImpedanceGPOWidget;
       /// Description for post trigger fraction
-      UniquePtr< QLabel >::Type m_postTrigPercentageLabel;
+      std::unique_ptr< QLabel > m_postTrigPercentageLabel;
       /// Post trigger fraction setting
-      UniquePtr< QSpinBox >::Type m_postTrigPercentageWidget;
+      std::unique_ptr< QSpinBox > m_postTrigPercentageWidget;
       /// Description of the trigger mode setting
-      UniquePtr< QLabel >::Type m_trigModeLabel;
+      std::unique_ptr< QLabel > m_trigModeLabel;
       /// Trigger mode chooser
-      UniquePtr< QComboBox >::Type m_trigModeWidget;
+      std::unique_ptr< QComboBox > m_trigModeWidget;
       /// Description for front panel signal type
-      UniquePtr< QLabel >::Type m_signalTypeLabel;
+      std::unique_ptr< QLabel > m_signalTypeLabel;
       /// Front panel signal type setting
-      UniquePtr< QComboBox >::Type m_signalTypeWidget;
+      std::unique_ptr< QComboBox > m_signalTypeWidget;
 
       /// Box for the acquisition settings
-      UniquePtr< QGroupBox >::Type m_acquisitionBox;
+      std::unique_ptr< QGroupBox > m_acquisitionBox;
       /// Pattern generation setting
-      UniquePtr< QCheckBox >::Type m_patGenEnabledWidget;
+      std::unique_ptr< QCheckBox > m_patGenEnabledWidget;
       /// RAW ntuple save setting
-      UniquePtr< QCheckBox >::Type m_saveRawNtupleWidget;
+      std::unique_ptr< QCheckBox > m_saveRawNtupleWidget;
       /// Description of the acquisition mode setting
-      UniquePtr< QLabel >::Type m_acqModeLabel;
+      std::unique_ptr< QLabel > m_acqModeLabel;
       /// Acquisition mode chooser
-      UniquePtr< QComboBox >::Type m_acqModeWidget;
+      std::unique_ptr< QComboBox > m_acqModeWidget;
       /// Description of the gate mode setting
-      UniquePtr< QLabel >::Type m_gateModeLabel;
+      std::unique_ptr< QLabel > m_gateModeLabel;
       /// Gate mode chooser
-      UniquePtr< QComboBox >::Type m_gateModeWidget;
+      std::unique_ptr< QComboBox > m_gateModeWidget;
       /// Description of buffer mode setting
-      UniquePtr< QLabel >::Type m_bufferModeLabel;
+      std::unique_ptr< QLabel > m_bufferModeLabel;
       /// Buffer mode chooser
-      UniquePtr< QComboBox >::Type m_bufferModeWidget;
+      std::unique_ptr< QComboBox > m_bufferModeWidget;
       /// Description of the clock source setting
-      UniquePtr< QLabel >::Type m_clockSourceLabel;
+      std::unique_ptr< QLabel > m_clockSourceLabel;
       /// Clock source chooser
-      UniquePtr< QComboBox >::Type m_clockSourceWidget;
+      std::unique_ptr< QComboBox > m_clockSourceWidget;
       /// Description of the event counting mode setting
-      UniquePtr< QLabel >::Type m_evCountModeLabel;
+      std::unique_ptr< QLabel > m_evCountModeLabel;
       /// Event counting mode chooser
-      UniquePtr< QComboBox >::Type m_evCountModeWidget;
+      std::unique_ptr< QComboBox > m_evCountModeWidget;
 
       /// Box for the signal reconstruction settings
-      UniquePtr< QGroupBox >::Type m_recoBox;
+      std::unique_ptr< QGroupBox > m_recoBox;
       /// Description of the CFD fraction setting
-      UniquePtr< QLabel >::Type m_cfdFractionLabel;
+      std::unique_ptr< QLabel > m_cfdFractionLabel;
       /// Digital CFD fraction setting
-      UniquePtr< QDoubleSpinBox >::Type m_cfdFractionWidget;
+      std::unique_ptr< QDoubleSpinBox > m_cfdFractionWidget;
       /// Description of the CFD delay setting
-      UniquePtr< QLabel >::Type m_cfdDelayLabel;
+      std::unique_ptr< QLabel > m_cfdDelayLabel;
       /// Digital CFD delay setting
-      UniquePtr< QSpinBox >::Type m_cfdDelayWidget;
+      std::unique_ptr< QSpinBox > m_cfdDelayWidget;
       /// Description of the CFD length setting
-      UniquePtr< QLabel >::Type m_cfdLengthLabel;
+      std::unique_ptr< QLabel > m_cfdLengthLabel;
       /// Digital CFD length setting
-      UniquePtr< QSpinBox >::Type m_cfdLengthWidget;
+      std::unique_ptr< QSpinBox > m_cfdLengthWidget;
       /// Description of the Gaussian smoothing width setting
-      UniquePtr< QLabel >::Type m_gaussSmoothWidthLabel;
+      std::unique_ptr< QLabel > m_gaussSmoothWidthLabel;
       /// Gaussian smoothing width setting
-      UniquePtr< QDoubleSpinBox >::Type m_gaussSmoothWidthWidget;
+      std::unique_ptr< QDoubleSpinBox > m_gaussSmoothWidthWidget;
 
       /// The graphical representation of channel groups
-      UniquePtr< GroupGui >::Type m_ggroups[ NUMBER_OF_GROUPS ];
+      std::unique_ptr< GroupGui > m_ggroups[ NUMBER_OF_GROUPS ];
 
       mutable msg::Logger m_logger; ///< Message logger object
 

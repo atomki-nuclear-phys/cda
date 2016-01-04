@@ -3,6 +3,9 @@
 #ifndef CDA_DEVICES_DT5740_QTHIST_H
 #define CDA_DEVICES_DT5740_QTHIST_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QtGlobal>
 #include <QStackedLayout>
@@ -14,13 +17,11 @@
 #   include "cdacore/device/QtHist.h"
 #   include "cdacore/caen/Digitizer.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/common/UniquePtr.h"
 #   include "cdadaq/moni/Histogram.h"
 #else
 #   include "device/QtHist.h"
 #   include "caen/Digitizer.h"
 #   include "msg/Logger.h"
-#   include "common/UniquePtr.h"
 #   include "moni/Histogram.h"
 #endif
 
@@ -70,20 +71,20 @@ namespace dt5740 {
       bool reset();
 
       /// Layout for the tab widget
-      UniquePtr< QStackedLayout >::Type m_channelLayout;
+      std::unique_ptr< QStackedLayout > m_channelLayout;
       /// Separate tabs for the channels
-      UniquePtr< QTabWidget >::Type m_channelTab;
+      std::unique_ptr< QTabWidget > m_channelTab;
       /// The possibly created raw histograms
-      UniquePtr< RawHistogram >::Type
+      std::unique_ptr< RawHistogram >
       m_rawHistograms[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
       /// The possibly created reconstructed histograms
-      UniquePtr< moni::Histogram >::Type
+      std::unique_ptr< moni::Histogram >
       m_histograms[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ][ 2 ];
       /// Widgets for the tabs
-      UniquePtr< QWidget >::Type
+      std::unique_ptr< QWidget >
       m_widgets[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
       /// Layouts for the tabs
-      UniquePtr< QVBoxLayout >::Type
+      std::unique_ptr< QVBoxLayout >
       m_layouts[ NUMBER_OF_GROUPS ][ GroupConfig::CHANNELS_IN_GROUP ];
 
       mutable caen::Digitizer::EventInfo m_eventInfo; ///< Decoded event info

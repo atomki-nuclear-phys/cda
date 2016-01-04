@@ -140,10 +140,10 @@ namespace dt5740 {
       return true;
    }
 
-   UniquePtr< ev::Fragment >::Type Readout::readEvent() {
+   std::unique_ptr< ev::Fragment > Readout::readEvent() {
 
       // Create the new event fragment:
-      UniquePtr< ev::Fragment >::Type result( new ev::Fragment() );
+      std::unique_ptr< ev::Fragment > result( new ev::Fragment() );
       result->setModuleID( getID() );
 
       // Read a new (set of) event(s) if the event buffer is empty:

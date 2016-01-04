@@ -89,9 +89,9 @@ namespace dev {
          if( m_loader->isLoaded( type ) ) {
 
             Factory& factory = m_loader->getFactory( type );
-            typename UniquePtr< DEVICE >::Type device =
+            std::unique_ptr< DEVICE > device =
                factory.createDevice< DEVICE >();
-            if( ! device.get() ) {
+            if( ! device ) {
                m_logger << msg::WARNING
                         << tr( "No implementation found for type %1" )
                   .arg( type )
@@ -112,7 +112,7 @@ namespace dev {
                   .arg( device->getID() ) << msg::endmsg;
             }
 
-            UniquePtr< DEVICE >::swap( m_devices[ device->getID() ], device );
+            m_devices[ device->getID() ].swap( device );
 
          } else {
             REPORT_ERROR( tr( "Device type \"%1\" unknown.\n"
@@ -239,9 +239,9 @@ namespace dev {
 
          // If we do, let's try loading the configuration:
          Factory& factory = m_loader->getFactory( type );
-         typename UniquePtr< DEVICE >::Type device =
+         std::unique_ptr< DEVICE > device =
             factory.createDevice< DEVICE >();
-         if( ! device.get() ) {
+         if( ! device ) {
             m_logger << msg::WARNING
                      << tr( "No implementation found for type %1" )
                .arg( type )
@@ -265,7 +265,7 @@ namespace dev {
                .arg( device->getID() )
                      << msg::endmsg;
          }
-         UniquePtr< DEVICE >::swap( m_devices[ device->getID() ], device );
+         m_devices[ device->getID() ].swap( device );
 
       }
 
