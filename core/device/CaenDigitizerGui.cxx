@@ -1,11 +1,11 @@
 // $Id$
 
 // Local include(s):
-#include "CaenGui.h"
+#include "CaenDigitizerGui.h"
 
 namespace dev {
 
-   CaenGui::CaenGui( QWidget* parent, Qt::WindowFlags flags )
+   CaenDigitizerGui::CaenDigitizerGui( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ) {
 
       this->resize( WIDGET_WIDTH, WIDGET_HEIGHT );

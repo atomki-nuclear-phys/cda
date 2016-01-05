@@ -16,14 +16,15 @@
 #endif
 
 // Local include(s):
-#include "CaenEditor.h"
+#include "CaenDigitizerEditor.h"
 
 namespace dev {
 
-   CaenEditor::CaenEditor( QWidget* parent, Qt::WindowFlags flags )
+   CaenDigitizerEditor::CaenDigitizerEditor( QWidget* parent,
+                                             Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        dev::Crate< dev::CaenGui >( "CAEN", true ),
-        m_logger( "dev::CaenEditor" ) {
+        dev::Crate< dev::CaenDigitizerGui >( "CAEN", true ),
+        m_logger( "dev::CaenDigitizerEditor" ) {
 
       resize( 520, 640 );
       setMinimumSize( 520, 640 );
@@ -33,7 +34,7 @@ namespace dev {
       setLoader( Loader::instance() );
 
       // Create the dropdown menu that can be used to create a device:
-      m_createDevice = new QComboBox( this );
+      m_createDevice.reset( new QComboBox( this ) );
       m_createDevice->setGeometry( QRect( 110, 0, 300, 25 ) );
       m_createDevice->addItem( tr( "Add CAEN device..." ) );
 
@@ -46,8 +47,8 @@ namespace dev {
          // Check if this particular device could be inserted into this
          // crate slot:
          //
-         std::unique_ptr< CaenGui > device =
-            m_loader->getFactory( *dev ).createDevice< CaenGui >();
+         std::unique_ptr< CaenDigitizerGui > device =
+            m_loader->getFactory( *dev ).createDevice< CaenDigitizerGui >();
          // Check if this is a CAEN device:
          if( ! device.get() ) {
             continue;
@@ -60,41 +61,33 @@ namespace dev {
 
       // Connect the dropdown menu to the slot handling the creation of
       // a CAEN device:
-      connect( m_createDevice, SIGNAL( currentIndexChanged( int ) ),
+      connect( m_createDevice.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( createDeviceSlot( int ) ) );
 
       // Create a widget to show the devices in:
-      m_deviceTab = new QTabWidget( this );
+      m_deviceTab.reset( new QTabWidget( this ) );
       m_deviceTab->setGeometry( QRect( 0, 30, 520,
-                                       CaenGui::WIDGET_HEIGHT + 40 ) );
+                                       CaenDigitizerGui::WIDGET_HEIGHT + 40 ) );
       m_deviceTab->setUsesScrollButtons( true );
       m_deviceTab->setTabsClosable( true );
-      connect( m_deviceTab, SIGNAL( tabCloseRequested( int ) ),
+      connect( m_deviceTab.get(), SIGNAL( tabCloseRequested( int ) ),
                this, SLOT( deleteDeviceSlot( int ) ) );
 
    }
 
-   CaenEditor::~CaenEditor() {
+   CaenDigitizerEditor::~CaenDigitizerEditor() {
 
       // The tab widget thinks that it actually owns its widgets,
-      // so it deletes them in the end. To avoid crashes because of
-      // a double-delete, let's not allow the smart pointers to delete
-      // their objects.
-      DeviceMap_t::iterator itr = m_devices.begin();
-      DeviceMap_t::iterator end = m_devices.end();
-      for( ; itr != end; ++itr ) {
-         itr->second.release();
-      }
+      // so it deletes them in the end if they still exist. However, the tab
+      // widget does knowit when the objects get deleted already. So let's do
+      // that.
       m_devices.clear();
-
-      delete m_createDevice;
-      delete m_deviceTab;
    }
 
-   bool CaenEditor::readConfig( QIODevice& dev ) {
+   bool CaenDigitizerEditor::readConfig( QIODevice& dev ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenGui >::readConfig( dev ) ) {
+      if( ! dev::Crate< dev::CaenDigitizerGui >::readConfig( dev ) ) {
          REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
          return false;
       }
@@ -121,10 +114,10 @@ namespace dev {
       return true;
    }
 
-   bool CaenEditor::readConfig( const QDomElement& node ) {
+   bool CaenDigitizerEditor::readConfig( const QDomElement& node ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenGui >::readConfig( node ) ) {
+      if( ! dev::Crate< dev::CaenDigitizerGui >::readConfig( node ) ) {
          REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
          return false;
       }
@@ -151,10 +144,10 @@ namespace dev {
       return true;
    }
 
-   void CaenEditor::clear() {
+   void CaenDigitizerEditor::clear() {
 
+      dev::Crate< dev::CaenDigitizerGui >::clear();
       m_deviceTab->clear();
-      dev::Crate< dev::CaenGui >::clear();
 
       // Check if the GUI is still "consistent":
       if( ! consistent() ) {
@@ -169,7 +162,7 @@ namespace dev {
    /**
     * @param index Index of the menu item in m_createDevice
     */
-   void CaenEditor::createDeviceSlot( int index ) {
+   void CaenDigitizerEditor::createDeviceSlot( int index ) {
 
       // A security check:
       if( ! checkLoader() ) return;
@@ -194,9 +187,11 @@ namespace dev {
       //
       // Try to create the new device:
       //
-      std::unique_ptr< CaenGui > device = factory.createDevice< CaenGui >();
+      std::unique_ptr< CaenDigitizerGui > device =
+            factory.createDevice< CaenDigitizerGui >();
       if( ! device.get() ) {
-         REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" ).arg( type ) );
+         REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" )
+                       .arg( type ) );
          return;
       } else {
          REPORT_VERBOSE( tr( "GUI object created for device type \"%1\"" )
@@ -223,14 +218,14 @@ namespace dev {
       return;
    }
 
-   void CaenEditor::deleteDeviceSlot( int index ) {
+   void CaenDigitizerEditor::deleteDeviceSlot( int index ) {
 
       // Return right away if there's no device configured at the moment:
       if( ! m_devices.size() ) return;
 
       // Get the pointer of the currently shown device:
-      CaenGui* device =
-         dynamic_cast< CaenGui* >( m_deviceTab->widget( index ) );
+      CaenDigitizerGui* device =
+         dynamic_cast< CaenDigitizerGui* >( m_deviceTab->widget( index ) );
       if( ! device ) {
          REPORT_ERROR( tr( "No device selected currently" ) );
          return;
@@ -265,7 +260,7 @@ namespace dev {
       return;
    }
 
-   void CaenEditor::idChangedSlot() {
+   void CaenDigitizerEditor::idChangedSlot() {
 
       // Make an "endless" loop, with a bit of added security.
       // (We don't expect more than ~20 devices, so the loop should
@@ -319,7 +314,7 @@ namespace dev {
       return;
    }
 
-   bool CaenEditor::consistent() const {
+   bool CaenDigitizerEditor::consistent() const {
 
       return ( static_cast< int >( m_devices.size() ) == m_deviceTab->count() );
    }

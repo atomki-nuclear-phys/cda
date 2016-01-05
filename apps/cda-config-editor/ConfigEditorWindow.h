@@ -3,24 +3,25 @@
 #ifndef CDA_APPS_CDA_CONFIG_EDITOR_CONFIGEDITORWINDOW_H
 #define CDA_APPS_CDA_CONFIG_EDITOR_CONFIGEDITORWINDOW_H
 
+// System include(s):
+#include <memory>
+
 // Qt include(s):
 #include <QtCore/QString>
 #include <QMainWindow>
+#include <QStackedWidget>
+#include <QAction>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
+#   include "cdagui/device/CamacEditor.h"
+#   include "cdagui/device/CaenDigitizerEditor.h"
 #else
 #   include "msg/Logger.h"
+#   include "device/CamacEditor.h"
+#   include "device/CaenDigitizerEditor.h"
 #endif
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QStackedWidget )
-QT_FORWARD_DECLARE_CLASS( QAction )
-namespace dev {
-   class CamacEditor;
-   class CaenEditor;
-}
 
 /**
  *  @short Main window for the configuration editor application
@@ -83,19 +84,19 @@ private:
    void writeBinaryConfig( const QString& filename );
 
    /// Central widget
-   QWidget* m_centralWidget;
+   std::unique_ptr< QWidget > m_centralWidget;
    /// Stack of the editor widgets
-   QStackedWidget* m_editStack;
+   std::unique_ptr< QStackedWidget > m_editStack;
 
    /// Widget to modify the CAMAC crate settings
-   dev::CamacEditor* m_camacEdit;
+   std::unique_ptr< dev::CamacEditor > m_camacEdit;
    /// Widget to modify the CAEN device settings
-   dev::CaenEditor* m_caenEdit;
+   std::unique_ptr< dev::CaenDigitizerEditor > m_caenDigitizerEdit;
 
    /// Action triggering the display of the CAMAC confiugration
-   QAction* m_camacConfigAction;
-   /// Action triggering the display of the CAEN configuration
-   QAction* m_caenConfigAction;
+   std::unique_ptr< QAction > m_camacConfigAction;
+   /// Action triggering the display of the CAEN digitizer configuration
+   std::unique_ptr< QAction > m_caenDigitizerConfigAction;
 
    /// Name of the currently "opened" file
    QString m_currFileName;

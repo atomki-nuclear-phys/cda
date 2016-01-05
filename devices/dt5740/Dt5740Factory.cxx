@@ -28,9 +28,9 @@ namespace dt5740 {
 
    void* Dt5740Factory::createDevice( const std::type_info& ti ) const {
 
-      if( ti == typeid( dev::CaenGui ) ) {
+      if( ti == typeid( dev::CaenDigitizerGui ) ) {
 
-         return static_cast< dev::CaenGui* >( new Gui() );
+         return static_cast< dev::CaenDigitizerGui* >( new Gui() );
 
       } else if( ti == typeid( dev::ICernlibHist ) ) {
 

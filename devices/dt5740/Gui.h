@@ -18,10 +18,10 @@
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
-#   include "cdacore/device/CaenGui.h"
+#   include "cdacore/device/CaenDigitizerGui.h"
 #   include "cdacore/msg/Logger.h"
 #else
-#   include "device/CaenGui.h"
+#   include "device/CaenDigitizerGui.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -51,7 +51,7 @@ namespace dt5740 {
     * $Revision$
     * $Date$
     */
-   class Gui : public dev::CaenGui,
+   class Gui : public dev::CaenDigitizerGui,
                public virtual Device {
 
       Q_OBJECT

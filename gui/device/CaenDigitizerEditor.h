@@ -1,19 +1,24 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_GUI_DEVICE_CAENEDITOR_H
-#define CDA_GUI_DEVICE_CAENEDITOR_H
+#ifndef CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H
+#define CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H
+
+// System include(s):
+#include <memory>
 
 // Qt include(s):
 #include <QWidget>
+#include <QTabWidget>
+#include <QComboBox>
 
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/device/Crate.h"
-#   include "cdacore/device/CaenGui.h"
+#   include "cdacore/device/CaenDigitizerGui.h"
 #   include "cdacore/msg/Logger.h"
 #else
 #   include "device/Crate.h"
-#   include "device/CaenGui.h"
+#   include "device/CaenDigitizerGui.h"
 #   include "msg/Logger.h"
 #endif
 
@@ -24,26 +29,26 @@ QT_FORWARD_DECLARE_CLASS( QComboBox )
 namespace dev {
 
    /**
-    *  @short Editor widget for CAEN devices
+    *  @short Editor widget for CAEN digitizer devices
     *
     *         This class is used to construct/view the configuration
-    *         of (a) CAEN device(s) for a CDA data taking session.
+    *         of (a) CAEN digitizer device(s) for a CDA data taking session.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
-   class CaenEditor : public QWidget,
-                      public dev::Crate< dev::CaenGui > {
+   class CaenDigitizerEditor : public QWidget,
+                               public dev::Crate< dev::CaenDigitizerGui > {
 
       Q_OBJECT
 
    public:
       /// Standard QWidget style constructor
-      CaenEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenDigitizerEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       /// Destructor
-      ~CaenEditor();
+      ~CaenDigitizerEditor();
 
       /// Function reading the configuration in binary format
       virtual bool readConfig( QIODevice& dev );
@@ -65,13 +70,15 @@ namespace dev {
       /// Function checking if the GUI is consistent with the configuration
       bool consistent() const;
 
-      QTabWidget* m_deviceTab; ///< A widget to show the device(s) in
-      QComboBox* m_createDevice; ///< Dropdown menu selecting what kind of device to create
+      /// A widget to show the device(s) in
+      std::unique_ptr< QTabWidget > m_deviceTab;
+      /// Dropdown menu selecting what kind of device to create
+      std::unique_ptr< QComboBox > m_createDevice;
 
       mutable msg::Logger m_logger; ///< Message logger object
 
-   }; // class CaenEditor
+   }; // class CaenDigitizerEditor
 
 } // namespace dev
 
-#endif // CDA_GUI_DEVICE_CAENEDITOR_H
+#endif // CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H

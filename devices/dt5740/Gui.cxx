@@ -33,7 +33,7 @@ namespace dt5740 {
     * @param flags The Qt flags given to the widget
     */
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CaenGui( parent, flags ),
+      : dev::CaenDigitizerGui( parent, flags ),
         m_logger( "dt5740::Gui" ) {
 
       //

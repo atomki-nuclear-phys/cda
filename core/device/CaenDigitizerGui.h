@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_DEVICE_CAENGUI_H
-#define CDA_CORE_DEVICE_CAENGUI_H
+#ifndef CDA_CORE_DEVICE_CAENDIGITIZERGUI_H
+#define CDA_CORE_DEVICE_CAENDIGITIZERGUI_H
 
 // Qt include(s):
 #include <QWidget>
@@ -22,23 +22,23 @@ namespace dev {
    /**
     *  @short Base class for the graphical representation of a CAEN device
     *
-    *         All CAEN devices have to be able to show their configuration in
-    *         a graphical way. This interface is also used to change
-    *         the configuration of the devices.
+    *         All CAEN digitizer devices have to be able to show their
+    *         configuration in a graphical way. This interface is also used to
+    *         change the configuration of the devices.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
-   class CaenGui : public QWidget,
-                   virtual public IDevice {
+   class CaenDigitizerGui : public QWidget,
+                            virtual public IDevice {
 
       Q_OBJECT
 
    public:
       /// Standard QWidget style constructor
-      CaenGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenDigitizerGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Fixed width of a device
       static const int WIDGET_WIDTH = 510;
@@ -56,8 +56,8 @@ namespace dev {
        */
       void idChanged();
 
-   }; // class CaenGui
+   }; // class CaenDigitizerGui
 
 } // namespace dev
 
-#endif // CDA_CORE_DEVICE_CAENGUI_H
+#endif // CDA_CORE_DEVICE_CAENDIGITIZERGUI_H
