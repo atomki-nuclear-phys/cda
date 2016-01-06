@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_CORE_CAEN_VME_H
-#define CDA_CORE_CAEN_VME_H
+#ifndef CDA_CORE_CAEN_VMEBUS_H
+#define CDA_CORE_CAEN_VMEBUS_H
 
 // System include(s):
 #include <cinttypes>
@@ -32,16 +32,16 @@ namespace caen {
     * $Revision$
     * $Date$
     */
-   class VME {
+   class VmeBus {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( caen::VME )
 
    public:
       /// Default constructor
-      VME();
+      VmeBus();
       /// Destructor
-      ~VME();
+      ~VmeBus();
 
       /// CAEN VME board types
       enum BoardType {
@@ -68,8 +68,8 @@ namespace caen {
       sigset_t m_blockedSignals;
 #endif // Q_OS_WIN
 
-   }; // class VME
+   }; // class VmeBus
 
 } // namespace caen
 
-#endif // CDA_CORE_CAEN_VME_H
+#endif // CDA_CORE_CAEN_VMEBUS_H

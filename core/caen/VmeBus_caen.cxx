@@ -9,25 +9,25 @@
 #endif // HAVE_CAEN_QTP_LIBS
 
 // Local include(s):
-#include "VME.h"
+#include "VmeBus.h"
 
 #ifdef HAVE_CAEN_QTP_LIBS
 namespace {
 
    /// Convert from the custom type to the CAENVMELib one
-   CVBoardTypes convert( caen::VME::BoardType type ) {
+   CVBoardTypes convert( caen::VmeBus::BoardType type ) {
       switch( type )
          {
-         case caen::VME::BOARD_V1718:
+         case caen::VmeBus::BOARD_V1718:
             return cvV1718;
             break;
-         case caen::VME::BOARD_V2718:
+         case caen::VmeBus::BOARD_V2718:
             return cvV2718;
             break;
-         case caen::VME::BOARD_A2818:
+         case caen::VmeBus::BOARD_A2818:
             return cvA2818;
             break;
-         case caen::VME::BOARD_A2719:
+         case caen::VmeBus::BOARD_A2719:
             return cvA2719;
             break;
          default:
@@ -72,7 +72,7 @@ namespace {
 #define CHECK( CMD ) {                                                  \
       CVErrorCodes code = CMD;                                          \
       if( code != cvSuccess ) {                                         \
-         REPORT_ERROR( qApp->translate( "VME_CHECK",                    \
+         REPORT_ERROR( qApp->translate( "VmeBus_CHECK",                 \
                                         "Failed executing \"%1\", "     \
                                         "Return value: %2" )            \
                        .arg( #CMD )                                     \
@@ -89,7 +89,7 @@ namespace {
       CVErrorCodes code = CMD;                                          \
       sigprocmask( SIG_UNBLOCK, &m_blockedSignals, NULL );              \
       if( code != cvSuccess ) {                                         \
-         REPORT_ERROR( qApp->translate( "VME_CHECK",                    \
+         REPORT_ERROR( qApp->translate( "VmeBus_CHECK",                 \
                                         "Failed executing \"%1\", "     \
                                         "Return value: %2" )            \
                        .arg( #CMD )                                     \
@@ -104,19 +104,19 @@ namespace {
 namespace {
 
    /// Helper function translating the board type to a printable value
-   const char* toString( caen::VME::BoardType type ) {
+   const char* toString( caen::VmeBus::BoardType type ) {
       switch( type )
          {
-         case caen::VME::BOARD_V1718:
+         case caen::VmeBus::BOARD_V1718:
             return "BOARD_V1718";
             break;
-         case caen::VME::BOARD_V2718:
+         case caen::VmeBus::BOARD_V2718:
             return "BOARD_V2718";
             break;
-         case caen::VME::BOARD_A2818:
+         case caen::VmeBus::BOARD_A2818:
             return "BOARD_A2818";
             break;
-         case caen::VME::BOARD_A2719:
+         case caen::VmeBus::BOARD_A2719:
             return "BOARD_A2719";
             break;
          default:
@@ -128,7 +128,7 @@ namespace {
 
 namespace caen {
 
-   VME::VME()
+   VmeBus::VmeBus()
       : m_handle( -1 ), m_logger( "caen::VME" ) {
 
       // Initialize the blocked signal list:
@@ -139,12 +139,12 @@ namespace caen {
 #endif // Q_OS_WIN
    }
 
-   VME::~VME() {
+   VmeBus::~VmeBus() {
 
       close();
    }
 
-   bool VME::open( BoardType type, short linkNumber, short boardNumber ) {
+   bool VmeBus::open( BoardType type, short linkNumber, short boardNumber ) {
 
       REPORT_VERBOSE( tr( "Open called with type = %1, linkNumber = %2, "
                           "boardNumber = %3" ).arg( toString( type ) )
@@ -162,7 +162,7 @@ namespace caen {
       return true;
    }
 
-   bool VME::close() {
+   bool VmeBus::close() {
 
       // Check if the device is even open:
       if( m_handle == -1 ) {
@@ -189,7 +189,7 @@ namespace caen {
       return true;
    }
 
-   int32_t VME::handle() const {
+   int32_t VmeBus::handle() const {
 
       // Return the handle value:
       return m_handle;
