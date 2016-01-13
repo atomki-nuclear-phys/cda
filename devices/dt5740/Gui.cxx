@@ -55,7 +55,9 @@ namespace dt5740 {
       m_image.reset( new QLabel( m_scrollWidget.get() ) );
       m_image->setGeometry( QRect( 50, 10, 400, 181 ) );
       QPixmap pixmap( ":/img/dt5740.png" );
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 1, 0 )
       pixmap.setDevicePixelRatio( m_image->devicePixelRatio() );
+#endif // QT_VERSION
       m_image->setPixmap( pixmap );
       m_image->setScaledContents( true );
 
