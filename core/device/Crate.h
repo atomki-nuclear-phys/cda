@@ -97,7 +97,7 @@ namespace dev {
       virtual bool writeCrateConfig( QDomElement& node ) const;
 
       /// Type of the device container
-      typedef std::map< unsigned int,
+      typedef std::map< size_t,
                         std::unique_ptr< DEVICE > > DeviceMap_t;
 
       /// Container for the devices

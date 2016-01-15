@@ -61,13 +61,13 @@ namespace ev {
       /// Operator "serialising" a full CAMAC event
       BinaryStream& operator<< ( const Event& event );
       /// Operator "de-serialising" a full CAMAC event
-      BinaryStream& operator>> ( Event& event ) throw( IncompleteEvent );
+      BinaryStream& operator>> ( Event& event );
 
    private:
       /// Operator "serialising" a CAMAC event fragment
       BinaryStream& operator<< ( const Fragment& fragment );
       /// Operator "de-serialising" a CAMAC event fragment
-      BinaryStream& operator>> ( Fragment& fragment ) throw( IncompleteEvent );
+      BinaryStream& operator>> ( Fragment& fragment );
 
       /// Function making sure that the socket has data available
       bool ensureDataAvailable( qint64 minBytes );

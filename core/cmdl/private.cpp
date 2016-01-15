@@ -28,11 +28,13 @@
 //
 //-^^---------------------------------------------------------------------
 
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <strstrea.h>
+#  include <sstream>
 #else
 // AK 041103 <<<<<<<<<<
 //# if __GNUC__ >= 3

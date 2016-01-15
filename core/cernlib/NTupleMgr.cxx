@@ -114,6 +114,7 @@ namespace cernlib {
          return true;
       }
 
+#ifdef HAVE_CERNLIB
       // Translate the variable names into a format that CERNLIB can
       // understand:
       char varNames[ m_varNames.size() ][ 10 ];
@@ -129,6 +130,7 @@ namespace cernlib {
                      << msg::endmsg;
          }
       }
+#endif // HAVE_CERNLIB
 
       // Prepare some other character variables for the CERNLIB
       // functions:

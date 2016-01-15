@@ -1,17 +1,17 @@
 // $Id$
 
 // CAEN include(s):
-#ifdef HAVE_CAEN_QTP_LIBS
+#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
 #   ifndef Q_OS_WIN
 #      define LINUX
 #   endif // Q_OS_WIN
 #   include <CAENVMElib.h>
-#endif // HAVE_CAEN_QTP_LIBS
+#endif // CERN libs
 
 // Local include(s):
 #include "VmeBus.h"
 
-#ifdef HAVE_CAEN_QTP_LIBS
+#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
 namespace {
 
    /// Convert from the custom type to the CAENVMELib one
@@ -99,7 +99,7 @@ namespace {
    } while( 0 )
 
 #endif // Q_OS_WIN
-#endif // HAVE_CAEN_QTP_LIBS
+#endif // CAEN libs
 
 namespace {
 
@@ -150,10 +150,10 @@ namespace caen {
                           "boardNumber = %3" ).arg( toString( type ) )
                       .arg( linkNumber ).arg( boardNumber ) );
 
-#ifdef HAVE_CAEN_QTP_LIBS
+#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
       CHECK( CAENVME_Init( convert( type ), linkNumber, boardNumber,
                            &m_handle ) );
-#endif // HAVE_CAEN_QTP_LIBS
+#endif // CAEN libs
 
       m_logger << msg::DEBUG << tr( "Opened connection to VME device" )
                << msg::endmsg;
@@ -173,9 +173,9 @@ namespace caen {
       }
 
       // Close the connection:
-#ifdef HAVE_CAEN_DIGITIZER_LIBS
+#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
       CHECK( CAENVME_End( m_handle ) );
-#endif // HAVE_CAEN_DIGITIZER_LIBS
+#endif // CAEN libs
 
       // Reset the device handle:
       m_handle = -1;

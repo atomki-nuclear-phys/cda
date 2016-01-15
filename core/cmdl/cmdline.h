@@ -27,18 +27,20 @@
 //
 
 #if !defined(__GNUG__) && (defined(__WIN32__) || defined(_WIN32) || defined(WIN32))
-#  if defined(CMDL_BUILD_DLL)
-#    if !defined(_MSC_VER) && !defined(__SC__) && !defined(__WATCOMC__)
-#      define CmdLineExport _export
-#      define cmdlineexport _export
-#    else
-#      define CmdLineExport __declspec(dllexport)    
-#      define cmdlineexport __declspec(dllexport)
-#    endif
-#  else
-#    define CmdLineExport __declspec(dllimport)
-#    define cmdlineexport __declspec(dllimport)
-#  endif
+//#  if defined(CMDL_BUILD_DLL)
+//#    if !defined(_MSC_VER) && !defined(__SC__) && !defined(__WATCOMC__)
+//#      define CmdLineExport _export
+//#      define cmdlineexport _export
+//#    else
+//#      define CmdLineExport __declspec(dllexport)    
+//#      define cmdlineexport __declspec(dllexport)
+//#    endif
+//#  else
+//#    define CmdLineExport __declspec(dllimport)
+//#    define cmdlineexport __declspec(dllimport)
+//#  endif
+#  define CmdLineExport __declspec(dllexport)    
+#  define cmdlineexport __declspec(dllexport)
 #else
 #  define CmdLineExport
 #  define cmdlineexport

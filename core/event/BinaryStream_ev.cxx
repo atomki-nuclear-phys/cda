@@ -58,7 +58,7 @@ namespace ev {
     * @returns This same object
     */
    BinaryStream&
-   BinaryStream::operator>> ( Event& event ) throw( IncompleteEvent ) {
+   BinaryStream::operator>> ( Event& event ) {
 
       event.clear();
 
@@ -120,7 +120,7 @@ namespace ev {
     * @returns This same object
     */
    BinaryStream&
-   BinaryStream::operator>> ( Fragment& fragment ) throw( IncompleteEvent ) {
+   BinaryStream::operator>> ( Fragment& fragment ) {
 
       fragment.clear();
 

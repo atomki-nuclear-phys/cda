@@ -1101,7 +1101,7 @@ namespace moni {
                exponent +=
                   static_cast< int >( std::floor( std::log10( itr->value() ) ) );
             }
-            exponent /= abin.majors().size();
+            exponent /= static_cast< int >( abin.majors().size() );
             return std::make_pair( true, exponent );
          } else {
             return std::make_pair( false, -1 );

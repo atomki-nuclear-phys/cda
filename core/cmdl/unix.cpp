@@ -26,7 +26,7 @@
 
 #include <iostream>
 #ifdef _MSC_VER
-#  include <strstrea.h>
+#  include <sstream>
 #else
 # if __GNUC__ >= 3
 #  include <sstream>
@@ -718,11 +718,8 @@ CmdLine::fmt_arg(const CmdArg           * cmdarg,
                  CmdLine::CmdLineSyntax   syntax,
                  CmdLine::CmdUsageLevel   level) const
 {
-#if __GNUC__ >= 3
    std::ostringstream  oss;
-#else
-   ostrstream  oss(buf, bufsize);
-#endif
+
    *buf = '\0';
 
    int  plus = (cmd_flags & ALLOW_PLUS) ;  // Can we use "+"?
@@ -778,12 +775,9 @@ CmdLine::fmt_arg(const CmdArg           * cmdarg,
          oss << char(']') ;
       }
       oss << ends ;
-#if __GNUC__ >= 3
+
       memcpy(buf,oss.str().data(),bufsize) ;
       return oss.str().length() ;
-#else
-      return  (oss.pcount() - 1) ;
-#endif
    }
 
    if (! (cmdarg->syntax() & CmdArg::isPOS)) {
@@ -841,11 +835,7 @@ CmdLine::fmt_arg(const CmdArg           * cmdarg,
    }
    oss << ends ;
 
-#if __GNUC__ >= 3
    memcpy(buf,oss.str().data(),bufsize) ;
    return oss.str().length() ;
-#else
-   return  (oss.pcount() - 1) ;
-#endif
 }
 

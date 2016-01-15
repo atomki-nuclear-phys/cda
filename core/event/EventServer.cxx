@@ -172,7 +172,7 @@ namespace ev {
             //
             try {
                stream >> event;
-            } catch( const IncompleteEvent& ex ) {
+            } catch( const IncompleteEvent& ) {
                // Throw away the incomplete event:
                continue;
             }
