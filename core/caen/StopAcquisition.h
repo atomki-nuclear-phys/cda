@@ -3,6 +3,9 @@
 #ifndef CDA_CORE_CAEN_STOPACQUISITION_H
 #define CDA_CORE_CAEN_STOPACQUISITION_H
 
+// Local include(s):
+#include "../common/Export.h"
+
 /// Flag specifying whether the event taking should continue
 /**
  * The CAEN libraries don't like it when we exit from one of them using
@@ -15,6 +18,6 @@
  * should just return an empty event fragment and let the cda-caen-reader
  * application exit gracefully.
  */
-extern bool g_stopAcquisition;
+CDACORE_EXPORT extern bool g_stopAcquisition;
 
 #endif // CDA_CORE_CAEN_STOPACQUISITION_H

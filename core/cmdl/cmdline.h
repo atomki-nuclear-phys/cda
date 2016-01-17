@@ -21,30 +21,15 @@
 #ifndef _usr_include_cmdline_h
 #define _usr_include_cmdline_h
 
+// CDA include(s):
+#include "../common/Export.h"
+
 //
 // 'CmdLineExport' and 'cmdlineexport' keywords are used to build
 // CmdLine library as Windows NT DLL
 //
-
-#if !defined(__GNUG__) && (defined(__WIN32__) || defined(_WIN32) || defined(WIN32))
-//#  if defined(CMDL_BUILD_DLL)
-//#    if !defined(_MSC_VER) && !defined(__SC__) && !defined(__WATCOMC__)
-//#      define CmdLineExport _export
-//#      define cmdlineexport _export
-//#    else
-//#      define CmdLineExport __declspec(dllexport)    
-//#      define cmdlineexport __declspec(dllexport)
-//#    endif
-//#  else
-//#    define CmdLineExport __declspec(dllimport)
-//#    define cmdlineexport __declspec(dllimport)
-//#  endif
-#  define CmdLineExport __declspec(dllexport)    
-#  define cmdlineexport __declspec(dllexport)
-#else
-#  define CmdLineExport
-#  define cmdlineexport
-#endif
+#define CmdLineExport CDACORE_EXPORT
+#define cmdlineexport CDACORE_EXPORT
 
 
   //

@@ -141,7 +141,7 @@ namespace moni {
        * $Revision$
        * $Date$
        */
-      class AxisBinning {
+      class CDADAQ_EXPORT AxisBinning {
 
       public:
          /// Type of the tick positions (in pixels)
