@@ -16,7 +16,13 @@
 // System include(s):
 #include <cstdlib>
 #include <csignal>
-#include <unistd.h>
+
+// Signal handler include:
+#ifdef _MSC_VER
+#   include <signal.h>
+#else
+#   include <unistd.h>
+#endif
 
 // STL include(s):
 #include <iostream>

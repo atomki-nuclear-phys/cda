@@ -7,6 +7,9 @@
 #include <QtGui/QFont>
 #include <QApplication>
 
+// Local include(s):
+#include "Export.h"
+
 namespace gui {
 
    /**
@@ -21,7 +24,7 @@ namespace gui {
     * $Revision$
     * $Date$
     */
-   class DefaultFont : public QFont {
+   class CDAGUI_EXPORT DefaultFont : public QFont {
 
    public:
       /// Constructor setting all default properties

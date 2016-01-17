@@ -13,6 +13,9 @@
 #   include "stat/Statistics.h"
 #endif
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QLabel )
 QT_FORWARD_DECLARE_CLASS( QTimer )
@@ -40,7 +43,7 @@ namespace cdastat {
     * $Revision$
     * $Date$
     */
-   class RateWindow : public QWidget {
+   class CDAGUI_EXPORT RateWindow : public QWidget {
 
       Q_OBJECT
 
@@ -86,14 +89,14 @@ namespace cdastat {
        * The event processing rate is reported by this widget periodically.
        * This constant sets the period of this process.
        */
-      static const quint32 RATE_UPDATE_TIMEOUT;
+      static const quint32 RATE_UPDATE_TIMEOUT = 1500;
       /// Time after which the event rate should be reset to 0.0
       /**
        * The rate calculation depends on receiving new statistics objects
        * periodically. If a new object is not received for this length of
        * time (in miliseconds), then the rate is reset to 0.0.
        */
-      static const quint32 RATE_RESET_TIMEOUT;
+      static const quint32 RATE_RESET_TIMEOUT = 5000;
 
       RateWidget* m_rateWidget; ///< Main display of the calculated rate
 

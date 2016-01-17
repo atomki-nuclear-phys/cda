@@ -15,6 +15,9 @@
 #   include "msg/Logger.h"
 #endif
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 class Address;
 
@@ -54,7 +57,7 @@ namespace conf {
     * $Revision$
     * $Date$
     */
-   class ConfServer : public QTcpServer {
+   class CDADAQ_EXPORT ConfServer : public QTcpServer {
 
       Q_OBJECT
 

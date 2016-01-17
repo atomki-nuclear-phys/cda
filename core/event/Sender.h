@@ -11,6 +11,7 @@
 
 // CDA include(s):
 #include "../common/Address.h"
+#include "../common/Export.h"
 #include "../msg/Logger.h"
 
 // Local include(s):
@@ -42,7 +43,7 @@ namespace ev {
     * $Revision$
     * $Date$
     */
-   class Sender {
+   class CDACORE_EXPORT Sender {
 
       // To have the tr() function:
       Q_DECLARE_TR_FUNCTIONS( ev::Sender )

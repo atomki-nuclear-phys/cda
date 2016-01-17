@@ -17,10 +17,8 @@
 #include <QtCore/QCoreApplication>
 #include <QtNetwork/QHostAddress>
 
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "Address needs Qt >= 4.0.0"
-#endif
+// Local include(s):
+#include "Export.h"
 
 /**
  *  @short The address of a server
@@ -34,7 +32,7 @@
  * $Revision$
  * $Date$
  */
-class Address {
+class CDACORE_EXPORT Address {
 
    // To get the tr() function:
    Q_DECLARE_TR_FUNCTIONS( Address )

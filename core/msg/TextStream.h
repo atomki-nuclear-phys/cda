@@ -9,6 +9,9 @@
 // Qt include(s):
 #include <QtCore/QTextStream>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 // Local include(s):
 #include "Message.h"
 #include "Level.h"
@@ -17,11 +20,6 @@
 QT_FORWARD_DECLARE_CLASS( QIODevice )
 QT_FORWARD_DECLARE_CLASS( QString )
 QT_FORWARD_DECLARE_CLASS( QByteArray )
-
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::TextStream needs Qt >= 4.0.0"
-#endif
 
 namespace msg {
 
@@ -49,7 +47,7 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class TextStream : public QTextStream {
+   class CDACORE_EXPORT TextStream : public QTextStream {
 
    public:
       /// Constructor for handling a generic device

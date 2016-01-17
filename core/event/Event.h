@@ -7,6 +7,9 @@
 #include <vector>
 #include <memory>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 // Local include(s):
 #include "Fragment.h"
 
@@ -25,7 +28,7 @@ namespace ev {
     * $Revision$
     * $Date$
     */
-   class Event :
+   class CDACORE_EXPORT Event :
       public std::vector< std::shared_ptr< Fragment > > {
 
    public:

@@ -9,6 +9,7 @@
 
 // CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 // Local include(s):
 #include "IncompleteEvent.h"
@@ -46,7 +47,7 @@ namespace ev {
     * $Revision$
     * $Date$
     */
-   class BinaryStream : public QDataStream {
+   class CDACORE_EXPORT BinaryStream : public QDataStream {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( ev::BinaryStream )

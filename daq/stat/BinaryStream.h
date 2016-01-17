@@ -6,6 +6,9 @@
 // Qt include(s):
 #include <QtCore/QDataStream>
 
+// Local include(s):
+#include "../common/Export.h"
+
 namespace cdastat {
 
    // Forward declaration(s):
@@ -23,7 +26,7 @@ namespace cdastat {
     * $Revision$
     * $Date$
     */
-   class BinaryStream : public QDataStream {
+   class CDADAQ_EXPORT BinaryStream : public QDataStream {
 
    public:
       /// Constructor receiving an I/O device

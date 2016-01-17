@@ -38,6 +38,9 @@ MOC_DIR     = ./.obj
 # The following is needed to compile the cmdl code:
 DEFINES += unix_style
 
+# In order to export the library's symbols:
+DEFINES += CDACORE_LIBRARY
+
 #
 # These are the specific configuration options for compiling the code
 # on Mac OS X.
@@ -148,8 +151,8 @@ unix:!mac {
 # These are the configuration options for compiling the code on Windows:
 #
 win32 {
-   CONFIG += static
-   DESTDIR = ../lib
+   CONFIG += shared
+   DESTDIR = ../bin
 }
 
 #
@@ -194,9 +197,9 @@ contains(DEFINES,HAVE_CAEN_DIGITIZER_LIBS) {
       INCLUDEPATH += "/Program Files/CAEN/Digitizers/Library/include" \
                      "/Program Files/CAEN/Comm/include" \
                      "/Program Files/CAEN/VME/include"
-      LIBS += -L"/Program Files/CAEN/Digitizers/Library/lib" \
-              -L"/Program Files/CAEN/Comm/lib" \
-              -L"/Program Files/CAEN/VME/lib" \
+      LIBS += -L"/Program Files/CAEN/Digitizers/Library/lib/x86_64" \
+              -L"/Program Files/CAEN/Comm/lib/x86_64" \
+              -L"/Program Files/CAEN/VME/lib/x86_64" \
               -lCAENDigitizer -lCAENComm -lCAENVMElib
    } else {
       LIBS += -lCAENVME -lCAENComm -lCAENDigitizer

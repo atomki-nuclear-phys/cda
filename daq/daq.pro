@@ -30,6 +30,10 @@ QT      = core xml network gui widgets
 OBJECTS_DIR = ./.obj
 MOC_DIR     = ./.obj
 
+# In order to export the library's symbols:
+DEFINES += CDADAQ_LIBRARY
+
+
 #
 # These are the specific configuration options for compiling the code
 # on Mac OS X.
@@ -94,10 +98,10 @@ unix:!mac {
 #
 win32 {
    # Create a static library and link it against the cdacore library:
-   CONFIG      += static
+   CONFIG      += shared
    INCLUDEPATH += ../core
-   LIBS        += -L../lib -lcdacore
+   LIBS        += -L../bin -lcdacore1
 
    # Place the library in ../lib:
-   DESTDIR      = ../lib
+   DESTDIR      = ../bin
 }

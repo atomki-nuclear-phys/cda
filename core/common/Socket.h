@@ -15,6 +15,9 @@
 // Qt include(s):
 #include <QtNetwork/QTcpSocket>
 
+// CDA include(s):
+#include "Export.h"
+
 /**
  *  @short Network socket for transmitting data
  *
@@ -29,7 +32,7 @@
  * $Revision$
  * $Date$
  */
-class Socket : public QTcpSocket {
+class CDACORE_EXPORT Socket : public QTcpSocket {
 
    Q_OBJECT
 

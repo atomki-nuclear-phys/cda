@@ -9,6 +9,7 @@
 
 // Local include(s):
 #include "Histogram.h"
+#include "../common/Export.h"
 
 namespace moni {
 
@@ -27,7 +28,7 @@ namespace moni {
     * $Revision$
     * $Date$
     */
-   class AxisStyleAction : public QAction {
+   class CDADAQ_EXPORT AxisStyleAction : public QAction {
 
       Q_OBJECT
 

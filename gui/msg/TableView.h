@@ -18,6 +18,9 @@
 #   include "msg/Level.h"
 #endif
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedLayout )
 QT_FORWARD_DECLARE_CLASS( QTableWidget )
@@ -50,7 +53,7 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class TableView : public QWidget {
+   class CDAGUI_EXPORT TableView : public QWidget {
 
       Q_OBJECT
 
@@ -90,13 +93,13 @@ namespace msg {
       void adjustColumns();
 
       /// Default width of the "time" column
-      static const int DEFAULT_TIME_WIDTH;
+      static const int DEFAULT_TIME_WIDTH   = 160;
       /// Default width of the "sender" column
-      static const int DEFAULT_SENDER_WIDTH;
+      static const int DEFAULT_SENDER_WIDTH = 150;
       /// Default width of the "level" column
-      static const int DEFAULT_LEVEL_WIDTH;
+      static const int DEFAULT_LEVEL_WIDTH  = 70;
       /// Minimum width of the "text" column
-      static const int MINIMUM_TEXT_WIDTH;
+      static const int MINIMUM_TEXT_WIDTH   = 300;
 
       QStackedLayout* m_layout; ///< The layout used by the widget
       QTableWidget*   m_table;  ///< The table showing the messages

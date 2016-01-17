@@ -15,6 +15,9 @@
 #   include "msg/Logger.h"
 #endif // Q_OS_DARWIN
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QPainter )
 
@@ -52,7 +55,7 @@ namespace moni {
     * $Revision$
     * $Date$
     */
-   class Histogram : public QWidget {
+   class CDADAQ_EXPORT Histogram : public QWidget {
 
       Q_OBJECT
 

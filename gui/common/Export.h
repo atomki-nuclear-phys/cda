@@ -1,0 +1,16 @@
+// Dear emacs, this is -*- c++ -*-
+// $Id$
+#ifndef CDA_GUI_COMMON_EXPORT_H
+#define CDA_GUI_COMMON_EXPORT_H
+
+// Qt include(s):
+#include <QtCore/QtGlobal>
+
+/// Helper macro for declaring functions/classes to be visible on all platforms
+#ifdef CDAGUI_LIBRARY
+#   define CDAGUI_EXPORT Q_DECL_EXPORT
+#else
+#   define CDAGUI_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // CDA_GUI_COMMON_EXPORT_H

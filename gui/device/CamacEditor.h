@@ -22,6 +22,7 @@
 
 // Local include(s):
 #include "CamacCrateWidget.h"
+#include "../common/Export.h"
 
 namespace dev {
 
@@ -38,8 +39,8 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class CamacEditor : public QWidget,
-                       public IConfig {
+   class CDAGUI_EXPORT CamacEditor : public QWidget,
+                                     public IConfig {
 
       Q_OBJECT
 

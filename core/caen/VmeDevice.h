@@ -6,6 +6,9 @@
 // System include(s):
 #include <cinttypes>
 
+// Local include(s):
+#include "../common/Export.h"
+
 namespace caen {
 
    // Forward declaration(s):
@@ -25,7 +28,7 @@ namespace caen {
     * $Revision$
     * $Date$
     */
-   class VmeDevice {
+   class CDACORE_EXPORT VmeDevice {
 
    public:
       /// Default constructor

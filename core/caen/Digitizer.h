@@ -14,6 +14,7 @@ extern "C" {
 
 // CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 /**
  *  @short Namespace for the CAEN library related classes
@@ -41,7 +42,7 @@ namespace caen {
     * $Revision$
     * $Date$
     */
-   class Digitizer {
+   class CDACORE_EXPORT Digitizer {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( caen::Digitizer )

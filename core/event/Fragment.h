@@ -9,6 +9,9 @@
 // STL include(s):
 #include <vector>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 /**
  *  @short Namespace for the event classes
  *
@@ -39,7 +42,7 @@ namespace ev {
     * $Revision$
     * $Date$
     */
-   class Fragment {
+   class CDACORE_EXPORT Fragment {
 
    public:
       /// Type of the module identifier

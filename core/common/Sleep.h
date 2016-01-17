@@ -3,13 +3,16 @@
 #ifndef CDA_CORE_COMMON_SLEEP_H
 #define CDA_CORE_COMMON_SLEEP_H
 
+// CDA include(s):
+#include "Export.h"
+
 namespace common {
 
    /// Platform independent function for sleeping for a while
-   void Sleep( unsigned int milisec );
+   CDACORE_EXPORT void Sleep( unsigned int milisec );
 
    /// Sleep function sleeping for the shortest possible time
-   void SleepMin();
+   CDACORE_EXPORT void SleepMin();
 
 } // namespace common
 

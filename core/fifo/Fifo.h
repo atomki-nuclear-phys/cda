@@ -7,6 +7,9 @@
 #include <QtCore/QFile>
 #include <QtCore/QCoreApplication>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 /**
  *  @short Light-weight layer over QFile for handling FIFOs
  *
@@ -22,7 +25,7 @@
  * $Revision$
  * $Date$
  */
-class Fifo : public QFile {
+class CDACORE_EXPORT Fifo : public QFile {
 
    Q_OBJECT
 

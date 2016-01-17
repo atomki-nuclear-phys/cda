@@ -9,6 +9,9 @@
 // Qt include(s):
 #include <QtCore/QDataStream>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 // Local include(s):
 #include "Level.h"
 #include "Message.h"
@@ -16,11 +19,6 @@
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QIODevice )
 QT_FORWARD_DECLARE_CLASS( QByteArray )
-
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::BinaryStream needs Qt >= 4.0.0"
-#endif
 
 namespace msg {
 
@@ -47,7 +45,7 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class BinaryStream : public QDataStream {
+   class CDACORE_EXPORT BinaryStream : public QDataStream {
 
    public:
       /// Constructor for handling a generic device

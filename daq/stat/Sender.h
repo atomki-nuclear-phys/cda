@@ -21,6 +21,7 @@
 
 // Local include(s):
 #include "Statistics.h"
+#include "../common/Export.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QTcpSocket )
@@ -41,7 +42,7 @@ namespace cdastat {
     * $Revision$
     * $Date$
     */
-   class Sender : public QThread {
+   class CDADAQ_EXPORT Sender : public QThread {
 
       Q_OBJECT
 

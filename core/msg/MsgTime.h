@@ -7,10 +7,8 @@
 #include <QtCore/QDate>
 #include <QtCore/QTime>
 
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::MsgTime needs Qt >= 4.0.0"
-#endif
+// CDA include(s):
+#include "../common/Export.h"
 
 namespace msg {
 
@@ -39,7 +37,7 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class MsgTime {
+   class CDACORE_EXPORT MsgTime {
 
    public:
       /// Constructor initialising to current time

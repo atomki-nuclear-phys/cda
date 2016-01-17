@@ -8,6 +8,9 @@
 #include <QtCore/QString>
 #include <QWidget>
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedLayout )
 QT_FORWARD_DECLARE_CLASS( QSplitter )
@@ -43,7 +46,7 @@ namespace cdastat {
     * $Revision$
     * $Date$
     */
-   class MDIView : public QWidget {
+   class CDAGUI_EXPORT MDIView : public QWidget {
 
       Q_OBJECT
 
@@ -70,10 +73,10 @@ namespace cdastat {
       void handleWindowClose( const QString& source );
 
    private:
-      static const int MINIMUM_WIDTH;
-      static const int MINIMUM_MDI_HEIGHT;
-      static const int MINIMUM_TABLE_HEIGHT;
-      static const int TABLE_RATE_COLUMN_WIDTH;
+      static const int MINIMUM_WIDTH = 500;
+      static const int MINIMUM_MDI_HEIGHT = 350;
+      static const int MINIMUM_TABLE_HEIGHT = 150;
+      static const int TABLE_RATE_COLUMN_WIDTH = 130;
 
       /// Function adjusting the layout of the rate table
       void adjustTableColumns();

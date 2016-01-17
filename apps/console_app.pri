@@ -29,8 +29,11 @@ mac {
    QMAKE_CXXFLAGS += -F$$CDASYS/lib
    LIBS           += -F$$CDASYS/lib -framework cdacore -framework cdadaq
 }
-!mac {
+unix:!mac {
    LIBS += -L../../lib -lcdadaq -lcdacore
+}
+win32 {
+   LIBS += -L../../bin -lcdadaq1 -lcdacore1
 }
 contains(DEFINES,HAVE_CERNLIB) {
    LIBS += $$system(cernlib packlib)

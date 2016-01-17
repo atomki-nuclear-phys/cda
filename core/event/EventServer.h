@@ -13,6 +13,7 @@
 
 // CDA include(s):
 #include "../common/Address.h"
+#include "../common/Export.h"
 #include "../msg/Logger.h"
 
 // Local include(s):
@@ -61,7 +62,7 @@ namespace ev {
     * $Revision$
     * $Date$
     */
-   class EventServer : public QThread {
+   class CDACORE_EXPORT EventServer : public QThread {
 
       Q_OBJECT
 

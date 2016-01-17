@@ -8,6 +8,7 @@
 
 // Local include(s):
 #include "IDevice.h"
+#include "../common/Export.h"
 
 namespace dev {
 
@@ -31,8 +32,8 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class CaenDigitizerGui : public QWidget,
-                            virtual public IDevice {
+   class CDACORE_EXPORT CaenDigitizerGui : public QWidget,
+                                           virtual public IDevice {
 
       Q_OBJECT
 

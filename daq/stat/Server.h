@@ -8,6 +8,7 @@
 
 // Local include(s):
 #include "Statistics.h"
+#include "../common/Export.h"
 
 // Forward declaration(s):
 class Address;
@@ -29,7 +30,7 @@ namespace cdastat {
     * $Revision$
     * $Date$
     */
-   class Server : public QTcpServer {
+   class CDADAQ_EXPORT Server : public QTcpServer {
 
       Q_OBJECT
 

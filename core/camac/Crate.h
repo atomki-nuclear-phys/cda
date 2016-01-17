@@ -16,6 +16,7 @@
 
 // CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 /**
  *  @short Namespace for the CAMAC crate accessor class(es)
@@ -50,7 +51,7 @@ namespace camac {
     * $Revision$
     * $Date$
     */
-   class Crate {
+   class CDACORE_EXPORT Crate {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( camac::Crate )

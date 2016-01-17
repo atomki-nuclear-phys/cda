@@ -8,6 +8,7 @@
 
 // Local include(s):
 #include "IDevice.h"
+#include "../common/Export.h"
 
 // Forward declaration(s):
 namespace ev {
@@ -40,8 +41,8 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class QtHist : public QWidget,
-                  virtual public IDevice {
+   class CDACORE_EXPORT QtHist : public QWidget,
+                                 virtual public IDevice {
 
       Q_OBJECT
 

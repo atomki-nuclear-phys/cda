@@ -17,6 +17,9 @@
 #   include "msg/Level.h"
 #endif
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QStackedLayout )
 QT_FORWARD_DECLARE_CLASS( QTextEdit )
@@ -51,7 +54,7 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class TextView : public QWidget {
+   class CDAGUI_EXPORT TextView : public QWidget {
 
       Q_OBJECT
 

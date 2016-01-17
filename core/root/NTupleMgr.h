@@ -10,8 +10,9 @@
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 
-// Local include(s):
+// CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 // Forward declaration(s):
 #ifdef HAVE_ROOT_LIBS
@@ -34,7 +35,7 @@ namespace root {
     * $Revision$
     * $Date$
     */
-   class NTupleMgr {
+   class CDACORE_EXPORT NTupleMgr {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( root::NTupleMgr )

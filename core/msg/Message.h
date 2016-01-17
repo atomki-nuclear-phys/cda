@@ -6,14 +6,12 @@
 // Qt include(s):
 #include <QtCore/QString>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 // Local include(s):
 #include "Level.h"
 #include "MsgTime.h"
-
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::Message needs Qt >= 4.0.0"
-#endif
 
 namespace msg {
 
@@ -36,7 +34,7 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class Message {
+   class CDACORE_EXPORT Message {
 
    public:
       /// The only constructor

@@ -33,14 +33,6 @@ namespace cdastat {
    using QT_PREPEND_NAMESPACE( QTableWidgetItem );
    using QT_PREPEND_NAMESPACE( QMdiSubWindow );
 
-   //
-   // Specify the value(s) of the constant(s):
-   //
-   const int MDIView::MINIMUM_WIDTH = 500;
-   const int MDIView::MINIMUM_MDI_HEIGHT = 350;
-   const int MDIView::MINIMUM_TABLE_HEIGHT = 150;
-   const int MDIView::TABLE_RATE_COLUMN_WIDTH = 130;
-
    /**
     * The constructor creates all the graphic widgets and sets up the objects
     * for handling the statistics information.

@@ -22,6 +22,9 @@
 #   include "msg/Logger.h"
 #endif
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QTabWidget )
 QT_FORWARD_DECLARE_CLASS( QComboBox )
@@ -39,8 +42,9 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class CaenDigitizerEditor : public QWidget,
-                               public dev::Crate< dev::CaenDigitizerGui > {
+   class CDAGUI_EXPORT CaenDigitizerEditor :
+      public QWidget,
+      public dev::Crate< dev::CaenDigitizerGui > {
 
       Q_OBJECT
 

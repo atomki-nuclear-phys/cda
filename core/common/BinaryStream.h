@@ -17,6 +17,7 @@
 
 // Local include(s):
 #include "Address.h"
+#include "Export.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QIODevice )
@@ -33,7 +34,7 @@ QT_FORWARD_DECLARE_CLASS( QByteArray )
  * $Revision$
  * $Date$
  */
-class BinaryStream : public QDataStream {
+class CDACORE_EXPORT BinaryStream : public QDataStream {
 
 public:
    /// Standard QDataStream constructor

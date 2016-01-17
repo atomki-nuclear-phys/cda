@@ -12,6 +12,7 @@
 
 // CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 /**
  *  @short Namespace for the CERNLIB interface classes
@@ -44,7 +45,7 @@ namespace cernlib {
     * $Revision$
     * $Date$
     */
-   class NTupleMgr {
+   class CDACORE_EXPORT NTupleMgr {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( cernlib::NTupleMgr )

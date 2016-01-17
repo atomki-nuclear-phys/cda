@@ -12,6 +12,7 @@
 
 // Local include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 namespace caen {
 
@@ -32,7 +33,7 @@ namespace caen {
     * $Revision$
     * $Date$
     */
-   class VmeBus {
+   class CDACORE_EXPORT VmeBus {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( caen::VME )

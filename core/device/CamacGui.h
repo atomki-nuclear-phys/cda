@@ -8,6 +8,7 @@
 
 // Local include(s):
 #include "IDevice.h"
+#include "../common/Export.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QPainter )
@@ -34,8 +35,8 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class CamacGui : public QWidget,
-                    virtual public IDevice {
+   class CDACORE_EXPORT CamacGui : public QWidget,
+                                   virtual public IDevice {
 
       Q_OBJECT
 

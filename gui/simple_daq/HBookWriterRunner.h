@@ -19,6 +19,9 @@
 #   include "common/AppRunner.h"
 #endif
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QGroupBox )
 QT_FORWARD_DECLARE_CLASS( QPushButton )
@@ -48,7 +51,7 @@ namespace simple_daq {
     * $Revision$
     * $Date$
     */
-   class HBookWriterRunner : public QWidget {
+   class CDAGUI_EXPORT HBookWriterRunner : public QWidget {
 
       Q_OBJECT
 

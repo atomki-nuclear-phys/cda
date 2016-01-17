@@ -15,6 +15,9 @@
 #   include "msg/Logger.h"
 #endif
 
+// Local include(s):
+#include "Export.h"
+
 namespace daq {
 
    /**
@@ -33,7 +36,7 @@ namespace daq {
     * $Revision$
     * $Date$
     */
-   class AppRunner {
+   class CDADAQ_EXPORT AppRunner {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( daq::AppRunner )

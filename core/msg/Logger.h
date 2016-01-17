@@ -9,14 +9,12 @@
 // Qt include(s):
 #include <QtCore/QString>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 // Local include(s):
 #include "Level.h"
 #include "Sender.h"
-
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::Logger needs Qt >= 4.0.0"
-#endif
 
 /**
  *  @short Namespace for the message handling classes
@@ -51,9 +49,9 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class Logger : public std::ostringstream {
+   class CDACORE_EXPORT Logger : public std::ostringstream {
 
-      friend Logger& endmsg( Logger& );
+      friend CDACORE_EXPORT Logger& endmsg( Logger& );
 
    public:
       /// Normal constructor that defines the sender of the messager
@@ -130,7 +128,7 @@ namespace msg {
    }
 
    /// Stream modifier that sends off a message to the server
-   Logger& endmsg( Logger& logger );
+   CDACORE_EXPORT Logger& endmsg( Logger& logger );
 
 } // namespace msg
 

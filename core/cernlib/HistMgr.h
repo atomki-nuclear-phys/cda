@@ -8,6 +8,7 @@
 
 // CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 namespace cernlib {
 
@@ -28,7 +29,7 @@ namespace cernlib {
     * $Revision$
     * $Date$
     */
-   class HistMgr {
+   class CDACORE_EXPORT HistMgr {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( cernlib::HistMgr )

@@ -6,6 +6,9 @@
 // Qt include(s):
 #include <QtCore/QTextStream>
 
+// CDA include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QIODevice )
 QT_FORWARD_DECLARE_CLASS( QString )
@@ -42,7 +45,7 @@ namespace ev {
     * $Revision$
     * $Date$
     */
-   class TextStream : public QTextStream {
+   class CDACORE_EXPORT TextStream : public QTextStream {
 
    public:
       /// Constructor for handling a generic device

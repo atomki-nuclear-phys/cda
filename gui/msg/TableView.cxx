@@ -30,14 +30,6 @@ namespace msg {
    using QT_PREPEND_NAMESPACE( QTableWidgetItem );
    using QT_PREPEND_NAMESPACE( QHeaderView );
 
-   //
-   // Set the values of the constsnts:
-   //
-   const int TableView::DEFAULT_TIME_WIDTH   = 160;
-   const int TableView::DEFAULT_SENDER_WIDTH = 150;
-   const int TableView::DEFAULT_LEVEL_WIDTH  = 70;
-   const int TableView::MINIMUM_TEXT_WIDTH   = 300;
-
    /**
     * The constructor takes care of correctly setting up all all members
     * of the class, which is actually quite a bit of work in this case...

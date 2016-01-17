@@ -13,6 +13,7 @@
 
 // CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 namespace dev {
 
@@ -39,7 +40,7 @@ namespace dev {
     * $Revision$
     * $Date$
     */
-   class Loader {
+   class CDACORE_EXPORT Loader {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( dev::Loader )

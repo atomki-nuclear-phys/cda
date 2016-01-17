@@ -12,6 +12,7 @@
 
 // CDA include(s):
 #include "../msg/Logger.h"
+#include "../common/Export.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QTranslator )
@@ -35,7 +36,7 @@ namespace i18n {
     * $Revision$
     * $Date$
     */
-   class Loader {
+   class CDACORE_EXPORT Loader {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( i18n::Loader )

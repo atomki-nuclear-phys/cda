@@ -12,12 +12,6 @@
 
 namespace cdastat {
 
-   //
-   // Specify the value(s) of the constant(s):
-   //
-   const quint32 RateWindow::RATE_UPDATE_TIMEOUT = 1500;
-   const quint32 RateWindow::RATE_RESET_TIMEOUT  = 5000;
-
    /**
     * The constructor creates the layout of the window, and sets up the
     * updating of the rate values.

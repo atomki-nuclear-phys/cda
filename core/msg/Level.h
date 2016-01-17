@@ -3,6 +3,11 @@
 #ifndef CDA_CORE_MSG_LEVEL_H
 #define CDA_CORE_MSG_LEVEL_H
 
+// For when building against the CAEN libraries on Windows with MSVC:
+#ifdef ERROR
+#   undef ERROR
+#endif
+
 namespace msg {
 
    /**

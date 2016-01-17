@@ -9,9 +9,11 @@
 
 // CAEN include(s):
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
-// On Windows we compile the code with MinGW, so this definition would just
+// On Windows, when we compile the code with MinGW, this definition would just
 // get in the way:
-#   undef WIN32
+#   ifndef _MSC_VER
+#      undef WIN32
+#   endif
 #   include <CAENDigitizer.h>
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 

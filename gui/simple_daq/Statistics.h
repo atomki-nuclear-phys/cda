@@ -17,6 +17,9 @@
 #   include "stat/Server.h"
 #endif
 
+// Local include(s):
+#include "../common/Export.h"
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QGroupBox )
 QT_FORWARD_DECLARE_CLASS( QLabel )
@@ -40,7 +43,7 @@ namespace simple_daq {
     * $Revision$
     * $Date$
     */
-   class Statistics : public QWidget {
+   class CDAGUI_EXPORT Statistics : public QWidget {
 
       Q_OBJECT
 

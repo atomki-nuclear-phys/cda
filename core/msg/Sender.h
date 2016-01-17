@@ -11,15 +11,11 @@
 
 // CDA include(s):
 #include "../common/Address.h"
+#include "../common/Export.h"
 
 // Local include(s):
 #include "Level.h"
 #include "Message.h"
-
-// Check the Qt version used for compilation:
-#if QT_VERSION < QT_VERSION_CHECK( 4, 0, 0 )
-#  error "msg::Sender needs Qt >= 4.0.0"
-#endif
 
 namespace msg {
 
@@ -44,7 +40,7 @@ namespace msg {
     * $Revision$
     * $Date$
     */
-   class Sender {
+   class CDACORE_EXPORT Sender {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( msg::Sender )

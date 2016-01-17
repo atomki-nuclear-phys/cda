@@ -6,6 +6,9 @@
 // Qt include(s):
 #include <QSplashScreen>
 
+// Local include(s):
+#include "Export.h"
+
 namespace gui {
 
    /**
@@ -22,7 +25,7 @@ namespace gui {
     * $Revision$
     * $Date$
     */
-   class SplashScreen : public QSplashScreen {
+   class CDAGUI_EXPORT SplashScreen : public QSplashScreen {
 
       Q_OBJECT
 

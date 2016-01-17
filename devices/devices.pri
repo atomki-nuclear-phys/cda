@@ -38,8 +38,11 @@ mac {
    QMAKE_CXXFLAGS += -F$$CDASYS/lib
    LIBS           += -F$$CDASYS/lib -framework cdacore -framework cdadaq
 }
-!mac {
+unix:!mac {
    LIBS += -L../../lib -lcdacore -lcdadaq
+}
+win32 {
+   LIBS += -L../../bin -lcdacore1 -lcdadaq1
 }
 
 # If cernlib is being used, the plugins must be built as static libraries:

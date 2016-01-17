@@ -7,6 +7,9 @@
 #include <QtCore/QTime>
 #include <QtCore/QString>
 
+// Local include(s):
+#include "../common/Export.h"
+
 /**
  *  @short Namespace for DAQ statistics classes
  *
@@ -33,7 +36,7 @@ namespace cdastat {
     * $Revision$
     * $Date$
     */
-   class Statistics {
+   class CDADAQ_EXPORT Statistics {
 
    public:
       /// Constructor with all the properties of the object
