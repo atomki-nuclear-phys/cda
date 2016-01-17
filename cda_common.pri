@@ -47,7 +47,7 @@ DEFINES += CDASYS=$$CDASYS
 # Uncomment the following if you have the CAEN Digitizer library installed
 # on your system.
 #
-DEFINES += HAVE_CAEN_DIGITIZER_LIBS
+#DEFINES += HAVE_CAEN_DIGITIZER_LIBS
 
 #
 # Uncomment the following if you have the CAEN qtp library installed
