@@ -56,8 +56,13 @@ namespace dev {
       /// Constructor
       Crate( const QString& type = "CamacCrate",
              bool isTypeImportant = false );
+      /// Copy constructor
+      Crate( const Crate< DEVICE >& ) = delete;
       /// Destructor
       ~Crate();
+
+      /// Assignment operator
+      Crate< DEVICE >& operator= ( const Crate< DEVICE >& ) = delete;
 
       /// Read the configuration of the crate from a binary device
       virtual bool readConfig( QIODevice& dev );
