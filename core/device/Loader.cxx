@@ -15,12 +15,17 @@
 #include "Loader.h"
 #include "Factory.h"
 
+#ifndef Q_OS_WIN
 // Found these definitions with Google. They make it possible
 // to pass the CDASYS variable as a string to the code on all
 // platforms.
-#define CDASYS1_(x) #x
-#define CDASYS_(x) CDASYS1_(x)
-#define CDASYS_PATH CDASYS_(CDASYS)
+#   define CDASYS1_(x) #x
+#   define CDASYS_(x) CDASYS1_(x)
+#   define CDASYS_PATH CDASYS_(CDASYS)
+#else
+#   include <QtCore/QCoreApplication>
+#   define CDASYS_PATH QCoreApplication::applicationDirPath() + "/.."
+#endif // CDASYS
 
 namespace dev {
 

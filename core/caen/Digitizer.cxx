@@ -1344,7 +1344,7 @@ namespace caen {
 #else
       REPORT_VERBOSE( tr( "Reading data in mode \"%1\"" )
                       .arg( toString( mode ) ) );
-      *buffer = static_cast< char >( 0xf5 );
+      *buffer = static_cast< char >( 0xe5 );
       bufferSize = 1;
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 

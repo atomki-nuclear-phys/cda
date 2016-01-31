@@ -128,7 +128,8 @@ CmdLine::print_synopsis(CmdLine::CmdLineSyntax  syntax,
 
    // first print the command name
    os << usg_prefix << cmd_name ;
-   ll = (cmd_name ? ::strlen(cmd_name) : 0) + (sizeof(usg_prefix) - 1);
+   ll = ( cmd_name ? static_cast< unsigned >( ::strlen( cmd_name ) ) : 0 ) + 
+      ( static_cast< unsigned >( sizeof( usg_prefix ) ) - 1 );
 
    // set margin so that we always start printing arguments in a column
    // that is *past* the command name.

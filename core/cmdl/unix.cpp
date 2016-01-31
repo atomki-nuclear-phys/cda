@@ -777,7 +777,7 @@ CmdLine::fmt_arg(const CmdArg           * cmdarg,
       oss << ends ;
 
       memcpy(buf,oss.str().data(),bufsize) ;
-      return oss.str().length() ;
+      return static_cast< unsigned >( oss.str().length() );
    }
 
    if (! (cmdarg->syntax() & CmdArg::isPOS)) {
@@ -836,6 +836,6 @@ CmdLine::fmt_arg(const CmdArg           * cmdarg,
    oss << ends ;
 
    memcpy(buf,oss.str().data(),bufsize) ;
-   return oss.str().length() ;
+   return static_cast< unsigned >( oss.str().length() );
 }
 

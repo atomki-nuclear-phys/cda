@@ -20,8 +20,10 @@ OBJECTS_DIR = ./.obj
 MOC_DIR     = ./.obj
 DESTDIR     = ../../bin
 
-# Special linking setup for Windows:
-QMAKE_LFLAGS_WINDOWS += -Wl,--enable-auto-import
+# Special linking setup for Windows, when using MinGW:
+contains( QMAKE_CC, gcc ) {
+   QMAKE_LFLAGS_WINDOWS += -Wl,--enable-auto-import
+}
 
 # The include paths:
 INCLUDEPATH += ../../core ../../daq ../../gui

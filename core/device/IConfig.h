@@ -6,6 +6,11 @@
 // Qt include(s):
 #include <QtCore/QtGlobal>
 
+// Disable a warning about diamond inheritance trees
+#ifdef Q_CC_MSVC
+#pragma warning( disable : 4250 )
+#endif // Q_CC_MSVC
+
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QIODevice )
 QT_FORWARD_DECLARE_CLASS( QDomElement )
