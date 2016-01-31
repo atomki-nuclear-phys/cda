@@ -223,7 +223,7 @@ namespace dt5740 {
                      m_transScale * ( *std::min_element( ( m_trans.begin() + start ),
                                                          ( m_trans.begin() + end ) ) ) ) :
            *( std::min_element( ( m_values.begin() + start ),
-                                ( m_values.end() + start ) ) ) );
+                                ( m_values.begin() + end ) ) ) );
       double view_minimum = 0.0;
 
       // Choose smart limits for the Y axis, so that the histogram can be seen

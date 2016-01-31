@@ -11,7 +11,7 @@
 # Link the application against all available plugins on Windows,
 # or when using cernlib. (And hence building the plugins as static
 # libraries.)
-win32|contains(DEFINES,HAVE_CERNLIB) {
+contains(DEFINES,HAVE_CERNLIB) {
    # Statically link applications against the plugins:
    LIBS += -L../../dev -lad413a -lad1000 -lad2249a \
            -lt2228a -lt4300b -ls9418t -ldt5740
