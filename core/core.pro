@@ -20,7 +20,7 @@ HEADERS = $$files(fifo/*.h) $$files(msg/*.h) $$files(event/*.h) \
           $$files(device/*.h) $$files(device/*.icc) $$files(camac/*.h) \
           $$files(cmdl/*.h) $$files(cernlib/*.h) $$files(common/*.h) \
           $$files(i18n/*.h) $$files(vme/*.h) $$files(caen/*.h) \
-          $$files(root/*.h) $$files(root/*.icc)
+          $$files(root/*.h) $$files(root/*.icc) $$files(tclap/*.h)
 SOURCES = $$files(fifo/*.cxx) $$files(msg/*.cxx) $$files(event/*.cxx) \
           $$files(device/*.cxx) $$files(camac/*.cxx) $$files(cmdl/*.cpp) \
           $$files(cernlib/*.cxx) $$files(common/*.cxx) $$files(i18n/*.cxx) \
@@ -96,6 +96,11 @@ mac {
    CMDL_HEADERS.files = cmdl/cmdargs.h cmdl/cmdline.h
    CMDL_HEADERS.path = Headers/cmdl
    QMAKE_BUNDLE_DATA += CMDL_HEADERS
+
+   TCLAP_HEADERS.version = Versions
+   TCLAP_HEADERS.files = $$files(tclap/*.h)
+   TCLAP_HEADERS.path = Headers/tclap
+   QMAKE_BUNDLE_DATA += TCLAP_HEADERS
 
    CERNLIB_HEADERS.version = Versions
    CERNLIB_HEADERS.files = $$files(cernlib/*.h)
