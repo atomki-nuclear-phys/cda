@@ -1,11 +1,11 @@
 // $Id$
 /**
- *   @file apps/cda-simple-daq/main.cxx
- *  @short Main file for the cda-simple-daq application
+ *   @file apps/cda-camac-daq/main.cxx
+ *  @short Main file for the cda-camac-daq application
  *
- *         This file stores the code that runs the cda-simple-daq application.
+ *         This file stores the code that runs the cda-camac-daq application.
  *         It is rather simple, it reads a few simple command line options,
- *         then sets up SimpleDAQWindow to do the rest of the job.
+ *         then sets up CamacDAQWindow to do the rest of the job.
  *
  * @author Attila Krasznahorkay Jr.
  *
@@ -23,14 +23,14 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
 #   include "cdacore/msg/Sender.h"
-#   include "cdacore/cmdl/cmdargs.h"
+#   include "cdacore/tclap/CmdLine.h"
 #   include "cdacore/i18n/Loader.h"
 #   include "cdagui/common/DefaultFont.h"
 #   include "cdagui/common/SplashScreen.h"
 #else
 #   include "msg/Logger.h"
 #   include "msg/Sender.h"
-#   include "cmdl/cmdargs.h"
+#   include "tclap/CmdLine.h"
 #   include "i18n/Loader.h"
 #   include "common/DefaultFont.h"
 #   include "common/SplashScreen.h"
@@ -58,15 +58,16 @@ int main( int argc, char* argv[] ) {
    //
    // Read the rest of the command line arguments:
    //
-   CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename", "Name of the XML configuration" );
-
-   CmdLine cmd( *argv, &verbosity, &config, NULL );
-   cmd.description( description );
-
-   CmdArgvIter arg_iter( --argc, ++argv );
-   verbosity = 3;
-   cmd.parse( arg_iter );
+   TCLAP::CmdLine cmd( description );
+   TCLAP::ValueArg< int > verbosity( "v", "verbosity",
+                                     "Level of output verbosity", false, 3,
+                                     "code" );
+   cmd.add( verbosity );
+   TCLAP::ValueArg< std::string >
+      config( "c", "config", "Name of an XML config file, or "
+              "address of a config server", false, "", "filename/address");
+   cmd.add( config );
+   cmd.parse( argc, argv );
 
    //
    // Create a splash screen:
@@ -104,8 +105,9 @@ int main( int argc, char* argv[] ) {
    v_map[ 5 ] = msg::ERROR;
    v_map[ 6 ] = msg::FATAL;
    v_map[ 7 ] = msg::ALWAYS;
-   if( v_map.find( verbosity ) != v_map.end() ) {
-      msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
+   auto itr = v_map.find( verbosity.getValue() );
+   if( itr != v_map.end() ) {
+      msg::Sender::instance()->setMinLevel( itr->second );
    } else {
       logger << msg::FATAL
              << qApp->translate( "cda-camac-daq",
@@ -118,8 +120,8 @@ int main( int argc, char* argv[] ) {
    //
    // Create and show the main window of the application:
    //
-   CamacDAQWindow window( ( const char* ) config,
-                          v_map.find( verbosity )->second );
+   CamacDAQWindow window( config.getValue().c_str(),
+                          itr->second );
    window.show();
    splash.showMessage( qApp->translate( "cda-camac-daq",
                                         "CAMAC DAQ Ready" ),
