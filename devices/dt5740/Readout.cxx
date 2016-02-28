@@ -22,10 +22,8 @@
 namespace dt5740 {
 
    Readout::Readout()
-      : dev::ICaenDigitizerReadout(), Device(), m_digitizer(),
-        m_buffer( NULL ), m_bufferSize( 0 ), m_eventSize( 0 ),
-        m_numEvents( 0 ), m_currentEvent( 0 ),
-        m_logger( "dt5740::Readout" ) {
+      : m_digitizer(), m_buffer( NULL ), m_bufferSize( 0 ), m_eventSize( 0 ),
+        m_numEvents( 0 ), m_currentEvent( 0 ), m_logger("dt5740::Readout") {
 
    }
 

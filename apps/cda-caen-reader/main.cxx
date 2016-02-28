@@ -92,15 +92,7 @@ int main( int argc, char* argv[] ) {
                        "Addresses of statistics reader clients", false,
                        "address list" );
    cmd.add( statistics );
-   try {
-      cmd.parse( argc, argv );
-   } catch( const std::exception& ex ) {
-       g_logger << msg::FATAL << qApp->translate( "cda-caen-reader",
-                                                  "Couldn't parse the command "
-                                                  "line arguments\nWhat:" )
-                << ex.what() << msg::endmsg;
-       return 1;
-   }
+   cmd.parse( argc, argv );
 
    //
    // Set the destination of the messages:

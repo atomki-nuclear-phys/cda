@@ -13,6 +13,7 @@ TEMPLATE = app
 
 # The application uses a bunch of Qt libraries:
 CONFIG += qt
+CONFIG += console
 CONFIG -= app_bundle
 QT      = core network xml gui widgets
 

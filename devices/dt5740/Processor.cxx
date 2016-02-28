@@ -10,6 +10,7 @@ namespace dt5740 {
 
    Processor::Processor()
       : m_fraction( 0.2 ), m_delay( 20 ), m_length( 10 ), m_smoothWidth( 0.0 ),
+        m_smooth(), m_trans(),
         m_logger( "dt5740::Processor" ) {
 
    }

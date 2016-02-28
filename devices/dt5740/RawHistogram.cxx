@@ -200,15 +200,15 @@ namespace dt5740 {
 
       // Get the first and final bins that are shown:
       const size_t start = getBin( m_viewLow );
-      const size_t end   = getBin( m_viewUp );
+      const size_t end   = getBin( m_viewUp ) - 1;
 
       // Get the maximum values within the limits:
       const double maximum =
          *( std::max_element( ( m_values.begin() + start ),
                               ( m_values.begin() + end ) ) );
       const double tmaximum = ( m_trans.size() ?
-                                *( std::max_element( ( m_trans.begin() + start ),
-                                                     ( m_trans.begin() + end ) ) ) :
+                                *( std::max_element( ( m_trans.begin() + start - 1 ),
+                                                     ( m_trans.begin() + end - 1 ) ) ) :
                                 0.0 );
       m_transScale = ( std::abs( tmaximum ) > 0.001 ?
                        0.8 * maximum / tmaximum : 1.0 );
@@ -220,8 +220,8 @@ namespace dt5740 {
          ( m_trans.size() ?
            std::min( *( std::min_element( ( m_values.begin() + start ),
                                           ( m_values.begin() + end ) ) ),
-                     m_transScale * ( *std::min_element( ( m_trans.begin() + start ),
-                                                         ( m_trans.begin() + end ) ) ) ) :
+                     m_transScale * ( *std::min_element( ( m_trans.begin() + start - 1 ),
+                                                         ( m_trans.begin() + end - 1 ) ) ) ) :
            *( std::min_element( ( m_values.begin() + start ),
                                 ( m_values.begin() + end ) ) ) );
       double view_minimum = 0.0;

@@ -18,9 +18,7 @@
 namespace dt5740 {
 
    CernlibDisk::CernlibDisk()
-      : dev::ICernlibDisk(), Device(),
-        m_processor(),
-        m_logger( "dt5740::CernlibDisk" ) {
+      : m_processor(), m_logger( "dt5740::CernlibDisk" ) {
 
       // Reset the ntuple map:
       for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
