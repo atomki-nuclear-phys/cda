@@ -20,14 +20,14 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
 #   include "cdacore/msg/Sender.h"
-#   include "cdacore/cmdl/cmdargs.h"
+#   include "cdacore/tclap/CmdLine.h"
 #   include "cdacore/i18n/Loader.h"
 #   include "cdagui/common/DefaultFont.h"
 #   include "cdagui/common/SplashScreen.h"
 #else
 #   include "msg/Logger.h"
 #   include "msg/Sender.h"
-#   include "cmdl/cmdargs.h"
+#   include "tclap/CmdLine.h"
 #   include "i18n/Loader.h"
 #   include "common/DefaultFont.h"
 #   include "common/SplashScreen.h"
@@ -54,15 +54,16 @@ int main( int argc, char* argv[] ) {
    //
    // Read the rest of the command line arguments:
    //
-   CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename", "Name of the XML configuration" );
-
-   CmdLine cmd( *argv, &verbosity, &config, NULL );
-   cmd.description( description );
-
-   CmdArgvIter arg_iter( --argc, ++argv );
-   verbosity = 3;
-   cmd.parse( arg_iter );
+   TCLAP::CmdLine cmd( description );
+   TCLAP::ValueArg< int > verbosity( "v", "verbosity",
+                                     "Level of output verbosity", false, 3,
+                                     "code" );
+   cmd.add( verbosity );
+   TCLAP::ValueArg< std::string >
+      config( "c", "config", "Name of an XML config file, or "
+              "address of a config server", false, "", "filename/address");
+   cmd.add( config );
+   cmd.parse( argc, argv );
 
    // Set the message server to a fixed address:
    msg::Sender::addAddress( Address( Const::MSG_SERVER_ADDRESS ) );
@@ -93,7 +94,7 @@ int main( int argc, char* argv[] ) {
    // Translate the verbosity option:
    //
    msg::Level lvl = msg::INFO;
-   switch( verbosity ) {
+   switch( verbosity.getValue() ) {
 
    case 1:
       lvl = msg::VERBOSE;
@@ -129,7 +130,7 @@ int main( int argc, char* argv[] ) {
    //
    // Create and show the main window of the application:
    //
-   CaenDAQWindow window( ( const char* ) config, lvl );
+   CaenDAQWindow window( config.getValue().c_str(), lvl );
    window.show();
    splash.showMessage( qApp->translate( "cda-caen-daq",
                                         "CAEN DAQ Ready" ),
