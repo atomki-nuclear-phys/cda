@@ -70,3 +70,8 @@ endif()
 
 # Build the main libraries of the project:
 add_subdirectory( core )
+add_subdirectory( daq )
+add_subdirectory( gui )
+
+# Build the device plugins:
+add_subdirectory( devices )

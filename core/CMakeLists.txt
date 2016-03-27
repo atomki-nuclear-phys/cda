@@ -3,6 +3,9 @@
 # Configuration for building the CDA core library.
 #
 
+# Greet the user:
+message( STATUS "Configuring the build of cdacore" )
+
 # Find Qt:
 find_package( Qt5 COMPONENTS Core Network Gui Widgets )
 if( Qt5_FOUND )
