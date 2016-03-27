@@ -40,7 +40,7 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Sender.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/cmdl/cmdargs.h"
+#   include "cdacore/tclap/CmdLine.h"
 #   include "cdacore/device/Loader.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/EventServer.h"
@@ -51,7 +51,7 @@
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
-#   include "cmdl/cmdargs.h"
+#   include "tclap/CmdLine.h"
 #   include "device/Loader.h"
 #   include "event/Event.h"
 #   include "event/EventServer.h"
@@ -70,10 +70,10 @@
 void shutDown( int );
 
 // Global variable(s):
-msg::Logger   g_logger( "cda-raw-writer" );
-raw::Crate* g_crate = 0;
-raw::FileWriter* g_fwriter = 0;
-quint32 g_evcount = 0;
+static msg::Logger g_logger( "cda-raw-writer" );
+static raw::Crate* g_crate = 0;
+static raw::FileWriter* g_fwriter = 0;
+static quint32 g_evcount = 0;
 
 /// Description printed to the console
 static const char* description =
@@ -88,36 +88,42 @@ int main( int argc, char* argv[] ) {
    //
    // Read the command line options:
    //
-   CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename/address",
-                     "Name of an XML config file or address of a config server",
-                     CmdArg::isREQ );
-   CmdArgStrList msgservers( 'm', "msgservers", "addresses",
-                             "Addresses of message servers" );
-   CmdArgStr evaddress( 'e', "evaddress", "address",
-                        "Address where to receive events",
-                        CmdArg::isREQ );
-   CmdArgStr output( 'o', "output", "filename", "Name of the RAW file",
-                     CmdArg::isREQ );
-   CmdArgStrList statistics( 's', "statistics", "addresses",
-                             "Addresses of statistics reader clients" );
-   CmdArgInt updatefreq( 'u', "update-frequency", "minutes",
-                         "Frequency of file name updates" );
-
-   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &evaddress, &output,
-                &statistics, &updatefreq, NULL );
-   cmd.description( description );
-
-   CmdArgvIter arg_iter( --argc, ++argv );
-   verbosity = 3;
-   updatefreq = 60;
-   cmd.parse( arg_iter );
+   TCLAP::CmdLine cmd( description );
+   TCLAP::ValueArg< int > verbosity( "v", "verbosity",
+                                     "Level of output verbosity", false, 3,
+                                     "code" );
+   cmd.add( verbosity );
+   TCLAP::MultiArg< std::string >
+         msgservers( "m", "msgservers", "Addresses of message servers",
+                     false, "address list" );
+   cmd.add( msgservers );
+   TCLAP::ValueArg< std::string >
+         config( "c", "config", "Name of an XML config file, or "
+                 "address of a config server", true, "", "filename/address" );
+   cmd.add( config );
+   TCLAP::ValueArg< std::string >
+         evaddress( "e", "evaddress", "Address on which to receive events",
+                    true, "", "address" );
+   cmd.add( evaddress );
+   TCLAP::MultiArg< std::string >
+         statistics( "s", "statistics",
+                     "Addresses of statistics reader clients", false,
+                     "address list" );
+   cmd.add( statistics );
+   TCLAP::ValueArg< std::string >
+         output( "o", "output", "Name of the output HBOOK file", true,
+                 "", "filename" );
+   cmd.add( output );
+   TCLAP::ValueArg< int >
+         updatefreq( "u", "update-frequency", "Frequency of file name updates",
+                     false, 60, "minutes" );
+   cmd.parse( argc, argv );
 
    //
    // Set the destination of the messages:
    //
-   for( unsigned int i = 0; i < msgservers.count(); ++i ) {
-      msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+   for( const std::string& address : msgservers.getValue() ) {
+      msg::Sender::addAddress( Address( address.c_str() ) );
    }
 
    //
@@ -144,8 +150,9 @@ int main( int argc, char* argv[] ) {
    v_map[ 5 ] = msg::ERROR;
    v_map[ 6 ] = msg::FATAL;
    v_map[ 7 ] = msg::ALWAYS;
-   if( v_map.find( verbosity ) != v_map.end() ) {
-      msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
+   auto itr = v_map.find( verbosity.getValue() );
+   if( itr != v_map.end() ) {
+      msg::Sender::instance()->setMinLevel( itr->second );
    } else {
       g_logger << msg::FATAL
                << qApp->translate( "cda-raw-writer",
@@ -179,18 +186,18 @@ int main( int argc, char* argv[] ) {
    //
    // Decide how to read the configuration:
    //
-   if( Address::isAddress( ( const char* ) config ) ) {
+   if( Address::isAddress( config.getValue().c_str() ) ) {
 
       //
       // Read the configuration data from the specified address:
       //
       conf::ConfReader reader;
-      if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
+      if( ! reader.readFrom( Address( config.getValue().c_str() ) ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-raw-writer",
                                       "Couldn't read configuration from "
                                       "address: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
          return 1;
       }
@@ -203,14 +210,14 @@ int main( int argc, char* argv[] ) {
                   << qApp->translate( "cda-raw-writer",
                                       "Couldn't process configuration coming "
                                       "from address: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
          return 1;
       } else {
          g_logger << msg::INFO
                   << qApp->translate( "cda-raw-writer",
                                       "Read the configuration from: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -219,13 +226,14 @@ int main( int argc, char* argv[] ) {
       //
       // Open the configuration file:
       //
-      QFile config_file( ( const char* ) config );
+      QFile config_file( config.getValue().c_str() );
       if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-raw-writer",
-                                      "The specified configuration file (\"%1\")\n"
-                                      "could not be opened!" )
-            .arg( ( const char* ) config ? ( const char* ) config : "" )
+                                      "The specified configuration file "
+                                      "(\"%1\") could not be opened!" )
+                     .arg( config.getValue().c_str() ?
+                              config.getValue().c_str() : "" )
                   << msg::endmsg;
          return 1;
       }
@@ -244,15 +252,15 @@ int main( int argc, char* argv[] ) {
                                       "  Error message: %2\n"
                                       "  Error line   : %3\n"
                                       "  Error column : %4" )
-            .arg( ( const char* ) config )
-            .arg( errorMsg ).arg( errorLine ).arg( errorColumn )
+                     .arg( config.getValue().c_str() )
+                     .arg( errorMsg ).arg( errorLine ).arg( errorColumn )
                   << msg::endmsg;
          return 1;
       } else {
          g_logger << msg::DEBUG
                   << qApp->translate( "cda-raw-writer",
                                       "Successfully parsed: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -273,7 +281,7 @@ int main( int argc, char* argv[] ) {
          g_logger << msg::INFO
                   << qApp->translate( "cda-raw-writer",
                                       "Read the configuration from: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -283,15 +291,15 @@ int main( int argc, char* argv[] ) {
    // Start an EventServer listening on the specified port:
    //
    ev::EventServer evserver;
-   evserver.listen( Address( ( const char* ) evaddress ) );
+   evserver.listen( Address( evaddress.getValue().c_str() ) );
 
    //
    // Open connections to all the statistics recepients. (Ignore connection errors
    // here, since statistics publishing is not a major concern...)
    //
    cdastat::Sender stat_sender;
-   for( unsigned int i = 0; i < statistics.count(); ++i ) {
-      stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
+   for( const std::string& server : statistics.getValue() ) {
+      stat_sender.addReceiver( Address( server.c_str() ) );
    }
 
    //
@@ -305,7 +313,7 @@ int main( int argc, char* argv[] ) {
    // during event processing:
    //
    QString statSource = "cda-raw-writer:";
-   statSource += ( const char* ) config;
+   statSource += config.getValue().c_str();
    statSource += ":";
    statSource += QString::number( QCoreApplication::applicationPid() );
 
@@ -330,13 +338,14 @@ int main( int argc, char* argv[] ) {
    //
    // Decide if file name updating will be required:
    //
-   QString fileName( ( const char* ) output );
+   QString fileName( output.getValue().c_str() );
    if( fileName.contains( "%1" ) ) {
       //
       // Initialise writing to the first RAW file:
       //
       int filecounter = 1;
-      if( ! g_crate->initialize( fileName.arg( filecounter, ( int ) 3, ( int ) 10,
+      if( ! g_crate->initialize( fileName.arg( filecounter, ( int ) 3,
+                                               ( int ) 10,
                                                QLatin1Char( '0' ) ) ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-raw-writer",
@@ -347,7 +356,8 @@ int main( int argc, char* argv[] ) {
       } else {
          g_logger << msg::DEBUG
                   << qApp->translate( "cda-raw-writer",
-                                      "Initialised RAW file for data acquisition" )
+                                      "Initialised RAW file for data "
+                                      "acquisition" )
                   << msg::endmsg;
       }
       //
@@ -373,7 +383,8 @@ int main( int argc, char* argv[] ) {
                                                   statSource ) );
 
          // If it's time to open a new file, let's do it:
-         if( startTime.secsTo( QTime::currentTime() ) > ( 60 * updatefreq ) ) {
+         if( startTime.secsTo( QTime::currentTime() ) >
+             ( 60 * updatefreq.getValue() ) ) {
             // Remember the current time:
             startTime = QTime::currentTime();
             // First off, let's stop the file writing thread:
@@ -421,7 +432,8 @@ int main( int argc, char* argv[] ) {
       } else {
          g_logger << msg::DEBUG
                   << qApp->translate( "cda-raw-writer",
-                                      "Initialised RAW file for data acquisition" )
+                                      "Initialised RAW file for data "
+                                      "acquisition" )
                   << msg::endmsg;
       }
       //

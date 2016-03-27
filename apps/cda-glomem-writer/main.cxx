@@ -33,7 +33,7 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Sender.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/cmdl/cmdargs.h"
+#   include "cdacore/tclap/CmdLine.h"
 #   include "cdacore/device/Loader.h"
 #   include "cdacore/event/Event.h"
 #   include "cdacore/event/EventServer.h"
@@ -44,7 +44,7 @@
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
-#   include "cmdl/cmdargs.h"
+#   include "tclap/CmdLine.h"
 #   include "device/Loader.h"
 #   include "fifo/Fifo.h"
 #   include "event/Event.h"
@@ -80,30 +80,35 @@ int main( int argc, char* argv[] ) {
    //
    // Read the command line options:
    //
-   CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename/address",
-                     "Name of an XML config file or address of a config server",
-                     CmdArg::isREQ );
-   CmdArgStrList msgservers( 'm', "msgservers", "addresses",
-                             "Addresses of message servers" );
-   CmdArgStr evaddress( 'e', "evaddress", "address", "Address where to receive events",
-                        CmdArg::isREQ );
-   CmdArgStrList statistics( 's', "statistics", "addresses",
-                             "Addresses of statistics reader clients" );
-
-   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &evaddress,
-                &statistics, NULL );
-   cmd.description( description );
-
-   CmdArgvIter arg_iter( --argc, ++argv );
-   verbosity = 3;
-   cmd.parse( arg_iter );
+   TCLAP::CmdLine cmd( description );
+   TCLAP::ValueArg< int > verbosity( "v", "verbosity",
+                                     "Level of output verbosity", false, 3,
+                                     "code" );
+   cmd.add( verbosity );
+   TCLAP::MultiArg< std::string >
+         msgservers( "m", "msgservers", "Addresses of message servers",
+                     false, "address list" );
+   cmd.add( msgservers );
+   TCLAP::ValueArg< std::string >
+         config( "c", "config", "Name of an XML config file, or "
+                 "address of a config server", true, "", "filename/address" );
+   cmd.add( config );
+   TCLAP::ValueArg< std::string >
+         evaddress( "e", "evaddress", "Address on which to receive events",
+                    true, "", "address" );
+   cmd.add( evaddress );
+   TCLAP::MultiArg< std::string >
+         statistics( "s", "statistics",
+                     "Addresses of statistics reader clients", false,
+                     "address list" );
+   cmd.add( statistics );
+   cmd.parse( argc, argv );
 
    //
    // Set the destination of the messages:
    //
-   for( unsigned int i = 0; i < msgservers.count(); ++i ) {
-      msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+   for( const std::string& address : msgservers.getValue() ) {
+      msg::Sender::addAddress( Address( address.c_str() ) );
    }
 
    //
@@ -130,8 +135,9 @@ int main( int argc, char* argv[] ) {
    v_map[ 5 ] = msg::ERROR;
    v_map[ 6 ] = msg::FATAL;
    v_map[ 7 ] = msg::ALWAYS;
-   if( v_map.find( verbosity ) != v_map.end() ) {
-      msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
+   auto itr = v_map.find( verbosity.getValue() );
+   if( itr != v_map.end() ) {
+      msg::Sender::instance()->setMinLevel( itr->second );
    } else {
       g_logger << msg::FATAL
                << qApp->translate( "cda-glomem-writer",
@@ -165,17 +171,18 @@ int main( int argc, char* argv[] ) {
    //
    // Decide how to read the configuration:
    //
-   if( Address::isAddress( ( const char* ) config ) ) {
+   if( Address::isAddress( config.getValue().c_str() ) ) {
 
       //
       // Read the configuration data from the specified address:
       //
       conf::ConfReader reader;
-      if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
+      if( ! reader.readFrom( Address( config.getValue().c_str() ) ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-glomem-writer",
-                                      "Couldn't read configuration from address: %1" )
-            .arg( ( const char* ) config )
+                                      "Couldn't read configuration from "
+                                      "address: %1" )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
          return 1;
       }
@@ -186,15 +193,16 @@ int main( int argc, char* argv[] ) {
       if( ! crate.readConfig( reader.buffer() ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-glomem-writer",
-                                      "Couldn't process configuration coming from address: %1" )
-            .arg( ( const char* ) config )
+                                      "Couldn't process configuration coming "
+                                      "from address: %1" )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
          return 1;
       } else {
          g_logger << msg::INFO
                   << qApp->translate( "cda-glomem-writer",
                                       "Read the configuration from: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -203,13 +211,14 @@ int main( int argc, char* argv[] ) {
       //
       // Open the configuration file:
       //
-      QFile config_file( ( const char* ) config );
+      QFile config_file( config.getValue().c_str() );
       if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-glomem-writer",
-                                      "The specified configuration file (\"%1\")\n"
-                                      "could not be opened!" )
-            .arg( ( const char* ) config ? ( const char* ) config : "" )
+                                      "The specified configuration file "
+                                      "(\"%1\") could not be opened!" )
+                     .arg( config.getValue().c_str() ?
+                              config.getValue().c_str() : "" )
                   << msg::endmsg;
          return 1;
       }
@@ -228,15 +237,15 @@ int main( int argc, char* argv[] ) {
                                       "  Error message: %2\n"
                                       "  Error line   : %3\n"
                                       "  Error column : %4" )
-            .arg( ( const char* ) config ).arg( errorMsg )
-            .arg( errorLine ).arg( errorColumn )
+                     .arg( config.getValue().c_str() ).arg( errorMsg )
+                     .arg( errorLine ).arg( errorColumn )
                   << msg::endmsg;
          return 1;
       } else {
          g_logger << msg::DEBUG
                   << qApp->translate( "cda-glomem-writer",
                                       "Successfully parsed: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
       QDomElement work = doc.documentElement();
@@ -248,14 +257,15 @@ int main( int argc, char* argv[] ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-glomem-writer",
                                       "Failed to read configuration file!\n"
-                                      "See previous messages for more information..." )
+                                      "See previous messages for more "
+                                      "information..." )
                   << msg::endmsg;
          return 1;
       } else {
          g_logger << msg::INFO
                   << qApp->translate( "cda-glomem-writer",
                                       "Read the configuration from: %1" )
-            .arg( ( const char* ) config )
+                     .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -274,7 +284,8 @@ int main( int argc, char* argv[] ) {
    } else {
       g_logger << msg::DEBUG
                << qApp->translate( "cda-glomem-writer",
-                                   "Initialised histograms for data acquisition" )
+                                   "Initialised histograms for data "
+                                   "acquisition" )
                << msg::endmsg;
    }
 
@@ -282,15 +293,15 @@ int main( int argc, char* argv[] ) {
    // Start an EventServer listening on the specified port:
    //
    ev::EventServer evserver;
-   evserver.listen( Address( ( const char* ) evaddress ) );
+   evserver.listen( Address( evaddress.getValue().c_str() ) );
 
    //
-   // Open connections to all the statistics recepients. (Ignore connection errors
-   // here, since statistics publishing is not a major concern...)
+   // Open connections to all the statistics recepients. (Ignore connection
+   // errors here, since statistics publishing is not a major concern...)
    //
    cdastat::Sender stat_sender;
-   for( unsigned int i = 0; i < statistics.count(); ++i ) {
-      stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
+   for( const std::string& server : statistics.getValue() ) {
+      stat_sender.addReceiver( Address( server.c_str() ) );
    }
 
    //
@@ -304,7 +315,7 @@ int main( int argc, char* argv[] ) {
    // during event processing:
    //
    QString statSource = "cda-glomem-writer:";
-   statSource += ( const char* ) config;
+   statSource += config.getValue().c_str();
    statSource += ":";
    statSource += QString::number( QCoreApplication::applicationPid() );
 
@@ -332,18 +343,19 @@ int main( int argc, char* argv[] ) {
    g_gwriter->start();
    for( ; ; ) {
 
-      // Check if the file writing thread is still running:
+      // Check if the histogram writing thread is still running:
       if( ! g_gwriter->isRunning() ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-glomem-writer",
-                                      "The histogram writing thread unexpectedly died" )
+                                      "The histogram writing thread "
+                                      "unexpectedly died" )
                   << msg::endmsg;
          shutDown( 0 );
       }
 
       // Update the statistics receivers:
       stat_sender.update( cdastat::Statistics( g_gwriter->processedEvents(),
-                                            statSource ) );
+                                               statSource ) );
 
       // Sleep for 2 seconds:
       common::Sleep( 2000 );

@@ -18,11 +18,11 @@ TARGET   = cdacore
 # These are the header and source files:
 HEADERS = $$files(fifo/*.h) $$files(msg/*.h) $$files(event/*.h) \
           $$files(device/*.h) $$files(device/*.icc) $$files(camac/*.h) \
-          $$files(cmdl/*.h) $$files(cernlib/*.h) $$files(common/*.h) \
+          $$files(cernlib/*.h) $$files(common/*.h) \
           $$files(i18n/*.h) $$files(vme/*.h) $$files(caen/*.h) \
           $$files(root/*.h) $$files(root/*.icc) $$files(tclap/*.h)
 SOURCES = $$files(fifo/*.cxx) $$files(msg/*.cxx) $$files(event/*.cxx) \
-          $$files(device/*.cxx) $$files(camac/*.cxx) $$files(cmdl/*.cpp) \
+          $$files(device/*.cxx) $$files(camac/*.cxx) \
           $$files(cernlib/*.cxx) $$files(common/*.cxx) $$files(i18n/*.cxx) \
           $$files(vme/*.cxx) $$files(caen/*.cxx) $$files(root/*.cxx)
 TRANSLATIONS = ../trans/cdacore_hu.ts
@@ -91,11 +91,6 @@ mac {
    CAEN_HEADERS.files = $$files(caen/*.h) $$files(caen/*.icc)
    CAEN_HEADERS.path = Headers/caen
    QMAKE_BUNDLE_DATA += CAEN_HEADERS
-
-   CMDL_HEADERS.version = Versions
-   CMDL_HEADERS.files = cmdl/cmdargs.h cmdl/cmdline.h
-   CMDL_HEADERS.path = Headers/cmdl
-   QMAKE_BUNDLE_DATA += CMDL_HEADERS
 
    TCLAP_HEADERS.version = Versions
    TCLAP_HEADERS.files = $$files(tclap/*.h)

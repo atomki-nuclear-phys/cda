@@ -9,11 +9,11 @@
 // CDA include(s):
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/cmdl/cmdargs.h"
+#   include "cdacore/tclap/CmdLine.h"
 #   include "cdadaq/config/ConfServer.h"
 #else
 #   include "msg/Logger.h"
-#   include "cmdl/cmdargs.h"
+#   include "tclap/CmdLine.h"
 #   include "config/ConfServer.h"
 #endif
 
@@ -35,31 +35,33 @@ int main( int argc, char* argv[] ) {
    //
    // Read the command line options:
    //
-   CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename",
-                     "Name of an XML or binary config file",
-                     CmdArg::isREQ );
-   CmdArgStrList msgservers( 'm', "msgservers", "addresses",
-                             "Addresses of message servers" );
-   CmdArgStr saddr( 's', "server-address", "address",
-                    "Broadcast address of the configuration server" );
-
-   CmdLine cmd( *argv, &verbosity, &config, &saddr, &msgservers, NULL );
-   cmd.description( description );
-
-   CmdArgvIter arg_iter( --argc, ++argv );
-   verbosity = 3;
-   saddr = "127.0.0.1:31000";
-   cmd.parse( arg_iter );
+   TCLAP::CmdLine cmd( description );
+   TCLAP::ValueArg< int > verbosity( "v", "verbosity",
+                                     "Level of output verbosity", false, 3,
+                                     "code" );
+   cmd.add( verbosity );
+   TCLAP::MultiArg< std::string >
+         msgservers( "m", "msgservers", "Addresses of message servers",
+                     false, "address list" );
+   cmd.add( msgservers );
+   TCLAP::ValueArg< std::string >
+         config( "c", "config", "Name of an XML config file, or "
+                 "address of a config server", true, "", "filename/address" );
+   cmd.add( config );
+   TCLAP::ValueArg< std::string >
+         saddr( "s", "server-address",
+                "Broadcast address of the configuration server", false,
+                "127.0.0.1:31000", "address" );
+   cmd.parse( argc, argv );
 
    //
    // Set the destination of the messages:
    //
-   for( unsigned int i = 0; i < msgservers.count(); ++i ) {
-      if( ! Address::isAddress( ( const char* ) msgservers[ i ] ) ) {
+   for( const std::string& address : msgservers.getValue() ) {
+      if( ! Address::isAddress( address.c_str() ) ) {
          continue;
       }
-      msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+      msg::Sender::addAddress( Address( address.c_str() ) );
    }
 
    //
@@ -73,8 +75,9 @@ int main( int argc, char* argv[] ) {
    v_map[ 5 ] = msg::ERROR;
    v_map[ 6 ] = msg::FATAL;
    v_map[ 7 ] = msg::ALWAYS;
-   if( v_map.find( verbosity ) != v_map.end() ) {
-      msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
+   auto itr = v_map.find( verbosity.getValue() );
+   if( itr != v_map.end() ) {
+      msg::Sender::instance()->setMinLevel( itr->second );
    } else {
       logger << msg::FATAL
              << qApp->translate( "cda-config-server",
@@ -87,20 +90,22 @@ int main( int argc, char* argv[] ) {
    //
    // Start the configuration server on a specific port:
    //
-   conf::ConfServer server( ( const char* ) config );
-   if( ! server.listen( Address( ( const char* ) saddr ) ) ) {
+   conf::ConfServer server( config.getValue().c_str() );
+   if( ! server.listen( Address( saddr.getValue().c_str() ) ) ) {
       logger << msg::FATAL
              << qApp->translate( "cda-config-server",
-                                 "The configuration server could not be started "
-                                 "on address: %1" ).arg( ( const char* ) saddr )
+                                 "The configuration server could not be "
+                                 "started on address: %1" )
+                .arg( saddr.getValue().c_str() )
              << msg::endmsg;
       return 1;
    } else {
       logger << msg::INFO
              << qApp->translate( "cda-config-server",
-                                 "The configuration server is broadcasting \"%1\" "
-                                 "on address \"%2\"" )
-         .arg( ( const char* ) config ).arg( ( const char* ) saddr )
+                                 "The configuration server is broadcasting "
+                                 "\"%1\" on address \"%2\"" )
+                .arg( config.getValue().c_str() )
+                .arg( saddr.getValue().c_str() )
              << msg::endmsg;
    }
 

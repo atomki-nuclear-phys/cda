@@ -32,7 +32,7 @@
 #ifdef Q_OS_DARWIN
 #   include "cdacore/msg/Sender.h"
 #   include "cdacore/msg/Logger.h"
-#   include "cdacore/cmdl/cmdargs.h"
+#   include "cdacore/tclap/CmdLine.h"
 #   include "cdacore/device/Loader.h"
 #   include "cdacore/camac/Crate.h"
 #   include "cdacore/event/Event.h"
@@ -43,7 +43,7 @@
 #else
 #   include "msg/Sender.h"
 #   include "msg/Logger.h"
-#   include "cmdl/cmdargs.h"
+#   include "tclap/CmdLine.h"
 #   include "device/Loader.h"
 #   include "camac/Crate.h"
 #   include "event/Event.h"
@@ -78,30 +78,35 @@ int main( int argc, char* argv[] ) {
    //
    // Read the command line options:
    //
-   CmdArgInt verbosity( 'v', "verbosity", "code", "Level of output verbosity" );
-   CmdArgStr config( 'c', "config", "filename/address",
-                     "Name of an XML config file or address of a config server",
-                     CmdArg::isREQ );
-   CmdArgStrList msgservers( 'm', "msgservers", "addresses",
-                             "Addresses of message servers" );
-   CmdArgStrList clients( 'e', "clients", "addresses",
-                          "Addresses of event reader clients" );
-   CmdArgStrList statistics( 's', "statistics", "addresses",
-                             "Addresses of statistics reader clients" );
-
-   CmdLine cmd( *argv, &verbosity, &config, &msgservers, &clients,
-                &statistics, NULL );
-   cmd.description( description );
-
-   CmdArgvIter arg_iter( --argc, ++argv );
-   verbosity = 3;
-   cmd.parse( arg_iter );
+   TCLAP::CmdLine cmd( description );
+   TCLAP::ValueArg< int > verbosity( "v", "verbosity",
+                                     "Level of output verbosity", false, 3,
+                                     "code" );
+   cmd.add( verbosity );
+   TCLAP::MultiArg< std::string >
+         msgservers( "m", "msgservers", "Addresses of message servers",
+                     false, "address list" );
+   cmd.add( msgservers );
+   TCLAP::ValueArg< std::string >
+         config( "c", "config", "Name of an XML config file, or "
+                 "address of a config server", true, "", "filename/address" );
+   cmd.add( config );
+   TCLAP::MultiArg< std::string >
+         clients( "e", "clients", "Addresses of event reader clients",
+                  true, "address list" );
+   cmd.add( clients );
+   TCLAP::MultiArg< std::string >
+         statistics( "s", "statistics",
+                     "Addresses of statistics reader clients", false,
+                     "address list" );
+   cmd.add( statistics );
+   cmd.parse( argc, argv );
 
    //
    // Set the destination of the messages:
    //
-   for( unsigned int i = 0; i < msgservers.count(); ++i ) {
-      msg::Sender::addAddress( Address( ( const char* ) msgservers[ i ] ) );
+   for( const std::string& address : msgservers.getValue() ) {
+      msg::Sender::addAddress( Address( address.c_str() ) );
    }
 
    //
@@ -128,8 +133,9 @@ int main( int argc, char* argv[] ) {
    v_map[ 5 ] = msg::ERROR;
    v_map[ 6 ] = msg::FATAL;
    v_map[ 7 ] = msg::ALWAYS;
-   if( v_map.find( verbosity ) != v_map.end() ) {
-      msg::Sender::instance()->setMinLevel( v_map.find( verbosity )->second );
+   auto itr = v_map.find( verbosity.getValue() );
+   if( itr != v_map.end() ) {
+      msg::Sender::instance()->setMinLevel( itr->second );
    } else {
       g_logger << msg::FATAL
                << qApp->translate( "cda-camac-reader",
@@ -164,18 +170,18 @@ int main( int argc, char* argv[] ) {
    //
    // Decide how to read the configuration:
    //
-   if( Address::isAddress( ( const char* ) config ) ) {
+   if( Address::isAddress( config.getValue().c_str() ) ) {
 
       //
       // Read the configuration data from the specified address:
       //
       conf::ConfReader reader;
-      if( ! reader.readFrom( Address( ( const char* ) config ) ) ) {
+      if( ! reader.readFrom( Address( config.getValue().c_str() ) ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-camac-reader",
                                       "Couldn't read configuration from "
                                       "address: %1" )
-            .arg( ( const char* ) config )
+            .arg( config.getValue().c_str() )
                   << msg::endmsg;
          return 1;
       }
@@ -188,14 +194,14 @@ int main( int argc, char* argv[] ) {
                   << qApp->translate( "cda-camac-reader",
                                       "Couldn't process configuration "
                                       "coming from address: %1" )
-            .arg( ( const char* ) config )
+            .arg( config.getValue().c_str() )
                   << msg::endmsg;
          return 1;
       } else {
          g_logger << msg::INFO
                   << qApp->translate( "cda-camac-reader",
                                       "Read the configuration from: %1" )
-            .arg( ( const char* ) config )
+            .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -204,13 +210,13 @@ int main( int argc, char* argv[] ) {
       //
       // Open the configuration file:
       //
-      QFile config_file( ( const char* ) config );
+      QFile config_file( config.getValue().c_str() );
       if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-camac-reader",
                                       "The specified configuration file (\"%1\")\n"
                                       "could not be opened!" )
-            .arg( ( const char* ) config ? ( const char* ) config : "" )
+            .arg( config.getValue().c_str() ? config.getValue().c_str() : "" )
                   << msg::endmsg;
          return 1;
       }
@@ -229,7 +235,7 @@ int main( int argc, char* argv[] ) {
                                       "  Error message: %2\n"
                                       "  Error line   : %3\n"
                                       "  Error column : %4" )
-            .arg( ( const char* ) config ).arg( errorMsg )
+            .arg( config.getValue().c_str() ).arg( errorMsg )
             .arg( errorLine ).arg( errorColumn )
                   << msg::endmsg;
          return 1;
@@ -237,7 +243,7 @@ int main( int argc, char* argv[] ) {
          g_logger << msg::DEBUG
                   << qApp->translate( "cda-camac-reader",
                                       "Successfully parsed: %1" )
-            .arg( ( const char* ) config )
+            .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -257,7 +263,7 @@ int main( int argc, char* argv[] ) {
          g_logger << msg::INFO
                   << qApp->translate( "cda-camac-reader",
                                       "Read the configuration from: %1" )
-            .arg( ( const char* ) config )
+            .arg( config.getValue().c_str() )
                   << msg::endmsg;
       }
 
@@ -301,12 +307,12 @@ int main( int argc, char* argv[] ) {
    // Open connections to all the event recepients:
    //
    ev::Sender ev_sender;
-   for( unsigned int i = 0; i < clients.count(); ++i ) {
-      if( ! ev_sender.addSocket( Address( ( const char* ) clients[ i ] ) ) ) {
+   for( const std::string& client : clients.getValue() ) {
+      if( ! ev_sender.addSocket( Address( client.c_str() ) ) ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-camac-reader",
                                       "Couldn't connect to event receiver: %1" )
-            .arg( ( const char* ) clients[ i ] )
+            .arg( client.c_str() )
                   << msg::endmsg;
          shutDown( 0 );
       }
@@ -317,8 +323,8 @@ int main( int argc, char* argv[] ) {
    // here, since statistics publishing is not a major concern...)
    //
    cdastat::Sender stat_sender;
-   for( unsigned int i = 0; i < statistics.count(); ++i ) {
-      stat_sender.addReceiver( Address( ( const char* ) statistics[ i ] ) );
+   for( const std::string& server : statistics.getValue() ) {
+      stat_sender.addReceiver( Address( server.c_str() ) );
    }
 
    //
@@ -332,7 +338,7 @@ int main( int argc, char* argv[] ) {
    // during event processing:
    //
    QString statSource = "cda-camac-reader:";
-   statSource += ( const char* ) config;
+   statSource += config.getValue().c_str();
    statSource += ":";
    statSource += QString::number( QCoreApplication::applicationPid() );
 
