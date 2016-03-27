@@ -30,7 +30,7 @@ file( GLOB sources msg/*.cxx device/*.cxx simple_daq/*.cxx stat/*.cxx
 set( CMAKE_AUTOMOC TRUE )
 
 # Build the cdacore library:
-add_library( cdagui SHARED ${headers} ${sources} )
+add_library( cdagui STATIC ${headers} ${sources} )
 target_include_directories( cdagui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 target_link_libraries( cdagui PUBLIC ${qt_libraries} cdacore cdadaq )
 set_target_properties( cdagui PROPERTIES

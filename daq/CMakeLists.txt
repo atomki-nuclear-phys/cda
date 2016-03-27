@@ -30,7 +30,7 @@ file( GLOB sources common/*.cxx stat/*.cxx config/*.cxx moni/*.cxx )
 set( CMAKE_AUTOMOC TRUE )
 
 # Build the cdacore library:
-add_library( cdadaq SHARED ${headers} ${sources} )
+add_library( cdadaq STATIC ${headers} ${sources} )
 target_include_directories( cdadaq PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 target_link_libraries( cdadaq PUBLIC ${qt_libraries} cdacore )
 set_target_properties( cdadaq PROPERTIES

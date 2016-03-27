@@ -18,7 +18,7 @@ extern "C" {
 // Some CERNLIB definitions:
 //
 #ifdef HAVE_CERNLIB
-#define PAWC_SIZE 500000
+#define PAWC_SIZE 1000000
 typedef struct { float PAW[ PAWC_SIZE ]; } PAWC_DEF;
 #define PAWC COMMON_BLOCK( PAWC, pawc )
 COMMON_BLOCK_DEF( PAWC_DEF, PAWC );

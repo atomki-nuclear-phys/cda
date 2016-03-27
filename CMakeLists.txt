@@ -32,7 +32,7 @@ else()
 endif()
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
   CACHE PATH "Directory to store static libraries" )
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
   CACHE PATH "Directory to store executables" )
 foreach( config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO )
   if( UNIX )
@@ -44,7 +44,7 @@ foreach( config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO )
   endif()
   set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${config} "${CMAKE_BINARY_DIR}/lib"
     CACHE PATH "Directory to store static libraries" )
-  set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${config} "${CMAKE_BINARY_DIR}/lib"
+  set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${config} "${CMAKE_BINARY_DIR}/bin"
     CACHE PATH "Directory to store executables" )
 endforeach()
 if( UNIX )
@@ -58,15 +58,22 @@ endif()
 # Find the CDA CMake helper code:
 list( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
-# The build needs c++11 mode:
+# Set the compile flags to be used for everything:
 set( CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard to use for the build" )
 set( CMAKE_CXX_EXTENSIONS FALSE CACHE BOOL "(Dis)allow compiler extensions" )
 if( ${CMAKE_VERSION} VERSION_LESS 3.1 )
-  set( CMAKE_CXX_FLAGS "-std=c++0x" )
-  foreach( config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO )
-    set( CMAKE_CXX_FLAGS_${config} "-std=c++0x" )
-  endforeach()
+  set( _extraFlags "-std=c++0x" )
+else()
+  set( _extraFlags "" )
 endif()
+set( CMAKE_CXX_FLAGS "${_extraFlags}" )
+foreach( config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO )
+  set( CMAKE_CXX_FLAGS_${config} "${_extraFlags}" )
+endforeach()
+unset( _extraFlags )
+
+# Set the CDASYS compiler definition:
+add_definitions( -DCDASYS=${CMAKE_BINARY_DIR} )
 
 # Build the main libraries of the project:
 add_subdirectory( core )
@@ -75,3 +82,6 @@ add_subdirectory( gui )
 
 # Build the device plugins:
 add_subdirectory( devices )
+
+# Build the applications:
+add_subdirectory( apps )

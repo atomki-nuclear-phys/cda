@@ -42,7 +42,7 @@ file( GLOB sources fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
 set( CMAKE_AUTOMOC TRUE )
 
 # Build the cdacore library:
-add_library( cdacore SHARED ${headers} ${sources} )
+add_library( cdacore STATIC ${headers} ${sources} )
 target_include_directories( cdacore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 target_link_libraries( cdacore PUBLIC ${qt_libraries} )
 set_target_properties( cdacore PROPERTIES

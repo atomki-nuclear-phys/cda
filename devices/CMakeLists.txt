@@ -24,13 +24,6 @@ macro( add_cda_plugin name )
       Qt4::QtXml )
   endif()
 
-  # Set the output directory for the plugin library:
-  set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_DEVICE_OUTPUT_DIRECTORY} )
-  foreach( config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${config}
-      ${CMAKE_DEVICE_OUTPUT_DIRECTORY} )
-  endforeach()
-
   # Generate MOC files automatically:
   set( CMAKE_AUTOMOC TRUE )
   # Generate resource files automatically:
@@ -38,12 +31,18 @@ macro( add_cda_plugin name )
 
   # Collect the source files of the plugin:
   file( GLOB headers *.h )
-  file( GLOB sources *.cxx *.qrc )
+  file( GLOB sources *.cxx )
+  file( GLOB resources ${CMAKE_CURRENT_SOURCE_DIR}/*.qrc )
 
-  # Build a module library out of the sources:
-  add_library( ${name} MODULE ${headers} ${sources} )
+  # Build the plugin as a static library:
+  add_library( ${name} STATIC ${headers} ${sources} ${resources} )
   target_include_directories( ${name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
   target_link_libraries( ${name} PRIVATE ${qt_libraries} cdacore cdadaq )
+  target_compile_definitions( ${name} PRIVATE QT_STATICPLUGIN )
+
+  # Remember the name and properties of the plugin:
+  set_property( GLOBAL APPEND PROPERTY CDA_PLUGINS ${name} )
+  set_property( GLOBAL APPEND PROPERTY CDA_RESOURCES ${resources} )
 
 endmacro( add_cda_plugin )
 
