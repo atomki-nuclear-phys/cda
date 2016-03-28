@@ -7,13 +7,13 @@
 message( STATUS "Configuring the build of cdagui" )
 
 # Find Qt:
-find_package( Qt5 COMPONENTS Core Network Gui Widgets )
+find_package( Qt5 QUIET COMPONENTS Core Network Gui Widgets )
 if( Qt5_FOUND )
   message( STATUS "Using Qt5 for the build" )
   set( qt_libraries Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets )
 else()
-  find_package( Qt4 COMPONENTS QtCore QtNetwork QtGui )
-  if( NOT Qt4_FOUND )
+  find_package( Qt4 QUIET COMPONENTS QtCore QtNetwork QtGui )
+  if( NOT QT_FOUND )
     message( ERROR "No working version of Qt was found" )
     return()
   endif()

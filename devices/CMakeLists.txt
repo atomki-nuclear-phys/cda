@@ -10,13 +10,13 @@ macro( add_cda_plugin name )
   message( STATUS "Configuring the build of the ${name} plugin" )
 
   # Find Qt:
-  find_package( Qt5 COMPONENTS Core Network Gui Widgets Xml )
+  find_package( Qt5 QUIET COMPONENTS Core Network Gui Widgets Xml )
   if( Qt5_FOUND )
     set( qt_libraries Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
       Qt5::Xml )
   else()
-    find_package( Qt4 COMPONENTS QtCore QtNetwork QtGui QtXml )
-    if( NOT Qt4_FOUND )
+    find_package( Qt4 QUIET COMPONENTS QtCore QtNetwork QtGui QtXml )
+    if( NOT QT_FOUND )
       message( ERROR "No working version of Qt was found" )
       return()
     endif()
