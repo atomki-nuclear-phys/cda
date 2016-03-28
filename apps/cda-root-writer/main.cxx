@@ -16,7 +16,6 @@
 // System include(s):
 #include <cstdlib>
 #include <csignal>
-#include <unistd.h>
 
 // STL include(s):
 #include <iostream>

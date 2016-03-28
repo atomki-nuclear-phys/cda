@@ -8,9 +8,9 @@
 
 /// Helper macro for declaring functions/classes to be visible on all platforms
 #ifdef CDACORE_LIBRARY
-#   define CDACORE_EXPORT Q_DECL_EXPORT
+#   define CDACORE_EXPORT
 #else
-#   define CDACORE_EXPORT Q_DECL_IMPORT
+#   define CDACORE_EXPORT
 #endif
 
 #endif // CDA_CORE_COMMON_EXPORT_H

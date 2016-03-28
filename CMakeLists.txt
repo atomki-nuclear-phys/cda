@@ -8,6 +8,9 @@
 cmake_minimum_required( VERSION 2.8 )
 project( CDA )
 
+# Policy settings:
+cmake_policy( SET CMP0020 NEW )
+
 # Declare the options for controlling what externals CDA should be
 # built against. If a given external is not found, that's not a
 # problem. So by default everything is turned on.

@@ -34,3 +34,8 @@ if( CAENCOMM_FOUND )
   list( APPEND CAENCOMM_LIBRARIES
     ${CAENVME_LIBRARIES} )
 endif()
+
+# On Windows use the WIN32 compiler definition:
+if( WIN32 )
+   add_definitions( -DWIN32 )
+endif()

@@ -21,3 +21,8 @@ include( FindPackageHandleStandardArgs )
 find_package_handle_standard_args( CAENVME DEFAULT_MSG
   CAENVME_LIBRARY CAENVME_INCLUDE_DIR )
 mark_as_advanced( CAENVME_FOUND )
+
+# On Windows use the WIN32 compiler definition:
+if( WIN32 )
+   add_definitions( -DWIN32 )
+endif()
