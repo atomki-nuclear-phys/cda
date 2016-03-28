@@ -72,7 +72,7 @@ namespace simple_daq {
       m_fileNameEdit = new QLineEdit( m_mainBox );
       m_fileNameEdit->setGeometry( QRect( 100, 75, 170, 25 ) );
       m_fileNameEdit->setToolTip( tr( "To activate automatic file name updating, put\n"
-                                      "\"\%1\" in the file name where a number should\n"
+                                      "\"%1\" in the file name where a number should\n"
                                       "be filled in. To disable the automatic updating\n"
                                       "just don't put this symbol in the file name." ) );
 

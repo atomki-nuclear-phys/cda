@@ -61,19 +61,22 @@ endif()
 # Find the CDA CMake helper code:
 list( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
-# Set the compile flags to be used for everything:
-set( CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard to use for the build" )
-set( CMAKE_CXX_EXTENSIONS FALSE CACHE BOOL "(Dis)allow compiler extensions" )
-if( ${CMAKE_VERSION} VERSION_LESS 3.1 )
-  set( _extraFlags "-std=c++0x" )
-else()
-  set( _extraFlags "" )
+# Set the compile flags to be used for everything. Except with MSVC, there we let
+# it use its default settings.
+if( NOT MSVC )
+  set( CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard to use for the build" )
+  set( CMAKE_CXX_EXTENSIONS FALSE CACHE BOOL "(Dis)allow compiler extensions" )
+  if( ${CMAKE_VERSION} VERSION_LESS 3.1 )
+    set( _extraFlags "-std=c++0x" )
+  else()
+    set( _extraFlags "" )
+  endif()
+  set( CMAKE_CXX_FLAGS "${_extraFlags}" )
+  foreach( config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO )
+    set( CMAKE_CXX_FLAGS_${config} "${_extraFlags}" )
+  endforeach()
+  unset( _extraFlags )
 endif()
-set( CMAKE_CXX_FLAGS "${_extraFlags}" )
-foreach( config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO )
-  set( CMAKE_CXX_FLAGS_${config} "${_extraFlags}" )
-endforeach()
-unset( _extraFlags )
 
 # Set the CDASYS compiler definition:
 add_definitions( -DCDASYS=${CMAKE_BINARY_DIR} )

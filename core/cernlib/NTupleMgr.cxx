@@ -135,9 +135,9 @@ namespace cernlib {
       // Prepare some other character variables for the CERNLIB
       // functions:
       char aq[ 15 ], data[ 10 ], n[ 2 ], hname[ 50 ];
-      sprintf( aq, "acquisition" );
-      sprintf( data, "Data" );
-      sprintf( n, "N" );
+      snprintf( aq, sizeof( aq ), "acquisition" );
+      snprintf( data, sizeof( data ), "Data" );
+      snprintf( n, sizeof( n ), "N" );
       if( snprintf( hname, sizeof( hname ), "%s",
                     fileName.toLatin1().constData() ) >
           ( int ) sizeof( hname ) ) {
@@ -200,8 +200,8 @@ namespace cernlib {
 
       // Create the character variables needed by the CERNLIB functions:
       char aq[ 15 ], t[ 2 ];
-      sprintf( aq, "acquisition" );
-      sprintf( t, "T" );
+      snprintf( aq, sizeof( aq ), "acquisition" );
+      snprintf( t, sizeof( t ), "T" );
 
 #ifdef HAVE_CERNLIB
       // Additional variable(s) needed by CERNLIB:
