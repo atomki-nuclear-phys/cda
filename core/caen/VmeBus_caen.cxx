@@ -1,17 +1,14 @@
 // $Id$
 
 // CAEN include(s):
-#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
-#   ifndef Q_OS_WIN
-#      define LINUX
-#   endif // Q_OS_WIN
+#ifdef HAVE_CAEN_VME_LIBS
 #   include <CAENVMElib.h>
-#endif // CERN libs
+#endif
 
 // Local include(s):
 #include "VmeBus.h"
 
-#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
+#ifdef HAVE_CAEN_VME_LIBS
 namespace {
 
    /// Convert from the custom type to the CAENVMELib one
@@ -150,7 +147,7 @@ namespace caen {
                           "boardNumber = %3" ).arg( toString( type ) )
                       .arg( linkNumber ).arg( boardNumber ) );
 
-#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
+#ifdef HAVE_CAEN_VME_LIBS
       CHECK( CAENVME_Init( convert( type ), linkNumber, boardNumber,
                            &m_handle ) );
 #endif // CAEN libs
@@ -173,7 +170,7 @@ namespace caen {
       }
 
       // Close the connection:
-#if defined(HAVE_CAEN_DIGITIZER_LIBS) || defined(HAVE_CAEN_QTP_LIBS)
+#ifdef HAVE_CAEN_VME_LIBS
       CHECK( CAENVME_End( m_handle ) );
 #endif // CAEN libs
 

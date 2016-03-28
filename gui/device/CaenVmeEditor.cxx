@@ -5,6 +5,7 @@
 #include <QComboBox>
 #include <QIcon>
 #include <QMessageBox>
+#include <QDataStream>
 
 // CDA include(s):
 #include "device/Loader.h"
@@ -68,6 +69,9 @@ namespace dev {
       connect( m_deviceTab.get(), SIGNAL( tabCloseRequested( int ) ),
                this, SLOT( deleteDeviceSlot( int ) ) );
 
+      // Add one non-dismissable tab:
+      m_vmeWidget.reset( new CaenVmeBusWidget( this ) );
+      m_deviceTab->addTab( m_vmeWidget.get(), "VME Controller" );
    }
 
    CaenVmeEditor::~CaenVmeEditor() {
@@ -76,6 +80,7 @@ namespace dev {
       // so it deletes them in the end if they still exist. However, the tab
       // widget does know it when the objects get deleted already. So let's do
       // that.
+      m_vmeWidget.reset();
       m_devices.clear();
    }
 
@@ -143,8 +148,14 @@ namespace dev {
 
    void CaenVmeEditor::clear() {
 
+      // Clear the tabs, making sure that the first tab is not disturbed:
       dev::Crate< dev::CaenVmeGui >::clear();
-      m_deviceTab->clear();
+      for( int i = 1; i < m_deviceTab->count(); ++i ) {
+         m_deviceTab->removeTab( i );
+      }
+
+      // Reset the controller configuration:
+      m_vmeWidget->reset();
 
       // Check if the GUI is still "consistent":
       if( ! consistent() ) {
@@ -154,6 +165,82 @@ namespace dev {
       }
 
       return;
+   }
+
+   bool CaenVmeEditor::readCrateConfig( QIODevice& dev ) {
+
+      // Create the object used for reading the data:
+      QDataStream input( &dev );
+      input.setVersion( QDataStream::Qt_4_0 );
+
+      // Read the connector type:
+      quint16 type = 0;
+      input >> type;
+      m_vmeWidget->setType( static_cast< caen::VmeBus::BoardType >( type ) );
+
+      // Read the link number:
+      qint16 linkNumber = 0;
+      input >> linkNumber;
+      m_vmeWidget->setLinkNumber( linkNumber );
+
+      // Read the board number:
+      qint16 boardNumber = 0;
+      input >> boardNumber;
+      m_vmeWidget->setBoardNumber( boardNumber );
+
+      // Return gracefully:
+      return true;
+   }
+
+   bool CaenVmeEditor::writeCrateConfig( QIODevice& dev ) const {
+
+      // Create the object used for writing the data:
+      QDataStream output( &dev );
+      output.setVersion( QDataStream::Qt_4_0 );
+
+      // Write the controller configuration:
+      output << static_cast< quint16 >( m_vmeWidget->type() );
+      output << static_cast< qint16 >( m_vmeWidget->linkNumber() );
+      output << static_cast< qint16 >( m_vmeWidget->boardNumber() );
+
+      // Return gracefully:
+      return true;
+   }
+
+   bool CaenVmeEditor::readCrateConfig( const QDomElement& node ) {
+
+      // A helper variable:
+      bool ok = true;
+
+      // Read the controller type:
+      const int type = node.attribute( "ControllerType", "0" ).toInt( &ok );
+      CHECK( ok );
+      m_vmeWidget->setType( static_cast< caen::VmeBus::BoardType >( type ) );
+
+      // Read the link number:
+      const int linkNumber = node.attribute( "LinkNumber", "0" ).toInt( &ok );
+      CHECK( ok );
+      m_vmeWidget->setLinkNumber( static_cast< short >( linkNumber ) );
+
+      // Read the board number:
+      const int boardNumber = node.attribute( "BoardNumber", "0" ).toInt( &ok );
+      CHECK( ok );
+      m_vmeWidget->setBoardNumber( static_cast< short >( boardNumber ) );
+
+      // Return gracefully:
+      return true;
+   }
+
+   bool CaenVmeEditor::writeCrateConfig( QDomElement& node ) const {
+
+      // Set all the controller properties:
+      node.setAttribute( "ControllerType",
+                         static_cast< int >( m_vmeWidget->type() ) );
+      node.setAttribute( "LinkNumber", m_vmeWidget->linkNumber() );
+      node.setAttribute( "BoardNumber", m_vmeWidget->boardNumber() );
+
+      // Return gracefully:
+      return true;
    }
 
    /**
@@ -219,6 +306,8 @@ namespace dev {
 
       // Return right away if there's no device configured at the moment:
       if( ! m_devices.size() ) return;
+      // Don't allow deleting the first tab:
+      if( index == 0 ) return;
 
       // Get the pointer of the currently shown device:
       CaenVmeGui* device =
@@ -315,7 +404,8 @@ namespace dev {
 
    bool CaenVmeEditor::consistent() const {
 
-      return ( static_cast< int >( m_devices.size() ) == m_deviceTab->count() );
+      return ( static_cast< int >( m_devices.size() + 1 ) ==
+               m_deviceTab->count() );
    }
 
 } // namespace dev

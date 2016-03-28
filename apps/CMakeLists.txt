@@ -53,6 +53,9 @@ macro( add_cda_console_app name )
   unset( plugins )
   unset( resources )
 
+  # Install the executable:
+  install( TARGETS ${name} DESTINATION bin )
+
 endmacro( add_cda_console_app )
 
 # Macro for building a GUI application
@@ -122,6 +125,9 @@ macro( add_cda_gui_app name )
         MACOSX_BUNDLE_ICON_FILE ${fname} )
      unset( fname )
   endif()
+
+  # Install the executable:
+  install( TARGETS ${name} DESTINATION bin )
 
 endmacro( add_cda_gui_app )
 

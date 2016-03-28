@@ -12,12 +12,14 @@
 #include <QComboBox>
 
 // CDA include(s):
+#include "caen/VmeBus.h"
 #include "device/Crate.h"
 #include "device/CaenVmeGui.h"
 #include "msg/Logger.h"
 
 // Local include(s):
 #include "../common/Export.h"
+#include "CaenVmeBusWidget.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QTabWidget )
@@ -56,6 +58,17 @@ namespace dev {
       /// Re-implemented clear function, resetting the widget
       virtual void clear();
 
+   protected:
+      /// Read the crate specific options from binary input
+      virtual bool readCrateConfig( QIODevice& dev );
+      /// Write the crate specific options to binary output
+      virtual bool writeCrateConfig( QIODevice& dev ) const;
+
+      /// Read the crate specific options from XML input
+      virtual bool readCrateConfig( const QDomElement& node );
+      /// Write the crate specific options to XML output
+      virtual bool writeCrateConfig( QDomElement& node ) const;
+
    private slots:
       /// Create a device in the configuration
       void createDeviceSlot( int index );
@@ -72,6 +85,9 @@ namespace dev {
       std::unique_ptr< QTabWidget > m_deviceTab;
       /// Dropdown menu selecting what kind of device to create
       std::unique_ptr< QComboBox > m_createDevice;
+
+      /// Widget for editing the VME crate connection parameters
+      std::unique_ptr< CaenVmeBusWidget > m_vmeWidget;
 
       mutable msg::Logger m_logger; ///< Message logger object
 

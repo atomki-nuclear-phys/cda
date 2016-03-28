@@ -91,3 +91,6 @@ add_subdirectory( devices )
 
 # Build the applications:
 add_subdirectory( apps )
+
+# Install the setup files:
+install( FILES setup.sh setup.csh DESTINATION . )

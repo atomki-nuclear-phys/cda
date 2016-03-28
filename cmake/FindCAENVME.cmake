@@ -26,3 +26,8 @@ mark_as_advanced( CAENVME_FOUND )
 if( WIN32 )
    add_definitions( -DWIN32 )
 endif()
+
+# On UNIX platforms use LINUX:
+if( UNIX )
+   add_definitions( -DLINUX )
+endif()

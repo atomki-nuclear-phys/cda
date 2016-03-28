@@ -80,14 +80,16 @@ endif()
 
 # Use the CAEN digitizer libraries if they were found:
 if( CAENDIGITIZER_FOUND AND CDA_USE_CAENDIGITIZER )
-  target_compile_definitions( cdacore PRIVATE HAVE_CAEN_DIGITIZER_LIBS )
+  target_compile_definitions( cdacore PRIVATE HAVE_CAEN_DIGITIZER_LIBS
+    HAVE_CAEN_COMM_LIBS HAVE_CAEN_VME_LIBS )
   target_include_directories( cdacore PRIVATE ${CAENDIGITIZER_INCLUDE_DIRS} )
   target_link_libraries( cdacore PRIVATE ${CAENDIGITIZER_LIBRARIES} )
 endif()
 
 # Use the CAEN QTP libraries if they were found:
 if( CAENQTPSDK_FOUND AND CDA_USE_CAENQTPSDK )
-  target_compile_definitions( cdacore PRIVATE HAVE_CAEN_QTP_LIBS )
+  target_compile_definitions( cdacore PRIVATE HAVE_CAEN_QTP_LIBS
+    HAVE_CAEN_VME_LIBS )
   target_include_directories( cdacore PRIVATE ${CAENQTPSDK_INCLUDE_DIRS} )
   target_link_libraries( cdacore PRIVATE ${CAENQTPSDK_LIBRARIES} )
 endif()
