@@ -58,8 +58,14 @@ endmacro( add_cda_console_app )
 # Macro for building a GUI application
 macro( add_cda_gui_app name )
 
+  # Parse optional arguments:
+  cmake_parse_arguments( ARG "" "ICON" "" ${ARGN} )
+
   # Tell the user what's happening:
   message( STATUS "Configuring the build of GUI application ${name}" )
+
+  # Build an application bundle for MacOS X:
+  include( BundleUtilities )
 
   # Find Qt:
   find_package( Qt5 COMPONENTS Core Gui Widgets Xml )
@@ -100,11 +106,22 @@ macro( add_cda_gui_app name )
   set( CMAKE_AUTORCC TRUE )
 
   # Build the executable:
-  add_executable( ${name} ${headers} ${sources} ${resources} )
+  add_executable( ${name} WIN32 MACOSX_BUNDLE ${headers} ${sources}
+    ${resources} ${ARG_ICON} )
   target_link_libraries( ${name} ${qt_libraries} cdacore cdadaq cdagui
     ${plugins} )
   unset( plugins )
   unset( resources )
+
+  # Set up the icon for the application, if one was specified:
+  if( ARG_ICON AND APPLE )
+     set_source_files_properties( ${ARG_ICON} PROPERTIES
+        MACOSX_PACKAGE_LOCATION "Resources" )
+     get_filename_component( fname ${ARG_ICON} NAME )
+     set_target_properties( ${name} PROPERTIES
+        MACOSX_BUNDLE_ICON_FILE ${fname} )
+     unset( fname )
+  endif()
 
 endmacro( add_cda_gui_app )
 

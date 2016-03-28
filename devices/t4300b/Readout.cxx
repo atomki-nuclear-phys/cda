@@ -4,13 +4,8 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/camac/Crate.h"
-#   include "cdacore/event/Fragment.h"
-#else
-#   include "camac/Crate.h"
-#   include "event/Fragment.h"
-#endif
+#include "camac/Crate.h"
+#include "event/Fragment.h"
 
 // Local include(s):
 #include "Readout.h"

@@ -1,14 +1,11 @@
 // $Id$
 
-// CDA include(s):
+// Qt include(s):
 #include <QtCore/QtGlobal>
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/Address.h"
-#   include "cdacore/common/Socket.h"
-#else
-#   include "common/Address.h"
-#   include "common/Socket.h"
-#endif
+
+// CDA include(s)
+#include "common/Address.h"
+#include "common/Socket.h"
 
 // Local include(s):
 #include "Server.h"

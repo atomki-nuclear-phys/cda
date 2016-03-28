@@ -4,13 +4,8 @@
 #include <QtCore/QRect>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/Loader.h"
-#   include "cdacore/device/CamacGui.h"
-#else
-#   include "device/Loader.h"
-#   include "device/CamacGui.h"
-#endif
+#include "device/Loader.h"
+#include "device/CamacGui.h"
 
 // Local include(s):
 #include "CamacEditor.h"

@@ -12,11 +12,8 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/errorcheck.h"
-#else
-#   include "common/errorcheck.h"
-#endif
+// CDA include(s):
+#include "common/errorcheck.h"
 
 // Local include(s):
 #include "Gui.h"

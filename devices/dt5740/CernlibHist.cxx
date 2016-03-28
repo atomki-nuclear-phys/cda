@@ -4,13 +4,8 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_WS_DARWIN
-#   include "cdacore/common/errorcheck.h"
-#   include "cdacore/cernlib/HistMgr.h"
-#else
-#   include "common/errorcheck.h"
-#   include "cernlib/HistMgr.h"
-#endif
+#include "common/errorcheck.h"
+#include "cernlib/HistMgr.h"
 
 // Local include(s):
 #include "CernlibHist.h"

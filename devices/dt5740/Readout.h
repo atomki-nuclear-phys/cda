@@ -7,15 +7,9 @@
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/ICaenDigitizerReadout.h"
-#   include "cdacore/caen/Digitizer.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/ICaenDigitizerReadout.h"
-#   include "caen/Digitizer.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/ICaenDigitizerReadout.h"
+#include "caen/Digitizer.h"
+#include "msg/Logger.h"
 
 // Local include(s):
 #include "Device.h"

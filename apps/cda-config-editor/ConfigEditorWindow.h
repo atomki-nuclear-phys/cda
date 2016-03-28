@@ -13,15 +13,10 @@
 #include <QAction>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Logger.h"
-#   include "cdagui/device/CamacEditor.h"
-#   include "cdagui/device/CaenDigitizerEditor.h"
-#else
-#   include "msg/Logger.h"
-#   include "device/CamacEditor.h"
-#   include "device/CaenDigitizerEditor.h"
-#endif
+#include "msg/Logger.h"
+#include "device/CamacEditor.h"
+#include "device/CaenDigitizerEditor.h"
+#include "device/CaenVmeEditor.h"
 
 /**
  *  @short Main window for the configuration editor application
@@ -63,8 +58,10 @@ private slots:
 
    /// Slot for showing the CAMAC configuration
    void showCamacConfigSlot();
-   /// Slot for showing the CAEN configuration
-   void showCaenConfigSlot();
+   /// Slot for showing the CAEN digitizer configuration
+   void showCaenDigitizerConfigSlot();
+   /// Slot for showing the CAEN VME configuration
+   void showCaenVmeConfigSlot();
 
    /// Slot showing a window about CDA
    void aboutCDASlot();
@@ -90,13 +87,17 @@ private:
 
    /// Widget to modify the CAMAC crate settings
    std::unique_ptr< dev::CamacEditor > m_camacEdit;
-   /// Widget to modify the CAEN device settings
+   /// Widget to modify the CAEN digitizer device settings
    std::unique_ptr< dev::CaenDigitizerEditor > m_caenDigitizerEdit;
+   /// Widget to modify the CAEN VME device settings
+   std::unique_ptr< dev::CaenVmeEditor > m_caenVmeEdit;
 
    /// Action triggering the display of the CAMAC confiugration
    std::unique_ptr< QAction > m_camacConfigAction;
    /// Action triggering the display of the CAEN digitizer configuration
    std::unique_ptr< QAction > m_caenDigitizerConfigAction;
+   /// Action triggering the display of the CAEN VME configuration
+   std::unique_ptr< QAction > m_caenVmeConfigAction;
 
    /// Name of the currently "opened" file
    QString m_currFileName;

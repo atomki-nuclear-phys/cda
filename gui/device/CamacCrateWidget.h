@@ -10,15 +10,9 @@
 #include <QWidget>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/Crate.h"
-#   include "cdacore/device/CamacGui.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/Crate.h"
-#   include "device/CamacGui.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/Crate.h"
+#include "device/CamacGui.h"
+#include "msg/Logger.h"
 
 namespace dev {
 

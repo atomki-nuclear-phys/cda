@@ -12,13 +12,8 @@
 #include <QMenu>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/Factory.h"
-#   include "cdacore/device/Loader.h"
-#else
-#   include "device/Factory.h"
-#   include "device/Loader.h"
-#endif
+#include "device/Factory.h"
+#include "device/Loader.h"
 
 // Local include(s):
 #include "CamacCrateWidget.h"

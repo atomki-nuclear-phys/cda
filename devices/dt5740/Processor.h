@@ -4,22 +4,14 @@
 #define CDA_DEVICES_DT5740_PROCESSOR_H
 
 // System include(s):
-extern "C" {
-#   include <stdint.h>
-}
-
-// STL include(s):
+#include <cstdint>
 #include <vector>
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
-#ifdef Q_WS_DARWIN
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "msg/Logger.h"
-#endif // Q_WS_DARWIN
+#include "msg/Logger.h"
 
 namespace dt5740 {
 

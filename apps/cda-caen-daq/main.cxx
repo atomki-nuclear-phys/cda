@@ -17,21 +17,12 @@
 #include <QApplication>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Logger.h"
-#   include "cdacore/msg/Sender.h"
-#   include "cdacore/tclap/CmdLine.h"
-#   include "cdacore/i18n/Loader.h"
-#   include "cdagui/common/DefaultFont.h"
-#   include "cdagui/common/SplashScreen.h"
-#else
-#   include "msg/Logger.h"
-#   include "msg/Sender.h"
-#   include "tclap/CmdLine.h"
-#   include "i18n/Loader.h"
-#   include "common/DefaultFont.h"
-#   include "common/SplashScreen.h"
-#endif
+#include "msg/Logger.h"
+#include "msg/Sender.h"
+#include "tclap/CmdLine.h"
+#include "i18n/Loader.h"
+#include "common/DefaultFont.h"
+#include "common/SplashScreen.h"
 
 // Local include(s):
 #include "CaenDAQWindow.h"

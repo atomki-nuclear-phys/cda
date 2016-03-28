@@ -7,11 +7,7 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdadaq/moni/Histogram.h"
-#else
-#   include "moni/Histogram.h"
-#endif
+#include "moni/Histogram.h"
 
 // Local include(s):
 #include "Processor.h"

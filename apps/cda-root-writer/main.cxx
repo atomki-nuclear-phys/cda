@@ -23,7 +23,6 @@
 #include <map>
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
@@ -31,29 +30,16 @@
 #include <QtXml/QDomElement>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Sender.h"
-#   include "cdacore/msg/Logger.h"
-#   include "cdacore/tclap/CmdLine.h"
-#   include "cdacore/device/Loader.h"
-#   include "cdacore/event/Event.h"
-#   include "cdacore/event/EventServer.h"
-#   include "cdacore/i18n/Loader.h"
-#   include "cdacore/common/Sleep.h"
-#   include "cdadaq/stat/Sender.h"
-#   include "cdadaq/config/ConfReader.h"
-#else
-#   include "msg/Sender.h"
-#   include "msg/Logger.h"
-#   include "tclap/CmdLine.h"
-#   include "device/Loader.h"
-#   include "event/Event.h"
-#   include "event/EventServer.h"
-#   include "i18n/Loader.h"
-#   include "common/Sleep.h"
-#   include "stat/Sender.h"
-#   include "config/ConfReader.h"
-#endif
+#include "msg/Sender.h"
+#include "msg/Logger.h"
+#include "tclap/CmdLine.h"
+#include "device/Loader.h"
+#include "event/Event.h"
+#include "event/EventServer.h"
+#include "i18n/Loader.h"
+#include "common/Sleep.h"
+#include "stat/Sender.h"
+#include "config/ConfReader.h"
 
 // Local include(s):
 #include "Crate.h"

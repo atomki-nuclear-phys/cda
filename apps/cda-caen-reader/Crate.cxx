@@ -1,16 +1,8 @@
 // $Id$
 
-// Qt include(s):
-#include <QtCore/QtGlobal>
-
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/caen/Digitizer.h"
-#   include "cdacore/common/errorcheck.h"
-#else
-#   include "caen/Digitizer.h"
-#   include "common/errorcheck.h"
-#endif
+#include "caen/Digitizer.h"
+#include "common/errorcheck.h"
 
 // Local include(s):
 #include "Crate.h"

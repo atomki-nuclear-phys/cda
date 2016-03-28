@@ -19,13 +19,8 @@
 #include <QtXml/QDomElement>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdagui/common/aboutCDA.h"
-#   include "cdagui/common/DefaultFont.h"
-#else
-#   include "common/aboutCDA.h"
-#   include "common/DefaultFont.h"
-#endif
+#include "common/aboutCDA.h"
+#include "common/DefaultFont.h"
 
 // Local include(s):
 #include "ConfigEditorWindow.h"
@@ -89,6 +84,14 @@ ConfigEditorWindow::ConfigEditorWindow()
    m_editStack->addWidget( m_caenDigitizerEdit.get() );
 
    //
+   // Create the CAEN VME device editor:
+   //
+   m_caenVmeEdit.reset(
+            new dev::CaenVmeEditor( m_editStack.get() ) );
+   m_caenVmeEdit->setGeometry( QRect( 0, 0, 520, 640 ) );
+   m_editStack->addWidget( m_caenVmeEdit.get() );
+
+   //
    // Create the application menus:
    //
    createMenus();
@@ -102,6 +105,7 @@ void ConfigEditorWindow::newConfigSlot() {
 
    m_camacEdit->clear();
    m_caenDigitizerEdit->clear();
+   m_caenVmeEdit->clear();
    showCamacConfigSlot();
    setWindowTitle( tr( "CDA configuration editor - Untitled.cxml" ) );
 
@@ -191,7 +195,7 @@ void ConfigEditorWindow::showCamacConfigSlot() {
    return;
 }
 
-void ConfigEditorWindow::showCaenConfigSlot() {
+void ConfigEditorWindow::showCaenDigitizerConfigSlot() {
 
    // Bring the Caen configuration to the front if it's not there
    // already:
@@ -201,6 +205,21 @@ void ConfigEditorWindow::showCaenConfigSlot() {
    // Make sure the menu is in sync with what is shown:
    if( ! m_caenDigitizerConfigAction->isChecked() ) {
       m_caenDigitizerConfigAction->setChecked( true );
+   }
+
+   return;
+}
+
+void ConfigEditorWindow::showCaenVmeConfigSlot() {
+
+   // Bring the Caen configuration to the front if it's not there
+   // already:
+   if( m_editStack->currentWidget() != m_caenVmeEdit.get() ) {
+      m_editStack->setCurrentWidget( m_caenVmeEdit.get() );
+   }
+   // Make sure the menu is in sync with what is shown:
+   if( ! m_caenVmeConfigAction->isChecked() ) {
+      m_caenVmeConfigAction->setChecked( true );
    }
 
    return;
@@ -292,16 +311,24 @@ void ConfigEditorWindow::createMenus() {
                          this ) );
    m_caenDigitizerConfigAction->setCheckable( true );
    connect( m_caenDigitizerConfigAction.get(), SIGNAL( triggered() ),
-            this, SLOT( showCaenConfigSlot() ) );
+            this, SLOT( showCaenDigitizerConfigSlot() ) );
+   m_caenVmeConfigAction.reset(
+            new QAction( tr( "Show CAEN VME Config" ),
+                         this ) );
+   m_caenVmeConfigAction->setCheckable( true );
+   connect( m_caenVmeConfigAction.get(), SIGNAL( triggered() ),
+            this, SLOT( showCaenVmeConfigSlot() ) );
 
    QActionGroup* configGroup = new QActionGroup( this );
    configGroup->setExclusive( true );
    configGroup->addAction( m_camacConfigAction.get() );
    configGroup->addAction( m_caenDigitizerConfigAction.get() );
+   configGroup->addAction( m_caenVmeConfigAction.get() );
    m_camacConfigAction->setChecked( true );
 
    configMenu->addAction( m_camacConfigAction.get() );
    configMenu->addAction( m_caenDigitizerConfigAction.get() );
+   configMenu->addAction( m_caenVmeConfigAction.get() );
 
    /////////////////////////////////////////////////////////////
    //                                                         //
@@ -391,13 +418,24 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
       showCamacConfigSlot();
    } else if( m_caenDigitizerEdit->canRead( work ) ) {
       if( ! m_caenDigitizerEdit->readConfig( work ) ) {
-         REPORT_ERROR( tr( "Failed to read CAEN configuration file!" ) );
-         QMessageBox::critical( this, tr( "CAEN configuration problem" ),
-                                tr( "Failed to read CAEN configuration "
+         REPORT_ERROR( tr( "Failed to read CAEN digitizer configuration "
+                           "file!" ) );
+         QMessageBox::critical( this, tr( "CAEN digitizer configuration "
+                                          "problem" ),
+                                tr( "Failed to read CAEN digitizer "
+                                    "configuration file!" ) );
+         return;
+      }
+      showCaenDigitizerConfigSlot();
+   } else if( m_caenVmeEdit->canRead( work ) ) {
+      if( ! m_caenVmeEdit->readConfig( work ) ) {
+         REPORT_ERROR( tr( "Failed to read CAEN VME configuration file!" ) );
+         QMessageBox::critical( this, tr( "CAEN VME configuration problem" ),
+                                tr( "Failed to read CAEN VME configuration "
                                     "file!" ) );
          return;
       }
-      showCaenConfigSlot();
+      showCaenVmeConfigSlot();
    } else {
       REPORT_ERROR( tr( "Couldn't find an editor able to handle the "
                         "specified configuration file" ) );
@@ -462,7 +500,20 @@ void ConfigEditorWindow::readBinaryConfig( const QString& filename ) {
                                     "information" ) );
          return;
       }
-      showCaenConfigSlot();
+      showCaenDigitizerConfigSlot();
+   } else if( input_file.seek( 0 ) &&
+              m_caenVmeEdit->canRead( input_file ) ) {
+      input_file.seek( 0 );
+      if( ! m_caenVmeEdit->readConfig( input_file ) ) {
+         REPORT_ERROR( tr( "Some error happened while reading the "
+                           "binary configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration reading error" ),
+                                tr( "The configuration could not be read. See "
+                                    "the application messages for more "
+                                    "information" ) );
+         return;
+      }
+      showCaenVmeConfigSlot();
    } else {
       REPORT_ERROR( tr( "Couldn't find an editor able to handle the "
                         "specified configuration file" ) );
@@ -508,6 +559,16 @@ void ConfigEditorWindow::writeXMLConfig( const QString& filename ) {
       }
    } else if( m_editStack->currentWidget() == m_caenDigitizerEdit.get() ) {
       if( ! m_caenDigitizerEdit->writeConfig( elem ) ) {
+         REPORT_ERROR( tr( "Some error happened while creating the "
+                           "XML configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration writing error" ),
+                                tr( "The configuration could not be written."
+                                    "See the application messages for more "
+                                    "information." ) );
+         return;
+      }
+   } else if( m_editStack->currentWidget() == m_caenVmeEdit.get() ) {
+      if( ! m_caenVmeEdit->writeConfig( elem ) ) {
          REPORT_ERROR( tr( "Some error happened while creating the "
                            "XML configuration" ) );
          QMessageBox::critical( this, tr( "Configuration writing error" ),
@@ -582,6 +643,16 @@ void ConfigEditorWindow::writeBinaryConfig( const QString& filename ) {
       }
    } else if( m_editStack->currentWidget() == m_caenDigitizerEdit.get() ) {
       if( ! m_caenDigitizerEdit->writeConfig( output_file ) ) {
+         REPORT_ERROR( tr( "Some error happened while creating the "
+                           "binary configuration" ) );
+         QMessageBox::critical( this, tr( "Configuration writing error" ),
+                                tr( "The configuration could not be written."
+                                    " See the application messages for more "
+                                    "information." ) );
+         return;
+      }
+   } else if( m_editStack->currentWidget() == m_caenVmeEdit.get() ) {
+      if( ! m_caenVmeEdit->writeConfig( output_file ) ) {
          REPORT_ERROR( tr( "Some error happened while creating the "
                            "binary configuration" ) );
          QMessageBox::critical( this, tr( "Configuration writing error" ),

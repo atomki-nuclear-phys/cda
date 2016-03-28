@@ -7,11 +7,7 @@
 #include <QWidget>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdadaq/stat/Statistics.h"
-#else
-#   include "stat/Statistics.h"
-#endif
+#include "stat/Statistics.h"
 
 // Local include(s):
 #include "../common/Export.h"

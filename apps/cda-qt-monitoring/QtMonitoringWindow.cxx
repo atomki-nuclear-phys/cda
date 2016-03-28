@@ -18,21 +18,12 @@
 #include <QtXml/QDomElement>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/Address.h"
-#   include "cdacore/event/Event.h"
-#   include "cdacore/event/EventServer.h"
-#   include "cdacore/device/Loader.h"
-#   include "cdagui/common/aboutCDA.h"
-#   include "cdagui/common/DefaultFont.h"
-#else
-#   include "common/Address.h"
-#   include "event/Event.h"
-#   include "event/EventServer.h"
-#   include "device/Loader.h"
-#   include "common/aboutCDA.h"
-#   include "common/DefaultFont.h"
-#endif
+#include "common/Address.h"
+#include "event/Event.h"
+#include "event/EventServer.h"
+#include "device/Loader.h"
+#include "common/aboutCDA.h"
+#include "common/DefaultFont.h"
 
 // Local include(s):
 #include "QtMonitoringWindow.h"

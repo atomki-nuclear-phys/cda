@@ -10,15 +10,9 @@
 #include "Crate.h"
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/Address.h"
-#   include "cdacore/common/errorcheck.h"
-#   include "cdacore/device/Loader.h"
-#else
-#   include "common/Address.h"
-#   include "common/errorcheck.h"
-#   include "device/Loader.h"
-#endif
+#include "common/Address.h"
+#include "common/errorcheck.h"
+#include "device/Loader.h"
 
 namespace conf {
 

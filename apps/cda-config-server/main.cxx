@@ -7,15 +7,9 @@
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Logger.h"
-#   include "cdacore/tclap/CmdLine.h"
-#   include "cdadaq/config/ConfServer.h"
-#else
-#   include "msg/Logger.h"
-#   include "tclap/CmdLine.h"
-#   include "config/ConfServer.h"
-#endif
+#include "msg/Logger.h"
+#include "tclap/CmdLine.h"
+#include "config/ConfServer.h"
 
 // Local include(s):
 #include "../win32/plugins.h"

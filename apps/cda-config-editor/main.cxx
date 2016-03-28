@@ -21,17 +21,10 @@
 #include <QPixmap>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Sender.h"
-#   include "cdacore/i18n/Loader.h"
-#   include "cdagui/common/DefaultFont.h"
-#   include "cdagui/common/SplashScreen.h"
-#else
-#   include "msg/Sender.h"
-#   include "i18n/Loader.h"
-#   include "common/DefaultFont.h"
-#   include "common/SplashScreen.h"
-#endif
+#include "msg/Sender.h"
+#include "i18n/Loader.h"
+#include "common/DefaultFont.h"
+#include "common/SplashScreen.h"
 
 // Local include(s):
 #include "ConfigEditorWindow.h"

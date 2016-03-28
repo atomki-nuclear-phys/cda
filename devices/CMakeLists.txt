@@ -55,6 +55,3 @@ add_subdirectory( t4300b )
 
 # Build all the CAEN digitiser plugins:
 add_subdirectory( dt5740 )
-
-# Build all the VME plugins:
-add_subdirectory( s9418t )

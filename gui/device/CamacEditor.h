@@ -12,13 +12,8 @@
 #include <QStackedWidget>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/IConfig.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/IConfig.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/IConfig.h"
+#include "msg/Logger.h"
 
 // Local include(s):
 #include "CamacCrateWidget.h"

@@ -12,17 +12,10 @@
 #include <QIcon>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/Address.h"
-#   include "cdadaq/stat/Server.h"
-#   include "cdagui/stat/MDIView.h"
-#   include "cdagui/common/aboutCDA.h"
-#else
-#   include "common/Address.h"
-#   include "stat/Server.h"
-#   include "stat/MDIView.h"
-#   include "common/aboutCDA.h"
-#endif
+#include "common/Address.h"
+#include "stat/Server.h"
+#include "stat/MDIView.h"
+#include "common/aboutCDA.h"
 
 // Local include(s):
 #include "StatServerWindow.h"

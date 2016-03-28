@@ -7,13 +7,8 @@
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/IConfig.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/IConfig.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/IConfig.h"
+#include "msg/Logger.h"
 
 namespace ad1000 {
 

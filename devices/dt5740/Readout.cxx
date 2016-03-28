@@ -4,17 +4,10 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/event/Fragment.h"
-#   include "cdacore/common/errorcheck.h"
-#   include "cdacore/common/Sleep.h"
-#   include "cdacore/caen/StopAcquisition.h"
-#else
-#   include "event/Fragment.h"
-#   include "common/errorcheck.h"
-#   include "common/Sleep.h"
-#   include "caen/StopAcquisition.h"
-#endif
+#include "event/Fragment.h"
+#include "common/errorcheck.h"
+#include "common/Sleep.h"
+#include "caen/StopAcquisition.h"
 
 // Local include(s):
 #include "Readout.h"

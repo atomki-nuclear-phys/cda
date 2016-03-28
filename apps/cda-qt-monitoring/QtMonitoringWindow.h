@@ -7,15 +7,9 @@
 #include <QMainWindow>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/QtHist.h"
-#   include "cdacore/device/Crate.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/QtHist.h"
-#   include "device/Crate.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/QtHist.h"
+#include "device/Crate.h"
+#include "msg/Logger.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QSpinBox )

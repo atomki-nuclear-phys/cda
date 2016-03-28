@@ -4,23 +4,14 @@
 #define CDA_APPS_CDA_ROOT_WRITER_CRATE_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QString>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/Crate.h"
-#   include "cdacore/device/IRootDisk.h"
-#   include "cdacore/root/NTupleMgr.h"
-#   include "cdacore/event/Event.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/Crate.h"
-#   include "device/IRootDisk.h"
-#   include "root/NTupleMgr.h"
-#   include "event/Event.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/Crate.h"
+#include "device/IRootDisk.h"
+#include "root/NTupleMgr.h"
+#include "event/Event.h"
+#include "msg/Logger.h"
 
 /**
  *  @short Namespace for the classes used in cda-root-writer

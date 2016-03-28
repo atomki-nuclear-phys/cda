@@ -11,15 +11,15 @@
 #include "common/errorcheck.h"
 
 // Local include(s):
-#include "CaenDigitizerEditor.h"
+#include "CaenVmeEditor.h"
 
 namespace dev {
 
-   CaenDigitizerEditor::CaenDigitizerEditor( QWidget* parent,
-                                             Qt::WindowFlags flags )
+   CaenVmeEditor::CaenVmeEditor( QWidget* parent,
+                                 Qt::WindowFlags flags )
       : QWidget( parent, flags ),
-        dev::Crate< dev::CaenDigitizerGui >( "CAEN", true ),
-        m_logger( "dev::CaenDigitizerEditor" ) {
+        dev::Crate< dev::CaenVmeGui >( "CAENVME", true ),
+        m_logger( "dev::CaenVmeEditor" ) {
 
       resize( 520, 640 );
       setMinimumSize( 520, 640 );
@@ -31,9 +31,9 @@ namespace dev {
       // Create the dropdown menu that can be used to create a device:
       m_createDevice.reset( new QComboBox( this ) );
       m_createDevice->setGeometry( QRect( 110, 0, 300, 25 ) );
-      m_createDevice->addItem( tr( "Add CAEN digitizer device..." ) );
+      m_createDevice->addItem( tr( "Add CAEN VME device..." ) );
 
-      // Add all CAEN devices to the list:
+      // Add all CAEN VME devices to the list:
       QStringList devices = m_loader->getDeviceNames();
       for( QStringList::const_iterator dev = devices.begin();
            dev != devices.end(); ++dev ) {
@@ -42,8 +42,8 @@ namespace dev {
          // Check if this particular device could be inserted into this
          // crate slot:
          //
-         std::unique_ptr< CaenDigitizerGui > device =
-            m_loader->getFactory( *dev ).createDevice< CaenDigitizerGui >();
+         std::unique_ptr< CaenVmeGui > device =
+            m_loader->getFactory( *dev ).createDevice< CaenVmeGui >();
          // Check if this is a CAEN device:
          if( ! device.get() ) {
             continue;
@@ -55,14 +55,14 @@ namespace dev {
       }
 
       // Connect the dropdown menu to the slot handling the creation of
-      // a CAEN device:
+      // a CAEN VME device:
       connect( m_createDevice.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( createDeviceSlot( int ) ) );
 
       // Create a widget to show the devices in:
       m_deviceTab.reset( new QTabWidget( this ) );
       m_deviceTab->setGeometry( QRect( 0, 30, 520,
-                                       CaenDigitizerGui::WIDGET_HEIGHT + 40 ) );
+                                       CaenVmeGui::WIDGET_HEIGHT + 40 ) );
       m_deviceTab->setUsesScrollButtons( true );
       m_deviceTab->setTabsClosable( true );
       connect( m_deviceTab.get(), SIGNAL( tabCloseRequested( int ) ),
@@ -70,19 +70,19 @@ namespace dev {
 
    }
 
-   CaenDigitizerEditor::~CaenDigitizerEditor() {
+   CaenVmeEditor::~CaenVmeEditor() {
 
       // The tab widget thinks that it actually owns its widgets,
       // so it deletes them in the end if they still exist. However, the tab
-      // widget does knowit when the objects get deleted already. So let's do
+      // widget does know it when the objects get deleted already. So let's do
       // that.
       m_devices.clear();
    }
 
-   bool CaenDigitizerEditor::readConfig( QIODevice& dev ) {
+   bool CaenVmeEditor::readConfig( QIODevice& dev ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenDigitizerGui >::readConfig( dev ) ) {
+      if( ! dev::Crate< dev::CaenVmeGui >::readConfig( dev ) ) {
          REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
          return false;
       }
@@ -104,15 +104,15 @@ namespace dev {
       // Check if the GUI is still "consistent":
       CHECK( consistent() );
       // Check if the configuration is "consistent":
-      idChangedSlot();
+      addressChangedSlot();
 
       return true;
    }
 
-   bool CaenDigitizerEditor::readConfig( const QDomElement& node ) {
+   bool CaenVmeEditor::readConfig( const QDomElement& node ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenDigitizerGui >::readConfig( node ) ) {
+      if( ! dev::Crate< dev::CaenVmeGui >::readConfig( node ) ) {
          REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
          return false;
       }
@@ -129,19 +129,21 @@ namespace dev {
       }
 
       // Make sure the combo box is in the first position:
+      m_createDevice->setEnabled( false );
       m_createDevice->setCurrentIndex( 0 );
+      m_createDevice->setEnabled( true );
 
       // Check if the GUI is still "consistent":
       CHECK( consistent() );
       // Check if the configuration is "consistent":
-      idChangedSlot();
+      addressChangedSlot();
 
       return true;
    }
 
-   void CaenDigitizerEditor::clear() {
+   void CaenVmeEditor::clear() {
 
-      dev::Crate< dev::CaenDigitizerGui >::clear();
+      dev::Crate< dev::CaenVmeGui >::clear();
       m_deviceTab->clear();
 
       // Check if the GUI is still "consistent":
@@ -157,7 +159,7 @@ namespace dev {
    /**
     * @param index Index of the menu item in m_createDevice
     */
-   void CaenDigitizerEditor::createDeviceSlot( int index ) {
+   void CaenVmeEditor::createDeviceSlot( int index ) {
 
       // A security check:
       if( ! checkLoader() ) return;
@@ -182,8 +184,8 @@ namespace dev {
       //
       // Try to create the new device:
       //
-      std::unique_ptr< CaenDigitizerGui > device =
-            factory.createDevice< CaenDigitizerGui >();
+      std::unique_ptr< CaenVmeGui > device =
+            factory.createDevice< CaenVmeGui >();
       if( ! device.get() ) {
          REPORT_ERROR( tr( "No GUI implemented by device \"%1\"" )
                        .arg( type ) );
@@ -194,13 +196,13 @@ namespace dev {
       }
 
       // Connect its signal(s):
-      connect( device.get(), SIGNAL( idChanged() ),
-               this, SLOT( idChangedSlot() ) );
+      connect( device.get(), SIGNAL( addressChanged() ),
+               this, SLOT( addressChangedSlot() ) );
 
       // Show the device:
       m_deviceTab->addTab( device.get(), device->deviceName() );
 
-      // Store the device with a "random" ID first:
+      // Store the device with a "random" address first:
       m_devices[ 10000 + m_devices.size() ].swap( device );
 
       // Check if the GUI is still "consistent":
@@ -213,14 +215,14 @@ namespace dev {
       return;
    }
 
-   void CaenDigitizerEditor::deleteDeviceSlot( int index ) {
+   void CaenVmeEditor::deleteDeviceSlot( int index ) {
 
       // Return right away if there's no device configured at the moment:
       if( ! m_devices.size() ) return;
 
       // Get the pointer of the currently shown device:
-      CaenDigitizerGui* device =
-         dynamic_cast< CaenDigitizerGui* >( m_deviceTab->widget( index ) );
+      CaenVmeGui* device =
+         dynamic_cast< CaenVmeGui* >( m_deviceTab->widget( index ) );
       if( ! device ) {
          REPORT_ERROR( tr( "No device selected currently" ) );
          return;
@@ -243,7 +245,9 @@ namespace dev {
       // the object.
 
       // Make sure the combo box is in the correct position:
+      m_createDevice->setEnabled( false );
       m_createDevice->setCurrentIndex( 0 );
+      m_createDevice->setEnabled( true );
 
       // Check if the GUI is still "consistent":
       if( ! consistent() ) {
@@ -255,7 +259,7 @@ namespace dev {
       return;
    }
 
-   void CaenDigitizerEditor::idChangedSlot() {
+   void CaenVmeEditor::addressChangedSlot() {
 
       // Make an "endless" loop, with a bit of added security.
       // (We don't expect more than ~20 devices, so the loop should
@@ -309,7 +313,7 @@ namespace dev {
       return;
    }
 
-   bool CaenDigitizerEditor::consistent() const {
+   bool CaenVmeEditor::consistent() const {
 
       return ( static_cast< int >( m_devices.size() ) == m_deviceTab->count() );
    }

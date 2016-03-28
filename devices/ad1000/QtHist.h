@@ -11,15 +11,9 @@
 #include <QStackedLayout>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/QtHist.h"
-#   include "cdacore/msg/Logger.h"
-#   include "cdadaq/moni/Histogram.h"
-#else
-#   include "device/QtHist.h"
-#   include "msg/Logger.h"
-#   include "moni/Histogram.h"
-#endif
+#include "device/QtHist.h"
+#include "msg/Logger.h"
+#include "moni/Histogram.h"
 
 // Local include(s):
 #include "Device.h"

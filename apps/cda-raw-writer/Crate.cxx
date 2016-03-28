@@ -1,15 +1,10 @@
 // $Id$
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QFile>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/event/BinaryStream.h"
-#else
-#   include "event/BinaryStream.h"
-#endif
+#include "event/BinaryStream.h"
 
 // Local include(s):
 #include "Crate.h"

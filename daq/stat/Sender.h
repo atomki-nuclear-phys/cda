@@ -11,13 +11,8 @@
 #include <QtCore/QMutex>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/Address.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "common/Address.h"
-#   include "msg/Logger.h"
-#endif
+#include "common/Address.h"
+#include "msg/Logger.h"
 
 // Local include(s):
 #include "Statistics.h"

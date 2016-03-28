@@ -18,15 +18,9 @@
 #include <QComboBox>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Server.h"
-#   include "cdagui/msg/TextView.h"
-#   include "cdagui/common/aboutCDA.h"
-#else
-#   include "msg/Server.h"
-#   include "msg/TextView.h"
-#   include "common/aboutCDA.h"
-#endif
+#include "msg/Server.h"
+#include "msg/TextView.h"
+#include "common/aboutCDA.h"
 
 // Local include(s):
 #include "MsgServerWindow.h"

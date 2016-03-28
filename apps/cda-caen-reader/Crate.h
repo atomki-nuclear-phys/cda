@@ -7,17 +7,10 @@
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/ICaenDigitizerReadout.h"
-#   include "cdacore/device/Crate.h"
-#   include "cdacore/event/Event.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/ICaenDigitizerReadout.h"
-#   include "device/Crate.h"
-#   include "event/Event.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/ICaenDigitizerReadout.h"
+#include "device/Crate.h"
+#include "event/Event.h"
+#include "msg/Logger.h"
 
 /**
  *  @short Namespace for the CAEN readout class(es)

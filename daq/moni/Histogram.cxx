@@ -41,6 +41,7 @@ namespace moni {
    Histogram::Histogram( QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( "N/A" ), m_nbins( 100 ),
         m_low( 0.0 ), m_up( 100.0 ), m_viewLow( 0.0 ), m_viewUp( 100.0 ),
+        m_isZooming( false ), m_zoomStart( 0 ), m_zoomCurrent( 0 ),
         m_hColor( Qt::darkRed ),
         m_refreshTimer( this ),
         m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),
@@ -78,6 +79,7 @@ namespace moni {
                          QWidget* parent, Qt::WindowFlags flags )
       : QWidget( parent, flags ), m_title( title ), m_nbins( bins ),
         m_low( low ), m_up( up ), m_viewLow( low ), m_viewUp( up ),
+        m_isZooming( false ), m_zoomStart( 0 ), m_zoomCurrent( 0 ),
         m_hColor( Qt::darkRed ),
         m_refreshTimer( this ),
         m_xAxisStyle( Linear ), m_yAxisStyle( Linear ),

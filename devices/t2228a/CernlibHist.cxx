@@ -4,13 +4,8 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/event/Fragment.h"
-#   include "cdacore/cernlib/HistMgr.h"
-#else
-#   include "event/Fragment.h"
-#   include "cernlib/HistMgr.h"
-#endif
+#include "event/Fragment.h"
+#include "cernlib/HistMgr.h"
 
 // Local include(s):
 #include "CernlibHist.h"

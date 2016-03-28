@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H
-#define CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H
+#ifndef CDA_GUI_DEVICE_CAENVMEEDITOR_H
+#define CDA_GUI_DEVICE_CAENVMEEDITOR_H
 
 // System include(s):
 #include <memory>
@@ -13,7 +13,7 @@
 
 // CDA include(s):
 #include "device/Crate.h"
-#include "device/CaenDigitizerGui.h"
+#include "device/CaenVmeGui.h"
 #include "msg/Logger.h"
 
 // Local include(s):
@@ -26,27 +26,27 @@ QT_FORWARD_DECLARE_CLASS( QComboBox )
 namespace dev {
 
    /**
-    *  @short Editor widget for CAEN digitizer devices
+    *  @short Editor widget for CAEN VME devices
     *
     *         This class is used to construct/view the configuration
-    *         of (a) CAEN digitizer device(s) for a CDA data taking session.
+    *         of (a) CAEN VME device(s) for a CDA data taking session.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
     * $Revision$
     * $Date$
     */
-   class CDAGUI_EXPORT CaenDigitizerEditor :
+   class CDAGUI_EXPORT CaenVmeEditor :
       public QWidget,
-      public dev::Crate< dev::CaenDigitizerGui > {
+      public dev::Crate< dev::CaenVmeGui > {
 
       Q_OBJECT
 
    public:
       /// Standard QWidget style constructor
-      CaenDigitizerEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenVmeEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
       /// Destructor
-      ~CaenDigitizerEditor();
+      ~CaenVmeEditor();
 
       /// Function reading the configuration in binary format
       virtual bool readConfig( QIODevice& dev );
@@ -62,7 +62,7 @@ namespace dev {
       /// Remove the current device from the configuration
       void deleteDeviceSlot( int index );
       /// Handle the change in the connection configuration of a device
-      void idChangedSlot();
+      void addressChangedSlot();
 
    private:
       /// Function checking if the GUI is consistent with the configuration
@@ -75,8 +75,8 @@ namespace dev {
 
       mutable msg::Logger m_logger; ///< Message logger object
 
-   }; // class CaenDigitizerEditor
+   }; // class CaenVmeEditor
 
 } // namespace dev
 
-#endif // CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H
+#endif // CDA_GUI_DEVICE_CAENVMEEDITOR_H

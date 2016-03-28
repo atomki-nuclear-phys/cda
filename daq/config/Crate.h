@@ -7,13 +7,8 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/ICernlibHist.h"
-#   include "cdacore/device/Crate.h"
-#else
-#   include "device/ICernlibHist.h"
-#   include "device/Crate.h"
-#endif
+#include "device/ICernlibHist.h"
+#include "device/Crate.h"
 
 namespace conf {
 

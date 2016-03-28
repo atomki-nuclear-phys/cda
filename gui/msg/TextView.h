@@ -11,11 +11,7 @@
 #include <QtGui/QColor>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Level.h"
-#else
-#   include "msg/Level.h"
-#endif
+#include "msg/Level.h"
 
 // Local include(s):
 #include "../common/Export.h"

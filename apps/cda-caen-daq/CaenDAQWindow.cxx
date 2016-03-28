@@ -13,31 +13,17 @@
 #include <QPushButton>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/Address.h"
-#   include "cdacore/msg/Server.h"
-#   include "cdagui/msg/TextView.h"
-#   include "cdagui/simple_daq/Statistics.h"
-#   include "cdagui/simple_daq/CaenReaderRunner.h"
-#   include "cdagui/simple_daq/GlomemWriterRunner.h"
-#   include "cdagui/simple_daq/HBookWriterRunner.h"
-#   include "cdagui/simple_daq/RootWriterRunner.h"
-#   include "cdagui/simple_daq/RawWriterRunner.h"
-#   include "cdagui/common/aboutCDA.h"
-#   include "cdagui/common/DefaultFont.h"
-#else
-#   include "common/Address.h"
-#   include "msg/Server.h"
-#   include "msg/TextView.h"
-#   include "simple_daq/Statistics.h"
-#   include "simple_daq/CaenReaderRunner.h"
-#   include "simple_daq/GlomemWriterRunner.h"
-#   include "simple_daq/HBookWriterRunner.h"
-#   include "simple_daq/RootWriterRunner.h"
-#   include "simple_daq/RawWriterRunner.h"
-#   include "common/aboutCDA.h"
-#   include "common/DefaultFont.h"
-#endif
+#include "common/Address.h"
+#include "msg/Server.h"
+#include "msg/TextView.h"
+#include "simple_daq/Statistics.h"
+#include "simple_daq/CaenReaderRunner.h"
+#include "simple_daq/GlomemWriterRunner.h"
+#include "simple_daq/HBookWriterRunner.h"
+#include "simple_daq/RootWriterRunner.h"
+#include "simple_daq/RawWriterRunner.h"
+#include "common/aboutCDA.h"
+#include "common/DefaultFont.h"
 
 // Local include(s):
 #include "CaenDAQWindow.h"

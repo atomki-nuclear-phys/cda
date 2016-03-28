@@ -4,11 +4,7 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/Factory.h"
-#else
-#   include "device/Factory.h"
-#endif
+#include "device/Factory.h"
 
 // Local include(s):
 #include "Crate.h"

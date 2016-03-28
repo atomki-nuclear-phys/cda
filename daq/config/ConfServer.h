@@ -9,11 +9,7 @@
 #include <QtNetwork/QTcpServer>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "msg/Logger.h"
-#endif
+#include "msg/Logger.h"
 
 // Local include(s):
 #include "../common/Export.h"

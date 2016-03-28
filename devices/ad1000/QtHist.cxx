@@ -4,15 +4,9 @@
 #include <QStackedLayout>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/errorcheck.h"
-#   include "cdacore/event/Fragment.h"
-#   include "cdadaq/moni/Histogram.h"
-#else
-#   include "common/errorcheck.h"
-#   include "event/Fragment.h"
-#   include "moni/Histogram.h"
-#endif
+#include "common/errorcheck.h"
+#include "event/Fragment.h"
+#include "moni/Histogram.h"
 
 // Local include(s):
 #include "QtHist.h"

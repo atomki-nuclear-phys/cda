@@ -7,13 +7,8 @@
 #include <QTextDocument>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Message.h"
-#   include "cdacore/msg/TextStream.h"
-#else
-#   include "msg/Message.h"
-#   include "msg/TextStream.h"
-#endif
+#include "msg/Message.h"
+#include "msg/TextStream.h"
 
 // Local include(s):
 #include "TextView.h"

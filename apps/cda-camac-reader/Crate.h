@@ -7,17 +7,10 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/ICamacReadout.h"
-#   include "cdacore/device/Crate.h"
-#   include "cdacore/event/Event.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/ICamacReadout.h"
-#   include "device/Crate.h"
-#   include "event/Event.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/ICamacReadout.h"
+#include "device/Crate.h"
+#include "event/Event.h"
+#include "msg/Logger.h"
 
 // Forward declaration(s):
 namespace camac {

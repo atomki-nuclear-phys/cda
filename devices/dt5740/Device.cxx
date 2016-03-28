@@ -9,13 +9,8 @@
 #include <QtXml/QDomElement>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/event/Fragment.h"
-#   include "cdacore/common/errorcheck.h"
-#else
-#   include "event/Fragment.h"
-#   include "common/errorcheck.h"
-#endif
+#include "event/Fragment.h"
+#include "common/errorcheck.h"
 
 // Local include(s):
 #include "Device.h"

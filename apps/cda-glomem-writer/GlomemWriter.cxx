@@ -1,16 +1,8 @@
 // $Id$
 
-// Qt include(s):
-#include <QtGlobal>
-
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/event/Event.h"
-#   include "cdacore/event/EventServer.h"
-#else
-#   include "event/Event.h"
-#   include "event/EventServer.h"
-#endif
+#include "event/Event.h"
+#include "event/EventServer.h"
 
 // Local include(s):
 #include "GlomemWriter.h"

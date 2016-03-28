@@ -4,15 +4,9 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/errorcheck.h"
-#   include "cdacore/cernlib/NTupleMgr.h"
-#   include "cdacore/event/Fragment.h"
-#else
-#   include "common/errorcheck.h"
-#   include "cernlib/NTupleMgr.h"
-#   include "event/Fragment.h"
-#endif
+#include "common/errorcheck.h"
+#include "cernlib/NTupleMgr.h"
+#include "event/Fragment.h"
 
 // Local include(s):
 #include "CernlibDisk.h"

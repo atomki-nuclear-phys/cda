@@ -11,11 +11,7 @@
 #include <QIcon>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdadaq/common/PathResolver.h"
-#else
-#   include "common/PathResolver.h"
-#endif
+#include "common/PathResolver.h"
 
 // Local include(s):
 #include "RootWriterRunner.h"

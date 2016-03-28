@@ -5,11 +5,7 @@
 #include <QtCore/QProcessEnvironment>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/errorcheck.h"
-#else
-#   include "common/errorcheck.h"
-#endif
+#include "common/errorcheck.h"
 
 // Local include(s):
 #include "AppRunner.h"

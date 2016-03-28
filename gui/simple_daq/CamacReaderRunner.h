@@ -11,13 +11,8 @@
 #include <QWidget>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/msg/Logger.h"
-#   include "cdadaq/common/AppRunner.h"
-#else
-#   include "msg/Logger.h"
-#   include "common/AppRunner.h"
-#endif
+#include "msg/Logger.h"
+#include "common/AppRunner.h"
 
 // Local include(s):
 #include "../common/Export.h"

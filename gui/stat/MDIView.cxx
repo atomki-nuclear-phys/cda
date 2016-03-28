@@ -14,13 +14,8 @@
 #include <QHeaderView>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/common/Address.h"
-#   include "cdadaq/stat/Statistics.h"
-#else
-#   include "common/Address.h"
-#   include "stat/Statistics.h"
-#endif
+#include "common/Address.h"
+#include "stat/Statistics.h"
 
 // Local include(s):
 #include "MDIView.h"

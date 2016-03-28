@@ -4,21 +4,13 @@
 #define CDA_APPS_CDA_RAW_WRITER_CRATE_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
 #include <QtCore/QString>
 
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/Crate.h"
-#   include "cdacore/device/ICernlibDisk.h"
-#   include "cdacore/event/Event.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/Crate.h"
-#   include "device/ICernlibDisk.h"
-#   include "event/Event.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/Crate.h"
+#include "device/ICernlibDisk.h"
+#include "event/Event.h"
+#include "msg/Logger.h"
 
 // Forward declaration(s):
 QT_FORWARD_DECLARE_CLASS( QFile )

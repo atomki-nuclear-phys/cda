@@ -3,23 +3,12 @@
 #ifndef CDA_APPS_CDA_GLOMEM_WRITER_CRATE_H
 #define CDA_APPS_CDA_GLOMEM_WRITER_CRATE_H
 
-// Qt include(s):
-#include <QtCore/QtGlobal>
-
 // CDA include(s):
-#ifdef Q_OS_DARWIN
-#   include "cdacore/device/ICernlibHist.h"
-#   include "cdacore/device/Crate.h"
-#   include "cdacore/event/Event.h"
-#   include "cdacore/cernlib/HistMgr.h"
-#   include "cdacore/msg/Logger.h"
-#else
-#   include "device/ICernlibHist.h"
-#   include "device/Crate.h"
-#   include "event/Event.h"
-#   include "cernlib/HistMgr.h"
-#   include "msg/Logger.h"
-#endif
+#include "device/ICernlibHist.h"
+#include "device/Crate.h"
+#include "event/Event.h"
+#include "cernlib/HistMgr.h"
+#include "msg/Logger.h"
 
 /**
  *  @short Namespace holding classes used by cda-glomem-writer
