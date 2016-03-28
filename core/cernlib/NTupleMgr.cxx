@@ -15,14 +15,33 @@ extern "C" {
 #include "NTupleMgr.h"
 
 //
-// Some CERNLIB definitions:
+// Some CERNLIB definitions. Stolen from ROOT's THbookFile.cxx, and adjusted
+// to work correctly on different flavours of Ubuntu.
 //
-#ifdef HAVE_CERNLIB
-#define PAWC_SIZE 1000000
-typedef struct { float PAW[ PAWC_SIZE ]; } PAWC_DEF;
-#define PAWC COMMON_BLOCK( PAWC, pawc )
-COMMON_BLOCK_DEF( PAWC_DEF, PAWC );
-#endif // HAVE_CERNLIB
+#define PAWC_SIZE 4000000
+#ifndef WIN32
+#  define pawc pawc_
+#  define quest quest_
+#  define hcbits hcbits_
+#  define hcbook hcbook_
+#  define rzcl rzcl_
+int pawc[PAWC_SIZE] __attribute__((aligned(64)));
+int quest[100] __attribute__((aligned(64)));
+int hcbits[37] __attribute__((aligned(64)));
+int hcbook[51] __attribute__((aligned(64)));
+int rzcl[11] __attribute__((aligned(64)));
+#else
+#  define pawc   PAWC
+#  define quest  QUEST
+#  define hcbits HCBITS
+#  define hcbook HCBOOK
+#  define rzcl   RZCL
+extern "C" int pawc[PAWC_SIZE];
+extern "C" int quest[100];
+extern "C" int hcbits[37];
+extern "C" int hcbook[51];
+extern "C" int rzcl[11];
+#endif
 
 namespace cernlib {
 
@@ -146,11 +165,11 @@ namespace cernlib {
       }
 
 #ifdef HAVE_CERNLIB
-      // Some additionally needed variables for the CERNLIB functions:
-      int istat = 0, record_size = 1024;
-
       // Create the HBOOK common block(s):
       HLIMIT( PAWC_SIZE );
+
+      // Some additionally needed variables for the CERNLIB functions:
+      int istat = 0, record_size = 1024;
 
       // Try to open the output file:
       HROPEN( HFILE_ID, aq, hname, n, record_size, istat );
