@@ -1,5 +1,8 @@
 // $Id$
 
+// System include(s):
+#include <vector>
+
 // Qt include(s):
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
@@ -93,23 +96,22 @@ namespace daq {
       // the current application's directory:
       //
       if( env == "PATH" ) {
-         QString path = QCoreApplication::applicationDirPath() + "/" + name;
-         const QFileInfo finfo( path );
-         if( finfo.exists() && finfo.isExecutable() ) {
-            m_logger << msg::DEBUG
-                     << tr( "\"%1\" found under \"%2\"" )
-               .arg( name ).arg( path )
-                     << msg::endmsg;
-            return path;
-         }
-         path = QCoreApplication::applicationDirPath() + "/" + name + ".exe";
-         const QFileInfo finfo2( path );
-         if( finfo2.exists() && finfo2.isExecutable() ) {
-            m_logger << msg::DEBUG
-                     << tr( "\"%1.exe\" found under \"%2\"" )
-               .arg( name ).arg( path )
-                     << msg::endmsg;
-            return path;
+         // The possible relative locations of the executable:
+         const std::vector< QString > paths = {
+            QCoreApplication::applicationDirPath() + "/" + name,
+            QCoreApplication::applicationDirPath() + "/" + name + ".exe",
+            QCoreApplication::applicationDirPath() + "/../../../" + name
+         };
+         // Look for it:
+         for( const QString& path : paths ) {
+            const QFileInfo finfo( path );
+            if( finfo.exists() && finfo.isExecutable() ) {
+               m_logger << msg::DEBUG
+                        << tr( "\"%1\" found under \"%2\"" )
+                  .arg( name ).arg( path )
+                        << msg::endmsg;
+               return path;
+            }
          }
       }
 

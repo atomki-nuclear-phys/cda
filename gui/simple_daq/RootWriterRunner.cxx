@@ -207,13 +207,8 @@ namespace simple_daq {
          //
          // Collect where the application should send statistics information to:
          //
-         if( m_statServerAddresses.size() ) {
-            options += " -s ";
-            std::set< QString >::const_iterator itr = m_statServerAddresses.begin();
-            std::set< QString >::const_iterator end = m_statServerAddresses.end();
-            for( ; itr != end; ++itr ) {
-               options += ( *itr ) + " ";
-            }
+         for( const QString& server : m_statServerAddresses ) {
+            options += " -s " + server;
          }
 
          m_logger << msg::DEBUG << tr( "Using options: %1" ).arg( options )

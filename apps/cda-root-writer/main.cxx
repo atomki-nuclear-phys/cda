@@ -96,6 +96,7 @@ int main( int argc, char* argv[] ) {
    TCLAP::ValueArg< int >
          updatefreq( "u", "update-frequency", "Frequency of file name updates",
                      false, 60, "minutes" );
+   cmd.add( updatefreq );
    cmd.parse( argc, argv );
 
    //

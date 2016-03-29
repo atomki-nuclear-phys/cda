@@ -54,6 +54,8 @@ if( ROOT_FOUND AND CDA_USE_ROOT )
   target_compile_definitions( cdacore PUBLIC HAVE_ROOT_LIBS )
   target_include_directories( cdacore PUBLIC ${ROOT_INCLUDE_DIRS} )
   target_link_libraries( cdacore PUBLIC ${ROOT_LIBRARIES} )
+  list( APPEND CMAKE_INSTALL_RPATH ${ROOT_LIBRARY_DIRS} )
+  set( CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} PARENT_SCOPE )
 endif()
 
 # Use CERNLIB if it was found:
@@ -69,6 +71,8 @@ if( CERNLIB_FOUND AND CDA_USE_CERNLIB )
   endif()
   target_include_directories( cdacore PRIVATE ${CERNLIB_INCLUDE_DIRS} )
   target_link_libraries( cdacore PUBLIC ${CERNLIB_LIBRARIES} )
+  list( APPEND CMAKE_INSTALL_RPATH ${CERNLIB_LIBRARY_DIRS} )
+  set( CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} PARENT_SCOPE )
 endif()
 
 # Use the CAMAC cc32 library if it was found:
