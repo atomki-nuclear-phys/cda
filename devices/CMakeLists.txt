@@ -17,7 +17,7 @@ macro( add_cda_plugin name )
   else()
     find_package( Qt4 QUIET COMPONENTS QtCore QtNetwork QtGui QtXml )
     if( NOT QT_FOUND )
-      message( ERROR "No working version of Qt was found" )
+      message( SEND_ERROR "No working version of Qt was found" )
       return()
     endif()
     set( qt_libraries Qt4::QtCore Qt4::QtNetwork Qt4::QtGui

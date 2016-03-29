@@ -11,11 +11,11 @@
 
 # Find the cernlib helper script:
 find_program( CERNLIB_EXECUTABLE cernlib
-  HINTS /cern/pro/bin )
+  HINTS /cern/pro/bin /sw/bin )
 
 # Find the include directories to use:
 find_path( CERNLIB_INCLUDE_DIR NAMES cfortran/cfortran.h hbook.h
-  HINTS /cern/pro/include )
+  HINTS /cern/pro/include /sw/include )
 set( CERNLIB_INCLUDE_DIRS ${CERNLIB_INCLUDE_DIR} )
 mark_as_advanced( CERNLIB_INCLUDE_DIR )
 
@@ -24,6 +24,16 @@ execute_process( COMMAND ${CERNLIB_EXECUTABLE} ${CERNLIB_FIND_COMPONENTS}
   OUTPUT_VARIABLE CERNLIB_LIBRARIES
   OUTPUT_STRIP_TRAILING_WHITESPACE )
 mark_as_advanced( CERNLIB_LIBRARIES )
+
+# On MacOS add gfortran as a requirement by hand. Since the cernlib
+# script doesn't seem to be aware of this dependency of the libraries. :-(
+if( APPLE )
+   find_library( _gfortran NAME gfortran
+      HINTS /usr/local/gfortran/lib /sw/lib )
+   list( APPEND CERNLIB_LIBRARIES ${_gfortran} )
+   unset( _gfortran )
+   mark_as_advanced( _gfortran )
+endif()
 
 # Print the usual find_package messages:
 include( FindPackageHandleStandardArgs )

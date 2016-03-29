@@ -7,7 +7,7 @@
 #ifdef HAVE_CERNLIB
 extern "C" {
 #   include <cfortran/cfortran.h>
-#   include <hbook.h>
+#   include <cfortran/hbook.h>
 }
 #endif // HAVE_CERNLIB
 

@@ -78,6 +78,10 @@ if( NOT MSVC )
   unset( _extraFlags )
 endif()
 
+# Configure the use of rpath:
+set( CMAKE_MACOSX_RPATH ON )
+set( CMAKE_SKIP_INSTALL_RPATH OFF )
+
 # Set the CDASYS compiler definition:
 add_definitions( -DCDASYS=${CMAKE_BINARY_DIR} )
 
