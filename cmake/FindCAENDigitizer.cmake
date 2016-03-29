@@ -6,13 +6,15 @@
 # Find the CAEN digitizer headers:
 find_path( CAENDIGITIZER_INCLUDE_DIR
   NAMES CAENDigitizer.h CAENDigitizerType.h
-  HINTS "/Program Files/CAEN/Digitizers/Library/include" )
+  PATHS "/Program Files/CAEN/Digitizers/Library/include"
+        "/Program Files (x86)/CAEN/Digitizers/Library/include" )
 set( CAENDIGITIZER_INCLUDE_DIRS ${CAENDIGITIZER_INCLUDE_DIR} )
 mark_as_advanced( CAENDIGITIZER_INCLUDE_DIR )
 
 # Find the CAEN digitizer library:
 find_library( CAENDIGITIZER_LIBRARY NAMES CAENDigitizer
-  HINTS "/Program Files/CAEN/Digitizers/Library/lib/x86_64" )
+  PATHS "/Program Files/CAEN/Digitizers/Library/lib/x86_64"
+        "/Program Files (x86)/CAEN/Digitizers/Library/lib/x86_64" )
 set( CAENDIGITIZER_LIBRARIES ${CAENDIGITIZER_LIBRARY} )
 mark_as_advanced( CAENDIGITIZER_LIBRARY )
 

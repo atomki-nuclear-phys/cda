@@ -6,13 +6,15 @@
 # Find the CAEN comm header:
 find_path( CAENCOMM_INCLUDE_DIR
   NAMES CAENComm.h
-  HINTS "/Program Files/CAEN/Comm/include" )
+  PATHS "/Program Files/CAEN/Comm/include"
+        "/Program Files (x86)/CAEN/Comm/include" )
 set( CAENCOMM_INCLUDE_DIRS ${CAENCOMM_INCLUDE_DIR} )
 mark_as_advanced( CAENCOMM_INCLUDE_DIR )
 
 # Find the CAEN comm library:
 find_library( CAENCOMM_LIBRARY NAMES CAENComm
-  HINTS "/Program Files/CAEN/Comm/lib/x86_64" )
+  PATHS "/Program Files/CAEN/Comm/lib/x86_64"
+        "/Program Files (x86)/CAEN/Comm/lib/x86_64" )
 set( CAENCOMM_LIBRARIES ${CAENCOMM_LIBRARY} )
 mark_as_advanced( CAENCOMM_LIBRARY )
 

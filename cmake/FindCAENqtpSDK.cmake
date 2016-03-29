@@ -4,13 +4,25 @@
 #
 
 # Find the CAEN QTP headers:
-find_path( CAENQTPSDK_INCLUDE_DIR
-  NAMES cvt_V792.h cvt_board_commons.h cvt_common_defs.h )
-set( CAENQTPSDK_INCLUDE_DIRS ${CAENQTPSDK_INCLUDE_DIR} )
-mark_as_advanced( CAENQTPSDK_INCLUDE_DIR )
+find_path( _v792_dir
+  NAMES cvt_V792.h 
+  PATHS "/Program Files/CAEN/CAENVMEToolBox/CAENqtp/SDK/CAENqtpSDK"
+        "/Program Files (x86)/CAEN/CAENVMEToolBox/CAENqtp/SDK/CAENqtpSDK" )
+find_path( _common_dir
+  NAMES cvt_board_commons.h cvt_common_defs.h
+  PATHS "/Program Files/CAEN/CAENVMEToolBox/CAENqtp/SDK/CAENqtpSDK/common/src"
+        "/Program Files (x86)/CAEN/CAENVMEToolBox/CAENqtp/SDK/CAENqtpSDK/common/src" )
+set( CAENQTPSDK_INCLUDE_DIRS ${_v792_dir} ${_common_dir} )
+list( REMOVE_DUPLICATES CAENQTPSDK_INCLUDE_DIRS )
+unset( _v792_dir )
+mark_as_advanced( _v792_dir )
+unset( _common_dir )
+mark_as_advanced( _common_dir )
 
 # Find the CAEN QTP library:
-find_library( CAENQTPSDK_LIBRARY NAMES CAENqtpSDK )
+find_library( CAENQTPSDK_LIBRARY NAMES CAENqtpSDK
+  PATHS "/Program Files/CAEN/CAENVMEToolBox/CAENqtp/SDK/bin"
+        "/Program Files (x86)/CAEN/CAENVMEToolBox/CAENqtp/SDK/bin" )
 set( CAENQTPSDK_LIBRARIES ${CAENQTPSDK_LIBRARY} )
 mark_as_advanced( CAENQTPSDK_LIBRARY )
 
@@ -20,7 +32,7 @@ find_package( CAENVME )
 # Print the usual find_package messages:
 include( FindPackageHandleStandardArgs )
 find_package_handle_standard_args( CAENqtpSDK DEFAULT_MSG
-  CAENQTPSDK_LIBRARY CAENQTPSDK_INCLUDE_DIR
+  CAENQTPSDK_LIBRARY CAENQTPSDK_INCLUDE_DIRS
   CAENVME_FOUND )
 mark_as_advanced( CAENQTPSDK_FOUND )
 
