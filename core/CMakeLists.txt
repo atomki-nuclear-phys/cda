@@ -32,10 +32,10 @@ find_package( CAENqtpSDK )
 
 # Collect the source files of the library:
 file( GLOB headers fifo/*.h msg/*.h event/*.h device/*.h device/*.icc
-  camac/*.h caen/*.h vme/*.h cernlib/*.h root/*.h root/*.icc
+  camac/*.h caen/*.h cernlib/*.h root/*.h root/*.icc
   common/*.h i18n/*.h )
 file( GLOB sources fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
-  camac/*.cxx caen/*.cxx vme/*.cxx cernlib/*.cxx root/*.cxx
+  camac/*.cxx caen/*.cxx cernlib/*.cxx root/*.cxx
   common/*.cxx i18n/*.cxx )
 
 # Generate MOC files automatically:
