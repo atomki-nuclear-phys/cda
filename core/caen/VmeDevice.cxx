@@ -2,6 +2,7 @@
 
 // System include(s):
 #include <cstring>
+#include <cstdlib>
 
 // CAEN include(s):
 #ifdef HAVE_CAEN_QTP_LIBS
@@ -24,22 +25,44 @@ namespace {
    /// Helper function converting between device types
    CVT_QTP_TYPES convert( caen::VmeDevice::DeviceType type ) {
       switch( type ) {
-         case caen::VmeDevice::DEV_V775A:
-            return CVT_V775_TYPE_A;
-            break;
-         case caen::VmeDevice::DEV_V785A:
-            return CVT_V785_TYPE_A;
-            break;
-         case caen::VmeDevice::DEV_V792A:
-            return CVT_V792_TYPE_A;
-            break;
-         case caen::VmeDevice::DEV_V862A:
-            return CVT_V862_TYPE_A;
-            break;
-         default:
-            msg::Logger m_logger( "convert" );
-            REPORT_ERROR( "Unknown device type received: " << type );
-            return static_cast< CVT_QTP_TYPES >( 0 );
+      case caen::VmeDevice::DEV_V775A:
+         return CVT_V775_TYPE_A;
+         break;
+      case caen::VmeDevice::DEV_V785A:
+         return CVT_V785_TYPE_A;
+         break;
+      case caen::VmeDevice::DEV_V792A:
+         return CVT_V792_TYPE_A;
+         break;
+      case caen::VmeDevice::DEV_V862A:
+         return CVT_V862_TYPE_A;
+         break;
+      default:
+         msg::Logger m_logger( "convert" );
+         REPORT_ERROR( "Unknown device type received: " << type );
+         return static_cast< CVT_QTP_TYPES >( 0 );
+      }
+   }
+
+   /// Helper function decoding the channel number of a data word
+   uint32_t decodeChannel( uint32_t data, caen::VmeDevice::DeviceType type ) {
+      switch( type ) {
+      case caen::VmeDevice::DEV_V775A:
+         return CVT_V775A_GET_DATUM_CH( data );
+         break;
+      case caen::VmeDevice::DEV_V785A:
+         return CVT_V785A_GET_DATUM_CH( data );
+         break;
+      case caen::VmeDevice::DEV_V792A:
+         return CVT_V792A_GET_DATUM_CH( data );
+         break;
+      case caen::VmeDevice::DEV_V862A:
+         return CVT_V862A_GET_DATUM_CH( data );
+         break;
+      default:
+         msg::Logger m_logger( "decodeChannel" );
+         REPORT_ERROR( "Unknown device type received: " << type );
+         return 0;
       }
    }
 #endif // HAVE_CAEN_QTP_LIBS
@@ -64,11 +87,30 @@ namespace {
       }
    }
 
+   /// Helper function for printing vectors
+   template< typename T >
+   msg::Logger& operator<< ( msg::Logger& out, const std::vector< T >& vec ) {
+      out << "[";
+      for( size_t i = 0; i < vec.size(); ++i ) {
+         out << vec[ i ];
+         if( i < vec.size() - 1 ) {
+            out << ", ";
+         }
+      }
+      out << "]";
+      return out;
+   }
+
 } // private namespace
 
 namespace caen {
 
    /// Helper class holding on to data used by the QTP library
+   ///
+   /// The library specific data is put into this object instead of the main
+   /// VmeDevice one, so that the clients wouldn't have to be exposed to the
+   /// implementation details of the class.
+   ///
    class VmeDevicePrivateData {
 
    public:
@@ -78,7 +120,20 @@ namespace caen {
          // Make sure that the data object is zeroed out at the start
          memset( &m_data, 0, sizeof( m_data ) );
 #endif // HAVE_CAEN_QTP_LIBS
+         m_buffer = new uint8_t[ BUFFER_SIZE ];
       }
+      /// Destructor
+      ~VmeDevicePrivateData() {
+         delete[] m_buffer;
+      }
+
+      /// Size of the allocated data buffer
+      static const size_t BUFFER_SIZE = 1024 * 1024;
+
+      /// Accessor for the readout buffer
+      uint8_t* buffer() { return m_buffer; }
+      /// Accessor for the buffer usage variable
+      uint32_t& bufferUsage() { return m_bufferUsage; }
 
 #ifdef HAVE_CAEN_QTP_LIBS
       /// Accessor for the data object
@@ -89,25 +144,43 @@ namespace caen {
       cvt_V792_data m_data;
 #endif // HAVE_CAEN_QTP_LIBS
 
+      /// Data buffer used by the QTP library
+      uint8_t* m_buffer;
+      /// Size of the buffer currently being used
+      uint32_t m_bufferUsage;
+
    }; // class VmeDevicePrivateData
 
    VmeDevice::VmeDevice()
-      : m_data( 0 ), m_logger( "caen::VmeDevice" ) {
+      : m_data( 0 ), m_type( DEV_UNKNOWN ), m_logger( "caen::VmeDevice" ) {
 
    }
 
    VmeDevice::~VmeDevice() {
 
-      if( m_data ) {
-         delete m_data;
+      // Make sure that the device is properly disconnected from:
+      if( isConnected() ) {
+         close();
       }
    }
 
+   /// This function can be used to open the connection to a CAEN VME device.
+   ///
+   /// @param address The address of the device inside the VME crate
+   /// @param type The device type
+   /// @param bus A VmeBus object that is already initialised, and connected to
+   ///            the VME bus controller
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
    bool VmeDevice::open( uint16_t address, DeviceType type,
                          const VmeBus& bus ) {
 
       // Make sure that the data is cleared:
       resetData();
+
+      // Set the device type:
+      m_type = type;
 
       // Open the connection to the device:
 #ifdef HAVE_CAEN_QTP_LIBS
@@ -121,6 +194,12 @@ namespace caen {
       return true;
    }
 
+   /// This function can be used to close the connection to the CAEN VME
+   /// device.
+   ///
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
    bool VmeDevice::close() {
 
       // Make sure that we have a data object:
@@ -134,12 +213,319 @@ namespace caen {
 #ifdef HAVE_CAEN_QTP_LIBS
       CHECK( cvt_V792_close( m_data->data() ) );
 #endif // HAVE_CAEN_QTP_LIBS
-      REPORT_VERBOSE( tr( "Device closed" ) );
+      REPORT_VERBOSE( tr( "Device type \"%1\" closed" )
+                      .arg( toString( m_type ) ) );
+
+      // Delete the data object from memory:
+      delete m_data;
+      m_data = 0;
+
+      // Set the device type to unknown:
+      m_type = DEV_UNKNOWN;
 
       // Return gracefully:
       return true;
    }
 
+   /// This function can be used to print some user friendly information about
+   /// the device that the connection was made with.
+   ///
+   /// @param level The output level at which the information should be printed
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::printInfo( msg::Level level ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef USE_CAEN_QTP_LIBS
+      // Get the information about the board:
+      uint16_t firmware_rev = 0, serial_number = 0;
+      uint8_t piggy_back_type = 0;
+      CHECK( cvt_V792_get_system_info( m_data->data(), &firmware_rev,
+                                       &piggy_back_type, &serial_number ) );
+      m_logger << level << "Board information:\n"
+               << "Type           : " << toString( m_type ) << "\n"
+               << "Address        : "
+               << std::hex << m_data->data()->m_common_data.m_base_address
+               << "\n"
+               << "Firmware rev.  : " << std::hex << firmware_rev << "\n"
+               << "Piggy back type: "
+               << cvt_V792_get_piggy_back_str( m_data->data(), piggy_back_type )
+               << "\n"
+               << "Serial number  : " << std::hex << serial_number
+               << std::dec << msg::endmsg;
+#else
+      m_logger << level << tr( "Board info not available in simulation mode" )
+               << msg::endmsg;
+#endif // USE_CAEN_QTP_LIBS
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used during the initialisation of the device to
+   /// clear all data from it, possibly remaining from a previous data
+   /// acquisition session.
+   ///
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::dataClear() {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef USE_CAEN_QTP_LIBS
+      // Clear the device:
+      CHECK( cvt_V792_data_clear( m_data->data() ) );
+#endif // USE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG << tr( "Cleared the data from the device" )
+               << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to set the zero suppression behaviour of
+   /// devices that support "single range" zero suppression.
+   ///
+   /// @param enable Flag enabling/disabling zero suppression
+   /// @param stepThreshold If set, the comparison is CNV_VALUE > THR_VALUEx2,
+   ///                      otherwise it's CNV_VALUE > THR_VALUEx16
+   /// @param thresholds Vector of thresholds, with one value per channel. Has
+   ///                   to have exactly as many elements as many channels are
+   ///                   in the hardware board.
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool
+   VmeDevice::setZeroSuppression( bool enable, bool stepThreshold,
+                                  const std::vector< uint16_t >& thresholds ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef USE_CAEN_QTP_LIBS
+      // Make sure that the size of the threshold vector is correct for the
+      // device type:
+      const size_t requiredSize =
+            CVT_QTP_NUM_CHANNELS[ m_data->data()->m_type ];
+      CHECK( thresholds.size() == requiredSize );
+      // Call the setter function:
+      CHECK( cvt_V792_set_zero_suppression( m_data->data(),
+                                            enable, stepThreshold,
+                                            thresholds.data() ) );
+#endif // USE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG << tr( "Set zero suppression with:\n" )
+               << "enable       : " << enable << "\n"
+               << "stepThreshold: " << stepThreshold << "\n"
+               << "thresholds   : " << thresholds << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to set a number of properties on the device
+   /// that control its data acquisition properties.
+   ///
+   /// @param slidingScaleEnable Enable/Disable the sliding scale feature
+   /// @param zeroSuppressionEnable Enable/Disable the zero suppression feature
+   /// @param overflowSuppressionEnable Enable/Disable the overflow suppression
+   ///        feature
+   /// @param validSuppressionEnable Enable/Disable the valid suppression
+   ///        feature (V775 ONLY)
+   /// @param commonStopEnable Enable/Disable the common stop acquisition mode
+   ///        (V775 ONLY)
+   /// @param emptyEnable Enable/Disable empty event storing feature
+   /// @param countAllEvents Enable counting all triggers or accepted one only
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::setAcquisitionMode( bool slidingScaleEnable,
+                                       bool zeroSuppressionEnable,
+                                       bool overflowSuppressionEnable,
+                                       bool validSuppressionEnable,
+                                       bool commonStopEnable,
+                                       bool emptyEnable,
+                                       bool countAllEvents ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef USE_CAEN_QTP_LIBS
+      // Call the setter function:
+      CHECK( cvt_V792_set_acquisition_mode( m_data->data(),
+                                            slidingScaleEnable,
+                                            zeroSuppressionEnable,
+                                            overflowSuppressionEnable,
+                                            validSuppressionEnable,
+                                            commonStopEnable,
+                                            emptyEnable,
+                                            countAllEvents ) );
+#endif // USE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG << tr( "Set acquisition mode with:\n" )
+               << "slidingScaleEnable       : " << slidingScaleEnable << "\n"
+               << "zeroSuppressionEnable    : " << zeroSuppressionEnable << "\n"
+               << "overflowSuppressionEnable: " << overflowSuppressionEnable
+               << "\n"
+               << "validSuppressionEnable   : " << validSuppressionEnable
+               << "\n"
+               << "commonStopEnable         : " << commonStopEnable << "\n"
+               << "emptyEnable              : " << emptyEnable << "\n"
+               << "countAllEvents           : " << countAllEvents
+               << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to configure the readout mode settings of the
+   /// device.
+   ///
+   /// @param busErrorEnable Enable/disable bus error. The module is enabled to
+   ///        generate a Bus error to finish a block transfer.
+   /// @param blockEndEnable Enable/disable block end. the module sends all data
+   ///        to the CPU until the first EOB word (end of first event) is
+   ///        reached.
+   /// @param align64Enable Enable/disable align 64 mode. The module is enabled
+   ///        to add a dummy word when the number of words is odd.
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::setReadoutMode( bool busErrorEnable, bool blockEndEnable,
+                                   bool align64Enable ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef USE_CAEN_QTP_LIBS
+      // Call the setter function:
+      CHECK( cvt_V792_set_readout_mode( m_data->data(), busErrorEnable,
+                                        blockEndEnable, align64Enable ) );
+#endif // USE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG << tr( "Set readout mode with:\n" )
+               << "busErrorEnable: " << busErrorEnable << "\n"
+               << "blockEndEnable: " << blockEndEnable << "\n"
+               << "align64Enable : " << align64Enable << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to read data from the device. It makes use of
+   /// the underlying QTP library's Multiple Event Buffer readout to first copy
+   /// the data into the application's memory, and then decodes the information
+   /// into an easily digestible data format.
+   ///
+   /// @param data Container filled by the function with new event data
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::read( std::vector< DataEvent >& data ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef USE_CAEN_QTP_LIBS
+      // Read data from the device into the allocated buffer:
+      m_data->bufferUsage() = VmeDevicePrivateData::BUFFER_SIZE;
+      CHECK( cvt_V792_read_MEB( m_data->data(), m_data->buffer(),
+                                &( m_data->bufferUsage() ) ) );
+      // The current event object, used in the payload decoding:
+      DataEvent currentEvent;
+      // Loop over the buffer, translating its contents into DataEvent
+      // objects:
+      uint32_t* itr = static_cast< uint32_t* >( m_data->buffer() );
+      while( ( m_data->bufferUsage() -= 4 ) >= 0 ) {
+         // The current data word:
+         uint32_t data = *( itr++ );
+         // Decode the data word:
+         switch( data & CVT_QTP_DATA_TYPE_MSK ) {
+         case CVT_QTP_HEADER:
+            // A new event is started. Clear out the current event object,
+            // and set its header.
+            currentEvent.data.clear();
+            currentEvent.footer.geo = 0;
+            currentEvent.footer.eventCount = 0;
+            // Now set the properties of its header:
+            currentEvent.header.geo = CVT_QTP_GET_HDR_GEO( data );
+            currentEvent.header.crate = CVT_QTP_GET_HDR_CRATE( data );
+            currentEvent.header.channelCount = CVT_QTP_GET_HDR_CH_COUNT( data );
+            break;
+         case CVT_QTP_EOB:
+            // This is the end of the event. Fill the footer of the object:
+            currentEvent.footer.geo = CVT_QTP_GET_EOB_GEO( data );
+            currentEvent.footer.eventCount =
+                  CVT_QTP_GET_EOB_EVENT_COUNT( data );
+            // And now add the event to the output:
+            data.push_back( currentEvent );
+            break;
+         case CVT_QTP_DATUM:
+            // This is a new data word. Add one to the current event:
+            currentEvent.data.push_back( DataWord() );
+            // And now set its properties:
+            currentEvent.data.back().geo = CVT_V792_GET_DATUM_GEO( data );
+            currentEvent.data.back().channel = ::decodeChannel( data, m_type );
+            currentEvent.data.back().data = CVT_V792_GET_DATUM_ADC( data );
+            currentEvent.data.back().underflow = CVT_V792_GET_DATUM_UN( data );
+            currentEvent.data.back().overflow = CVT_V792_GET_DATUM_OV( data );
+            break;
+         case CVT_QTP_NOT_VALID_DATUM:
+            // This is an invalid data word. Print a warning.
+            m_logger << msg::WARNING << tr( "Incorrect data word found" )
+                     << msg::endmsg;
+            break;
+         default:
+            // This is an unknown word. This should not happen.
+            REPORT_ERROR( tr( "Unknown data word found" ) );
+            break;
+         }
+      }
+      // Check that we read out all the data words:
+      if( m_data->bufferUsage() > 0 ) {
+         REPORT_ERROR( tr( "Data words were left in the MEB. This will lead "
+                           "to data loss." ) );
+      }
+#else
+      // Fill a small random number of events into the output:
+      const int events = rand()  / ( RAND_MAX / 10 );
+      for( int i = 0; i < events; ++i ) {
+         // Set the header and footer of the event:
+         DataEvent event;
+         event.header.geo = 0;
+         event.header.crate = 0;
+         event.header.channelCount = 32;
+         event.footer.geo = 0;
+         event.footer.eventCount = i;
+         // Generate some simple data values for it:
+         for( int j = 0; j < 32; ++j ) {
+            event.data.push_back( DataWord() );
+            event.data.back().geo = 0;
+            event.data.back().channel = j;
+            event.data.back().data = j * 100;
+            event.data.back().underflow = 0;
+            event.data.back().overflow = 0;
+         }
+      }
+#endif // USE_CAEN_QTP_LIBS
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function is used internally to make sure that we have a pristine
+   /// private data object available when we connect to a new device.
+   ///
    void VmeDevice::resetData() {
 
       if( m_data ) {
@@ -149,6 +535,17 @@ namespace caen {
       m_data = new VmeDevicePrivateData();
 
       return;
+   }
+
+   /// This function tries to tell in a very simple way whether the object is
+   /// connected to a hardware device at the moment.
+   ///
+   /// @returns <code>true</code> if the hardware is connected,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::isConnected() const {
+
+      return ( m_data != 0 );
    }
 
 } // namespace caen
