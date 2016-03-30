@@ -44,6 +44,28 @@ namespace {
       }
    }
 
+   /// Helper function decoding the GEO address of a data word
+   uint32_t decodeGeo( uint32_t data, caen::VmeDevice::DeviceType type ) {
+      switch( type ) {
+      case caen::VmeDevice::DEV_V775A:
+         return CVT_V775_GET_DATUM_GEO( data );
+         break;
+      case caen::VmeDevice::DEV_V785A:
+         return CVT_V785_GET_DATUM_GEO( data );
+         break;
+      case caen::VmeDevice::DEV_V792A:
+         return CVT_V792_GET_DATUM_GEO( data );
+         break;
+      case caen::VmeDevice::DEV_V862A:
+         return CVT_V862_GET_DATUM_GEO( data );
+         break;
+      default:
+         msg::Logger m_logger( "decodeGeo" );
+         REPORT_ERROR( "Unknown device type received: " << type );
+         return 0;
+      }
+   }
+
    /// Helper function decoding the channel number of a data word
    uint32_t decodeChannel( uint32_t data, caen::VmeDevice::DeviceType type ) {
       switch( type ) {
@@ -57,10 +79,77 @@ namespace {
          return CVT_V792A_GET_DATUM_CH( data );
          break;
       case caen::VmeDevice::DEV_V862A:
-         return CVT_V862A_GET_DATUM_CH( data );
+         return CVT_V862_GET_DATUM_CH( data );
          break;
       default:
          msg::Logger m_logger( "decodeChannel" );
+         REPORT_ERROR( "Unknown device type received: " << type );
+         return 0;
+      }
+   }
+
+   /// Helper function decoding the data payload of a data word
+   uint32_t decodeData( uint32_t data, caen::VmeDevice::DeviceType type ) {
+      switch( type ) {
+      case caen::VmeDevice::DEV_V775A:
+         return CVT_V775_GET_DATUM_ADC( data );
+         break;
+      case caen::VmeDevice::DEV_V785A:
+         return CVT_V785_GET_DATUM_ADC( data );
+         break;
+      case caen::VmeDevice::DEV_V792A:
+         return CVT_V792_GET_DATUM_ADC( data );
+         break;
+      case caen::VmeDevice::DEV_V862A:
+         return CVT_V862_GET_DATUM_ADC( data );
+         break;
+      default:
+         msg::Logger m_logger( "decodeData" );
+         REPORT_ERROR( "Unknown device type received: " << type );
+         return 0;
+      }
+   }
+
+   /// Helper function decoding the under threshold bit of a data word
+   uint32_t decodeUnderThreshold( uint32_t data,
+                                  caen::VmeDevice::DeviceType type ) {
+      switch( type ) {
+      case caen::VmeDevice::DEV_V775A:
+         return CVT_V775_GET_DATUM_UN( data );
+         break;
+      case caen::VmeDevice::DEV_V785A:
+         return CVT_V785_GET_DATUM_UN( data );
+         break;
+      case caen::VmeDevice::DEV_V792A:
+         return CVT_V792_GET_DATUM_UN( data );
+         break;
+      case caen::VmeDevice::DEV_V862A:
+         return CVT_V862_GET_DATUM_UN( data );
+         break;
+      default:
+         msg::Logger m_logger( "decodeUnderThreshold" );
+         REPORT_ERROR( "Unknown device type received: " << type );
+         return 0;
+      }
+   }
+
+   /// Helper function decoding the overflow bit of a data word
+   uint32_t decodeOverflow( uint32_t data, caen::VmeDevice::DeviceType type ) {
+      switch( type ) {
+      case caen::VmeDevice::DEV_V775A:
+         return CVT_V775_GET_DATUM_OV( data );
+         break;
+      case caen::VmeDevice::DEV_V785A:
+         return CVT_V785_GET_DATUM_OV( data );
+         break;
+      case caen::VmeDevice::DEV_V792A:
+         return CVT_V792_GET_DATUM_OV( data );
+         break;
+      case caen::VmeDevice::DEV_V862A:
+         return CVT_V862_GET_DATUM_OV( data );
+         break;
+      default:
+         msg::Logger m_logger( "decodeOverflow" );
          REPORT_ERROR( "Unknown device type received: " << type );
          return 0;
       }
@@ -239,7 +328,7 @@ namespace caen {
       // Make sure that the board is connected to:
       CHECK( isConnected() );
 
-#ifdef USE_CAEN_QTP_LIBS
+#ifdef HAVE_CAEN_QTP_LIBS
       // Get the information about the board:
       uint16_t firmware_rev = 0, serial_number = 0;
       uint8_t piggy_back_type = 0;
@@ -259,7 +348,7 @@ namespace caen {
 #else
       m_logger << level << tr( "Board info not available in simulation mode" )
                << msg::endmsg;
-#endif // USE_CAEN_QTP_LIBS
+#endif // HAVE_CAEN_QTP_LIBS
 
       // Return gracefully:
       return true;
@@ -277,10 +366,10 @@ namespace caen {
       // Make sure that the board is connected to:
       CHECK( isConnected() );
 
-#ifdef USE_CAEN_QTP_LIBS
+#ifdef HAVE_CAEN_QTP_LIBS
       // Clear the device:
       CHECK( cvt_V792_data_clear( m_data->data() ) );
-#endif // USE_CAEN_QTP_LIBS
+#endif // HAVE_CAEN_QTP_LIBS
 
       // Tell the user what happened:
       m_logger << msg::DEBUG << tr( "Cleared the data from the device" )
@@ -309,7 +398,7 @@ namespace caen {
       // Make sure that the board is connected to:
       CHECK( isConnected() );
 
-#ifdef USE_CAEN_QTP_LIBS
+#ifdef HAVE_CAEN_QTP_LIBS
       // Make sure that the size of the threshold vector is correct for the
       // device type:
       const size_t requiredSize =
@@ -319,7 +408,7 @@ namespace caen {
       CHECK( cvt_V792_set_zero_suppression( m_data->data(),
                                             enable, stepThreshold,
                                             thresholds.data() ) );
-#endif // USE_CAEN_QTP_LIBS
+#endif // HAVE_CAEN_QTP_LIBS
 
       // Tell the user what happened:
       m_logger << msg::DEBUG << tr( "Set zero suppression with:\n" )
@@ -358,7 +447,7 @@ namespace caen {
       // Make sure that the board is connected to:
       CHECK( isConnected() );
 
-#ifdef USE_CAEN_QTP_LIBS
+#ifdef HAVE_CAEN_QTP_LIBS
       // Call the setter function:
       CHECK( cvt_V792_set_acquisition_mode( m_data->data(),
                                             slidingScaleEnable,
@@ -368,7 +457,7 @@ namespace caen {
                                             commonStopEnable,
                                             emptyEnable,
                                             countAllEvents ) );
-#endif // USE_CAEN_QTP_LIBS
+#endif // HAVE_CAEN_QTP_LIBS
 
       // Tell the user what happened:
       m_logger << msg::DEBUG << tr( "Set acquisition mode with:\n" )
@@ -406,11 +495,11 @@ namespace caen {
       // Make sure that the board is connected to:
       CHECK( isConnected() );
 
-#ifdef USE_CAEN_QTP_LIBS
+#ifdef HAVE_CAEN_QTP_LIBS
       // Call the setter function:
       CHECK( cvt_V792_set_readout_mode( m_data->data(), busErrorEnable,
                                         blockEndEnable, align64Enable ) );
-#endif // USE_CAEN_QTP_LIBS
+#endif // HAVE_CAEN_QTP_LIBS
 
       // Tell the user what happened:
       m_logger << msg::DEBUG << tr( "Set readout mode with:\n" )
@@ -427,16 +516,16 @@ namespace caen {
    /// the data into the application's memory, and then decodes the information
    /// into an easily digestible data format.
    ///
-   /// @param data Container filled by the function with new event data
+   /// @param events Container filled by the function with new event data
    /// @returns <code>true</code> if the call was successful,
    ///          <code>false</code> otherwise
    ///
-   bool VmeDevice::read( std::vector< DataEvent >& data ) {
+   bool VmeDevice::read( std::vector< DataEvent >& events ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
 
-#ifdef USE_CAEN_QTP_LIBS
+#ifdef HAVE_CAEN_QTP_LIBS
       // Read data from the device into the allocated buffer:
       m_data->bufferUsage() = VmeDevicePrivateData::BUFFER_SIZE;
       CHECK( cvt_V792_read_MEB( m_data->data(), m_data->buffer(),
@@ -445,7 +534,7 @@ namespace caen {
       DataEvent currentEvent;
       // Loop over the buffer, translating its contents into DataEvent
       // objects:
-      uint32_t* itr = static_cast< uint32_t* >( m_data->buffer() );
+      uint32_t* itr = reinterpret_cast< uint32_t* >( m_data->buffer() );
       while( ( m_data->bufferUsage() -= 4 ) >= 0 ) {
          // The current data word:
          uint32_t data = *( itr++ );
@@ -468,17 +557,19 @@ namespace caen {
             currentEvent.footer.eventCount =
                   CVT_QTP_GET_EOB_EVENT_COUNT( data );
             // And now add the event to the output:
-            data.push_back( currentEvent );
+            events.push_back( currentEvent );
             break;
          case CVT_QTP_DATUM:
             // This is a new data word. Add one to the current event:
             currentEvent.data.push_back( DataWord() );
             // And now set its properties:
-            currentEvent.data.back().geo = CVT_V792_GET_DATUM_GEO( data );
+            currentEvent.data.back().geo = ::decodeGeo( data, m_type );
             currentEvent.data.back().channel = ::decodeChannel( data, m_type );
-            currentEvent.data.back().data = CVT_V792_GET_DATUM_ADC( data );
-            currentEvent.data.back().underflow = CVT_V792_GET_DATUM_UN( data );
-            currentEvent.data.back().overflow = CVT_V792_GET_DATUM_OV( data );
+            currentEvent.data.back().data = ::decodeData( data, m_type );
+            currentEvent.data.back().underThreshold =
+                  ::decodeUnderThreshold( data, m_type );
+            currentEvent.data.back().overflow = ::decodeOverflow( data,
+                                                                  m_type );
             break;
          case CVT_QTP_NOT_VALID_DATUM:
             // This is an invalid data word. Print a warning.
@@ -498,8 +589,8 @@ namespace caen {
       }
 #else
       // Fill a small random number of events into the output:
-      const int events = rand()  / ( RAND_MAX / 10 );
-      for( int i = 0; i < events; ++i ) {
+      const int nevents = rand()  / ( RAND_MAX / 10 );
+      for( int i = 0; i < nevents; ++i ) {
          // Set the header and footer of the event:
          DataEvent event;
          event.header.geo = 0;
@@ -513,11 +604,12 @@ namespace caen {
             event.data.back().geo = 0;
             event.data.back().channel = j;
             event.data.back().data = j * 100;
-            event.data.back().underflow = 0;
+            event.data.back().underThreshold = 0;
             event.data.back().overflow = 0;
          }
+         events.push_back( event );
       }
-#endif // USE_CAEN_QTP_LIBS
+#endif // HAVE_CAEN_QTP_LIBS
 
       // Return gracefully:
       return true;

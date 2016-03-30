@@ -111,7 +111,7 @@ namespace caen {
          uint32_t geo;
          uint32_t channel;
          uint32_t data;
-         uint32_t underflow;
+         uint32_t underThreshold;
          uint32_t overflow;
       };
       /// Struct describing a single event read from the device
@@ -122,7 +122,7 @@ namespace caen {
       };
 
       /// Read data from the board, and fill the user provided data object
-      bool read( std::vector< DataEvent >& data );
+      bool read( std::vector< DataEvent >& events );
 
       /// @}
 
