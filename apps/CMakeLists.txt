@@ -23,7 +23,7 @@ macro( add_cda_console_app name )
   endif()
 
   # Collect the source files of the executable:
-  file( GLOB headers *.h )
+  file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
   file( GLOB sources *.cxx )
 
   # Get the names and properties of the available plugins:
@@ -84,7 +84,7 @@ macro( add_cda_gui_app name )
   endif()
 
   # Collect the source files of the executable:
-  file( GLOB headers *.h )
+  file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
   file( GLOB sources *.cxx *.qrc )
 
   # Get the names of the available plugins:
@@ -133,6 +133,7 @@ endmacro( add_cda_gui_app )
 
 # Build the console application(s):
 add_subdirectory( cda-caen-reader )
+add_subdirectory( cda-caen-vme-reader )
 add_subdirectory( cda-camac-reader )
 add_subdirectory( cda-config-server )
 add_subdirectory( cda-glomem-writer )

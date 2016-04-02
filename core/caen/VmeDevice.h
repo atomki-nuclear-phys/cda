@@ -50,7 +50,7 @@ namespace caen {
          DEV_V775A = 0, ///< The board is a V775A
          DEV_V785A = 1, ///< The board is a V785A
          DEV_V792A = 2, ///< The board is a V792A
-         DEV_V862A = 3, ///< The board is a V862A
+         DEV_V862  = 3, ///< The board is a V862
          DEV_UNKNOWN = 99 ///< Default value for an unknown device
       };
 

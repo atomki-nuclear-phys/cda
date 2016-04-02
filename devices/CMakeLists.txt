@@ -3,8 +3,14 @@
 # Configuration for building all the device plugins for CDA.
 #
 
+# Use the CMake argument parser code:
+include( CMakeParseArguments )
+
 # Macro for building a CDA device plugin
 macro( add_cda_plugin name )
+
+  # Parse optional arguments:
+  cmake_parse_arguments( ARG "NO_AUTOMOC;NO_AUTORCC" "" "" ${ARGN} )
 
   # Greet the user:
   message( STATUS "Configuring the build of the ${name} plugin" )
@@ -25,9 +31,13 @@ macro( add_cda_plugin name )
   endif()
 
   # Generate MOC files automatically:
-  set( CMAKE_AUTOMOC TRUE )
+  if( NOT ARG_NO_AUTOMOC )
+     set( CMAKE_AUTOMOC TRUE )
+  endif()
   # Generate resource files automatically:
-  set( CMAKE_AUTORCC TRUE )
+  if( NOT ARG_NO_AUTORCC )
+     set( CMAKE_AUTORCC TRUE )
+  endif()
 
   # Collect the source files of the plugin:
   file( GLOB headers *.h )
@@ -55,3 +65,6 @@ add_subdirectory( t4300b )
 
 # Build all the CAEN digitiser plugins:
 add_subdirectory( dt5740 )
+
+# Build all the CAEN VME plugins:
+add_subdirectory( v862 )

@@ -34,7 +34,7 @@ namespace {
       case caen::VmeDevice::DEV_V792A:
          return CVT_V792_TYPE_A;
          break;
-      case caen::VmeDevice::DEV_V862A:
+      case caen::VmeDevice::DEV_V862:
          return CVT_V862_TYPE_A;
          break;
       default:
@@ -56,7 +56,7 @@ namespace {
       case caen::VmeDevice::DEV_V792A:
          return CVT_V792_GET_DATUM_GEO( data );
          break;
-      case caen::VmeDevice::DEV_V862A:
+      case caen::VmeDevice::DEV_V862:
          return CVT_V862_GET_DATUM_GEO( data );
          break;
       default:
@@ -78,7 +78,7 @@ namespace {
       case caen::VmeDevice::DEV_V792A:
          return CVT_V792A_GET_DATUM_CH( data );
          break;
-      case caen::VmeDevice::DEV_V862A:
+      case caen::VmeDevice::DEV_V862:
          return CVT_V862_GET_DATUM_CH( data );
          break;
       default:
@@ -100,7 +100,7 @@ namespace {
       case caen::VmeDevice::DEV_V792A:
          return CVT_V792_GET_DATUM_ADC( data );
          break;
-      case caen::VmeDevice::DEV_V862A:
+      case caen::VmeDevice::DEV_V862:
          return CVT_V862_GET_DATUM_ADC( data );
          break;
       default:
@@ -123,7 +123,7 @@ namespace {
       case caen::VmeDevice::DEV_V792A:
          return CVT_V792_GET_DATUM_UN( data );
          break;
-      case caen::VmeDevice::DEV_V862A:
+      case caen::VmeDevice::DEV_V862:
          return CVT_V862_GET_DATUM_UN( data );
          break;
       default:
@@ -145,7 +145,7 @@ namespace {
       case caen::VmeDevice::DEV_V792A:
          return CVT_V792_GET_DATUM_OV( data );
          break;
-      case caen::VmeDevice::DEV_V862A:
+      case caen::VmeDevice::DEV_V862:
          return CVT_V862_GET_DATUM_OV( data );
          break;
       default:
@@ -168,8 +168,8 @@ namespace {
          case caen::VmeDevice::DEV_V792A:
             return "V792A";
             break;
-         case caen::VmeDevice::DEV_V862A:
-            return "V862A";
+         case caen::VmeDevice::DEV_V862:
+            return "V862";
             break;
          default:
             return "<unknown>";
