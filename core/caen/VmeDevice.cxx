@@ -6,9 +6,11 @@
 
 // CAEN include(s):
 #ifdef HAVE_CAEN_QTP_LIBS
+extern "C" {
 #   include <cvt_board_commons.h>
 #   include <cvt_common_defs.h>
 #   include <cvt_V792.h>
+}
 #endif
 
 // CDA include(s):
