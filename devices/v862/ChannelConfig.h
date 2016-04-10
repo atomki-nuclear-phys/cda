@@ -53,6 +53,8 @@ namespace v862 {
       double         getUpperBound() const;
       /// Get the name of the channel
       const QString& getName() const;
+      /// Get the readout threshold for the channel
+      int            getThreshold() const;
 
       /// Set the channel (subaddress) number
       void setChannel( int value );
@@ -64,6 +66,8 @@ namespace v862 {
       void setUpperBound( double value );
       /// Set the name of the channel
       void setName( const QString& value );
+      /// Set the readout threshold for the channel
+      void setThreshold( int value );
 
       /// Print the configuration of the channel
       void printConfig( msg::Level level = msg::INFO ) const;
@@ -77,6 +81,7 @@ namespace v862 {
       double  m_lowerBound; ///< Lower bound of the created histogram
       double  m_upperBound; ///< Upper bound of the created histogram
       QString m_name;       ///< Name of the channel
+      int     m_threshold;  ///< Lower threshold applied for the readout
 
       mutable msg::Logger m_logger; ///< Logger member
 

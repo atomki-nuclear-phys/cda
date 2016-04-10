@@ -13,10 +13,20 @@ namespace dev {
       setMinimumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
       setMaximumSize( WIDGET_WIDTH, WIDGET_HEIGHT );
 
+      // Create the image of a VME crate:
+      m_image.reset( new QLabel( this ) );
+      m_image->setGeometry( QRect( 40, 20, WIDGET_WIDTH - 80, 200 ) );
+      QPixmap pixmap( ":/img/vme8008x.png" );
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 1, 0 )
+      pixmap.setDevicePixelRatio( m_image->devicePixelRatio() );
+#endif // QT_VERSION
+      m_image->setPixmap( pixmap );
+      m_image->setScaledContents( true );
+
       // Set up the main label:
       m_label.reset( new QLabel( "CAEN VME Controller Configuration",
                                  this ) );
-      m_label->setGeometry( QRect( 20, 20, 470, 40 ) );
+      m_label->setGeometry( QRect( 20, 230, WIDGET_WIDTH - 40, 40 ) );
       QFont font = m_label->font();
       font.setPointSize( 15 );
       m_label->setFont( font );
@@ -24,11 +34,11 @@ namespace dev {
 
       // Set up the controller selector label:
       m_typeLabel.reset( new QLabel( "Controller type:", this ) );
-      m_typeLabel->setGeometry( QRect( 20, 100, 120, 25 ) );
+      m_typeLabel->setGeometry( QRect( 20, 300, 120, 25 ) );
 
       // Set up the controller selector:
       m_type.reset( new QComboBox( this ) );
-      m_type->setGeometry( QRect( 150, 100, 300, 25 ) );
+      m_type->setGeometry( QRect( 150, 300, 300, 25 ) );
       m_type->addItem( tr( "V1718 USB-VME bridge" ) );
       m_type->addItem( tr( "V2718 PCI-VME bridge with optical link" ) );
       m_type->addItem( tr( "A2818 PCI board with optical link" ) );
@@ -38,22 +48,22 @@ namespace dev {
 
       // Set up the link number selector label:
       m_linkNumberLabel.reset( new QLabel( "Link number:", this ) );
-      m_linkNumberLabel->setGeometry( QRect( 20, 130, 120, 25 ) );
+      m_linkNumberLabel->setGeometry( QRect( 20, 330, 120, 25 ) );
 
       // Set up the link number selector:
       m_linkNumber.reset( new QSpinBox( this ) );
-      m_linkNumber->setGeometry( QRect( 150, 130, 100, 25 ) );
+      m_linkNumber->setGeometry( QRect( 150, 330, 100, 25 ) );
       m_linkNumber->setRange( 0, 255 );
       connect( m_linkNumber.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( linkNumberModifiedSlot( int ) ) );
 
       // Set up the board number selector label:
       m_boardNumberLabel.reset( new QLabel( "Board number:", this ) );
-      m_boardNumberLabel->setGeometry( QRect( 20, 160, 120, 25 ) );
+      m_boardNumberLabel->setGeometry( QRect( 20, 360, 120, 25 ) );
 
       // Set up the link number selector:
       m_boardNumber.reset( new QSpinBox( this ) );
-      m_boardNumber->setGeometry( QRect( 150, 160, 100, 25 ) );
+      m_boardNumber->setGeometry( QRect( 150, 360, 100, 25 ) );
       m_boardNumber->setRange( 0, 255 );
       connect( m_boardNumber.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( boardNumberModifiedSlot( int ) ) );

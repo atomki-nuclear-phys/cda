@@ -25,6 +25,7 @@ namespace v862 {
    ChannelConfig::ChannelConfig()
       : m_channel( 0 ), m_nBins( 100 ),
         m_lowerBound( 0. ), m_upperBound( 100. ), m_name( "" ),
+        m_threshold( 0 ),
         m_logger( "v862::ChannelConfig" ) {
 
       REPORT_VERBOSE( tr( "Object created" ) );
@@ -43,6 +44,7 @@ namespace v862 {
       input >> m_lowerBound;
       input >> m_upperBound;
       input >> m_name;
+      input >> m_threshold;
 
       printConfig( msg::VERBOSE );
 
@@ -60,6 +62,7 @@ namespace v862 {
       output << m_lowerBound;
       output << m_upperBound;
       output << m_name;
+      output << m_threshold;
 
       return true;
    }
@@ -86,6 +89,9 @@ namespace v862 {
 
       m_name = element.attribute( "Name", "" );
 
+      m_threshold = element.attribute( "Threshold", "" ).toInt( &ok );
+      CHECK( ok );
+
       printConfig( msg::VERBOSE );
 
       return true;
@@ -100,6 +106,7 @@ namespace v862 {
       element.setAttribute( "LowerBound", m_lowerBound );
       element.setAttribute( "UpperBound", m_upperBound );
       element.setAttribute( "Name", m_name );
+      element.setAttribute( "Threshold", m_threshold );
 
       return true;
    }
@@ -122,6 +129,11 @@ namespace v862 {
    double ChannelConfig::getUpperBound() const {
 
       return m_upperBound;
+   }
+
+   int ChannelConfig::getThreshold() const {
+
+      return m_threshold;
    }
 
    const QString& ChannelConfig::getName() const {
@@ -159,6 +171,12 @@ namespace v862 {
       return;
    }
 
+   void ChannelConfig::setThreshold( int value ) {
+
+      m_threshold = value;
+      return;
+   }
+
    /**
     * @param level The message level in which the channel configuration should
     *              be printed
@@ -170,9 +188,11 @@ namespace v862 {
                       " - Number of bins : %2\n"
                       " - Lower bound    : %3\n"
                       " - Upper bound    : %4\n"
-                      " - Name           : %5" )
-         .arg( m_channel ).arg( m_nBins )
-         .arg( m_lowerBound ).arg( m_upperBound ).arg( m_name )
+                      " - Name           : %5\n"
+                      " - Threshold      : %6" )
+                  .arg( m_channel ).arg( m_nBins )
+                  .arg( m_lowerBound ).arg( m_upperBound ).arg( m_name )
+                  .arg( m_threshold )
                << msg::endmsg;
 
       return;
@@ -185,6 +205,7 @@ namespace v862 {
       m_lowerBound = 0.;
       m_upperBound = 100.;
       m_name = "";
+      m_threshold = 0;
 
       return;
    }

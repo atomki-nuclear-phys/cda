@@ -14,7 +14,10 @@
 namespace v862 {
 
    Device::Device()
-      : m_vmeAddress( 0 ), m_logger( "v862::Device" ) {
+      : m_vmeAddress( 0 ), m_zeroSuppressionEnabled( false ),
+        m_overflowSuppressionEnabled( false ),
+        m_validSuppressionEnabled( false ),
+        m_logger( "v862::Device" ) {
 
    }
 
@@ -30,6 +33,9 @@ namespace v862 {
       QDataStream input( &dev );
       input.setVersion( QDataStream::Qt_4_0 );
       input >> m_vmeAddress;
+      input >> m_zeroSuppressionEnabled;
+      input >> m_overflowSuppressionEnabled;
+      input >> m_validSuppressionEnabled;
       quint32 number_of_channels;
       input >> number_of_channels;
 
@@ -71,6 +77,9 @@ namespace v862 {
       QDataStream output( &dev );
       output.setVersion( QDataStream::Qt_4_0 );
       output << m_vmeAddress;
+      output << m_zeroSuppressionEnabled;
+      output << m_overflowSuppressionEnabled;
+      output << m_validSuppressionEnabled;
 
       // Count the number of configured channels:
       quint32 number_of_channels = 0;
@@ -104,7 +113,22 @@ namespace v862 {
       bool ok = true;
 
       // Read the VME address:
-      m_vmeAddress = element.attribute( "VMEAddress", "0" ).toInt( &ok );
+      m_vmeAddress = element.attribute( "VMEAddress", "0" ).toInt( &ok, 16 );
+      CHECK( ok );
+
+      // Read the zero suppression flag:
+      m_zeroSuppressionEnabled = element.attribute( "ZeroSuppression",
+                                                    "0" ).toInt( &ok );
+      CHECK( ok );
+
+      // Read the overflow suppression flag:
+      m_overflowSuppressionEnabled = element.attribute( "OverflowSuppression",
+                                                        "0" ).toInt( &ok );
+      CHECK( ok );
+
+      // Read the zero suppression flag:
+      m_validSuppressionEnabled = element.attribute( "ValidSuppression",
+                                                     "0" ).toInt( &ok );
       CHECK( ok );
 
       // Print the device level configuration:
@@ -151,7 +175,13 @@ namespace v862 {
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
       // Set the device level properties:
-      element.setAttribute( "VMEAddress", m_vmeAddress );
+      element.setAttribute( "VMEAddress",
+                            QString( "%1" ).arg( m_vmeAddress, 4, 16,
+                                                 QChar( '0' ) ) );
+      element.setAttribute( "ZeroSuppression", m_zeroSuppressionEnabled );
+      element.setAttribute( "OverflowSuppression",
+                            m_overflowSuppressionEnabled );
+      element.setAttribute( "ValidSuppression", m_validSuppressionEnabled );
 
       // Create a new node for the configuration of each channel:
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
@@ -188,6 +218,9 @@ namespace v862 {
 
       // Set the device level setting(s) to default values:
       m_vmeAddress = 0;
+      m_zeroSuppressionEnabled = false;
+      m_overflowSuppressionEnabled = false;
+      m_validSuppressionEnabled = false;
 
       // Remove all the channels:
       for( auto& ch : m_channels ) {

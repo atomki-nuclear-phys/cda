@@ -25,12 +25,18 @@ endif()
 file( GLOB headers msg/*.h device/*.h simple_daq/*.h stat/*.h common/*.h )
 file( GLOB sources msg/*.cxx device/*.cxx simple_daq/*.cxx stat/*.cxx
   common/*.cxx )
+file( GLOB resources ${CMAKE_CURRENT_SOURCE_DIR}/*.qrc )
+
+# Remember the resource file name(s):
+set_property( GLOBAL APPEND PROPERTY CDA_RESOURCES ${resources} )
 
 # Generate MOC files automatically:
 set( CMAKE_AUTOMOC TRUE )
+# Generate RCC files automatically:
+set( CMAKE_AUTORCC TRUE )
 
 # Build the cdacore library:
-add_library( cdagui STATIC ${headers} ${sources} )
+add_library( cdagui STATIC ${headers} ${sources} ${resources} )
 target_include_directories( cdagui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 target_link_libraries( cdagui PUBLIC ${qt_libraries} cdacore cdadaq )
 set_target_properties( cdagui PROPERTIES

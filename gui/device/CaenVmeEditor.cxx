@@ -97,10 +97,14 @@ namespace dev {
       DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          // Display the device:
-         m_deviceTab->addTab( itr->second.get(), itr->second->deviceName() );
+         m_deviceTab->addTab( itr->second.get(),
+                              QString( "%1 [%2]" )
+                              .arg( itr->second->deviceName() )
+                              .arg( itr->second->getID(), 4, 16,
+                                    QChar( '0' ) ) );
          // Connect its signal(s):
-         connect( itr->second.get(), SIGNAL( idChanged() ),
-                  this, SLOT( idChangedSlot() ) );
+         connect( itr->second.get(), SIGNAL( addressChanged() ),
+                  this, SLOT( addressChangedSlot() ) );
       }
 
       // Make sure the combo box is in the first position:
@@ -127,10 +131,14 @@ namespace dev {
       DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
          // Display the device:
-         m_deviceTab->addTab( itr->second.get(), itr->second->deviceName() );
+         m_deviceTab->addTab( itr->second.get(),
+                              QString( "%1 [%2]" )
+                              .arg( itr->second->deviceName() )
+                              .arg( itr->second->getID(), 4, 16,
+                                    QChar( '0' ) ) );
          // Connect its signal(s):
-         connect( itr->second.get(), SIGNAL( idChanged() ),
-                  this, SLOT( idChangedSlot() ) );
+         connect( itr->second.get(), SIGNAL( addressChanged() ),
+                  this, SLOT( addressChangedSlot() ) );
       }
 
       // Make sure the combo box is in the first position:
@@ -287,7 +295,9 @@ namespace dev {
                this, SLOT( addressChangedSlot() ) );
 
       // Show the device:
-      m_deviceTab->addTab( device.get(), device->deviceName() );
+      m_deviceTab->addTab( device.get(),
+                           QString( "%1 [%2]" ).arg( device->deviceName() )
+                           .arg( device->getID(), 4, 16, QChar( '0' ) ) );
 
       // Store the device with a "random" address first:
       m_devices[ 10000 + m_devices.size() ].swap( device );
@@ -376,6 +386,17 @@ namespace dev {
                                          "Please fix this before "
                                          "continuing." ) );
                break;
+            }
+
+            // Find the tab of this device, and update its title:
+            for( int i = 1; i < m_deviceTab->count(); ++i ) {
+               if( m_deviceTab->widget( i ) == itr->second.get() ) {
+                  m_deviceTab->setTabText( i, QString( "%1 [%2]" )
+                                           .arg( itr->second->deviceName() )
+                                           .arg( itr->second->getID(), 4, 16,
+                                                 QChar( '0' ) ) );
+                  break;
+               }
             }
 
             // If it now has an ID that is not used by others, then let's

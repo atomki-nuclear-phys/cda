@@ -70,6 +70,12 @@ namespace v862 {
 
       /// The VME address of the device
       unsigned int m_vmeAddress;
+      /// Flag enabling/disabling zero suppression in the readout
+      bool m_zeroSuppressionEnabled;
+      /// Flag enabling/disabling overflow suppression in the readout
+      bool m_overflowSuppressionEnabled;
+      /// Flag enabling/disabling valid data suppression in the readout
+      bool m_validSuppressionEnabled;
 
       /// Configuration of the channels of the device
       std::unique_ptr< ChannelConfig > m_channels[ NUMBER_OF_CHANNELS ];

@@ -5,6 +5,7 @@
 
 // Local include(s):
 #include "V862Factory.h"
+#include "Gui.h"
 #include "Readout.h"
 
 namespace v862 {
@@ -26,6 +27,10 @@ namespace v862 {
       if( ti == typeid( dev::ICaenVmeReadout ) ) {
 
          return static_cast< dev::ICaenVmeReadout* >( new Readout() );
+
+      } else if( ti == typeid( dev::CaenVmeGui ) ) {
+
+         return static_cast< dev::CaenVmeGui* >( new Gui() );
 
       }
 

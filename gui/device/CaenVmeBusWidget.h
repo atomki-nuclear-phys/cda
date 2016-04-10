@@ -83,6 +83,8 @@ namespace dev {
       void boardNumberModifiedSlot( int value );
 
    private:
+      /// Image of a CAEN VME crate
+      std::unique_ptr< QLabel > m_image;
       /// Label describing the widget
       std::unique_ptr< QLabel > m_label;
 
