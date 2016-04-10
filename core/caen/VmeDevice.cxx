@@ -403,10 +403,13 @@ namespace caen {
 
 #ifdef HAVE_CAEN_QTP_LIBS
       // Make sure that the size of the threshold vector is correct for the
-      // device type:
+      // device type. But not on Windows. Since the needed symbol can't be used
+      // correctly there...
+#ifndef WIN32
       const size_t requiredSize =
             CVT_QTP_NUM_CHANNELS[ m_data->data()->m_type ];
       CHECK( thresholds.size() == requiredSize );
+#endif // WIN32
       // Call the setter function:
       CHECK( cvt_V792_set_zero_suppression( m_data->data(),
                                             enable, stepThreshold,
