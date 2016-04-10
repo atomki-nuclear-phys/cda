@@ -70,7 +70,7 @@ int main( int argc, char* argv[] ) {
    cmd.add( config );
    TCLAP::MultiArg< std::string >
            clients( "e", "clients", "Addresses of event reader clients",
-                    true, "address list" );
+                    false, "address list" );
    cmd.add( clients );
    TCLAP::MultiArg< std::string >
            statistics( "s", "statistics",

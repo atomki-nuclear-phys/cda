@@ -16,6 +16,7 @@ extern "C" {
 // CDA include(s):
 #include "../msg/Logger.h"
 #include "../common/errorcheck.h"
+#include "../common/Sleep.h"
 
 // Local include(s):
 #include "VmeDevice.h"
@@ -529,17 +530,25 @@ namespace caen {
 
 #ifdef HAVE_CAEN_QTP_LIBS
       // Read data from the device into the allocated buffer:
-      m_data->bufferUsage() = VmeDevicePrivateData::BUFFER_SIZE;
-      CHECK( cvt_V792_read_MEB( m_data->data(), m_data->buffer(),
-                                &( m_data->bufferUsage() ) ) );
+      m_data->bufferUsage() = 0;
+      while( ! m_data->bufferUsage() ) {
+	m_data->bufferUsage() = VmeDevicePrivateData::BUFFER_SIZE;
+	CHECK( cvt_V792_read_MEB( m_data->data(), m_data->buffer(),
+				  &( m_data->bufferUsage() ) ) );
+	if( ! m_data->bufferUsage() ) {
+	  common::SleepMin();
+	}
+      }
       // The current event object, used in the payload decoding:
       DataEvent currentEvent;
       // Loop over the buffer, translating its contents into DataEvent
       // objects:
       uint32_t* itr = reinterpret_cast< uint32_t* >( m_data->buffer() );
-      while( ( m_data->bufferUsage() -= 4 ) >= 0 ) {
+      while( m_data->bufferUsage() >= 4 ) {
          // The current data word:
          uint32_t data = *( itr++ );
+	 // Update the buffer usage:
+	 m_data->bufferUsage() -= 4;
          // Decode the data word:
          switch( data & CVT_QTP_DATA_TYPE_MSK ) {
          case CVT_QTP_HEADER:

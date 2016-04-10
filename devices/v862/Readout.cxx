@@ -26,6 +26,11 @@ namespace v862 {
       // Clear all data from the device:
       CHECK( m_vmeDevice.dataClear() );
 
+      CHECK( m_vmeDevice.setZeroSuppression( false, false, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ) );
+      CHECK( m_vmeDevice.setAcquisitionMode( true, false, false, false, false, true, false ) );
+      CHECK( m_vmeDevice.setReadoutMode( true, true, true ) );
+
       // Return gracefully:
       return true;
    }
@@ -83,7 +88,12 @@ namespace v862 {
                                   ( data.underThreshold ? 0x1000000 : 0 ) |
                                   ( data.overflow ? 0x2000000 : 0 ) );
          fragment->addDataWord( dword );
+	 m_logger << msg::INFO << "Read ch = " << data.channel << " data = " << data.data
+		  << msg::endmsg;
       }
+
+      // Remove this event from the cache:
+      m_events.erase( m_events.begin() );
 
       // Return the event fragment:
       return fragment;
