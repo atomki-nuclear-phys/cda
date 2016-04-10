@@ -44,7 +44,7 @@ namespace v862 {
                                         "Individual Gate QDC" ),
                                     m_scrollWidget.get() ) );
       m_topLabel->setAlignment( Qt::AlignCenter );
-      m_topLabel->setGeometry( QRect( 120, 20, WIDGET_WIDTH - 130, 35 ) );
+      m_topLabel->setGeometry( QRect( 120, 20, WIDGET_WIDTH - 150, 35 ) );
       QFont titleFont( m_topLabel->font() );
       titleFont.setPointSize( titleFont.pointSize() + 2 );
       titleFont.setBold( true );
