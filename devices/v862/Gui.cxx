@@ -57,7 +57,7 @@ namespace v862 {
       m_deviceSettingsBox.reset( new QGroupBox( tr( "Device properties" ),
                                                 m_scrollWidget.get() ) );
       m_deviceSettingsBox->setGeometry( QRect( 130, 80,
-                                               WIDGET_WIDTH - 140, 140 ) );
+                                               WIDGET_WIDTH - 150, 150 ) );
 
       m_vmeAddressLabel.reset( new QLabel( tr( "VME Address (hex)" ),
                                            m_deviceSettingsBox.get() ) );
@@ -93,7 +93,7 @@ namespace v862 {
       //
       m_channelSettingsBox.reset( new QGroupBox( tr( "Input channels" ),
                                                  m_scrollWidget.get() ) );
-      m_channelSettingsBox->setGeometry( QRect( 10, 350, WIDGET_WIDTH - 20,
+      m_channelSettingsBox->setGeometry( QRect( 10, 350, WIDGET_WIDTH - 30,
                                                 1650 ) );
       m_channelNameLabel.reset( new QLabel( tr( "Name" ),
                                             m_channelSettingsBox.get() ) );

@@ -45,7 +45,7 @@ namespace v862 {
       //
       m_nameEdit.reset( new QLineEdit( this ) );
       m_nameEdit->setEnabled( false );
-      m_nameEdit->setGeometry( QRect( 115, 2, 75, 21 ) );
+      m_nameEdit->setGeometry( QRect( 115, 0, 75, 25 ) );
       connect( m_nameEdit.get(), SIGNAL( textChanged( const QString& ) ),
                this, SLOT( nameChangedSlot( const QString& ) ) );
 
