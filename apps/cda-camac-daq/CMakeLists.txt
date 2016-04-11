@@ -4,4 +4,5 @@
 #
 
 # Use the helper macro to set up the build:
-add_cda_gui_app( cda-camac-daq )
+add_cda_gui_app( cda-camac-daq
+   ICON ${CMAKE_SOURCE_DIR}/images/cda-daq.icns )

@@ -108,13 +108,22 @@ macro( add_cda_gui_app name )
   # Generate resource files automatically:
   set( CMAKE_AUTORCC TRUE )
 
+  # Decide what kind of an application to build:
+  set( OS_BUNDLE )
+  if( APPLE )
+     set( OS_BUNDLE MACOSX_BUNDLE )
+  elseif( WIN32 )
+     set( OS_BUNDLE WIN32 )
+  endif()
+  
   # Build the executable:
-  add_executable( ${name} WIN32 MACOSX_BUNDLE ${headers} ${sources}
+  add_executable( ${name} ${OS_BUNDLE} ${headers} ${sources}
     ${resources} ${ARG_ICON} )
   target_link_libraries( ${name} ${qt_libraries} cdacore cdadaq cdagui
     ${plugins} )
   unset( plugins )
   unset( resources )
+  unset( OS_BUNDLE )
 
   # Set up the icon for the application, if one was specified:
   if( ARG_ICON AND APPLE )

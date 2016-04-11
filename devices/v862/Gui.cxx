@@ -70,21 +70,21 @@ namespace v862 {
 
       m_zeroSuppressionEdit.reset( new QCheckBox( "Zero suppression enabled",
                                                   m_deviceSettingsBox.get() ) );
-      m_zeroSuppressionEdit->setGeometry( QRect( 10, 60, 200, 25 ) );
+      m_zeroSuppressionEdit->setGeometry( QRect( 10, 60, 300, 25 ) );
       connect( m_zeroSuppressionEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( zeroSuppressionSlot( bool ) ) );
 
       m_overflowSuppressionEdit.reset(
                new QCheckBox( "Overflow suppression enabled",
                               m_deviceSettingsBox.get() ) );
-      m_overflowSuppressionEdit->setGeometry( QRect( 10, 85, 200, 25 ) );
+      m_overflowSuppressionEdit->setGeometry( QRect( 10, 85, 300, 25 ) );
       connect( m_overflowSuppressionEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( overflowSuppressionSlot( bool ) ) );
 
       m_validSuppressionEdit.reset(
                new QCheckBox( "Valid suppression enabled",
                               m_deviceSettingsBox.get() ) );
-      m_validSuppressionEdit->setGeometry( QRect( 10, 110, 200, 25 ) );
+      m_validSuppressionEdit->setGeometry( QRect( 10, 110, 300, 25 ) );
       connect( m_validSuppressionEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( validSuppressionSlot( bool ) ) );
 
