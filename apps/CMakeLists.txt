@@ -152,6 +152,7 @@ add_subdirectory( cda-root-writer )
 
 # Build the GUI application(s):
 add_subdirectory( cda-caen-daq )
+add_subdirectory( cda-caen-vme-daq )
 add_subdirectory( cda-camac-daq )
 add_subdirectory( cda-config-editor )
 add_subdirectory( cda-msgserver )
