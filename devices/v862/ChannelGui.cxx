@@ -100,7 +100,7 @@ namespace v862 {
       m_thresholdEdit.reset( new QSpinBox( this ) );
       m_thresholdEdit->setEnabled( false );
       m_thresholdEdit->setGeometry( QRect( 195, 25, 75, 25 ) );
-      m_thresholdEdit->setRange( 0, 1024 );
+      m_thresholdEdit->setRange( 0, 255 );
       m_thresholdEdit->setValue( 0 );
       connect( m_thresholdEdit.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( thresholdChangedSlot( int ) ) );

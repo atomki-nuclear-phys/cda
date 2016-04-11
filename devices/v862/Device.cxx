@@ -17,6 +17,7 @@ namespace v862 {
       : m_vmeAddress( 0 ), m_zeroSuppressionEnabled( false ),
         m_overflowSuppressionEnabled( false ),
         m_validSuppressionEnabled( false ),
+        m_channels(),
         m_logger( "v862::Device" ) {
 
    }
@@ -229,6 +230,40 @@ namespace v862 {
 
       // Return gracefully:
       return;
+   }
+
+   Device::ChannelData::ChannelData( const caen::VmeDevice::DataWord& dw ) {
+
+      // Construct the internal word:
+      m_data = ( ( dw.data & 0xffff ) |
+                 ( ( dw.channel << 16 ) & 0xff0000 ) |
+                 ( dw.underThreshold ? 0x1000000 : 0 ) |
+                 ( dw.overflow ? 0x2000000 : 0 ) );
+   }
+
+   Device::ChannelData::ChannelData( ev::Fragment::Payload_t::value_type data )
+      : m_data( data ) {
+
+   }
+
+   int Device::ChannelData::channel() const {
+
+      return ( ( m_data >> 16 ) & 0xff );
+   }
+
+   int Device::ChannelData::data() const {
+
+      return ( m_data & 0xffff );
+   }
+
+   bool Device::ChannelData::underThreshold() const {
+
+      return ( m_data & 0x1000000 );
+   }
+
+   bool Device::ChannelData::overflow() const {
+
+      return ( m_data & 0x2000000 );
    }
 
 } // namespace v862

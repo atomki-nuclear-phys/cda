@@ -26,9 +26,23 @@ namespace v862 {
       // Clear all data from the device:
       CHECK( m_vmeDevice.dataClear() );
 
-      CHECK( m_vmeDevice.setZeroSuppression( false, false, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ) );
-      CHECK( m_vmeDevice.setAcquisitionMode( true, false, false, false, false, true, false ) );
+      // Set up the zero suppression for the device:
+      std::vector< uint16_t > thresholds( NUMBER_OF_CHANNELS, 0xff );
+      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
+         if( m_channels[ i ] ) {
+            thresholds[ i ] = m_channels[ i ]->getThreshold();
+         }
+      }
+      CHECK( m_vmeDevice.setZeroSuppression( m_zeroSuppressionEnabled, false,
+                                             thresholds ) );
+
+      // Set up the acquisition mode:
+      CHECK( m_vmeDevice.setAcquisitionMode( false, m_zeroSuppressionEnabled,
+                                             m_overflowSuppressionEnabled,
+                                             m_validSuppressionEnabled, false,
+                                             true, true ) );
+
+      // Set up the readout mode:
       CHECK( m_vmeDevice.setReadoutMode( true, true, true ) );
 
       // Return gracefully:
@@ -82,14 +96,15 @@ namespace v862 {
       // Translate the first event in the buffer into an event fragment:
       fragment->setModuleID( m_vmeAddress );
       for( const auto& data : m_events.front().data ) {
+         // Skip channels that we didn't set up for reading. To save some
+         // bandwidth. (If there's a big enough signal on the channel, it will
+         // be read out, even if we didn't ask for it.)
+         if( ! m_channels[ data.channel ] ) {
+            continue;
+         }
          // Construct a 32-bit word with all the data from the channel:
-         const uint32_t dword = ( ( data.data & 0xffff ) |
-                                  ( ( data.channel << 16 ) & 0xff0000 ) |
-                                  ( data.underThreshold ? 0x1000000 : 0 ) |
-                                  ( data.overflow ? 0x2000000 : 0 ) );
-         fragment->addDataWord( dword );
-	 m_logger << msg::INFO << "Read ch = " << data.channel << " data = " << data.data
-		  << msg::endmsg;
+         ChannelData d( data );
+         fragment->addDataWord( d );
       }
 
       // Remove this event from the cache:

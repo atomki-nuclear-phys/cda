@@ -5,6 +5,7 @@
 
 // System include(s):
 #include <memory>
+#include <array>
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
@@ -12,6 +13,8 @@
 // CDA include(s):
 #include "device/IDevice.h"
 #include "msg/Logger.h"
+#include "event/Fragment.h"
+#include "caen/VmeDevice.h"
 
 // Local include(s):
 #include "ChannelConfig.h"
@@ -68,6 +71,31 @@ namespace v862 {
       /// Number of channels in the device
       static const size_t NUMBER_OF_CHANNELS = 32;
 
+      /// Structure describing the data from a single channel
+      class ChannelData {
+      public:
+         /// Constructor from a caen::VmeDevice::DataWord object
+         ChannelData( const caen::VmeDevice::DataWord& dw );
+         /// Constructor from one word in an event fragment
+         ChannelData( ev::Fragment::Payload_t::value_type data );
+         /// Automatic conversion to a word in an event fragment
+         operator ev::Fragment::Payload_t::value_type() const {
+            return m_data;
+         }
+
+         /// Get the channel number
+         int channel() const;
+         /// Get the qdc data
+         int data() const;
+         /// Get the under threshold bit
+         bool underThreshold() const;
+         /// Get the overflow bit
+         bool overflow() const;
+
+      private:
+         uint32_t m_data; ///< Encoded data word
+      }; // class ChannelData
+
       /// The VME address of the device
       unsigned int m_vmeAddress;
       /// Flag enabling/disabling zero suppression in the readout
@@ -78,7 +106,8 @@ namespace v862 {
       bool m_validSuppressionEnabled;
 
       /// Configuration of the channels of the device
-      std::unique_ptr< ChannelConfig > m_channels[ NUMBER_OF_CHANNELS ];
+      std::array< std::unique_ptr< ChannelConfig >,
+                  NUMBER_OF_CHANNELS > m_channels;
 
       /// A message logger object
       mutable msg::Logger m_logger;

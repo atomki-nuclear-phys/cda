@@ -603,7 +603,7 @@ namespace caen {
       }
 #else
       // Fill a small random number of events into the output:
-      const int nevents = rand()  / ( RAND_MAX / 10 );
+      const int nevents = rand()  / ( RAND_MAX / 10 ) + 1;
       for( int i = 0; i < nevents; ++i ) {
          // Set the header and footer of the event:
          DataEvent event;
@@ -623,6 +623,8 @@ namespace caen {
          }
          events.push_back( event );
       }
+      // Wait a moment before returning:
+      common::Sleep( 100 );
 #endif // HAVE_CAEN_QTP_LIBS
 
       // Return gracefully:

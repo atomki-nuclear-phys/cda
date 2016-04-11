@@ -7,6 +7,7 @@
 #include "V862Factory.h"
 #include "Gui.h"
 #include "Readout.h"
+#include "RootDisk.h"
 
 namespace v862 {
 
@@ -31,6 +32,10 @@ namespace v862 {
       } else if( ti == typeid( dev::CaenVmeGui ) ) {
 
          return static_cast< dev::CaenVmeGui* >( new Gui() );
+
+      } else if( ti == typeid( dev::IRootDisk ) ) {
+
+         return static_cast< dev::IRootDisk* >( new RootDisk() );
 
       }
 

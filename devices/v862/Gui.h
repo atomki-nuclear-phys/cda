@@ -5,6 +5,7 @@
 
 // System include(s):
 #include <memory>
+#include <array>
 
 // Qt include(s):
 #include <QWidget>
@@ -109,7 +110,8 @@ namespace v862 {
       /// Label for the channel histogram upper bounds
       std::unique_ptr< QLabel > m_channelUpperBoundLabel;
       /// The graphical representation of the input channels
-      std::unique_ptr< ChannelGui > m_gchannels[ NUMBER_OF_CHANNELS ];
+      std::array< std::unique_ptr< ChannelGui >,
+                  NUMBER_OF_CHANNELS > m_gchannels;
 
       /// A message logging object
       mutable msg::Logger m_logger;
