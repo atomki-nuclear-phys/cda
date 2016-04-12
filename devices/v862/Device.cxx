@@ -232,7 +232,8 @@ namespace v862 {
       return;
    }
 
-   Device::ChannelData::ChannelData( const caen::VmeDevice::DataWord& dw ) {
+   Device::ChannelData::ChannelData( const caen::VmeDevice::DataWord& dw )
+      : m_data( 0 ) {
 
       // Construct the internal word:
       m_data = ( ( dw.data & 0xffff ) |

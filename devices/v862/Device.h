@@ -73,6 +73,7 @@ namespace v862 {
 
       /// Structure describing the data from a single channel
       class ChannelData {
+
       public:
          /// Constructor from a caen::VmeDevice::DataWord object
          ChannelData( const caen::VmeDevice::DataWord& dw );
@@ -94,6 +95,7 @@ namespace v862 {
 
       private:
          uint32_t m_data; ///< Encoded data word
+
       }; // class ChannelData
 
       /// The VME address of the device

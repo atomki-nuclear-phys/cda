@@ -10,4 +10,11 @@ namespace dev {
 
    }
 
+   QString QtHist::windowTitle() const {
+
+      return ( tr( "%1 with ID %2" )
+               .arg( this->deviceName() )
+               .arg( this->getID() ) );
+   }
+
 } // namespace dev

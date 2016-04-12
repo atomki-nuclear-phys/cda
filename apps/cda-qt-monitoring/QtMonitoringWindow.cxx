@@ -132,9 +132,7 @@ void QtMonitoringWindow::readConfigSlot() {
       QMdiSubWindow* window = m_view->addSubWindow( itr->second.get() );
       window->setAttribute( Qt::WA_DeleteOnClose, false );
       window->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-      window->setWindowTitle( tr( "%1 with ID %2" )
-                              .arg( itr->second->deviceName() )
-                              .arg( itr->second->getID() ) );
+      window->setWindowTitle( itr->second->windowTitle() );
       connect( window, SIGNAL( aboutToActivate() ),
                itr->second.get(), SLOT( update() ) );
       itr->second->show();

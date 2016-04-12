@@ -8,6 +8,7 @@
 #include "Gui.h"
 #include "Readout.h"
 #include "RootDisk.h"
+#include "QtHist.h"
 
 namespace v862 {
 
@@ -36,6 +37,10 @@ namespace v862 {
       } else if( ti == typeid( dev::IRootDisk ) ) {
 
          return static_cast< dev::IRootDisk* >( new RootDisk() );
+
+      } else if( ti == typeid( dev::QtHist ) ) {
+
+         return static_cast< dev::QtHist* >( new QtHist() );
 
       }
 

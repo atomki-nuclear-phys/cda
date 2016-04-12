@@ -617,7 +617,8 @@ namespace caen {
             event.data.push_back( DataWord() );
             event.data.back().geo = 0;
             event.data.back().channel = j;
-            event.data.back().data = j * 100;
+            event.data.back().data = ( j * 100 + 100 +
+                                       ( rand() / ( RAND_MAX / 20 ) ) );
             event.data.back().underThreshold = 0;
             event.data.back().overflow = 0;
          }

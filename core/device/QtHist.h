@@ -53,6 +53,9 @@ namespace dev {
       /// Function displaying a newly received event
       virtual bool displayEvent( const ev::Fragment& fragment ) = 0;
 
+      /// Title to show for the window displaying this object
+      virtual QString windowTitle() const;
+
    }; // class QtHist
 
 } // namespace dev
