@@ -88,6 +88,9 @@ set( CMAKE_INSTALL_RPATH_USE_LINK_PATH ON )
 # Set the CDASYS compiler definition:
 add_definitions( -DCDASYS=${CMAKE_BINARY_DIR} )
 
+# Turn on using folders in certain IDEs (Xcode,VS):
+set_property( GLOBAL PROPERTY USE_FOLDERS ON )
+
 # Build the main libraries of the project:
 add_subdirectory( core )
 add_subdirectory( daq )

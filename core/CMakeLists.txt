@@ -31,12 +31,14 @@ find_package( CAENDigitizer )
 find_package( CAENqtpSDK )
 
 # Collect the source files of the library:
-file( GLOB headers fifo/*.h msg/*.h event/*.h device/*.h device/*.icc
-  camac/*.h caen/*.h cernlib/*.h root/*.h root/*.icc
-  common/*.h i18n/*.h )
-file( GLOB sources fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
-  camac/*.cxx caen/*.cxx cernlib/*.cxx root/*.cxx
-  common/*.cxx i18n/*.cxx )
+file( GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+   fifo/*.h msg/*.h event/*.h device/*.h device/*.icc
+   camac/*.h caen/*.h cernlib/*.h root/*.h root/*.icc
+   common/*.h i18n/*.h )
+file( GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+   fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
+   camac/*.cxx caen/*.cxx cernlib/*.cxx root/*.cxx
+   common/*.cxx i18n/*.cxx )
 
 # Generate MOC files automatically:
 set( CMAKE_AUTOMOC TRUE )
@@ -48,6 +50,19 @@ target_link_libraries( cdacore PUBLIC ${qt_libraries} )
 set_target_properties( cdacore PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )
 target_compile_definitions( cdacore PRIVATE CDACORE_LIBRARY )
+set_property( TARGET cdacore PROPERTY FOLDER core )
+
+# Group its source files:
+foreach( f ${headers} ${sources} )
+   # Get the file's path:
+   get_filename_component( _path ${f} PATH )
+   # Replace the forward slashes with double backward slashes:
+   string( REPLACE "/" "\\\\" _group "${_path}" )
+   # Put the file into the right group:
+   source_group( ${_group} FILES ${f} )
+endforeach()
+unset( _path )
+unset( _group )
 
 # Use ROOT if it was found:
 if( ROOT_FOUND AND CDA_USE_ROOT )

@@ -22,9 +22,11 @@ else()
 endif()
 
 # Collect the source files of the library:
-file( GLOB headers msg/*.h device/*.h simple_daq/*.h stat/*.h common/*.h )
-file( GLOB sources msg/*.cxx device/*.cxx simple_daq/*.cxx stat/*.cxx
-  common/*.cxx )
+file( GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+   msg/*.h device/*.h simple_daq/*.h stat/*.h common/*.h )
+file( GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+   msg/*.cxx device/*.cxx simple_daq/*.cxx stat/*.cxx
+   common/*.cxx )
 file( GLOB resources ${CMAKE_CURRENT_SOURCE_DIR}/*.qrc )
 
 # Remember the resource file name(s):
@@ -42,3 +44,16 @@ target_link_libraries( cdagui PUBLIC ${qt_libraries} cdacore cdadaq )
 set_target_properties( cdagui PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )
 target_compile_definitions( cdagui PRIVATE CDAGUI_LIBRARY )
+set_property( TARGET cdagui PROPERTY FOLDER gui )
+
+# Group its source files:
+foreach( f ${headers} ${sources} )
+   # Get the file's path:
+   get_filename_component( _path ${f} PATH )
+   # Replace the forward slashes with double backward slashes:
+   string( REPLACE "/" "\\\\" _group "${_path}" )
+   # Put the file into the right group:
+   source_group( ${_group} FILES ${f} )
+endforeach()
+unset( _path )
+unset( _group )

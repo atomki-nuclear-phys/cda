@@ -49,6 +49,10 @@ macro( add_cda_plugin name )
   target_include_directories( ${name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
   target_link_libraries( ${name} PRIVATE ${qt_libraries} cdacore cdadaq )
   target_compile_definitions( ${name} PRIVATE QT_STATICPLUGIN )
+  set_property( TARGET ${name} PROPERTY FOLDER "devices/${name}" )
+
+  # Group its source files:
+  source_group( "" FILES ${headers} ${sources} )
 
   # Remember the name and properties of the plugin:
   set_property( GLOBAL APPEND PROPERTY CDA_PLUGINS ${name} )

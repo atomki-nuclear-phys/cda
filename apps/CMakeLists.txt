@@ -52,6 +52,10 @@ macro( add_cda_console_app name )
   target_link_libraries( ${name} ${qt_libraries} cdacore cdadaq ${plugins} )
   unset( plugins )
   unset( resources )
+  set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
+
+  # Group its source files:
+  source_group( "" FILES ${headers} ${sources} )
 
   # Install the executable:
   install( TARGETS ${name} DESTINATION bin )
@@ -124,6 +128,10 @@ macro( add_cda_gui_app name )
   unset( plugins )
   unset( resources )
   unset( OS_BUNDLE )
+  set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
+
+  # Group its source files:
+  source_group( "" FILES ${headers} ${sources} )
 
   # Set up the icon for the application, if one was specified:
   if( ARG_ICON AND APPLE )

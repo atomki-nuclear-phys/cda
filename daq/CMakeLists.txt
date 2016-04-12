@@ -23,8 +23,10 @@ else()
 endif()
 
 # Collect the source files of the library:
-file( GLOB headers common/*.h stat/*.h config/*.h moni/*.h )
-file( GLOB sources common/*.cxx stat/*.cxx config/*.cxx moni/*.cxx )
+file( GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+   common/*.h stat/*.h config/*.h moni/*.h )
+file( GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+   common/*.cxx stat/*.cxx config/*.cxx moni/*.cxx )
 
 # Generate MOC files automatically:
 set( CMAKE_AUTOMOC TRUE )
@@ -36,3 +38,16 @@ target_link_libraries( cdadaq PUBLIC ${qt_libraries} cdacore )
 set_target_properties( cdadaq PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )
 target_compile_definitions( cdadaq PRIVATE CDADAQ_LIBRARY )
+set_property( TARGET cdadaq PROPERTY FOLDER daq )
+
+# Group its source files:
+foreach( f ${headers} ${sources} )
+   # Get the file's path:
+   get_filename_component( _path ${f} PATH )
+   # Replace the forward slashes with double backward slashes:
+   string( REPLACE "/" "\\\\" _group "${_path}" )
+   # Put the file into the right group:
+   source_group( ${_group} FILES ${f} )
+endforeach()
+unset( _path )
+unset( _group )

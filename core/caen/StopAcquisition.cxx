@@ -4,4 +4,4 @@
 #include "StopAcquisition.h"
 
 // Initialize the variable:
-extern bool g_stopAcquisition = false;
+bool g_stopAcquisition = false;
