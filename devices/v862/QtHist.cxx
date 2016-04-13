@@ -13,15 +13,14 @@ namespace v862 {
         m_logger( "v862::QtHist" ) {
 
       // Declare a minimum size for this widget:
-      setMinimumSize( 200, 200 );
+      setMinimumSize( 250, 250 );
 
       // Create the "layout" for the tab widget:
       m_channelLayout.reset( new QStackedLayout( this ) );
 
       // Set up the tabs for the channels:
       m_channelTab.reset( new QTabWidget() );
-      m_channelTab->setMinimumSize( 200, 200 );
-      m_channelTab->setMaximumSize( 20000, 20000 );
+      m_channelTab->setMinimumSize( 250, 250 );
       m_channelTab->setSizePolicy( QSizePolicy::Expanding,
                                    QSizePolicy::Expanding );
       m_channelTab->setUsesScrollButtons( true );

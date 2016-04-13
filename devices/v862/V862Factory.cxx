@@ -5,6 +5,7 @@
 
 // Local include(s):
 #include "V862Factory.h"
+#include "CernlibHist.h"
 #include "Gui.h"
 #include "Readout.h"
 #include "RootDisk.h"
@@ -41,6 +42,10 @@ namespace v862 {
       } else if( ti == typeid( dev::QtHist ) ) {
 
          return static_cast< dev::QtHist* >( new QtHist() );
+
+      } else if( ti == typeid( dev::ICernlibHist ) ) {
+
+         return static_cast< dev::ICernlibHist* >( new CernlibHist() );
 
       }
 
