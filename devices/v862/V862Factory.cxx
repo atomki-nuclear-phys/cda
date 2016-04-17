@@ -6,6 +6,7 @@
 // Local include(s):
 #include "V862Factory.h"
 #include "CernlibHist.h"
+#include "CernlibDisk.h"
 #include "Gui.h"
 #include "Readout.h"
 #include "RootDisk.h"
@@ -47,12 +48,17 @@ namespace v862 {
 
          return static_cast< dev::ICernlibHist* >( new CernlibHist() );
 
+      } else if( ti == typeid( dev::ICernlibDisk ) ) {
+
+         return static_cast< dev::ICernlibDisk* >( new CernlibDisk() );
+
       }
+
 
       return 0;
    }
 
-} // namespace t2228a
+} // namespace v862
 
 // Declare this plugin to Qt:
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
