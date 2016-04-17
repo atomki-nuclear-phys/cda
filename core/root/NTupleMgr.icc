@@ -5,9 +5,11 @@
 
 #ifdef HAVE_ROOT_LIBS
 // System include(s):
+#ifdef HAVE_CXXABI_H
 extern "C" {
 #   include <cxxabi.h>
 }
+#endif // HAVE_CXX_ABI
 #include <cstring>
 #include <cstdlib>
 
@@ -58,8 +60,12 @@ namespace root {
          // This is an object:
          REPORT_VERBOSE( tr( "The supplied variable is an object" ) );
 
-         int status;
+         int status = 0;
+#ifdef HAVE_CXXABI_H
          char* real_type_name = abi::__cxa_demangle( type_name, 0, 0, &status );
+#else
+         char* real_type_name = _strdup( type_name );
+#endif // HAVE_CXXABI_H
          if( status ) {
             REPORT_ERROR( tr( "Couldn't de-mangle type name: %1" )
                           .arg( type_name ) );

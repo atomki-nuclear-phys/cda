@@ -88,6 +88,14 @@ if( ROOT_FOUND AND CDA_USE_ROOT )
   set( CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} PARENT_SCOPE )
 endif()
 
+# Check if the cxxabi.h header file is available. (It's used by the
+# ROOT interface code.)
+include( CheckIncludeFiles )
+check_include_files( cxxabi.h HAVE_CXXABI_H )
+if( HAVE_CXX_ABI )
+   target_compile_definitions( cdacore PUBLIC HAVE_CXXABI_H )
+endif()  
+
 # Use CERNLIB if it was found:
 if( CERNLIB_FOUND AND CDA_USE_CERNLIB )
   target_compile_definitions( cdacore PRIVATE HAVE_CERNLIB )
