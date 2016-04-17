@@ -8,7 +8,7 @@ message( STATUS "Configuring the build of cdagui" )
 
 # Find Qt:
 find_package( Qt5 QUIET COMPONENTS Core Network Gui Widgets )
-if( Qt5_FOUND )
+if( Qt5_FOUND AND NOT CDA_USE_QT4 )
   message( STATUS "Using Qt5 for the build" )
   set( qt_libraries Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets )
 else()

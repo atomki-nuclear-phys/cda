@@ -6,43 +6,35 @@
     <message>
         <location filename="../core/common/Address.cxx" line="39"/>
         <source>Constructing address from string: &quot;%1&quot;</source>
-        <translatorcomment>Using &quot;ö&quot; instead of &quot;ő&quot; as the encoding doesn&apos;t like the latter.</translatorcomment>
-        <translation>Cím létrehozása a(z) &quot;%1&quot; névböl</translation>
+        <translation>Cím létrehozása a &quot;%1&quot; string-ből</translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="47"/>
         <source>Couldn&apos;t decode address: &quot;%1&quot;
 Setting to 127.0.0.1:50000</source>
-        <translation>Nem lehetett értelmezni a(z) &quot;%1&quot; címet
-Beállítva 127.0.0.1:50000 címre</translation>
+        <translation>&quot;%1&quot; dekódolása sikertelen
+127.0.0.1:50000 lett beállítva</translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="57"/>
         <source>Decoded host name: %1, port: %2</source>
-        <translation>A dekódolt hoszt név: %1, port: %2</translation>
+        <translation>Dekódolt név: %1, port: %2</translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="68"/>
         <source>Couldn&apos;t decode port: %1
 Setting it to 50000</source>
-        <translation>Nem lehetett a(z) &quot;%1&quot; portot értelmezni
-Beállítva 50000-re</translation>
-    </message>
-</context>
-<context>
-    <name>CHECK</name>
-    <message>
-        <location filename="../core/common/errorcheck.h" line="33"/>
-        <source>Failed executing &quot;%1&quot;</source>
-        <translation>Hiba a következö futtatásakor: &quot;%1&quot;</translation>
+        <translation>Port dekódolása sikertelen ebből: &quot;%1&quot;
+50000 lett beállítva</translation>
     </message>
 </context>
 <context>
     <name>Digitizer_CHECK</name>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="388"/>
+        <location filename="../core/caen/Digitizer.cxx" line="391"/>
+        <location filename="../core/caen/Digitizer.cxx" line="408"/>
         <source>Failed executing &quot;%1&quot;, Return value: %2</source>
-        <translation>Hiba a következö futtatásakor: &quot;%1&quot;, visszatérési érték: %2</translation>
+        <translation>&quot;%1&quot; futtatása sikertelen, visszatérési érték: %2</translation>
     </message>
 </context>
 <context>
@@ -53,45 +45,54 @@ Beállítva 50000-re</translation>
         <translation>%1 létezik</translation>
     </message>
     <message>
-        <location filename="../core/fifo/Fifo.cxx" line="41"/>
+        <location filename="../core/fifo/Fifo.cxx" line="40"/>
         <source>%1 does not exist</source>
         <translation>%1 nem létezik</translation>
     </message>
 </context>
 <context>
+    <name>VmeBus_CHECK</name>
+    <message>
+        <location filename="../core/caen/VmeBus.cxx" line="72"/>
+        <location filename="../core/caen/VmeBus.cxx" line="89"/>
+        <source>Failed executing &quot;%1&quot;, Return value: %2</source>
+        <translation>&quot;%1&quot; futtatása sikertelen, visszatérési érték: %2</translation>
+    </message>
+</context>
+<context>
     <name>caen::Digitizer</name>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="571"/>
+        <location filename="../core/caen/Digitizer.cxx" line="602"/>
         <source>Opening connection type %1 on link number %2,  CONET node %3, VME address %4</source>
-        <translation>Kapcsolat megnyitása %1 típussal a(z) %2 link számon, %3 CONET egységgel, %4 VME címmel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="579"/>
+        <location filename="../core/caen/Digitizer.cxx" line="610"/>
         <source>Opened connection to digitizer</source>
-        <translation>A kapcsolat a digitalizálóval megnyitva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="597"/>
+        <location filename="../core/caen/Digitizer.cxx" line="628"/>
         <source>No need to close the device, it&apos;s not open</source>
-        <translation>Nem szükséges lezárni az eszközt, nincsen megnyitva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="612"/>
+        <location filename="../core/caen/Digitizer.cxx" line="643"/>
         <source>Closed connection to digitizer</source>
-        <translation>A kapcsolat a digitalizálóval lezárva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="624"/>
+        <location filename="../core/caen/Digitizer.cxx" line="655"/>
         <source>writeRegister( address: %1, data: %2 )</source>
-        <translation>writeRegister( cím: %1, adat: %2 )</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="638"/>
+        <location filename="../core/caen/Digitizer.cxx" line="669"/>
         <source>readRegister( address: %1, data: to be set )</source>
-        <translation>readRegister( cím: %1, adat: beállítás alatt )</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="663"/>
+        <location filename="../core/caen/Digitizer.cxx" line="694"/>
         <source>Digitizer board information:
   model name : %1
   model      : %2
@@ -103,189 +104,258 @@ Beállítva 50000-re</translation>
   serial num.: %8
   PCB rev.   : %9
   ADC NBits  : %10</source>
-        <translation>Digitalizáló eszköz információ:
-  modell név  : %1
-  modell      : %2
-  csatornák   : %3
-  forma faktor: %4
-  család-kód  : %5
-  ROC firmware kiadás: %6
-  AMC firmware kiadás: %7
-  sorozat szám: %8
-  PCB verzió  : %9
-  ADC bit-szám: %10</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="684"/>
-        <location filename="../core/caen/Digitizer.cxx" line="845"/>
+        <location filename="../core/caen/Digitizer.cxx" line="715"/>
+        <location filename="../core/caen/Digitizer.cxx" line="876"/>
         <source>No CAEN library available</source>
-        <translation>A CAEN könyvtár nem elérhetö</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="779"/>
+        <location filename="../core/caen/Digitizer.cxx" line="810"/>
         <source>Setting acquisition mode to %1</source>
-        <translation>Az adatgyüjtési mód beállítása %1-ra/re</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="811"/>
+        <location filename="../core/caen/Digitizer.cxx" line="842"/>
         <source>Setting interrupt to happen after %1 events</source>
-        <translation>A megszakítás beállítása %1 esemény begyüjtése után</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="833"/>
+        <location filename="../core/caen/Digitizer.cxx" line="864"/>
         <source>Interrupt configuration:
   state       : %1
   level       : %2
   status ID   : %3
   event number: %4
   mode        : %5</source>
-        <translation>Megszakítási beállítások:
-  állapot          : %1
-  szint            : %2
-  státusz azonosító: %3
-  esemény szám     : %4
-  mód              : %5</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="870"/>
+        <location filename="../core/caen/Digitizer.cxx" line="901"/>
         <source>Setting SW trigger mode to %1</source>
-        <translation>A szoftveres trigger beállítása %1 módba</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="898"/>
+        <location filename="../core/caen/Digitizer.cxx" line="929"/>
         <source>Setting Ext trigger mode to %1</source>
-        <translation>A külsö trigger beállítása %1 módba</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="927"/>
+        <location filename="../core/caen/Digitizer.cxx" line="958"/>
         <source>Setting channel %1 self-trigger mode to %2</source>
-        <translation>A(z) %1. csatorna ön-trigger módja %2-ra/re állítva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="944"/>
+        <location filename="../core/caen/Digitizer.cxx" line="975"/>
         <source>Requesting channel %1&apos;s self-trigger mode</source>
-        <translation>A(z) %1. csatorna ön-trigger módjának lekérdezése</translation>
-    </message>
-    <message>
-        <location filename="../core/caen/Digitizer.cxx" line="960"/>
-        <source>Setting group %1 self-trigger mode to %2</source>
-        <translation>A(z) %1. csoport ön trigger módja %2-ra/re állítva</translation>
-    </message>
-    <message>
-        <location filename="../core/caen/Digitizer.cxx" line="977"/>
-        <source>Requesting group %1&apos;s self-trigger mode</source>
-        <translation>A(z) %1. csoport ön-trigger módjának lekérdezése</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="991"/>
+        <source>Setting group %1 self-trigger mode to %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/Digitizer.cxx" line="1008"/>
+        <source>Requesting group %1&apos;s self-trigger mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/Digitizer.cxx" line="1022"/>
         <source>Sent a SW trigger</source>
-        <translation>Szoftveres trigger elküldve</translation>
-    </message>
-    <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1005"/>
-        <source>Setting group %1&apos;s channel mask to %2</source>
-        <translation>A(z) %1. csoport csatorna maszkja %2-ra/re állítva</translation>
-    </message>
-    <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1020"/>
-        <source>Requestuing group %1&apos;s channel mask</source>
-        <translation>A(z) %1. csoport csatorna maszkjának lekérdezése</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1036"/>
-        <source>Setting channel %1&apos;s trigger threshold to %2</source>
-        <translation>A(z) %1. csatorna trigger küszöbe beállítva %2-ra/re</translation>
+        <source>Setting group %1&apos;s channel mask to %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1051"/>
-        <source>Retrieving trigger threshold for channel %1</source>
-        <translation>A(z) %1. csatorna trigger küszöbének lekérdezése</translation>
+        <source>Requestuing group %1&apos;s channel mask</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1067"/>
-        <source>Setting group %1&apos;s trigger threshold to %2</source>
-        <translation>A(z) %1. csoport trigger küszöbe beállítva %2-ra/re</translation>
+        <source>Setting channel %1&apos;s trigger threshold to %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1082"/>
+        <source>Retrieving trigger threshold for channel %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/Digitizer.cxx" line="1098"/>
+        <source>Setting group %1&apos;s trigger threshold to %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/Digitizer.cxx" line="1113"/>
         <source>Retrieving trigger threshold for group %1</source>
-        <translation>A(z) %1. csoport trigger küszöbének lekérdezése</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1096"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1127"/>
         <source>Channel enable mask set to %1</source>
-        <translation>A csatorna engedélyezési maszk %1-ra/re állítva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1121"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1152"/>
         <source>Group enable mask set to %1</source>
-        <translation>A csoport engedélyezési maszk %1-ra/re állítva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1146"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1177"/>
         <source>Record length set to %1</source>
-        <translation>A minta szám %1-ra/re állítva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1172"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1203"/>
         <source>Post trigger size set to %1%</source>
-        <translation>A trigger utáni minta méret %1%-ra állítva</translation>
-    </message>
-    <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1199"/>
-        <source>Setting channel %1&apos;s DC offset to %2</source>
-        <translation>A(z) %1. csatorna DC eltolása %2-ra/re állítva</translation>
-    </message>
-    <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1214"/>
-        <source>Retrieving channel %1&apos;s DC offset</source>
-        <translation>A(z) %1. csatorna DC eltolásának lekérdezése</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1230"/>
-        <source>Setting group %1&apos;s DC offset to %2</source>
-        <translation>A(z) %1. csoport DC eltolása %2-ra/re állítva</translation>
+        <source>Setting channel %1&apos;s DC offset to %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1245"/>
+        <source>Retrieving channel %1&apos;s DC offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/Digitizer.cxx" line="1261"/>
+        <source>Setting group %1&apos;s DC offset to %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/Digitizer.cxx" line="1276"/>
         <source>Retrieving group %1&apos;s DC offset</source>
-        <translation>A(z) %1. csoport DC eltolásának lekérdezése</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1259"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1290"/>
         <source>Setting maximum number of events to read out to %1</source>
-        <translation>Az egyszerre kiolvasható események száma %1-ra/re állítva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1272"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1303"/>
         <source>Retrieving maximum number of events to read out</source>
-        <translation>Az egyszerre kiolvasható események számának lekérdezése</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1285"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1316"/>
         <source>Allocating readout buffer</source>
-        <translation>Kiolvasási buffer lefoglalása</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1299"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1330"/>
         <source>Freeing readout buffer</source>
-        <translation>Kiolvasási buffer felszabadítása</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1314"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1345"/>
         <source>Reading data in mode &quot;%1&quot;</source>
-        <translation>Adatok olvasása &quot;%1&quot; módban</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1331"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1366"/>
         <source>Extracting number of events from buffer of size %1</source>
-        <translation>Az események számának megállapítása egy %1 méretü bufferböl</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/Digitizer.cxx" line="1373"/>
-        <location filename="../core/caen/Digitizer.cxx" line="1430"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1412"/>
+        <location filename="../core/caen/Digitizer.cxx" line="1473"/>
         <source>Reading event %1 from buffer with size %2</source>
-        <translation>A(z) %1. esemény kiolvasása egy %2 méretü bufferböl</translation>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>caen::VME</name>
+    <message>
+        <location filename="../core/caen/VmeBus.cxx" line="146"/>
+        <source>Open called with type = %1, linkNumber = %2, boardNumber = %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeBus.cxx" line="155"/>
+        <source>Opened connection to VME device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeBus.cxx" line="167"/>
+        <source>No need to close the device, it&apos;s not open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeBus.cxx" line="182"/>
+        <source>Closed connection to VME device</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>caen::VmeDevice</name>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="282"/>
+        <source>Device &quot;%1&quot; opened on address %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="299"/>
+        <source>Trying to close a closed device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="308"/>
+        <source>Device type &quot;%1&quot; closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="352"/>
+        <source>Board info not available in simulation mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="378"/>
+        <source>Cleared the data from the device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="420"/>
+        <source>Set zero suppression with:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="469"/>
+        <source>Set acquisition mode with:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="511"/>
+        <source>Set readout mode with:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="590"/>
+        <source>Incorrect data word found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="595"/>
+        <source>Unknown data word found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="601"/>
+        <source>Data words were left in the MEB. This will lead to data loss.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -293,134 +363,128 @@ Beállítva 50000-re</translation>
     <message>
         <location filename="../core/camac/Crate.cxx" line="26"/>
         <source>Device constructed</source>
-        <translation>Eszköz létrehozva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="36"/>
         <source>Device destructed</source>
-        <translation>Eszköz törölve</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="61"/>
         <source>CAMAC crate could not be opened
 with message: %1</source>
-        <translation>A CAMAC keretet nem lehetett megnyitni.
-A kapott üzenet: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="68"/>
         <source>CAMAC crate opened on device: %1</source>
-        <translation>CAMAC keret megnyitva a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="91"/>
         <source>CAMAC crate closing failed
 with message: %1</source>
-        <translation>A CAMAC keret lezárása sikertelen.
-A kapott üzenet: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="98"/>
         <source>CAMAC crate closed on device: %1</source>
-        <translation>CAMAC keret lezárva a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="122"/>
         <source>readWord(...) called with: N = %1, A = %2, F = %3</source>
-        <translation>readWord(...) meghívva N = %1, A = %2, F = %3 paraméterekkel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="146"/>
         <source>readLong(...) called with: N = %1, A = %2, F = %3</source>
-        <translation>readLong(...) meghívva N = %1, A = %2, F = %3 paraméterekkel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="176"/>
         <source>readLong(...) called with: N = %1, A = %2, F = %3, Q, X</source>
-        <translation>readLong(...) meghívva N = %1, A = %2, F = %3, Q, X paraméterekkel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="204"/>
         <source>writeWord(...) called with: N = %1, A = %2, F = %3, data = %4</source>
-        <translation>writeWord(...) meghívva N = %1, A = %2, F = %3, adat = %4 paraméterekkel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="230"/>
         <source>writeLong(...) called with: N = %1, A = %2, F = %3, data = %4</source>
-        <translation>writeLong(...) meghívva N = %1, A = %2, F = %3, adat = %4 paraméterekkel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="253"/>
         <source>There was a problem enabling interrupts
 on device: %1</source>
-        <translation>Hiba történt a megszakítások engedélyezésével
-a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="259"/>
         <source>Interrupts enabled on device: %1</source>
-        <translation>Megszakítások engedélyezve a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="280"/>
         <source>There was a problem disabling interrupts
 on device: %1</source>
-        <translation>Hiba történt a megszakítások kikapcsolásával
-a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="286"/>
         <source>Interrupts disabled on device: %1</source>
-        <translation>Megszakítások kikapcsolva a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="300"/>
         <source>Inhibit set on device: %1</source>
-        <translation>Gátlás beállítva a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="314"/>
         <source>Inhibit reset on device: %1</source>
-        <translation>Gátlás felfüggesztve a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="329"/>
         <source>Initialize called on device: %1</source>
-        <translation>Inicializáció meghívva a(z) %1 eszközre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="344"/>
         <source>Clear called on device: %1</source>
-        <translation>Törlés meghívva a(z) %1 eszközre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/camac/Crate.cxx" line="359"/>
         <source>LAM mask set to: 0x%1</source>
-        <translation>A LAM maszk beállítva 0x%1-ra/re</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/camac/Crate.cxx" line="384"/>
+        <location filename="../core/camac/Crate.cxx" line="385"/>
         <source>There was a problem waiting for a LAM interrupt.
 Cause: </source>
-        <translation>Hiba történt egy LAM megszakításra várakozás közben.
-Magyarázat: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/camac/Crate.cxx" line="390"/>
+        <location filename="../core/camac/Crate.cxx" line="391"/>
         <source>Waiting for LAM</source>
-        <translation>Várakozás egy LAM-ra</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/camac/Crate.cxx" line="406"/>
+        <location filename="../core/camac/Crate.cxx" line="407"/>
         <source>LAM cleared on device: %1</source>
-        <translation>LAM jel törölve a(z) %1 eszközön</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/camac/Crate.cxx" line="424"/>
+        <location filename="../core/camac/Crate.cxx" line="425"/>
         <source>Trying to use the CAMAC crate without opening it first
 Use the Crate::open(...) function!</source>
-        <translation>Megpróbálta a CAMAC keretet hasznáni annak megnyitása nélkül
-Használja a Crate::open(...) függvényt!</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -428,255 +492,256 @@ Használja a Crate::open(...) függvényt!</translation>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="27"/>
         <source>Object constructed</source>
-        <translation>Objektum létrehozva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="43"/>
         <source>Booking global memory block: %1</source>
-        <translation>A(z) %1 globális memória blokk lefoglalása</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="56"/>
         <source>Couldn&apos;t const_cast specified global memory name</source>
-        <translation>Nem lehetett const_cast-olni a megadott globális memória nevet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/cernlib/HistMgr.cxx" line="64"/>
         <source>Created PAW global memory with name: &quot;%1&quot;</source>
-        <translation>PAW globális memória létrehozva &quot;%1&quot; névvel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="88"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="89"/>
         <source>Booking 1D histogram with name &quot;%1&quot;, channels: %2, lower bound: %3, upper bound: %4</source>
-        <translation>1 dimenziós hisztogram lefoglalva &quot;%1&quot; névvel, %2 csatornával, %3 alsó és %4 felsö korláttal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="101"/>
-        <location filename="../core/cernlib/HistMgr.cxx" line="149"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="102"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="151"/>
         <source>Couldn&apos;t const_cast specified histogram name</source>
-        <translation>Nem lehetett const_cast-olni a megadott hisztogram nevet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="136"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="137"/>
         <source>Booking 2D histogram with name &quot;%1&quot;, x-channels: %2, x-low: %3, x-up: %4, y-channels: %5, y-low: %6, y-up: %7</source>
-        <translation>2 dimenziós histogram lefoglalva &quot;%1&quot; névvel, %2 x-csatornával, %3 x alsó-, %4 felsö korláttal, %5 y-csatornával, %6 y-alsó és %7 felsö-korláttal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="179"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="181"/>
         <source>Filling histogram %1 with data: %2, weight: %3</source>
-        <translation>A(z) %1 hisztogram feltöltése %2 helyen %3 súllyal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="210"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="212"/>
         <source>Filling histogram %1 with xdata: %2, ydata: %3, weight: %4</source>
-        <translation>A(z) %1 hisztogram feltöltése %2 X- ées %3 Y-koordinátákkal és %4 súllyal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/HistMgr.cxx" line="237"/>
+        <location filename="../core/cernlib/HistMgr.cxx" line="239"/>
         <source>Trying to create/access histograms without
 initializing the global memory first</source>
-        <translatorcomment>Using &quot;ö&quot; instead of &quot;ő&quot; because the latter is not supported by the text encoding</translatorcomment>
-        <translation>Hisztogramok készítésének/elérésének megkísérlése a
-globális memória inicializációja elött</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>cernlib::NTupleMgr</name>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="44"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="63"/>
         <source>Object constructed</source>
-        <translation>Objektum létrehozva</translation>
-    </message>
-    <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="54"/>
-        <source>Object destructed</source>
-        <translation>Objektum törölve</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/cernlib/NTupleMgr.cxx" line="73"/>
-        <source>Adding variable with name: %1</source>
-        <translation>Új változó hozzáadása &quot;%1&quot; névvel</translation>
+        <source>Object destructed</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="79"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="92"/>
+        <source>Adding variable with name: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="98"/>
         <source>You can&apos;t add new variables when the output file
 is already open!</source>
-        <translation>Nem lehet új változókat megadni amikor a kimeneti fájl
-már meg van nyitva!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="104"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="123"/>
         <source>Opening output file: %1</source>
-        <translation>A(z) &quot;%1&quot; kimeneti fájl megnyitása</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="112"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="131"/>
         <source>The output file is already open</source>
-        <translation>A kimeneti fájl már meg van nyitva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="126"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="147"/>
         <source>Variable name &quot;%1&quot; too long. It was shortened to &quot;%2&quot;</source>
-        <translation>A(z) &quot;%1&quot; változó név túl hosszú. Le lett rövidítve &quot;%2&quot;-ra/re</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="140"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="163"/>
         <source>Output file name too long. File not opened!</source>
-        <translation>A kimeneti fájlnév túl hosszú. A fájl nem lett megnyitva!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="154"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="177"/>
         <source>There was a problem opening: %1</source>
-        <translation>Hiba történt a(z) %1 megnyitásával</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="157"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="180"/>
         <source>&quot;%1&quot; opened</source>
-        <translation>&quot;%1&quot; megnyitva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="166"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="189"/>
         <source>NTuple created</source>
-        <translation>NTuple létrehozva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="192"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="215"/>
         <source>No output file is open</source>
-        <translation>Nincsen kimeneti fájl megnyitva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="210"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="233"/>
         <source>A total of %1 events written to the ntuple</source>
-        <translation>Összesen %1 esemény kiírva az ntuple-ba</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="217"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="241"/>
         <source>Output file closed</source>
-        <translation>Kimeneti fájl lezárva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="243"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="267"/>
         <source>Setting variable %1 to: %2</source>
-        <translation>A(z) &quot;%1&quot; változó %2-re/ra állítva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="250"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="274"/>
         <source>You should not be setting variables before opening
 an output file!</source>
-        <translation>Nem lehet a változó értékeket beállítani egy kimeneti
-fájl megnyitása előtt!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="257"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="281"/>
         <source>Index %1 is not defined in the ntuple!</source>
-        <translation>A(z) %1 index nincs definiálva az ntuple-ban!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/cernlib/NTupleMgr.cxx" line="282"/>
+        <location filename="../core/cernlib/NTupleMgr.cxx" line="306"/>
         <source>saveEvent() should only be called when an output
 file is already open!</source>
-        <translation>A saveEvent() függvényt csak akkor lehet meghívni amikor egy
-kimeneti fájl már meg van nyitva!</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>dev::Loader</name>
     <message>
-        <location filename="../core/device/Loader.cxx" line="318"/>
-        <source>Setting device plugin directory to: %1</source>
-        <translation>Az eszköz plugin könyvtár beállítva %1-ra/re</translation>
-    </message>
-    <message>
-        <location filename="../core/device/Loader.cxx" line="95"/>
+        <location filename="../core/device/Loader.cxx" line="102"/>
         <source>There was a problem loading the static plugins</source>
-        <translation>Hiba történt a statikus plugin-ek betöltése közben</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="98"/>
+        <location filename="../core/device/Loader.cxx" line="105"/>
         <source>Loaded the static plugins</source>
-        <translation>A statikus plugin-ek betöltve</translation>
-    </message>
-    <message>
-        <location filename="../core/device/Loader.cxx" line="115"/>
-        <source>Evaluating: %1</source>
-        <translation>%1 elbírálása</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/device/Loader.cxx" line="122"/>
+        <source>Evaluating: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/device/Loader.cxx" line="129"/>
         <source>Trying to load plugin: %1</source>
-        <translation>Megpróbálkozás a(z) %1 plugin betöltésével</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="125"/>
+        <location filename="../core/device/Loader.cxx" line="132"/>
         <source>%1 loaded</source>
-        <translation>%1 betöltve</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="128"/>
+        <location filename="../core/device/Loader.cxx" line="135"/>
         <source>%1 could not be loaded</source>
-        <translation>%1-t nem lehetett betölteni</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="159"/>
+        <location filename="../core/device/Loader.cxx" line="166"/>
         <source>Couldn&apos;t load plugin with name: %1</source>
-        <translatorcomment>Using &quot;ü&quot; instead of &quot;ű&quot;, as the latter is not supported by the current encoding.</translatorcomment>
-        <translation>Nem lehetett a(z) %1 nevü plugin-t betölteni</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="163"/>
+        <location filename="../core/device/Loader.cxx" line="171"/>
         <source>Loaded plugin with name: %1</source>
-        <translatorcomment>Using &quot;ü&quot; instead of &quot;ű&quot;, as the latter is not supported by the current encoding.</translatorcomment>
-        <translation>A(z) %1 nevü plugin betöltve</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="172"/>
+        <location filename="../core/device/Loader.cxx" line="180"/>
         <source>%1 doesn&apos;t provide the dev::Factory interface!</source>
-        <translation>%1 nem biztosítja a dev::Factory interfészt!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="178"/>
+        <location filename="../core/device/Loader.cxx" line="186"/>
         <source>Accessed dev::Factory interface in plugin: %1</source>
-        <translation>Sikerült a dev::Factory interfészt elérni a(z) %1 plugin-ben</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="195"/>
+        <location filename="../core/device/Loader.cxx" line="204"/>
         <source>Loaded device &quot;%1&quot; from plugin: %2</source>
-        <translation>&quot;%1&quot; eszköz betöltve a(z) %2 plugin-ból</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="231"/>
+        <location filename="../core/device/Loader.cxx" line="241"/>
         <source>Found a static plugin not providing the needed interface</source>
-        <translation>Találtam egy statikus plugin-t ami nem biztosítja az elvárt interfészt</translation>
-    </message>
-    <message>
-        <location filename="../core/device/Loader.cxx" line="235"/>
-        <source>Accessed dev::Factory interface in static plugin</source>
-        <translation>Sikerült a dev::Factory interfészt elérni egy statikus plugin-ban</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/device/Loader.cxx" line="245"/>
-        <source>Loaded device &quot;%1&quot; from a static plugin</source>
-        <translation>&quot;%1&quot; eszköz betöltve egy statikus plugin-ból</translation>
+        <source>Accessed dev::Factory interface in static plugin</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/device/Loader.cxx" line="277"/>
+        <location filename="../core/device/Loader.cxx" line="255"/>
+        <source>Loaded device &quot;%1&quot; from a static plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/device/Loader.cxx" line="287"/>
         <source>No device with name &quot;%1&quot; loaded currently</source>
-        <translation>Nincs eszköz &quot;%1&quot; névvel betöltve jelenleg</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/device/Loader.cxx" line="329"/>
+        <source>Setting device plugin directory to: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>dev::QtHist</name>
+    <message>
+        <location filename="../core/device/QtHist.cxx" line="15"/>
+        <source>%1 with ID %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ev::BinaryStream</name>
     <message>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="67"/>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="133"/>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="147"/>
+        <location filename="../core/event/BinaryStream_ev.cxx" line="69"/>
+        <location filename="../core/event/BinaryStream_ev.cxx" line="135"/>
+        <location filename="../core/event/BinaryStream_ev.cxx" line="149"/>
         <source>Incomplete event received</source>
-        <translation>Részleges esemény fogadva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="104"/>
+        <location filename="../core/event/BinaryStream_ev.cxx" line="106"/>
         <source>Couldn&apos;t send data</source>
-        <translation>Nem lehetett az adatot elküldeni</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -685,57 +750,43 @@ kimeneti fájl már meg van nyitva!</translation>
         <location filename="../core/event/EventServer.cxx" line="44"/>
         <source>Restarting the event reading thread.
 This could be dangerous...</source>
-        <translation>Az esemény-olvasó programszál újraindítása.
-Ez elég veszélyes lehet...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="53"/>
         <source>Listening for incoming events on %1:%2</source>
-        <translation>Bejövö események várása a(z) %1:%2 címen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="108"/>
         <source>Server is listening on host &quot;%1&quot; and port %2</source>
-        <translation>A szerver a(z) &quot;%1&quot; néven és %2 porton figyel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="112"/>
         <source>Server could not be started on host &quot;%1&quot; and port &quot;%2&quot;</source>
-        <translation>A szervert nem lehetett elindítani a(z) &quot;%1&quot; címen és &quot;%2&quot; porton</translation>
-    </message>
-    <message>
-        <source>Received new incoming connection</source>
-        <translation type="obsolete">Új beérkezö kapcsolat érzékelése</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="130"/>
         <source>There was a problem while waiting for an incoming connection</source>
-        <translation>Hiba történt bejövö kapcsolatra várakozás közben</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="141"/>
         <source>There was a problem while accepting an incoming connection</source>
-        <translation>Hiba történt egy bejövö kapcsolat felépítése közben</translation>
-    </message>
-    <message>
-        <source>Data is ready for readout</source>
-        <translation type="obsolete">Adatok állnak készen kiolvasásra</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="162"/>
         <source>Connection to event sender lost.</source>
-        <translation>Kapcsolat megszakadt az esemény-küldövel.</translation>
-    </message>
-    <message>
-        <source>Bytes available: %1</source>
-        <translation type="obsolete">%1 bájt elérhetö</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/EventServer.cxx" line="191"/>
         <source>Can&apos;t store any more events in internal buffer
 Throwing away incoming event!</source>
-        <translation>Nem lehet több eseményt rögzíteni a belsö bufferben
-Eldobom a bejövö eseményt!</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -743,121 +794,102 @@ Eldobom a bejövö eseményt!</translation>
     <message>
         <location filename="../core/event/Sender_ev.cxx" line="22"/>
         <source>Object created</source>
-        <translation>Objektum létrehozva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/Sender_ev.cxx" line="39"/>
+        <location filename="../core/event/Sender_ev.cxx" line="47"/>
         <source>Object deleted</source>
-        <translation>Objektum törölve</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/Sender_ev.cxx" line="56"/>
+        <location filename="../core/event/Sender_ev.cxx" line="64"/>
         <source>Connecting to %1:%2</source>
-        <translation>Kapcsolódás a(z) %1:%2 címhez</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/Sender_ev.cxx" line="80"/>
+        <location filename="../core/event/Sender_ev.cxx" line="89"/>
         <source>Connected to event receiver on %1:%2</source>
-        <translation>Kapcsolódás sikeres egy esemény fogadóval a(z) %1:%2 címen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bytes to write: %1</source>
-        <translation type="obsolete">Írandó bájtok: %1</translation>
+        <location filename="../core/event/Sender_ev.cxx" line="113"/>
+        <source>There is a coding error in this class!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/Sender_ev.cxx" line="136"/>
+        <location filename="../core/event/Sender_ev.cxx" line="152"/>
         <source>Could not connect to event receiver on address &quot;%1&quot;, port &quot;%2&quot;</source>
-        <translation>Nem sikerült egy esemény-olvasóhoz kapcsolódni a(z) &quot;%1&quot; címen, &quot;%2&quot; porton</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ev::TextStream</name>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="47"/>
+        <location filename="../core/event/TextStream_ev.cxx" line="48"/>
         <source>-------- Event record --------
 </source>
-        <translation>-------- Esemény feljegyzés --------
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="49"/>
+        <location filename="../core/event/TextStream_ev.cxx" line="51"/>
         <source> Number of fragments: %1
 
 </source>
-        <translation> Fragmentumok száma: %1
-
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="62"/>
+        <location filename="../core/event/TextStream_ev.cxx" line="63"/>
         <source> No event fragments!
 </source>
-        <translation> Nincs esemény fragmentum!
-</translation>
-    </message>
-    <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="81"/>
-        <source>  ---- Fragment record ----
-</source>
-        <translation>  ---- Fragmentum feljegyzés ----
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/event/TextStream_ev.cxx" line="83"/>
+        <source>  ---- Fragment record ----
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/event/TextStream_ev.cxx" line="86"/>
         <source>   Module ID   : %1
 
 </source>
-        <translation>   Modul azonosítója: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>   Crate number : %1
-</source>
-        <translation type="obsolete">   Keret száma: %1
-</translation>
-    </message>
-    <message>
-        <source>   Module number: %1
-
-</source>
-        <translation type="obsolete">   Modul száma: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="93"/>
+        <location filename="../core/event/TextStream_ev.cxx" line="97"/>
         <source>   Data word: 0x%1
 </source>
-        <translation>   Adat: 0x%1
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="98"/>
+        <location filename="../core/event/TextStream_ev.cxx" line="103"/>
         <source>   No data words!
 </source>
-        <translation>   Nem tartalmaz adatot!
-</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>i18n::Loader</name>
     <message>
-        <location filename="../core/i18n/Loader_i18n.cxx" line="51"/>
+        <location filename="../core/i18n/Loader_i18n.cxx" line="59"/>
         <source>Setting translation directory to: %1</source>
-        <translation>Fordítások kövtára beállítva %1-nak/nek</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/i18n/Loader_i18n.cxx" line="98"/>
         <source>Couldn&apos;t load translation file: %1</source>
-        <translation>Nem sikerült betölteni a(z) %1 fordítási fájlt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/i18n/Loader_i18n.cxx" line="103"/>
+        <location filename="../core/i18n/Loader_i18n.cxx" line="102"/>
         <source>Loaded translation file: %1</source>
-        <translation>A(z) %1 fordítási fájl betöltve</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/i18n/Loader_i18n.cxx" line="111"/>
+        <location filename="../core/i18n/Loader_i18n.cxx" line="110"/>
         <source>Loaded all translations</source>
-        <translation>Minden fordítás betöltve</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -867,18 +899,14 @@ Eldobom a bejövö eseményt!</translation>
         <source>* No message server set up yet.
 * Messages that could not be sent will be
 * printed to the console.</source>
-        <translation>* Nincsen még üzenet szerver beállítva.
-* Az üzenetek amiket nem lehetett elküldeni,
-* a konzolra lesznek kiírva.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/msg/Sender_msg.cxx" line="163"/>
         <source>* A Message Server could not be contacted!
 * Messages that could not be sent will be
 * printed to the console.</source>
-        <translation>* Nem lehetett elérni az egyik üzenet szervert!
-* Az üzenetek amiket nem lehetett elküldeni,
-* a konzolra lesznek kiírva.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -886,174 +914,99 @@ Eldobom a bejövö eseményt!</translation>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="43"/>
         <source>Opening output file with name &quot;%1&quot; and tree name &quot;%2&quot;</source>
-        <translation>A(z) &quot;%1&quot; kimeneti fájl megnyitása &quot;%2&quot; &quot;fa&quot; névvel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="50"/>
         <source>An output file is already open. Not doing anything.</source>
-        <translation>Egy kimeneti fájl már nyitva van. Nem csinálok semmit.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="59"/>
         <source>Failed creating output file with name: %1</source>
-        <translation>Nem sikerült megnyitni a kimeneti fájlt &quot;%1&quot; névvel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="63"/>
         <source>&quot;%1&quot; opened</source>
-        <translation>&quot;%1&quot; megnyitva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="93"/>
         <source>No output file is open at the moment</source>
-        <translation>Nincs kimeneti fájl megnyitva jelenleg</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="104"/>
         <source>The object is in an inconsistent state</source>
-        <translation>Az objektum inknonzisztens állapotban van</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="110"/>
         <source>An error happened while writing out the final events</source>
-        <translation>Hiba történt az utolsó események kiírása közben</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="129"/>
         <source>Closed output file after writing %1 events</source>
-        <translation>Kimeneti fájl lezárva %1 esemény kiírása után</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="148"/>
         <source>A file is not open at the moment</source>
-        <translation>Nincsen fájl megnyitva jelenleg</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="155"/>
         <source>A TTree is not available at the moment</source>
-        <translation>A TTree nem elérhetö jelenleg</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="161"/>
         <source>An error happened while writing the current event</source>
-        <translation>Hiba történt a jelenlegi esemény kiírása közben</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="173"/>
         <source>Received a complex object description</source>
-        <translation>Egy komplex objektum leírását kaptam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="214"/>
         <location filename="../core/root/NTupleMgr_root.cxx" line="220"/>
         <source>Unknown primitive type encountered: %1</source>
-        <translation>Ismeretlen egyszerü típust találtam: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="230"/>
         <source>You have to open an output file before declaring variables</source>
-        <translation>Meg kell nyitni egy kimeneti fájlt a változók deklarálása elött</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="237"/>
         <source>A branch with name &quot;%1&quot; already exists</source>
-        <translation>Egy &quot;%1&quot; nevü ág már létezik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/root/NTupleMgr_root.cxx" line="242"/>
         <source>Checking if branch with name &quot;%1&quot; can be added</source>
-        <translation>Annak ellenörzése, hogy egy &quot;%1&quot; nevü ágat létre lehet-e hozni</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="256"/>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="277"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="259"/>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="285"/>
         <source>Failed creating branch with name: %1</source>
-        <translation>Nem sikerült a(z) &quot;%1&quot; nevü ágat létrehozni</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="263"/>
-        <source>Creating primitive branch with name &quot;%1&quot; and leaf-list &quot;%2&quot;</source>
-        <translation>A(z) &quot;%1&quot; primitív ág létrehozása &quot;%2&quot; levél-listával</translation>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="266"/>
+        <source>Creating primitive branch with name &quot;%1&quot; , title &quot;%2&quot; and leaf-list &quot;%3&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="284"/>
-        <source>Creating object branch with name &quot;%1&quot; and classname &quot;%2&quot;</source>
-        <translation>A(z) &quot;%1&quot; objektum ág létrehozása &quot;%2&quot; osztály-névvel</translation>
-    </message>
-</context>
-<context>
-    <name>vme::VmeBus</name>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="34"/>
-        <source>Creating object</source>
-        <translation>Objektum létrehozása</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="64"/>
-        <source>The VME bus is already open</source>
-        <translation>A VME busz már meg van nyitva</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="74"/>
-        <source>The PCIVME driver could not be opened</source>
-        <translation>A PCIVME meghajtót nem lehetett megnyitni</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="102"/>
-        <source>Failed to close the PCIVME driver</source>
-        <translation>Nem sikerült lezárni a PCIVME meghajtót</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="142"/>
-        <location filename="../core/vme/VmeBus.cxx" line="167"/>
-        <location filename="../core/vme/VmeBus.cxx" line="192"/>
-        <location filename="../core/vme/VmeBus.cxx" line="220"/>
-        <location filename="../core/vme/VmeBus.cxx" line="245"/>
-        <location filename="../core/vme/VmeBus.cxx" line="271"/>
-        <location filename="../core/vme/VmeBus.cxx" line="297"/>
-        <location filename="../core/vme/VmeBus.cxx" line="336"/>
-        <source>VME bus not open yet</source>
-        <translation>A VME busz nincsen még megnyitva</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="149"/>
-        <source>8bit write &gt; Address: 0x%1; Data: %2</source>
-        <translation>8 bites írás &gt; Cím: 0x%1, Adat: %2</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="174"/>
-        <source>16bit write &gt; Address: 0x%1; Data: %2</source>
-        <translation>16 bites írás &gt; Cím: 0x%1, Adat: %2</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="199"/>
-        <source>32bit write &gt; Address: 0x%1; Data: %2</source>
-        <translation>32 bites írás &gt; Cím: 0x%1, Adat: %2</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="227"/>
-        <source>Unknown length write &gt; Address: 0x%1; length: %3</source>
-        <translation>Ismeretlen hosszúságú írás &gt; Cím: 0x%1, hossz: %3</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="252"/>
-        <source>8-bit read request from address: %1</source>
-        <translation>8 bites olvasás a %1 címröl</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="278"/>
-        <source>16-bit read request from address: %1</source>
-        <translation>16 bites olvasás a %1 címröl</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="304"/>
-        <source>32-bit read request from address: %1</source>
-        <translation>32 bites olvasás a %1 címröl</translation>
-    </message>
-    <message>
-        <location filename="../core/vme/VmeBus.cxx" line="343"/>
-        <source>Unknown size read request from Address: %1; length: %2</source>
-        <translation>Ismeretlen hosszúságú olvasás a %1 címröl, %2 hosszal</translation>
+        <location filename="../core/root/NTupleMgr_root.cxx" line="292"/>
+        <source>Creating object branch with name &quot;%1&quot;, title &quot;%2&quot; and classname &quot;%3&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

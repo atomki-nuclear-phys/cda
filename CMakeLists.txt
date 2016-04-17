@@ -24,6 +24,8 @@ option( CDA_USE_CAENDIGITIZER
   TRUE )
 option( CDA_USE_CAENQTPSDK
   "Build CDA against the CAEN QTP libraries if they are available" TRUE )
+option( CDA_USE_QT4
+  "Force the usage of Qt4, even when Qt5 is available" FALSE )
 
 # Set up the output directories for the build results:
 if( UNIX )

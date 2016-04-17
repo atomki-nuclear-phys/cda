@@ -11,7 +11,7 @@ macro( add_cda_console_app name )
 
   # Find Qt:
   find_package( Qt5 QUIET COMPONENTS Core Xml )
-  if( Qt5_FOUND )
+  if( Qt5_FOUND AND NOT CDA_USE_QT4 )
     set( qt_libraries Qt5::Core Qt5::Xml )
   else()
     find_package( Qt4 QUIET COMPONENTS QtCore QtXml )
@@ -76,7 +76,7 @@ macro( add_cda_gui_app name )
 
   # Find Qt:
   find_package( Qt5 QUIET COMPONENTS Core Gui Widgets Xml )
-  if( Qt5_FOUND )
+  if( Qt5_FOUND AND NOT CDA_USE_QT4 )
     set( qt_libraries Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Xml )
   else()
     find_package( Qt4 QUIET COMPONENTS QtCore QtGui QtXml )
