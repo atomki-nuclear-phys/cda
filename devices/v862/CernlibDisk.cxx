@@ -11,7 +11,7 @@
 namespace v862 {
 
    CernlibDisk::CernlibDisk()
-      : Device(), m_dataTable(), m_ovTable(), m_unTable(),
+      : Device(), m_dataTable(), m_unTable(), m_ovTable(),
         m_logger( "v862::CernlibDisk" ) {
 
    }

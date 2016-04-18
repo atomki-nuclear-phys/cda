@@ -82,7 +82,7 @@ unset( _group )
 # Use ROOT if it was found:
 if( ROOT_FOUND AND CDA_USE_ROOT )
   target_compile_definitions( cdacore PUBLIC HAVE_ROOT_LIBS )
-  target_include_directories( cdacore PUBLIC ${ROOT_INCLUDE_DIRS} )
+  target_include_directories( cdacore SYSTEM PUBLIC ${ROOT_INCLUDE_DIRS} )
   target_link_libraries( cdacore PUBLIC ${ROOT_LIBRARIES} )
   list( APPEND CMAKE_INSTALL_RPATH ${ROOT_LIBRARY_DIRS} )
   set( CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} PARENT_SCOPE )
@@ -90,9 +90,9 @@ endif()
 
 # Check if the cxxabi.h header file is available. (It's used by the
 # ROOT interface code.)
-include( CheckIncludeFiles )
-check_include_files( cxxabi.h HAVE_CXXABI_H )
-if( HAVE_CXX_ABI )
+include( CheckIncludeFileCXX )
+check_include_file_cxx( cxxabi.h HAVE_CXXABI_H )
+if( HAVE_CXXABI_H )
    target_compile_definitions( cdacore PUBLIC HAVE_CXXABI_H )
 endif()  
 
@@ -107,7 +107,7 @@ if( CERNLIB_FOUND AND CDA_USE_CERNLIB )
   else()
     message( WARNING "Compiler not supported for using CERNLIB" )
   endif()
-  target_include_directories( cdacore PRIVATE ${CERNLIB_INCLUDE_DIRS} )
+  target_include_directories( cdacore SYSTEM PRIVATE ${CERNLIB_INCLUDE_DIRS} )
   target_link_libraries( cdacore PUBLIC ${CERNLIB_LIBRARIES} )
   list( APPEND CMAKE_INSTALL_RPATH ${CERNLIB_LIBRARY_DIRS} )
   set( CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} PARENT_SCOPE )
@@ -116,7 +116,7 @@ endif()
 # Use the CAMAC cc32 library if it was found:
 if( CC32_FOUND AND CDA_USE_CC32 )
   target_compile_definitions( cdacore PUBLIC HAVE_CAMAC_LIB )
-  target_include_directories( cdacore PUBLIC ${CC32_INCLUDE_DIRS} )
+  target_include_directories( cdacore SYSTEM PUBLIC ${CC32_INCLUDE_DIRS} )
   target_link_libraries( cdacore PRIVATE ${CC32_LIBRARIES} )
 endif()
 
@@ -124,7 +124,8 @@ endif()
 if( CAENDIGITIZER_FOUND AND CDA_USE_CAENDIGITIZER )
   target_compile_definitions( cdacore PRIVATE HAVE_CAEN_DIGITIZER_LIBS
     HAVE_CAEN_COMM_LIBS HAVE_CAEN_VME_LIBS )
-  target_include_directories( cdacore PRIVATE ${CAENDIGITIZER_INCLUDE_DIRS} )
+  target_include_directories( cdacore SYSTEM PRIVATE
+    ${CAENDIGITIZER_INCLUDE_DIRS} )
   target_link_libraries( cdacore PRIVATE ${CAENDIGITIZER_LIBRARIES} )
 endif()
 
@@ -132,6 +133,7 @@ endif()
 if( CAENQTPSDK_FOUND AND CDA_USE_CAENQTPSDK )
   target_compile_definitions( cdacore PRIVATE HAVE_CAEN_QTP_LIBS
     HAVE_CAEN_VME_LIBS )
-  target_include_directories( cdacore PRIVATE ${CAENQTPSDK_INCLUDE_DIRS} )
+  target_include_directories( cdacore SYSTEM PRIVATE
+    ${CAENQTPSDK_INCLUDE_DIRS} )
   target_link_libraries( cdacore PRIVATE ${CAENQTPSDK_LIBRARIES} )
 endif()
