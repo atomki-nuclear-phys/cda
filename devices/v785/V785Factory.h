@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_V862_V862FACTORY_H
-#define CDA_DEVICES_V862_V862FACTORY_H
+#ifndef CDA_DEVICES_V785_V785FACTORY_H
+#define CDA_DEVICES_V785_V785FACTORY_H
 
 // Qt include(s):
 #include <QtCore/QObject>
@@ -10,9 +10,9 @@
 #include "device/Factory.h"
 
 /**
- *  @short Namespace for the V862 QDC device
+ *  @short Namespace for the V785 QDC device
  *
- *         This namespace holds all the classes that handle the a V862
+ *         This namespace holds all the classes that handle the a V785
  *         CAEN VME QDC device.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
@@ -20,7 +20,7 @@
  * $Revision$
  * $Date$
  */
-namespace v862 {
+namespace v785 {
 
    //
    // Make sure that the following Qt classes are available in the
@@ -31,9 +31,9 @@ namespace v862 {
    using QT_PREPEND_NAMESPACE( QString );
 
    /**
-    *  @short Factory creating all the V862 objects
+    *  @short Factory creating all the V785 objects
     *
-    *         This factory is used when loading the V862 plugin to access
+    *         This factory is used when loading the V785 plugin to access
     *         all the classes provided by the plugin.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
@@ -41,13 +41,13 @@ namespace v862 {
     * $Revision$
     * $Date$
     */
-   class V862Factory : public QObject,
+   class V785Factory : public QObject,
          virtual public dev::Factory {
 
       Q_OBJECT
       Q_INTERFACES( dev::Factory )
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.v862/1.0" )
+      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.v785/1.0" )
 #endif
 
    public:
@@ -60,8 +60,8 @@ namespace v862 {
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 
-   }; // class V862Factory
+   }; // class V785Factory
 
-} // namespace v862
+} // namespace v785
 
-#endif // CDA_DEVICES_V862_V862FACTORY_H
+#endif // CDA_DEVICES_V785_V785FACTORY_H

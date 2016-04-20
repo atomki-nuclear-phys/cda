@@ -72,3 +72,5 @@ add_subdirectory( dt5740 )
 
 # Build all the CAEN VME plugins:
 add_subdirectory( v862 )
+add_subdirectory( v785 )
+add_subdirectory( v792 )

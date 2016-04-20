@@ -4,7 +4,7 @@
 #include <QtCore/QtPlugin>
 
 // Local include(s):
-#include "V862Factory.h"
+#include "V785Factory.h"
 #include "CernlibHist.h"
 #include "CernlibDisk.h"
 #include "Gui.h"
@@ -12,21 +12,21 @@
 #include "RootDisk.h"
 #include "QtHist.h"
 
-namespace v862 {
+namespace v785 {
 
-   const QString& V862Factory::shortName() const {
+   const QString& V785Factory::shortName() const {
 
-      static const QString name( "V862" );
+      static const QString name( "V785" );
       return name;
    }
 
-   const QString& V862Factory::longName() const {
+   const QString& V785Factory::longName() const {
 
-      static const QString name( tr( "CAEN V862 QDC" ) );
+      static const QString name( tr( "CAEN V785 ADC" ) );
       return name;
    }
 
-   void* V862Factory::createDevice( const std::type_info& ti ) const {
+   void* V785Factory::createDevice( const std::type_info& ti ) const {
 
       if( ti == typeid( dev::ICaenVmeReadout ) ) {
 
@@ -57,9 +57,9 @@ namespace v862 {
       return 0;
    }
 
-} // namespace v862
+} // namespace v785
 
 // Declare this plugin to Qt:
 #if QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )
-Q_EXPORT_PLUGIN2( v862, v862::V862Factory )
+Q_EXPORT_PLUGIN2( v785, v785::V785Factory )
 #endif
