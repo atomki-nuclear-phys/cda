@@ -2,6 +2,7 @@
 
 // CDA include(s):
 #include "common/errorcheck.h"
+#include "caen/StopAcquisition.h"
 
 // Local include(s):
 #include "Readout.h"
@@ -64,6 +65,10 @@ namespace v785 {
       // data from the device, expecting that readout will start momentarily.
       CHECK( m_vmeDevice.dataClear() );
 
+      // Reset the event cache:
+      m_events.clear();
+      m_eventsProcessed = 0;
+
       // Return gracefully:
       return true;
    }
@@ -74,6 +79,11 @@ namespace v785 {
 
       // Return gracefully:
       return true;
+   }
+
+   size_t Readout::eventsProcessed() const {
+
+      return m_eventsProcessed;
    }
 
    std::unique_ptr< ev::Fragment > Readout::readEvent() {
@@ -87,6 +97,15 @@ namespace v785 {
             REPORT_ERROR( tr( "Failed to read data from the device" ) );
             return fragment;
          }
+         // If the acquisition is to be stopped, return an empty
+         // fragment:
+         if( g_stopAcquisition ) {
+            REPORT_VERBOSE( tr( "The acquisition is to be stopped. Returning "
+                                "empty event fragment." ) );
+            return fragment;
+         }
+         // If the acquisition was not supposed to stop, then we should have
+         // some events available now...
          if( ! m_events.size() ) {
             REPORT_ERROR( tr( "Code logic error detected") );
             return fragment;
@@ -106,6 +125,9 @@ namespace v785 {
          ChannelData d( data );
          fragment->addDataWord( d );
       }
+
+      // Update the number of events processed variable:
+      m_eventsProcessed = m_events.front().footer.eventCount;
 
       // Remove this event from the cache:
       m_events.erase( m_events.begin() );

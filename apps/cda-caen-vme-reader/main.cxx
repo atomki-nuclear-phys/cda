@@ -344,6 +344,24 @@ int main( int argc, char* argv[] ) {
       // Exit data acquisition if there was an interrupt:
       if( g_stopAcquisition ) break;
 
+      // Check whether the devices were in sync when reading out this event:
+      if( ! g_crate->devicesAreInSync() ) {
+         g_logger << msg::WARNING
+                  << qApp->translate( "cda-caen-vme-reader",
+                                      "Devices are out of sync. Resetting "
+                                      "the acquisition." ) << msg::endmsg;
+         // Reset all the devices:
+         if( ( ! g_crate->stop() ) || ( ! g_crate->start() ) ) {
+            g_logger << msg::FATAL
+                     << qApp->translate( "cda-caen-vme-reader",
+                                         "Couldn't reset the data acquisition" )
+                     << msg::endmsg;
+            shutDown( 0 );
+         }
+         // And forget about the current event:
+         continue;
+      }
+
       // Send the event to the receivers:
 #ifndef Q_OS_WIN32
       sigprocmask( SIG_BLOCK, &blockedSignals, NULL );

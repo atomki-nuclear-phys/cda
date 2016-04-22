@@ -111,6 +111,35 @@ namespace caen_vme_reader {
       return event;
    }
 
+   bool Crate::devicesAreInSync() const {
+
+      // First a simple security check:
+      if( ! m_devices.size() ) {
+         // Not sure what's happening here, but sure...
+         return true;
+      }
+
+      // Get the number of events processed by the first device:
+      const size_t eventsProcessed =
+         m_devices.begin()->second->eventsProcessed();
+
+      // Check if every device reports the same:
+      for( const auto& itr : m_devices ) {
+         if( eventsProcessed != itr.second->eventsProcessed() ) {
+            REPORT_VERBOSE( tr( "First device (%1) reports %2 events" )
+                            .arg( m_devices.begin()->second->deviceName() )
+                            .arg( eventsProcessed ) );
+            REPORT_VERBOSE( tr( "Device %1 reports %2 events" )
+                            .arg( itr.second->deviceName() )
+                            .arg( itr.second->eventsProcessed() ) );
+            return false;
+         }
+      }
+
+      // If yes, then they are in sync:
+      return true;
+   }
+
    bool Crate::readCrateConfig( QIODevice& dev ) {
 
       // Create the object used for reading the data:

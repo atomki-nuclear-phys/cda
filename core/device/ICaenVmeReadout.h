@@ -85,6 +85,20 @@ namespace dev {
        */
       virtual bool stop() = 0;
 
+      /// Get the number of events processed by the device so far
+      /**
+       * All CAEN VME devices collect events using their own gates. These should
+       * be syncronised in the hardware, but it's not at all impossible for an
+       * event to go missing in one or the other device.
+       *
+       * With this function the devices can be asked how many events they've
+       * seen so far. So that as soon as the devices go out of sync, the data
+       * acquisition could be reset, starting fresh.
+       *
+       * @returns The number of events processed by the device so far
+       */
+      virtual size_t eventsProcessed() const = 0;
+
       /// Function reading a single event from the device
       /**
        * This function is used to read out a single event from the

@@ -30,7 +30,7 @@ namespace v792 {
    /// $Date
    ///
    class Readout : public Device,
-         public virtual dev::ICaenVmeReadout {
+                   public virtual dev::ICaenVmeReadout {
 
       // To get the tr() function:
       Q_DECLARE_TR_FUNCTIONS( v792::Readout )
@@ -52,6 +52,9 @@ namespace v792 {
       /// Function stopping the device's data acquisition
       virtual bool stop();
 
+      /// Get the number of events processed by the device so far
+      virtual size_t eventsProcessed() const;
+
       /// Function reading a single event from the device
       virtual std::unique_ptr< ev::Fragment > readEvent();
 
@@ -63,6 +66,9 @@ namespace v792 {
 
       /// Current list of events already read from the device
       std::vector< caen::VmeDevice::DataEvent > m_events;
+
+      /// Number of events processed by the device so far
+      size_t m_eventsProcessed;
 
       /// A message logging object
       mutable msg::Logger m_logger;

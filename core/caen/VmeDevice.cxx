@@ -21,6 +21,7 @@ extern "C" {
 // Local include(s):
 #include "VmeDevice.h"
 #include "VmeBus.h"
+#include "StopAcquisition.h"
 
 namespace {
 
@@ -207,7 +208,7 @@ namespace caen {
 
    public:
       /// Default constructor
-      VmeDevicePrivateData() {
+      VmeDevicePrivateData() : m_nEvents( 0 ) {
 #ifdef HAVE_CAEN_QTP_LIBS
          // Make sure that the data object is zeroed out at the start
          memset( &m_data, 0, sizeof( m_data ) );
@@ -227,6 +228,9 @@ namespace caen {
       /// Accessor for the buffer usage variable
       uint32_t& bufferUsage() { return m_bufferUsage; }
 
+      /// The number of events "simulated" by the object so far
+      int& nEvents() { return m_nEvents; }
+
 #ifdef HAVE_CAEN_QTP_LIBS
       /// Accessor for the data object
       cvt_V792_data* data() { return &m_data; }
@@ -240,6 +244,9 @@ namespace caen {
       uint8_t* m_buffer;
       /// Size of the buffer currently being used
       uint32_t m_bufferUsage;
+
+      /// Number of events "simulated" by the object so far
+      int m_nEvents;
 
    }; // class VmeDevicePrivateData
 
@@ -373,6 +380,9 @@ namespace caen {
       // Clear the device:
       CHECK( cvt_V792_data_clear( m_data->data() ) );
 #endif // HAVE_CAEN_QTP_LIBS
+
+      // Reset the simulation counter:
+      m_data->nEvents() = 0;
 
       // Tell the user what happened:
       m_logger << msg::DEBUG << tr( "Cleared the data from the device" )
@@ -535,12 +545,19 @@ namespace caen {
       // Read data from the device into the allocated buffer:
       m_data->bufferUsage() = 0;
       while( ! m_data->bufferUsage() ) {
-	m_data->bufferUsage() = VmeDevicePrivateData::BUFFER_SIZE;
-	CHECK( cvt_V792_read_MEB( m_data->data(), m_data->buffer(),
-				  &( m_data->bufferUsage() ) ) );
-	if( ! m_data->bufferUsage() ) {
-	  common::SleepMin();
-	}
+         // Read the data:
+         m_data->bufferUsage() = VmeDevicePrivateData::BUFFER_SIZE;
+         CHECK( cvt_V792_read_MEB( m_data->data(), m_data->buffer(),
+                                   &( m_data->bufferUsage() ) ) );
+         // If the data acquisition is to be stopped, do so:
+         if( g_stopAcquisition ) {
+            REPORT_VERBOSE( tr( "Stopping acquisition" ) );
+            return true;
+         }
+         // If there is no data available, wait a bit more:
+         if( ! m_data->bufferUsage() ) {
+            common::SleepMin();
+         }
       }
       // The current event object, used in the payload decoding:
       DataEvent currentEvent;
@@ -550,8 +567,8 @@ namespace caen {
       while( m_data->bufferUsage() >= 4 ) {
          // The current data word:
          uint32_t data = *( itr++ );
-	 // Update the buffer usage:
-	 m_data->bufferUsage() -= 4;
+         // Update the buffer usage:
+         m_data->bufferUsage() -= 4;
          // Decode the data word:
          switch( data & CVT_QTP_DATA_TYPE_MSK ) {
          case CVT_QTP_HEADER:
@@ -611,7 +628,7 @@ namespace caen {
          event.header.crate = 0;
          event.header.channelCount = 32;
          event.footer.geo = 0;
-         event.footer.eventCount = i;
+         event.footer.eventCount = m_data->nEvents();
          // Generate some simple data values for it:
          for( int j = 0; j < 32; ++j ) {
             event.data.push_back( DataWord() );
@@ -623,6 +640,14 @@ namespace caen {
             event.data.back().overflow = 0;
          }
          events.push_back( event );
+         // Increment the simulated event count:
+         ++( m_data->nEvents() );
+         // With a low probability, simulate the device getting out of sync
+         // with other devices:
+         static const int unsyncProbability = RAND_MAX / 1000.0;
+         if( rand() < unsyncProbability ) {
+            ++( m_data->nEvents() );
+         }
       }
       // Wait a moment before returning:
       common::Sleep( 100 );

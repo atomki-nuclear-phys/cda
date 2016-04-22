@@ -62,6 +62,9 @@ namespace caen_vme_reader {
       /// Function reading out one event from the crate
       ev::Event readEvent() const;
 
+      /// Check if the devices appear to be in sync with each other
+      bool devicesAreInSync() const;
+
    protected:
       /// Read the crate specific options from binary input
       virtual bool readCrateConfig( QIODevice& dev );
