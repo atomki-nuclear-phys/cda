@@ -300,60 +300,65 @@ Setting it to 50000</source>
 <context>
     <name>caen::VmeDevice</name>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="282"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="289"/>
         <source>Device &quot;%1&quot; opened on address %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="299"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="306"/>
         <source>Trying to close a closed device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="308"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="315"/>
         <source>Device type &quot;%1&quot; closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="352"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="359"/>
         <source>Board info not available in simulation mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="378"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="388"/>
         <source>Cleared the data from the device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="420"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="430"/>
         <source>Set zero suppression with:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="469"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="479"/>
         <source>Set acquisition mode with:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="511"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="521"/>
         <source>Set readout mode with:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="590"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="554"/>
+        <source>Stopping acquisition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="607"/>
         <source>Incorrect data word found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="595"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="612"/>
         <source>Unknown data word found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="601"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="618"/>
         <source>Data words were left in the MEB. This will lead to data loss.</source>
         <translation type="unfinished"></translation>
     </message>

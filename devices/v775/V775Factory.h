@@ -1,7 +1,7 @@
 // Dear emacs, this is -*- c++ -*-
 // $Id$
-#ifndef CDA_DEVICES_V785_V785FACTORY_H
-#define CDA_DEVICES_V785_V785FACTORY_H
+#ifndef CDA_DEVICES_V775_V775FACTORY_H
+#define CDA_DEVICES_V775_V775FACTORY_H
 
 // Qt include(s):
 #include <QtCore/QObject>
@@ -10,17 +10,17 @@
 #include "device/Factory.h"
 
 /**
- *  @short Namespace for the V785 ADC device
+ *  @short Namespace for the V775 TDC device
  *
- *         This namespace holds all the classes that handle the a V785
- *         CAEN VME ADC device.
+ *         This namespace holds all the classes that handle the a V775
+ *         CAEN VME TDC device.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  *
  * $Revision$
  * $Date$
  */
-namespace v785 {
+namespace v775 {
 
    //
    // Make sure that the following Qt classes are available in the
@@ -31,9 +31,9 @@ namespace v785 {
    using QT_PREPEND_NAMESPACE( QString );
 
    /**
-    *  @short Factory creating all the V785 objects
+    *  @short Factory creating all the V775 objects
     *
-    *         This factory is used when loading the V785 plugin to access
+    *         This factory is used when loading the V775 plugin to access
     *         all the classes provided by the plugin.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
@@ -41,13 +41,13 @@ namespace v785 {
     * $Revision$
     * $Date$
     */
-   class V785Factory : public QObject,
+   class V775Factory : public QObject,
          virtual public dev::Factory {
 
       Q_OBJECT
       Q_INTERFACES( dev::Factory )
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.v785/1.0" )
+      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.v775/1.0" )
 #endif
 
    public:
@@ -60,8 +60,8 @@ namespace v785 {
       /// Universal function for creating a device object of this type
       virtual void* createDevice( const std::type_info& ti ) const;
 
-   }; // class V785Factory
+   }; // class V775Factory
 
-} // namespace v785
+} // namespace v775
 
-#endif // CDA_DEVICES_V785_V785FACTORY_H
+#endif // CDA_DEVICES_V775_V775FACTORY_H
