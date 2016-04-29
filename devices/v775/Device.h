@@ -108,6 +108,8 @@ namespace v775 {
       bool m_validSuppressionEnabled;
       /// Flag enabling/disabling common stop for the device
       bool m_commonStopEnabled;
+      /// Value to be used in the Full Scale Range register
+      uint8_t m_fullScaleRangeValue;
 
       /// Configuration of the channels of the device
       std::array< std::unique_ptr< ChannelConfig >,

@@ -15,6 +15,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QSpinBox>
 
 // CDA include(s):
 #include "device/CaenVmeGui.h"
@@ -37,7 +38,7 @@ namespace v775 {
    /// $Date$
    ///
    class Gui : public dev::CaenVmeGui,
-               public virtual Device {
+   public virtual Device {
 
       Q_OBJECT
 
@@ -61,6 +62,8 @@ namespace v775 {
       void validSuppressionSlot( bool value );
       /// Slot for common start/stop changes
       void commonStopSlot( int index );
+      /// Slot for FSR changes
+      void fullScaleRangeSlot( int value );
 
       /// Slot handling changes to channel enablement
       void channelEnabledSlot( int channel, bool on );
@@ -105,6 +108,15 @@ namespace v775 {
       std::unique_ptr< QLabel > m_commonStopLabel;
       /// Common start/stop editor
       std::unique_ptr< QComboBox > m_commonStopEdit;
+
+      /// Box for the Full Scale Range settings
+      std::unique_ptr< QGroupBox > m_fullScaleRangeBox;
+      /// Full Scale Range label
+      std::unique_ptr< QLabel > m_fullScaleRangeLabel;
+      /// Editor for the Full Scale Range value
+      std::unique_ptr< QSpinBox > m_fullScaleRangeEdit;
+      /// Label showing the current meaning of the FSR setting
+      std::unique_ptr< QLabel > m_fullScaleRangeRealValue;
 
       /// Channel settings box
       std::unique_ptr< QGroupBox > m_channelSettingsBox;

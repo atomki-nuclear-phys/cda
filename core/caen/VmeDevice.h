@@ -90,6 +90,9 @@ namespace caen {
       bool setReadoutMode( bool busErrorEnable, bool blockEndEnable,
                            bool align64Enable );
 
+      /// Set the pedestal of the device
+      bool setPedestal( uint8_t value );
+
       /// @}
 
       /// @name Functions/types used in the data acquisition

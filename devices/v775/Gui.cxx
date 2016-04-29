@@ -8,9 +8,12 @@
 
 namespace v775 {
 
+   /// Format for the FSR register feedback label
+   static const char* FSR_LABEL_VALUE = "Full range: %1 ns  Step value: %2 ps";
+
    Gui::Gui( QWidget* parent, Qt::WindowFlags flags )
-      : dev::CaenVmeGui( parent, flags ),
-        m_logger( "v775::Gui" ) {
+   : dev::CaenVmeGui( parent, flags ),
+   m_logger( "v775::Gui" ) {
 
       //
       // Create the widget that will hold all the configuration widgets:
@@ -56,7 +59,7 @@ namespace v775 {
       m_deviceSettingsBox.reset( new QGroupBox( tr( "Device properties" ),
                                                 m_scrollWidget.get() ) );
       m_deviceSettingsBox->setGeometry( QRect( 130, 80,
-                                               WIDGET_WIDTH - 150, 175 ) );
+                                               WIDGET_WIDTH - 150, 260 ) );
 
       m_vmeAddressLabel.reset( new QLabel( tr( "VME Address (hex)" ),
                                            m_deviceSettingsBox.get() ) );
@@ -98,6 +101,34 @@ namespace v775 {
       m_commonStopEdit->addItem( tr( "Common Stop" ) );
       connect( m_commonStopEdit.get(), SIGNAL( currentIndexChanged( int ) ),
                this, SLOT( commonStopSlot( int ) ) );
+
+      m_fullScaleRangeBox.reset( new QGroupBox( tr( "Full Scale Range" ),
+                                                m_deviceSettingsBox.get() ) );
+      m_fullScaleRangeBox->setGeometry( QRect( 10, 165, WIDGET_WIDTH - 170,
+                                               85 ) );
+
+      m_fullScaleRangeLabel.reset( new QLabel( tr( "Register value" ),
+                                               m_fullScaleRangeBox.get() ) );
+      m_fullScaleRangeLabel->setGeometry( QRect( 10, 30, 140, 25 ) );
+
+      m_fullScaleRangeEdit.reset( new QSpinBox( m_fullScaleRangeBox.get() ) );
+      m_fullScaleRangeEdit->setGeometry( QRect( 150, 30, 100, 25 ) );
+      m_fullScaleRangeEdit->setRange( 0x1e, 0xff );
+      m_fullScaleRangeEdit->setValue( m_fullScaleRangeValue );
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
+      m_fullScaleRangeEdit->setDisplayIntegerBase( 16 );
+#endif
+      connect( m_fullScaleRangeEdit.get(), SIGNAL( valueChanged( int ) ),
+               this, SLOT( fullScaleRangeSlot( int ) ) );
+
+      const double stepValue = 8900.0 / m_fullScaleRangeValue;
+      const double fullRange = stepValue * 4.096;
+      m_fullScaleRangeRealValue.reset(
+               new QLabel( tr( FSR_LABEL_VALUE )
+                           .arg( fullRange, 0, 'f', 0 )
+                           .arg( stepValue, 0, 'f', 0 ),
+                           m_fullScaleRangeBox.get() ) );
+      m_fullScaleRangeRealValue->setGeometry( QRect( 10, 55, 300, 25 ) );
 
       //
       // Create the input channel settings:
@@ -200,6 +231,20 @@ namespace v775 {
       return;
    }
 
+   void Gui::fullScaleRangeSlot( int value ) {
+
+      // Set the value:
+      m_fullScaleRangeValue = value;
+
+      // Update the label:
+      const double stepValue = 8900.0 / m_fullScaleRangeValue;
+      const double fullRange = stepValue * 4.096;
+      m_fullScaleRangeRealValue->setText( tr( FSR_LABEL_VALUE )
+                                          .arg( fullRange, 0, 'f', 0 )
+                                          .arg( stepValue, 0, 'f', 0 ) );
+      return;
+   }
+
    void Gui::channelEnabledSlot( int channel, bool on ) {
 
       if( on ) {
@@ -251,6 +296,7 @@ namespace v775 {
       m_overflowSuppressionEdit->setChecked( m_overflowSuppressionEnabled );
       m_validSuppressionEdit->setChecked( m_validSuppressionEnabled );
       m_commonStopEdit->setCurrentIndex( m_commonStopEnabled ? 1 : 0 );
+      m_fullScaleRangeEdit->setValue( m_fullScaleRangeValue );
 
       // Set the channel properties:
       for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {

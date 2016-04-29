@@ -18,6 +18,7 @@ namespace v775 {
         m_overflowSuppressionEnabled( false ),
         m_validSuppressionEnabled( false ),
         m_commonStopEnabled( false ),
+        m_fullScaleRangeValue( 0xff ),
         m_channels(),
         m_logger( "v775::Device" ) {
 
@@ -39,6 +40,7 @@ namespace v775 {
       input >> m_overflowSuppressionEnabled;
       input >> m_validSuppressionEnabled;
       input >> m_commonStopEnabled;
+      input >> m_fullScaleRangeValue;
       quint32 number_of_channels;
       input >> number_of_channels;
 
@@ -48,12 +50,14 @@ namespace v775 {
                           " - Overflow suppression: %3\n"
                           " - Valid suppression   : %4\n"
                           " - Common stop         : %5\n"
-                          " - Channels            : %6" )
+                          " - Full Scale Range    : %6\n"
+                          " - Channels            : %7" )
                       .arg( m_vmeAddress, 4, 16 )
                       .arg( m_zeroSuppressionEnabled )
                       .arg( m_overflowSuppressionEnabled )
                       .arg( m_validSuppressionEnabled )
                       .arg( m_commonStopEnabled )
+                      .arg( m_fullScaleRangeValue, 2, 16 )
                       .arg( number_of_channels ) );
 
       // Read the configuration of all enabled channels:
@@ -93,6 +97,7 @@ namespace v775 {
       output << m_overflowSuppressionEnabled;
       output << m_validSuppressionEnabled;
       output << m_commonStopEnabled;
+      output << m_fullScaleRangeValue;
 
       // Count the number of configured channels:
       quint32 number_of_channels = 0;
@@ -149,17 +154,24 @@ namespace v775 {
                                                "0" ).toInt( &ok );
       CHECK( ok );
 
+      // Read the Full Scale Range register value:
+      m_fullScaleRangeValue = element.attribute( "FullScaleRange",
+                                                 "255" ).toInt( &ok );
+      CHECK( ok );
+
       // Print the device level configuration:
       REPORT_VERBOSE( tr( " - VME Address: %1\n"
                           " - Zero suppression    : %2\n"
                           " - Overflow suppression: %3\n"
                           " - Valid suppression   : %4\n"
-                          " - Common stop         : %5" )
+                          " - Common stop         : %5\n"
+                          " - Full Scale Range    : %6" )
                       .arg( m_vmeAddress, 4, 16 )
                       .arg( m_zeroSuppressionEnabled )
                       .arg( m_overflowSuppressionEnabled )
                       .arg( m_validSuppressionEnabled )
-                      .arg( m_commonStopEnabled ) );
+                      .arg( m_commonStopEnabled )
+                      .arg( m_fullScaleRangeValue, 2, 16 ) );
 
       // Investigate all child nodes of this element:
       for( int i = 0; i < element.childNodes().size(); ++i ) {
@@ -209,6 +221,7 @@ namespace v775 {
                             m_overflowSuppressionEnabled );
       element.setAttribute( "ValidSuppression", m_validSuppressionEnabled );
       element.setAttribute( "CommonStop", m_commonStopEnabled );
+      element.setAttribute( "FullScaleRange", m_fullScaleRangeValue );
 
       // Create a new node for the configuration of each channel:
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
@@ -249,6 +262,7 @@ namespace v775 {
       m_overflowSuppressionEnabled = false;
       m_validSuppressionEnabled = false;
       m_commonStopEnabled = false;
+      m_fullScaleRangeValue = 0xff;
 
       // Remove all the channels:
       for( auto& ch : m_channels ) {

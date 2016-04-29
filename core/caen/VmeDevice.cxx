@@ -527,6 +527,36 @@ namespace caen {
       return true;
    }
 
+   /// This function can be used to set the pedestal value of the device.
+   ///
+   /// It is actually used in a fairly hacky way at the moment. Since for V775
+   /// the Full Scale Range register is on the same address that the pedestal
+   /// register uses on some other modules, it was easiest to just re-use this
+   /// function for setting the value of that register.
+   ///
+   /// @param value Value to be set for the pedestal/FSR register
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::setPedestal( uint8_t value ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef HAVE_CAEN_QTP_LIBS
+      // Call the setter function:
+      CHECK( cvt_V792_set_pedestal( m_data->data(), value ) );
+#endif // HAVE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG
+               << tr( "Set the pedestal to: %1" ).arg( value, 2, 16 )
+               << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
    /// This function can be used to read data from the device. It makes use of
    /// the underlying QTP library's Multiple Event Buffer readout to first copy
    /// the data into the application's memory, and then decodes the information

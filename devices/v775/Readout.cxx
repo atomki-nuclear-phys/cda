@@ -44,6 +44,9 @@ namespace v775 {
                                              m_commonStopEnabled,
                                              true, true ) );
 
+      // Set the FSR register by abusing the pedestal setter function:
+      CHECK( m_vmeDevice.setPedestal( m_fullScaleRangeValue ) );
+
       // Set up the readout mode:
       CHECK( m_vmeDevice.setReadoutMode( true, true, true ) );
 

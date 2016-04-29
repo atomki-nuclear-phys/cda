@@ -343,22 +343,27 @@ Setting it to 50000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="554"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="553"/>
+        <source>Set the pedestal to: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="584"/>
         <source>Stopping acquisition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="607"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="637"/>
         <source>Incorrect data word found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="612"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="642"/>
         <source>Unknown data word found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="618"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="648"/>
         <source>Data words were left in the MEB. This will lead to data loss.</source>
         <translation type="unfinished"></translation>
     </message>
