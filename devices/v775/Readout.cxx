@@ -9,6 +9,9 @@
 
 namespace v775 {
 
+   /// "Offline" bit in the Bit Set 2 register
+   static const uint16_t BIT_SET_2_OFFLINE_BIT = 0x2;
+
    Readout::Readout()
       : Device(), m_logger( "v775::Readout" ) {
 
@@ -23,6 +26,9 @@ namespace v775 {
       // Print some information about it. Making sure in the process that we
       // can talk to the device:
       CHECK( m_vmeDevice.printInfo( msg::DEBUG ) );
+
+      // Take the device offline:
+      CHECK( m_vmeDevice.writeBitSet2Register( BIT_SET_2_OFFLINE_BIT ) );
 
       // Clear all data from the device:
       CHECK( m_vmeDevice.dataClear() );
@@ -65,13 +71,15 @@ namespace v775 {
 
    bool Readout::start() {
 
-      // Since the device can't really be turned off, just clear all current
-      // data from the device, expecting that readout will start momentarily.
+      // Clear all possible data from the device:
       CHECK( m_vmeDevice.dataClear() );
 
       // Reset the event cache:
       m_events.clear();
       m_eventsProcessed = 0;
+
+      // Turn the data acquisition on:
+      CHECK( m_vmeDevice.writeBitClear2Register( BIT_SET_2_OFFLINE_BIT ) );
 
       // Return gracefully:
       return true;
@@ -79,7 +87,8 @@ namespace v775 {
 
    bool Readout::stop() {
 
-      // There's no easy way of preventing the device from running...
+      // Turn the data acuisition off:
+      CHECK( m_vmeDevice.writeBitSet2Register( BIT_SET_2_OFFLINE_BIT ) );
 
       // Return gracefully:
       return true;

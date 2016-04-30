@@ -93,6 +93,16 @@ namespace caen {
       /// Set the pedestal of the device
       bool setPedestal( uint8_t value );
 
+      /// Write a value to the bit set 2 register
+      bool writeBitSet1Register( uint16_t value );
+      /// Write a value to the bit clear 2 register
+      bool writeBitClear1Register( uint16_t value );
+
+      /// Write a value to the bit set 2 register
+      bool writeBitSet2Register( uint16_t value );
+      /// Write a value to the bit clear 2 register
+      bool writeBitClear2Register( uint16_t value );
+
       /// @}
 
       /// @name Functions/types used in the data acquisition

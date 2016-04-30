@@ -528,7 +528,6 @@ namespace caen {
    }
 
    /// This function can be used to set the pedestal value of the device.
-   ///
    /// It is actually used in a fairly hacky way at the moment. Since for V775
    /// the Full Scale Range register is on the same address that the pedestal
    /// register uses on some other modules, it was easiest to just re-use this
@@ -552,6 +551,114 @@ namespace caen {
       m_logger << msg::DEBUG
                << tr( "Set the pedestal to: %1" ).arg( value, 2, 16 )
                << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to write a particular value into the device's
+   /// Bit Set 1 register. See the device's documentation for information on
+   /// the meaning of the various bits.
+   ///
+   /// @param value The value to write into the register
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::writeBitSet1Register( uint16_t value ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef HAVE_CAEN_QTP_LIBS
+      // Call the library function:
+      CHECK( cvt_V792_set_bit_set_1( m_data->data(), value ) );
+#endif // HAVE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG
+               << tr( "Wrote value (bin) %1 to the bit set 1 register" )
+                  .arg( value, 16, 2 ) << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to write a particular value into the device's
+   /// Bit Clear 1 register. See the device's documentation for information on
+   /// the meaning of the various bits.
+   ///
+   /// @param value The value to write into the register
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::writeBitClear1Register( uint16_t value ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef HAVE_CAEN_QTP_LIBS
+      // Call the library function:
+      CHECK( cvt_V792_set_bit_clear_1( m_data->data(), value ) );
+#endif // HAVE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG
+               << tr( "Wrote value (bin) %1 to the bit clear 1 register" )
+                  .arg( value, 16, 2 ) << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to write a particular value into the device's
+   /// Bit Set 2 register. See the device's documentation for information on
+   /// the meaning of the various bits.
+   ///
+   /// @param value The value to write into the register
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::writeBitSet2Register( uint16_t value ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef HAVE_CAEN_QTP_LIBS
+      // Call the library function:
+      CHECK( cvt_V792_set_bit_set_2( m_data->data(), value ) );
+#endif // HAVE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG
+               << tr( "Wrote value (bin) %1 to the bit set 2 register" )
+                  .arg( value, 16, 2 ) << msg::endmsg;
+
+      // Return gracefully:
+      return true;
+   }
+
+   /// This function can be used to write a particular value into the device's
+   /// Bit Clear 2 register. See the device's documentation for information on
+   /// the meaning of the various bits.
+   ///
+   /// @param value The value to write into the register
+   /// @returns <code>true</code> if the call was successful,
+   ///          <code>false</code> otherwise
+   ///
+   bool VmeDevice::writeBitClear2Register( uint16_t value ) {
+
+      // Make sure that the board is connected to:
+      CHECK( isConnected() );
+
+#ifdef HAVE_CAEN_QTP_LIBS
+      // Call the library function:
+      CHECK( cvt_V792_set_bit_clear_2( m_data->data(), value ) );
+#endif // HAVE_CAEN_QTP_LIBS
+
+      // Tell the user what happened:
+      m_logger << msg::DEBUG
+               << tr( "Wrote value (bin) %1 to the bit clear 2 register" )
+                  .arg( value, 16, 2 ) << msg::endmsg;
 
       // Return gracefully:
       return true;

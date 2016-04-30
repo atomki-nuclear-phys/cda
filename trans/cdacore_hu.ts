@@ -6,26 +6,24 @@
     <message>
         <location filename="../core/common/Address.cxx" line="39"/>
         <source>Constructing address from string: &quot;%1&quot;</source>
-        <translation>Cím létrehozása a &quot;%1&quot; string-ből</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="47"/>
         <source>Couldn&apos;t decode address: &quot;%1&quot;
 Setting to 127.0.0.1:50000</source>
-        <translation>&quot;%1&quot; dekódolása sikertelen
-127.0.0.1:50000 lett beállítva</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="57"/>
         <source>Decoded host name: %1, port: %2</source>
-        <translation>Dekódolt név: %1, port: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="68"/>
         <source>Couldn&apos;t decode port: %1
 Setting it to 50000</source>
-        <translation>Port dekódolása sikertelen ebből: &quot;%1&quot;
-50000 lett beállítva</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -34,7 +32,7 @@ Setting it to 50000</source>
         <location filename="../core/caen/Digitizer.cxx" line="391"/>
         <location filename="../core/caen/Digitizer.cxx" line="408"/>
         <source>Failed executing &quot;%1&quot;, Return value: %2</source>
-        <translation>&quot;%1&quot; futtatása sikertelen, visszatérési érték: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -42,12 +40,12 @@ Setting it to 50000</source>
     <message>
         <location filename="../core/fifo/Fifo.cxx" line="37"/>
         <source>%1 exists</source>
-        <translation>%1 létezik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../core/fifo/Fifo.cxx" line="40"/>
         <source>%1 does not exist</source>
-        <translation>%1 nem létezik</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -56,7 +54,7 @@ Setting it to 50000</source>
         <location filename="../core/caen/VmeBus.cxx" line="72"/>
         <location filename="../core/caen/VmeBus.cxx" line="89"/>
         <source>Failed executing &quot;%1&quot;, Return value: %2</source>
-        <translation>&quot;%1&quot; futtatása sikertelen, visszatérési érték: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -343,27 +341,47 @@ Setting it to 50000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="553"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="552"/>
         <source>Set the pedestal to: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="584"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="579"/>
+        <source>Wrote value (bin) %1 to the bit set 1 register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="606"/>
+        <source>Wrote value (bin) %1 to the bit clear 1 register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="633"/>
+        <source>Wrote value (bin) %1 to the bit set 2 register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="660"/>
+        <source>Wrote value (bin) %1 to the bit clear 2 register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/caen/VmeDevice.cxx" line="691"/>
         <source>Stopping acquisition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="637"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="744"/>
         <source>Incorrect data word found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="642"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="749"/>
         <source>Unknown data word found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/caen/VmeDevice.cxx" line="648"/>
+        <location filename="../core/caen/VmeDevice.cxx" line="755"/>
         <source>Data words were left in the MEB. This will lead to data loss.</source>
         <translation type="unfinished"></translation>
     </message>
