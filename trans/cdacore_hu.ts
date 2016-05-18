@@ -760,14 +760,14 @@ file is already open!</source>
 <context>
     <name>ev::BinaryStream</name>
     <message>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="69"/>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="135"/>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="149"/>
+        <location filename="../core/event/BinaryStream.cxx" line="69"/>
+        <location filename="../core/event/BinaryStream.cxx" line="135"/>
+        <location filename="../core/event/BinaryStream.cxx" line="149"/>
         <source>Incomplete event received</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/BinaryStream_ev.cxx" line="106"/>
+        <location filename="../core/event/BinaryStream.cxx" line="106"/>
         <source>Couldn&apos;t send data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -853,45 +853,45 @@ Throwing away incoming event!</source>
 <context>
     <name>ev::TextStream</name>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="48"/>
+        <location filename="../core/event/TextStream.cxx" line="48"/>
         <source>-------- Event record --------
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="51"/>
+        <location filename="../core/event/TextStream.cxx" line="51"/>
         <source> Number of fragments: %1
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="63"/>
+        <location filename="../core/event/TextStream.cxx" line="63"/>
         <source> No event fragments!
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="83"/>
+        <location filename="../core/event/TextStream.cxx" line="83"/>
         <source>  ---- Fragment record ----
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="86"/>
+        <location filename="../core/event/TextStream.cxx" line="86"/>
         <source>   Module ID   : %1
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="97"/>
+        <location filename="../core/event/TextStream.cxx" line="97"/>
         <source>   Data word: 0x%1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/event/TextStream_ev.cxx" line="103"/>
+        <location filename="../core/event/TextStream.cxx" line="103"/>
         <source>   No data words!
 </source>
         <translation type="unfinished"></translation>
@@ -900,22 +900,22 @@ Throwing away incoming event!</source>
 <context>
     <name>i18n::Loader</name>
     <message>
-        <location filename="../core/i18n/Loader_i18n.cxx" line="59"/>
+        <location filename="../core/i18n/Loader.cxx" line="59"/>
         <source>Setting translation directory to: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/i18n/Loader_i18n.cxx" line="98"/>
+        <location filename="../core/i18n/Loader.cxx" line="98"/>
         <source>Couldn&apos;t load translation file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/i18n/Loader_i18n.cxx" line="102"/>
+        <location filename="../core/i18n/Loader.cxx" line="102"/>
         <source>Loaded translation file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/i18n/Loader_i18n.cxx" line="110"/>
+        <location filename="../core/i18n/Loader.cxx" line="110"/>
         <source>Loaded all translations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -940,99 +940,99 @@ Throwing away incoming event!</source>
 <context>
     <name>root::NTupleMgr</name>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="43"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="43"/>
         <source>Opening output file with name &quot;%1&quot; and tree name &quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="50"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="50"/>
         <source>An output file is already open. Not doing anything.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="59"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="59"/>
         <source>Failed creating output file with name: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="63"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="63"/>
         <source>&quot;%1&quot; opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="93"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="93"/>
         <source>No output file is open at the moment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="104"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="104"/>
         <source>The object is in an inconsistent state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="110"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="110"/>
         <source>An error happened while writing out the final events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="129"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="129"/>
         <source>Closed output file after writing %1 events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="148"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="148"/>
         <source>A file is not open at the moment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="155"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="155"/>
         <source>A TTree is not available at the moment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="161"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="161"/>
         <source>An error happened while writing the current event</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="173"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="173"/>
         <source>Received a complex object description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="214"/>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="220"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="214"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="220"/>
         <source>Unknown primitive type encountered: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="230"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="230"/>
         <source>You have to open an output file before declaring variables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="237"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="237"/>
         <source>A branch with name &quot;%1&quot; already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="242"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="242"/>
         <source>Checking if branch with name &quot;%1&quot; can be added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="259"/>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="285"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="259"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="285"/>
         <source>Failed creating branch with name: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="266"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="266"/>
         <source>Creating primitive branch with name &quot;%1&quot; , title &quot;%2&quot; and leaf-list &quot;%3&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../core/root/NTupleMgr_root.cxx" line="292"/>
+        <location filename="../core/root/NTupleMgr.cxx" line="292"/>
         <source>Creating object branch with name &quot;%1&quot;, title &quot;%2&quot; and classname &quot;%3&quot;</source>
         <translation type="unfinished"></translation>
     </message>

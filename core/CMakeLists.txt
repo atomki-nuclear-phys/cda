@@ -94,7 +94,7 @@ include( CheckIncludeFileCXX )
 check_include_file_cxx( cxxabi.h HAVE_CXXABI_H )
 if( HAVE_CXXABI_H )
    target_compile_definitions( cdacore PUBLIC HAVE_CXXABI_H )
-endif()  
+endif()
 
 # Use CERNLIB if it was found:
 if( CERNLIB_FOUND AND CDA_USE_CERNLIB )
