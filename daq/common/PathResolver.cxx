@@ -7,6 +7,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QProcessEnvironment>
 
 // Local include(s):
 #include "PathResolver.h"
@@ -44,7 +45,9 @@ namespace daq {
       } else {
          m_logger << msg::DEBUG << tr( "Caching environment: %1" ).arg( env )
                   << msg::endmsg;
-         QString envarray = ::getenv( env.toLatin1().constData() );
+         const QProcessEnvironment procenv =
+            QProcessEnvironment::systemEnvironment();
+         const QString envarray = procenv.value( env );
          REPORT_VERBOSE( tr( "%1 = %2" ).arg( env ).arg( envarray ) );
 #ifdef Q_OS_WIN
          static const QString separator = ";";
@@ -67,7 +70,7 @@ namespace daq {
       //
       if( name.contains( "/" ) ) {
          m_logger << msg::WARNING
-                  << tr( "The specified executable name (%1) contains a slash." )
+                  << tr( "The specified file name (%1) contains a slash." )
             .arg( name ) << std::endl
                   << tr( "Treating it as an absolute path..." ) << msg::endmsg;
          return name;
