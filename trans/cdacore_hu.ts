@@ -906,7 +906,7 @@ Throwing away incoming event!</source>
     </message>
     <message>
         <location filename="../core/i18n/Loader.cxx" line="98"/>
-        <source>Couldn&apos;t load translation file: %1</source>
+        <source>Couldn&apos;t load translation file: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

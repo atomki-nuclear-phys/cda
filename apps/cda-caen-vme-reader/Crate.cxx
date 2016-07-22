@@ -126,12 +126,13 @@ namespace caen_vme_reader {
       // Check if every device reports the same:
       for( const auto& itr : m_devices ) {
          if( eventsProcessed != itr.second->eventsProcessed() ) {
-            REPORT_VERBOSE( tr( "First device (%1) reports %2 events" )
-                            .arg( m_devices.begin()->second->deviceName() )
-                            .arg( eventsProcessed ) );
-            REPORT_VERBOSE( tr( "Device %1 reports %2 events" )
-                            .arg( itr.second->deviceName() )
-                            .arg( itr.second->eventsProcessed() ) );
+            m_logger << msg::DEBUG
+                     << tr( "First device (%1) reports %2 events" )
+                        .arg( m_devices.begin()->second->deviceName() )
+                        .arg( eventsProcessed ) << std::endl
+                     << tr( "Device %1 reports %2 events" )
+                        .arg( itr.second->deviceName() )
+                        .arg( itr.second->eventsProcessed() ) << msg::endmsg;
             return false;
          }
       }

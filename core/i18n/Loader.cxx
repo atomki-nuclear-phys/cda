@@ -25,7 +25,7 @@
 namespace i18n {
 
    /// Flag specifying if the hungarian translations should be loaded or not
-   static const bool USE_HUNGARIAN_TRANSLATIONS = true;
+   static const bool USE_HUNGARIAN_TRANSLATIONS = false;
 
    // Make sure that the Qt classes are in scope:
    using QT_PREPEND_NAMESPACE( QDir );
@@ -95,8 +95,8 @@ namespace i18n {
          QFileInfo finfo( *pname );
          QTranslator* trans = new QTranslator();
          if( ! trans->load( finfo.fileName(), m_path ) ) {
-            REPORT_ERROR( tr( "Couldn't load translation file: %1" )
-                          .arg( finfo.fileName() ) );
+            REPORT_ERROR( tr( "Couldn't load translation file: %1/%2" )
+                          .arg( m_path ).arg( finfo.fileName() ) );
             return false;
          }
          REPORT_VERBOSE( tr( "Loaded translation file: %1" )
