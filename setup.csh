@@ -1,31 +1,45 @@
 # $Id$
 #
 # Simple script setting up the environment for running CDA
-# applications/examples.
+# applications.
 #
 
+# Greet the user:
 echo "Setting up environment for compiling/running CDA"
 
-# Set the environment variables:
-setenv CDASYS $PWD
-setenv PATH $CDASYS/bin:$PATH
-if( $?LD_LIBRARY_PATH ) then
-    setenv LD_LIBRARY_PATH $CDASYS/lib:$LD_LIBRARY_PATH
-else
-    setenv LD_LIBRARY_PATH $CDASYS/lib
+# Make sure that we run in (T)CSH:
+set sourced=($_)
+if ( "$sourced" == "" ) then
+    echo "ERROR: This script must be sourced from TCSH"
+    return 1
 endif
 
-# Check that all the directories for the compiled binaries exist.
-# (They're no longer in the repository...)
-if( ! -d $CDASYS/bin ) then
-    echo Directory $CDASYS/bin does not exist. Creating it...
-    mkdir $CDASYS/bin
+# Figure out which directory the script is in:
+set thisdir=`dirname $sourced[2]`
+set thisdir=`cd $thisdir; pwd`
+unset sourced
+
+# Add the bin/ and lib/ directories to the environment, if they
+# exist.
+if( -d $thisdir/bin ) then
+    if ( ! `eval echo \$\?PATH` ) then
+        setenv PATH $thisdir/bin
+    else
+        setenv PATH $thisdir/bin:$PATH
+    endif
 endif
-if( ! -d $CDASYS/lib ) then
-    echo Directory $CDASYS/lib does not exist. Creating it...
-    mkdir $CDASYS/lib
+if( -d $thisdir/lib ) then
+    if ( ! `eval echo \$\?LD_LIBRARY_PATH` ) then
+        setenv LD_LIBRARY_PATH $thisdir/lib
+    else
+        setenv LD_LIBRARY_PATH $thisdir/lib:$LD_LIBRARY_PATH
+    endif
+    if ( ! `eval echo \$\?DYLD_LIBRARY_PATH` ) then
+        setenv DYLD_LIBRARY_PATH $thisdir/lib
+    else
+        setenv DYLD_LIBRARY_PATH $thisdir/lib:$DYLD_LIBRARY_PATH
+    endif
 endif
-if( ! -d $CDASYS/dev ) then
-    echo Directory $CDASYS/dev does not exist. Creating it...
-    mkdir $CDASYS/dev
-endif
+
+# Clean up:
+unset thisdir

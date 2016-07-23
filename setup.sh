@@ -1,32 +1,47 @@
 # $Id$
 #
 # Simple script setting up the environment for running CDA
-# applications/examples.
+# applications.
 #
 
+# Greet the user:
 echo "Setting up environment for compiling/running CDA"
 
-# Set the environment variables:
-THIS=$(dirname ${BASH_ARGV[0]})
-export CDASYS=$(cd ${THIS};pwd)
-export PATH=$CDASYS/bin:$PATH
-if [ ! $LD_LIBRARY_PATH ]; then
-    export LD_LIBRARY_PATH=$CDASYS/lib
+# Figure out which directory the script is in:
+if [ "x${BASH_SOURCE[0]}" = "x" ]; then
+    # This trick should do the right thing under ZSH:
+    thisdir=$(dirname `print -P %x`)
+    if [ $? != 0 ]; then
+        echo "ERROR: This script must be sourced from BASH or ZSH"
+        return 1
+    fi
 else
-    export LD_LIBRARY_PATH=$CDASYS/lib:$LD_LIBRARY_PATH
+    # The BASH solution is a bit more straight forward:
+    thisdir=$(dirname ${BASH_SOURCE[0]})
+fi
+thisdir=$(cd $thisdir; pwd)
+
+# Add the bin/ and lib/ directories to the environment, if they
+# exist.
+if [ -d ${thisdir}/bin ]; then
+    if [ -z "${PATH}" ]; then
+        export PATH=${thisdir}/bin
+    else
+        export PATH=${thisdir}/bin:${PATH}
+    fi
+fi
+if [ -d ${thisdir}/lib ]; then
+    if [ -z "${LD_LIBRARY_PATH}" ]; then
+        export LD_LIBRARY_PATH=${thisdir}/lib
+    else
+        export LD_LIBRARY_PATH=${thisdir}/lib:${LD_LIBRARY_PATH}
+    fi
+    if [ -z "${DYLD_LIBRARY_PATH}" ]; then
+        export DYLD_LIBRARY_PATH=${thisdir}/lib
+    else
+        export DYLD_LIBRARY_PATH=${thisdir}/lib:${DYLD_LIBRARY_PATH}
+    fi
 fi
 
-# Check that all the directories for the compiled binaries exist.
-# (They're no longer in the repository...)
-if [ ! -d $CDASYS/bin ]; then
-    echo Directory $CDASYS/bin does not exist. Creating it...
-    mkdir $CDASYS/bin
-fi
-if [ ! -d $CDASYS/lib ]; then
-    echo Directory $CDASYS/lib does not exist. Creating it...
-    mkdir $CDASYS/lib
-fi
-if [ ! -d $CDASYS/dev ]; then
-    echo Directory $CDASYS/dev does not exist. Creating it...
-    mkdir $CDASYS/dev
-fi
+# Clean up:
+unset thisdir
