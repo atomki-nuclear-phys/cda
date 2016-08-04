@@ -25,6 +25,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDateTime>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
@@ -344,7 +345,7 @@ int main( int argc, char* argv[] ) {
       // Start the file writing and monitoring (this) threads:
       //
       g_fwriter->start();
-      QTime startTime( QTime::currentTime() );
+      QDateTime startTime( QDateTime::currentDateTime() );
       for( ; ; ) {
 
          // Check if the file writing thread is still running:
@@ -363,10 +364,10 @@ int main( int argc, char* argv[] ) {
                                                   statSource ) );
 
          // If it's time to open a new file, let's do it:
-         if( startTime.secsTo( QTime::currentTime() ) >
+         if( startTime.secsTo( QDateTime::currentDateTime() ) >
              ( 60 * updatefreq.getValue() ) ) {
             // Remember the current time:
-            startTime = QTime::currentTime();
+            startTime = QDateTime::currentDateTime();
             // First off, let's stop the file writing thread:
             g_fwriter->stopProcessing();
             // Store how much data we saved to this file:
