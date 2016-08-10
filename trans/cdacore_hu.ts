@@ -6,24 +6,34 @@
     <message>
         <location filename="../core/common/Address.cxx" line="39"/>
         <source>Constructing address from string: &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Cím létrehozása a &quot;%1&quot; kifejezésből</translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="47"/>
         <source>Couldn&apos;t decode address: &quot;%1&quot;
 Setting to 127.0.0.1:50000</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; cím dekódolása sikertelen
+127.0.0.1:50000-re állítva</translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="57"/>
         <source>Decoded host name: %1, port: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekódolt szerver név: %1, port: %2</translation>
     </message>
     <message>
         <location filename="../core/common/Address.cxx" line="68"/>
         <source>Couldn&apos;t decode port: %1
 Setting it to 50000</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült a %1 port-ot dekódolni
+50000-re állítva</translation>
+    </message>
+</context>
+<context>
+    <name>CHECK</name>
+    <message>
+        <location filename="../core/common/errorcheck.h" line="33"/>
+        <source>Failed executing &quot;%1&quot;</source>
+        <translation>&quot;%1&quot; végrehajtása sikertelen</translation>
     </message>
 </context>
 <context>
@@ -32,7 +42,7 @@ Setting it to 50000</source>
         <location filename="../core/caen/Digitizer.cxx" line="391"/>
         <location filename="../core/caen/Digitizer.cxx" line="408"/>
         <source>Failed executing &quot;%1&quot;, Return value: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; végrehajtása sikertelen, visszatérési érték: %2</translation>
     </message>
 </context>
 <context>
@@ -40,12 +50,12 @@ Setting it to 50000</source>
     <message>
         <location filename="../core/fifo/Fifo.cxx" line="37"/>
         <source>%1 exists</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 létezik</translation>
     </message>
     <message>
         <location filename="../core/fifo/Fifo.cxx" line="40"/>
         <source>%1 does not exist</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 nem létezik</translation>
     </message>
 </context>
 <context>
@@ -54,7 +64,7 @@ Setting it to 50000</source>
         <location filename="../core/caen/VmeBus.cxx" line="72"/>
         <location filename="../core/caen/VmeBus.cxx" line="89"/>
         <source>Failed executing &quot;%1&quot;, Return value: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; végrehajtása sikertelen, visszatérési érték: %2</translation>
     </message>
 </context>
 <context>
@@ -62,22 +72,22 @@ Setting it to 50000</source>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="602"/>
         <source>Opening connection type %1 on link number %2,  CONET node %3, VME address %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 típusú kapcsolat megnyitása %2 link szám, %3 CONET node, és %4 VME cím alatt</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="610"/>
         <source>Opened connection to digitizer</source>
-        <translation type="unfinished"></translation>
+        <translation>A kapcsolat a digitalizátorral megnyitva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="628"/>
         <source>No need to close the device, it&apos;s not open</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem szükséges lezárni az eszközt, az nincs megnyitva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="643"/>
         <source>Closed connection to digitizer</source>
-        <translation type="unfinished"></translation>
+        <translation>A kapcsolat a digitalizátorral lezárva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="655"/>
@@ -102,23 +112,33 @@ Setting it to 50000</source>
   serial num.: %8
   PCB rev.   : %9
   ADC NBits  : %10</source>
-        <translation type="unfinished"></translation>
+        <translation>Digitalizátor információ:
+  model név: %1
+  model: %2
+  csatornák: %3
+  forma faktor: %4
+  család kód: %5
+  ROC firmware kiadás: %6
+  AMC firmware kiadás: %7
+  sorozatszám: %8
+  PCB verzió: %9
+  ADC bitek száma: %10</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="715"/>
         <location filename="../core/caen/Digitizer.cxx" line="876"/>
         <source>No CAEN library available</source>
-        <translation type="unfinished"></translation>
+        <translation>A CAEN könyvtár nem elérhető</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="810"/>
         <source>Setting acquisition mode to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Adatgyűjtési mód %1-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="842"/>
         <source>Setting interrupt to happen after %1 events</source>
-        <translation type="unfinished"></translation>
+        <translation>Megszakítás beállítása %1 esemény után</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="864"/>
@@ -128,82 +148,87 @@ Setting it to 50000</source>
   status ID   : %3
   event number: %4
   mode        : %5</source>
-        <translation type="unfinished"></translation>
+        <translation>Megszakítás beállítása:
+  állapot: %1
+  szint: %2
+  státusz ID: %3
+  esemény szám: %4
+  mód: %5</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="901"/>
         <source>Setting SW trigger mode to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>SW trigger mód %1-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="929"/>
         <source>Setting Ext trigger mode to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Külső trigger mód %1-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="958"/>
         <source>Setting channel %1 self-trigger mode to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csatorna ön-trigger módja %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="975"/>
         <source>Requesting channel %1&apos;s self-trigger mode</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csatorna ön-trigger módjának lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="991"/>
         <source>Setting group %1 self-trigger mode to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csoport ön-trigger módja %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1008"/>
         <source>Requesting group %1&apos;s self-trigger mode</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csoport ön-trigger módjának lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1022"/>
         <source>Sent a SW trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>SW trigger elküldve</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1036"/>
         <source>Setting group %1&apos;s channel mask to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csoport csatorna maszkja %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1051"/>
         <source>Requestuing group %1&apos;s channel mask</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csoport csatorna maszkjának lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1067"/>
         <source>Setting channel %1&apos;s trigger threshold to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csatorna trigger küszöbe %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1082"/>
         <source>Retrieving trigger threshold for channel %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csatorna trigger küszöbének lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1098"/>
         <source>Setting group %1&apos;s trigger threshold to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csoport trigger küszöbe %2-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1113"/>
         <source>Retrieving trigger threshold for group %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1. csoport trigger küszöbének lekérdezése</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1127"/>
         <source>Channel enable mask set to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Csatorna engedélyező maszk %1-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1152"/>
         <source>Group enable mask set to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Csoport engedélyező maszk %1-ra/re állítva</translation>
     </message>
     <message>
         <location filename="../core/caen/Digitizer.cxx" line="1177"/>
@@ -273,7 +298,7 @@ Setting it to 50000</source>
     </message>
 </context>
 <context>
-    <name>caen::VME</name>
+    <name>caen::VmeBus</name>
     <message>
         <location filename="../core/caen/VmeBus.cxx" line="146"/>
         <source>Open called with type = %1, linkNumber = %2, boardNumber = %3</source>
@@ -287,7 +312,7 @@ Setting it to 50000</source>
     <message>
         <location filename="../core/caen/VmeBus.cxx" line="167"/>
         <source>No need to close the device, it&apos;s not open</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem szükséges lezárni az eszközt, az nincs megnyitva</translation>
     </message>
     <message>
         <location filename="../core/caen/VmeBus.cxx" line="182"/>

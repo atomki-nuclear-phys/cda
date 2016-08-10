@@ -36,7 +36,7 @@ namespace caen {
    class CDACORE_EXPORT VmeBus {
 
       // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( caen::VME )
+      Q_DECLARE_TR_FUNCTIONS( caen::VmeBus )
 
    public:
       /// Default constructor

@@ -51,12 +51,14 @@ set_source_files_properties( ${ts_file} PROPERTIES OUTPUT_LOCATION
 if( Qt5_FOUND AND NOT CDA_USE_QT4 )
    find_package( Qt5LinguistTools )
    if( Qt5LinguistTools_FOUND )
-      qt5_create_translation( qm_files ${sources} ${ts_file} )
+      qt5_create_translation( qm_files ${sources}
+         ${CMAKE_CURRENT_SOURCE_DIR}/common/errorcheck.h ${ts_file} )
    endif()
 else()
-   qt4_create_translation( qm_files ${sources} ${ts_file} )
+   qt4_create_translation( qm_files ${sources}
+      ${CMAKE_CURRENT_SOURCE_DIR}/common/errorcheck.h ${ts_file} )
 endif()
-install( FILES ${qm_files} DESTINATION trans )
+install( FILES ${qm_files} DESTINATION trans OPTIONAL )
 
 # Build the cdacore library:
 add_library( cdacore STATIC ${headers} ${sources} ${qm_files} )

@@ -28,7 +28,7 @@
  * </code>
  */
 #define CHECK( CMD ) {                                               \
-      const bool result = CMD;                                       \
+      const auto result = CMD;                                       \
       if( ! result ) {                                               \
          REPORT_ERROR( qApp->translate( "CHECK",                     \
                                         "Failed executing \"%1\"" )  \
