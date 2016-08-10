@@ -84,13 +84,10 @@ namespace dev {
       m_devices.clear();
    }
 
-   bool CaenVmeEditor::readConfig( QIODevice& dev ) {
+   StatusCode CaenVmeEditor::readConfig( QIODevice& dev ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenVmeGui >::readConfig( dev ) ) {
-         REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
-         return false;
-      }
+      CHECK( dev::Crate< dev::CaenVmeGui >::readConfig( dev ) );
 
       // Now show the device(s):
       DeviceMap_t::const_iterator itr = m_devices.begin();
@@ -115,16 +112,14 @@ namespace dev {
       // Check if the configuration is "consistent":
       addressChangedSlot();
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
-   bool CaenVmeEditor::readConfig( const QDomElement& node ) {
+   StatusCode CaenVmeEditor::readConfig( const QDomElement& node ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenVmeGui >::readConfig( node ) ) {
-         REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
-         return false;
-      }
+      CHECK( dev::Crate< dev::CaenVmeGui >::readConfig( node ) );
 
       // Now show the device(s):
       DeviceMap_t::const_iterator itr = m_devices.begin();
@@ -151,7 +146,8 @@ namespace dev {
       // Check if the configuration is "consistent":
       addressChangedSlot();
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
    void CaenVmeEditor::clear() {
@@ -175,7 +171,7 @@ namespace dev {
       return;
    }
 
-   bool CaenVmeEditor::readCrateConfig( QIODevice& dev ) {
+   StatusCode CaenVmeEditor::readCrateConfig( QIODevice& dev ) {
 
       // Create the object used for reading the data:
       QDataStream input( &dev );
@@ -197,10 +193,10 @@ namespace dev {
       m_vmeWidget->setBoardNumber( boardNumber );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool CaenVmeEditor::writeCrateConfig( QIODevice& dev ) const {
+   StatusCode CaenVmeEditor::writeCrateConfig( QIODevice& dev ) const {
 
       // Create the object used for writing the data:
       QDataStream output( &dev );
@@ -212,10 +208,10 @@ namespace dev {
       output << static_cast< qint16 >( m_vmeWidget->boardNumber() );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool CaenVmeEditor::readCrateConfig( const QDomElement& node ) {
+   StatusCode CaenVmeEditor::readCrateConfig( const QDomElement& node ) {
 
       // A helper variable:
       bool ok = true;
@@ -236,10 +232,10 @@ namespace dev {
       m_vmeWidget->setBoardNumber( static_cast< short >( boardNumber ) );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool CaenVmeEditor::writeCrateConfig( QDomElement& node ) const {
+   StatusCode CaenVmeEditor::writeCrateConfig( QDomElement& node ) const {
 
       // Set all the controller properties:
       node.setAttribute( "ControllerType",
@@ -248,7 +244,7 @@ namespace dev {
       node.setAttribute( "BoardNumber", m_vmeWidget->boardNumber() );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /**

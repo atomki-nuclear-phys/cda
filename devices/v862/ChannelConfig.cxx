@@ -31,7 +31,7 @@ namespace v862 {
       REPORT_VERBOSE( tr( "Object created" ) );
    }
 
-   bool ChannelConfig::readConfig( QIODevice& dev ) {
+   StatusCode ChannelConfig::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -48,10 +48,10 @@ namespace v862 {
 
       printConfig( msg::VERBOSE );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::writeConfig( QIODevice& dev ) const {
+   StatusCode ChannelConfig::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -64,10 +64,10 @@ namespace v862 {
       output << m_name;
       output << m_threshold;
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::readConfig( const QDomElement& element ) {
+   StatusCode ChannelConfig::readConfig( const QDomElement& element ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -94,10 +94,10 @@ namespace v862 {
 
       printConfig( msg::VERBOSE );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::writeConfig( QDomElement& element ) const {
+   StatusCode ChannelConfig::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -108,7 +108,7 @@ namespace v862 {
       element.setAttribute( "Name", m_name );
       element.setAttribute( "Threshold", m_threshold );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    int ChannelConfig::getChannel() const {

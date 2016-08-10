@@ -42,12 +42,18 @@ namespace cdastat {
       /// Constructor with all the properties of the object
       Statistics( quint32 processedEvents = 0,
                   const QString& source = "cda-daq",
-                  const QTime& statTime = QTime::currentTime() );
+                  const QTime& statTime = QTime::currentTime(),
+                  quint32 lostEvents = 0 );
 
       /// Set the number of events processed by the DAQ
       void setProcessedEvents( quint32 events );
       /// Get the number of events processed by the DAQ
       quint32 getProcessedEvents() const;
+
+      /// Set the number of events lost by the DAQ system
+      void setLostEvents( quint32 events );
+      /// Get the number of events lost by the DAQ system
+      quint32 getLostEvents() const;
 
       /// Set the source of the statistics
       void setSource( const QString& source );
@@ -64,6 +70,7 @@ namespace cdastat {
 
    private:
       quint32 m_processedEvents; ///< Number of processed events
+      quint32 m_lostEvents;      ///< Events lost due to DAQ issues
       QString m_source;          ///< Source of the statistics
       QTime m_statTime;          ///< Time of the making of this object
 

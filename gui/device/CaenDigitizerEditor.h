@@ -49,9 +49,9 @@ namespace dev {
       ~CaenDigitizerEditor();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice& dev );
+      virtual StatusCode readConfig( QIODevice& dev );
       /// Function reading the configuration in XML format
-      virtual bool readConfig( const QDomElement& node );
+      virtual StatusCode readConfig( const QDomElement& node );
 
       /// Re-implemented clear function, resetting the widget
       virtual void clear();

@@ -29,7 +29,7 @@ namespace ad1000 {
 
    }
 
-   bool Device::readConfig( QIODevice& dev ) {
+   StatusCode Device::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -48,10 +48,10 @@ namespace ad1000 {
       // Now read the properties of the one channel:
       CHECK( m_channel.readConfig( dev ) );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QIODevice& dev ) const {
+   StatusCode Device::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -64,10 +64,10 @@ namespace ad1000 {
       // Write the properties of the channel:
       CHECK( m_channel.writeConfig( dev ) );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::readConfig( const QDomElement& element ) {
+   StatusCode Device::readConfig( const QDomElement& element ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -115,10 +115,10 @@ namespace ad1000 {
       // Check whether the channel's configuration was found:
       CHECK( channelFound );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QDomElement& element ) const {
+   StatusCode Device::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -132,7 +132,7 @@ namespace ad1000 {
       CHECK( m_channel.writeConfig( ch_element ) );
       element.appendChild( ch_element );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    const QString& Device::deviceName() const {

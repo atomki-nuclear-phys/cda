@@ -10,6 +10,7 @@
 
 // Local include(s):
 #include "Loader.h"
+#include "common/errorcheck.h"
 
 namespace dev {
 
@@ -55,10 +56,12 @@ namespace dev {
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::readConfig( QIODevice& dev ) {
+   StatusCode Crate< DEVICE >::readConfig( QIODevice& dev ) {
 
       // Check that a correct loader is set:
-      if( ! checkLoader() ) return false;
+      if( ! checkLoader() ) {
+         return StatusCode::FAILURE;
+      }
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -73,9 +76,10 @@ namespace dev {
       if( ( type != m_type ) && m_isTypeImportant ) {
          REPORT_ERROR( tr( "Wrong type found in configuration (%1 != %2) "
                            "You may be reading a too old XML file, or "
-                           "a configuration meant for a different application." )
+                           "a configuration meant for a different "
+                           "application." )
                        .arg( type ).arg( m_type ) );
-         return false;
+         return StatusCode::FAILURE;
       }
 
       quint32 nDevices;
@@ -83,58 +87,52 @@ namespace dev {
 
       for( quint32 i = 0; i < nDevices; ++i ) {
 
+         // Get the type of the device:
          QString type;
          input >> type;
 
+         // Check whether we have a plugin for this type:
          if( m_loader->isLoaded( type ) ) {
-
-            Factory& factory = m_loader->getFactory( type );
-            std::unique_ptr< DEVICE > device =
-               factory.createDevice< DEVICE >();
-            if( ! device ) {
-               m_logger << msg::WARNING
-                        << tr( "No implementation found for type %1" )
-                  .arg( type )
-                        << msg::endmsg;
-               continue;
-            }
-            if( ! device->readConfig( dev ) ) {
-               REPORT_ERROR( tr( "There was a problem reading the "
-                                 "configuration of one of the devices!" ) );
-               return false;
-            }
-
-            typename DeviceMap_t::iterator it;
-            if( ( it = m_devices.find( device->getID() ) ) !=
-                m_devices.end() ) {
-               m_logger << msg::WARNING
-                        << tr( "Redefining the device with 'id': %1" )
-                  .arg( device->getID() ) << msg::endmsg;
-            }
-
-            m_devices[ device->getID() ].swap( device );
-
-         } else {
             REPORT_ERROR( tr( "Device type \"%1\" unknown.\n"
-                              "Check that you have all plugins available!" )
-                          .arg( type ) );
-            return false;
+                             "Check that you have all plugins available!" )
+                         .arg( type ) );
+            return StatusCode::FAILURE;
          }
 
+         // Create the device, and read its configuration:
+         Factory& factory = m_loader->getFactory( type );
+         std::unique_ptr< DEVICE > device =
+            factory.createDevice< DEVICE >();
+         if( ! device ) {
+            m_logger << msg::WARNING
+                     << tr( "No implementation found for type %1" )
+                  .arg( type )
+                     << msg::endmsg;
+            continue;
+         }
+         CHECK( device->readConfig( dev ) );
+
+         // Put the new device into the crate object:
+         typename DeviceMap_t::iterator it;
+         if( ( it = m_devices.find( device->getID() ) ) !=
+            m_devices.end() ) {
+            m_logger << msg::WARNING
+                     << tr( "Redefining the device with 'id': %1" )
+                  .arg( device->getID() ) << msg::endmsg;
+         }
+
+         m_devices[ device->getID() ].swap( device );
       }
 
       // Let the derived classes read in their specific configuration:
-      if( ! readCrateConfig( dev ) ) {
-         REPORT_ERROR( tr( "Failed to read crate specific configuration" ) );
-         return false;
-      }
+      CHECK( readCrateConfig( dev ) );
 
       // Signal that the operation was successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::writeConfig( QIODevice& dev ) const {
+   StatusCode Crate< DEVICE >::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -150,28 +148,23 @@ namespace dev {
       for( ; itr != end; ++itr ) {
 
          output << itr->second->deviceName();
-         if( ! itr->second->writeConfig( dev ) ) {
-            REPORT_ERROR( tr( "There was a problem writing the "
-                              "configuration of a device" ) );
-            return false;
-         }
+         CHECK( itr->second->writeConfig( dev ) );
       }
 
       // Let the derived classes write out their specific configuration:
-      if( ! writeCrateConfig( dev ) ) {
-         REPORT_ERROR( tr( "Failed to write crate specific configuration" ) );
-         return false;
-      }
+      CHECK( writeCrateConfig( dev ) );
 
       // Signal that the operation was successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::readConfig( const QDomElement& element ) {
+   StatusCode Crate< DEVICE >::readConfig( const QDomElement& element ) {
 
       // Check that a correct loader is set:
-      if( ! checkLoader() ) return false;
+      if( ! checkLoader() ) {
+         return StatusCode::FAILURE;
+      }
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -193,7 +186,7 @@ namespace dev {
       if( crate_index == -1 ) {
          REPORT_ERROR( tr( "Couldn't find crate element in XML. "
                            "You may be reading a too old XML file." ) );
-         return false;
+         return StatusCode::FAILURE;
       }
 
       // Access the DOM element:
@@ -210,15 +203,12 @@ namespace dev {
                               "a configuration meant for a different "
                               "application." )
                           .arg( type ).arg( m_type ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
       // Let the derived classes read in their specific configuration:
-      if( ! readCrateConfig( crate_element ) ) {
-         REPORT_ERROR( tr( "Failed to read crate specific configuration" ) );
-         return false;
-      }
+      CHECK( readCrateConfig( crate_element ) );
 
       // Loop over all the elements inside the crate node:
       for( int i = 0; i < crate_element.childNodes().size(); ++i ) {
@@ -234,7 +224,7 @@ namespace dev {
             REPORT_ERROR( tr( "Device type \"%1\" unknown\n"
                               "Check that you have all plugins available!" )
                           .arg( type ) );
-            return false;
+            return StatusCode::FAILURE;
          }
 
          // If we do, let's try loading the configuration:
@@ -250,11 +240,7 @@ namespace dev {
          }
          const QDomElement conf =
             crate_element.childNodes().at( i ).toElement();
-         if( ! device->readConfig( conf ) ) {
-            REPORT_ERROR( tr( "There was a problem reading the "
-                              "configuration of one of the devices!" ) );
-            return false;
-         }
+         CHECK( device->readConfig( conf ) );
 
          // Add this new device to the crate:
          typename DeviceMap_t::iterator it;
@@ -270,11 +256,11 @@ namespace dev {
       }
 
       // Signal that the operation was successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::writeConfig( QDomElement& element ) const {
+   StatusCode Crate< DEVICE >::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -284,10 +270,7 @@ namespace dev {
       crate_element.setAttribute( "Type", m_type );
 
       // Let the derived classes write out their specific configuration:
-      if( ! writeCrateConfig( crate_element ) ) {
-         REPORT_ERROR( tr( "Failed to write crate specific configuration" ) );
-         return false;
-      }
+      CHECK( writeCrateConfig( crate_element ) );
 
       // Add the crate node to the configuration:
       element.appendChild( crate_element );
@@ -300,17 +283,12 @@ namespace dev {
 
          QDomElement dev_element =
             element.ownerDocument().createElement( itr->second->deviceName() );
-         if( ! itr->second->writeConfig( dev_element ) ) {
-            REPORT_ERROR( tr( "There was a problem writing the "
-                              "configuration of a device" ) );
-            return false;
-         }
+         CHECK( itr->second->writeConfig( dev_element ) );
          crate_element.appendChild( dev_element );
-
       }
 
       // Signal that the operation was successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    template< class DEVICE >
@@ -418,7 +396,8 @@ namespace dev {
 
       if( ! m_loader ) {
          REPORT_ERROR( tr( "No functional dev::Loader object specified yet\n"
-                           "Configuration reading is not possible like this!" ) );
+                           "Configuration reading is not possible like "
+                           "this!" ) );
          return false;
       }
 
@@ -426,27 +405,27 @@ namespace dev {
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::readCrateConfig( QIODevice& ) {
+   StatusCode Crate< DEVICE >::readCrateConfig( QIODevice& ) {
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::writeCrateConfig( QIODevice& ) const {
+   StatusCode Crate< DEVICE >::writeCrateConfig( QIODevice& ) const {
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::readCrateConfig( const QDomElement& ) {
+   StatusCode Crate< DEVICE >::readCrateConfig( const QDomElement& ) {
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    template< class DEVICE >
-   bool Crate< DEVICE >::writeCrateConfig( QDomElement& ) const {
+   StatusCode Crate< DEVICE >::writeCrateConfig( QDomElement& ) const {
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
 } // namespace dev

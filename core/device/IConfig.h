@@ -6,6 +6,9 @@
 // Qt include(s):
 #include <QtCore/QtGlobal>
 
+// Local include(s):
+#include "../common/StatusCode.h"
+
 // Disable a warning about diamond inheritance trees
 #ifdef Q_CC_MSVC
 #pragma warning( disable : 4250 )
@@ -71,10 +74,9 @@ namespace dev {
        * variety of objects.
        *
        * @param dev Pointer to the device providing the configuration
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @return StatusCode with the outcome of the operation
        */
-      virtual bool readConfig( QIODevice& dev ) = 0;
+      virtual StatusCode readConfig( QIODevice& dev ) = 0;
       /// Function writing the configuration in binary format
       /**
        * This function can be used to write the configuration of a device
@@ -84,10 +86,9 @@ namespace dev {
        *
        * @param dev Pointer to the device where the configuration is to
        *            be written
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @return StatusCode with the outcome of the operation
        */
-      virtual bool writeConfig( QIODevice& dev ) const = 0;
+      virtual StatusCode writeConfig( QIODevice& dev ) const = 0;
 
       /// Function reading the configuration in XML format
       /**
@@ -95,24 +96,22 @@ namespace dev {
        * DOM node. It is used when reading the configuration of the
        * device from a text file.
        *
-       * @param node Pointer to the element type node holding the configuration of
-       *             this device
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @param node The element type node holding the configuration of this
+       *             device
+       * @return StatusCode with the outcome of the operation
        */
-      virtual bool readConfig( const QDomElement& node ) = 0;
+      virtual StatusCode readConfig( const QDomElement& node ) = 0;
       /// Function writing the configuration in XML format
       /**
        * This function can be used to write the configuration of the device
        * to an empty XML DOM node. It is used when writing the configuration
        * of the device to a text file.
        *
-       * @param node Pointer to an empty element type node where the configuration is
+       * @param node An empty element type node where the configuration is
        *             to be written
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @return StatusCode with the outcome of the operation
        */
-      virtual bool writeConfig( QDomElement& node ) const = 0;
+      virtual StatusCode writeConfig( QDomElement& node ) const = 0;
 
    }; // class IConfig
 

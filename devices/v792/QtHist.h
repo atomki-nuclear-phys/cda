@@ -46,9 +46,9 @@ namespace v792 {
       /// @{
 
       /// Read the device configuration from a binary file
-      virtual bool readConfig( QIODevice& dev );
+      virtual StatusCode readConfig( QIODevice& dev );
       /// Read the device configuration from an XML file
-      virtual bool readConfig( const QDomElement& node );
+      virtual StatusCode readConfig( const QDomElement& node );
 
       /// @}
 

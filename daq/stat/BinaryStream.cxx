@@ -31,6 +31,7 @@ namespace cdastat {
       setVersion( QDataStream::Qt_4_0 );
 
       ( * ( QDataStream* ) this ) << stat.getProcessedEvents();
+      ( * ( QDataStream* ) this ) << stat.getLostEvents();
       ( * ( QDataStream* ) this ) << stat.getSource();
       ( * ( QDataStream* ) this ) << stat.getStatTime();
 
@@ -48,15 +49,17 @@ namespace cdastat {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      quint32 events;
+      quint32 processedEvents = 0, lostEvents = 0;
       QString source;
       QTime statTime;
 
-      ( * ( QDataStream* ) this ) >> events;
+      ( * ( QDataStream* ) this ) >> processedEvents;
+      ( * ( QDataStream* ) this ) >> lostEvents;
       ( * ( QDataStream* ) this ) >> source;
       ( * ( QDataStream* ) this ) >> statTime;
 
-      stat.setProcessedEvents( events );
+      stat.setProcessedEvents( processedEvents );
+      stat.setLostEvents( lostEvents );
       stat.setSource( source );
       stat.setStatTime( statTime );
 

@@ -178,18 +178,18 @@ namespace v775 {
       }
    }
 
-   bool Gui::readConfig( QIODevice& dev ) {
+   StatusCode Gui::readConfig( QIODevice& dev ) {
 
       CHECK( Device::readConfig( dev ) );
       sync();
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Gui::readConfig( const QDomElement& node ) {
+   StatusCode Gui::readConfig( const QDomElement& node ) {
 
       CHECK( Device::readConfig( node ) );
       sync();
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    void Gui::vmeAddressSlot( const QString& value ) {

@@ -33,14 +33,14 @@ namespace t4300b {
       ChannelConfig();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice& dev );
+      virtual StatusCode readConfig( QIODevice& dev );
       /// Function writing the configuration in binary format
-      virtual bool writeConfig( QIODevice& dev ) const;
+      virtual StatusCode writeConfig( QIODevice& dev ) const;
 
       /// Function reading the configuration in XML format
-      virtual bool readConfig( const QDomElement& node );
+      virtual StatusCode readConfig( const QDomElement& node );
       /// Function writing the configuration in XML format
-      virtual bool writeConfig( QDomElement& node ) const;
+      virtual StatusCode writeConfig( QDomElement& node ) const;
 
       /// Get the subaddress of this channel
       int            getSubaddress() const;

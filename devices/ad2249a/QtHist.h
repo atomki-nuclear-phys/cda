@@ -43,9 +43,9 @@ namespace ad2249a {
       QtHist( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Read the device configuration from a binary file
-      virtual bool readConfig( QIODevice& dev );
+      virtual StatusCode readConfig( QIODevice& dev );
       /// Read the device configuration from an XML file
-      virtual bool readConfig( const QDomElement& node );
+      virtual StatusCode readConfig( const QDomElement& node );
 
       /// Function displaying a newly received event
       virtual bool displayEvent( const ev::Fragment& fragment );

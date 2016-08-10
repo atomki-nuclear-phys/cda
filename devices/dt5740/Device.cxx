@@ -50,7 +50,7 @@ namespace dt5740 {
       }
    }
 
-   bool Device::readConfig( QIODevice& dev ) {
+   StatusCode Device::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -99,10 +99,10 @@ namespace dt5740 {
          CHECK( m_groups[ i ].getGroupNumber() != i );
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QIODevice& dev ) const {
+   StatusCode Device::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -137,10 +137,10 @@ namespace dt5740 {
          CHECK( m_groups[ i ].writeConfig( dev ) );
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::readConfig( const QDomElement& element ) {
+   StatusCode Device::readConfig( const QDomElement& element ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -239,14 +239,14 @@ namespace dt5740 {
          } else {
             REPORT_ERROR( tr( "There was an error reading the configuration "
                               "of a group" ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QDomElement& element ) const {
+   StatusCode Device::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -287,7 +287,7 @@ namespace dt5740 {
          element.appendChild( gr_element );
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    const QString& Device::deviceName() const {

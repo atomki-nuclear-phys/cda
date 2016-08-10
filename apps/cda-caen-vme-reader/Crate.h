@@ -67,9 +67,9 @@ namespace caen_vme_reader {
 
    protected:
       /// Read the crate specific options from binary input
-      virtual bool readCrateConfig( QIODevice& dev );
+      virtual StatusCode readCrateConfig( QIODevice& dev );
       /// Read the crate specific options from XML input
-      virtual bool readCrateConfig( const QDomElement& node );
+      virtual StatusCode readCrateConfig( const QDomElement& node );
 
    private:
       /// Common VME bus object used by all the devices

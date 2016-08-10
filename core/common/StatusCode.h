@@ -3,6 +3,9 @@
 #ifndef CDA_CORE_COMMON_STATUSCODE_H
 #define CDA_CORE_COMMON_STATUSCODE_H
 
+// Local include(s):
+#include "Export.h"
+
 /**
  * @short Type used as the return type of functions that can fail
  *
@@ -15,7 +18,7 @@
  * $Revision$
  * $Date$
  */
-class StatusCode {
+class CDACORE_EXPORT StatusCode {
 
 public:
    /// Convenience StatusCode types

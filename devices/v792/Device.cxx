@@ -22,7 +22,7 @@ namespace v792 {
 
    }
 
-   bool Device::readConfig( QIODevice& dev ) {
+   StatusCode Device::readConfig( QIODevice& dev ) {
 
       // Tell the user what's happening:
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
@@ -61,15 +61,15 @@ namespace v792 {
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QIODevice& dev ) const {
+   StatusCode Device::writeConfig( QIODevice& dev ) const {
 
       // Tell the user what's happening:
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
@@ -99,10 +99,10 @@ namespace v792 {
       }
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::readConfig( const QDomElement& element ) {
+   StatusCode Device::readConfig( const QDomElement& element ) {
 
       // Tell the user what's happening:
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
@@ -162,15 +162,15 @@ namespace v792 {
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QDomElement& element ) const {
+   StatusCode Device::writeConfig( QDomElement& element ) const {
 
       // Tell the user what's happening:
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
@@ -195,7 +195,7 @@ namespace v792 {
       }
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    const QString& Device::deviceName() const {

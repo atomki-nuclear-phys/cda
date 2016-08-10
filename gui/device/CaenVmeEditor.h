@@ -51,23 +51,23 @@ namespace dev {
       ~CaenVmeEditor();
 
       /// Function reading the configuration in binary format
-      virtual bool readConfig( QIODevice& dev );
+      virtual StatusCode readConfig( QIODevice& dev );
       /// Function reading the configuration in XML format
-      virtual bool readConfig( const QDomElement& node );
+      virtual StatusCode readConfig( const QDomElement& node );
 
       /// Re-implemented clear function, resetting the widget
       virtual void clear();
 
    protected:
       /// Read the crate specific options from binary input
-      virtual bool readCrateConfig( QIODevice& dev );
+      virtual StatusCode readCrateConfig( QIODevice& dev );
       /// Write the crate specific options to binary output
-      virtual bool writeCrateConfig( QIODevice& dev ) const;
+      virtual StatusCode writeCrateConfig( QIODevice& dev ) const;
 
       /// Read the crate specific options from XML input
-      virtual bool readCrateConfig( const QDomElement& node );
+      virtual StatusCode readCrateConfig( const QDomElement& node );
       /// Write the crate specific options to XML output
-      virtual bool writeCrateConfig( QDomElement& node ) const;
+      virtual StatusCode writeCrateConfig( QDomElement& node ) const;
 
    private slots:
       /// Create a device in the configuration

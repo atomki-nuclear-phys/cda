@@ -141,7 +141,7 @@ namespace caen_vme_reader {
       return true;
    }
 
-   bool Crate::readCrateConfig( QIODevice& dev ) {
+   StatusCode Crate::readCrateConfig( QIODevice& dev ) {
 
       // Create the object used for reading the data:
       QDataStream input( &dev );
@@ -170,10 +170,10 @@ namespace caen_vme_reader {
                       .arg( m_linkNumber ).arg( m_boardNumber ) );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Crate::readCrateConfig( const QDomElement& node ) {
+   StatusCode Crate::readCrateConfig( const QDomElement& node ) {
 
       // A helper variable:
       bool ok = true;
@@ -194,7 +194,7 @@ namespace caen_vme_reader {
       m_boardNumber = static_cast< short >( boardNumber );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
 } // namespace caen_reader

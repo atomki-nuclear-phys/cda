@@ -55,9 +55,9 @@ namespace dev {
       CamacCrateWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
       /// Extended configuration reading from binary file
-      virtual bool readConfig( QIODevice& dev );
+      virtual StatusCode readConfig( QIODevice& dev );
       /// Extended configuration reading from XML file
-      virtual bool readConfig( const QDomElement& element );
+      virtual StatusCode readConfig( const QDomElement& element );
 
       /// Get the CAMAC device in a given slot
       CamacGui* getDevice( int slot );

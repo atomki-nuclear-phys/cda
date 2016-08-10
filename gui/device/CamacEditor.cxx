@@ -63,7 +63,7 @@ namespace dev {
     * The configuration reading is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool CamacEditor::readConfig( QIODevice& dev ) {
+   StatusCode CamacEditor::readConfig( QIODevice& dev ) {
 
       return m_crateView->readConfig( dev );
    }
@@ -72,7 +72,7 @@ namespace dev {
     * The configuration writing is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool CamacEditor::writeConfig( QIODevice& dev ) const {
+   StatusCode CamacEditor::writeConfig( QIODevice& dev ) const {
 
       return m_crateView->writeConfig( dev );
    }
@@ -81,7 +81,7 @@ namespace dev {
     * The configuration reading is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool CamacEditor::readConfig( const QDomElement& node ) {
+   StatusCode CamacEditor::readConfig( const QDomElement& node ) {
 
       return m_crateView->readConfig( node );
    }
@@ -90,7 +90,7 @@ namespace dev {
     * The configuration writing is simply forwarded to the CamacCrateWidget
     * object.
     */
-   bool CamacEditor::writeConfig( QDomElement& node ) const {
+   StatusCode CamacEditor::writeConfig( QDomElement& node ) const {
 
       return m_crateView->writeConfig( node );
    }

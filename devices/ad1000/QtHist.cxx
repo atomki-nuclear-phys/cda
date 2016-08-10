@@ -30,7 +30,7 @@ namespace ad1000 {
       m_layout->addWidget( m_hist.get() );
    }
 
-   bool QtHist::readConfig( QIODevice& dev ) {
+   StatusCode QtHist::readConfig( QIODevice& dev ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( dev ) );
@@ -38,10 +38,11 @@ namespace ad1000 {
       // Update the look of the widget:
       CHECK( initialize() );
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
-   bool QtHist::readConfig( const QDomElement& node ) {
+   StatusCode QtHist::readConfig( const QDomElement& node ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( node ) );
@@ -49,7 +50,8 @@ namespace ad1000 {
       // Update the look of the widget:
       CHECK( initialize() );
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
    bool QtHist::displayEvent( const ev::Fragment& fragment ) {

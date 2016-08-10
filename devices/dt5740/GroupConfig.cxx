@@ -65,7 +65,7 @@ namespace dt5740 {
       return *this;
    }
 
-   bool GroupConfig::readConfig( QIODevice& dev ) {
+   StatusCode GroupConfig::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -106,14 +106,14 @@ namespace dt5740 {
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool GroupConfig::writeConfig( QIODevice& dev ) const {
+   StatusCode GroupConfig::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -144,10 +144,10 @@ namespace dt5740 {
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool GroupConfig::readConfig( const QDomElement& node ) {
+   StatusCode GroupConfig::readConfig( const QDomElement& node ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -204,14 +204,14 @@ namespace dt5740 {
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool GroupConfig::writeConfig( QDomElement& node ) const {
+   StatusCode GroupConfig::writeConfig( QDomElement& node ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -237,7 +237,7 @@ namespace dt5740 {
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    int GroupConfig::getGroupNumber() const {

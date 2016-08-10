@@ -65,14 +65,14 @@ namespace dev {
       Crate< DEVICE >& operator= ( const Crate< DEVICE >& ) = delete;
 
       /// Read the configuration of the crate from a binary device
-      virtual bool readConfig( QIODevice& dev );
+      virtual StatusCode readConfig( QIODevice& dev );
       /// Write the configuration of the crate to a binary device
-      virtual bool writeConfig( QIODevice& dev ) const;
+      virtual StatusCode writeConfig( QIODevice& dev ) const;
 
       /// Read the configuration of the crate from an XML node
-      virtual bool readConfig( const QDomElement& node );
+      virtual StatusCode readConfig( const QDomElement& node );
       /// Write the configuration of the crate to an XML node
-      virtual bool writeConfig( QDomElement& node ) const;
+      virtual StatusCode writeConfig( QDomElement& node ) const;
 
       /// Check if this object can read this binary configuration
       bool canRead( QIODevice& dev ) const;
@@ -92,14 +92,14 @@ namespace dev {
       virtual bool checkLoader() const;
 
       /// Read the crate specific options from binary input
-      virtual bool readCrateConfig( QIODevice& dev );
+      virtual StatusCode readCrateConfig( QIODevice& dev );
       /// Write the crate specific options to binary output
-      virtual bool writeCrateConfig( QIODevice& dev ) const;
+      virtual StatusCode writeCrateConfig( QIODevice& dev ) const;
 
       /// Read the crate specific options from XML input
-      virtual bool readCrateConfig( const QDomElement& node );
+      virtual StatusCode readCrateConfig( const QDomElement& node );
       /// Write the crate specific options to XML output
-      virtual bool writeCrateConfig( QDomElement& node ) const;
+      virtual StatusCode writeCrateConfig( QDomElement& node ) const;
 
       /// Type of the device container
       typedef std::map< size_t,

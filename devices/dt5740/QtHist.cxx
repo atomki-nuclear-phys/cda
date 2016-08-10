@@ -42,7 +42,7 @@ namespace dt5740 {
       reset();
    }
 
-   bool QtHist::readConfig( QIODevice& dev ) {
+   StatusCode QtHist::readConfig( QIODevice& dev ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( dev ) );
@@ -50,10 +50,10 @@ namespace dt5740 {
       // Update the look of the widget:
       CHECK( initialize() );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool QtHist::readConfig( const QDomElement& node ) {
+   StatusCode QtHist::readConfig( const QDomElement& node ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( node ) );
@@ -61,7 +61,7 @@ namespace dt5740 {
       // Update the look of the widget:
       CHECK( initialize() );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    bool QtHist::displayEvent( const ev::Fragment& fragment ) {

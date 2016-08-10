@@ -29,7 +29,7 @@ namespace ad2249a {
 
    }
 
-   bool Device::readConfig( QIODevice& dev ) {
+   StatusCode Device::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -50,11 +50,7 @@ namespace ad2249a {
 
       for( quint32 i = 0; i < number_of_channels; ++i ) {
          std::unique_ptr< ChannelConfig > channel( new ChannelConfig() );
-         if( ! channel->readConfig( dev ) ) {
-            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
-                              "read!" ) );
-            return false;
-         }
+         CHECK( channel->readConfig( dev ) );
          if( ( channel->getSubaddress() >= 0 ) &&
              ( channel->getSubaddress() < NUMBER_OF_SUBADDRESSES ) ) {
             if( m_channels[ channel->getSubaddress() ] ) {
@@ -67,14 +63,14 @@ namespace ad2249a {
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QIODevice& dev ) const {
+   StatusCode Device::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -99,10 +95,10 @@ namespace ad2249a {
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::readConfig( const QDomElement& element ) {
+   StatusCode Device::readConfig( const QDomElement& element ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -129,12 +125,9 @@ namespace ad2249a {
 
          // Read in this channel's configuration:
          std::unique_ptr< ChannelConfig > channel( new ChannelConfig() );
-         if( ! channel->readConfig(
-                element.childNodes().at( i ).toElement() ) ) {
-            REPORT_ERROR( tr( "The configuration of a channel couldn't be "
-                              "read!" ) );
-            return false;
-         }
+         const QDomElement& chElement =
+            element.childNodes().at( i ).toElement();
+         CHECK( channel->readConfig( chElement ) );
 
          // Store this object:
          if( ( channel->getSubaddress() >= 0 ) &&
@@ -149,14 +142,14 @@ namespace ad2249a {
          } else {
             REPORT_ERROR( tr( "There was a problem reading the configuration "
                               "of one channel" ) );
-            return false;
+            return StatusCode::FAILURE;
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Device::writeConfig( QDomElement& element ) const {
+   StatusCode Device::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -175,7 +168,7 @@ namespace ad2249a {
          }
       }
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    const QString& Device::deviceName() const {

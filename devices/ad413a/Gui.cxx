@@ -144,11 +144,11 @@ namespace ad413a {
     * to read the device configuration and then calls sync() to show the
     * new configuration correctly.
     */
-   bool Gui::readConfig( QIODevice& dev ) {
+   StatusCode Gui::readConfig( QIODevice& dev ) {
 
       CHECK( Device::readConfig( dev ) );
       sync();
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /**
@@ -156,11 +156,11 @@ namespace ad413a {
     * to read the device configuration and then calls sync() to show the
     * new configuration correctly.
     */
-   bool Gui::readConfig( const QDomElement& node ) {
+   StatusCode Gui::readConfig( const QDomElement& node ) {
 
       CHECK( Device::readConfig( node ) );
       sync();
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /**

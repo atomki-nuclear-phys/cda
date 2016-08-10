@@ -30,7 +30,7 @@ namespace ad413a {
       REPORT_VERBOSE( tr( "Object created" ) );
    }
 
-   bool ChannelConfig::readConfig( QIODevice& dev ) {
+   StatusCode ChannelConfig::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -47,10 +47,10 @@ namespace ad413a {
 
       printConfig( msg::VERBOSE );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::writeConfig( QIODevice& dev ) const {
+   StatusCode ChannelConfig::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -63,10 +63,10 @@ namespace ad413a {
       output << m_upperBound;
       output << m_name;
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::readConfig( const QDomElement& element ) {
+   StatusCode ChannelConfig::readConfig( const QDomElement& element ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -94,10 +94,10 @@ namespace ad413a {
 
       printConfig( msg::VERBOSE );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::writeConfig( QDomElement& element ) const {
+   StatusCode ChannelConfig::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -108,7 +108,7 @@ namespace ad413a {
       element.setAttribute( "UpperBound", m_upperBound );
       element.setAttribute( "Name", m_name );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    int ChannelConfig::getSubaddress() const {

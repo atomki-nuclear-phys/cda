@@ -38,7 +38,7 @@ namespace v785 {
       }
    }
 
-   bool QtHist::readConfig( QIODevice& dev ) {
+   StatusCode QtHist::readConfig( QIODevice& dev ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( dev ) );
@@ -47,10 +47,10 @@ namespace v785 {
       CHECK( initialize() );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool QtHist::readConfig( const QDomElement& node ) {
+   StatusCode QtHist::readConfig( const QDomElement& node ) {
 
       // Read in the configuration using the base class:
       CHECK( Device::readConfig( node ) );
@@ -59,7 +59,7 @@ namespace v785 {
       CHECK( initialize() );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    bool QtHist::displayEvent( const ev::Fragment& fragment ) {

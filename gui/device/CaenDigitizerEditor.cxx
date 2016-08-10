@@ -79,13 +79,10 @@ namespace dev {
       m_devices.clear();
    }
 
-   bool CaenDigitizerEditor::readConfig( QIODevice& dev ) {
+   StatusCode CaenDigitizerEditor::readConfig( QIODevice& dev ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenDigitizerGui >::readConfig( dev ) ) {
-         REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
-         return false;
-      }
+      CHECK( dev::Crate< dev::CaenDigitizerGui >::readConfig( dev ) );
 
       // Now show the device(s):
       DeviceMap_t::const_iterator itr = m_devices.begin();
@@ -106,16 +103,14 @@ namespace dev {
       // Check if the configuration is "consistent":
       idChangedSlot();
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
-   bool CaenDigitizerEditor::readConfig( const QDomElement& node ) {
+   StatusCode CaenDigitizerEditor::readConfig( const QDomElement& node ) {
 
       // Read the configuration using the base class:
-      if( ! dev::Crate< dev::CaenDigitizerGui >::readConfig( node ) ) {
-         REPORT_ERROR( tr( "Couldn't read binary configuration" ) );
-         return false;
-      }
+      CHECK( dev::Crate< dev::CaenDigitizerGui >::readConfig( node ) );
 
       // Now show the device(s):
       DeviceMap_t::const_iterator itr = m_devices.begin();
@@ -136,7 +131,8 @@ namespace dev {
       // Check if the configuration is "consistent":
       idChangedSlot();
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
    void CaenDigitizerEditor::clear() {

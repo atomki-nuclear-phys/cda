@@ -12,6 +12,7 @@
 #include <QMenu>
 
 // CDA include(s):
+#include "common/errorcheck.h"
 #include "device/Factory.h"
 #include "device/Loader.h"
 
@@ -64,14 +65,12 @@ namespace dev {
     *
     * @param dev Device to read the binary configuration from
     */
-   bool CamacCrateWidget::readConfig( QIODevice& dev ) {
+   StatusCode CamacCrateWidget::readConfig( QIODevice& dev ) {
 
       //
       // Read the configuration using the base class:
       //
-      if( ! Crate< dev::CamacGui >::readConfig( dev ) ) {
-         return false;
-      }
+      CHECK( Crate< dev::CamacGui >::readConfig( dev ) );
       //
       // Connect the signals coming from the configured modules:
       //
@@ -86,7 +85,8 @@ namespace dev {
       //
       update();
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
    /**
@@ -98,14 +98,12 @@ namespace dev {
     *
     * @param element The XML node holding the CAMAC crate configuration
     */
-   bool CamacCrateWidget::readConfig( const QDomElement& element ) {
+   StatusCode CamacCrateWidget::readConfig( const QDomElement& element ) {
 
       //
       // Read the configuration using the base class:
       //
-      if( ! Crate< dev::CamacGui >::readConfig( element ) ) {
-         return false;
-      }
+      CHECK( Crate< dev::CamacGui >::readConfig( element ) );
       //
       // Connect the signals coming from the configured modules:
       //
@@ -120,7 +118,8 @@ namespace dev {
       //
       update();
 
-      return true;
+      // Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
    /**

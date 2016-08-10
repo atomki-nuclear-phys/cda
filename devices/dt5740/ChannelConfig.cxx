@@ -34,7 +34,7 @@ namespace dt5740 {
 
    }
 
-   bool ChannelConfig::readConfig( QIODevice& dev ) {
+   StatusCode ChannelConfig::readConfig( QIODevice& dev ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
 
@@ -55,10 +55,10 @@ namespace dt5740 {
 
       printConfig( msg::VERBOSE );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::writeConfig( QIODevice& dev ) const {
+   StatusCode ChannelConfig::writeConfig( QIODevice& dev ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
 
@@ -75,10 +75,10 @@ namespace dt5740 {
       output << m_energyName;
       output << m_channelNumber;
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::readConfig( const QDomElement& element ) {
+   StatusCode ChannelConfig::readConfig( const QDomElement& element ) {
 
       REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
 
@@ -122,10 +122,10 @@ namespace dt5740 {
 
       printConfig( msg::VERBOSE );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool ChannelConfig::writeConfig( QDomElement& element ) const {
+   StatusCode ChannelConfig::writeConfig( QDomElement& element ) const {
 
       REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
 
@@ -141,7 +141,7 @@ namespace dt5740 {
       element.setAttribute( "EnergyName", m_energyName );
       element.setAttribute( "ChannelNumber", m_channelNumber );
 
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    int ChannelConfig::getTimeNumberOfChannels() const {

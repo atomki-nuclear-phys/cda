@@ -6,9 +6,9 @@
 namespace cdastat {
 
    Statistics::Statistics( quint32 processedEvents, const QString& source,
-                           const QTime& statTime )
-      : m_processedEvents( processedEvents ), m_source( source ),
-        m_statTime( statTime ) {
+                           const QTime& statTime, quint32 lostEvents )
+      : m_processedEvents( processedEvents ), m_lostEvents( lostEvents ),
+        m_source( source ), m_statTime( statTime ) {
 
    }
 
@@ -29,6 +29,23 @@ namespace cdastat {
 
       return m_processedEvents;
 
+   }
+
+   /**
+    * @param events The number of events lost by the DAQ system
+    */
+   void Statistics::setLostEvents( quint32 events ) {
+
+      m_lostEvents = events;
+      return;
+   }
+
+   /**
+    * @returns The number of events lost by the DAQ system
+    */
+   quint32 Statistics::getLostEvents() const {
+
+      return m_lostEvents;
    }
 
    /**
@@ -72,6 +89,7 @@ namespace cdastat {
    bool Statistics::operator== ( const Statistics& stat ) const {
 
       return ( ( m_processedEvents == stat.m_processedEvents ) &&
+               ( m_lostEvents == stat.m_lostEvents ) &&
                ( m_source == stat.m_source ) &&
                ( m_statTime == stat.m_statTime ) );
 
