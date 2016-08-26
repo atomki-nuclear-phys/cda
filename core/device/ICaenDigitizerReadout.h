@@ -9,6 +9,7 @@
 // Local include(s):
 #include "IDevice.h"
 #include "../event/Fragment.h"
+#include "../common/StatusCode.h"
 
 namespace dev {
 
@@ -37,10 +38,9 @@ namespace dev {
        * instances of caen::Digitizer for communicating with their
        * hardware. So the function doesn't need to receive anything.
        *
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool initialize() = 0;
+      virtual StatusCode initialize() = 0;
 
       /// Function "finalizing" the device
       /**
@@ -48,10 +48,9 @@ namespace dev {
        * themseves because of the way the CAEN Digitizer library works.
        * They should do that in this function.
        *
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool finalize() = 0;
+      virtual StatusCode finalize() = 0;
 
       /// Function enabling data acquisition in the device
       /**
@@ -59,10 +58,9 @@ namespace dev {
        * device. Once it is called, cda-caen-readout will go to looking for
        * collected events right away.
        *
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool start() = 0;
+      virtual StatusCode start() = 0;
 
       /// Function disabling data acquisition in the device
       /**
@@ -73,10 +71,9 @@ namespace dev {
        *
        * But still, for the moment let's keep it in the interface...
        *
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool stop() = 0;
+      virtual StatusCode stop() = 0;
 
       /// Function reading a single event from the device
       /**

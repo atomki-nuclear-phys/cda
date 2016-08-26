@@ -40,18 +40,23 @@ namespace dt5740 {
       /// Destructor
       ~Readout();
 
+      /// @name Functions implemented from dev::ICaenDigitizerReadout
+      /// @{
+
       /// Function initializing the device
-      virtual bool initialize();
+      virtual StatusCode initialize();
       /// Function "finalizing" the device
-      virtual bool finalize();
+      virtual StatusCode finalize();
 
       /// Function enabling data acquisition in the device
-      virtual bool start();
+      virtual StatusCode start();
       /// Function disabling data acquisition in the device
-      virtual bool stop();
+      virtual StatusCode stop();
 
       /// Function reading a single event from the device
       virtual std::unique_ptr< ev::Fragment > readEvent();
+
+      /// @}
 
    private:
       /// Get the external trigger mode

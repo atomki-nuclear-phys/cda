@@ -25,7 +25,7 @@ namespace dt5740 {
       cleanup();
    }
 
-   bool Readout::initialize() {
+   StatusCode Readout::initialize() {
 
       // Try opening the connection to the device:
       CHECK( m_digitizer.open( m_connType, m_linkNumber ) );
@@ -95,10 +95,11 @@ namespace dt5740 {
       m_numEvents = 0;
       m_currentEvent = 0;
 
-      return true;
+      /// Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
-   bool Readout::finalize() {
+   StatusCode Readout::finalize() {
 
       // Free up the allocated readout buffer:
       CHECK( cleanup() );
@@ -108,10 +109,11 @@ namespace dt5740 {
       CHECK( m_digitizer.close() );
       REPORT_VERBOSE( tr( "Digitizer closed" ) );
 
-      return true;
+      /// Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
-   bool Readout::start() {
+   StatusCode Readout::start() {
 
       // Start the acquisition:
       CHECK( m_digitizer.startAcquisition() );
@@ -119,16 +121,18 @@ namespace dt5740 {
       // normal operation...
       CHECK( m_digitizer.sendSWTrigger() );
 
-      return true;
+      /// Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
-   bool Readout::stop() {
+   StatusCode Readout::stop() {
 
       // Stop the acquisition:
       CHECK( m_digitizer.stopAcquisition() );
       REPORT_VERBOSE( tr( "Acquisition stopped" ) );
 
-      return true;
+      /// Return gracefully:
+      return StatusCode::SUCCESS;
    }
 
    std::unique_ptr< ev::Fragment > Readout::readEvent() {

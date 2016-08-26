@@ -43,14 +43,14 @@ namespace v775 {
       /// @{
 
       /// Function initialising the device for data acquisition
-      virtual bool initialize( const caen::VmeBus& bus );
+      virtual StatusCode initialize( const caen::VmeBus& bus );
       /// Function finalising the device's data acquisition session
-      virtual bool finalize();
+      virtual StatusCode finalize();
 
       /// Function starting data acquisition on the device
-      virtual bool start();
+      virtual StatusCode start();
       /// Function stopping the device's data acquisition
-      virtual bool stop();
+      virtual StatusCode stop();
 
       /// Get the number of events processed by the device so far
       virtual size_t eventsProcessed() const;

@@ -17,7 +17,7 @@ namespace v775 {
 
    }
 
-   bool Readout::initialize( const caen::VmeBus& bus ) {
+   StatusCode Readout::initialize( const caen::VmeBus& bus ) {
 
       // Open the connection to the hardware device:
       CHECK( m_vmeDevice.open( m_vmeAddress, caen::VmeDevice::DEV_V775A,
@@ -57,19 +57,19 @@ namespace v775 {
       CHECK( m_vmeDevice.setReadoutMode( true, true, true ) );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Readout::finalize() {
+   StatusCode Readout::finalize() {
 
       // Close the connection to the device:
       CHECK( m_vmeDevice.close() );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Readout::start() {
+   StatusCode Readout::start() {
 
       // Clear all possible data from the device:
       CHECK( m_vmeDevice.dataClear() );
@@ -82,16 +82,16 @@ namespace v775 {
       CHECK( m_vmeDevice.writeBitClear2Register( BIT_SET_2_OFFLINE_BIT ) );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Readout::stop() {
+   StatusCode Readout::stop() {
 
       // Turn the data acuisition off:
       CHECK( m_vmeDevice.writeBitSet2Register( BIT_SET_2_OFFLINE_BIT ) );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    size_t Readout::eventsProcessed() const {

@@ -11,6 +11,7 @@
 #include "device/Crate.h"
 #include "event/Event.h"
 #include "msg/Logger.h"
+#include "common/StatusCode.h"
 
 /**
  *  @short Namespace for the CAEN readout class(es)
@@ -51,14 +52,14 @@ namespace caen_reader {
       ~Crate();
 
       /// Function initializing all CAEN devices
-      bool initialize();
+      StatusCode initialize();
       /// Function finalizing all CAEN devices
-      bool finalize();
+      StatusCode finalize();
 
       /// Start the acquisition on all the devices
-      bool start();
+      StatusCode start();
       /// Stop the acquisition on all the devices
-      bool stop();
+      StatusCode stop();
 
       /// Function reading out one event from the crate
       ev::Event readEvent() const;

@@ -9,6 +9,7 @@
 // Local include(s):
 #include "IDevice.h"
 #include "../event/Fragment.h"
+#include "../common/StatusCode.h"
 
 // Forward declaration(s):
 namespace caen {
@@ -44,10 +45,9 @@ namespace dev {
        * by caen::VmeDevice to be initialised...
        *
        * @param bus The caen::VmeBus instance to use in the data taking
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool initialize( const caen::VmeBus& bus ) = 0;
+      virtual StatusCode initialize( const caen::VmeBus& bus ) = 0;
 
       /// Function "finalizing" the device
       /**
@@ -55,10 +55,9 @@ namespace dev {
        * themseves because of the way the CAEN Digitizer library works.
        * They should do that in this function.
        *
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool finalize() = 0;
+      virtual StatusCode finalize() = 0;
 
       /// Function enabling data acquisition in the device
       /**
@@ -66,10 +65,9 @@ namespace dev {
        * device. Once it is called, cda-caen-vme-reader will go to looking for
        * collected events right away.
        *
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool start() = 0;
+      virtual StatusCode start() = 0;
 
       /// Function disabling data acquisition in the device
       /**
@@ -80,10 +78,9 @@ namespace dev {
        *
        * But still, for the moment let's keep it in the interface...
        *
-       * @returns <code>true</code> if the operation was successful,
-       *          <code>false</code> otherwise
+       * @returns StatusCode with the outcome of the operation
        */
-      virtual bool stop() = 0;
+      virtual StatusCode stop() = 0;
 
       /// Get the number of events processed by the device so far
       /**

@@ -28,53 +28,47 @@ namespace caen_reader {
       }
    }
 
-   bool Crate::initialize() {
+   StatusCode Crate::initialize() {
 
       // Initialize all the devices:
       DeviceMap_t::const_iterator itr = m_devices.begin();
       DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
-         if( ! itr->second->initialize() ) {
-            REPORT_ERROR( tr( "Couldn't initialize one of the CAEN devices" ) );
-            return false;
-         }
+         CHECK( itr->second->initialize() );
       }
 
       // Remember the object's internal state:
       m_initialized = true;
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Crate::finalize() {
+   StatusCode Crate::finalize() {
 
       // Don't do anything if the object is not initialized:
       if( ! m_initialized ) {
          m_logger << msg::WARNING
                   << tr( "Object not in initialized state, not finalizing" )
                   << msg::endmsg;
-         return true;
+         return StatusCode::SUCCESS;
       }
 
       // Finalize all the devices:
       DeviceMap_t::const_iterator itr = m_devices.begin();
       DeviceMap_t::const_iterator end = m_devices.end();
       for( ; itr != end; ++itr ) {
-         if( ! itr->second->finalize() ) {
-            REPORT_ERROR( tr( "Couldn't finalize one of the CAEN devices" ) );
-            return false;
-         }
+         CHECK( itr->second->finalize() );
       }
 
       // Remember the object's internal state:
       m_initialized = false;
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Crate::start() {
+   StatusCode Crate::start() {
 
       // Start all the devices:
       DeviceMap_t::const_iterator itr = m_devices.begin();
@@ -84,10 +78,10 @@ namespace caen_reader {
       }
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Crate::stop() {
+   StatusCode Crate::stop() {
 
       // Stop all the devices:
       DeviceMap_t::const_iterator itr = m_devices.begin();
@@ -97,7 +91,7 @@ namespace caen_reader {
       }
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /**

@@ -166,7 +166,7 @@ int main( int argc, char* argv[] ) {
       //
       // Initialise the crate object from the buffer:
       //
-      if( ! g_crate->readConfig( reader.buffer() ) ) {
+      if( ! g_crate->readConfig( reader.buffer() ).isSuccess() ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-caen-reader",
                                       "Couldn't process configuration "
@@ -228,7 +228,7 @@ int main( int argc, char* argv[] ) {
       // Initialise a Crate object with this configuration:
       //
       QDomElement work = doc.documentElement();
-      if( ! g_crate->readConfig( work ) ) {
+      if( ! g_crate->readConfig( work ).isSuccess() ) {
          g_logger << msg::FATAL
                   << qApp->translate( "cda-caen-reader",
                                       "Failed to read configuration file!\n"
@@ -249,7 +249,7 @@ int main( int argc, char* argv[] ) {
    //
    // Initialize the digitizer(s) for data acquisition:
    //
-   if( ! g_crate->initialize() ) {
+   if( ! g_crate->initialize().isSuccess() ) {
       g_logger << msg::FATAL
                << qApp->translate( "cda-caen-reader",
                                    "Failed to initialise device(s) for data "
@@ -304,7 +304,7 @@ int main( int argc, char* argv[] ) {
    //
    // Start the data acquisition:
    //
-   if( ! g_crate->start() ) {
+   if( ! g_crate->start().isSuccess() ) {
       g_logger << msg::FATAL
                << qApp->translate( "cda-caen-reader",
                                    "Couldn't start the data acquisition" )
@@ -384,7 +384,7 @@ void shutDown( int ) {
             << msg::endmsg;
 
    // Stop the data acquisition:
-   if( ! g_crate->stop() ) {
+   if( ! g_crate->stop().isSuccess() ) {
       g_logger << msg::FATAL
                << qApp->translate( "cda-caen-reader",
                                    "Couldn't stop data acquisition" )
@@ -396,7 +396,7 @@ void shutDown( int ) {
                << msg::endmsg;
    }
    // Finalize the data acquisition:
-   if( ! g_crate->finalize() ) {
+   if( ! g_crate->finalize().isSuccess() ) {
       g_logger << msg::FATAL
                << qApp->translate( "cda-caen-reader",
                                    "Couldn't cleanly finalize data acquisition" )

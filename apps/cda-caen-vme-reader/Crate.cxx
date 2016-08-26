@@ -33,7 +33,7 @@ namespace caen_vme_reader {
       }
    }
 
-   bool Crate::initialize() {
+   StatusCode Crate::initialize() {
 
       // Open the connection to the VME bus:
       CHECK( m_vmeBus.open( m_type, m_linkNumber, m_boardNumber ) );
@@ -47,17 +47,17 @@ namespace caen_vme_reader {
       m_initialized = true;
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Crate::finalize() {
+   StatusCode Crate::finalize() {
 
       // Don't do anything if the object is not initialized:
       if( ! m_initialized ) {
          m_logger << msg::WARNING
                   << tr( "Object not in initialized state, not finalizing" )
                   << msg::endmsg;
-         return true;
+         return StatusCode::SUCCESS;
       }
 
       // Finalize all the devices:
@@ -72,10 +72,10 @@ namespace caen_vme_reader {
       m_initialized = false;
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Crate::start() {
+   StatusCode Crate::start() {
 
       // Start all the devices:
       for( auto& itr : m_devices ) {
@@ -83,10 +83,10 @@ namespace caen_vme_reader {
       }
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Crate::stop() {
+   StatusCode Crate::stop() {
 
       // Stop all the devices:
       for( auto& itr : m_devices ) {
@@ -94,7 +94,7 @@ namespace caen_vme_reader {
       }
 
       // Show that we were successful:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    ev::Event Crate::readEvent() const {
