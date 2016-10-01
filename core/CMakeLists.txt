@@ -34,7 +34,7 @@ find_package( CAENqtpSDK )
 file( GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
    fifo/*.h msg/*.h event/*.h device/*.h device/*.icc
    camac/*.h caen/*.h cernlib/*.h root/*.h root/*.icc
-   common/*.h i18n/*.h )
+   common/*.h i18n/*.h tclap/*.h )
 file( GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
    fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
    camac/*.cxx caen/*.cxx cernlib/*.cxx root/*.cxx
