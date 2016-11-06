@@ -112,9 +112,10 @@ namespace v792 {
       m_channelUpperBoundLabel->setAlignment( Qt::AlignCenter );
 
       for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         m_gchannels[ i ].reset( new ChannelGui( i,
+         m_gchannels[ i ].reset( new ChannelGui( static_cast< int >( i ),
                                                  m_channelSettingsBox.get() ) );
-         m_gchannels[ i ]->setGeometry( QRect( 20, 50 + i * ChannelGui::HEIGHT,
+         m_gchannels[ i ]->setGeometry( QRect( 20, static_cast< int >( 50 +
+                                                                       i * ChannelGui::HEIGHT ),
                                                ChannelGui::WIDTH - 40,
                                                ChannelGui::HEIGHT ) );
          connect( m_gchannels[ i ].get(), SIGNAL( enableChanged( int, bool ) ),
