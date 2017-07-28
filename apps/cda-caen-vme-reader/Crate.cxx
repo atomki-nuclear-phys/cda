@@ -113,31 +113,7 @@ namespace caen_vme_reader {
 
    bool Crate::devicesAreInSync() const {
 
-      // First a simple security check:
-      if( ! m_devices.size() ) {
-         // Not sure what's happening here, but sure...
-         return true;
-      }
-
-      // Get the number of events processed by the first device:
-      const size_t eventsProcessed =
-         m_devices.begin()->second->eventsProcessed();
-
-      // Check if every device reports the same:
-      for( const auto& itr : m_devices ) {
-         if( eventsProcessed != itr.second->eventsProcessed() ) {
-            m_logger << msg::DEBUG
-                     << tr( "First device (%1) reports %2 events" )
-                        .arg( m_devices.begin()->second->deviceName() )
-                        .arg( eventsProcessed ) << std::endl
-                     << tr( "Device %1 reports %2 events" )
-                        .arg( itr.second->deviceName() )
-                        .arg( itr.second->eventsProcessed() ) << msg::endmsg;
-            return false;
-         }
-      }
-
-      // If yes, then they are in sync:
+      // The devices are considered to always be in sync:
       return true;
    }
 
