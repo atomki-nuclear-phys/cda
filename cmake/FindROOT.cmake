@@ -24,8 +24,15 @@ if( ROOT_FOUND )
    message( STATUS "Found ROOT: ${ROOT_BINARY_DIR}/root-config "
                    "(found version \"${ROOT_VERSION}\")" )
    # Make use of the imported libraries:
-   set( ROOT_LIBRARIES Core RIO Net Hist Graf Graf3d Gpad Tree
-                       Rint Postscript Matrix Physics MathCore Thread )
+   if( "${ROOT_VERSION}" VERSION_LESS 6.10 )
+      set( ROOT_LIBRARIES Core RIO Net Hist Graf Graf3d Gpad Tree
+                          Rint Postscript Matrix Physics MathCore Thread )
+   else()
+      set( ROOT_LIBRARIES ROOT::Core ROOT::RIO ROOT::Net ROOT::Hist ROOT::Graf
+                          ROOT::Graf3d ROOT::Gpad ROOT::Tree ROOT::Rint
+                          ROOT::Postscript ROOT::Matrix ROOT::Physics
+                          ROOT::MathCore ROOT::Thread )
+   endif()
 else()
 
    # Look for root-config. Everything else is found using this script:
