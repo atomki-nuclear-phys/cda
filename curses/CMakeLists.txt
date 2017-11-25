@@ -13,17 +13,36 @@ if( NOT CURSES_FOUND )
    return()
 endif()
 
+# Find Qt:
+find_package( Qt5 QUIET COMPONENTS Core )
+if( Qt5_FOUND AND NOT CDA_USE_QT4 )
+  message( STATUS "Using Qt5 for the build" )
+  set( qt_libraries Qt5::Core )
+else()
+  find_package( Qt4 QUIET COMPONENTS QtCore )
+  if( NOT QT_FOUND )
+    message( SEND_ERROR "No working version of Qt was found" )
+    return()
+  endif()
+  message( STATUS "Using Qt4 for the build" )
+  set( qt_libraries Qt4::QtCore )
+endif()
+
 # Collect the source files of the library:
 file( GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
    msg/*.h )
 file( GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
    msg/*.cxx )
 
+# Generate MOC files automatically:
+set( CMAKE_AUTOMOC TRUE )
+
 # Build the cdacurses library:
 add_library( cdacurses STATIC ${headers} ${sources} )
 target_include_directories( cdacurses PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
    ${CURSES_INCLUDE_DIRS} )
-target_link_libraries( cdacurses PUBLIC ${CURSES_LIBRARIES} cdacore )
+target_link_libraries( cdacurses PUBLIC ${CURSES_LIBRARIES} ${qt_libraries}
+   cdacore )
 set_target_properties( cdacurses PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )
 target_compile_definitions( cdacurses PRIVATE CDACURSES_LIBRARY )

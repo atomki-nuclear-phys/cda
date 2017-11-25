@@ -1,12 +1,19 @@
 // $Id$
 
+// Qt include(s):
+#include <QString>
+
+// CDA include(s):
+#include "msg/Message.h"
+#include "msg/TextStream.h"
+
 // Local include(s):
 #include "TermWindowView.h"
 
 namespace msg {
 
    TermWindowView::TermWindowView( int x, int y, int width, int height )
-      : m_window( nullptr ) {
+      : m_mainWindow( nullptr ), m_textWindow( nullptr ), m_firstMsg( true ) {
 
       // Set up the terminal window:
       setupWin( x, y, ( width < 0 ? COLS - x : width ),
@@ -19,6 +26,32 @@ namespace msg {
       deleteWin();
    }
 
+   void TermWindowView::addMessage( const Message& message ) {
+
+      // Decide whether to show the message:
+      if( message.getLevel() < m_minLevel ) {
+         return;
+      }
+
+      // Format the message into a QString:
+      QString text;
+      TextStream stream( &text );
+      stream << message;
+
+      // Print the line at the current cursor location:
+      ::wprintw( m_textWindow, ( m_firstMsg ? "%s" : "\n%s" ),
+                 text.toLatin1().constData() );
+
+      // Refresh the view:
+      ::wrefresh( m_textWindow );
+
+      // The next one won't be the first message anymore:
+      m_firstMsg = false;
+
+      // Return gracefully:
+      return;
+   }
+
    void TermWindowView::setupWin( int x, int y, int width, int height ) {
 
       // Start by making sure that the terminal window, if it already exists,
@@ -26,14 +59,26 @@ namespace msg {
       deleteWin();
 
       // Create the main window:
-      m_window = ::newwin( height, width, y, x );
-      // Draw a "default" box around it:
-      ::box( m_window, 0 , 0 );
-      // Put a title at the top-left of the window:
-      ::mvwprintw( m_window, 0, 1, " Messages " );
+      m_mainWindow = ::newwin( height, width, y, x );
+      // Draw a "default" box around the window:
+      ::box( m_mainWindow, 0 , 0 );
+      // Put a title at the top-left of it:
+      ::mvwprintw( m_mainWindow, 0, 1, " Messages " );
 
-      // Update the window on the screen:
-      ::wrefresh( m_window );
+      // Create the text window:
+      m_textWindow = ::newwin( height - 2, width - 4, y + 1, x + 2 );
+
+      // Set the scroll behaviour of the text window:
+      ::scrollok( m_textWindow, true );
+      ::idlok( m_textWindow, true );
+      ::wsetscrreg( m_textWindow, 0, 0 );
+
+      // Update the windows on the screen:
+      ::wrefresh( m_mainWindow );
+      ::wrefresh( m_textWindow );
+
+      // Remember that the next message will be the first one printed:
+      m_firstMsg = true;
 
       // Return gracefully:
       return;
@@ -42,16 +87,18 @@ namespace msg {
    void TermWindowView::deleteWin() {
 
       // If the window doesn't exist, don't do anything:
-      if( ! m_window ) {
+      if( ! m_mainWindow ) {
          return;
       }
 
       // Clear the window border:
-      ::wborder( m_window, ' ', ' ', ' ',' ',' ',' ',' ',' ' );
+      ::wborder( m_mainWindow, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' );
       // Update the window on the screen, now without its border:
-      ::wrefresh( m_window );
-      // Delete the window:
-      ::delwin( m_window );
+      ::wrefresh( m_mainWindow );
+      // Delete the windows:
+      ::delwin( m_textWindow );
+      ::delwin( m_mainWindow );
+      m_mainWindow = nullptr; m_textWindow = nullptr;
 
       // Return gracefully:
       return;
