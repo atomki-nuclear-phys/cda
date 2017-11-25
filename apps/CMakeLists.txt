@@ -148,6 +148,38 @@ macro( add_cda_gui_app name )
 
 endmacro( add_cda_gui_app )
 
+# Macro for building a terminal/curses application
+macro( add_cda_terminal_app name )
+
+   # Check if the cdacurses library is available:
+   if( NOT TARGET cdacurses )
+      message( STATUS "Not building ${name}" )
+      return()
+   endif()
+
+   # Tell the user what's happening:
+   message( STATUS "Configuring the build of terminal application ${name}" )
+
+   # External(s) needed:
+   find_package( Curses REQUIRED )
+
+   # Collect the source files of the executable:
+   file( GLOB headers *.h )
+   file( GLOB sources *.cxx )
+
+   # Build the executable:
+   add_executable( ${name} ${headers} ${sources} )
+   target_link_libraries( ${name} ${CURSES_LIBRARIES} cdacore cdadaq cdacurses )
+   set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
+
+   # Group its source files:
+   source_group( "" FILES ${headers} ${sources} )
+
+   # Install the executable:
+   install( TARGETS ${name} DESTINATION bin )
+
+endmacro( add_cda_terminal_app )
+
 # Build the console application(s):
 add_subdirectory( cda-caen-reader )
 add_subdirectory( cda-caen-vme-reader )
@@ -166,3 +198,6 @@ add_subdirectory( cda-config-editor )
 add_subdirectory( cda-msgserver )
 add_subdirectory( cda-qt-monitoring )
 add_subdirectory( cda-stat-server )
+
+# Build the terminal/curses application(s):
+add_subdirectory( cda-caen-vme-terminal )
