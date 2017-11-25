@@ -4,7 +4,7 @@
 #include <ncurses.h>
 
 // CDA include(s):
-#include "msg/PanelView.h"
+#include "msg/TermWindowView.h"
 
 int main() {
 
@@ -14,7 +14,7 @@ int main() {
    ::refresh();
 
    {
-      msg::PanelView messages;
+      msg::TermWindowView messages;
       ::getch();
    }
 
