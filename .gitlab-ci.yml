@@ -1,0 +1,67 @@
+#
+# Continuous Integration configuration for all build configurations:
+#
+
+# The build stages to test individually:
+stages:
+   - config
+   - build
+
+# Global configurations for the CI's behaviour
+variables:
+   GIT_STRATEGY: fetch
+
+# Configuration job template
+.config_template: &config_job
+   tags:
+      - docker
+   stage: config
+   script:
+      - mkdir ci_build
+      - cd ci_build/
+      - cmake -DCMAKE_BUILD_TYPE:STRING=Release ${CONFIG_FLAGS} ../
+   artifacts:
+      paths:
+         - ci_build/
+
+# Test the project's configuration on Ubuntu-12.04, with all available externals
+# used:
+config:ubuntu1204full:
+   <<: *config_job
+   image: krasznaa/cda-build:ubuntu-12.04
+
+# Test the project's configuration on Ubuntu-12.04, with all optional externals
+# turned off.
+config:ubuntu1204vanilla:
+   <<: *config_job
+   image: krasznaa/cda-build:ubuntu-12.04
+   before_script:
+      - export CONFIG_FLAGS="-DCDA_USE_ROOT:BOOL=FALSE -DCDA_USE_CERNLIB:BOOL=FALSE -DCDA_USE_CC32:BOOL=FALSE -DCDA_USE_CAENDIGITIZER:BOOL=FALSE -DCDA_USE_CAENQTPSDK:BOOL=FALSE"
+
+# Build job template:
+.build_template: &build_job
+   tags:
+      - docker
+   stage: build
+   script:
+      - export MAKEFLAGS=-j`nproc`
+      - cmake --build ci_build/
+   artifacts:
+      paths:
+         - ci_build/
+
+# Build the project on top of Ubuntu-12.04 with all possible externals turned
+# on:
+build:ubuntu1204full:
+   <<: *build_job
+   image: krasznaa/cda-build:ubuntu-12.04
+   dependencies:
+      - config:ubuntu1204full
+
+# Build the project on top of Ubuntu-12.04 with all optional externals turned
+# off:
+build:ubuntu1204vanilla:
+   <<: *build_job
+   image: krasznaa/cda-build:ubuntu-12.04
+   dependencies:
+      - config:ubuntu1204vanilla
