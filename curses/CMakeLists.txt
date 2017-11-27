@@ -41,7 +41,7 @@ set( CMAKE_AUTOMOC TRUE )
 add_library( cdacurses STATIC ${headers} ${sources} )
 target_include_directories( cdacurses PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
    ${CURSES_INCLUDE_DIRS} )
-target_link_libraries( cdacurses PUBLIC ${CURSES_LIBRARIES} ${qt_libraries}
+target_link_libraries( cdacurses ${CURSES_LIBRARIES} ${qt_libraries}
    cdacore )
 set_target_properties( cdacurses PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )

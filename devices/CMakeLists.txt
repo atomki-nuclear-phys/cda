@@ -47,7 +47,7 @@ macro( add_cda_plugin name )
   # Build the plugin as a static library:
   add_library( ${name} STATIC ${headers} ${sources} ${resources} )
   target_include_directories( ${name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
-  target_link_libraries( ${name} PRIVATE ${qt_libraries} cdacore cdadaq )
+  target_link_libraries( ${name} ${qt_libraries} cdacore cdadaq )
   target_compile_definitions( ${name} PRIVATE QT_STATICPLUGIN )
   set_property( TARGET ${name} PROPERTY FOLDER "devices/${name}" )
 

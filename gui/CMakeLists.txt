@@ -40,7 +40,7 @@ set( CMAKE_AUTORCC TRUE )
 # Build the cdacore library:
 add_library( cdagui STATIC ${headers} ${sources} ${resources} )
 target_include_directories( cdagui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
-target_link_libraries( cdagui PUBLIC ${qt_libraries} cdacore cdadaq )
+target_link_libraries( cdagui ${qt_libraries} cdacore cdadaq )
 set_target_properties( cdagui PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )
 target_compile_definitions( cdagui PRIVATE CDAGUI_LIBRARY )
