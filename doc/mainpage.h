@@ -1,8 +1,5 @@
-
 /**
  * @mainpage CDA
- *
- * @author Attila Krasznahorkay Jr.
  *
  * @section CDAintro Introduction
  *
@@ -22,30 +19,6 @@
  * Qt plugins. This way the main part of the code can stay agnostic
  * about the details of the devices.
  *
- * @section CDAcompile Compilation
- *
- * You need a recent version of Qt (qt.nokia.com), versions above
- * 4.0.0 should work equally well. In the main directory you have to
- * execute:
- *
- * <code>
- *  # source setup.[c]sh<br/>
- *  # /path/to/Qt/bin/qmake cda.pro<br/>
- *  # make
- * </code>
- *
- * to compile all libraries and examples. The compiled libraries/frameworks are put
- * under <strong>./lib</strong> the applications under <strong>./bin</strong>,
- * and the device plugins under <strong>./dev</strong>.
- * To set up your environment for running the examples, from any
- * directory exacute:
- *
- * <code>
- *  # source /path/to/CDA/setup.[c]sh
- * </code>
- *
- * <i>(You should select the file matching your shell...)</i> Enjoy!
- *
- * $Revision$
- * $Date$
+ * For compilation and usage instructions see the README files of the
+ * code repository.
  */
