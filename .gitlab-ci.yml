@@ -10,6 +10,7 @@ stages:
 # Global configurations for the CI's behaviour
 variables:
    GIT_STRATEGY: fetch
+   DISABLE_FLAGS: "-DCDA_USE_ROOT:BOOL=FALSE -DCDA_USE_CERNLIB:BOOL=FALSE -DCDA_USE_CC32:BOOL=FALSE -DCDA_USE_CAENDIGITIZER:BOOL=FALSE -DCDA_USE_CAENQTPSDK:BOOL=FALSE"
 
 # Configuration job template
 .config_template: &config_job
@@ -36,7 +37,21 @@ config:ubuntu1204vanilla:
    <<: *config_job
    image: krasznaa/cda-build:ubuntu-12.04
    before_script:
-      - export CONFIG_FLAGS="-DCDA_USE_ROOT:BOOL=FALSE -DCDA_USE_CERNLIB:BOOL=FALSE -DCDA_USE_CC32:BOOL=FALSE -DCDA_USE_CAENDIGITIZER:BOOL=FALSE -DCDA_USE_CAENQTPSDK:BOOL=FALSE"
+      - export CONFIG_FLAGS=${DISABLE_FLAGS}
+
+# Test the project's configuration on Ubuntu-16.04, with all available externals
+# used:
+config:ubuntu1604full:
+   <<: *config_job
+   image: krasznaa/cda-build:ubuntu-16.04
+
+# Test the project's configuration on Ubuntu-16.04, with all optional externals
+# turned off.
+config:ubuntu1604vanilla:
+   <<: *config_job
+   image: krasznaa/cda-build:ubuntu-16.04
+   before_script:
+      - export CONFIG_FLAGS=${DISABLE_FLAGS}
 
 # Build job template:
 .build_template: &build_job
@@ -65,3 +80,19 @@ build:ubuntu1204vanilla:
    image: krasznaa/cda-build:ubuntu-12.04
    dependencies:
       - config:ubuntu1204vanilla
+
+# Build the project on top of Ubuntu-16.04 with all possible externals turned
+# on:
+build:ubuntu1604full:
+   <<: *build_job
+   image: krasznaa/cda-build:ubuntu-16.04
+   dependencies:
+      - config:ubuntu1604full
+
+# Build the project on top of Ubuntu-16.04 with all optional externals turned
+# off:
+build:ubuntu1604vanilla:
+   <<: *build_job
+   image: krasznaa/cda-build:ubuntu-16.04
+   dependencies:
+      - config:ubuntu1604vanilla
