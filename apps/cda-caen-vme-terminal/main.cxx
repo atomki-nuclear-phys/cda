@@ -19,7 +19,7 @@ int main() {
    ::curs_set( 0 );
 
    {
-      msg::TermWindowView messages;
+      msg::TermWindowView messages( 0, 0, COLS, LINES );
       for( int i = 0; i < 50; ++i ) {
          std::ostringstream msgNumber;
          msgNumber << i + 1 << " 12341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234";
@@ -30,7 +30,10 @@ int main() {
                                                       msgNumber.str() ).c_str(),
                                             msg::WARNING ) );
       }
-      ::getch();
+      int ch = 0;
+      while( ( ch = ::getch() ) == KEY_RESIZE ) {
+         messages.resize( 0, 0, COLS, LINES );
+      }
    }
 
    ::endwin();

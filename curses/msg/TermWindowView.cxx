@@ -33,20 +33,26 @@ namespace msg {
          return;
       }
 
-      // Format the message into a QString:
-      QString text;
-      TextStream stream( &text );
-      stream << message;
+      // Show the message using the internal function:
+      static const bool STORE_IN_QUEUE = true;
+      addMessage( message, STORE_IN_QUEUE );
 
-      // Print the line at the current cursor location:
-      ::wprintw( m_textWindow, ( m_firstMsg ? "%s" : "\n%s" ),
-                 text.toLatin1().constData() );
+      // Return gracefully:
+      return;
+   }
 
-      // Refresh the view:
-      ::wrefresh( m_textWindow );
+   void TermWindowView::resize( int x, int y, int width, int height ) {
 
-      // The next one won't be the first message anymore:
-      m_firstMsg = false;
+      // Setup the window anew:
+      setupWin( x, y, width, height );
+
+      // Push all messages from the queue into the view once again:
+      std::list< Message >::const_iterator itr = m_msgQueue.begin();
+      std::list< Message >::const_iterator end = m_msgQueue.end();
+      for( ; itr != end; ++itr ) {
+         static const bool STORE_IN_QUEUE = false;
+         addMessage( *itr, STORE_IN_QUEUE );
+      }
 
       // Return gracefully:
       return;
@@ -99,6 +105,36 @@ namespace msg {
       ::delwin( m_textWindow );
       ::delwin( m_mainWindow );
       m_mainWindow = nullptr; m_textWindow = nullptr;
+
+      // Return gracefully:
+      return;
+   }
+
+   void TermWindowView::addMessage( const Message& message,
+                                    bool storeInQueue ) {
+
+      // Format the message into a QString:
+      QString text;
+      TextStream stream( &text );
+      stream << message;
+
+      // Print the line at the current cursor location:
+      ::wprintw( m_textWindow, ( m_firstMsg ? "%s" : "\n%s" ),
+                 text.toLatin1().constData() );
+
+      // Refresh the view:
+      ::wrefresh( m_textWindow );
+
+      // The next one won't be the first message anymore:
+      m_firstMsg = false;
+
+      // Store the message in the internal queue if needed:
+      if( storeInQueue ) {
+         m_msgQueue.push_back( message );
+         if( m_msgQueue.size() > MSG_QUEUE_SIZE ) {
+            m_msgQueue.pop_front();
+         }
+      }
 
       // Return gracefully:
       return;

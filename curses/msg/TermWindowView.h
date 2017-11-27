@@ -3,6 +3,9 @@
 #ifndef CDA_CURSES_MSG_TERMWINDOWVIEW_H
 #define CDA_CURSES_MSG_TERMWINDOWVIEW_H
 
+// System include(s):
+#include <list>
+
 // Curses include(s):
 #include <ncurses.h>
 
@@ -11,6 +14,7 @@
 
 // CDA include(s):
 #include "msg/Level.h"
+#include "msg/Message.h"
 
 namespace msg {
 
@@ -41,12 +45,17 @@ namespace msg {
    public slots:
       /// Insert a new message into the window
       void addMessage( const Message& message );
+      /// Resize the window on in the terminal
+      void resize( int x, int y, int width, int height );
 
    private:
       /// Function for setting up/updating the window
       void setupWin( int x, int y, int width, int height );
       /// Function for deleting an existing window
       void deleteWin();
+
+      /// Internal function for adding a message to the window
+      void addMessage( const Message& message, bool storeInQueue );
 
       /// The main window
       WINDOW* m_mainWindow;
@@ -59,6 +68,12 @@ namespace msg {
       /// Internal flag showing whether we're printing the first message on the
       /// screen or not
       bool m_firstMsg;
+
+      /// Queue of the last 50 messages received by the view. To be able to
+      /// (re-)show them correctly in case the view gets resized
+      std::list< Message > m_msgQueue;
+      /// The number of messages to queue
+      static const size_t MSG_QUEUE_SIZE = 50;
 
    }; // class TermWindowView
 
