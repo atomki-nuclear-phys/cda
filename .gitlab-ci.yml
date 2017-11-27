@@ -6,6 +6,7 @@
 stages:
    - config
    - build
+   - deploy
 
 # Global configurations for the CI's behaviour
 variables:
@@ -96,3 +97,19 @@ build:ubuntu1604vanilla:
    image: krasznaa/cda-build:ubuntu-16.04
    dependencies:
       - config:ubuntu1604vanilla
+
+# Build the doxygen configuration for the project:
+pages:
+   tags:
+      - docker
+   stage: deploy
+   image: krasznaa/cda-build:ubuntu-16.04
+   dependencies: []
+   script:
+      - doxygen Doxyfile
+      - mv doxygen/html/ public/
+   artifacts:
+      paths:
+         - public
+   only:
+      - master
