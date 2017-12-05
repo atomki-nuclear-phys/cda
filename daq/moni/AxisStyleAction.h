@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_MONI_AXISSTYLEACTION_H
 #define CDA_GUI_MONI_AXISSTYLEACTION_H
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 #include <QAction>
 
 // Local include(s):
@@ -24,9 +23,6 @@ namespace moni {
     *         Histogram class to change the style of one of its axes.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDADAQ_EXPORT AxisStyleAction : public QAction {
 

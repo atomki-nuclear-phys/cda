@@ -1,12 +1,11 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_COMMON_APPRUNNER_H
 #define CDA_DAQ_COMMON_APPRUNNER_H
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QProcess>
+#include <QString>
+#include <QCoreApplication>
+#include <QProcess>
 
 // CDA include(s):
 #include "msg/Logger.h"
@@ -27,10 +26,7 @@ namespace daq {
     *         to start the same executable in multiple instances, you'll have
     *         to create multiple instances of this class.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDADAQ_EXPORT AppRunner {
 

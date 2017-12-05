@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_STAT_STATISTICS_H
 #define CDA_DAQ_STAT_STATISTICS_H
 
 // Qt include(s):
-#include <QtCore/QTime>
-#include <QtCore/QString>
+#include <QTime>
+#include <QString>
 
 // Local include(s):
 #include "../common/Export.h"
@@ -16,10 +15,7 @@
  *         This namespace collects the classes that are involved in the
  *         distribution of DAQ statistics information.
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 namespace cdastat {
 
@@ -31,10 +27,7 @@ namespace cdastat {
     *         a simple class really, since the DAQ system itself is quite
     *         simple...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDADAQ_EXPORT Statistics {
 

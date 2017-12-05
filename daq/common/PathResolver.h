@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_COMMON_PATHRESOLVER_H
 #define CDA_DAQ_COMMON_PATHRESOLVER_H
 
@@ -8,8 +7,8 @@
 #include <list>
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QCoreApplication>
+#include <QString>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "msg/Logger.h"
@@ -28,9 +27,6 @@ namespace daq {
     *         configuration files in specific locations. etc.)
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDADAQ_EXPORT PathResolver {
 
@@ -39,7 +35,8 @@ namespace daq {
 
    public:
       /// Find the full path of a given file
-      static QString resolve( const QString& name, const QString& env = "PATH" );
+      static QString resolve( const QString& name,
+                              const QString& env = "PATH" );
 
    private:
       /// Cached environments

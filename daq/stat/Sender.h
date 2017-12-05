@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_STAT_SENDER_H
 #define CDA_DAQ_STAT_SENDER_H
 
@@ -7,8 +6,8 @@
 #include <list>
 
 // Qt include(s):
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
+#include <QThread>
+#include <QMutex>
 
 // CDA include(s):
 #include "common/Address.h"
@@ -32,10 +31,7 @@ namespace cdastat {
     *         This class can be used to send statistics information to
     *         any number of receivers.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDADAQ_EXPORT Sender : public QThread {
 

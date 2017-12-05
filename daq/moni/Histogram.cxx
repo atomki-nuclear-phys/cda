@@ -1,15 +1,14 @@
-// $Id$
 
 // System include(s):
 #include <algorithm>
 #include <cmath>
 
 // Qt include(s):
-#include <QtCore/QPoint>
-#include <QtCore/QLine>
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
-#include <QtGui/QMouseEvent>
+#include <QPoint>
+#include <QLine>
+#include <QRect>
+#include <QPainter>
+#include <QMouseEvent>
 #include <QMenu>
 #include <QActionGroup>
 

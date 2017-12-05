@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_STAT_BINARYSTREAM_H
 #define CDA_DAQ_STAT_BINARYSTREAM_H\
 
 // Qt include(s):
-#include <QtCore/QDataStream>
+#include <QDataStream>
 
 // Local include(s):
 #include "../common/Export.h"
@@ -21,10 +20,7 @@ namespace cdastat {
     *         information over the network, to convert statistics objects
     *         to/from binary data.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDADAQ_EXPORT BinaryStream : public QDataStream {
 

@@ -1,8 +1,7 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QStringList>
-#include <QtCore/QProcessEnvironment>
+#include <QStringList>
+#include <QProcessEnvironment>
 
 // CDA include(s):
 #include "common/errorcheck.h"
@@ -60,11 +59,12 @@ namespace daq {
     * don't like C++ constructs...
     *
     * Once done with setting up all the input data, it starts the new process by
-    * first duplicating the caller process (using <code>fork</code>), then starting
-    * the specified executable inside the newly created process (using
+    * first duplicating the caller process (using <code>fork</code>), then
+    * starting the specified executable inside the newly created process (using
     * <code>execve</code>).
     *
-    * When finished, it tries to clean up the memory in the caller (original) process.
+    * When finished, it tries to clean up the memory in the caller (original)
+    * process.
     *
     * @returns <code>true</code> if tha process started successfully,
     *          <code>false</code> is there were any problems

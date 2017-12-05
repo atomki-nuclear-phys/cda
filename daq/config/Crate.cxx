@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 // CDA include(s):
 #include "device/Factory.h"

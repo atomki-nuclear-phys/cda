@@ -1,9 +1,8 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QFile>
-#include <QtXml/QDomDocument>
-#include <QtNetwork/QTcpSocket>
+#include <QFile>
+#include <QDomDocument>
+#include <QTcpSocket>
 
 // Local include(s):
 #include "ConfServer.h"

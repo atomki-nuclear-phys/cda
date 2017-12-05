@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtNetwork/QTcpSocket>
+#include <QTcpSocket>
 
 // Local include(s):
 #include "ConfReader.h"
@@ -20,7 +19,8 @@ namespace conf {
       if( m_buffer.open( QBuffer::ReadWrite ) ) {
          REPORT_VERBOSE( tr( "Opened internal buffer in read/write mode" ) );
       } else {
-         REPORT_ERROR( tr( "Internal buffer could not be read in read/write mode!" ) );
+         REPORT_ERROR( tr( "Internal buffer could not be read in read/write "
+                           "mode!" ) );
       }
    }
 

@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtNetwork/QTcpSocket>
+#include <QTcpSocket>
 
 // Local include(s):
 #include "Sender.h"

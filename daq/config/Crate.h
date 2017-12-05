@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_CONFIG_CRATE_H
 #define CDA_DAQ_CONFIG_CRATE_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 // CDA include(s):
 #include "device/ICernlibHist.h"
@@ -23,10 +22,7 @@ namespace conf {
     *
     *         This class should not be used outside the conf:: namespace!
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class Crate : public dev::Crate< dev::ICernlibHist > {
 

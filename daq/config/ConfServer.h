@@ -1,12 +1,11 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_CONFIG_CONFSERVER_H
 #define CDA_DAQ_CONFIG_CONFSERVER_H
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QBuffer>
-#include <QtNetwork/QTcpServer>
+#include <QString>
+#include <QBuffer>
+#include <QTcpServer>
 
 // CDA include(s):
 #include "msg/Logger.h"
@@ -23,10 +22,7 @@ class Address;
  *         This namespace holds the classes which are used to distribute
  *         the configuration over the network.
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 namespace conf {
 
@@ -48,10 +44,7 @@ namespace conf {
     *         it just has to send the contents of this buffer to all the
     *         connecting clients.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDADAQ_EXPORT ConfServer : public QTcpServer {
 

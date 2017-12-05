@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_CONFIG_CONFREADER_H
 #define CDA_DAQ_CONFIG_CONFREADER_H
 
 // Qt include(s):
-#include <QtCore/QBuffer>
-#include <QtCore/QCoreApplication>
+#include <QBuffer>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "msg/Logger.h"
@@ -26,13 +25,11 @@ namespace conf {
     *  @short Class retrieving the configuration from a server
     *
     *         This class can be used in the clients that need the configuration,
-    *         to read it from a configuration server. Once read, the configuration
-    *         data can be accessed using the ConfReader::buffer() function.
+    *         to read it from a configuration server. Once read, the
+    *         configuration data can be accessed using the ConfReader::buffer()
+    *         function.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDADAQ_EXPORT ConfReader {
 

@@ -1,4 +1,3 @@
-// $Id$
 
 // Local include(s):
 #include "BinaryStream.h"

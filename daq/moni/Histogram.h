@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_MONI_HISTOGRAM_H
 #define CDA_DAQ_MONI_HISTOGRAM_H
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QTimer>
+#include <QString>
+#include <QTimer>
 #include <QWidget>
 
 // CDA include(s):
@@ -23,9 +22,6 @@ QT_FORWARD_DECLARE_CLASS( QPainter )
  * any CERNLIB or ROOT functionality, are put into this namespace.
  *
  * @author Attila Krasznahorkay Jr. <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 namespace moni {
 
@@ -47,9 +43,6 @@ namespace moni {
     *         system.
     *
     * @author Attila Krasznahorkay Jr. <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDADAQ_EXPORT Histogram : public QWidget {
 
@@ -128,14 +121,12 @@ namespace moni {
       /**
        *  @short Internal class used in displaying the axis binning
        *
-       *         Figuring out how to properly display an axis is not that trivial
-       *         as it turns out. This class is used in the Histogram class internally
-       *         to store how the binning should be done for a particular axis.
+       *         Figuring out how to properly display an axis is not that
+       *         trivial as it turns out. This class is used in the Histogram
+       *         class internally to store how the binning should be done for a
+       *         particular axis.
        *
        * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-       *
-       * $Revision$
-       * $Date$
        */
       class CDADAQ_EXPORT AxisBinning {
 
@@ -171,8 +162,8 @@ namespace moni {
          }; // class MinorTick
 
          /// Default constructor
-         AxisBinning( AxisStyle style = Linear, double low = 0.0, double up = 100.0,
-                      double alength = 100.0 );
+         AxisBinning( AxisStyle style = Linear, double low = 0.0,
+                      double up = 100.0, double alength = 100.0 );
 
          /// Add one "major" tick to the axis view
          void addMajorTick( const MajorTick& tick );

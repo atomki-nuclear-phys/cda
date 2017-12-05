@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DAQ_STAT_SERVER_H
 #define CDA_DAQ_STAT_SERVER_H
 
 // Qt include(s):
-#include <QtNetwork/QTcpServer>
+#include <QTcpServer>
 
 // Local include(s):
 #include "Statistics.h"
@@ -25,10 +24,7 @@ namespace cdastat {
     *         named it like this, since msg::Server and ev::Server are
     *         written in such a manner as well...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDADAQ_EXPORT Server : public QTcpServer {
 

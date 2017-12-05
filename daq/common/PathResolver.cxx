@@ -1,13 +1,12 @@
-// $Id$
 
 // System include(s):
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QStringList>
-#include <QtCore/QFileInfo>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QProcessEnvironment>
+#include <QStringList>
+#include <QFileInfo>
+#include <QCoreApplication>
+#include <QProcessEnvironment>
 
 // Local include(s):
 #include "PathResolver.h"
