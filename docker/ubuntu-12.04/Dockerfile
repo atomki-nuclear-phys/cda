@@ -28,5 +28,28 @@ RUN wget --no-check-certificate \
     -xvf root_v5.34.36.Linux-ubuntu12-x86_64-gcc4.6.tar.gz && \
     rm root_v5.34.36.Linux-ubuntu12-x86_64-gcc4.6.tar.gz
 
+# Install the CAEN libraries:
+COPY CAENVMELib-2.50.tgz .
+RUN tar -xvf CAENVMELib-2.50.tgz && \
+    cd CAENVMELib-2.50/lib && sh install_x64 && \
+    cd ../.. && rm -rf CAENVMELib-2.50*
+
+COPY CAENComm-1.2-build20140211.tgz .
+RUN tar -xvf CAENComm-1.2-build20140211.tgz && \
+    cd CAENComm-1.2/lib && sh install_x64 && \
+    cd ../.. && rm -rf CAENComm-1.2*
+
+COPY CAENDigitizer_2.9.1_20170707.tgz .
+RUN tar -xvf CAENDigitizer_2.9.1_20170707.tgz && \
+    cd CAENDigitizer_2.9.1 && sh install_64 && \
+    cd .. && rm -rf CAENDigitizer_2.9.1*
+
+COPY CAENVMEToolBox.tar.xz .
+RUN tar -xvf CAENVMEToolBox.tar.xz && \
+    cd CAENVMEToolBox/CAENqtpSDK && sh install && \
+    cd ../.. && rm -rf CAENVMEToolBox*
+
+RUN chmod 644 /usr/include/CAEN* /usr/include/cvt_*
+
 # Start with BASH by default:
 CMD /bin/bash
