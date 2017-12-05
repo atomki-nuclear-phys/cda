@@ -21,5 +21,12 @@ RUN wget --no-check-certificate \
     && cd cmake-2.8.11/ && ./bootstrap && make && make install \
     && cd ../ && rm -rf cmake-2.8.11*
 
+# Install ROOT:
+RUN wget --no-check-certificate \
+    https://root.cern.ch/download/root_v5.34.36.Linux-ubuntu12-x86_64-gcc4.6.tar.gz \
+    && tar -C /usr/local --strip-components=1 --no-same-owner \
+    -xvf root_v5.34.36.Linux-ubuntu12-x86_64-gcc4.6.tar.gz && \
+    rm root_v5.34.36.Linux-ubuntu12-x86_64-gcc4.6.tar.gz
+
 # Start with BASH by default:
 CMD /bin/bash
