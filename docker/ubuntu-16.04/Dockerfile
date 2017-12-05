@@ -45,5 +45,11 @@ RUN tar -xvf CAENVMEToolBox.tar.xz && \
 
 RUN chmod 644 /usr/include/CAEN* /usr/include/cvt_*
 
+# Install the pcicc32 library:
+COPY pcicc32-6.8.tar.gz .
+RUN tar -xvf pcicc32-6.8.tar.gz && \
+    cd pcicc32-6.8 && make && make install && \
+    cd .. && rm -rf pcicc32-6.8*
+
 # Start with BASH by default:
 CMD /bin/bash
