@@ -160,6 +160,19 @@ macro( add_cda_terminal_app name )
    # Tell the user what's happening:
    message( STATUS "Configuring the build of terminal application ${name}" )
 
+   # Find Qt:
+   find_package( Qt5 QUIET COMPONENTS Core )
+   if( Qt5_FOUND AND NOT CDA_USE_QT4 )
+      set( qt_libraries Qt5::Core )
+   else()
+      find_package( Qt4 QUIET COMPONENTS QtCore )
+      if( NOT QT_FOUND )
+         message( SEND_ERROR "No working version of Qt was found" )
+         return()
+      endif()
+      set( qt_libraries Qt4::QtCore )
+   endif()
+
    # External(s) needed:
    find_package( Curses REQUIRED )
 
@@ -169,7 +182,8 @@ macro( add_cda_terminal_app name )
 
    # Build the executable:
    add_executable( ${name} ${headers} ${sources} )
-   target_link_libraries( ${name} ${CURSES_LIBRARIES} cdacore cdadaq cdacurses )
+   target_link_libraries( ${name} ${CURSES_LIBRARIES} ${qt_libraries}
+      cdacore cdadaq cdacurses )
    set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
 
    # Group its source files:
