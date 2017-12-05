@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_FACTORY_H
 #define CDA_CORE_DEVICE_FACTORY_H
 
@@ -29,10 +28,7 @@ namespace dev {
     *         factory is then used to create new instances of different
     *         classes handling the same device type.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class Factory {
 

@@ -1,11 +1,11 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QThread>
+#include <QThread>
 
 // Local include(s):
 #include "Sleep.h"
 
+/// Private namespace for @c core/common/Sleep.cxx.
 namespace {
 
    /**
@@ -22,9 +22,6 @@ namespace {
     *         is supported on...
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class ThreadWait : public QThread {
 

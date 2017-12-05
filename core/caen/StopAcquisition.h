@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_CAEN_STOPACQUISITION_H
 #define CDA_CORE_CAEN_STOPACQUISITION_H
 

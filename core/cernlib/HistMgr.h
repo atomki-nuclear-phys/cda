@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_CERNLIB_HISTMGR_H
 #define CDA_CORE_CERNLIB_HISTMGR_H
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -24,10 +23,7 @@ namespace cernlib {
     *         I just created functions for doing the most basic things that
     *         CDA applications can need.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT HistMgr {
 

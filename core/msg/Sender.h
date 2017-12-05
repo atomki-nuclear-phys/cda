@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_SENDER_H
 #define CDA_CORE_MSG_SENDER_H
 
@@ -7,7 +6,7 @@
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "../common/Address.h"
@@ -35,10 +34,7 @@ namespace msg {
     *         because for some reason I couldn't get Qt to hold a TCP
     *         connection properly open for me... :-/
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT Sender {
 

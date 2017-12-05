@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_CAENVMEGUI_H
 #define CDA_CORE_DEVICE_CAENVMEGUI_H
 
@@ -28,9 +27,6 @@ namespace dev {
     *         change the configuration of the devices.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT CaenVmeGui : public QWidget,
                                      virtual public IDevice {

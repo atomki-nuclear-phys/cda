@@ -1,12 +1,11 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_CRATE_ICC
 #define CDA_CORE_DEVICE_CRATE_ICC
 
 // Qt include(s):
-#include <QtCore/QIODevice>
-#include <QtCore/QDataStream>
-#include <QtXml/QDomElement>
+#include <QIODevice>
+#include <QDataStream>
+#include <QDomElement>
 
 // Local include(s):
 #include "Loader.h"

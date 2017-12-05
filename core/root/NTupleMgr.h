@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_ROOT_NTUPLEMGR_H
 #define CDA_CORE_ROOT_NTUPLEMGR_H
 
@@ -7,8 +6,8 @@
 #include <list>
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QCoreApplication>
+#include <QString>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -31,9 +30,6 @@ namespace root {
     *         of storing information than cernlib::NTupleMgr does.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT NTupleMgr {
 

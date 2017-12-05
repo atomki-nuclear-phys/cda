@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_LOGGER_H
 #define CDA_CORE_MSG_LOGGER_H
 
@@ -7,7 +6,7 @@
 #include <sstream>
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -23,10 +22,7 @@
  *         this namespace. This way the names of the classes can be quite
  *         generic (Socket, Sender, etc.) which I prefer.
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 namespace msg {
 
@@ -44,10 +40,7 @@ namespace msg {
     *         messages. The class behaves like any std::ostream, so all
     *         the practices used with those can be used with this as well.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT Logger : public std::ostringstream {
 

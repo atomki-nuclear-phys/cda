@@ -1,12 +1,8 @@
-// $Id$
 /**
- *   @file core/common/BinaryStream_common.cxx
+ *   @file core/common/BinaryStream.cxx
  *  @short File implementing the BinaryStream class
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 
 // Local include(s):

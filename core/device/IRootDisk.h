@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_IROOTDISK_H
 #define CDA_CORE_DEVICE_IROOTDISK_H
 
@@ -7,7 +6,7 @@
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 
 // Local include(s):
 #include "IDevice.h"
@@ -29,9 +28,6 @@ namespace dev {
     *         collected by the CDA devices.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class IRootDisk : virtual public IDevice {
 

@@ -1,4 +1,3 @@
-// $Id$
 
 // ROOT include(s):
 #ifdef HAVE_ROOT_LIBS

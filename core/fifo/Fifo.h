@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_FIFO_FIFO_H
 #define CDA_CORE_FIFO_FIFO_H
 
 // Qt include(s):
-#include <QtCore/QFile>
-#include <QtCore/QCoreApplication>
+#include <QFile>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -20,10 +19,7 @@
  *         functionality of a QFile, but really only the QIODevice
  *         interface of it should be used.
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 class CDACORE_EXPORT Fifo : public QFile {
 

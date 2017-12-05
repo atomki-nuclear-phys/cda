@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_MESSAGE_H
 #define CDA_CORE_MSG_MESSAGE_H
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -29,10 +28,7 @@ namespace msg {
     *         classes to pass messages around. The external users
     *         should not care about it too much.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT Message {
 

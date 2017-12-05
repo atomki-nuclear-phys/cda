@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_LEVEL_H
 #define CDA_CORE_MSG_LEVEL_H
 
@@ -17,19 +16,23 @@ namespace msg {
     *         message. The names of the types should speak for
     *         themselves.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    enum Level {
-      VERBOSE = 1, /**< Type for the most detailed messages. Only for serious debugging. */
-      DEBUG   = 2, /**< Type for debug messages. */
-      INFO    = 3, /**< Type for normal information messages. */
-      WARNING = 4, /**< Type for smaller problems. Data acquisition not affected. */
-      ERROR   = 5, /**< Type for "real" problems. Data acquisition is affected. */
-      FATAL   = 6, /**< Type for problems that should halt the data acquisition. */
-      ALWAYS  = 7  /**< Type that should always be shown. No particular meaning. */
+      /// Type for the most detailed messages. Only for serious debugging.
+      VERBOSE = 1,
+      /// Type for debug messages.
+      DEBUG   = 2,
+      /// Type for normal information messages.
+      INFO    = 3,
+      /// Type for smaller problems. Data acquisition not affected.
+      WARNING = 4,
+      /// Type for "real" problems. Data acquisition is affected.
+      ERROR   = 5,
+      /// Type for problems that should halt the data acquisition.
+      FATAL   = 6,
+      /// Type that should always be shown. No particular meaning.
+      ALWAYS  = 7
    }; // enum Level
 
 } // namespace msg

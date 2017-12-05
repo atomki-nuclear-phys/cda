@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_QTHIST_H
 #define CDA_CORE_DEVICE_QTHIST_H
 
@@ -37,9 +36,6 @@ namespace dev {
     *         This is the base class for such monitoring classes.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT QtHist : public QWidget,
                                  virtual public IDevice {

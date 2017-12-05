@@ -1,19 +1,15 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 /**
  *   @file core/common/Socket.h
  *  @short Header file declaring the Socket class
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 #ifndef CDA_CORE_COMMON_SOCKET_H
 #define CDA_CORE_COMMON_SOCKET_H
 
 // Qt include(s):
-#include <QtNetwork/QTcpSocket>
+#include <QTcpSocket>
 
 // CDA include(s):
 #include "Export.h"
@@ -27,10 +23,7 @@
  *         rather simple, but it makes a huge difference in
  *         reliability...
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 class CDACORE_EXPORT Socket : public QTcpSocket {
 

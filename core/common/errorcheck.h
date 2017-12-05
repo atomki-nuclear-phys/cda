@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_COMMON_ERRORCHECK_H
 #define CDA_CORE_COMMON_ERRORCHECK_H
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 /// Macro for handling functions returning boolean status values
 /**

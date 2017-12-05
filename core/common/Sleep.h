@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_COMMON_SLEEP_H
 #define CDA_CORE_COMMON_SLEEP_H
 

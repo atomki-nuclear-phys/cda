@@ -1,11 +1,10 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QDir>
-#include <QtCore/QStringList>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTranslator>
-#include <QtCore/QProcessEnvironment>
+#include <QDir>
+#include <QStringList>
+#include <QFileInfo>
+#include <QTranslator>
+#include <QProcessEnvironment>
 
 // Local include(s):
 #include "Loader.h"

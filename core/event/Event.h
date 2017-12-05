@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_EVENT_EVENT_H
 #define CDA_CORE_EVENT_EVENT_H
 
@@ -24,9 +23,6 @@ namespace ev {
     *         coming from one device.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT Event :
       public std::vector< std::shared_ptr< Fragment > > {

@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_COMMON_CAEN_DIGITIZER_H
 #define CDA_COMMON_CAEN_DIGITIZER_H
 
@@ -10,7 +9,7 @@ extern "C" {
 #include <csignal>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -24,9 +23,6 @@ extern "C" {
  *         should be put in it's/their own namespace.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 namespace caen {
 
@@ -38,9 +34,6 @@ namespace caen {
     *        the rest of the CDA code from the CAEN libraries.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT Digitizer {
 

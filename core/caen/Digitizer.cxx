@@ -1,4 +1,3 @@
-// $Id$
 
 // System include(s):
 #include <cmath>
@@ -24,6 +23,7 @@
 #include "Digitizer.h"
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
+/// Private namespace for @c core/caen/Digitizer.cxx
 namespace {
 
    /// Function turning a CAEN error code into a string

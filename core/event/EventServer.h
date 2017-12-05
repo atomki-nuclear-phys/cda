@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_EVENT_EVENTSERVER_H
 #define CDA_CORE_EVENT_EVENTSERVER_H
 
@@ -7,9 +6,9 @@
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QTime>
+#include <QThread>
+#include <QMutex>
+#include <QTime>
 
 // CDA include(s):
 #include "../common/Address.h"
@@ -58,9 +57,6 @@ namespace ev {
     *         pretty simple code...
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT EventServer : public QThread {
 

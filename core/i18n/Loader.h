@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_I18N_LOADER_H
 #define CDA_CORE_I18N_LOADER_H
 
@@ -7,8 +6,8 @@
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
-#include <QtCore/QString>
+#include <QCoreApplication>
+#include <QString>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -31,10 +30,7 @@ namespace i18n {
     *         (hungarian) translation files before starting to print messages
     *         for the user.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT Loader {
 

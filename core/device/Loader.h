@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_LOADER_H
 #define CDA_CORE_DEVICE_LOADER_H
 
@@ -7,9 +6,9 @@
 #include <map>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QCoreApplication>
+#include <QString>
+#include <QStringList>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -35,10 +34,7 @@ namespace dev {
     *
     *         In principle it should be even pretty platform-independent.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT Loader {
 

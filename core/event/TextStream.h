@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_EVENT_TEXTSTREAM_H
 #define CDA_CORE_EVENT_TEXTSTREAM_H
 
 // Qt include(s):
-#include <QtCore/QTextStream>
+#include <QTextStream>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -40,10 +39,7 @@ namespace ev {
     *         with printing the events, this is only for developing the
     *         code...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT TextStream : public QTextStream {
 

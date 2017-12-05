@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_CAEN_VMEDEVICE_H
 #define CDA_CORE_CAEN_VMEDEVICE_H
 
@@ -8,7 +7,7 @@
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 // Local include(s):
 #include "../common/Export.h"
@@ -30,9 +29,6 @@ namespace caen {
     * is built without that library.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT VmeDevice {
 

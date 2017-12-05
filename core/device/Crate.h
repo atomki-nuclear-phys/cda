@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_CRATE_H
 #define CDA_CORE_DEVICE_CRATE_H
 
@@ -8,8 +7,8 @@
 #include <memory>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
-#include <QtCore/QString>
+#include <QCoreApplication>
+#include <QString>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -42,10 +41,7 @@ namespace dev {
     *         done by passing the constructor the proper function
     *         pointer. A bit fancy, but it works...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    template< class DEVICE >
    class Crate : public virtual IConfig {

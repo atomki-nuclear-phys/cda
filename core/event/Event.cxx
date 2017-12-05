@@ -1,4 +1,3 @@
-// $Id$
 
 // STL include(s):
 #include <functional>
@@ -7,6 +6,7 @@
 // Local include(s):
 #include "Event.h"
 
+/// Private namespace for @c core/event/Event.cxx
 namespace {
 
    /**
@@ -17,9 +17,6 @@ namespace {
     *         algorithms.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CountBytes :
       public std::unary_function< ev::Event::Base_t::value_type, void > {

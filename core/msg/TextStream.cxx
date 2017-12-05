@@ -1,8 +1,7 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QString>
+#include <QStringList>
 
 // Local include(s):
 #include "TextStream.h"

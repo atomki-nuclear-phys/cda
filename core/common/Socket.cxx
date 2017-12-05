@@ -1,12 +1,8 @@
-// $Id$
 /**
  *   @file core/common/Socket.cxx
  *  @short File implementing the Socket class
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 
 // Local include(s):

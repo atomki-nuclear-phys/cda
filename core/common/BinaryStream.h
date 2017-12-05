@@ -1,19 +1,15 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 /**
  *   @file core/common/BinaryStream.h
  *  @short Header file declaring the BinaryStream class
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 #ifndef CDA_CORE_COMMON_BINARYSTREAM_H
 #define CDA_CORE_COMMON_BINARYSTREAM_H
 
 // Qt include(s):
-#include <QtCore/QDataStream>
+#include <QDataStream>
 
 // Local include(s):
 #include "Address.h"
@@ -29,10 +25,7 @@ QT_FORWARD_DECLARE_CLASS( QByteArray )
  *         The need presented itself to read/write Address objects
  *         from/to binary data. This class takes care of this translation.
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 class CDACORE_EXPORT BinaryStream : public QDataStream {
 

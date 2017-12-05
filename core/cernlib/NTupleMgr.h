@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_CERNLIB_NTUPLEMGR_H
 #define CDA_CORE_CERNLIB_NTUPLEMGR_H
 
@@ -7,8 +6,8 @@
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
-#include <QtCore/QString>
+#include <QCoreApplication>
+#include <QString>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -25,10 +24,7 @@
  *         from dynamic Qt plugins. Making a dynamic plugin depend on a
  *         static CERNLIB library just didn't work...
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 namespace cernlib {
 
@@ -40,10 +36,7 @@ namespace cernlib {
     *         defining the ntuple contents, creating the ntuple, and adding
     *         new events to the ntuple.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT NTupleMgr {
 

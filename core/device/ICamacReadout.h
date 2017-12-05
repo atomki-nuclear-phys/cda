@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_ICAMACREADOUT_H
 #define CDA_CORE_DEVICE_ICAMACREADOUT_H
 
@@ -25,10 +24,7 @@ namespace dev {
     *         object. It's just a first guess of what the interface could
     *         be like. Will probably change drastically later on...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class ICamacReadout : virtual public IDevice {
 

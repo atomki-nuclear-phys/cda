@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_MSGTIME_H
 #define CDA_CORE_MSG_MSGTIME_H
 
 // Qt include(s):
-#include <QtCore/QDate>
-#include <QtCore/QTime>
+#include <QDate>
+#include <QTime>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -32,10 +31,7 @@ namespace msg {
     *         the header file Time.h caused annoying problems on
     *         MacOS X (with the FS being case-insensitive...).
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT MsgTime {
 

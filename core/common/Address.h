@@ -1,21 +1,17 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 /**
  *   @file core/common/Address.h
  *  @short Header file declaring the Address class
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision: 57$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 #ifndef CDA_CORE_COMMON_ADDRESS_H
 #define CDA_CORE_COMMON_ADDRESS_H
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QCoreApplication>
-#include <QtNetwork/QHostAddress>
+#include <QString>
+#include <QCoreApplication>
+#include <QHostAddress>
 
 // Local include(s):
 #include "Export.h"
@@ -27,10 +23,7 @@
  *         network address under which a server is
  *         available.
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 class CDACORE_EXPORT Address {
 
@@ -41,8 +34,7 @@ public:
    /// Constructor with combined hostname:port string
    Address( const QString& address = "127.0.0.1:50000" );
    /// Constructor with host name and port
-   Address( const QString& host,
-            quint16 port );
+   Address( const QString& host, quint16 port );
 
    /// Set the host name of the address
    void setHost( const QHostAddress& host );

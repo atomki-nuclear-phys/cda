@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_EVENT_SENDER_H
 #define CDA_CORE_EVENT_SENDER_H
 
@@ -7,7 +6,7 @@
 #include <list>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "../common/Address.h"
@@ -39,9 +38,6 @@ namespace ev {
     *         send events over the network.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT Sender {
 

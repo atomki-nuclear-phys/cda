@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QFile>
+#include <QFile>
 
 // CDA include(s):
 #include "../common/Socket.h"

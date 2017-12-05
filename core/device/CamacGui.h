@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_CAMACGUI_H
 #define CDA_CORE_DEVICE_CAMACGUI_H
 
@@ -30,10 +29,7 @@ namespace dev {
     *         a graphical way. This interface is also used to change
     *         the configuration of the devices.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT CamacGui : public QWidget,
                                    virtual public IDevice {

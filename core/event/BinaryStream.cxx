@@ -1,10 +1,3 @@
-// $Id$
-//
-// The file is called BinaryStream_ev.cxx, since there is a class called
-// BinaryStream in the msg namespace as well. If the two source files
-// would be called the same, qmake would have difficulties compiling the
-// library...
-//
 
 // CDA include(s):
 #include "../common/errorcheck.h"

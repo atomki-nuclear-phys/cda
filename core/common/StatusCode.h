@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_COMMON_STATUSCODE_H
 #define CDA_CORE_COMMON_STATUSCODE_H
 
@@ -14,9 +13,6 @@
  * code.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 class CDACORE_EXPORT StatusCode {
 

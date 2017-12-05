@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_CERNLIBHIST_H
 #define CDA_CORE_DEVICE_CERNLIBHIST_H
 
@@ -22,10 +21,7 @@ namespace dev {
     *         This class describes how devices can fill monitoring histograms
     *         with their readout data.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class ICernlibHist : virtual public IDevice {
 

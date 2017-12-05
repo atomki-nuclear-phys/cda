@@ -1,8 +1,7 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QIODevice>
-#include <QtCore/QByteArray>
+#include <QIODevice>
+#include <QByteArray>
 
 // Local include(s):
 #include "BinaryStream.h"

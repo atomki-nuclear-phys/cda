@@ -1,4 +1,3 @@
-// $Id$
 
 // CDA include(s):
 #include "../common/Sleep.h"

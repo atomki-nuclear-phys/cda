@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_ICONFIG_H
 #define CDA_CORE_DEVICE_ICONFIG_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 // Local include(s):
 #include "../common/StatusCode.h"
@@ -28,10 +27,7 @@ QT_FORWARD_DECLARE_CLASS( QDomElement )
  *         In addition classes providing core functionalities for handling
  *         the device objects are also placed in this namespace.
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 namespace dev {
 
@@ -55,10 +51,7 @@ namespace dev {
     *         be sent over binary connections (TCP for instance) and also
     *         written out to a user readable format.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class IConfig {
 

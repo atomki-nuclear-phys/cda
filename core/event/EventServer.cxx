@@ -1,9 +1,8 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
-#include <QtNetwork/QTcpServer>
-#include <QtNetwork/QTcpSocket>
+#include <QCoreApplication>
+#include <QTcpServer>
+#include <QTcpSocket>
 
 // Local include(s):
 #include "EventServer.h"

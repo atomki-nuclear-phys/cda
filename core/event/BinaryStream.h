@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_EVENT_BINARYSTREAM_H
 #define CDA_CORE_EVENT_BINARYSTREAM_H
 
 // Qt include(s):
-#include <QtCore/QDataStream>
-#include <QtCore/QCoreApplication>
+#include <QDataStream>
+#include <QCoreApplication>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -42,10 +41,7 @@ namespace ev {
     *         network connection, or even to read/write them from/to
     *         a physical file.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT BinaryStream : public QDataStream {
 

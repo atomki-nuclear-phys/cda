@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_SERVER_H
 #define CDA_CORE_MSG_SERVER_H
 
 // Qt include(s):
-#include <QtNetwork/QTcpServer>
-#include <QtCore/QString>
+#include <QTcpServer>
+#include <QString>
 
 // CDA include(s):
 #include "../common/Address.h"
@@ -46,10 +45,7 @@ namespace msg {
     *         (For instance to show the messages in a graphical
     *         window.)
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT Server : public QTcpServer {
 

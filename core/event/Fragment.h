@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_EVENT_FRAGMENT_H
 #define CDA_CORE_EVENT_FRAGMENT_H
 
@@ -21,9 +20,6 @@
  *         data.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 namespace ev {
 
@@ -38,9 +34,6 @@ namespace ev {
     *         are allowed to use the data words completely differently.)
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDACORE_EXPORT Fragment {
 

@@ -1,16 +1,12 @@
-// $Id$
 /**
  *   @file core/common/Address.cxx
  *  @short File implementing the Address class
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision: 57$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 
 // Qt include(s):
-#include <QtCore/QStringList>
+#include <QStringList>
 
 // CDA include(s):
 #include "../msg/Logger.h"
@@ -19,13 +15,13 @@
 #include "Address.h"
 
 /**
- * This constructor is used when the host name and port number are "encoded" into
- * a single string. The constructor tries to decode this string.
+ * This constructor is used when the host name and port number are "encoded"
+ * into a single string. The constructor tries to decode this string.
  *
- * The pitfall is, that this class is often used to describe the address of message
- * servers. So for instance when creating the address of the first message server that
- * should be used by the application, these messages have nowhere to go to. For this
- * case there is a little hack in msg::Sender...
+ * The pitfall is, that this class is often used to describe the address of
+ * message servers. So for instance when creating the address of the first
+ * message server that should be used by the application, these messages have
+ * nowhere to go to. For this case there is a little hack in msg::Sender...
  *
  * @param address Encoded host name and port, something like "localhost:49700"
  */

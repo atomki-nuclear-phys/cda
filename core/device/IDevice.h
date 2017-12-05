@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_IDEVICE_H
 #define CDA_CORE_DEVICE_IDEVICE_H
 
@@ -15,10 +14,7 @@ namespace dev {
     *         These can't be put into dev::IConfig, as that class is used
     *         as base class not only for the device classes.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class IDevice : public virtual IConfig {
 

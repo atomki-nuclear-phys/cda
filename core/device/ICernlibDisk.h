@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_ICERNLIBDISK_H
 #define CDA_CORE_DEVICE_ICERNLIBDISK_H
 
@@ -7,7 +6,7 @@
 #include <vector>
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 
 // Local include(s):
 #include "IDevice.h"
@@ -28,10 +27,7 @@ namespace dev {
     *         This interface needs to be implemented by the devices to be
     *         able to write their collected data into HBOOK ntuples.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class ICernlibDisk : virtual public IDevice {
 

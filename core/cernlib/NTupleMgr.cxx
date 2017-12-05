@@ -1,4 +1,3 @@
-// $Id$
 
 // System include(s):
 #include <cstdio>

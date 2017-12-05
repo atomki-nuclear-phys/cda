@@ -1,4 +1,3 @@
-// $Id$
 
 // CERNLIB include(s):
 #ifdef HAVE_CERNLIB

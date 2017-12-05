@@ -1,4 +1,3 @@
-// $Id$
 
 // CAEN include(s):
 #ifdef HAVE_CAEN_VME_LIBS
@@ -9,6 +8,7 @@
 #include "VmeBus.h"
 
 #ifdef HAVE_CAEN_VME_LIBS
+/// Private namespace for @c core/caen/VmeBus.cxx
 namespace {
 
    /// Convert from the custom type to the CAENVMELib one

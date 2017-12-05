@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_BINARYSTREAM_H
 #define CDA_CORE_MSG_BINARYSTREAM_H
 
@@ -7,7 +6,7 @@
 #include <map>
 
 // Qt include(s):
-#include <QtCore/QDataStream>
+#include <QDataStream>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -40,10 +39,7 @@ namespace msg {
     *         the Message objects so that they can be transmitted in
     *         various ways.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT BinaryStream : public QDataStream {
 

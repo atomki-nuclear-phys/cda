@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_DEVICE_ICAENDIGITIZERREADOUT_H
 #define CDA_CORE_DEVICE_ICAENDIGITIZERREADOUT_H
 
@@ -21,9 +20,6 @@ namespace dev {
     *         use to access the hardware.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class ICaenDigitizerReadout : virtual public IDevice {
 

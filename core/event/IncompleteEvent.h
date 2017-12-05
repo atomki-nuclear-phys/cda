@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_EVENT_INCOMPLETEEVENT_H
 #define CDA_CORE_EVENT_INCOMPLETEEVENT_H
 
@@ -21,9 +20,6 @@ namespace ev {
     *         of exception is thrown by the event server.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class IncompleteEvent : public std::exception {
 

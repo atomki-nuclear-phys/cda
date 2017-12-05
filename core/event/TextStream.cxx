@@ -1,10 +1,9 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QIODevice>
-#include <QtCore/QString>
-#include <QtCore/QByteArray>
-#include <QtCore/QCoreApplication>
+#include <QIODevice>
+#include <QString>
+#include <QByteArray>
+#include <QCoreApplication>
 
 // Local include(s):
 #include "TextStream.h"

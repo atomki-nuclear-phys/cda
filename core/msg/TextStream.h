@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_MSG_TEXTSTREAM_H
 #define CDA_CORE_MSG_TEXTSTREAM_H
 
@@ -7,7 +6,7 @@
 #include <map>
 
 // Qt include(s):
-#include <QtCore/QTextStream>
+#include <QTextStream>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -42,10 +41,7 @@ namespace msg {
     *         to a file, etc. It should be used whenever a message
     *         is to be visualised.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT TextStream : public QTextStream {
 

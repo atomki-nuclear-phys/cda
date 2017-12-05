@@ -1,4 +1,3 @@
-// $Id$
 
 // CDA include(s):
 #include "../msg/Logger.h"

@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtNetwork/QTcpSocket>
+#include <QTcpSocket>
 
 // CDA include(s):
 #include "../common/errorcheck.h"

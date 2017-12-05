@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CORE_CAMAC_CRATE_H
 #define CDA_CORE_CAMAC_CRATE_H
 
@@ -7,7 +6,7 @@
 #include <stdint.h>
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 // CAMAC library include(s):
 #ifdef HAVE_CAMAC_LIB
@@ -25,10 +24,7 @@
  *         crate camac::Crate. Hence I created this namespace. Not sure if
  *         it will hold any other classes though...
  *
- * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
 namespace camac {
 
@@ -46,10 +42,7 @@ namespace camac {
     *         take up too much time to handle in real running even if they
     *         are not shown to the user.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDACORE_EXPORT Crate {
 

@@ -1,4 +1,3 @@
-// $Id$
 
 // System include(s):
 #include <cstring>
@@ -23,6 +22,7 @@ extern "C" {
 #include "VmeBus.h"
 #include "StopAcquisition.h"
 
+/// Private namespace for @c core/caen/VmeDevice.cxx.
 namespace {
 
 #ifdef HAVE_CAEN_QTP_LIBS
