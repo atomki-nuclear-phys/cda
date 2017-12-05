@@ -11,7 +11,7 @@ WORKDIR /root
 
 # Install the required packages:
 RUN apt-get update && apt-get -y install gcc g++ libqt4-dev make wget \
-    cernlib-base-dev cernlib-core-dev && apt-get clean
+    cernlib-base-dev cernlib-core-dev libncurses5-dev && apt-get clean
 
 # Install a (very slightly) newer version of CMake than what's available in this
 # old release:
