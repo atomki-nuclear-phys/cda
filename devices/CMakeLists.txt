@@ -6,7 +6,7 @@
 include( CMakeParseArguments )
 
 # Macro for building a CDA device plugin
-macro( add_cda_plugin name )
+macro( cda_add_plugin name )
 
   # Parse optional arguments:
   cmake_parse_arguments( ARG "NO_AUTOMOC;NO_AUTORCC" "" "" ${ARGN} )
@@ -45,7 +45,7 @@ macro( add_cda_plugin name )
   set_property( GLOBAL APPEND PROPERTY CDA_PLUGINS ${name} )
   set_property( GLOBAL APPEND PROPERTY CDA_RESOURCES ${resources} )
 
-endmacro( add_cda_plugin )
+endmacro( cda_add_plugin )
 
 # Build all the CAMAC plugins:
 add_subdirectory( ad1000 )
