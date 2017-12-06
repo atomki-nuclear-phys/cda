@@ -41,21 +41,12 @@ else()
    unset( _components )
 endif()
 
-# Silence the message if Qt was already found:
-if( Qt45_FOUND_ALREADY )
-   set( Qt45_FIND_QUIETLY TRUE )
-endif()
-
 # Handle the standard find_package arguments:
 include( FindPackageHandleStandardArgs )
 find_package_handle_standard_args( Qt45
    FOUND_VAR Qt45_FOUND
    REQUIRED_VARS _qmakePath Qt45_LIBRARIES
    VERSION_VAR _version )
-
-# Signal to subsequent calls that they shouldn't print the find message again:
-set( Qt45_FOUND_ALREADY TRUE
-   CACHE INTERNAL "Technical variable used internally by the module" )
 
 # Clean up:
 unset( _extraArgs )
