@@ -45,7 +45,7 @@ function( cda_add_library name )
    endforeach()
 
    # Group all source files:
-   foreach( f ${headers} ${sources} )
+   foreach( f ${_headers} ${_sources} )
       # Get the file's path:
       get_filename_component( _path ${f} PATH )
       # Replace the forward slashes with double backward slashes:
