@@ -64,10 +64,14 @@ function( cda_add_library name )
       ${ARG_INCLUDE_DIRS} )
 
    # Set up the libraries to link to it:
-   target_link_libraries( ${name} ${ARG_LINK_LIBRARIES} )
+   if( ARG_LINK_LIBRARIES )
+      target_link_libraries( ${name} ${ARG_LINK_LIBRARIES} )
+   endif()
 
    # Set up the compile definitions for it:
-   target_compile_definitions( ${name} PUBLIC ${ARG_DEFINITIONS} )
+   if( ARG_DEFINITIONS )
+      target_compile_definitions( ${name} PUBLIC ${ARG_DEFINITIONS} )
+   endif()
 
    # Definition used for building a shared library. In case we ever switch back
    # to building such things...
