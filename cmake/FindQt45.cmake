@@ -33,7 +33,7 @@ else()
       foreach( lib ${_components} )
          list( APPEND Qt45_LIBRARIES "Qt4::${lib}" )
       endforeach()
-      set( _version "${Qt4_VERSION}" )
+      set( _version "${QTVERSION}" )
    endif()
 
    # Clean up:
