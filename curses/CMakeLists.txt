@@ -13,19 +13,7 @@ if( NOT CURSES_FOUND )
 endif()
 
 # Find Qt:
-find_package( Qt5 QUIET COMPONENTS Core )
-if( Qt5_FOUND AND NOT CDA_USE_QT4 )
-  message( STATUS "Using Qt5 for the build" )
-  set( qt_libraries Qt5::Core )
-else()
-  find_package( Qt4 QUIET COMPONENTS QtCore )
-  if( NOT QT_FOUND )
-    message( SEND_ERROR "No working version of Qt was found" )
-    return()
-  endif()
-  message( STATUS "Using Qt4 for the build" )
-  set( qt_libraries Qt4::QtCore )
-endif()
+find_package( Qt45 COMPONENTS Core REQUIRED )
 
 # Collect the source files of the library:
 file( GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -40,7 +28,7 @@ set( CMAKE_AUTOMOC TRUE )
 add_library( cdacurses STATIC ${headers} ${sources} )
 target_include_directories( cdacurses PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
    ${CURSES_INCLUDE_DIRS} )
-target_link_libraries( cdacurses ${CURSES_LIBRARIES} ${qt_libraries}
+target_link_libraries( cdacurses ${CURSES_LIBRARIES} ${Qt45_LIBRARIES}
    cdacore )
 set_target_properties( cdacurses PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )

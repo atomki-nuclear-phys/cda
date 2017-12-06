@@ -1,4 +1,3 @@
-# $Id$
 #
 # Configuration for building all the device plugins for CDA.
 #
@@ -16,19 +15,7 @@ macro( add_cda_plugin name )
   message( STATUS "Configuring the build of the ${name} plugin" )
 
   # Find Qt:
-  find_package( Qt5 QUIET COMPONENTS Core Network Gui Widgets Xml )
-  if( Qt5_FOUND AND NOT CDA_USE_QT4 )
-    set( qt_libraries Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
-      Qt5::Xml )
-  else()
-    find_package( Qt4 QUIET COMPONENTS QtCore QtNetwork QtGui QtXml )
-    if( NOT QT_FOUND )
-      message( SEND_ERROR "No working version of Qt was found" )
-      return()
-    endif()
-    set( qt_libraries Qt4::QtCore Qt4::QtNetwork Qt4::QtGui
-      Qt4::QtXml )
-  endif()
+  find_package( Qt45 COMPONENTS Core Network Gui Widgets Xml REQUIRED )
 
   # Generate MOC files automatically:
   if( NOT ARG_NO_AUTOMOC )
@@ -47,7 +34,7 @@ macro( add_cda_plugin name )
   # Build the plugin as a static library:
   add_library( ${name} STATIC ${headers} ${sources} ${resources} )
   target_include_directories( ${name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
-  target_link_libraries( ${name} ${qt_libraries} cdacore cdadaq )
+  target_link_libraries( ${name} ${Qt45_LIBRARIES} cdacore cdadaq )
   target_compile_definitions( ${name} PRIVATE QT_STATICPLUGIN )
   set_property( TARGET ${name} PROPERTY FOLDER "devices/${name}" )
 

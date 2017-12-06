@@ -1,4 +1,3 @@
-# $Id$
 #
 # Configuration for building all the applications for CDA.
 #
@@ -10,17 +9,7 @@ macro( add_cda_console_app name )
   message( STATUS "Configuring the build of console application ${name}" )
 
   # Find Qt:
-  find_package( Qt5 QUIET COMPONENTS Core Xml )
-  if( Qt5_FOUND AND NOT CDA_USE_QT4 )
-    set( qt_libraries Qt5::Core Qt5::Xml )
-  else()
-    find_package( Qt4 QUIET COMPONENTS QtCore QtXml )
-    if( NOT QT_FOUND )
-      message( SEND_ERROR "No working version of Qt was found" )
-      return()
-    endif()
-    set( qt_libraries Qt4::QtCore Qt4::QtXml )
-  endif()
+  find_package( Qt45 COMPONENTS Core Xml REQUIRED )
 
   # Collect the source files of the executable:
   file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
@@ -49,7 +38,7 @@ macro( add_cda_console_app name )
 
   # Build the executable:
   add_executable( ${name} ${headers} ${sources} ${resources} )
-  target_link_libraries( ${name} ${qt_libraries} cdacore cdadaq ${plugins} )
+  target_link_libraries( ${name} ${Qt45_LIBRARIES} cdacore cdadaq ${plugins} )
   unset( plugins )
   unset( resources )
   set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
@@ -75,17 +64,7 @@ macro( add_cda_gui_app name )
   include( BundleUtilities )
 
   # Find Qt:
-  find_package( Qt5 QUIET COMPONENTS Core Gui Widgets Xml )
-  if( Qt5_FOUND AND NOT CDA_USE_QT4 )
-    set( qt_libraries Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Xml )
-  else()
-    find_package( Qt4 QUIET COMPONENTS QtCore QtGui QtXml )
-    if( NOT QT_FOUND )
-      message( SEND_ERROR "No working version of Qt was found" )
-      return()
-    endif()
-    set( qt_libraries Qt4::QtCore Qt4::QtGui Qt4::QtXml )
-  endif()
+  find_package( Qt45 COMPONENTS Core Gui Widgets Xml REQUIRED )
 
   # Collect the source files of the executable:
   file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
@@ -123,7 +102,7 @@ macro( add_cda_gui_app name )
   # Build the executable:
   add_executable( ${name} ${OS_BUNDLE} ${headers} ${sources}
     ${resources} ${ARG_ICON} )
-  target_link_libraries( ${name} ${qt_libraries} cdacore cdadaq cdagui
+  target_link_libraries( ${name} ${Qt45_LIBRARIES} cdacore cdadaq cdagui
     ${plugins} )
   unset( plugins )
   unset( resources )
@@ -161,17 +140,7 @@ macro( add_cda_terminal_app name )
    message( STATUS "Configuring the build of terminal application ${name}" )
 
    # Find Qt:
-   find_package( Qt5 QUIET COMPONENTS Core )
-   if( Qt5_FOUND AND NOT CDA_USE_QT4 )
-      set( qt_libraries Qt5::Core )
-   else()
-      find_package( Qt4 QUIET COMPONENTS QtCore )
-      if( NOT QT_FOUND )
-         message( SEND_ERROR "No working version of Qt was found" )
-         return()
-      endif()
-      set( qt_libraries Qt4::QtCore )
-   endif()
+   find_package( Qt45 COMPONENTS Core REQUIRED )
 
    # External(s) needed:
    find_package( Curses REQUIRED )
@@ -182,7 +151,7 @@ macro( add_cda_terminal_app name )
 
    # Build the executable:
    add_executable( ${name} ${headers} ${sources} )
-   target_link_libraries( ${name} ${CURSES_LIBRARIES} ${qt_libraries}
+   target_link_libraries( ${name} ${CURSES_LIBRARIES} ${Qt45_LIBRARIES}
       cdacore cdadaq cdacurses )
    set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
 

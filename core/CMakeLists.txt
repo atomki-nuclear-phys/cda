@@ -6,19 +6,7 @@
 message( STATUS "Configuring the build of cdacore" )
 
 # Find Qt:
-find_package( Qt5 QUIET COMPONENTS Core Network Gui Widgets )
-if( Qt5_FOUND AND NOT CDA_USE_QT4 )
-  message( STATUS "Using Qt5 for the build" )
-  set( qt_libraries Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets )
-else()
-  find_package( Qt4 QUIET COMPONENTS QtCore QtNetwork QtGui )
-  if( NOT QT_FOUND )
-    message( SEND_ERROR "No working version of Qt was found" )
-    return()
-  endif()
-  message( STATUS "Using Qt4 for the build" )
-  set( qt_libraries Qt4::QtCore Qt4::QtNetwork Qt4::QtGui )
-endif()
+find_package( Qt45 COMPONENTS Core Network Gui Widgets REQUIRED )
 
 # Optional libraries to use for the build:
 find_package( ROOT )
@@ -42,27 +30,10 @@ file( GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 # Generate MOC files automatically:
 set( CMAKE_AUTOMOC TRUE )
 
-# Set up the hungarian translations:
-set( qm_files )
-set( ts_file ${CMAKE_SOURCE_DIR}/trans/cdacore_hu.ts )
-set_source_files_properties( ${ts_file} PROPERTIES OUTPUT_LOCATION
-   ${CMAKE_BINARY_DIR}/trans )
-if( Qt5_FOUND AND NOT CDA_USE_QT4 )
-   find_package( Qt5LinguistTools )
-   if( Qt5LinguistTools_FOUND )
-      qt5_create_translation( qm_files ${sources}
-         ${CMAKE_CURRENT_SOURCE_DIR}/common/errorcheck.h ${ts_file} )
-   endif()
-else()
-   qt4_create_translation( qm_files ${sources}
-      ${CMAKE_CURRENT_SOURCE_DIR}/common/errorcheck.h ${ts_file} )
-endif()
-install( FILES ${qm_files} DESTINATION trans OPTIONAL )
-
 # Build the cdacore library:
 add_library( cdacore STATIC ${headers} ${sources} ${qm_files} )
 target_include_directories( cdacore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
-target_link_libraries( cdacore ${qt_libraries} )
+target_link_libraries( cdacore ${Qt45_LIBRARIES} )
 set_target_properties( cdacore PROPERTIES
   VERSION 2.0.0 SOVERSION 2 )
 target_compile_definitions( cdacore PRIVATE CDACORE_LIBRARY )
