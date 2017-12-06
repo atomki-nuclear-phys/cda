@@ -18,10 +18,9 @@ else()
    set( _components )
    foreach( comp ${Qt45_FIND_COMPONENTS} )
       # Ignore the "Widgets" library, as it was only introduced in Qt5.
-      if( "${comp}" STREQUAL "Widgets" )
-         continue()
+      if( NOT "${comp}" STREQUAL "Widgets" )
+         list( APPEND _components "Qt${comp}" )
       endif()
-      list( APPEND _components "Qt${comp}" )
    endforeach()
 
    # Look for Qt4:
