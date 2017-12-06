@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_CURSES_MSG_TERMWINDOWVIEW_H
 #define CDA_CURSES_MSG_TERMWINDOWVIEW_H
 
@@ -28,9 +27,6 @@ namespace msg {
     *         terminal) presenting the incoming messages.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class TermWindowView : public QObject {
 
