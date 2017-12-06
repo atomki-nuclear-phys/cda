@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QTime>
+#include <QTime>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QLabel>

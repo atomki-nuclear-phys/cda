@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H
 #define CDA_GUI_DEVICE_CAENDIGITIZEREDITOR_H
 
@@ -32,9 +31,6 @@ namespace dev {
     *         of (a) CAEN digitizer device(s) for a CDA data taking session.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDAGUI_EXPORT CaenDigitizerEditor :
       public QWidget,

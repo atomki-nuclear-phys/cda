@@ -1,13 +1,12 @@
-// $Id$
 
 // STL include(s):
 #include <algorithm>
 #include <cmath>
 
 // Qt include(s):
-#include <QtCore/QPoint>
-#include <QtCore/QLine>
-#include <QtGui/QPainter>
+#include <QPoint>
+#include <QLine>
+#include <QPainter>
 
 // Local include(s):
 #include "RateWidget.h"

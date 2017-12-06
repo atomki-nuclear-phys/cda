@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_MSG_TABLEVIEW_H
 #define CDA_GUI_MSG_TABLEVIEW_H
 
@@ -7,9 +6,9 @@
 #include <map>
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 #include <QWidget>
-#include <QtGui/QBrush>
+#include <QBrush>
 
 // CDA include(s):
 #include "msg/Level.h"
@@ -44,10 +43,7 @@ namespace msg {
     *         application. It uses a specially configured QTableWidget
     *         to present the messages.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDAGUI_EXPORT TableView : public QWidget {
 

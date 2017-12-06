@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_MSG_TEXTVIEW_H
 #define CDA_GUI_MSG_TEXTVIEW_H
 
@@ -8,7 +7,7 @@
 
 // Qt include(s):
 #include <QWidget>
-#include <QtGui/QColor>
+#include <QColor>
 
 // CDA include(s):
 #include "msg/Level.h"
@@ -45,10 +44,7 @@ namespace msg {
     *         but it turns out, it's only marginally faster... (Even though
     *         the class is much simpler.)
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDAGUI_EXPORT TextView : public QWidget {
 

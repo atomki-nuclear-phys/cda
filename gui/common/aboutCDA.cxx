@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 #include <QMessageBox>
 #include <QApplication>
 

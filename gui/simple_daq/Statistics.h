@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_SIMPLE_DAQ_STATISTICS_H
 #define CDA_GUI_SIMPLE_DAQ_STATISTICS_H
 
@@ -32,10 +31,7 @@ namespace simple_daq {
     *         This simple widget shows some statistics information while the
     *         DAQ system is running. Very basic stuff...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDAGUI_EXPORT Statistics : public QWidget {
 

@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_DEVICE_CAENVMEBUSWIDGET_H
 #define CDA_GUI_DEVICE_CAENVMEBUSWIDGET_H
 
@@ -31,9 +30,6 @@ namespace dev {
      * caen::VmeBus object during data taking.
      *
      * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-     *
-     * $Revision$
-     * $Date$
      */
    class CDAGUI_EXPORT CaenVmeBusWidget : public QWidget {
 

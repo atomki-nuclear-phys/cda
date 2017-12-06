@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_DEVICE_CREATEACTION_H
 #define CDA_GUI_DEVICE_CREATEACTION_H
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 #include <QAction>
 
 namespace dev {
@@ -19,6 +18,8 @@ namespace dev {
     *
     *         The class is a very thin layer around QAction, just adding
     *         a slot and type variable to its triggered() signal.
+    *
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CreateAction : public QAction {
 

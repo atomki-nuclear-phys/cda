@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QRect>
+#include <QRect>
 
 // CDA include(s):
 #include "device/Loader.h"

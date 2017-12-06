@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_COMMON_ABOUTCDA_H
 #define CDA_GUI_COMMON_ABOUTCDA_H
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 // Local include(s):
 #include "Export.h"

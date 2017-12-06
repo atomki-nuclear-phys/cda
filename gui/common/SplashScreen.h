@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_COMMON_SPLASHSCREEN_H
 #define CDA_GUI_COMMON_SPLASHSCREEN_H
 
@@ -21,9 +20,6 @@ namespace gui {
     *         application's main window is ready.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDAGUI_EXPORT SplashScreen : public QSplashScreen {
 

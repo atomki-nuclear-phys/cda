@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_DEVICE_CAMACEDITOR_H
 #define CDA_GUI_DEVICE_CAMACEDITOR_H
 
@@ -29,10 +28,7 @@ namespace dev {
     *         widget, and it shows the detailed configuration of the
     *         selected device below the crate.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDAGUI_EXPORT CamacEditor : public QWidget,
                                      public IConfig {

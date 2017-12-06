@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_STAT_RATEWINDOW_H
 #define CDA_GUI_STAT_RATEWINDOW_H
 
@@ -28,16 +27,15 @@ namespace cdastat {
    using QT_PREPEND_NAMESPACE( QString );
 
    /**
-    *  @short Sub-window used by stat::MDIView to display the status of one process
+    *  @short Sub-window used by @c stat::MDIView to display the status of one
+    *         process
     *
     *         This window can present the event processing status of one process
-    *         sending its statistics information to the application. It doesn't do
-    *         much on its own, but it can interact nicely with stat::MDIView...
+    *         sending its statistics information to the application. It doesn't
+    *         do much on its own, but it can interact nicely with
+    *         @c stat::MDIView...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDAGUI_EXPORT RateWindow : public QWidget {
 

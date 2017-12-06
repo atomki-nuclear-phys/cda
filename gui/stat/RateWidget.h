@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_STAT_RATEWIDGET_H
 #define CDA_GUI_STAT_RATEWIDGET_H
 
@@ -28,10 +27,7 @@ namespace cdastat {
     *         to the rate values that it should be showing. Just like the
     *         Network Activity graph does in Activity Monitor...
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class RateWidget : public QWidget {
 

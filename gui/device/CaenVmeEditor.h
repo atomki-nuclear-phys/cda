@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_DEVICE_CAENVMEEDITOR_H
 #define CDA_GUI_DEVICE_CAENVMEEDITOR_H
 
@@ -34,9 +33,6 @@ namespace dev {
     *         of (a) CAEN VME device(s) for a CDA data taking session.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDAGUI_EXPORT CaenVmeEditor :
       public QWidget,

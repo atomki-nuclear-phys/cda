@@ -1,11 +1,10 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QtGlobal>
-#include <QtCore/QRect>
-#include <QtCore/QLine>
-#include <QtCore/QString>
-#include <QtCore/QPoint>
+#include <QtGlobal>
+#include <QRect>
+#include <QLine>
+#include <QString>
+#include <QPoint>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QMouseEvent>

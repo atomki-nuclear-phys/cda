@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_SIMPLE_DAQ_CAENVMEREADERRUNNER_H
 #define CDA_GUI_SIMPLE_DAQ_CAENVMEREADERRUNNER_H
 
@@ -8,7 +7,7 @@
 #include <memory>
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QString>
 #include <QWidget>
 #include <QGroupBox>
 #include <QPushButton>
@@ -37,9 +36,6 @@ namespace simple_daq {
     *         this directory.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDAGUI_EXPORT CaenVmeReaderRunner : public QWidget {
 

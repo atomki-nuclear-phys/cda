@@ -1,10 +1,9 @@
-// $Id$
 
 // System include(s):
 #include <cassert>
 
 // Qt include(s):
-#include <QtCore/QStringList>
+#include <QStringList>
 #include <QStackedLayout>
 #include <QSplitter>
 #include <QMdiArea>

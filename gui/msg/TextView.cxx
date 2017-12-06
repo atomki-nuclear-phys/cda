@@ -1,4 +1,3 @@
-// $Id$
 
 // Qt include(s):
 #include <QtCore/QString>

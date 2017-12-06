@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QTime>
+#include <QTime>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QLabel>
@@ -17,7 +16,8 @@
 
 namespace simple_daq {
 
-   CamacReaderRunner::CamacReaderRunner( QWidget* parent, Qt::WindowFlags flags )
+   CamacReaderRunner::CamacReaderRunner( QWidget* parent,
+                                         Qt::WindowFlags flags )
       : QWidget( parent, flags ),
         m_runner(),
         m_logger( "sd::CamacReaderRunner" ) {

@@ -1,8 +1,7 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QStringList>
-#include <QtCore/QSize>
+#include <QStringList>
+#include <QSize>
 #include <QStackedLayout>
 #include <QTableWidget>
 #include <QTableWidgetItem>

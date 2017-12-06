@@ -1,11 +1,10 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_STAT_MDIVIEW_H
 #define CDA_GUI_STAT_MDIVIEW_H
 
 // Qt include(s):
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QMap>
+#include <QString>
 #include <QWidget>
 
 // Local include(s):
@@ -41,10 +40,7 @@ namespace cdastat {
     *         and distributes this statistics to stat::RateWindow objects
     *         presenting the results.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CDAGUI_EXPORT MDIView : public QWidget {
 

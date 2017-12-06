@@ -1,8 +1,7 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QString>
-#include <QtCore/QTimer>
+#include <QString>
+#include <QTimer>
 #include <QLabel>
 #include <QCloseEvent>
 

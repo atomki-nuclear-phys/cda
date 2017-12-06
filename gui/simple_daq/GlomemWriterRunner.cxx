@@ -1,4 +1,3 @@
-// $Id$
 
 // Qt include(s):
 #include <QGroupBox>
@@ -16,7 +15,8 @@
 
 namespace simple_daq {
 
-   GlomemWriterRunner::GlomemWriterRunner( QWidget* parent, Qt::WindowFlags flags )
+   GlomemWriterRunner::GlomemWriterRunner( QWidget* parent,
+                                           Qt::WindowFlags flags )
       : QWidget( parent, flags ),
         m_runner(),
         m_logger( "sd::GlomemWriterRunner" ) {

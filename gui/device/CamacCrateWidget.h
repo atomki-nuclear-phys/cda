@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_DEVICE_CAMACCRATEWIDGET_H
 #define CDA_GUI_DEVICE_CAMACCRATEWIDGET_H
 
@@ -40,10 +39,7 @@ namespace dev {
     *         devices it provides context-menus by right clicking on a
     *         crate slot. All in all, it's a pretty powerful widget. :-)
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class CamacCrateWidget : public QWidget,
                             public Crate< dev::CamacGui > {

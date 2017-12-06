@@ -1,4 +1,3 @@
-# $Id$
 #
 # Configuration for building the CDA gui library.
 #

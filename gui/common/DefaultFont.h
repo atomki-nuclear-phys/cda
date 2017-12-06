@@ -1,10 +1,9 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_COMMON_DEFAULTFONT_H
 #define CDA_GUI_COMMON_DEFAULTFONT_H
 
 // Qt include(s):
-#include <QtGui/QFont>
+#include <QFont>
 #include <QApplication>
 
 // Local include(s):
@@ -20,9 +19,6 @@ namespace gui {
     *         graphical interfaces.
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
     */
    class CDAGUI_EXPORT DefaultFont : public QFont {
 

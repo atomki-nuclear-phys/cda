@@ -1,4 +1,3 @@
-// $Id$
 
 // Qt include(s):
 #include <QGroupBox>
@@ -18,7 +17,8 @@
 
 namespace simple_daq {
 
-   HBookWriterRunner::HBookWriterRunner( QWidget* parent, Qt::WindowFlags flags )
+   HBookWriterRunner::HBookWriterRunner( QWidget* parent,
+                                         Qt::WindowFlags flags )
       : QWidget( parent, flags ),
         m_runner(),
         m_logger( "sd::HBookWriterRunner" ) {

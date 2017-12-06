@@ -1,7 +1,6 @@
-// $Id$
 
 // Qt include(s):
-#include <QtCore/QTimer>
+#include <QTimer>
 
 // Local include(s):
 #include "SplashScreen.h"

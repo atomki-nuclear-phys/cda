@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_GUI_DEVICE_CLEARACTION_H
 #define CDA_GUI_DEVICE_CLEARACTION_H
 
@@ -18,10 +17,7 @@ namespace dev {
     *         The class is a very thin layer around QAction, just adding
     *         a slot variable to its triggered() signal.
     *
-    * @author Attila Krasznahorkay Jr.
-    *
-    * $Revision$
-    * $Date$
+    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
    class ClearAction : public QAction {
 
@@ -29,8 +25,7 @@ namespace dev {
 
    public:
       /// Constructor
-      ClearAction( const QString& text, int slot,
-                   QObject* parent = 0 );
+      ClearAction( const QString& text, int slot, QObject* parent = 0 );
 
    signals:
       /// Signal emitted when the action is called
