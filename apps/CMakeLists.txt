@@ -3,7 +3,7 @@
 #
 
 # Macro for building a console application
-macro( add_cda_console_app name )
+macro( cda_add_console_executable name )
 
   # Tell the user what's happening:
   message( STATUS "Configuring the build of console application ${name}" )
@@ -49,10 +49,10 @@ macro( add_cda_console_app name )
   # Install the executable:
   install( TARGETS ${name} DESTINATION bin )
 
-endmacro( add_cda_console_app )
+endmacro( cda_add_console_executable )
 
 # Macro for building a GUI application
-macro( add_cda_gui_app name )
+macro( cda_add_gui_executable name )
 
   # Parse optional arguments:
   cmake_parse_arguments( ARG "" "ICON" "" ${ARGN} )
@@ -125,10 +125,10 @@ macro( add_cda_gui_app name )
   # Install the executable:
   install( TARGETS ${name} DESTINATION bin )
 
-endmacro( add_cda_gui_app )
+endmacro( cda_add_gui_executable )
 
 # Macro for building a terminal/curses application
-macro( add_cda_terminal_app name )
+macro( cda_add_terminal_executable name )
 
    # Check if the cdacurses library is available:
    if( NOT TARGET cdacurses )
@@ -161,7 +161,7 @@ macro( add_cda_terminal_app name )
    # Install the executable:
    install( TARGETS ${name} DESTINATION bin )
 
-endmacro( add_cda_terminal_app )
+endmacro( cda_add_terminal_executable )
 
 # Build the console application(s):
 add_subdirectory( cda-caen-reader )
