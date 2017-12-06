@@ -8,7 +8,7 @@ message( STATUS "Configuring the build of cdacore" )
 # Find Qt:
 find_package( Qt45 COMPONENTS Core Network Gui Widgets REQUIRED )
 
-# Optional libraries to use for the build:
+# Optional I/O libraries to use for the build:
 find_package( ROOT )
 find_package( CERNLIB COMPONENTS packlib )
 
@@ -17,39 +17,19 @@ find_package( cc32 )
 find_package( CAENDigitizer )
 find_package( CAENqtpSDK )
 
-# Collect the source files of the library:
-file( GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-   fifo/*.h msg/*.h event/*.h device/*.h device/*.icc
-   camac/*.h caen/*.h cernlib/*.h root/*.h root/*.icc
-   common/*.h i18n/*.h tclap/*.h )
-file( GLOB sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-   fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx
-   camac/*.cxx caen/*.cxx cernlib/*.cxx root/*.cxx
-   common/*.cxx i18n/*.cxx )
-
 # Generate MOC files automatically:
 set( CMAKE_AUTOMOC TRUE )
 
 # Build the cdacore library:
-add_library( cdacore STATIC ${headers} ${sources} ${qm_files} )
-target_include_directories( cdacore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
-target_link_libraries( cdacore ${Qt45_LIBRARIES} )
+cda_add_library( cdacore
+   HEADERS fifo/*.h msg/*.h event/*.h device/*.h device/*.icc camac/*.h caen/*.h
+   cernlib/*.h root/*.h root/*.icc common/*.h i18n/*.h tclap/*.h
+   SOURCES fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx caen/*.cxx
+   cernlib/*.cxx root/*.cxx common/*.cxx i18n/*.cxx
+   LINK_LIBRARIES ${Qt45_LIBRARIES} )
 set_target_properties( cdacore PROPERTIES
-  VERSION 2.0.0 SOVERSION 2 )
-target_compile_definitions( cdacore PRIVATE CDACORE_LIBRARY )
-set_property( TARGET cdacore PROPERTY FOLDER core )
-
-# Group its source files:
-foreach( f ${headers} ${sources} )
-   # Get the file's path:
-   get_filename_component( _path ${f} PATH )
-   # Replace the forward slashes with double backward slashes:
-   string( REPLACE "/" "\\\\" _group "${_path}" )
-   # Put the file into the right group:
-   source_group( ${_group} FILES ${f} )
-endforeach()
-unset( _path )
-unset( _group )
+   VERSION 2.0.0
+   SOVERSION 2 )
 
 # Use ROOT if it was found:
 if( ROOT_FOUND AND CDA_USE_ROOT )

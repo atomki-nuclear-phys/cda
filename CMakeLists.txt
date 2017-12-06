@@ -62,6 +62,7 @@ endif()
 
 # Find the CDA CMake helper code:
 list( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
+include( CDAFunctions )
 
 # Set the compile flags to be used for everything. Except with MSVC, there we let
 # it use its default settings.
