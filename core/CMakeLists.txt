@@ -38,6 +38,9 @@ if( ROOT_FOUND AND CDA_USE_ROOT )
   target_link_libraries( cdacore ${ROOT_LIBRARIES} )
   list( APPEND CMAKE_INSTALL_RPATH ${ROOT_LIBRARY_DIRS} )
   set( CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} PARENT_SCOPE )
+  # Remember that ROOT is being used for the build:
+  set( CDA_USING_ROOT TRUE CACHE INTERNAL
+       "Flag showing that ROOT is used in the build" )
 endif()
 
 # Check if the cxxabi.h header file is available. (It's used by the
@@ -63,6 +66,9 @@ if( CERNLIB_FOUND AND CDA_USE_CERNLIB )
   target_link_libraries( cdacore ${CERNLIB_LIBRARIES} )
   list( APPEND CMAKE_INSTALL_RPATH ${CERNLIB_LIBRARY_DIRS} )
   set( CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} PARENT_SCOPE )
+  # Remember that CERNLIB is being used for the build:
+  set( CDA_USING_CERNLIB TRUE CACHE INTERNAL
+       "Flag showing that CERNLIB is used in the build" )
 endif()
 
 # Use the CAMAC cc32 library if it was found:
