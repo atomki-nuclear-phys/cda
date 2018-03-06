@@ -93,3 +93,26 @@ if( CAENQTPSDK_FOUND AND CDA_USE_CAENQTPSDK )
   target_include_directories( cdacore PRIVATE ${CAENQTPSDK_INCLUDE_DIRS} )
   target_link_libraries( cdacore ${CAENQTPSDK_LIBRARIES} )
 endif()
+
+# Generate the CDAVersion.h header:
+string( TIMESTAMP BUILD_DATE "%Y-%m-%dT%H%M" )
+execute_process( COMMAND git log -1 --format=%h
+   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+   RESULT_VARIABLE _gitReturn
+   OUTPUT_VARIABLE _gitHash
+   OUTPUT_STRIP_TRAILING_WHITESPACE
+   ERROR_QUIET )
+if( "${_gitReturn}" EQUAL 0 )
+   set( GIT_HASH "${_gitHash}" )
+else()
+   set( GIT_HASH "Unknown" )
+endif()
+set( _versionDir ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/version )
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/common/CDAVersion.h.in
+   ${_versionDir}/CDAVersion.h @ONLY )
+target_include_directories( cdacore PUBLIC $<BUILD_INTERFACE:${_versionDir}> )
+unset( BUILD_DATE )
+unset( _gitReturn )
+unset( _gitHash )
+unset( GIT_HASH )
+unset( _versionDir )
