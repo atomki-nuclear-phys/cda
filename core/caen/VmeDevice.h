@@ -10,8 +10,9 @@
 #include <QCoreApplication>
 
 // Local include(s):
-#include "../common/Export.h"
-#include "../msg/Logger.h"
+#include "common/Export.h"
+#include "common/StatusCode.h"
+#include "msg/Logger.h"
 
 namespace caen {
 
@@ -54,15 +55,15 @@ namespace caen {
       /// @{
 
       /// Open connection to a CAEN VME device
-      bool open( uint16_t address, DeviceType type, const VmeBus& bus );
+      StatusCode open( uint16_t address, DeviceType type, const VmeBus& bus );
       /// Close the connection to the device
-      bool close();
+      StatusCode close();
 
       /// Print some information about the board
-      bool printInfo( msg::Level level );
+      StatusCode printInfo( msg::Level level );
 
       /// Clear the board of any data. Usually called during initialisation.
-      bool dataClear();
+      StatusCode dataClear();
 
       /// @}
 
@@ -70,34 +71,35 @@ namespace caen {
       /// @{
 
       /// Set up the zero suppression of the device
-      bool setZeroSuppression( bool enable, bool stepThreshold,
-                               const std::vector< uint16_t >& thresholds );
+      StatusCode
+      setZeroSuppression( bool enable, bool stepThreshold,
+                          const std::vector< uint16_t >& thresholds );
 
       /// Set up the acquisition mode of the device
-      bool setAcquisitionMode( bool slidingScaleEnable,
-                               bool zeroSuppressionEnable,
-                               bool overflowSuppressionEnable,
-                               bool validSuppressionEnable,
-                               bool commonStopEnable,
-                               bool emptyEnable,
-                               bool countAllEvents );
+      StatusCode setAcquisitionMode( bool slidingScaleEnable,
+                                     bool zeroSuppressionEnable,
+                                     bool overflowSuppressionEnable,
+                                     bool validSuppressionEnable,
+                                     bool commonStopEnable,
+                                     bool emptyEnable,
+                                     bool countAllEvents );
 
       /// Set the readout mode of the device
-      bool setReadoutMode( bool busErrorEnable, bool blockEndEnable,
-                           bool align64Enable );
+      StatusCode setReadoutMode( bool busErrorEnable, bool blockEndEnable,
+                                 bool align64Enable );
 
       /// Set the pedestal of the device
-      bool setPedestal( uint8_t value );
+      StatusCode setPedestal( uint8_t value );
 
       /// Write a value to the bit set 2 register
-      bool writeBitSet1Register( uint16_t value );
+      StatusCode writeBitSet1Register( uint16_t value );
       /// Write a value to the bit clear 2 register
-      bool writeBitClear1Register( uint16_t value );
+      StatusCode writeBitClear1Register( uint16_t value );
 
       /// Write a value to the bit set 2 register
-      bool writeBitSet2Register( uint16_t value );
+      StatusCode writeBitSet2Register( uint16_t value );
       /// Write a value to the bit clear 2 register
-      bool writeBitClear2Register( uint16_t value );
+      StatusCode writeBitClear2Register( uint16_t value );
 
       /// @}
 
@@ -131,7 +133,7 @@ namespace caen {
       };
 
       /// Read data from the board, and fill the user provided data object
-      bool read( std::vector< DataEvent >& events );
+      StatusCode read( std::vector< DataEvent >& events );
 
       /// @}
 
@@ -147,7 +149,7 @@ namespace caen {
       DeviceType m_type;
 
       /// The message logger object
-      msg::Logger m_logger;
+      mutable msg::Logger m_logger;
 
    }; // class VmeDevice
 

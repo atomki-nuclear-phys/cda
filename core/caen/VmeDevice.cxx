@@ -13,14 +13,14 @@ extern "C" {
 #endif
 
 // CDA include(s):
-#include "../msg/Logger.h"
-#include "../common/errorcheck.h"
-#include "../common/Sleep.h"
+#include "msg/Logger.h"
+#include "common/errorcheck.h"
+#include "common/Sleep.h"
 
 // Local include(s):
-#include "VmeDevice.h"
-#include "VmeBus.h"
-#include "StopAcquisition.h"
+#include "caen/VmeDevice.h"
+#include "caen/VmeBus.h"
+#include "caen/StopAcquisition.h"
 
 /// Private namespace for @c core/caen/VmeDevice.cxx.
 namespace {
@@ -269,11 +269,10 @@ namespace caen {
    /// @param type The device type
    /// @param bus A VmeBus object that is already initialised, and connected to
    ///            the VME bus controller
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::open( uint16_t address, DeviceType type,
-                         const VmeBus& bus ) {
+   StatusCode VmeDevice::open( uint16_t address, DeviceType type,
+                               const VmeBus& bus ) {
 
       // Make sure that the data is cleared:
       resetData();
@@ -290,22 +289,21 @@ namespace caen {
                       .arg( toString( type ) ).arg( address, 4, 16 ) );
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to close the connection to the CAEN VME
    /// device.
    ///
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::close() {
+   StatusCode VmeDevice::close() {
 
       // Make sure that we have a data object:
       if( ! m_data ) {
          m_logger << msg::WARNING << tr( "Trying to close a closed device" )
                   << msg::endmsg;
-         return false;
+         return StatusCode::FAILURE;
       }
 
       // Close the connection to the device:
@@ -323,17 +321,16 @@ namespace caen {
       m_type = DEV_UNKNOWN;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to print some user friendly information about
    /// the device that the connection was made with.
    ///
    /// @param level The output level at which the information should be printed
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::printInfo( msg::Level level ) {
+   StatusCode VmeDevice::printInfo( msg::Level level ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -361,17 +358,16 @@ namespace caen {
 #endif // HAVE_CAEN_QTP_LIBS
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used during the initialisation of the device to
    /// clear all data from it, possibly remaining from a previous data
    /// acquisition session.
    ///
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::dataClear() {
+   StatusCode VmeDevice::dataClear() {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -389,7 +385,7 @@ namespace caen {
                << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to set the zero suppression behaviour of
@@ -401,10 +397,9 @@ namespace caen {
    /// @param thresholds Vector of thresholds, with one value per channel. Has
    ///                   to have exactly as many elements as many channels are
    ///                   in the hardware board.
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool
+   StatusCode
    VmeDevice::setZeroSuppression( bool enable, bool stepThreshold,
                                   const std::vector< uint16_t >& thresholds ) {
 
@@ -433,7 +428,7 @@ namespace caen {
                << "thresholds   : " << thresholds << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to set a number of properties on the device
@@ -449,16 +444,15 @@ namespace caen {
    ///        (V775 ONLY)
    /// @param emptyEnable Enable/Disable empty event storing feature
    /// @param countAllEvents Enable counting all triggers or accepted one only
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::setAcquisitionMode( bool slidingScaleEnable,
-                                       bool zeroSuppressionEnable,
-                                       bool overflowSuppressionEnable,
-                                       bool validSuppressionEnable,
-                                       bool commonStopEnable,
-                                       bool emptyEnable,
-                                       bool countAllEvents ) {
+   StatusCode VmeDevice::setAcquisitionMode( bool slidingScaleEnable,
+                                             bool zeroSuppressionEnable,
+                                             bool overflowSuppressionEnable,
+                                             bool validSuppressionEnable,
+                                             bool commonStopEnable,
+                                             bool emptyEnable,
+                                             bool countAllEvents ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -489,7 +483,7 @@ namespace caen {
                << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to configure the readout mode settings of the
@@ -502,11 +496,11 @@ namespace caen {
    ///        reached.
    /// @param align64Enable Enable/disable align 64 mode. The module is enabled
    ///        to add a dummy word when the number of words is odd.
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::setReadoutMode( bool busErrorEnable, bool blockEndEnable,
-                                   bool align64Enable ) {
+   StatusCode VmeDevice::setReadoutMode( bool busErrorEnable,
+                                         bool blockEndEnable,
+                                         bool align64Enable ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -524,7 +518,7 @@ namespace caen {
                << "align64Enable : " << align64Enable << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to set the pedestal value of the device.
@@ -534,10 +528,9 @@ namespace caen {
    /// function for setting the value of that register.
    ///
    /// @param value Value to be set for the pedestal/FSR register
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::setPedestal( uint8_t value ) {
+   StatusCode VmeDevice::setPedestal( uint8_t value ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -553,7 +546,7 @@ namespace caen {
                << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to write a particular value into the device's
@@ -561,10 +554,9 @@ namespace caen {
    /// the meaning of the various bits.
    ///
    /// @param value The value to write into the register
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::writeBitSet1Register( uint16_t value ) {
+   StatusCode VmeDevice::writeBitSet1Register( uint16_t value ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -580,7 +572,7 @@ namespace caen {
                   .arg( value, 16, 2 ) << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to write a particular value into the device's
@@ -588,10 +580,9 @@ namespace caen {
    /// the meaning of the various bits.
    ///
    /// @param value The value to write into the register
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::writeBitClear1Register( uint16_t value ) {
+   StatusCode VmeDevice::writeBitClear1Register( uint16_t value ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -607,7 +598,7 @@ namespace caen {
                   .arg( value, 16, 2 ) << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to write a particular value into the device's
@@ -615,10 +606,9 @@ namespace caen {
    /// the meaning of the various bits.
    ///
    /// @param value The value to write into the register
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::writeBitSet2Register( uint16_t value ) {
+   StatusCode VmeDevice::writeBitSet2Register( uint16_t value ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -634,7 +624,7 @@ namespace caen {
                   .arg( value, 16, 2 ) << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to write a particular value into the device's
@@ -642,10 +632,9 @@ namespace caen {
    /// the meaning of the various bits.
    ///
    /// @param value The value to write into the register
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::writeBitClear2Register( uint16_t value ) {
+   StatusCode VmeDevice::writeBitClear2Register( uint16_t value ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -661,7 +650,7 @@ namespace caen {
                   .arg( value, 16, 2 ) << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function can be used to read data from the device. It makes use of
@@ -670,10 +659,9 @@ namespace caen {
    /// into an easily digestible data format.
    ///
    /// @param events Container filled by the function with new event data
-   /// @returns <code>true</code> if the call was successful,
-   ///          <code>false</code> otherwise
+   /// @returns The usual status codes
    ///
-   bool VmeDevice::read( std::vector< DataEvent >& events ) {
+   StatusCode VmeDevice::read( std::vector< DataEvent >& events ) {
 
       // Make sure that the board is connected to:
       CHECK( isConnected() );
@@ -689,7 +677,7 @@ namespace caen {
          // If the data acquisition is to be stopped, do so:
          if( g_stopAcquisition ) {
             REPORT_VERBOSE( tr( "Stopping acquisition" ) );
-            return true;
+            return StatusCode::SUCCESS;
          }
          // If there is no data available, wait a bit more:
          if( ! m_data->bufferUsage() ) {
@@ -791,7 +779,7 @@ namespace caen {
 #endif // HAVE_CAEN_QTP_LIBS
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /// This function is used internally to make sure that we have a pristine
