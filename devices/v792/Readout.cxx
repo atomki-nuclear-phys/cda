@@ -49,7 +49,7 @@ namespace v792 {
       static const bool SLIDING_SCALE_ENABLE = false;
       static const bool COMMON_STOP_ENABLE = false;
       static const bool EMPTY_ENABLE = true;
-      static const bool COUNT_ALL_EVENTS = false;
+      static const bool COUNT_ALL_EVENTS = true;
       CHECK( m_vmeDevice.setAcquisitionMode( SLIDING_SCALE_ENABLE,
                                              m_zeroSuppressionEnabled,
                                              m_overflowSuppressionEnabled,
