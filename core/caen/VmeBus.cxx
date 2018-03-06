@@ -5,7 +5,7 @@
 #endif
 
 // Local include(s):
-#include "VmeBus.h"
+#include "caen/VmeBus.h"
 
 #ifdef HAVE_CAEN_VME_LIBS
 /// Private namespace for @c core/caen/VmeBus.cxx
