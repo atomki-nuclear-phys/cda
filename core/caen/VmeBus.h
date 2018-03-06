@@ -10,8 +10,9 @@
 #include <QCoreApplication>
 
 // Local include(s):
-#include "../msg/Logger.h"
-#include "../common/Export.h"
+#include "msg/Logger.h"
+#include "common/Export.h"
+#include "common/StatusCode.h"
 
 namespace caen {
 
@@ -49,9 +50,9 @@ namespace caen {
       };
 
       /// Open the connection to the VME board
-      bool open( BoardType type, short linkNumber, short boardNumber );
+      StatusCode open( BoardType type, short linkNumber, short boardNumber );
       /// Close the connection to the board
-      bool close();
+      StatusCode close();
 
       /// Get the handle of the VME connection
       int32_t handle() const;
