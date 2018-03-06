@@ -29,6 +29,7 @@
 #include <QtXml/QDomElement>
 
 // CDA include(s):
+#include "CDAVersion.h"
 #include "msg/Sender.h"
 #include "msg/Logger.h"
 #include "tclap/CmdLine.h"
@@ -65,7 +66,7 @@ int main( int argc, char* argv[] ) {
    //
    // Read the command line options:
    //
-   TCLAP::CmdLine cmd( description );
+   TCLAP::CmdLine cmd( description, ' ', CDA_VERSION_STRING );
    TCLAP::ValueArg< int > verbosity( "v", "verbosity",
                                      "Level of output verbosity", false, 3,
                                      "code" );

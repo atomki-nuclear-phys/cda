@@ -9,6 +9,9 @@
 
 namespace v785 {
 
+   /// "Offline" bit in the Bit Set 2 register
+   static const uint16_t BIT_SET_2_OFFLINE_BIT = 0x2;
+
    Readout::Readout()
       : Device(), m_logger( "v785::Readout" ) {
 
@@ -24,6 +27,9 @@ namespace v785 {
       // can talk to the device:
       CHECK( m_vmeDevice.printInfo( msg::DEBUG ) );
 
+      // Take the device offline:
+      CHECK( m_vmeDevice.writeBitSet2Register( BIT_SET_2_OFFLINE_BIT ) );
+
       // Clear all data from the device:
       CHECK( m_vmeDevice.dataClear() );
 
@@ -34,17 +40,31 @@ namespace v785 {
             thresholds[ i ] = m_channels[ i ]->getThreshold();
          }
       }
-      CHECK( m_vmeDevice.setZeroSuppression( m_zeroSuppressionEnabled, false,
+      static const bool STEP_THRESHOLD = false;
+      CHECK( m_vmeDevice.setZeroSuppression( m_zeroSuppressionEnabled,
+                                             STEP_THRESHOLD,
                                              thresholds ) );
 
       // Set up the acquisition mode:
-      CHECK( m_vmeDevice.setAcquisitionMode( false, m_zeroSuppressionEnabled,
+      static const bool SLIDING_SCALE_ENABLE = false;
+      static const bool COMMON_STOP_ENABLE = false;
+      static const bool EMPTY_ENABLE = true;
+      static const bool COUNT_ALL_EVENTS = true;
+      CHECK( m_vmeDevice.setAcquisitionMode( SLIDING_SCALE_ENABLE,
+                                             m_zeroSuppressionEnabled,
                                              m_overflowSuppressionEnabled,
-                                             m_validSuppressionEnabled, false,
-                                             true, true ) );
+                                             m_validSuppressionEnabled,
+                                             COMMON_STOP_ENABLE,
+                                             EMPTY_ENABLE,
+                                             COUNT_ALL_EVENTS ) );
 
       // Set up the readout mode:
-      CHECK( m_vmeDevice.setReadoutMode( true, true, true ) );
+      static const bool BUS_ERROR_ENABLE = true;
+      static const bool BLOCK_END_ENABLE = true;
+      static const bool ALIGN_64_ENABLE = true;
+      CHECK( m_vmeDevice.setReadoutMode( BUS_ERROR_ENABLE,
+                                         BLOCK_END_ENABLE,
+                                         ALIGN_64_ENABLE ) );
 
       // Return gracefully:
       return StatusCode::SUCCESS;
@@ -61,13 +81,15 @@ namespace v785 {
 
    StatusCode Readout::start() {
 
-      // Since the device can't really be turned off, just clear all current
-      // data from the device, expecting that readout will start momentarily.
+      // Clear all possible data from the device:
       CHECK( m_vmeDevice.dataClear() );
 
       // Reset the event cache:
       m_events.clear();
       m_eventsProcessed = 0;
+
+      // Turn the data acquisition on:
+      CHECK( m_vmeDevice.writeBitClear2Register( BIT_SET_2_OFFLINE_BIT ) );
 
       // Return gracefully:
       return StatusCode::SUCCESS;
@@ -75,7 +97,8 @@ namespace v785 {
 
    StatusCode Readout::stop() {
 
-      // There's no easy way of preventing the device from running...
+      // Turn the data acquisition off:
+      CHECK( m_vmeDevice.writeBitSet2Register( BIT_SET_2_OFFLINE_BIT ) );
 
       // Return gracefully:
       return StatusCode::SUCCESS;

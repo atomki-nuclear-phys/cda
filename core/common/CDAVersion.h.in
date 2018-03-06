@@ -1,0 +1,14 @@
+// Dear emacs, this is -*- c++ -*-
+#ifndef CDA_CORE_COMMON_CDAVERSION_H
+#define CDA_CORE_COMMON_CDAVERSION_H
+
+/// Exact version (git hash) for the compiled software
+static const char* CDA_VERSION = "@GIT_HASH@";
+
+/// Date on which the software was built
+static const char* CDA_DATE = "@BUILD_DATE@";
+
+/// Full version string to print
+static const char* CDA_VERSION_STRING = "@GIT_HASH@ (@BUILD_DATE@)";
+
+#endif // CDA_CORE_COMMON_CDAVERSION_H

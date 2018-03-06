@@ -5,6 +5,7 @@
 #include <QApplication>
 
 // Local include(s):
+#include "CDAVersion.h"
 #include "aboutCDA.h"
 #include "DefaultFont.h"
 
@@ -24,7 +25,8 @@ void aboutCDA( QT_PREPEND_NAMESPACE( QWidget )* parent ) {
                                                     "Physics department of the Atomki. It is "
                                                     "composed of multiple executables "
                                                     "that work together in the data "
-                                                    "acquisition." ) );
+                                                    "acquisition. "
+                                                    "Version: \"%1\"" ).arg( CDA_VERSION_STRING ) );
 
    // Make sure Qt remembers what is its default font.
    // (There seems to be a bug in Qt...)

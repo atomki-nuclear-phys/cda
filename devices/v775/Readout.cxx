@@ -40,21 +40,33 @@ namespace v775 {
             thresholds[ i ] = m_channels[ i ]->getThreshold();
          }
       }
-      CHECK( m_vmeDevice.setZeroSuppression( m_zeroSuppressionEnabled, false,
+      static const bool STEP_THRESHOLD = false;
+      CHECK( m_vmeDevice.setZeroSuppression( m_zeroSuppressionEnabled,
+                                             STEP_THRESHOLD,
                                              thresholds ) );
 
       // Set up the acquisition mode:
-      CHECK( m_vmeDevice.setAcquisitionMode( false, m_zeroSuppressionEnabled,
+      static const bool SLIDING_SCALE_ENABLE = false;
+      static const bool EMPTY_ENABLE = true;
+      static const bool COUNT_ALL_EVENTS = true;
+      CHECK( m_vmeDevice.setAcquisitionMode( SLIDING_SCALE_ENABLE,
+                                             m_zeroSuppressionEnabled,
                                              m_overflowSuppressionEnabled,
                                              m_validSuppressionEnabled,
                                              m_commonStopEnabled,
-                                             true, true ) );
+                                             EMPTY_ENABLE,
+                                             COUNT_ALL_EVENTS ) );
 
       // Set the FSR register by abusing the pedestal setter function:
       CHECK( m_vmeDevice.setPedestal( m_fullScaleRangeValue ) );
 
       // Set up the readout mode:
-      CHECK( m_vmeDevice.setReadoutMode( true, true, true ) );
+      static const bool BUS_ERROR_ENABLE = true;
+      static const bool BLOCK_END_ENABLE = true;
+      static const bool ALIGN_64_ENABLE = true;
+      CHECK( m_vmeDevice.setReadoutMode( BUS_ERROR_ENABLE,
+                                         BLOCK_END_ENABLE,
+                                         ALIGN_64_ENABLE ) );
 
       // Return gracefully:
       return StatusCode::SUCCESS;

@@ -20,6 +20,7 @@
 #include <QApplication>
 
 // CDA include(s):
+#include "CDAVersion.h"
 #include "msg/Logger.h"
 #include "msg/Sender.h"
 #include "tclap/CmdLine.h"
@@ -49,7 +50,7 @@ int main( int argc, char* argv[] ) {
    //
    // Read the rest of the command line arguments:
    //
-   TCLAP::CmdLine cmd( description );
+   TCLAP::CmdLine cmd( description, ' ', CDA_VERSION_STRING );
    TCLAP::ValueArg< int > verbosity( "v", "verbosity",
                                      "Level of output verbosity", false, 3,
                                      "code" );
