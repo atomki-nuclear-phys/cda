@@ -12,8 +12,9 @@ extern "C" {
 #include <QCoreApplication>
 
 // CDA include(s):
-#include "../msg/Logger.h"
-#include "../common/Export.h"
+#include "msg/Logger.h"
+#include "common/Export.h"
+#include "common/StatusCode.h"
 
 /**
  *  @short Namespace for the CAEN library related classes
@@ -60,24 +61,24 @@ namespace caen {
       static ConnectionType convertConnType( int type );
 
       /// Open the connection
-      bool open( ConnectionType type = USB, int linkNum = 0,
-                 int conetNode = 0, uint32_t vmeAddress = 0 );
+      StatusCode open( ConnectionType type = USB, int linkNum = 0,
+                       int conetNode = 0, uint32_t vmeAddress = 0 );
       /// Close the connection
-      bool close();
+      StatusCode close();
 
       /// Write to a 32-bit register
-      bool writeRegister( uint32_t address, uint32_t data );
+      StatusCode writeRegister( uint32_t address, uint32_t data );
       /// Read from a 32-bit register
-      bool readRegister( uint32_t address, uint32_t& data ) const;
+      StatusCode readRegister( uint32_t address, uint32_t& data ) const;
 
       /// Prints information about the digitizer
-      bool printInfo( msg::Level level ) const;
+      StatusCode printInfo( msg::Level level ) const;
 
       /// Resets the digitizer
-      bool reset();
+      StatusCode reset();
 
       /// Clears the data from the digitizer
-      bool clear();
+      StatusCode clear();
 
       /// Acquisition mode
       enum AcquisitionMode {
@@ -91,20 +92,20 @@ namespace caen {
       static AcquisitionMode convertAcqMode( int mode );
 
       /// Start the data acquisition by the digitizer
-      bool startAcquisition();
+      StatusCode startAcquisition();
       /// Stop the data acquisition by the digitizer
-      bool stopAcquisition();
+      StatusCode stopAcquisition();
       /// Set the acquisition mode
-      bool setAcquisitionMode( AcquisitionMode mode );
+      StatusCode setAcquisitionMode( AcquisitionMode mode );
       /// Get the acquisition mode
-      bool getAcquisitionMode( AcquisitionMode& mode ) const;
+      StatusCode getAcquisitionMode( AcquisitionMode& mode ) const;
 
       /// Sets up the interrupt mode of the digitizer
-      bool setInterruptAfterEvents( uint16_t event_number );
+      StatusCode setInterruptAfterEvents( uint16_t event_number );
       /// Retrieves the interrupt config of the digitizer
-      bool printInterruptConfig() const;
+      StatusCode printInterruptConfig() const;
       /// Waits for an interrupt from the digitizer
-      bool irqWait( uint32_t timeout ) const;
+      StatusCode irqWait( uint32_t timeout ) const;
 
       /// Enumeration listing the channel trigger modes
       enum TriggerMode {
@@ -115,84 +116,84 @@ namespace caen {
       };
 
       /// Sets the SW triggering mode
-      bool setSWTriggerMode( TriggerMode mode );
+      StatusCode setSWTriggerMode( TriggerMode mode );
       /// Retrieves the SW triggering mode
-      bool getSWTriggerMode( TriggerMode& mode ) const;
+      StatusCode getSWTriggerMode( TriggerMode& mode ) const;
       /// Sets the external triggering mode
-      bool setExtTriggerMode( TriggerMode mode );
+      StatusCode setExtTriggerMode( TriggerMode mode );
       /// Retrieves the external triggering mode
-      bool getExtTriggerMode( TriggerMode& mode ) const;
+      StatusCode getExtTriggerMode( TriggerMode& mode ) const;
       /// Sets the triggering mode for one channel
-      bool setChannelSelfTriggerMode( uint32_t channel,
-                                      TriggerMode mode );
+      StatusCode setChannelSelfTriggerMode( uint32_t channel,
+                                            TriggerMode mode );
       /// Retrieves the triggering mode of one channel
-      bool getChannelSelfTriggerMode( uint32_t channel,
-                                      TriggerMode& mode ) const;
+      StatusCode getChannelSelfTriggerMode( uint32_t channel,
+                                            TriggerMode& mode ) const;
       /// Sets the triggering mode for one group
-      bool setGroupSelfTriggerMode( uint32_t group,
-                                    TriggerMode mode );
+      StatusCode setGroupSelfTriggerMode( uint32_t group,
+                                          TriggerMode mode );
       /// Retrieves the triggering mode of one group
-      bool getGroupSelfTriggerMode( uint32_t group,
-                                    TriggerMode& mode ) const;
+      StatusCode getGroupSelfTriggerMode( uint32_t group,
+                                          TriggerMode& mode ) const;
 
       /// Send a software trigger to the device
-      bool sendSWTrigger();
+      StatusCode sendSWTrigger();
 
       /// Sets which channels of a group should generate self triggers
-      bool setChannelGroupMask( uint32_t group,
-                                uint32_t mask );
+      StatusCode setChannelGroupMask( uint32_t group,
+                                      uint32_t mask );
       /// Gets which channels of a group should generate self triggers
-      bool getChannelGroupMask( uint32_t group,
-                                uint32_t& mask ) const;
+      StatusCode getChannelGroupMask( uint32_t group,
+                                      uint32_t& mask ) const;
 
       /// Sets the trigger threshold for a specific channel
-      bool setChannelTriggerThreshold( uint32_t channel,
-                                       uint32_t thr );
+      StatusCode setChannelTriggerThreshold( uint32_t channel,
+                                             uint32_t thr );
       /// Retrieves the trigger threshold of a specific channel
-      bool getChannelTriggerThreshold( uint32_t channel,
-                                       uint32_t& thr ) const;
+      StatusCode getChannelTriggerThreshold( uint32_t channel,
+                                             uint32_t& thr ) const;
       /// Sets the trigger threshold for a group
-      bool setGroupTriggerThreshold( uint32_t group,
-                                     uint32_t thr );
+      StatusCode setGroupTriggerThreshold( uint32_t group,
+                                           uint32_t thr );
       /// Retrieves the trigger threshold of a group
-      bool getGroupTriggerThreshold( uint32_t group,
-                                     uint32_t& thr ) const;
+      StatusCode getGroupTriggerThreshold( uint32_t group,
+                                           uint32_t& thr ) const;
 
       /// Sets which channels are enabled for readout
-      bool setChannelEnableMask( uint32_t mask );
+      StatusCode setChannelEnableMask( uint32_t mask );
       /// Gets which channels are enabled for readout
-      bool getChannelEnableMask( uint32_t& mask ) const;
+      StatusCode getChannelEnableMask( uint32_t& mask ) const;
       /// Sets which groups are enabled for readout
-      bool setGroupEnableMask( uint32_t mask );
+      StatusCode setGroupEnableMask( uint32_t mask );
       /// Gets which groups are enabled for readout
-      bool getGroupEnableMask( uint32_t& mask ) const;
+      StatusCode getGroupEnableMask( uint32_t& mask ) const;
 
       /// Sets the record length of the digitizer
-      bool setRecordLength( uint32_t size );
+      StatusCode setRecordLength( uint32_t size );
       /// Gets the record length of the digitizer
-      bool getRecordLength( uint32_t& size ) const;
+      StatusCode getRecordLength( uint32_t& size ) const;
       /// Sets how much of the readout is after the trigger
-      bool setPostTriggerSize( uint32_t percent );
+      StatusCode setPostTriggerSize( uint32_t percent );
       /// Gets how much of the readout is after the trigger
-      bool getPostTriggerSize( uint32_t& percent ) const;
+      StatusCode getPostTriggerSize( uint32_t& percent ) const;
 
       /// Sets the DC offset for a specified channel
-      bool setChannelDCOffset( uint32_t channel,
-                               uint32_t value );
+      StatusCode setChannelDCOffset( uint32_t channel,
+                                     uint32_t value );
       /// Retrieves the DC offset of a specified channel
-      bool getChannelDCOffset( uint32_t channel,
-                               uint32_t& value ) const;
+      StatusCode getChannelDCOffset( uint32_t channel,
+                                     uint32_t& value ) const;
       /// Sets the DC offset for a group
-      bool setGroupDCOffset( uint32_t group,
-                             uint32_t value );
+      StatusCode setGroupDCOffset( uint32_t group,
+                                   uint32_t value );
       /// Retrieves the DC offset of a group
-      bool getGroupDCOffset( uint32_t group,
-                             uint32_t& value ) const;
+      StatusCode getGroupDCOffset( uint32_t group,
+                                   uint32_t& value ) const;
 
       /// Sets the maximum number of events during readout
-      bool setMaxNumEventsBLT( uint32_t events );
+      StatusCode setMaxNumEventsBLT( uint32_t events );
       /// Retrieves the maximum number of events during readout
-      bool getMaxNumEventsBLT( uint32_t& events ) const;
+      StatusCode getMaxNumEventsBLT( uint32_t& events ) const;
 
       /// Data reading modes
       enum ReadMode {
@@ -226,23 +227,23 @@ namespace caen {
       };
 
       /// Allocates the readout buffer in memory
-      bool mallocReadoutBuffer( char** buffer, uint32_t& size );
+      StatusCode mallocReadoutBuffer( char** buffer, uint32_t& size );
       /// Frees the memory allocated for the readout buffer
-      bool freeReadoutBuffer( char** buffer );
+      StatusCode freeReadoutBuffer( char** buffer );
       /// Read data from the digitizer
-      bool readData( ReadMode mode, char* buffer,
-                     uint32_t& bufferSize );
+      StatusCode readData( ReadMode mode, char* buffer,
+                           uint32_t& bufferSize );
       /// Get the number of events in the readout buffer
-      bool getNumEvents( char* buffer, uint32_t bufferSize,
-                         uint32_t& numEvents ) const;
+      StatusCode getNumEvents( char* buffer, uint32_t bufferSize,
+                               uint32_t& numEvents ) const;
       /// Get the data of one of the events in the readout buffer
-      bool getEvent( char* buffer, uint32_t bufferSize,
-                     int32_t event, EventInfo& eventInfo,
-                     EventData16Bit& eventData );
+      StatusCode getEvent( char* buffer, uint32_t bufferSize,
+                           int32_t event, EventInfo& eventInfo,
+                           EventData16Bit& eventData );
       /// Get the data of one of the events in the readout buffer
-      bool getEvent( char* buffer, uint32_t bufferSize,
-                     int32_t event, EventInfo& eventInfo,
-                     EventData8Bit& eventData );
+      StatusCode getEvent( char* buffer, uint32_t bufferSize,
+                           int32_t event, EventInfo& eventInfo,
+                           EventData8Bit& eventData );
 
    private:
       int m_handle; ///< C-style device handle

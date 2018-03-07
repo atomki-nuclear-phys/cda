@@ -17,10 +17,10 @@
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
 // CDA include(s):
-#include "../common/Sleep.h"
+#include "common/Sleep.h"
 
 // Local include(s):
-#include "Digitizer.h"
+#include "caen/Digitizer.h"
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
 /// Private namespace for @c core/caen/Digitizer.cxx
@@ -393,7 +393,7 @@ namespace {
                                         "Return value: %2" )            \
                        .arg( #CMD )                                     \
                        .arg( toString( code ) ) );                      \
-         return false;                                                  \
+         return StatusCode::FAILURE;                                    \
       }                                                                 \
    } while( 0 ){}
 
@@ -410,7 +410,7 @@ namespace {
                                         "Return value: %2" )            \
                        .arg( #CMD )                                     \
                        .arg( toString( code ) ) );                      \
-         return false;                                                  \
+         return StatusCode::FAILURE;                                    \
       }                                                                 \
    } while( 0 ){}
 
@@ -588,11 +588,16 @@ namespace caen {
     * @param linkNum Link number (0 when only one USB device)
     * @param conetNode ID of the device in dasy chain (0 for USB)
     * @param vmeAddress VME base address (0 for USB)
-    * @returns <code>true</code> if the operation was successful,
-    *          <code>false</code> if it wasn't
+    * @returns The usual StatusCode values
     */
-   bool Digitizer::open( ConnectionType type, int linkNum,
-                         int conetNode, uint32_t vmeAddress ) {
+   StatusCode Digitizer::open( ConnectionType type, int linkNum,
+                               int conetNode, uint32_t vmeAddress ) {
+
+      // Check if anything needs to be done:
+      if( m_handle != -1 ) {
+         REPORT_ERROR( tr( "Device is already open!" ) );
+         return StatusCode::FAILURE;
+      }
 
       // Open the connection:
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -611,23 +616,22 @@ namespace caen {
                << msg::endmsg;
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /**
     * This function closes the connetion to the device(s).
     *
-    * @returns <code>true</code> if the operation was successful,
-    *          <code>false</code> if it wasn't
+    * @returns The usual StatusCode values
     */
-   bool Digitizer::close() {
+   StatusCode Digitizer::close() {
 
       // Check if the device is even open:
       if( m_handle == -1 ) {
          m_logger << msg::DEBUG
                   << tr( "No need to close the device, it's not open" )
                   << msg::endmsg;
-         return true;
+         return StatusCode::SUCCESS;
       }
 
       // Close the connection:
@@ -644,10 +648,10 @@ namespace caen {
                << msg::endmsg;
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::writeRegister( uint32_t address, uint32_t data ) {
+   StatusCode Digitizer::writeRegister( uint32_t address, uint32_t data ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_WriteRegister( m_handle, address, data ) );
@@ -657,11 +661,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::readRegister( uint32_t address,
-                                 uint32_t& data ) const {
+   StatusCode Digitizer::readRegister( uint32_t address,
+                                       uint32_t& data ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_ReadRegister( m_handle, address, &data ) );
@@ -672,7 +676,7 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    /**
@@ -680,10 +684,9 @@ namespace caen {
     * digitizer that this object is connected to.
     *
     * @param level Message level of the printed information
-    * @returns <code>true</code> if the operation was successful,
-    *          <code>false</code> if it wasn't
+    * @returns The usual StatusCode values
     */
-   bool Digitizer::printInfo( msg::Level level ) const {
+   StatusCode Digitizer::printInfo( msg::Level level ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       // Read the board information:
@@ -717,10 +720,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::reset() {
+   StatusCode Digitizer::reset() {
 
       // Reset the digitizer:
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -728,10 +731,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::clear() {
+   StatusCode Digitizer::clear() {
 
       // Clear the data from the digitizer:
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -739,7 +742,7 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    int Digitizer::convertAcqMode( Digitizer::AcquisitionMode mode ) {
@@ -778,7 +781,7 @@ namespace caen {
       return static_cast< AcquisitionMode >( 1000 );
    }
 
-   bool Digitizer::startAcquisition() {
+   StatusCode Digitizer::startAcquisition() {
 
       // Start the data acquisition in the digitizer:
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -786,10 +789,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::stopAcquisition() {
+   StatusCode Digitizer::stopAcquisition() {
 
       // Stop the data acquisition in the digitizer:
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -797,10 +800,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setAcquisitionMode( AcquisitionMode mode ) {
+   StatusCode Digitizer::setAcquisitionMode( AcquisitionMode mode ) {
 
       // Set the acquisition mode of the digitizer
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -812,10 +815,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getAcquisitionMode( AcquisitionMode& mode ) const {
+   StatusCode Digitizer::getAcquisitionMode( AcquisitionMode& mode ) const {
 
       // Set the acquisition mode of the digitizer
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -828,10 +831,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setInterruptAfterEvents( uint16_t event_number ) {
+   StatusCode Digitizer::setInterruptAfterEvents( uint16_t event_number ) {
 
       // Set up interrupts on the digitizer:
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
@@ -844,10 +847,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::printInterruptConfig() const {
+   StatusCode Digitizer::printInterruptConfig() const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       // Read the requested information:
@@ -878,10 +881,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::irqWait( uint32_t timeout ) const {
+   StatusCode Digitizer::irqWait( uint32_t timeout ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_IRQWait( m_handle, timeout ) );
@@ -890,10 +893,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setSWTriggerMode( TriggerMode mode ) {
+   StatusCode Digitizer::setSWTriggerMode( TriggerMode mode ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetSWTriggerMode( m_handle, convert( mode ) ) );
@@ -903,10 +906,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getSWTriggerMode( TriggerMode& mode ) const {
+   StatusCode Digitizer::getSWTriggerMode( TriggerMode& mode ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CAEN_DGTZ_TriggerMode_t cmode;
@@ -917,10 +920,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setExtTriggerMode( TriggerMode mode ) {
+   StatusCode Digitizer::setExtTriggerMode( TriggerMode mode ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetExtTriggerInputMode( m_handle,
@@ -931,10 +934,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getExtTriggerMode( TriggerMode& mode ) const {
+   StatusCode Digitizer::getExtTriggerMode( TriggerMode& mode ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CAEN_DGTZ_TriggerMode_t cmode;
@@ -945,11 +948,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setChannelSelfTriggerMode( uint32_t channel,
-                                              TriggerMode mode ) {
+   StatusCode Digitizer::setChannelSelfTriggerMode( uint32_t channel,
+                                                    TriggerMode mode ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetChannelSelfTrigger( m_handle, convert( mode ),
@@ -960,11 +963,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getChannelSelfTriggerMode( uint32_t channel,
-                                              TriggerMode& mode ) const {
+   StatusCode Digitizer::getChannelSelfTriggerMode( uint32_t channel,
+                                                    TriggerMode& mode ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CAEN_DGTZ_TriggerMode_t cmode;
@@ -978,11 +981,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setGroupSelfTriggerMode( uint32_t group,
-                                            TriggerMode mode ) {
+   StatusCode Digitizer::setGroupSelfTriggerMode( uint32_t group,
+                                                  TriggerMode mode ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetGroupSelfTrigger( m_handle, convert( mode ),
@@ -993,11 +996,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getGroupSelfTriggerMode( uint32_t group,
-                                            TriggerMode& mode ) const {
+   StatusCode Digitizer::getGroupSelfTriggerMode( uint32_t group,
+                                                  TriggerMode& mode ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CAEN_DGTZ_TriggerMode_t cmode;
@@ -1011,10 +1014,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::sendSWTrigger() {
+   StatusCode Digitizer::sendSWTrigger() {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SendSWtrigger( m_handle ) );
@@ -1023,11 +1026,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setChannelGroupMask( uint32_t group,
-                                        uint32_t mask ) {
+   StatusCode Digitizer::setChannelGroupMask( uint32_t group,
+                                              uint32_t mask ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetChannelGroupMask( m_handle, group,
@@ -1038,11 +1041,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getChannelGroupMask( uint32_t group,
-                                        uint32_t& mask ) const {
+   StatusCode Digitizer::getChannelGroupMask( uint32_t group,
+                                              uint32_t& mask ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetChannelGroupMask( m_handle, group,
@@ -1054,11 +1057,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setChannelTriggerThreshold( uint32_t channel,
-                                               uint32_t thr ) {
+   StatusCode Digitizer::setChannelTriggerThreshold( uint32_t channel,
+                                                     uint32_t thr ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetChannelTriggerThreshold( m_handle, channel,
@@ -1069,11 +1072,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getChannelTriggerThreshold( uint32_t channel,
-                                               uint32_t& thr ) const {
+   StatusCode Digitizer::getChannelTriggerThreshold( uint32_t channel,
+                                                     uint32_t& thr ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetChannelTriggerThreshold( m_handle, channel,
@@ -1085,11 +1088,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setGroupTriggerThreshold( uint32_t group,
-                                             uint32_t thr ) {
+   StatusCode Digitizer::setGroupTriggerThreshold( uint32_t group,
+                                                   uint32_t thr ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetGroupTriggerThreshold( m_handle, group,
@@ -1100,11 +1103,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getGroupTriggerThreshold( uint32_t group,
-                                             uint32_t& thr ) const {
+   StatusCode Digitizer::getGroupTriggerThreshold( uint32_t group,
+                                                   uint32_t& thr ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetGroupTriggerThreshold( m_handle, group,
@@ -1116,10 +1119,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setChannelEnableMask( uint32_t mask ) {
+   StatusCode Digitizer::setChannelEnableMask( uint32_t mask ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetChannelEnableMask( m_handle, mask ) );
@@ -1129,10 +1132,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getChannelEnableMask( uint32_t& mask ) const {
+   StatusCode Digitizer::getChannelEnableMask( uint32_t& mask ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetChannelEnableMask( m_handle, &mask ) );
@@ -1141,10 +1144,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setGroupEnableMask( uint32_t mask ) {
+   StatusCode Digitizer::setGroupEnableMask( uint32_t mask ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetGroupEnableMask( m_handle, mask ) );
@@ -1154,10 +1157,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getGroupEnableMask( uint32_t& mask ) const {
+   StatusCode Digitizer::getGroupEnableMask( uint32_t& mask ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetGroupEnableMask( m_handle, &mask ) );
@@ -1166,10 +1169,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setRecordLength( uint32_t size ) {
+   StatusCode Digitizer::setRecordLength( uint32_t size ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetRecordLength( m_handle, size ) );
@@ -1180,10 +1183,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getRecordLength( uint32_t& size ) const {
+   StatusCode Digitizer::getRecordLength( uint32_t& size ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetRecordLength( m_handle, &size ) );
@@ -1192,10 +1195,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setPostTriggerSize( uint32_t percent ) {
+   StatusCode Digitizer::setPostTriggerSize( uint32_t percent ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetPostTriggerSize( m_handle, percent ) );
@@ -1205,10 +1208,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getPostTriggerSize( uint32_t& percent ) const {
+   StatusCode Digitizer::getPostTriggerSize( uint32_t& percent ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetPostTriggerSize( m_handle, &percent ) );
@@ -1217,11 +1220,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setChannelDCOffset( uint32_t channel,
-                                       uint32_t value ) {
+   StatusCode Digitizer::setChannelDCOffset( uint32_t channel,
+                                             uint32_t value ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetChannelDCOffset( m_handle, channel,
@@ -1232,11 +1235,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getChannelDCOffset( uint32_t channel,
-                                       uint32_t& value ) const {
+   StatusCode Digitizer::getChannelDCOffset( uint32_t channel,
+                                             uint32_t& value ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetChannelDCOffset( m_handle, channel,
@@ -1248,11 +1251,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setGroupDCOffset( uint32_t group,
-                                     uint32_t value ) {
+   StatusCode Digitizer::setGroupDCOffset( uint32_t group,
+                                           uint32_t value ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetGroupDCOffset( m_handle, group,
@@ -1263,11 +1266,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getGroupDCOffset( uint32_t group,
-                                     uint32_t& value ) const {
+   StatusCode Digitizer::getGroupDCOffset( uint32_t group,
+                                           uint32_t& value ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetGroupDCOffset( m_handle, group,
@@ -1279,10 +1282,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::setMaxNumEventsBLT( uint32_t events ) {
+   StatusCode Digitizer::setMaxNumEventsBLT( uint32_t events ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetMaxNumEventsBLT( m_handle, events ) );
@@ -1292,10 +1295,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getMaxNumEventsBLT( uint32_t& events ) const {
+   StatusCode Digitizer::getMaxNumEventsBLT( uint32_t& events ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetMaxNumEventsBLT( m_handle, &events ) );
@@ -1305,10 +1308,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::mallocReadoutBuffer( char** buffer, uint32_t& size ) {
+   StatusCode Digitizer::mallocReadoutBuffer( char** buffer, uint32_t& size ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_MallocReadoutBuffer( m_handle, buffer, &size ) );
@@ -1319,10 +1322,10 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::freeReadoutBuffer( char** buffer ) {
+   StatusCode Digitizer::freeReadoutBuffer( char** buffer ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_FreeReadoutBuffer( buffer ) );
@@ -1332,11 +1335,11 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::readData( ReadMode mode, char* buffer,
-                             uint32_t& bufferSize ) {
+   StatusCode Digitizer::readData( ReadMode mode, char* buffer,
+                                   uint32_t& bufferSize ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_ReadData( m_handle, convert( mode ),
@@ -1349,15 +1352,15 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getNumEvents( char*
+   StatusCode Digitizer::getNumEvents( char*
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
-                                       buffer
+                                             buffer
 #endif // HAVE_CAEN_DIGITIZER_LIBS
-                                 , uint32_t bufferSize,
-                                 uint32_t& numEvents ) const {
+                                       , uint32_t bufferSize,
+                                       uint32_t& numEvents ) const {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_GetNumEvents( m_handle, buffer,
@@ -1369,16 +1372,16 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getEvent( char*
+   StatusCode Digitizer::getEvent( char*
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
-                                   buffer
+                                         buffer
 #endif // HAVE_CAEN_DIGITIZER_LIBS
-                             , uint32_t bufferSize,
-                             int32_t event, EventInfo& eventInfo,
-                             EventData16Bit& eventData ) {
+                                   , uint32_t bufferSize,
+                                   int32_t event, EventInfo& eventInfo,
+                                   EventData16Bit& eventData ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CAEN_DGTZ_EventInfo_t ei;
@@ -1430,16 +1433,16 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool Digitizer::getEvent( char*
+   StatusCode Digitizer::getEvent( char*
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
-                                   buffer
+                                         buffer
 #endif // HAVE_CAEN_DIGITIZER_LIBS
-                             , uint32_t bufferSize,
-                             int32_t event, EventInfo& eventInfo,
-                             EventData8Bit& eventData ) {
+                                   , uint32_t bufferSize,
+                                   int32_t event, EventInfo& eventInfo,
+                                   EventData8Bit& eventData ) {
 
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CAEN_DGTZ_EventInfo_t ei;
@@ -1491,7 +1494,7 @@ namespace caen {
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
       // Signal a successful operation:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
 } // namespace caen

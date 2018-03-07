@@ -5,7 +5,7 @@
 #endif
 
 // Local include(s):
-#include "VmeBus.h"
+#include "caen/VmeBus.h"
 
 #ifdef HAVE_CAEN_VME_LIBS
 /// Private namespace for @c core/caen/VmeBus.cxx
@@ -74,7 +74,7 @@ namespace {
                                         "Return value: %2" )            \
                        .arg( #CMD )                                     \
                        .arg( toString( code ) ) );                      \
-         return false;                                                  \
+         return StatusCode::FAILURE;                                    \
       }                                                                 \
    } while( 0 )
 
@@ -91,7 +91,7 @@ namespace {
                                         "Return value: %2" )            \
                        .arg( #CMD )                                     \
                        .arg( toString( code ) ) );                      \
-         return false;                                                  \
+         return StatusCode::FAILURE;                                    \
       }                                                                 \
    } while( 0 )
 
@@ -141,7 +141,8 @@ namespace caen {
       close();
    }
 
-   bool VmeBus::open( BoardType type, short linkNumber, short boardNumber ) {
+   StatusCode VmeBus::open( BoardType type, short linkNumber,
+                            short boardNumber ) {
 
       REPORT_VERBOSE( tr( "Open called with type = %1, linkNumber = %2, "
                           "boardNumber = %3" ).arg( toString( type ) )
@@ -156,17 +157,17 @@ namespace caen {
                << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
-   bool VmeBus::close() {
+   StatusCode VmeBus::close() {
 
       // Check if the device is even open:
       if( m_handle == -1 ) {
          m_logger << msg::DEBUG
                   << tr( "No need to close the device, it's not open" )
                   << msg::endmsg;
-         return true;
+         return StatusCode::SUCCESS;
       }
 
       // Close the connection:
@@ -183,7 +184,7 @@ namespace caen {
                << msg::endmsg;
 
       // Return gracefully:
-      return true;
+      return StatusCode::SUCCESS;
    }
 
    int32_t VmeBus::handle() const {
