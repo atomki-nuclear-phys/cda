@@ -23,7 +23,7 @@ namespace dev {
       m_image->setScaledContents( true );
 
       // Set up the main label:
-      m_label.reset( new QLabel( "CAEN VME Controller Configuration",
+      m_label.reset( new QLabel( tr( "CAEN VME Controller Configuration" ),
                                  this ) );
       m_label->setGeometry( QRect( 20, 230, WIDGET_WIDTH - 40, 40 ) );
       QFont font = m_label->font();
@@ -32,7 +32,7 @@ namespace dev {
       m_label->setAlignment( Qt::AlignCenter );
 
       // Set up the controller selector label:
-      m_typeLabel.reset( new QLabel( "Controller type:", this ) );
+      m_typeLabel.reset( new QLabel( tr( "Controller type:" ), this ) );
       m_typeLabel->setGeometry( QRect( 20, 300, 120, 25 ) );
 
       // Set up the controller selector:
@@ -46,7 +46,7 @@ namespace dev {
                this, SLOT( typeModifiedSlot( int ) ) );
 
       // Set up the link number selector label:
-      m_linkNumberLabel.reset( new QLabel( "Link number:", this ) );
+      m_linkNumberLabel.reset( new QLabel( tr( "Link number:" ), this ) );
       m_linkNumberLabel->setGeometry( QRect( 20, 330, 120, 25 ) );
 
       // Set up the link number selector:
@@ -57,7 +57,7 @@ namespace dev {
                this, SLOT( linkNumberModifiedSlot( int ) ) );
 
       // Set up the board number selector label:
-      m_boardNumberLabel.reset( new QLabel( "Board number:", this ) );
+      m_boardNumberLabel.reset( new QLabel( tr( "Board number:" ), this ) );
       m_boardNumberLabel->setGeometry( QRect( 20, 360, 120, 25 ) );
 
       // Set up the link number selector:
