@@ -66,6 +66,15 @@ namespace dev {
       m_boardNumber->setRange( 0, 255 );
       connect( m_boardNumber.get(), SIGNAL( valueChanged( int ) ),
                this, SLOT( boardNumberModifiedSlot( int ) ) );
+
+      // Set up the device synchronisation check selection box:
+      m_checkDeviceSync.reset( new QCheckBox( tr( "Check for device "
+                                                  "de-synchronisation" ),
+                                              this ) );
+      m_checkDeviceSync->setGeometry( QRect( 20, 390, 300, 25 ) );
+      m_checkDeviceSync->setChecked( true );
+      connect( m_checkDeviceSync.get(), SIGNAL( toggled( bool ) ),
+               this, SLOT( checkDeviceSyncModifiedSlot( bool ) ) );
    }
 
    caen::VmeBus::BoardType CaenVmeBusWidget::type() const {
@@ -113,6 +122,21 @@ namespace dev {
       return;
    }
 
+   bool CaenVmeBusWidget::checkDeviceSync() const {
+
+      return m_checkDeviceSync->isChecked();
+   }
+
+   void CaenVmeBusWidget::setCheckDeviceSync( bool value ) {
+
+      // Prevent the emission of signals while the setting is made:
+      m_checkDeviceSync->setEnabled( false );
+      m_checkDeviceSync->setChecked( value );
+      m_checkDeviceSync->setEnabled( true );
+
+      return;
+   }
+
    void CaenVmeBusWidget::reset() {
 
       setType( caen::VmeBus::BOARD_V1718 );
@@ -145,6 +169,14 @@ namespace dev {
 
       // Emit the right signal:
       emit( boardNumberModified( static_cast< short >( value ) ) );
+
+      return;
+   }
+
+   void CaenVmeBusWidget::checkDeviceSyncModifiedSlot( bool value ) {
+
+      // Emit the right signal:
+      emit( checkDeviceSyncModified( value ) );
 
       return;
    }

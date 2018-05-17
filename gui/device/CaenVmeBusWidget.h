@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QSpinBox>
+#include <QCheckBox>
 
 // CDA include(s):
 #include "caen/VmeBus.h"
@@ -59,6 +60,11 @@ namespace dev {
       /// Set the board number
       void setBoardNumber( short value );
 
+      /// Get whether the synchronisation between the devices should be checked
+      bool checkDeviceSync() const;
+      /// Set whether the synchronisation between the devices should be checked
+      void setCheckDeviceSync( bool value );
+
       // Reset the configuration to its default values
       void reset();
 
@@ -69,6 +75,8 @@ namespace dev {
       void linkNumberModified( short value );
       /// Signal emitted when the controller board number is modified
       void boardNumberModified( short value );
+      /// Signal emitted when the device synchronisation check is modified
+      void checkDeviceSyncModified( bool value );
 
    private slots:
       /// Slot catching type change signals
@@ -77,6 +85,8 @@ namespace dev {
       void linkNumberModifiedSlot( int value );
       /// Slot catching board number change signals
       void boardNumberModifiedSlot( int value );
+      /// Slot catching device synchronisation change signals
+      void checkDeviceSyncModifiedSlot( bool value );
 
    private:
       /// Image of a CAEN VME crate
@@ -98,6 +108,9 @@ namespace dev {
       std::unique_ptr< QLabel > m_boardNumberLabel;
       /// Spinbox selecting the board number
       std::unique_ptr< QSpinBox > m_boardNumber;
+
+      /// Check box for controlling the device synchronisation checks
+      std::unique_ptr< QCheckBox > m_checkDeviceSync;
 
    }; // class CaenVmeBusWidget
 
