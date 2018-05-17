@@ -82,6 +82,8 @@ namespace caen_vme_reader {
       short m_linkNumber;
       /// Board number for connecting to the VME crate controller
       short m_boardNumber;
+      /// Flag for controlling the device synchronisation checks
+      bool m_checkDeviceSync;
 
       bool m_initialized; ///< "Initialized state" of the device
       mutable msg::Logger m_logger; ///< Message logger object

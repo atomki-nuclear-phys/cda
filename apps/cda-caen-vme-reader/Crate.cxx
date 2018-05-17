@@ -15,7 +15,7 @@ namespace caen_vme_reader {
    Crate::Crate()
       : dev::Crate< dev::ICaenVmeReadout >( "CAENVME", true ),
         m_vmeBus(), m_type( caen::VmeBus::BOARD_V1718 ), m_linkNumber( 0 ),
-        m_boardNumber( 0 ),
+        m_boardNumber( 0 ), m_checkDeviceSync( true ),
         m_initialized( false ),
         m_logger( "caen_vme_reader::Crate" ) {
 
@@ -113,7 +113,36 @@ namespace caen_vme_reader {
 
    bool Crate::devicesAreInSync() const {
 
-      // The devices are considered to always be in sync:
+      // If the synchronisation is not to be checked, return right away:
+      if( ! m_checkDeviceSync ) {
+         return true;
+      }
+
+      // A simple security check:
+      if( ! m_devices.size() ) {
+         // Not sure what's happening here, but sure...
+         return true;
+      }
+
+      // Get the number of events processed by the first device:
+      const size_t eventsProcessed =
+         m_devices.begin()->second->eventsProcessed();
+
+      // Check if every device reports the same:
+      for( const auto& itr : m_devices ) {
+         if( eventsProcessed != itr.second->eventsProcessed() ) {
+            m_logger << msg::WARNING
+                     << tr( "First device (%1) reports %2 events" )
+                        .arg( m_devices.begin()->second->deviceName() )
+                        .arg( eventsProcessed ) << std::endl
+                     << tr( "Device %1 reports %2 events" )
+                        .arg( itr.second->deviceName() )
+                        .arg( itr.second->eventsProcessed() ) << msg::endmsg;
+            return false;
+         }
+      }
+
+      // If yes, then they are in sync:
       return true;
    }
 
@@ -138,12 +167,19 @@ namespace caen_vme_reader {
       input >> boardNumber;
       m_boardNumber = boardNumber;
 
+      // Read the device synchronisation check setting:
+      quint16 checkDeviceSync = 1;
+      input >> checkDeviceSync;
+      m_checkDeviceSync = checkDeviceSync;
+
       // Tell the user what happened:
       REPORT_VERBOSE( tr( "Read the following VME controller parameters:\n"
-                          "  type        : %1\n"
-                          "  link number : %2\n"
-                          "  board number: %3" ).arg( m_type )
-                      .arg( m_linkNumber ).arg( m_boardNumber ) );
+                          "  type          : %1\n"
+                          "  link number   : %2\n"
+                          "  board number  : %3\n"
+                          "  check dev sync: %4" ).arg( m_type )
+                      .arg( m_linkNumber ).arg( m_boardNumber )
+                      .arg( m_checkDeviceSync ) );
 
       // Return gracefully:
       return StatusCode::SUCCESS;
@@ -168,6 +204,12 @@ namespace caen_vme_reader {
       const int boardNumber = node.attribute( "BoardNumber", "0" ).toInt( &ok );
       CHECK( ok );
       m_boardNumber = static_cast< short >( boardNumber );
+
+      // Read the device synchronisation check setting:
+      const int checkDeviceSync =
+         node.attribute( "CheckDeviceSync", "1" ).toInt( &ok );
+      CHECK( ok );
+      m_checkDeviceSync = static_cast< bool >( checkDeviceSync );
 
       // Return gracefully:
       return StatusCode::SUCCESS;
