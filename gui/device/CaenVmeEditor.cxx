@@ -191,6 +191,11 @@ namespace dev {
       input >> boardNumber;
       m_vmeWidget->setBoardNumber( boardNumber );
 
+      // Read the device synchronisation check setting:
+      quint16 checkDeviceSync = 1;
+      input >> checkDeviceSync;
+      m_vmeWidget->setCheckDeviceSync( checkDeviceSync );
+
       // Return gracefully:
       return StatusCode::SUCCESS;
    }
@@ -205,6 +210,7 @@ namespace dev {
       output << static_cast< quint16 >( m_vmeWidget->type() );
       output << static_cast< qint16 >( m_vmeWidget->linkNumber() );
       output << static_cast< qint16 >( m_vmeWidget->boardNumber() );
+      output << static_cast< quint16 >( m_vmeWidget->checkDeviceSync() );
 
       // Return gracefully:
       return StatusCode::SUCCESS;
@@ -230,6 +236,12 @@ namespace dev {
       CHECK( ok );
       m_vmeWidget->setBoardNumber( static_cast< short >( boardNumber ) );
 
+      // Read the device synchronisation check setting:
+      const bool checkDeviceSync =
+         node.attribute( "CheckDeviceSync", "1" ).toInt( &ok );
+      CHECK( ok );
+      m_vmeWidget->setCheckDeviceSync( checkDeviceSync );
+
       // Return gracefully:
       return StatusCode::SUCCESS;
    }
@@ -241,6 +253,8 @@ namespace dev {
                          static_cast< int >( m_vmeWidget->type() ) );
       node.setAttribute( "LinkNumber", m_vmeWidget->linkNumber() );
       node.setAttribute( "BoardNumber", m_vmeWidget->boardNumber() );
+      node.setAttribute( "CheckDeviceSync",
+                         static_cast< int >( m_vmeWidget->checkDeviceSync() ) );
 
       // Return gracefully:
       return StatusCode::SUCCESS;
