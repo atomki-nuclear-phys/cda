@@ -12,6 +12,13 @@
 
 namespace v812 {
 
+   Device::Device()
+   : m_vmeAddress( 0x0 ), m_outputWidth1( 0 ), m_outputWidth2( 0 ),
+     m_deadTime1( 0 ), m_deadTime2( 0 ), m_majorityThreshold( 1 ),
+     m_channels(), m_logger( "v812::Device" ) {
+
+   }
+
    StatusCode Device::readConfig( QIODevice& dev ) {
 
       // Tell the user what's happening.

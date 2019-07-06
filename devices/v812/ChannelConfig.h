@@ -26,7 +26,7 @@ namespace v812 {
 
    public:
       /// Constructor
-      ChannelConfig() = default;
+      ChannelConfig();
 
       /// @name Function(s) inherited from @c dev::IConfig
       /// @{
@@ -61,12 +61,12 @@ namespace v812 {
       void clear();
 
       /// The channel's number
-      int m_channel = -1;
+      int m_channel;
       /// Discriminator threshold for the channel
-      uint8_t m_threshold = 1;
+      uint8_t m_threshold;
 
       /// Logger object
-      mutable msg::Logger m_logger{ "v812::ChannelConfig" };
+      mutable msg::Logger m_logger;
 
    }; // class ChannelConfig
 

@@ -33,7 +33,7 @@ namespace v812 {
 
    public:
       /// Default constructor
-      Device() = default;
+      Device();
 
       /// @name Functions inherited from @c dev::IDevice
       /// @{
@@ -66,24 +66,24 @@ namespace v812 {
       static const size_t NUMBER_OF_CHANNELS = 16;
 
       /// The VME address of the device
-      unsigned int m_vmeAddress = 0x0;
+      unsigned int m_vmeAddress;
       /// Output width for channels 0 - 7
-      uint8_t m_outputWidth1 = 0;
+      uint8_t m_outputWidth1;
       /// Output width for channels 8 - 15
-      uint8_t m_outputWidth2 = 0;
+      uint8_t m_outputWidth2;
       /// Dead time for channels 0 - 7
-      uint8_t m_deadTime1 = 0;
+      uint8_t m_deadTime1;
       /// Dead time for channels 8 - 15
-      uint8_t m_deadTime2 = 0;
+      uint8_t m_deadTime2;
       /// Majority threshold
-      uint8_t m_majorityThreshold = 1;
+      uint8_t m_majorityThreshold;
 
       /// Configuration of the channels of the device
       std::array< std::unique_ptr< ChannelConfig >,
                   NUMBER_OF_CHANNELS > m_channels;
 
       /// A message logger object
-      mutable msg::Logger m_logger{ "v812::Device" };
+      mutable msg::Logger m_logger;
 
    }; // class Device
 

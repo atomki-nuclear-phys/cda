@@ -23,7 +23,7 @@ namespace v812 {
 
    public:
       /// Default constructor
-      Configurable() = default;
+      Configurable();
 
       /// @name Function(s) inherited from @c dev::CaenVmeConfigurable
       /// @{
@@ -35,7 +35,7 @@ namespace v812 {
 
    private:
       /// Message logger object
-      mutable msg::Logger m_logger{ "v812::Configurable" };
+      mutable msg::Logger m_logger;
 
    }; // class Configurable
 

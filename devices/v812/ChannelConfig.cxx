@@ -21,6 +21,11 @@ namespace v812 {
    using QT_PREPEND_NAMESPACE( QDataStream );
    using QT_PREPEND_NAMESPACE( QDomElement );
 
+   ChannelConfig::ChannelConfig()
+   : m_channel( -1 ), m_threshold( 0 ), m_logger( "v812::ChannelConfig" ) {
+
+   }
+
    StatusCode ChannelConfig::readConfig( QIODevice& dev ) {
 
       // Tell the user what's happening.

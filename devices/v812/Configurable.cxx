@@ -30,6 +30,11 @@ namespace std {
 
 namespace v812 {
 
+   Configurable::Configurable()
+   : Device(), m_logger( "v812::Configurable" ) {
+
+   }
+
    StatusCode Configurable::configure( const caen::VmeBus& bus ) const {
 
       // Tell the user what's happening.
