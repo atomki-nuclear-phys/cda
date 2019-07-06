@@ -165,6 +165,7 @@ endmacro( cda_add_terminal_executable )
 
 # Build the console application(s):
 add_subdirectory( cda-caen-reader )
+add_subdirectory( cda-caen-vme-configurator )
 add_subdirectory( cda-caen-vme-reader )
 add_subdirectory( cda-camac-reader )
 add_subdirectory( cda-config-server )
