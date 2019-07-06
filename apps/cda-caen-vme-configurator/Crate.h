@@ -53,14 +53,14 @@ namespace caen_vme_configurator {
       caen::VmeBus m_vmeBus;
 
       /// Type of the VME crate controller
-      caen::VmeBus::BoardType m_type = caen::VmeBus::BOARD_V1718;
+      caen::VmeBus::BoardType m_type;
       /// Link number for connecting to the VME crate controller
-      short m_linkNumber = 0;
+      short m_linkNumber;
       /// Board number for connecting to the VME crate controller
-      short m_boardNumber = 0;
+      short m_boardNumber;
 
       /// Message logger object
-      mutable msg::Logger m_logger{ "caen_vme_configurator::Crate" };
+      mutable msg::Logger m_logger;
 
    }; // class Crate
 

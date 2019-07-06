@@ -12,7 +12,9 @@
 namespace caen_vme_configurator {
 
    Crate::Crate()
-   : dev::Crate< dev::ICaenVmeConfigurable >( "CAENVME", true ) {
+   : dev::Crate< dev::ICaenVmeConfigurable >( "CAENVME", true ),
+     m_vmeBus(), m_type( caen::VmeBus::BOARD_V1718 ), m_linkNumber( 0 ),
+     m_boardNumber( 0 ), m_logger( "caen_vme_configurator::Crate" ) {
 
    }
 
