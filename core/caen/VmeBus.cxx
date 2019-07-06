@@ -198,7 +198,7 @@ namespace caen {
       // Perform a standard write with 24-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
       CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA24_U_DATA,
-                                 8 ) );
+                                 cvD8 ) );
 #endif // CAEN libs
 
       // Tell the user what happened.
@@ -215,7 +215,7 @@ namespace caen {
       // Perform a standard write with 24-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
       CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA24_U_DATA,
-                                 16 ) );
+                                 cvD16 ) );
 #endif // CAEN libs
 
       // Tell the user what happened.
@@ -231,7 +231,7 @@ namespace caen {
       // Perform a standard read with 24-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
       CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA24_U_DATA,
-                                8 ) );
+                                cvD8 ) );
 #endif // CAEN libs
 
       // Tell the user what happened.
@@ -248,7 +248,7 @@ namespace caen {
       // Perform a standard read with 24-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
       CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA24_U_DATA,
-                                16 ) );
+                                cvD16 ) );
 #endif // CAEN libs
 
       // Tell the user what happened.
