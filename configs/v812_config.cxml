@@ -1,0 +1,32 @@
+<!DOCTYPE CDA_SETUP PUBLIC '' ''>
+<Setup xmlns="">
+
+   <Crate Type="CAENVME" ControllerType="0" LinkNumber="0" BoardNumber="0">
+
+      <V812 VMEAddress="ff00"
+            OutputWidth_0_7="0" OutputWidth_8_15="0"
+            DeadTime_0_7="0"    DeadTime_8_15="0"
+            MajorityThreshold="1" >
+
+         <Channel ChannelNumber="0"  Threshold="1" />
+         <Channel ChannelNumber="1"  Threshold="1" />
+         <Channel ChannelNumber="2"  Threshold="1" />
+         <Channel ChannelNumber="3"  Threshold="1" />
+         <Channel ChannelNumber="4"  Threshold="1" />
+         <Channel ChannelNumber="5"  Threshold="1" />
+         <Channel ChannelNumber="6"  Threshold="1" />
+         <Channel ChannelNumber="7"  Threshold="1" />
+         <Channel ChannelNumber="8"  Threshold="1" />
+         <Channel ChannelNumber="9"  Threshold="1" />
+         <Channel ChannelNumber="10" Threshold="1" />
+         <Channel ChannelNumber="11" Threshold="1" />
+         <Channel ChannelNumber="12" Threshold="1" />
+         <Channel ChannelNumber="13" Threshold="1" />
+         <Channel ChannelNumber="14" Threshold="1" />
+         <Channel ChannelNumber="15" Threshold="1" />
+
+      </V812>
+
+   </Crate>
+
+</Setup>
