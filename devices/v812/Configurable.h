@@ -29,7 +29,7 @@ namespace v812 {
       /// @{
 
       /// Configure the device for data taking
-      virtual StatusCode configure( const caen::VmeBus& bus ) const override;
+      virtual StatusCode configure( const caen::VmeBus& bus ) const;
 
       /// @}
 
