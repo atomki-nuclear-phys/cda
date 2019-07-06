@@ -57,6 +57,16 @@ namespace caen {
       /// Get the handle of the VME connection
       int32_t handle() const;
 
+      /// Write an 8-bit value to an address on the VME bus
+      StatusCode write( unsigned int address, uint8_t value ) const;
+      /// Write a 16-bit value to an address on the VME bus
+      StatusCode write( unsigned int address, uint16_t value ) const;
+
+      /// Read an 8-bit value from an address on the VME bus
+      StatusCode read( unsigned int address, uint8_t& value ) const;
+      /// Read a 16-bit value from an address on the VME bus
+      StatusCode read( unsigned int address, uint16_t& value ) const;
+
    private:
       int32_t m_handle; ///< Opaque handle to the VME device
       mutable msg::Logger m_logger; ///< Message logger object

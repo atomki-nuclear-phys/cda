@@ -138,7 +138,7 @@ namespace caen {
 
    VmeBus::~VmeBus() {
 
-      close();
+      close().ignore();
    }
 
    StatusCode VmeBus::open( BoardType type, short linkNumber,
@@ -191,6 +191,72 @@ namespace caen {
 
       // Return the handle value:
       return m_handle;
+   }
+
+   StatusCode VmeBus::write( unsigned int address, uint8_t value ) const {
+
+      // Perform a standard write with 24-bit addressing.
+#ifdef HAVE_CAEN_VME_LIBS
+      CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA24_U_DATA,
+                                 8 ) );
+#endif // CAEN libs
+
+      // Tell the user what happened.
+      REPORT_VERBOSE( tr( "Wrote 8-bit value \"%1\" to address \"%2\"" )
+                      .arg( static_cast< int >( value ) )
+                      .arg( address, 4, 16 ) );
+
+      // Return gracefully.
+      return StatusCode::SUCCESS;
+   }
+
+   StatusCode VmeBus::write( unsigned int address, uint16_t value ) const {
+
+      // Perform a standard write with 24-bit addressing.
+#ifdef HAVE_CAEN_VME_LIBS
+      CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA24_U_DATA,
+                                 16 ) );
+#endif // CAEN libs
+
+      // Tell the user what happened.
+      REPORT_VERBOSE( tr( "Wrote 16-bit value \"%1\" to address \"%2\"" )
+                      .arg( value ).arg( address, 4, 16 ) );
+
+      // Return gracefully.
+      return StatusCode::SUCCESS;
+   }
+
+   StatusCode VmeBus::read( unsigned int address, uint8_t& value ) const {
+
+      // Perform a standard read with 24-bit addressing.
+#ifdef HAVE_CAEN_VME_LIBS
+      CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA24_U_DATA,
+                                8 ) );
+#endif // CAEN libs
+
+      // Tell the user what happened.
+      REPORT_VERBOSE( tr( "Read 8-bit value \"%1\" from address \"%2\"" )
+                      .arg( static_cast< int >( value ) )
+                      .arg( address, 4, 16 ) );
+
+      // Return gracefully.
+      return StatusCode::SUCCESS;
+   }
+
+   StatusCode VmeBus::read( unsigned int address, uint16_t& value ) const {
+
+      // Perform a standard read with 24-bit addressing.
+#ifdef HAVE_CAEN_VME_LIBS
+      CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA24_U_DATA,
+                                16 ) );
+#endif // CAEN libs
+
+      // Tell the user what happened.
+      REPORT_VERBOSE( tr( "Read 16-bit value \"%1\" from address \"%2\"" )
+                      .arg( value ).arg( address, 4, 16 ) );
+
+      // Return gracefully.
+      return StatusCode::SUCCESS;
    }
 
 } // namespace caen
