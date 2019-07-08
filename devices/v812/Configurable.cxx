@@ -41,6 +41,20 @@ namespace v812 {
       m_logger << msg::INFO << tr( "Configuring device on address: %1" )
                                .arg( m_vmeAddress, 4, 16 ) << msg::endmsg;
 
+      // Read the device identifiers, just to make sure that the device is
+      // available.
+      m_logger << msg::DEBUG << tr( "Module identifiers:" ) << msg::endmsg;
+      uint16_t deviceId = 0;
+      CHECK( bus.read( m_vmeAddress + 0xfe, deviceId ) );
+      m_logger << msg::DEBUG << tr( "Version & serial number      : %1" )
+                                .arg( deviceId, 16, 2 ) << msg::endmsg;
+      CHECK( bus.read( m_vmeAddress + 0xfc, deviceId ) );
+      m_logger << msg::DEBUG << tr( "Manufacturer n. & module type: %1" )
+                                .arg( deviceId, 16, 2 ) << msg::endmsg;
+      CHECK( bus.read( m_vmeAddress + 0xfa, deviceId ) );
+      m_logger << msg::DEBUG << tr( "Fixed code                   : %1" )
+                                .arg( deviceId, 16, 2 ) << msg::endmsg;
+
       // Construct the 16-bit inhibit word, used to enable/disable channels on
       // the device.
       uint16_t inhibitWord = 0;
@@ -68,30 +82,30 @@ namespace v812 {
          CHECK( bus.write( m_vmeAddress + i * 0x2,
                            m_channels[ i ]->getThreshold() ) );
          m_logger << msg::INFO << tr( "  - Channel %1: %2" ).arg( i, 2 )
-                  .arg( static_cast< int >( m_channels[ i ]->getThreshold() ) )
+                  .arg( m_channels[ i ]->getThreshold() )
                   << msg::endmsg;
       }
 
       // Set the device level properties.
       CHECK( bus.write( m_vmeAddress + 0x40, m_outputWidth1 ) );
       m_logger << msg::INFO << tr( "Output width (channels 0-7) : %1" )
-                               .arg( static_cast< int >( m_outputWidth1 ) )
+                               .arg( m_outputWidth1 )
                << msg::endmsg;
       CHECK( bus.write( m_vmeAddress + 0x42, m_outputWidth2 ) );
       m_logger << msg::INFO << tr( "Output width (channels 8-15): %1" )
-                               .arg( static_cast< int >( m_outputWidth2 ) )
+                               .arg( m_outputWidth2 )
                << msg::endmsg;
       CHECK( bus.write( m_vmeAddress + 0x44, m_deadTime1 ) );
       m_logger << msg::INFO << tr( "Dead time (channels 0-7) : %1" )
-                               .arg( static_cast< int >( m_deadTime1 ) )
+                               .arg( m_deadTime1 )
                << msg::endmsg;
       CHECK( bus.write( m_vmeAddress + 0x46, m_deadTime2 ) );
       m_logger << msg::INFO << tr( "Dead time (channels 8-15): %1" )
-                               .arg( static_cast< int >( m_deadTime2 ) )
+                               .arg( m_deadTime2 )
                << msg::endmsg;
       CHECK( bus.write( m_vmeAddress + 0x48, m_majorityThreshold ) );
       m_logger << msg::INFO << tr( "Majority threshold: %1" )
-                              .arg( static_cast< int >( m_majorityThreshold ) )
+                              .arg( m_majorityThreshold )
                << msg::endmsg;
 
       // Return gracefully.

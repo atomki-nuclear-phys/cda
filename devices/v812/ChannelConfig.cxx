@@ -108,12 +108,12 @@ namespace v812 {
       return;
    }
 
-   uint8_t ChannelConfig::getThreshold() const {
+   uint16_t ChannelConfig::getThreshold() const {
 
       return m_threshold;
    }
 
-   void ChannelConfig::setThreshold( uint8_t value ) {
+   void ChannelConfig::setThreshold( uint16_t value ) {
 
       m_threshold = value;
       return;
@@ -125,14 +125,14 @@ namespace v812 {
    void ChannelConfig::printConfig( msg::Level level ) const {
 
       m_logger << level
-               << tr( " - Threshold      : %1" )
-                  .arg( static_cast< int >( m_threshold ) )
+               << tr( " - Threshold      : %1" ).arg( m_threshold )
                << msg::endmsg;
       return;
    }
 
    void ChannelConfig::clear() {
 
+      m_channel = -1;
       m_threshold = 1;
       return;
    }
