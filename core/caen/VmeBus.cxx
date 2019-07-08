@@ -195,9 +195,9 @@ namespace caen {
 
    StatusCode VmeBus::write( unsigned int address, uint8_t value ) const {
 
-      // Perform a standard write with 24-bit addressing.
+      // Perform a standard write with 32-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
-      CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA24_U_DATA,
+      CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA32_U_DATA,
                                  cvD8 ) );
 #endif // CAEN libs
 
@@ -212,9 +212,9 @@ namespace caen {
 
    StatusCode VmeBus::write( unsigned int address, uint16_t value ) const {
 
-      // Perform a standard write with 24-bit addressing.
+      // Perform a standard write with 32-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
-      CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA24_U_DATA,
+      CHECK( CAENVME_WriteCycle( m_handle, address, &value, cvA32_U_DATA,
                                  cvD16 ) );
 #endif // CAEN libs
 
@@ -228,9 +228,9 @@ namespace caen {
 
    StatusCode VmeBus::read( unsigned int address, uint8_t& value ) const {
 
-      // Perform a standard read with 24-bit addressing.
+      // Perform a standard read with 32-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
-      CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA24_U_DATA,
+      CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA32_U_DATA,
                                 cvD8 ) );
 #endif // CAEN libs
 
@@ -245,9 +245,9 @@ namespace caen {
 
    StatusCode VmeBus::read( unsigned int address, uint16_t& value ) const {
 
-      // Perform a standard read with 24-bit addressing.
+      // Perform a standard read with 32-bit addressing.
 #ifdef HAVE_CAEN_VME_LIBS
-      CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA24_U_DATA,
+      CHECK( CAENVME_ReadCycle( m_handle, address, &value, cvA32_U_DATA,
                                 cvD16 ) );
 #endif // CAEN libs
 
