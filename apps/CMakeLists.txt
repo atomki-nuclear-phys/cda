@@ -33,8 +33,6 @@ macro( cda_add_console_executable name )
 
   # Generate MOC files automatically:
   set( CMAKE_AUTOMOC TRUE )
-  # Generate resource files automatically:
-  set( CMAKE_AUTORCC TRUE )
 
   # Build the executable:
   add_executable( ${name} ${headers} ${sources} ${resources} )
