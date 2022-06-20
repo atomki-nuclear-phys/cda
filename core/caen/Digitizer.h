@@ -52,7 +52,6 @@ namespace caen {
          USB = 0, ///< USB connection (direct or V1718->VME)
          PCI_OpticalLink = 1, ///< PCI-A2818 (direct or V2718->VME)
          PCIE_OpticalLink = 2, ///< PCIe-A3818 (direct or A3818->VME)
-         PCIE_EmbeddedDigitizer = 3 ///< Possible future development
       };
 
       /// Helper function converting connection type

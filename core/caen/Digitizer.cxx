@@ -245,13 +245,10 @@ namespace {
          return CAEN_DGTZ_USB;
          break;
       case caen::Digitizer::PCI_OpticalLink:
-         return CAEN_DGTZ_PCI_OpticalLink;
+         return CAEN_DGTZ_OpticalLink;
          break;
       case caen::Digitizer::PCIE_OpticalLink:
-         return CAEN_DGTZ_PCIE_OpticalLink;
-         break;
-      case caen::Digitizer::PCIE_EmbeddedDigitizer:
-         return CAEN_DGTZ_PCIE_EmbeddedDigitizer;
+         return CAEN_DGTZ_OpticalLink;
          break;
       default:
          return static_cast< CAEN_DGTZ_ConnectionType >( 10L );
@@ -542,9 +539,6 @@ namespace caen {
       case PCIE_OpticalLink:
          return 2;
          break;
-      case PCIE_EmbeddedDigitizer:
-         return 3;
-         break;
       default:
          return 0;
          break;
@@ -565,9 +559,6 @@ namespace caen {
          break;
       case 2:
          return PCIE_OpticalLink;
-         break;
-      case 3:
-         return PCIE_EmbeddedDigitizer;
          break;
       default:
          return USB;
