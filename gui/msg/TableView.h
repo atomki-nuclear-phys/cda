@@ -51,7 +51,8 @@ namespace msg {
 
    public:
       /// Standard QWidget-type constructor
-      TableView( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      TableView( QWidget* parent = 0,
+                 Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~TableView();
 

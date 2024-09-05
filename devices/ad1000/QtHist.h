@@ -40,7 +40,7 @@ namespace ad1000 {
 
    public:
       /// Qt Widget constructor
-      QtHist( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      QtHist( QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Read the device configuration from a binary file
       virtual StatusCode readConfig( QIODevice& dev );

@@ -36,11 +36,13 @@ namespace dt5740 {
 
    public:
       /// Standard QWidget-style constructor
-      RawHistogram( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      RawHistogram( QWidget* parent = 0,
+                    Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Constructor specifying all properties of the histogram
       RawHistogram( const QString& title, int bins, double low, double up,
                     int refreshTimeout = 2000,
-                    QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+                    QWidget* parent = 0,
+                    Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Reconstruct the properties of the digitized signal
       virtual bool reconstruct( const std::vector< uint16_t >& data,

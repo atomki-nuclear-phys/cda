@@ -44,7 +44,7 @@ namespace dev {
 
    public:
       /// Standard QWidget style constructor
-      QtHist( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      QtHist( QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Function displaying a newly received event
       virtual bool displayEvent( const ev::Fragment& fragment ) = 0;

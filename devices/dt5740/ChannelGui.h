@@ -39,7 +39,7 @@ namespace dt5740 {
    public:
       /// Constructor
       ChannelGui( int channel, QWidget* parent = 0,
-                  Qt::WindowFlags flags = 0 );
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Get the subaddress described by this widget
       int getChannelNumber() const;

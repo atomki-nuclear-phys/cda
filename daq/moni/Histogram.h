@@ -50,11 +50,13 @@ namespace moni {
 
    public:
       /// Standard QWidget-style constructor
-      Histogram( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      Histogram( QWidget* parent = 0,
+                 Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Constructor specifying all properties of the histogram
       Histogram( const QString& title, int bins, double low, double up,
                  int refreshTimeout = 2000,
-                 QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+                 QWidget* parent = 0,
+                 Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Get the title of the histogram
       const QString& getTitle() const;

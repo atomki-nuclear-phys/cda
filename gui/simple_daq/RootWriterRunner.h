@@ -48,7 +48,8 @@ namespace simple_daq {
 
    public:
       /// Standard QWidget-type constructor
-      RootWriterRunner( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      RootWriterRunner( QWidget* parent = 0,
+                        Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~RootWriterRunner();
 

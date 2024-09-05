@@ -52,7 +52,8 @@ namespace msg {
 
    public:
       /// Standard QWidget-type constructor
-      TextView( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      TextView( QWidget* parent = 0,
+                Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~TextView();
 

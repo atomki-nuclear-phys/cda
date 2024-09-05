@@ -40,7 +40,7 @@ namespace t2228a {
    public:
       /// Constructor
       ChannelGui( int subaddress, QWidget* parent = 0,
-                  Qt::WindowFlags flags = 0 );
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Get the subaddress described by this widget
       int getSubaddress() const;

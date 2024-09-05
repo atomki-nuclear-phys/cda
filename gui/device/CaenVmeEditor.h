@@ -42,7 +42,8 @@ namespace dev {
 
    public:
       /// Standard QWidget style constructor
-      CaenVmeEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenVmeEditor( QWidget* parent = 0,
+                     Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~CaenVmeEditor();
 

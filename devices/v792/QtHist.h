@@ -38,7 +38,7 @@ namespace v792 {
 
    public:
       /// Regular Qt constructor
-      QtHist( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      QtHist( QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~QtHist();
 

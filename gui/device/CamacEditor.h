@@ -37,7 +37,8 @@ namespace dev {
 
    public:
       /// Constructor
-      CamacEditor( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CamacEditor( QWidget* parent = 0,
+                   Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~CamacEditor();
 

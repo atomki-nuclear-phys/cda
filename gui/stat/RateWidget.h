@@ -35,7 +35,8 @@ namespace cdastat {
 
    public:
       /// Standard QWidget-style constructor
-      RateWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      RateWidget( QWidget* parent = 0,
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
 
    public slots:
       /// Update the widget with a new rate value

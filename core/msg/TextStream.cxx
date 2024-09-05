@@ -86,8 +86,8 @@ namespace msg {
       //
       // Construct the time string:
       //
-      QString time = message.getTime().getDate().toString( Qt::SystemLocaleShortDate ) +
-         "/" + message.getTime().getTime().toString( Qt::SystemLocaleShortDate );
+      QString time = message.getTime().getDate().toString( Qt::ISODate ) +
+         "/" + message.getTime().getTime().toString( Qt::ISODate );
 
       //
       // Format the sender's name:

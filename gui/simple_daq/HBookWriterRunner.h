@@ -48,7 +48,8 @@ namespace simple_daq {
 
    public:
       /// Standard QWidget-type constructor
-      HBookWriterRunner( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      HBookWriterRunner( QWidget* parent = 0,
+                         Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Set the name of the configuration file
       void setConfigFileName( const QString& fileName );

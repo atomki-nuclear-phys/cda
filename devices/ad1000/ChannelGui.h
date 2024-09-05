@@ -42,7 +42,7 @@ namespace ad1000 {
    public:
       /// Constructor
       ChannelGui( QWidget* parent = 0,
-                  Qt::WindowFlags flags = 0 );
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Total width of the widget
       static const int WIDTH;
