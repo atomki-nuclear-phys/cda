@@ -43,7 +43,8 @@ namespace simple_daq {
 
    public:
       /// Standard QWidget-type constructor
-      CaenVmeReaderRunner( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenVmeReaderRunner( QWidget* parent = 0,
+                           Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Set the name of the configuration file
       void setConfigFileName( const QString& fileName );

@@ -44,7 +44,8 @@ namespace simple_daq {
 
    public:
       /// Standard QWidget-type constructor
-      GlomemWriterRunner( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      GlomemWriterRunner( QWidget* parent = 0,
+                          Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~GlomemWriterRunner();
 

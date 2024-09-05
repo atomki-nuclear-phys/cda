@@ -48,7 +48,8 @@ namespace dev {
 
    public:
       /// Constructor
-      CamacCrateWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CamacCrateWidget( QWidget* parent = 0,
+                        Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Extended configuration reading from binary file
       virtual StatusCode readConfig( QIODevice& dev );

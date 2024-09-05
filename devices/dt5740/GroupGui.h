@@ -41,7 +41,7 @@ namespace dt5740 {
    public:
       /// Constructor
       GroupGui( GroupConfig& group, QWidget* parent = 0,
-                Qt::WindowFlags flags = 0 );
+                Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Total width of the widget
       static const int WIDTH;

@@ -44,7 +44,8 @@ namespace simple_daq {
 
    public:
       /// Standard QWidget-type constructor
-      CaenReaderRunner( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenReaderRunner( QWidget* parent = 0,
+                        Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~CaenReaderRunner();
 

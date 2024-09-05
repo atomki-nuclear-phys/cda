@@ -35,7 +35,8 @@ namespace dev {
 
    public:
       /// Standard QWidget style constructor
-      CaenVmeGui( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenVmeGui( QWidget* parent = 0,
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Fixed width of a device
       static const int WIDGET_WIDTH = 510;

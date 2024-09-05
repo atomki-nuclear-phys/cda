@@ -219,7 +219,7 @@ namespace msg {
       // Create the items for the new row:
       //
       QTableWidgetItem* time =
-         new QTableWidgetItem( message.getTime().getDate().toString( Qt::SystemLocaleShortDate ) +
+         new QTableWidgetItem( message.getTime().getDate().toString( Qt::ISODate ) +
                                "/" +
                                message.getTime().getTime().toString( "hh:mm:ss.zzz") );
       time->setForeground( foreground_it->second );

@@ -48,7 +48,8 @@ namespace cdastat {
 
    public:
       /// Standard QWidget-style constructor
-      MDIView( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      MDIView( QWidget* parent = 0,
+               Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~MDIView();
 

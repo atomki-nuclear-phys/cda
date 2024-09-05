@@ -36,9 +36,9 @@ namespace simple_daq {
       m_processStatus->setAlignment( Qt::AlignCenter );
 
       QPalette palette( m_processStatus->palette() );
-      palette.setColor( QPalette::Active, QPalette::Foreground,
+      palette.setColor( QPalette::Active, QPalette::WindowText,
                         QColor( 10, 150, 10 ) );
-      palette.setColor( QPalette::Inactive, QPalette::Foreground,
+      palette.setColor( QPalette::Inactive, QPalette::WindowText,
                         QColor( 10, 150, 10 ) );
       m_processStatus->setPalette( palette );
 
@@ -219,9 +219,9 @@ namespace simple_daq {
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
-            palette.setColor( QPalette::Active, QPalette::Foreground,
+            palette.setColor( QPalette::Active, QPalette::WindowText,
                               QColor( 150, 10, 10 ) );
-            palette.setColor( QPalette::Inactive, QPalette::Foreground,
+            palette.setColor( QPalette::Inactive, QPalette::WindowText,
                               QColor( 150, 10, 10 ) );
             m_processStatus->setPalette( palette );
 
@@ -234,9 +234,9 @@ namespace simple_daq {
 
             m_processStatus->setText( tr( "Root writer running" ) );
             QPalette palette( m_processStatus->palette() );
-            palette.setColor( QPalette::Active, QPalette::Foreground,
+            palette.setColor( QPalette::Active, QPalette::WindowText,
                               QColor( 150, 10, 10 ) );
-            palette.setColor( QPalette::Inactive, QPalette::Foreground,
+            palette.setColor( QPalette::Inactive, QPalette::WindowText,
                               QColor( 150, 10, 10 ) );
             m_processStatus->setPalette( palette );
 
@@ -255,9 +255,9 @@ namespace simple_daq {
 
             m_processStatus->setText( tr( "ERROR" ) );
             QPalette palette( m_processStatus->palette() );
-            palette.setColor( QPalette::Active, QPalette::Foreground,
+            palette.setColor( QPalette::Active, QPalette::WindowText,
                               QColor( 150, 10, 10 ) );
-            palette.setColor( QPalette::Inactive, QPalette::Foreground,
+            palette.setColor( QPalette::Inactive, QPalette::WindowText,
                               QColor( 150, 10, 10 ) );
             m_processStatus->setPalette( palette );
 
@@ -266,9 +266,9 @@ namespace simple_daq {
 
             m_processStatus->setText( tr( "Root writer stopped" ) );
             QPalette palette( m_processStatus->palette() );
-            palette.setColor( QPalette::Active, QPalette::Foreground,
+            palette.setColor( QPalette::Active, QPalette::WindowText,
                               QColor( 10, 150, 10 ) );
-            palette.setColor( QPalette::Inactive, QPalette::Foreground,
+            palette.setColor( QPalette::Inactive, QPalette::WindowText,
                               QColor( 10, 150, 10 ) );
             m_processStatus->setPalette( palette );
          }

@@ -39,7 +39,7 @@ namespace v775 {
    public:
       /// Constructor
       ChannelGui( int channel, QWidget* parent = 0,
-                  Qt::WindowFlags flags = 0 );
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Get the channel number described by this widget
       int getChannel() const;

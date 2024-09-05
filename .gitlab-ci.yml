@@ -16,7 +16,7 @@ variables:
 # Configuration job template
 .config_template: &config_job
    tags:
-      - docker
+      - gitlab-org-docker
    stage: config
    script:
       - mkdir ci_build
@@ -57,7 +57,7 @@ config:ubuntu1604vanilla:
 # Build job template:
 .build_template: &build_job
    tags:
-      - docker
+      - gitlab-org-docker
    stage: build
    script:
       - export MAKEFLAGS=-j`nproc`
@@ -101,7 +101,7 @@ build:ubuntu1604vanilla:
 # Build the doxygen configuration for the project:
 pages:
    tags:
-      - docker
+      - gitlab-org-docker
    stage: deploy
    image: krasznaa/cda-build:ubuntu-16.04
    dependencies: []

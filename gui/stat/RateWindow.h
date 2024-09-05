@@ -43,7 +43,8 @@ namespace cdastat {
 
    public:
       /// Standard QWidget-style constructor
-      RateWindow( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      RateWindow( QWidget* parent = 0,
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~RateWindow();
 

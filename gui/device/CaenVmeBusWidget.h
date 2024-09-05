@@ -38,7 +38,8 @@ namespace dev {
 
    public:
       /// Constructor
-      CaenVmeBusWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      CaenVmeBusWidget( QWidget* parent = 0,
+                        Qt::WindowFlags flags = Qt::WindowFlags() );
 
       /// Fixed width of the widget
       static const int WIDGET_WIDTH = 510;

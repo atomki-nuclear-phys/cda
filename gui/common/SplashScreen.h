@@ -27,7 +27,8 @@ namespace gui {
 
    public:
       /// Constructor specifying a timeout
-      SplashScreen( const QPixmap& pixmap, Qt::WindowFlags f = 0,
+      SplashScreen( const QPixmap& pixmap,
+                    Qt::WindowFlags f = Qt::WindowFlags(),
                     int timeout = 3 );
 
    private slots:

@@ -39,7 +39,8 @@ namespace simple_daq {
 
    public:
       /// Standard Qt widget constructor
-      Statistics( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+      Statistics( QWidget* parent = 0,
+                  Qt::WindowFlags flags = Qt::WindowFlags() );
       /// Destructor
       ~Statistics();
 
