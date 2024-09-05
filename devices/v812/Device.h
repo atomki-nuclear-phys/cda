@@ -68,13 +68,13 @@ namespace v812 {
       /// The VME address of the device
       unsigned int m_vmeAddress;
       /// Output width for channels 0 - 7
-      uint16_t m_outputWidth1;
+      uint8_t m_outputWidth1;
       /// Output width for channels 8 - 15
-      uint16_t m_outputWidth2;
+      uint8_t m_outputWidth2;
       /// Dead time for channels 0 - 7
-      uint16_t m_deadTime1;
+      uint8_t m_deadTime1;
       /// Dead time for channels 8 - 15
-      uint16_t m_deadTime2;
+      uint8_t m_deadTime2;
       /// Majority threshold
       uint16_t m_majorityThreshold;
 
