@@ -125,16 +125,14 @@ namespace v812 {
       m_vmeAddress = element.attribute( "VMEAddress", "" ).toInt( &ok, 16 );
       CHECK( ok );
       m_outputWidth1 =
-         static_cast<uint8_t>(element.attribute( "OutputWidth_0_7", "0" ).toUShort( &ok ));
+         element.attribute( "OutputWidth_0_7", "0" ).toInt( &ok );
       CHECK( ok );
       m_outputWidth2 =
-         static_cast<uint8_t>(element.attribute( "OutputWidth_8_15", "0" ).toUShort( &ok ));
+         element.attribute( "OutputWidth_8_15", "0" ).toInt( &ok );
       CHECK( ok );
-      m_deadTime1 =
-         static_cast<uint8_t>(element.attribute( "DeadTime_0_7", "0" ).toUShort( &ok ));
+      m_deadTime1 = element.attribute( "DeadTime_0_7", "0" ).toInt( &ok );
       CHECK( ok );
-      m_deadTime2 =
-         static_cast<uint8_t>(element.attribute( "DeadTime_8_15", "0" ).toUShort( &ok ));
+      m_deadTime2 = element.attribute( "DeadTime_8_15", "0" ).toInt( &ok );
       CHECK( ok );
       m_majorityThreshold =
          element.attribute( "MajorityThreshold", "1" ).toInt( &ok );
@@ -195,14 +193,10 @@ namespace v812 {
       element.setAttribute( "VMEAddress",
                             QString( "%1" ).arg( m_vmeAddress, 4, 16,
                                                  QChar( '0' ) ) );
-      element.setAttribute( "OutputWidth_0_7",
-                            static_cast<unsigned int>(m_outputWidth1) );
-      element.setAttribute( "OutputWidth_8_15",
-                            static_cast<unsigned int>(m_outputWidth2) );
-      element.setAttribute( "DeadTime_0_7",
-                            static_cast<unsigned int>(m_deadTime1) );
-      element.setAttribute( "DeadTime_8_15",
-                            static_cast<unsigned int>(m_deadTime2) );
+      element.setAttribute( "OutputWidth_0_7", m_outputWidth1 );
+      element.setAttribute( "OutputWidth_8_15", m_outputWidth2 );
+      element.setAttribute( "DeadTime_0_7", m_deadTime1 );
+      element.setAttribute( "DeadTime_8_15", m_deadTime2 );
       element.setAttribute( "MajorityThreshold", m_majorityThreshold );
 
       // Create a new node for the configuration of each channel.

@@ -49,9 +49,9 @@ namespace v812 {
       void setChannel( int value );
 
       /// Get the discriminator threshold for the channel
-      uint8_t getThreshold() const;
+      uint16_t getThreshold() const;
       /// Set the discriminator threshold for the channel
-      void setThreshold( uint8_t value );
+      void setThreshold( uint16_t value );
 
       /// Print the configuration of the channel
       void printConfig( msg::Level level = msg::INFO ) const;
@@ -63,7 +63,7 @@ namespace v812 {
       /// The channel's number
       int m_channel;
       /// Discriminator threshold for the channel
-      uint8_t m_threshold;
+      uint16_t m_threshold;
 
       /// Logger object
       mutable msg::Logger m_logger;
