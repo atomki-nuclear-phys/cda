@@ -74,8 +74,7 @@ namespace v812 {
       bool ok;
       m_channel = element.attribute( "ChannelNumber", "" ).toInt( &ok );
       CHECK( ok );
-      m_threshold =
-         static_cast<uint8_t>(element.attribute( "Threshold", "1" ).toUShort( &ok ));
+      m_threshold = element.attribute( "Threshold", "1" ).toInt( &ok );
       CHECK( ok );
 
       // Print the configuration for debugging.
@@ -92,8 +91,7 @@ namespace v812 {
 
       // Write the channel's configuration.
       element.setAttribute( "ChannelNumber", m_channel );
-      element.setAttribute( "Threshold",
-                            static_cast<unsigned int>(m_threshold) );
+      element.setAttribute( "Threshold", m_threshold );
 
       // Return gracefully.
       return StatusCode::SUCCESS;
@@ -110,12 +108,12 @@ namespace v812 {
       return;
    }
 
-   uint8_t ChannelConfig::getThreshold() const {
+   uint16_t ChannelConfig::getThreshold() const {
 
       return m_threshold;
    }
 
-   void ChannelConfig::setThreshold( uint8_t value ) {
+   void ChannelConfig::setThreshold( uint16_t value ) {
 
       m_threshold = value;
       return;
