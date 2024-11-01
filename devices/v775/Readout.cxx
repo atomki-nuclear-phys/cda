@@ -1,4 +1,3 @@
-// $Id$
 
 // CDA include(s):
 #include "common/errorcheck.h"
@@ -48,7 +47,7 @@ namespace v775 {
       // Set up the acquisition mode:
       static const bool SLIDING_SCALE_ENABLE = false;
       static const bool EMPTY_ENABLE = true;
-      static const bool COUNT_ALL_EVENTS = true;
+      static const bool COUNT_ALL_EVENTS = false;
       CHECK( m_vmeDevice.setAcquisitionMode( SLIDING_SCALE_ENABLE,
                                              m_zeroSuppressionEnabled,
                                              m_overflowSuppressionEnabled,
