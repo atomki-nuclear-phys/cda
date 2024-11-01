@@ -8,6 +8,9 @@
 #include <QCoreApplication>
 #include <QProcessEnvironment>
 
+// CDA include(s):
+#include "common/QStringCompat.h"
+
 // Local include(s):
 #include "PathResolver.h"
 
@@ -54,7 +57,7 @@ namespace daq {
          static const QString separator = ":";
 #endif // QT_ARCH_WINDOW
          QStringList envsplit = envarray.split( separator,
-                                                QString::SkipEmptyParts );
+                                                Qt::SkipEmptyParts );
          for( QStringList::const_iterator element = envsplit.begin();
               element != envsplit.end(); ++element ) {
             REPORT_VERBOSE( tr( "Adding \"%1\" to environment %2" )

@@ -31,6 +31,24 @@ set_target_properties( cdacore PROPERTIES
    VERSION 2.0.0
    SOVERSION 2 )
 
+# Decide how to use the SplitBehaviour enum. The Qt::SplitBehavior enum was
+# introduced in some 5.X version. So let's only check with Qt5 if it already has
+# it. Qt4 will definitely not.
+include( CheckCXXSourceCompiles )
+set( CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} )
+set( CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_COMPILE_OPTIONS_PIC} )
+set( CMAKE_REQUIRED_DEFINITIONS ${Qt5Core_DEFINITIONS} -DQT_NO_VERSION_TAGGING )
+check_cxx_source_compiles( "#include <QString>
+   int main() {
+      Qt::SplitBehavior sb = Qt::KeepEmptyParts;
+      return 0; }"
+   CDA_HAVE_QT_SPLITBEHAVIOR )
+target_compile_definitions( cdacore PUBLIC
+   $<$<BOOL:${CDA_HAVE_QT_SPLITBEHAVIOR}>:CDA_HAVE_QT_SPLITBEHAVIOR> )
+unset( CMAKE_REQUIRED_INCLUDES )
+unset( CMAKE_REQUIRED_FLAGS )
+unset( CMAKE_REQUIRED_DEFINITIONS )
+
 # Use ROOT if it was found:
 if( ROOT_FOUND AND CDA_USE_ROOT )
   target_compile_definitions( cdacore PUBLIC HAVE_ROOT_LIBS )

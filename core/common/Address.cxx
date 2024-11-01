@@ -9,6 +9,7 @@
 #include <QStringList>
 
 // CDA include(s):
+#include "QStringCompat.h"
 #include "../msg/Logger.h"
 
 // Local include(s):
@@ -38,7 +39,7 @@ Address::Address( const QString& address )
    //
    // Split the address string into a host name and a port number:
    //
-   QStringList split = address.split( ":", QString::SkipEmptyParts );
+   QStringList split = address.split( ":", Qt::SkipEmptyParts );
    if( split.size() != 2 ) {
       REPORT_ERROR( tr( "Couldn't decode address: \"%1\"\n"
                         "Setting to 127.0.0.1:50000" ).arg( address ) );
@@ -124,7 +125,7 @@ quint16 Address::getPort() const {
 bool Address::isAddress( const QString& address ) {
 
    // Split the string into an address and a port number:
-   QStringList split = address.split( ":", QString::SkipEmptyParts );
+   QStringList split = address.split( ":", Qt::SkipEmptyParts );
    if( split.size() != 2 ) {
       return false;
    }
