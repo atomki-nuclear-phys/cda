@@ -5,6 +5,7 @@
 
 // CDA include(s):
 #include "common/errorcheck.h"
+#include "common/QStringCompat.h"
 
 // Local include(s):
 #include "AppRunner.h"
@@ -82,7 +83,7 @@ namespace daq {
 
       // Split the options at whitespaces. This is needed for using "execve":
       QStringList optionList = m_options.split( " ",
-                                                QString::SkipEmptyParts );
+                                                Qt::SkipEmptyParts );
       m_process.setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
 
       // Start the process:

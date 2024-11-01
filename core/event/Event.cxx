@@ -18,19 +18,17 @@ namespace {
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
-   class CountBytes :
-      public std::unary_function< ev::Event::Base_t::value_type, void > {
+   class CountBytes {
 
    public:
       /// Constructor initializing the event size variable
       CountBytes()
-         : std::unary_function< ev::Event::Base_t::value_type, void >(),
-           m_size( 0 ) {
+         : m_size( 0 ) {
 
       }
 
       /// Add the size of one event fragment
-      result_type operator() ( const argument_type& obj ) {
+      void operator() ( const ev::Event::Base_t::value_type& obj ) {
          m_size += obj->sizeInBytes();
          return;
       }
