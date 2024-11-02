@@ -67,30 +67,25 @@ namespace glomem {
     */
    bool Crate::displayEvent( const ev::Event& event ) {
 
-      // Access the fragments coming from the different modules that
+      // Loop over the fragments coming from the different modules that
       // are used in data acquisition:
-      const ev::Event::Base_t& fragments = event.getFragments();
-
-      // Loop over the fragments:
-      ev::Event::Base_t::const_iterator frag_itr = fragments.begin();
-      ev::Event::Base_t::const_iterator frag_end = fragments.end();
-      for( ; frag_itr != frag_end; ++frag_itr ) {
+      for( auto& fragment : event.getFragments() ) {
 
          // Find the device that is expecting this event fragment:
          DeviceMap_t::iterator device =
-            m_devices.find( ( *frag_itr )->getModuleID() );
+            m_devices.find( fragment->getModuleID() );
          if( device == m_devices.end() ) {
             REPORT_ERROR( tr( "Failed to assign fragment with "
                               "module ID: %1" )
-                          .arg( ( *frag_itr )->getModuleID() ) );
+                          .arg( fragment->getModuleID() ) );
             return false;
          }
 
          // Give this fragment to the device that we just found:
-         if( ! device->second->displayEvent( *( *frag_itr ), m_hmgr ) ) {
+         if( ! device->second->displayEvent( *fragment, m_hmgr ) ) {
             REPORT_ERROR( tr( "There was a problem displaying the data "
                               "from device with ID: %1" )
-                          .arg( ( *frag_itr )->getModuleID() ) );
+                          .arg( fragment->getModuleID() ) );
             return false;
          }
 

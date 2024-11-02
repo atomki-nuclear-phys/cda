@@ -33,10 +33,10 @@ namespace ev {
 
       setVersion( QDataStream::Qt_4_0 );
 
-      ( * ( QDataStream* ) this ) << ( quint32 ) event.size();
+      ( * ( QDataStream* ) this ) << ( quint32 ) event.getFragments().size();
 
-      for( size_t i = 0; i < event.size(); ++i ) {
-         *this << *( event[ i ] );
+      for( auto& fragment : event.getFragments() ) {
+         *this << *fragment;
       }
 
       return *this;
@@ -70,7 +70,7 @@ namespace ev {
       for( quint32 i = 0; i < nFragments; ++i ) {
          std::unique_ptr< Fragment > fragment( new Fragment() );
          *this >> *fragment;
-         event.push_back( std::move( fragment ) );
+         event.addFragment( std::move( fragment ) );
       }
 
       return *this;

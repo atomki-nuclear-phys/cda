@@ -52,10 +52,8 @@ namespace ev {
          .arg( event.getFragments().size() );
 
       if( event.getFragments().size() ) {
-         Event::Base_t::const_iterator itr = event.getFragments().begin();
-         Event::Base_t::const_iterator end = event.getFragments().end();
-         for( ; itr != end; ++itr ) {
-            *this << *( *itr ) << "\n";
+         for( auto& fragment : event.getFragments() ) {
+            *this << *fragment << "\n";
          }
       } else {
          ( * ( QTextStream* ) this )
