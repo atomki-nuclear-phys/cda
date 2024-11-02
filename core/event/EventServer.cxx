@@ -85,7 +85,7 @@ namespace ev {
       }
 
       // Get the "oldest" event and remove it from the buffer:
-      event = m_events.front();
+      event = std::move(m_events.front());
       m_mutex.lock();
       m_events.erase( m_events.begin() );
       m_mutex.unlock();
@@ -181,7 +181,7 @@ namespace ev {
             //
             if( m_events.size() < m_bufferSize ) {
                m_mutex.lock();
-               m_events.push_back( event );
+               m_events.push_back( std::move( event ) );
                m_mutex.unlock();
             } else {
                if( m_warningTime.secsTo( QTime::currentTime() ) > 2 ) {

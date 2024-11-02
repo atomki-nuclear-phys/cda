@@ -6,6 +6,7 @@
 
 // CDA include(s):
 #include "common/errorcheck.h"
+#include "msg/Sender.h"
 
 // Local include(s):
 #include "Crate.h"
@@ -128,21 +129,36 @@ namespace caen_vme_reader {
       const size_t eventsProcessed =
          m_devices.begin()->second->eventsProcessed();
 
+      // Lambda used in printing the number of events seen / converted by each
+      // device.
+      auto printEvents = [this]( msg::Logger& logger,
+                                 const DeviceMap_t& devices,
+                                 msg::Level level ) {
+         if( msg::Sender::instance()->getMinLevel() <= level ) {
+            for( const auto& itr : devices ) {
+               logger << level
+                      << tr( "Device %1 (%2) processed %3 events" )
+                         .arg( itr.first )
+                         .arg( itr.second->deviceName() )
+                         .arg( itr.second->eventsProcessed() )
+                      << msg::endmsg;
+            }
+         }
+      };
+
       // Check if every device reports the same:
       for( const auto& itr : m_devices ) {
          if( eventsProcessed != itr.second->eventsProcessed() ) {
             m_logger << msg::WARNING
-                     << tr( "First device (%1) reports %2 events" )
-                        .arg( m_devices.begin()->second->deviceName() )
-                        .arg( eventsProcessed ) << std::endl
-                     << tr( "Device %1 reports %2 events" )
-                        .arg( itr.second->deviceName() )
-                        .arg( itr.second->eventsProcessed() ) << msg::endmsg;
+                     << tr( "Devices are not in sync with each other!" )
+                     << msg::endmsg;
+            printEvents( m_logger, m_devices, msg::WARNING );
             return false;
          }
       }
 
       // If yes, then they are in sync:
+      printEvents( m_logger, m_devices, msg::DEBUG );
       return true;
    }
 

@@ -24,30 +24,34 @@ namespace ev {
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     */
-   class CDACORE_EXPORT Event :
-      public std::vector< std::shared_ptr< Fragment > > {
+   class CDACORE_EXPORT Event {
 
    public:
       /// Type of the base class
-      typedef std::vector< std::shared_ptr< Fragment > > Base_t;
+      typedef std::vector< std::unique_ptr< Fragment > > Fragments_t;
 
       /// Default constructor
-      Event();
-      /// Copy constructor
-      Event( const Event& parent );
+      Event() = default;
+      /// Move constructor
+      Event( Event&& parent ) = default;
 
-      /// Copy operator
-      Event& operator= ( const Event& rh );
+      /// Move operator
+      Event& operator= ( Event&& rh ) = default;
 
       /// Get all the event fragments
-      const Base_t& getFragments() const;
+      const Fragments_t& getFragments() const;
       /// Add one more event fragment
       void addFragment( std::unique_ptr< Fragment > fragment );
-      /// Add one more event fragment
-      void push_back( std::unique_ptr< Fragment > fragment );
+
+      /// Clear the event of all its fragments
+      void clear();
 
       /// Get the size of this event in bytes
       uint32_t sizeInBytes() const;
+
+   private:
+      /// Event fragments
+      Fragments_t m_fragments;
 
    }; // class Event
 

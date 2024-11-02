@@ -28,7 +28,7 @@ namespace {
       }
 
       /// Add the size of one event fragment
-      void operator() ( const ev::Event::Base_t::value_type& obj ) {
+      void operator() ( const ev::Event::Fragments_t::value_type& obj ) {
          m_size += obj->sizeInBytes();
          return;
       }
@@ -47,52 +47,20 @@ namespace {
 
 namespace ev {
 
-   Event::Event()
-      : Event::Base_t() {
+   const Event::Fragments_t& Event::getFragments() const {
 
+      return m_fragments;
    }
 
-   Event::Event( const Event& parent )
-      : Event::Base_t( parent ) {
-
-   }
-
-   Event& Event::operator= ( const Event& rh ) {
-
-      Base_t::operator=( rh );
-
-      return *this;
-   }
-
-   /**
-    * This is a backwards compatibility function. Should be removed at one
-    * point, once all the clients have moved to the new interface.
-    *
-    * @returns The payload of the event
-    */
-   const Event::Base_t& Event::getFragments() const {
-
-      return *this;
-   }
-
-   /**
-    * This is a backwards compatibility function. Should be removed at one
-    * point, once all the clients have moved to the new interface.
-    *
-    * @param fragment The event fragment to be added to the event
-    */
    void Event::addFragment( std::unique_ptr< Fragment > fragment ) {
 
-      Base_t::push_back( std::move( fragment ) );
+      m_fragments.push_back( std::move( fragment ) );
       return;
    }
 
-   /**
-    * @param fragment The event fragment to be added to the event
-    */
-   void Event::push_back( std::unique_ptr< Fragment > fragment ) {
+   void Event::clear() {
 
-      Base_t::push_back( std::move( fragment ) );
+      m_fragments.clear();
       return;
    }
 
@@ -101,7 +69,8 @@ namespace ev {
     */
    uint32_t Event::sizeInBytes() const {
 
-      return std::for_each( begin(), end(), CountBytes() ).size();
+      return std::for_each( m_fragments.begin(), m_fragments.end(),\
+                            CountBytes() ).size();
    }
 
 } // namespace ev
