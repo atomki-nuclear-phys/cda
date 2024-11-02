@@ -15,7 +15,7 @@ macro( cda_add_plugin name )
   message( STATUS "Configuring the build of the ${name} plugin" )
 
   # Find Qt:
-  find_package( Qt45 COMPONENTS Core Network Gui Widgets Xml REQUIRED )
+  find_package( Qt456 COMPONENTS Core Network Gui Widgets Xml REQUIRED )
 
   # Generate MOC files automatically:
   if( NOT ARG_NO_AUTOMOC )

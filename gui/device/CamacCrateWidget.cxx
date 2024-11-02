@@ -384,8 +384,13 @@ namespace dev {
       //
       // Get the X and Y coordinates of the double-click:
       //
-      const int x = event->x();
-      const int y = event->y();
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+      const qreal x = event->x();
+      const qreal y = event->y();
+#else
+      const qreal x = event->position().x();
+      const qreal y = event->position().y();
+#endif
 
       //
       // Check whether the double-click happened inside the crate:
@@ -494,8 +499,13 @@ namespace dev {
       //
       // Get the X and Y coordinates of the double-click:
       //
-      const int x = event->x();
-      const int y = event->y();
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+      const qreal x = event->x();
+      const qreal y = event->y();
+#else
+      const qreal x = event->position().x();
+      const qreal y = event->position().y();
+#endif
 
       //
       // Check whether the double-click happened inside the crate:

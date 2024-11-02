@@ -2,6 +2,7 @@
 // Qt include(s):
 #include <QString>
 #include <QStringList>
+#include <QIODevice>
 
 // Local include(s):
 #include "TextStream.h"

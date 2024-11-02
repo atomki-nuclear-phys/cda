@@ -4,6 +4,7 @@
 
 // Qt include(s):
 #include <QDataStream>
+#include <QIODevice>
 
 // Local include(s):
 #include "../common/Export.h"

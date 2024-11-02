@@ -6,7 +6,7 @@
 message( STATUS "Configuring the build of cdacore" )
 
 # Find Qt:
-find_package( Qt45 COMPONENTS Core Network Gui Widgets REQUIRED )
+find_package( Qt456 COMPONENTS Core Network Gui Widgets REQUIRED )
 
 # Optional I/O libraries to use for the build:
 find_package( ROOT )
@@ -26,7 +26,7 @@ cda_add_library( cdacore
    cernlib/*.h root/*.h root/*.icc common/*.h i18n/*.h tclap/*.h
    SOURCES fifo/*.cxx msg/*.cxx event/*.cxx device/*.cxx camac/*.cxx caen/*.cxx
    cernlib/*.cxx root/*.cxx common/*.cxx i18n/*.cxx
-   LINK_LIBRARIES ${Qt45_LIBRARIES} )
+   LINK_LIBRARIES ${Qt456_LIBRARIES} )
 set_target_properties( cdacore PROPERTIES
    VERSION 2.0.0
    SOVERSION 2 )
@@ -38,11 +38,17 @@ include( CheckCXXSourceCompiles )
 set( CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} )
 set( CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_COMPILE_OPTIONS_PIC} )
 set( CMAKE_REQUIRED_DEFINITIONS ${Qt5Core_DEFINITIONS} -DQT_NO_VERSION_TAGGING )
-check_cxx_source_compiles( "#include <QString>
-   int main() {
-      Qt::SplitBehavior sb = Qt::KeepEmptyParts;
-      return 0; }"
-   CDA_HAVE_QT_SPLITBEHAVIOR )
+if( Qt456_VERSION VERSION_LESS 6 )
+   check_cxx_source_compiles( "#include <QString>
+      int main() {
+         Qt::SplitBehavior sb = Qt::KeepEmptyParts;
+         return 0; }"
+      CDA_HAVE_QT_SPLITBEHAVIOR )
+elseif( Qt456_VERSION VERSION_LESS 5 )
+   set( CDA_HAVE_QT_SPLITBEHAVIOR FALSE )
+else()
+   set( CDA_HAVE_QT_SPLITBEHAVIOR TRUE )
+endif()
 target_compile_definitions( cdacore PUBLIC
    $<$<BOOL:${CDA_HAVE_QT_SPLITBEHAVIOR}>:CDA_HAVE_QT_SPLITBEHAVIOR> )
 unset( CMAKE_REQUIRED_INCLUDES )

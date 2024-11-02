@@ -30,7 +30,6 @@ namespace i18n {
    using QT_PREPEND_NAMESPACE( QDir );
    using QT_PREPEND_NAMESPACE( QStringList );
    using QT_PREPEND_NAMESPACE( QFileInfo );
-   using QT_PREPEND_NAMESPACE( QTextCodec );
 
    Loader::Loader( const QString& path )
       : m_path( path ), m_logger( "i18n::Loader" ) {

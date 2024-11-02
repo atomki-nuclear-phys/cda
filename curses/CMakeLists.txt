@@ -13,7 +13,7 @@ if( NOT CURSES_FOUND )
 endif()
 
 # Find Qt:
-find_package( Qt45 COMPONENTS Core REQUIRED )
+find_package( Qt456 COMPONENTS Core REQUIRED )
 
 # Generate MOC files automatically:
 set( CMAKE_AUTOMOC TRUE )
@@ -23,7 +23,7 @@ cda_add_library( cdacurses
    HEADERS msg/*.h
    SOURCES msg/*.cxx
    INCLUDE_DIRS ${CURSES_INCLUDE_DIRS}
-   LINK_LIBRARIES ${CURSES_LIBRARIES} ${Qt45_LIBRARIES} cdacore )
+   LINK_LIBRARIES ${CURSES_LIBRARIES} ${Qt456_LIBRARIES} cdacore )
 set_target_properties( cdacurses PROPERTIES
    VERSION 2.0.0
    SOVERSION 2 )
