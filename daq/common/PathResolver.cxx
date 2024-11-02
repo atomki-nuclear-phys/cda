@@ -19,7 +19,7 @@ namespace daq {
    //
    // Initialise the member variables:
    //
-   std::map< QString, std::list< QString > > PathResolver::m_environment;
+   std::map< QString, std::list< QString > > PathResolver::m_environment{};
    msg::Logger PathResolver::m_logger( "daq::PathResolver" );
 
    /**
@@ -47,6 +47,17 @@ namespace daq {
       } else {
          m_logger << msg::DEBUG << tr( "Caching environment: %1" ).arg( env )
                   << msg::endmsg;
+
+         // For PATH, always consider first the directory that the current
+         // application is in.
+         if( env == "PATH" ) {
+            m_environment[ env ].push_back(
+               QCoreApplication::applicationDirPath() );
+            m_environment[ env ].push_back(
+               QCoreApplication::applicationDirPath() + "/../../../" );
+         }
+
+         // Get the value of the environment variable.
          const QProcessEnvironment procenv =
             QProcessEnvironment::systemEnvironment();
          const QString envarray = procenv.value( env );
@@ -97,37 +108,12 @@ namespace daq {
       }
 
       //
-      // If we didn't find it, and the user is searching in PATH, check
-      // the current application's directory:
-      //
-      if( env == "PATH" ) {
-         // The possible relative locations of the executable:
-         const std::vector< QString > paths = {
-            QCoreApplication::applicationDirPath() + "/" + name,
-            QCoreApplication::applicationDirPath() + "/" + name + ".exe",
-            QCoreApplication::applicationDirPath() + "/../../../" + name
-         };
-         // Look for it:
-         for( const QString& path : paths ) {
-            const QFileInfo finfo( path );
-            if( finfo.exists() && finfo.isExecutable() ) {
-               m_logger << msg::DEBUG
-                        << tr( "\"%1\" found under \"%2\"" )
-                  .arg( name ).arg( path )
-                        << msg::endmsg;
-               return path;
-            }
-         }
-      }
-
-      //
       // If we reached this point then we failed to find the file:
       //
       m_logger << msg::WARNING
                << tr( "Failed to find \"%1\" in environment: %2" )
          .arg( name ).arg( env ) << msg::endmsg;
-
-      return "";
+      return name;
    }
 
 } // namepsace daq
