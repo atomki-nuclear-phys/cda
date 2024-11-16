@@ -1,10 +1,12 @@
-// $Id$
 
 // CDA include(s):
 #include "common/errorcheck.h"
 
 // Local include(s):
 #include "Gui.h"
+
+// System include(s).
+#include <cassert>
 
 namespace v792 {
 
@@ -56,7 +58,7 @@ namespace v792 {
       m_deviceSettingsBox.reset( new QGroupBox( tr( "Device properties" ),
                                                 m_scrollWidget.get() ) );
       m_deviceSettingsBox->setGeometry( QRect( 130, 80,
-                                               WIDGET_WIDTH - 150, 150 ) );
+                                               WIDGET_WIDTH - 150, 175 ) );
 
       m_vmeAddressLabel.reset( new QLabel( tr( "VME Address (hex)" ),
                                            m_deviceSettingsBox.get() ) );
@@ -86,6 +88,17 @@ namespace v792 {
       m_validSuppressionEdit->setGeometry( QRect( 10, 110, 300, 25 ) );
       connect( m_validSuppressionEdit.get(), SIGNAL( toggled( bool ) ),
                this, SLOT( validSuppressionSlot( bool ) ) );
+
+      m_pedestalLabel.reset( new QLabel( tr( "Pedestal" ),
+                                         m_deviceSettingsBox.get() ) );
+      m_pedestalLabel->setGeometry( QRect( 10, 135, 150, 25 ) );
+
+      m_pedestalEdit.reset( new QSpinBox( m_deviceSettingsBox.get() ) );
+      m_pedestalEdit->setGeometry( QRect( 170, 135, 100, 25 ) );
+      m_pedestalEdit->setRange( 0, 255 );
+      m_pedestalEdit->setValue( 100 );
+      connect( m_pedestalEdit.get(), SIGNAL( valueChanged( int ) ),
+               this, SLOT( pedestalSlot( int ) ) );
 
       //
       // Create the input channel settings:
@@ -183,6 +196,14 @@ namespace v792 {
       return;
    }
 
+   void Gui::pedestalSlot( int value ) {
+
+      assert( value >= 0 );
+      assert( value <= 255 );
+      m_pedestal = static_cast<uint8_t>(value);
+      return;
+   }
+
    void Gui::channelEnabledSlot( int channel, bool on ) {
 
       if( on ) {
@@ -233,6 +254,7 @@ namespace v792 {
       m_zeroSuppressionEdit->setChecked( m_zeroSuppressionEnabled );
       m_overflowSuppressionEdit->setChecked( m_overflowSuppressionEnabled );
       m_validSuppressionEdit->setChecked( m_validSuppressionEnabled );
+      m_pedestalEdit->setValue( m_pedestal );
 
       // Set the channel properties:
       for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {

@@ -1,5 +1,4 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DEVICES_V862_GUI_H
 #define CDA_DEVICES_V862_GUI_H
 
@@ -14,6 +13,7 @@
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QSpinBox>
 
 // CDA include(s):
 #include "device/CaenVmeGui.h"
@@ -31,9 +31,6 @@ namespace v862 {
    /// V862 device.
    ///
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-   ///
-   /// $Revision$
-   /// $Date$
    ///
    class Gui : public dev::CaenVmeGui,
          public virtual Device {
@@ -58,6 +55,8 @@ namespace v862 {
       void overflowSuppressionSlot( bool value );
       /// Slot for valid suppression changes
       void validSuppressionSlot( bool value );
+      /// Slot for pedestal changes
+      void pedestalSlot( int value );
 
       /// Slot handling changes to channel enablement
       void channelEnabledSlot( int channel, bool on );
@@ -98,6 +97,10 @@ namespace v862 {
       std::unique_ptr< QCheckBox > m_overflowSuppressionEdit;
       /// Valid suppression editor
       std::unique_ptr< QCheckBox > m_validSuppressionEdit;
+      /// Pedestal label
+      std::unique_ptr< QLabel > m_pedestalLabel;
+      /// Pedestal editor
+      std::unique_ptr< QSpinBox > m_pedestalEdit;
 
       /// Channel settings box
       std::unique_ptr< QGroupBox > m_channelSettingsBox;
