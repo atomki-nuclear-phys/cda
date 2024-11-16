@@ -65,6 +65,9 @@ namespace v792 {
                                          BLOCK_END_ENABLE,
                                          ALIGN_64_ENABLE ) );
 
+      // Set the pedestal for the device.
+      CHECK( m_vmeDevice.setPedestal( m_pedestal ) );
+
       // Return gracefully:
       return StatusCode::SUCCESS;
    }
