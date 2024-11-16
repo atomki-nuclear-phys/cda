@@ -1,4 +1,3 @@
-// $Id$
 
 // Qt include(s):
 #include <QtCore/QString>
@@ -17,6 +16,7 @@ namespace v862 {
       : m_vmeAddress( 0 ), m_zeroSuppressionEnabled( false ),
         m_overflowSuppressionEnabled( false ),
         m_validSuppressionEnabled( false ),
+        m_pedestal( 100 ),
         m_channels(),
         m_logger( "v862::Device" ) {
 
@@ -37,6 +37,7 @@ namespace v862 {
       input >> m_zeroSuppressionEnabled;
       input >> m_overflowSuppressionEnabled;
       input >> m_validSuppressionEnabled;
+      input >> m_pedestal;
       quint32 number_of_channels;
       input >> number_of_channels;
 
@@ -81,6 +82,7 @@ namespace v862 {
       output << m_zeroSuppressionEnabled;
       output << m_overflowSuppressionEnabled;
       output << m_validSuppressionEnabled;
+      output << m_pedestal;
 
       // Count the number of configured channels:
       quint32 number_of_channels = 0;
@@ -130,6 +132,10 @@ namespace v862 {
       // Read the zero suppression flag:
       m_validSuppressionEnabled = element.attribute( "ValidSuppression",
                                                      "0" ).toInt( &ok );
+      CHECK( ok );
+
+      // Read the pedestal.
+      m_pedestal = element.attribute( "Pedestal", "100" ).toInt( &ok );
       CHECK( ok );
 
       // Print the device level configuration:
@@ -183,6 +189,7 @@ namespace v862 {
       element.setAttribute( "OverflowSuppression",
                             m_overflowSuppressionEnabled );
       element.setAttribute( "ValidSuppression", m_validSuppressionEnabled );
+      element.setAttribute( "Pedestal", m_pedestal );
 
       // Create a new node for the configuration of each channel:
       for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {

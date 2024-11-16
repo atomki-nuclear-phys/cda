@@ -1,11 +1,11 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
 #ifndef CDA_DEVICES_V862_DEVICE_H
 #define CDA_DEVICES_V862_DEVICE_H
 
 // System include(s):
 #include <memory>
 #include <array>
+#include <cinttypes>
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
@@ -28,9 +28,6 @@ namespace v862 {
    /// device.
    ///
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-   ///
-   /// $Revision$
-   /// $Date$
    ///
    class Device : public virtual dev::IDevice {
 
@@ -106,6 +103,8 @@ namespace v862 {
       bool m_overflowSuppressionEnabled;
       /// Flag enabling/disabling valid data suppression in the readout
       bool m_validSuppressionEnabled;
+      /// Pedestal for all the channels
+      uint8_t m_pedestal;
 
       /// Configuration of the channels of the device
       std::array< std::unique_ptr< ChannelConfig >,
