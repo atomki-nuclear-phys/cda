@@ -288,13 +288,21 @@ namespace moni {
 
    void Histogram::mousePressEvent( QMouseEvent* event ) {
 
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+      const qreal event_x = event->x();
+      const qreal event_y = event->y();
+#else
+      const qreal event_x = event->position().x();
+      const qreal event_y = event->position().y();
+#endif
+
       // If it's the left button, enter zooming mode:
       if( event->button() == Qt::LeftButton ) {
          // Check that the cursor is around the X axis:
-         if( ( event->y() < ( height() - X_AXIS_SPACING - 20 ) ) ||
-             ( event->y() > ( height() - X_AXIS_SPACING + 20 ) ) ||
-             ( event->x() < Y_AXIS_SPACING ) ||
-             ( event->x() > width() - 20 ) ) {
+         if( ( event_y < ( height() - X_AXIS_SPACING - 20 ) ) ||
+             ( event_y > ( height() - X_AXIS_SPACING + 20 ) ) ||
+             ( event_x < Y_AXIS_SPACING ) ||
+             ( event_x > width() - 20 ) ) {
             return;
          }
          // Check that the X axis is drawn in linear mode:
@@ -303,7 +311,7 @@ namespace moni {
          }
          // Enter zooming mode:
          m_isZooming = true;
-         m_zoomStart = event->x() - Y_AXIS_SPACING;
+         m_zoomStart = event_x - Y_AXIS_SPACING;
          m_zoomCurrent = m_zoomStart;
          update();
          return;
@@ -396,7 +404,7 @@ namespace moni {
                this, SLOT( reset() ) );
 
       // Display the menu under the cursor:
-      menu->exec( mapToGlobal( QPoint( event->x(), event->y() ) ) );
+      menu->exec( mapToGlobal( QPoint( event_x, event_y ) ) );
 
       return;
    }
@@ -421,13 +429,21 @@ namespace moni {
       // Leave zooming mode:
       m_isZooming = false;
 
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+      const qreal event_x = event->x();
+      const qreal event_y = event->y();
+#else
+      const qreal event_x = event->position().x();
+      const qreal event_y = event->position().y();
+#endif
+
       // Decide on the final point of the zoom:
-      if( event->x() > ( width() - 20 ) ) {
+      if( event_x > ( width() - 20 ) ) {
          m_zoomCurrent = width() - 20;
-      } else if( event->x() < Y_AXIS_SPACING ) {
+      } else if( event_x < Y_AXIS_SPACING ) {
          m_zoomCurrent = Y_AXIS_SPACING;
       } else {
-         m_zoomCurrent = event->x() - Y_AXIS_SPACING;
+         m_zoomCurrent = event_x - Y_AXIS_SPACING;
       }
 
       // Check that the zoom distance makes sense:
@@ -469,13 +485,21 @@ namespace moni {
          return;
       }
 
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+      const qreal event_x = event->x();
+      const qreal event_y = event->y();
+#else
+      const qreal event_x = event->position().x();
+      const qreal event_y = event->position().y();
+#endif
+
       // Decide on the final point of the zoom:
-      if( event->x() > ( width() - 20 ) ) {
+      if( event_x > ( width() - 20 ) ) {
          m_zoomCurrent = width() - 20;
-      } else if( event->x() < Y_AXIS_SPACING ) {
+      } else if( event_x < Y_AXIS_SPACING ) {
          m_zoomCurrent = Y_AXIS_SPACING;
       } else {
-         m_zoomCurrent = event->x() - Y_AXIS_SPACING;
+         m_zoomCurrent = event_x - Y_AXIS_SPACING;
       }
 
       update();

@@ -9,7 +9,7 @@ macro( cda_add_console_executable name )
   message( STATUS "Configuring the build of console application ${name}" )
 
   # Find Qt:
-  find_package( Qt45 COMPONENTS Core Xml REQUIRED )
+  find_package( Qt456 COMPONENTS Core Xml REQUIRED )
 
   # Collect the source files of the executable:
   file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
@@ -36,7 +36,7 @@ macro( cda_add_console_executable name )
 
   # Build the executable:
   add_executable( ${name} ${headers} ${sources} ${resources} )
-  target_link_libraries( ${name} ${Qt45_LIBRARIES} cdacore cdadaq ${plugins} )
+  target_link_libraries( ${name} ${Qt456_LIBRARIES} cdacore cdadaq ${plugins} )
   unset( plugins )
   unset( resources )
   set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
@@ -58,11 +58,8 @@ macro( cda_add_gui_executable name )
   # Tell the user what's happening:
   message( STATUS "Configuring the build of GUI application ${name}" )
 
-  # Build an application bundle for MacOS X:
-  include( BundleUtilities )
-
   # Find Qt:
-  find_package( Qt45 COMPONENTS Core Gui Widgets Xml REQUIRED )
+  find_package( Qt456 COMPONENTS Core Gui Widgets Xml REQUIRED )
 
   # Collect the source files of the executable:
   file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
@@ -96,11 +93,11 @@ macro( cda_add_gui_executable name )
   elseif( WIN32 )
      set( OS_BUNDLE WIN32 )
   endif()
-  
+
   # Build the executable:
   add_executable( ${name} ${OS_BUNDLE} ${headers} ${sources}
     ${resources} ${ARG_ICON} )
-  target_link_libraries( ${name} ${Qt45_LIBRARIES} cdacore cdadaq cdagui
+  target_link_libraries( ${name} ${Qt456_LIBRARIES} cdacore cdadaq cdagui
     ${plugins} )
   unset( plugins )
   unset( resources )
@@ -138,7 +135,7 @@ macro( cda_add_terminal_executable name )
    message( STATUS "Configuring the build of terminal application ${name}" )
 
    # Find Qt:
-   find_package( Qt45 COMPONENTS Core REQUIRED )
+   find_package( Qt456 COMPONENTS Core REQUIRED )
 
    # External(s) needed:
    find_package( Curses REQUIRED )
@@ -149,7 +146,7 @@ macro( cda_add_terminal_executable name )
 
    # Build the executable:
    add_executable( ${name} ${headers} ${sources} )
-   target_link_libraries( ${name} ${CURSES_LIBRARIES} ${Qt45_LIBRARIES}
+   target_link_libraries( ${name} ${CURSES_LIBRARIES} ${Qt456_LIBRARIES}
       cdacore cdadaq cdacurses )
    set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
 
