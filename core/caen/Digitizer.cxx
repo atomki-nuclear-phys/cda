@@ -574,7 +574,7 @@ namespace caen {
          break;
       }
 
-      return static_cast< ConnectionType >( 1000 ); 
+      return static_cast< ConnectionType >( 1000 );
    }
 
    /**
@@ -1203,7 +1203,7 @@ namespace caen {
 #ifdef HAVE_CAEN_DIGITIZER_LIBS
       CHECK( CAEN_DGTZ_SetPostTriggerSize( m_handle, percent ) );
 #else
-      REPORT_VERBOSE( tr( "Post trigger size set to %1\%" )
+      REPORT_VERBOSE( tr( "Post trigger size set to %1 percent" )
                       .arg( percent ) );
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 

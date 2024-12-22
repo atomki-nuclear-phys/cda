@@ -27,7 +27,7 @@
 
 // Local include(s):
 #include "QtMonitoringWindow.h"
-#include "../win32/plugins.h"
+#include "../common/plugins.h"
 
 int main( int argc, char* argv[] ) {
 
