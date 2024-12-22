@@ -79,7 +79,7 @@ namespace v812 {
          if( ! m_channels[ i ] ) {
             continue;
          }
-         CHECK( bus.write( m_vmeAddress + i * 0x2,
+         CHECK( bus.write( static_cast<unsigned int>(m_vmeAddress + i * 0x2),
                            m_channels[ i ]->getThreshold() ) );
          m_logger << msg::INFO << tr( "  - Channel %1: %2" ).arg( i, 2 )
                   .arg( m_channels[ i ]->getThreshold() )
