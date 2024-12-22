@@ -1,7 +1,6 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id$
-#ifndef CDA_APP_WIN32_PLUGINS_H
-#define CDA_APP_WIN32_PLUGINS_H
+#ifndef CDA_APPS_COMMON_PLUGINS_H
+#define CDA_APPS_COMMON_PLUGINS_H
 
 // Qt include(s):
 #include <QtCore/QtPlugin>
@@ -39,4 +38,4 @@ Q_IMPORT_PLUGIN( V812Factory )
 
 #endif // QT_VERSION
 
-#endif // CDA_APP_WIN32_PLUGINS_H
+#endif // CDA_APPS_COMMON_PLUGINS_H

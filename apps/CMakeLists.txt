@@ -36,7 +36,8 @@ macro( cda_add_console_executable name )
 
   # Build the executable:
   add_executable( ${name} ${headers} ${sources} ${resources} )
-  target_link_libraries( ${name} ${Qt456_LIBRARIES} cdacore cdadaq ${plugins} )
+  target_link_libraries( ${name} ${Qt456_LIBRARIES} cdacore cdadaq ${plugins}
+    cdaapps )
   unset( plugins )
   unset( resources )
   set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
@@ -98,7 +99,7 @@ macro( cda_add_gui_executable name )
   add_executable( ${name} ${OS_BUNDLE} ${headers} ${sources}
     ${resources} ${ARG_ICON} )
   target_link_libraries( ${name} ${Qt456_LIBRARIES} cdacore cdadaq cdagui
-    ${plugins} )
+    ${plugins} cdaapps )
   unset( plugins )
   unset( resources )
   unset( OS_BUNDLE )
@@ -147,7 +148,7 @@ macro( cda_add_terminal_executable name )
    # Build the executable:
    add_executable( ${name} ${headers} ${sources} )
    target_link_libraries( ${name} ${CURSES_LIBRARIES} ${Qt456_LIBRARIES}
-      cdacore cdadaq cdacurses )
+      cdacore cdadaq cdacurses cdaapps )
    set_property( TARGET ${name} PROPERTY FOLDER "apps/${name}" )
 
    # Group its source files:
@@ -157,6 +158,9 @@ macro( cda_add_terminal_executable name )
    install( TARGETS ${name} DESTINATION bin )
 
 endmacro( cda_add_terminal_executable )
+
+# Build the common static library for the applications.
+add_subdirectory( common )
 
 # Build the console application(s):
 add_subdirectory( cda-caen-reader )

@@ -239,6 +239,16 @@ namespace conf {
       // Parse the file as an XML document:
       //
       QDomDocument doc;
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+      const auto result = doc.setContent( &configFile );
+      if( ! result ) {
+         REPORT_ERROR( tr( "Error in parsing \"%1\"\n"
+                           "  Error message: %2\n"
+                           "  Error line   : %3\n"
+                           "  Error column : %4" )
+                       .arg( m_configFileName ).arg( result.errorMessage )
+                       .arg( result.errorLine ).arg( result.errorColumn ) );
+#else
       QString errorMsg;
       int errorLine, errorColumn;
       if( ! doc.setContent( &configFile, false, &errorMsg, &errorLine,
@@ -249,6 +259,7 @@ namespace conf {
                            "  Error column : %4" )
                        .arg( m_configFileName ).arg( errorMsg )
                        .arg( errorLine ).arg( errorColumn ) );
+#endif
          return false;
       } else {
          REPORT_VERBOSE( tr( "Successfully parsed: %1" )

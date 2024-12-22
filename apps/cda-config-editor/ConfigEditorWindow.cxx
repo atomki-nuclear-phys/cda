@@ -379,6 +379,23 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    // Read the file's contents into XML format:
    //
    QDomDocument doc;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+   const auto result = doc.setContent( &config_file );
+   if( ! result ) {
+      REPORT_ERROR( tr( "Error in parsing \"%1\"\n"
+                        "  Error message: %2\n"
+                        "  Error line   : %3\n"
+                        "  Error column : %4" )
+                    .arg( filename ).arg( result.errorMessage )
+                    .arg( result.errorLine ).arg( result.errorColumn ) );
+      QMessageBox::critical( this, tr( "XML error" ),
+                             tr( "There is some problem with the format of the "
+                                 "input file.\n\n "
+                                 "Error message: %1\n"
+                                 "Error line: %2\n"
+                                 "Error column: %3" ).arg( result.errorMessage )
+                             .arg( result.errorLine ).arg( result.errorColumn ) );
+#else
    QString errorMsg;
    int errorLine, errorColumn;
    if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
@@ -396,6 +413,7 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
                                  "Error line: %2\n"
                                  "Error column: %3" ).arg( errorMsg )
                              .arg( errorLine ).arg( errorColumn ) );
+#endif
       return;
    } else {
       m_logger << msg::DEBUG
@@ -408,7 +426,7 @@ void ConfigEditorWindow::readXMLConfig( const QString& filename ) {
    //
    const QDomElement work = doc.documentElement();
    if( m_camacEdit->canRead( work ) ) {
-      if( ! m_camacEdit->readConfig( work ) ) { 
+      if( ! m_camacEdit->readConfig( work ) ) {
          REPORT_ERROR( tr( "Failed to read CAMAC configuration file!" ) );
          QMessageBox::critical( this, tr( "CAMAC configuration problem" ),
                                 tr( "Failed to read CAMAC configuration "
