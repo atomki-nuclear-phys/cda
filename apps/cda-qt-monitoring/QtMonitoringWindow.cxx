@@ -1,4 +1,3 @@
-// $Id$
 
 // Qt include(s):
 #include <QSpinBox>
@@ -27,6 +26,7 @@
 
 // Local include(s):
 #include "QtMonitoringWindow.h"
+#include "../common/readConfig.h"
 
 /**
  * The constructor creates the layout of the window, and connects up the various
@@ -237,57 +237,10 @@ void QtMonitoringWindow::processEvents() {
 
 bool QtMonitoringWindow::readXMLConfig( const QString& filename ) {
 
-   //
-   // Open the configuration file:
-   //
-   QFile config_file( filename );
-   if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-      REPORT_ERROR( tr( "The specified configuration file (\"%1\")"
-                        " could not be opened!" ).arg( filename ) );
-      QMessageBox::critical( this, tr( "File not opened" ),
-                             tr( "The specified configuration file (\"%1\")"
-                                 " could not be opened!" ).arg( filename ) );
-      return false;
-   } else {
-      REPORT_VERBOSE( tr( "Opened file: %1" ).arg( filename ) );
-   }
-
-   //
-   // Read the file's contents into XML format:
-   //
-   QDomDocument doc;
-   QString errorMsg;
-   int errorLine, errorColumn;
-   if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
-                         &errorColumn ) ) {
-      REPORT_ERROR( tr( "Error in parsing \"%1\"\n"
-                        "  Error message: %2\n"
-                        "  Error line   : %3\n"
-                        "  Error column : %4" )
-                    .arg( filename ).arg( errorMsg )
-                    .arg( errorLine ).arg( errorColumn ) );
-      QMessageBox::critical( this, tr( "XML error" ),
-                             tr( "There is some problem with the format of the "
-                                 "input file.\n\n "
-                                 "Error message: %1\n"
-                                 "Error line: %2\n"
-                                 "Error column: %3" ).arg( errorMsg )
-                             .arg( errorLine ).arg( errorColumn ) );
-      return false;
-   } else {
-      m_logger << msg::DEBUG
-               << tr( "Successfully parsed: %1" ).arg( filename )
-               << msg::endmsg;
-   }
-
-   //
-   // Let the appropriate object read the configuration:
-   //
-   const QDomElement work = doc.documentElement();
-   if( ! readConfig( work ) ) {
-      REPORT_ERROR( tr( "Failed to read configuration file!" ) );
-      QMessageBox::critical( this, tr( "Configuration problem" ),
-                             tr( "Failed to read configuration file!" ) );
+   // Read the configuration.
+   if(apps::readConfig(filename, *this).isFailure()) {
+      REPORT_ERROR( tr( "Couldn't read configuration from %1" )
+                    .arg( filename ) );
       return false;
    }
 

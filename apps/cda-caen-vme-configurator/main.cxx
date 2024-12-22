@@ -8,10 +8,7 @@
 
 // Qt include(s).
 #include <QtCore/QCoreApplication>
-#include <QtCore/QFile>
 #include <QtCore/QString>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 
 // CDA include(s).
 #include "CDAVersion.h"
@@ -25,7 +22,8 @@
 
 // Local include(s).
 #include "Crate.h"
-#include "../win32/plugins.h"
+#include "../common/plugins.h"
+#include "../common/readConfig.h"
 
 /// Description for the executable
 static const char* DESCRIPTION =
@@ -117,94 +115,13 @@ int main( int argc, char* argv[] ) {
    caen_vme_configurator::Crate crate;
    crate.setLoader( dev::Loader::instance() );
 
-   // Decide how to read the configuration.
-   if( Address::isAddress( config.getValue().c_str() ) ) {
-
-      // Read the configuration data from the specified address.
-      conf::ConfReader reader;
-      if( ! reader.readFrom( Address( config.getValue().c_str() ) ) ) {
-         logger << msg::FATAL
-                << qApp->translate( APP_NAME,
-                                    "Couldn't read configuration from "
-                                    "address: %1" )
-                   .arg( config.getValue().c_str() )
-                << msg::endmsg;
-         return 1;
-      }
-
-      // Initialise the crate object from the buffer.
-      if( ! crate.readConfig( reader.buffer() ).isSuccess() ) {
-         logger << msg::FATAL
-                << qApp->translate( APP_NAME,
-                                    "Couldn't process configuration "
-                                    "coming from address: %1" )
-                   .arg( config.getValue().c_str() )
-                << msg::endmsg;
-         return 1;
-      } else {
-         logger << msg::INFO
-                << qApp->translate( APP_NAME,
-                                    "Read the configuration from: %1" )
-                   .arg( config.getValue().c_str() )
-                << msg::endmsg;
-      }
-
-   } else {
-
-      // Open the configuration file.
-      QFile config_file( config.getValue().c_str() );
-      if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-         logger << msg::FATAL
-                << qApp->translate( APP_NAME,
-                                    "The specified configuration file "
-                                    "(\"%1\") could not be opened!" )
-                   .arg( config.getValue().c_str() )
-                << msg::endmsg;
-         return 1;
-      }
-
-      // Read the file's contents as an XML.
-      QDomDocument doc;
-      QString errorMsg;
-      int errorLine, errorColumn;
-      if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
-                            &errorColumn ) ) {
-         logger << msg::FATAL
-                << qApp->translate( APP_NAME,
-                                    "Error in parsing \"%1\"\n"
-                                    "  Error message: %2\n"
-                                    "  Error line   : %3\n"
-                                    "  Error column : %4" )
-                   .arg( config.getValue().c_str() ).arg( errorMsg )
-                   .arg( errorLine ).arg( errorColumn )
-                << msg::endmsg;
-         return 1;
-      } else {
-         logger << msg::DEBUG
-                << qApp->translate( APP_NAME,
-                                    "Successfully parsed: %1" )
-                   .arg( config.getValue().c_str() )
-                << msg::endmsg;
-      }
-
-      // Initialise a Crate object with this configuration.
-      QDomElement work = doc.documentElement();
-      if( ! crate.readConfig( work ).isSuccess() ) {
-         logger << msg::FATAL
-                << qApp->translate( APP_NAME,
-                                    "Failed to read configuration file!\n"
-                                    "See previous messages for more "
-                                    "information..." )
-                << msg::endmsg;
-         return 1;
-      } else {
-         logger << msg::INFO
-                << qApp->translate( APP_NAME,
-                                    "Read the configuration from: %1" )
-                   .arg( config.getValue().c_str() )
-                << msg::endmsg;
-      }
-
+   // Read the configuration.
+   if(apps::readConfig(config.getValue().c_str(), crate).isFailure()) {
+      logger << msg::FATAL
+             << qApp->translate(APP_NAME,
+                              "Couldn't read the configuration!")
+             << msg::endmsg;
+      return 1;
    }
 
    // Configure all the VME devices.

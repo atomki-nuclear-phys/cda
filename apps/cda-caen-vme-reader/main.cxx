@@ -1,4 +1,3 @@
-// $Id$
 
 // System include(s):
 #include <cstdlib>
@@ -9,10 +8,7 @@
 
 // Qt include(s):
 #include <QtCore/QCoreApplication>
-#include <QtCore/QFile>
 #include <QtCore/QString>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 
 // CDA include(s):
 #include "CDAVersion.h"
@@ -30,7 +26,8 @@
 
 // Local include(s):
 #include "Crate.h"
-#include "../win32/plugins.h"
+#include "../common/plugins.h"
+#include "../common/readConfig.h"
 
 /// Function shutting down the data acquisition
 void shutDown( int );
@@ -146,105 +143,14 @@ int main( int argc, char* argv[] ) {
    g_crate->setLoader( dev::Loader::instance() );
 
    //
-   // Decide how to read the configuration:
+   // Read the configuration.
    //
-   if( Address::isAddress( config.getValue().c_str() ) ) {
-
-      //
-      // Read the configuration data from the specified address:
-      //
-      conf::ConfReader reader;
-      if( ! reader.readFrom( Address( config.getValue().c_str() ) ) ) {
-         g_logger << msg::FATAL
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "Couldn't read configuration from "
-                                      "address: %1" )
-                     .arg( config.getValue().c_str() )
-                  << msg::endmsg;
-         return 1;
-      }
-
-      //
-      // Initialise the crate object from the buffer:
-      //
-      if( ! g_crate->readConfig( reader.buffer() ).isSuccess() ) {
-         g_logger << msg::FATAL
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "Couldn't process configuration "
-                                      "coming from address: %1" )
-                     .arg( config.getValue().c_str() )
-                  << msg::endmsg;
-         return 1;
-      } else {
-         g_logger << msg::INFO
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "Read the configuration from: %1" )
-                     .arg( config.getValue().c_str() )
-                  << msg::endmsg;
-      }
-
-   } else {
-
-      //
-      // Open the configuration file:
-      //
-      QFile config_file( config.getValue().c_str() );
-      if( ! config_file.open( QFile::ReadOnly | QFile::Text ) ) {
-         g_logger << msg::FATAL
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "The specified configuration file "
-                                      "(\"%1\") could not be opened!" )
-                     .arg( config.getValue().c_str() )
-                  << msg::endmsg;
-         return 1;
-      }
-
-      //
-      // Read the file's contents into XML format:
-      //
-      QDomDocument doc;
-      QString errorMsg;
-      int errorLine, errorColumn;
-      if( ! doc.setContent( &config_file, false, &errorMsg, &errorLine,
-                            &errorColumn ) ) {
-         g_logger << msg::FATAL
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "Error in parsing \"%1\"\n"
-                                      "  Error message: %2\n"
-                                      "  Error line   : %3\n"
-                                      "  Error column : %4" )
-                     .arg( config.getValue().c_str() ).arg( errorMsg )
-                     .arg( errorLine ).arg( errorColumn )
-                  << msg::endmsg;
-         return 1;
-      } else {
-         g_logger << msg::DEBUG
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "Successfully parsed: %1" )
-                     .arg( config.getValue().c_str() )
-                  << msg::endmsg;
-      }
-
-      //
-      // Initialise a Crate object with this configuration:
-      //
-      QDomElement work = doc.documentElement();
-      if( ! g_crate->readConfig( work ).isSuccess() ) {
-         g_logger << msg::FATAL
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "Failed to read configuration file!\n"
-                                      "See previous messages for more "
-                                      "information..." )
-                  << msg::endmsg;
-         return 1;
-      } else {
-         g_logger << msg::INFO
-                  << qApp->translate( "cda-caen-vme-reader",
-                                      "Read the configuration from: %1" )
-            .arg( config.getValue().c_str() )
-                  << msg::endmsg;
-      }
-
+   if(apps::readConfig(config.getValue().c_str(), *g_crate).isFailure()) {
+      g_logger << msg::FATAL
+               << qApp->translate("cda-caen-vme-reader",
+                                  "Couldn't read the configuration!")
+               << msg::endmsg;
+      return 1;
    }
 
    //

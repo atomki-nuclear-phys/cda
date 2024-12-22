@@ -13,7 +13,7 @@
 #include "config/ConfServer.h"
 
 // Local include(s):
-#include "../win32/plugins.h"
+#include "../common/plugins.h"
 
 /// Description printed to the console
 static const char* description =
