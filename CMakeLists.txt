@@ -75,6 +75,7 @@ set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 add_subdirectory( core )
 add_subdirectory( daq )
 add_subdirectory( gui )
+add_subdirectory( tui )
 add_subdirectory( curses )
 
 # Build the device plugins:
