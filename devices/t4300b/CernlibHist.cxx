@@ -4,82 +4,80 @@
 #include <QtCore/QtGlobal>
 
 // CDA include(s):
-#include "event/Fragment.h"
 #include "cernlib/HistMgr.h"
+#include "event/Fragment.h"
 
 // Local include(s):
 #include "CernlibHist.h"
 
 namespace t4300b {
 
-   CernlibHist::CernlibHist()
-      : m_logger( "t4300b::CernlibHist" ) {
+CernlibHist::CernlibHist() : m_logger("t4300b::CernlibHist") {
 
-      // Clear the histogram table:
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         m_histTable[ i ] = 0;
+   // Clear the histogram table:
+   for (int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i) {
+      m_histTable[i] = 0;
+   }
+}
+
+bool CernlibHist::initialize(cernlib::HistMgr& hmgr) {
+
+   m_logger << msg::DEBUG << tr("Initialising histograms") << msg::endmsg;
+
+   // Loop over all configured subaddresses:
+   for (int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i) {
+      if (m_channels[i]) {
+
+         // Book the histogram and register it in the ID table:
+         m_histTable[i] = hmgr.book_1d(tr("%1 (%2 slot %3 channel %4)")
+                                           .arg(m_channels[i]->getName())
+                                           .arg(deviceName())
+                                           .arg(getID())
+                                           .arg(i)
+                                           .toLatin1()
+                                           .constData(),
+                                       m_channels[i]->getNumberOfChannels(),
+                                       m_channels[i]->getLowerBound(),
+                                       m_channels[i]->getUpperBound());
+
+         m_logger << msg::VERBOSE
+                  << tr("Created histogram %1 with name: \"%2\"")
+                         .arg(m_histTable[i])
+                         .arg(m_channels[i]->getName())
+                  << msg::endmsg;
       }
    }
 
-   bool CernlibHist::initialize( cernlib::HistMgr& hmgr ) {
+   return true;
+}
 
-      m_logger << msg::DEBUG
-               << tr( "Initialising histograms" )
-               << msg::endmsg;
+bool CernlibHist::displayEvent(const ev::Fragment& fragment,
+                               const cernlib::HistMgr& hmgr) const {
 
-      // Loop over all configured subaddresses:
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ] ) {
+   // Access the data words:
+   const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
-            // Book the histogram and register it in the ID table:
-            m_histTable[ i ] =
-               hmgr.book_1d( tr( "%1 (%2 slot %3 channel %4)" )
-                             .arg( m_channels[ i ]->getName() )
-                             .arg( deviceName() )
-                             .arg( getID() ).arg( i ).toLatin1().constData(),
-                             m_channels[ i ]->getNumberOfChannels(),
-                             m_channels[ i ]->getLowerBound(),
-                             m_channels[ i ]->getUpperBound() );
+   // Loop over all data words in the event fragment:
+   ev::Fragment::Payload_t::const_iterator dword_itr = dataWords.begin();
+   ev::Fragment::Payload_t::const_iterator dword_end = dataWords.end();
+   for (; dword_itr != dword_end; ++dword_itr) {
 
-            m_logger << msg::VERBOSE
-                     << tr( "Created histogram %1 with name: \"%2\"" )
-               .arg( m_histTable[ i ] ).arg( m_channels[ i ]->getName() )
-                     << msg::endmsg;
+      // Decode the data word:
+      const int subaddress = (*dword_itr >> 24) & 0xff;
+      const unsigned int data = (*dword_itr & 0xffffff);
 
-         }
+      // Check that the decoded information makes sense:
+      if (!((subaddress >= 0) && (subaddress < NUMBER_OF_SUBADDRESSES) &&
+            m_channels[subaddress])) {
+         REPORT_ERROR(tr("Received data word from unknown channel"));
+         return false;
       }
 
-      return true;
+      // Fill the histogram:
+      hmgr.fill_1d(m_histTable[subaddress], (double)data, 1.);
    }
 
-   bool CernlibHist::displayEvent( const ev::Fragment& fragment,
-                                   const cernlib::HistMgr& hmgr ) const {
+   return true;
+}
 
-      // Access the data words:
-      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
-
-      // Loop over all data words in the event fragment:
-      ev::Fragment::Payload_t::const_iterator dword_itr = dataWords.begin();
-      ev::Fragment::Payload_t::const_iterator dword_end = dataWords.end();
-      for( ; dword_itr != dword_end; ++dword_itr ) {
-
-         // Decode the data word:
-         const int subaddress    = ( *dword_itr >> 24 ) & 0xff;
-         const unsigned int data = ( *dword_itr & 0xffffff );
-
-         // Check that the decoded information makes sense:
-         if( ! ( ( subaddress >= 0 ) &&
-                 ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
-                 m_channels[ subaddress ] ) ) {
-            REPORT_ERROR( tr( "Received data word from unknown channel" ) );
-            return false;
-         }
-
-         // Fill the histogram:
-         hmgr.fill_1d( m_histTable[ subaddress ], ( double ) data, 1. );
-      }
-
-      return true;
-   }
-
-} // namespace t4300b
+}  // namespace t4300b

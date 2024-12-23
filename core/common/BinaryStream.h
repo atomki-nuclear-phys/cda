@@ -16,8 +16,8 @@
 #include "Export.h"
 
 // Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QIODevice )
-QT_FORWARD_DECLARE_CLASS( QByteArray )
+QT_FORWARD_DECLARE_CLASS(QIODevice)
+QT_FORWARD_DECLARE_CLASS(QByteArray)
 
 /**
  *  @short Binary stream serialising Address objects
@@ -31,16 +31,16 @@ class CDACORE_EXPORT BinaryStream : public QDataStream {
 
 public:
    /// Standard QDataStream constructor
-   BinaryStream( QIODevice* device = 0 );
+   BinaryStream(QIODevice* device = 0);
    /// Constructor I use mainly for debugging
-   BinaryStream( QByteArray* array,
-                 QIODevice::OpenMode openMode = QIODevice::ReadWrite );
+   BinaryStream(QByteArray* array,
+                QIODevice::OpenMode openMode = QIODevice::ReadWrite);
 
    /// Operator writing an Address object in binary format
-   BinaryStream& operator<< ( const Address& address );
+   BinaryStream& operator<<(const Address& address);
    /// Operator reading an Address object from binary input
-   BinaryStream& operator>> ( Address& address );
+   BinaryStream& operator>>(Address& address);
 
-}; // class BinaryStream
+};  // class BinaryStream
 
-#endif // CDA_CORE_COMMON_BINARYSTREAM_H
+#endif  // CDA_CORE_COMMON_BINARYSTREAM_H

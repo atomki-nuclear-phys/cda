@@ -1,21 +1,21 @@
 // $Id$
 
 // Qt include(s):
-#include <QtCore/QCoreApplication>
-#include <QSpinBox>
+#include <QAction>
 #include <QDockWidget>
-#include <QMessageBox>
-#include <QStatusBar>
+#include <QIcon>
 #include <QMenu>
 #include <QMenuBar>
-#include <QAction>
-#include <QIcon>
+#include <QMessageBox>
+#include <QSpinBox>
+#include <QStatusBar>
+#include <QtCore/QCoreApplication>
 
 // CDA include(s):
 #include "common/Address.h"
-#include "stat/Server.h"
-#include "stat/MDIView.h"
 #include "common/aboutCDA.h"
+#include "stat/MDIView.h"
+#include "stat/Server.h"
 
 // Local include(s):
 #include "StatServerWindow.h"
@@ -24,30 +24,29 @@
  * The constructor creates the layout of the window, and connects up the various
  * objects to interact with each other.
  */
-StatServerWindow::StatServerWindow()
-   : QMainWindow() {
+StatServerWindow::StatServerWindow() : QMainWindow() {
 
    //
    // Set up the window. Notice, that I assume that the CDA logo is
    // embedded in the executable in the "/img"
    // "virtual directory".
    //
-   resize( 750, 500 );
-   setWindowTitle( tr( "CDA Statistics Server" ) );
-   setWindowIcon( QIcon( ":/img/cda-stat-server.png" ) );
+   resize(750, 500);
+   setWindowTitle(tr("CDA Statistics Server"));
+   setWindowIcon(QIcon(":/img/cda-stat-server.png"));
 
    //
    // Create the objects doing most of the work:
    //
-   m_server = new cdastat::Server( this );
+   m_server = new cdastat::Server(this);
    m_view = new cdastat::MDIView();
-   setCentralWidget( m_view );
+   setCentralWidget(m_view);
 
    //
    // Connect up these two objects:
    //
-   connect( m_server, SIGNAL( statAvailable( const cdastat::Statistics& ) ),
-            m_view, SLOT( handleStatistics( const cdastat::Statistics& ) ) );
+   connect(m_server, SIGNAL(statAvailable(const cdastat::Statistics&)), m_view,
+           SLOT(handleStatistics(const cdastat::Statistics&)));
 
    //
    // Create the dock widgets and the menus:
@@ -58,23 +57,23 @@ StatServerWindow::StatServerWindow()
    //
    // Set the behaviour of the dock widgets:
    //
-   setDockNestingEnabled( true );
-   setDockOptions( QMainWindow::AnimatedDocks );
+   setDockNestingEnabled(true);
+   setDockOptions(QMainWindow::AnimatedDocks);
 
    //
    // Start listening on port 35000 with all network interfaces:
    //
-   if( ! m_server->listen( Address( "0.0.0.0", 35000 ) ) ) {
-      QMessageBox::critical( this, tr( "Error starting server" ),
-                             tr( "The TCP/IP statistics server could not be started "
-                                 "on port %1. Please select another port!" )
-                             .arg( 35000 ) );
-      statusBar()->showMessage( tr( "The server is stopped" ) );
+   if (!m_server->listen(Address("0.0.0.0", 35000))) {
+      QMessageBox::critical(
+          this, tr("Error starting server"),
+          tr("The TCP/IP statistics server could not be started "
+             "on port %1. Please select another port!")
+              .arg(35000));
+      statusBar()->showMessage(tr("The server is stopped"));
    } else {
-      statusBar()->showMessage( tr( "The server is running on port %1" )
-                                .arg( 35000 ) );
+      statusBar()->showMessage(
+          tr("The server is running on port %1").arg(35000));
    }
-
 }
 
 /**
@@ -92,18 +91,19 @@ StatServerWindow::~StatServerWindow() {
 
 void StatServerWindow::aboutStatServerSlot() {
 
-   QMessageBox::about( this, tr( "CDA Statistics Server" ),
-                       tr( "The CDA Statistics Server can be used to monitor a "
-                           "\"full-blown\" CDA DAQ system, composed of applications "
-                           "running on multiple computers. The status of the event "
-                           "processing in each of these applications can be monitored "
-                           "in this application." ) );
+   QMessageBox::about(
+       this, tr("CDA Statistics Server"),
+       tr("The CDA Statistics Server can be used to monitor a "
+          "\"full-blown\" CDA DAQ system, composed of applications "
+          "running on multiple computers. The status of the event "
+          "processing in each of these applications can be monitored "
+          "in this application."));
    return;
 }
 
 void StatServerWindow::aboutCDASlot() {
 
-   aboutCDA( this );
+   aboutCDA(this);
    return;
 }
 
@@ -111,24 +111,25 @@ void StatServerWindow::portChangedSlot() {
 
    const int port = m_portEdit->value();
    static int previous_port = 0;
-   if( port == previous_port ) {
+   if (port == previous_port) {
       return;
    } else {
       previous_port = port;
    }
-   if( m_server->isListening() ) m_server->close();
-   if( ! m_server->listen( Address( "0.0.0.0", port ) ) ) {
-      QMessageBox::critical( this, tr( "Error starting server" ),
-                             tr( "The TCP/IP statistics server could not be "
-                                 "started on port %1. Please select another "
-                                 "port!" ).arg( port ) );
-      statusBar()->showMessage( tr( "The server is stopped" ) );
+   if (m_server->isListening())
+      m_server->close();
+   if (!m_server->listen(Address("0.0.0.0", port))) {
+      QMessageBox::critical(this, tr("Error starting server"),
+                            tr("The TCP/IP statistics server could not be "
+                               "started on port %1. Please select another "
+                               "port!")
+                                .arg(port));
+      statusBar()->showMessage(tr("The server is stopped"));
    } else {
-      statusBar()->showMessage( tr( "The server is running on port %1" )
-                                .arg( port ) );
+      statusBar()->showMessage(
+          tr("The server is running on port %1").arg(port));
    }
    return;
-
 }
 
 /**
@@ -144,12 +145,11 @@ void StatServerWindow::createMenus() {
    //                                                             //
    /////////////////////////////////////////////////////////////////
 
-   QMenu* fileMenu = menuBar()->addMenu( tr( "&File" ) );
+   QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
 
-   QAction* quitAction = fileMenu->addAction( QIcon( ":/img/warning.png" ),
-                                              tr( "&Quit" ) );
-   connect( quitAction, SIGNAL( triggered() ),
-            this, SLOT( close() ) );
+   QAction* quitAction =
+       fileMenu->addAction(QIcon(":/img/warning.png"), tr("&Quit"));
+   connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));
 
    /////////////////////////////////////////////////////////////////
    //                                                             //
@@ -157,15 +157,14 @@ void StatServerWindow::createMenus() {
    //                                                             //
    /////////////////////////////////////////////////////////////////
 
-   QMenu* prefMenu = menuBar()->addMenu( tr( "&Preferences" ) );
+   QMenu* prefMenu = menuBar()->addMenu(tr("&Preferences"));
 
-   m_showPortDock = prefMenu->addAction( tr( "Show port setting" ) );
-   m_showPortDock->setCheckable( true );
-   connect( m_showPortDock, SIGNAL( toggled( bool ) ),
-            m_portDock, SLOT( setVisible( bool ) ) );
-   connect( m_portDock, SIGNAL( visibilityChanged( bool ) ),
-            m_showPortDock, SLOT( setChecked( bool ) ) );
-
+   m_showPortDock = prefMenu->addAction(tr("Show port setting"));
+   m_showPortDock->setCheckable(true);
+   connect(m_showPortDock, SIGNAL(toggled(bool)), m_portDock,
+           SLOT(setVisible(bool)));
+   connect(m_portDock, SIGNAL(visibilityChanged(bool)), m_showPortDock,
+           SLOT(setChecked(bool)));
 
    /////////////////////////////////////////////////////////////////
    //                                                             //
@@ -174,23 +173,20 @@ void StatServerWindow::createMenus() {
    /////////////////////////////////////////////////////////////////
 
    menuBar()->addSeparator();
-   QMenu* helpMenu = menuBar()->addMenu( tr( "&Help" ) );
+   QMenu* helpMenu = menuBar()->addMenu(tr("&Help"));
 
-   QAction* aboutQtAction = helpMenu->addAction( QIcon( ":/img/qt-logo.jpg" ),
-                                                 tr( "About &Qt" ) );
-   connect( aboutQtAction, SIGNAL( triggered() ),
-            qApp, SLOT( aboutQt() ) );
+   QAction* aboutQtAction =
+       helpMenu->addAction(QIcon(":/img/qt-logo.jpg"), tr("About &Qt"));
+   connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
-   QAction* aboutStatServerAction =
-      helpMenu->addAction( QIcon( ":/img/cda-stat-server.png" ),
-                           tr( "&About Statistics Server" ) );
-   connect( aboutStatServerAction, SIGNAL( triggered() ),
-            this, SLOT( aboutStatServerSlot() ) );
+   QAction* aboutStatServerAction = helpMenu->addAction(
+       QIcon(":/img/cda-stat-server.png"), tr("&About Statistics Server"));
+   connect(aboutStatServerAction, SIGNAL(triggered()), this,
+           SLOT(aboutStatServerSlot()));
 
-   QAction* aboutCDAAction = helpMenu->addAction( QIcon( ":/img/logo.png" ),
-                                                  tr( "About &CDA" ) );
-   connect( aboutCDAAction, SIGNAL( triggered() ),
-            this, SLOT( aboutCDASlot() ) );
+   QAction* aboutCDAAction =
+       helpMenu->addAction(QIcon(":/img/logo.png"), tr("About &CDA"));
+   connect(aboutCDAAction, SIGNAL(triggered()), this, SLOT(aboutCDASlot()));
 
    return;
 }
@@ -210,18 +206,18 @@ void StatServerWindow::createDockWidgets() {
    /////////////////////////////////////////////////////////////////
 
    m_portEdit = new QSpinBox();
-   m_portEdit->setMinimum( 100 );
-   m_portEdit->setMaximum( 80000 );
-   m_portEdit->setValue( 35000 );
-   connect( m_portEdit, SIGNAL( editingFinished() ),
-            this, SLOT( portChangedSlot() ) );
+   m_portEdit->setMinimum(100);
+   m_portEdit->setMaximum(80000);
+   m_portEdit->setValue(35000);
+   connect(m_portEdit, SIGNAL(editingFinished()), this,
+           SLOT(portChangedSlot()));
 
-   m_portDock = new QDockWidget( tr( "Server port" ), this );
-   m_portDock->setAllowedAreas( Qt::TopDockWidgetArea |
-                                Qt::BottomDockWidgetArea );
-   m_portDock->setWidget( m_portEdit );
+   m_portDock = new QDockWidget(tr("Server port"), this);
+   m_portDock->setAllowedAreas(Qt::TopDockWidgetArea |
+                               Qt::BottomDockWidgetArea);
+   m_portDock->setWidget(m_portEdit);
 
-   addDockWidget( Qt::TopDockWidgetArea, m_portDock );
+   addDockWidget(Qt::TopDockWidgetArea, m_portDock);
 
    return;
 }

@@ -4,16 +4,12 @@
 
 namespace dev {
 
-   QtHist::QtHist( QWidget* parent, Qt::WindowFlags flags )
-      : QWidget( parent, flags ) {
+QtHist::QtHist(QWidget* parent, Qt::WindowFlags flags)
+    : QWidget(parent, flags) {}
 
-   }
+QString QtHist::windowTitle() const {
 
-   QString QtHist::windowTitle() const {
+   return (tr("%1 with ID %2").arg(this->deviceName()).arg(this->getID()));
+}
 
-      return ( tr( "%1 with ID %2" )
-               .arg( this->deviceName() )
-               .arg( this->getID() ) );
-   }
-
-} // namespace dev
+}  // namespace dev

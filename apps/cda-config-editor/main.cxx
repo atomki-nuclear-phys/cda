@@ -21,41 +21,41 @@
 #include <QPixmap>
 
 // CDA include(s):
-#include "msg/Sender.h"
-#include "i18n/Loader.h"
 #include "common/DefaultFont.h"
 #include "common/SplashScreen.h"
+#include "i18n/Loader.h"
+#include "msg/Sender.h"
 
 // Local include(s):
-#include "ConfigEditorWindow.h"
 #include "../common/plugins.h"
+#include "ConfigEditorWindow.h"
 
-int main( int argc, char* argv[] ) {
+int main(int argc, char* argv[]) {
 
    //
    // Only display WARNING or more serious messages by this application:
    //
-   msg::Sender::instance()->setMinLevel( msg::WARNING );
+   msg::Sender::instance()->setMinLevel(msg::WARNING);
 
    //
    // Instantiate the back-bone of the Qt graphical application:
    //
-   QApplication app( argc, argv );
-   app.setFont( gui::DefaultFont() );
+   QApplication app(argc, argv);
+   app.setFont(gui::DefaultFont());
 
    //
    // Create a splash screen:
    //
-   gui::SplashScreen splash( QPixmap( ":/img/splash.png" ),
-                             Qt::WindowStaysOnTopHint |
-                             Qt::X11BypassWindowManagerHint );
+   gui::SplashScreen splash(
+       QPixmap(":/img/splash.png"),
+       Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
    splash.show();
 
    //
    // Load all the available translations:
    //
    i18n::Loader trans_loader;
-   if( ! trans_loader.loadTranslations() ) {
+   if (!trans_loader.loadTranslations()) {
       std::cerr << "Couldn't load the translations!" << std::endl;
       return 1;
    }
@@ -65,10 +65,9 @@ int main( int argc, char* argv[] ) {
    //
    ConfigEditorWindow editor;
    editor.show();
-   splash.showMessage( qApp->translate( "cda-config-editor",
-                                        "Configuration Editor Ready" ),
-                       Qt::AlignHCenter | Qt::AlignBottom,
-                       Qt::white );
+   splash.showMessage(
+       qApp->translate("cda-config-editor", "Configuration Editor Ready"),
+       Qt::AlignHCenter | Qt::AlignBottom, Qt::white);
 
    //
    // Run the application:

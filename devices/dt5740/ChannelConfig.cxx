@@ -1,8 +1,8 @@
 // $Id$
 
 // Qt include(s):
-#include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
+#include <QtCore/QIODevice>
 #include <QtXml/QDomElement>
 
 // CDA include(s):
@@ -13,292 +13,294 @@
 
 namespace dt5740 {
 
-   //
-   // Make sure that the following Qt classes are available in the
-   // current namespace even if Qt has been built in an arbitrary
-   // namespace:
-   //
-   using QT_PREPEND_NAMESPACE( QIODevice );
-   using QT_PREPEND_NAMESPACE( QDataStream );
-   using QT_PREPEND_NAMESPACE( QDomNode );
-   using QT_PREPEND_NAMESPACE( QDomElement );
+//
+// Make sure that the following Qt classes are available in the
+// current namespace even if Qt has been built in an arbitrary
+// namespace:
+//
+using QT_PREPEND_NAMESPACE(QIODevice);
+using QT_PREPEND_NAMESPACE(QDataStream);
+using QT_PREPEND_NAMESPACE(QDomNode);
+using QT_PREPEND_NAMESPACE(QDomElement);
+
+ChannelConfig::ChannelConfig()
+    : m_rawName("raw"),
+      m_timeNumberOfChannels(100),
+      m_timeLowerBound(0.),
+      m_timeUpperBound(100.),
+      m_timeName("time"),
+      m_energyNumberOfChannels(100),
+      m_energyLowerBound(0.),
+      m_energyUpperBound(100.),
+      m_energyName("energy"),
+      m_channelNumber(-1),
+      m_logger("dt5740::ChannelConfig") {}
+
+StatusCode ChannelConfig::readConfig(QIODevice& dev) {
+
+   REPORT_VERBOSE(tr("Reading configuration from binary input"));
+
+   clear();
+
+   QDataStream input(&dev);
+   input.setVersion(QDataStream::Qt_4_0);
+   input >> m_rawName;
+   input >> m_timeNumberOfChannels;
+   input >> m_timeLowerBound;
+   input >> m_timeUpperBound;
+   input >> m_timeName;
+   input >> m_energyNumberOfChannels;
+   input >> m_energyLowerBound;
+   input >> m_energyUpperBound;
+   input >> m_energyName;
+   input >> m_channelNumber;
 
-   ChannelConfig::ChannelConfig()
-      : m_rawName( "raw" ),
-        m_timeNumberOfChannels( 100 ), m_timeLowerBound( 0. ),
-        m_timeUpperBound( 100. ), m_timeName( "time" ),
-        m_energyNumberOfChannels( 100 ), m_energyLowerBound( 0. ),
-        m_energyUpperBound( 100. ), m_energyName( "energy" ),
-        m_channelNumber( -1 ),
-        m_logger( "dt5740::ChannelConfig" ) {
+   printConfig(msg::VERBOSE);
 
-   }
+   return StatusCode::SUCCESS;
+}
 
-   StatusCode ChannelConfig::readConfig( QIODevice& dev ) {
+StatusCode ChannelConfig::writeConfig(QIODevice& dev) const {
 
-      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
+   REPORT_VERBOSE(tr("Writing configuration to binary output"));
 
-      clear();
-
-      QDataStream input( &dev );
-      input.setVersion( QDataStream::Qt_4_0 );
-      input >> m_rawName;
-      input >> m_timeNumberOfChannels;
-      input >> m_timeLowerBound;
-      input >> m_timeUpperBound;
-      input >> m_timeName;
-      input >> m_energyNumberOfChannels;
-      input >> m_energyLowerBound;
-      input >> m_energyUpperBound;
-      input >> m_energyName;
-      input >> m_channelNumber;
+   QDataStream output(&dev);
+   output.setVersion(QDataStream::Qt_4_0);
+   output << m_rawName;
+   output << m_timeNumberOfChannels;
+   output << m_timeLowerBound;
+   output << m_timeUpperBound;
+   output << m_timeName;
+   output << m_energyNumberOfChannels;
+   output << m_energyLowerBound;
+   output << m_energyUpperBound;
+   output << m_energyName;
+   output << m_channelNumber;
 
-      printConfig( msg::VERBOSE );
+   return StatusCode::SUCCESS;
+}
 
-      return StatusCode::SUCCESS;
-   }
+StatusCode ChannelConfig::readConfig(const QDomElement& element) {
 
-   StatusCode ChannelConfig::writeConfig( QIODevice& dev ) const {
+   REPORT_VERBOSE(tr("Reading configuration from XML input"));
 
-      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
+   clear();
 
-      QDataStream output( &dev );
-      output.setVersion( QDataStream::Qt_4_0 );
-      output << m_rawName;
-      output << m_timeNumberOfChannels;
-      output << m_timeLowerBound;
-      output << m_timeUpperBound;
-      output << m_timeName;
-      output << m_energyNumberOfChannels;
-      output << m_energyLowerBound;
-      output << m_energyUpperBound;
-      output << m_energyName;
-      output << m_channelNumber;
+   bool ok;
 
-      return StatusCode::SUCCESS;
-   }
+   m_rawName = element.attribute("RawName", "");
 
-   StatusCode ChannelConfig::readConfig( const QDomElement& element ) {
+   m_timeNumberOfChannels =
+       element.attribute("NumberOfTimeChannels", "100").toInt(&ok);
+   CHECK(ok);
 
-      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
+   m_timeLowerBound = element.attribute("TimeLowerBound", "0.").toDouble(&ok);
+   CHECK(ok);
 
-      clear();
+   m_timeUpperBound = element.attribute("TimeUpperBound", "100.").toDouble(&ok);
+   CHECK(ok);
 
-      bool ok;
+   m_timeName = element.attribute("TimeName", "");
 
-      m_rawName = element.attribute( "RawName", "" );
+   m_energyNumberOfChannels =
+       element.attribute("NumberOfEnergyChannels", "100").toInt(&ok);
+   CHECK(ok);
 
-      m_timeNumberOfChannels = element.attribute( "NumberOfTimeChannels",
-                                                  "100" ).toInt( &ok );
-      CHECK( ok );
+   m_energyLowerBound =
+       element.attribute("EnergyLowerBound", "0.").toDouble(&ok);
+   CHECK(ok);
 
-      m_timeLowerBound = element.attribute( "TimeLowerBound",
-                                            "0." ).toDouble( &ok );
-      CHECK( ok );
+   m_energyUpperBound =
+       element.attribute("EnergyUpperBound", "100.").toDouble(&ok);
+   CHECK(ok);
 
-      m_timeUpperBound = element.attribute( "TimeUpperBound",
-                                            "100." ).toDouble( &ok );
-      CHECK( ok );
+   m_energyName = element.attribute("EnergyName", "");
 
-      m_timeName = element.attribute( "TimeName", "" );
+   m_channelNumber = element.attribute("ChannelNumber", "0").toInt(&ok);
+   CHECK(ok);
 
-      m_energyNumberOfChannels = element.attribute( "NumberOfEnergyChannels",
-                                                    "100" ).toInt( &ok );
-      CHECK( ok );
+   printConfig(msg::VERBOSE);
 
-      m_energyLowerBound = element.attribute( "EnergyLowerBound",
-                                              "0." ).toDouble( &ok );
-      CHECK( ok );
+   return StatusCode::SUCCESS;
+}
 
-      m_energyUpperBound = element.attribute( "EnergyUpperBound",
-                                              "100." ).toDouble( &ok );
-      CHECK( ok );
+StatusCode ChannelConfig::writeConfig(QDomElement& element) const {
 
-      m_energyName = element.attribute( "EnergyName", "" );
+   REPORT_VERBOSE(tr("Writing configuration to XML output"));
 
-      m_channelNumber = element.attribute( "ChannelNumber",
-                                           "0" ).toInt( &ok );
-      CHECK( ok );
+   element.setAttribute("RawName", m_rawName);
+   element.setAttribute("NumberOfTimeChannels", m_timeNumberOfChannels);
+   element.setAttribute("TimeLowerBound", m_timeLowerBound);
+   element.setAttribute("TimeUpperBound", m_timeUpperBound);
+   element.setAttribute("TimeName", m_timeName);
+   element.setAttribute("NumberOfEnergyChannels", m_energyNumberOfChannels);
+   element.setAttribute("EnergyLowerBound", m_energyLowerBound);
+   element.setAttribute("EnergyUpperBound", m_energyUpperBound);
+   element.setAttribute("EnergyName", m_energyName);
+   element.setAttribute("ChannelNumber", m_channelNumber);
 
-      printConfig( msg::VERBOSE );
+   return StatusCode::SUCCESS;
+}
 
-      return StatusCode::SUCCESS;
-   }
+int ChannelConfig::getTimeNumberOfChannels() const {
 
-   StatusCode ChannelConfig::writeConfig( QDomElement& element ) const {
+   return m_timeNumberOfChannels;
+}
 
-      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
+double ChannelConfig::getTimeLowerBound() const {
 
-      element.setAttribute( "RawName", m_rawName );
-      element.setAttribute( "NumberOfTimeChannels", m_timeNumberOfChannels );
-      element.setAttribute( "TimeLowerBound", m_timeLowerBound );
-      element.setAttribute( "TimeUpperBound", m_timeUpperBound );
-      element.setAttribute( "TimeName", m_timeName );
-      element.setAttribute( "NumberOfEnergyChannels",
-                            m_energyNumberOfChannels );
-      element.setAttribute( "EnergyLowerBound", m_energyLowerBound );
-      element.setAttribute( "EnergyUpperBound", m_energyUpperBound );
-      element.setAttribute( "EnergyName", m_energyName );
-      element.setAttribute( "ChannelNumber", m_channelNumber );
+   return m_timeLowerBound;
+}
 
-      return StatusCode::SUCCESS;
-   }
+double ChannelConfig::getTimeUpperBound() const {
 
-   int ChannelConfig::getTimeNumberOfChannels() const {
+   return m_timeUpperBound;
+}
 
-      return m_timeNumberOfChannels;
-   }
+const QString& ChannelConfig::getTimeName() const {
 
-   double ChannelConfig::getTimeLowerBound() const {
+   return m_timeName;
+}
 
-      return m_timeLowerBound;
-   }
+void ChannelConfig::setTimeNumberOfChannels(int value) {
 
-   double ChannelConfig::getTimeUpperBound() const {
+   m_timeNumberOfChannels = value;
+   return;
+}
 
-      return m_timeUpperBound;
-   }
+void ChannelConfig::setTimeLowerBound(double value) {
 
-   const QString& ChannelConfig::getTimeName() const {
+   m_timeLowerBound = value;
+   return;
+}
 
-      return m_timeName;
-   }
+void ChannelConfig::setTimeUpperBound(double value) {
 
-   void ChannelConfig::setTimeNumberOfChannels( int value ) {
+   m_timeUpperBound = value;
+   return;
+}
 
-      m_timeNumberOfChannels = value;
-      return;
-   }
+void ChannelConfig::setTimeName(const QString& value) {
 
-   void ChannelConfig::setTimeLowerBound( double value ) {
+   m_timeName = value;
+   return;
+}
 
-      m_timeLowerBound = value;
-      return;
-   }
+int ChannelConfig::getEnergyNumberOfChannels() const {
 
-   void ChannelConfig::setTimeUpperBound( double value ) {
+   return m_energyNumberOfChannels;
+}
 
-      m_timeUpperBound = value;
-      return;
-   }
+double ChannelConfig::getEnergyLowerBound() const {
 
-   void ChannelConfig::setTimeName( const QString& value ) {
+   return m_energyLowerBound;
+}
 
-      m_timeName = value;
-      return;
-   }
+double ChannelConfig::getEnergyUpperBound() const {
 
-   int ChannelConfig::getEnergyNumberOfChannels() const {
+   return m_energyUpperBound;
+}
 
-      return m_energyNumberOfChannels;
-   }
+const QString& ChannelConfig::getEnergyName() const {
 
-   double ChannelConfig::getEnergyLowerBound() const {
+   return m_energyName;
+}
 
-      return m_energyLowerBound;
-   }
+void ChannelConfig::setEnergyNumberOfChannels(int value) {
 
-   double ChannelConfig::getEnergyUpperBound() const {
+   m_energyNumberOfChannels = value;
+   return;
+}
 
-      return m_energyUpperBound;
-   }
+void ChannelConfig::setEnergyLowerBound(double value) {
 
-   const QString& ChannelConfig::getEnergyName() const {
+   m_energyLowerBound = value;
+   return;
+}
 
-      return m_energyName;
-   }
+void ChannelConfig::setEnergyUpperBound(double value) {
 
-   void ChannelConfig::setEnergyNumberOfChannels( int value ) {
+   m_energyUpperBound = value;
+   return;
+}
 
-      m_energyNumberOfChannels = value;
-      return;
-   }
+void ChannelConfig::setEnergyName(const QString& value) {
 
-   void ChannelConfig::setEnergyLowerBound( double value ) {
+   m_energyName = value;
+   return;
+}
 
-      m_energyLowerBound = value;
-      return;
-   }
+int ChannelConfig::getChannelNumber() const {
 
-   void ChannelConfig::setEnergyUpperBound( double value ) {
+   return m_channelNumber;
+}
 
-      m_energyUpperBound = value;
-      return;
-   }
+void ChannelConfig::setChannelNumber(int number) {
 
-   void ChannelConfig::setEnergyName( const QString& value ) {
+   m_channelNumber = number;
+   return;
+}
 
-      m_energyName = value;
-      return;
-   }
+const QString& ChannelConfig::getRawName() const {
 
-   int ChannelConfig::getChannelNumber() const {
+   return m_rawName;
+}
 
-      return m_channelNumber;
-   }
+void ChannelConfig::setRawName(const QString& value) {
 
-   void ChannelConfig::setChannelNumber( int number ) {
+   m_rawName = value;
+   return;
+}
 
-      m_channelNumber = number;
-      return;
-   }
+/**
+ * @param level The message level in which the channel configuration should
+ *              be printed
+ */
+void ChannelConfig::printConfig(msg::Level level) const {
 
-   const QString& ChannelConfig::getRawName() const {
+   m_logger << level
+            << tr(" - Channel number    : %1\n"
+                  " - Raw channel name  : %2\n"
+                  " - Number of time channels: %3\n"
+                  " - Time lower bound       : %4\n"
+                  " - Time upper bound       : %5\n"
+                  " - Time name              : %6\n"
+                  " - Number of energy channels: %7\n"
+                  " - Energy lower bound       : %8\n"
+                  " - Energy upper bound       : %9\n"
+                  " - Energy name              : %10")
+                   .arg(m_channelNumber)
+                   .arg(m_rawName)
+                   .arg(m_timeNumberOfChannels)
+                   .arg(m_timeLowerBound)
+                   .arg(m_timeUpperBound)
+                   .arg(m_timeName)
+                   .arg(m_energyNumberOfChannels)
+                   .arg(m_energyLowerBound)
+                   .arg(m_energyUpperBound)
+                   .arg(m_energyName)
+            << msg::endmsg;
 
-      return m_rawName;
-   }
+   return;
+}
 
-   void ChannelConfig::setRawName( const QString& value ) {
+void ChannelConfig::clear() {
 
-      m_rawName = value;
-      return;
-   }
+   m_rawName = "";
 
-   /**
-    * @param level The message level in which the channel configuration should
-    *              be printed
-    */
-   void ChannelConfig::printConfig( msg::Level level ) const {
+   m_timeNumberOfChannels = 100;
+   m_timeLowerBound = 0.;
+   m_timeUpperBound = 100.;
+   m_timeName = "";
 
-      m_logger << level
-               << tr( " - Channel number    : %1\n"
-                      " - Raw channel name  : %2\n"
-                      " - Number of time channels: %3\n"
-                      " - Time lower bound       : %4\n"
-                      " - Time upper bound       : %5\n"
-                      " - Time name              : %6\n"
-                      " - Number of energy channels: %7\n"
-                      " - Energy lower bound       : %8\n"
-                      " - Energy upper bound       : %9\n"
-                      " - Energy name              : %10" )
-         .arg( m_channelNumber ).arg( m_rawName )
-         .arg( m_timeNumberOfChannels )
-         .arg( m_timeLowerBound ).arg( m_timeUpperBound )
-         .arg( m_timeName ).arg( m_energyNumberOfChannels )
-         .arg( m_energyLowerBound ).arg( m_energyUpperBound )
-         .arg( m_energyName )
-               << msg::endmsg;
+   m_energyNumberOfChannels = 100;
+   m_energyLowerBound = 0.;
+   m_energyUpperBound = 100.;
+   m_energyName = "";
 
-      return;
-   }
+   m_channelNumber = -1;
 
-   void ChannelConfig::clear() {
+   return;
+}
 
-      m_rawName = "";
-
-      m_timeNumberOfChannels = 100;
-      m_timeLowerBound = 0.;
-      m_timeUpperBound = 100.;
-      m_timeName = "";
-
-      m_energyNumberOfChannels = 100;
-      m_energyLowerBound = 0.;
-      m_energyUpperBound = 100.;
-      m_energyName = "";
-
-      m_channelNumber = -1;
-
-      return;
-   }
-
-} // namespace dt5740
+}  // namespace dt5740

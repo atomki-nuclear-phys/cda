@@ -6,32 +6,32 @@
 #include <QtGlobal>
 
 // CDA include(s):
-#include "device/ICernlibHist.h"
 #include "device/Crate.h"
+#include "device/ICernlibHist.h"
 
 namespace conf {
 
-   /**
-    *  @short Crate class used to "translate" between configuration formats
-    *
-    *         The configuration server always sends the configuration
-    *         information to its clients in a binary format. To be able
-    *         to read in the configuration from an XML file and then send
-    *         it in binary format, we need such a helper crate object
-    *         to translate between these things.
-    *
-    *         This class should not be used outside the conf:: namespace!
-    *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    */
-   class Crate : public dev::Crate< dev::ICernlibHist > {
+/**
+ *  @short Crate class used to "translate" between configuration formats
+ *
+ *         The configuration server always sends the configuration
+ *         information to its clients in a binary format. To be able
+ *         to read in the configuration from an XML file and then send
+ *         it in binary format, we need such a helper crate object
+ *         to translate between these things.
+ *
+ *         This class should not be used outside the conf:: namespace!
+ *
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+ */
+class Crate : public dev::Crate<dev::ICernlibHist> {
 
-   public:
-      /// Constructor
-      Crate();
+public:
+   /// Constructor
+   Crate();
 
-   }; // class Crate
+};  // class Crate
 
-} // namespace conf
+}  // namespace conf
 
-#endif // CDA_DAQ_CONFIG_CRATE_H
+#endif  // CDA_DAQ_CONFIG_CRATE_H

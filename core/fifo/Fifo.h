@@ -3,8 +3,8 @@
 #define CDA_CORE_FIFO_FIFO_H
 
 // Qt include(s):
-#include <QFile>
 #include <QCoreApplication>
+#include <QFile>
 
 // CDA include(s):
 #include "../common/Export.h"
@@ -27,13 +27,13 @@ class CDACORE_EXPORT Fifo : public QFile {
 
 public:
    /// Constructor with FIFO path and Qt parent
-   Fifo( const QString& path = "dummy", QObject* parent = 0 );
+   Fifo(const QString& path = "dummy", QObject* parent = 0);
    /// Destructor
    virtual ~Fifo();
 
    /// Simplified open function not expecting any parameters
-   virtual bool open( QIODevice::OpenMode );
+   virtual bool open(QIODevice::OpenMode);
 
-}; // class Fifo
+};  // class Fifo
 
-#endif // CDA_CORE_FIFO_FIFO_H
+#endif  // CDA_CORE_FIFO_FIFO_H

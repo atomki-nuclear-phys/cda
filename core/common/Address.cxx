@@ -9,8 +9,8 @@
 #include <QStringList>
 
 // CDA include(s):
-#include "QStringCompat.h"
 #include "../msg/Logger.h"
+#include "QStringCompat.h"
 
 // Local include(s):
 #include "Address.h"
@@ -26,24 +26,23 @@
  *
  * @param address Encoded host name and port, something like "localhost:49700"
  */
-Address::Address( const QString& address )
-   : m_host(), m_port( 0 ) {
+Address::Address(const QString& address) : m_host(), m_port(0) {
 
    //
    // Create a logger object and report what we're doing:
    //
-   msg::Logger m_logger( "Address" );
-   REPORT_VERBOSE( tr( "Constructing address from string: \"%1\"" )
-                   .arg( address ) );
+   msg::Logger m_logger("Address");
+   REPORT_VERBOSE(tr("Constructing address from string: \"%1\"").arg(address));
 
    //
    // Split the address string into a host name and a port number:
    //
-   QStringList split = address.split( ":", Qt::SkipEmptyParts );
-   if( split.size() != 2 ) {
-      REPORT_ERROR( tr( "Couldn't decode address: \"%1\"\n"
-                        "Setting to 127.0.0.1:50000" ).arg( address ) );
-      m_host.setAddress( "127.0.0.1" );
+   QStringList split = address.split(":", Qt::SkipEmptyParts);
+   if (split.size() != 2) {
+      REPORT_ERROR(tr("Couldn't decode address: \"%1\"\n"
+                      "Setting to 127.0.0.1:50000")
+                       .arg(address));
+      m_host.setAddress("127.0.0.1");
       m_port = 50000;
       return;
    }
@@ -51,22 +50,22 @@ Address::Address( const QString& address )
    //
    // Report what we've done:
    //
-   REPORT_VERBOSE( tr( "Decoded host name: %1, port: %2" )
-                   .arg( split.at( 0 ) ).arg( split.at( 1 ) ) );
+   REPORT_VERBOSE(
+       tr("Decoded host name: %1, port: %2").arg(split.at(0)).arg(split.at(1)));
 
-   m_host.setAddress( split.at( 0 ) );
+   m_host.setAddress(split.at(0));
 
    //
    // Try to decode the port number:
    //
    bool ok = false;
-   m_port = static_cast< quint16 >( split.at( 1 ).toUInt( &ok ) );
-   if( ! ok ) {
-      REPORT_ERROR( tr( "Couldn't decode port: %1\n"
-                        "Setting it to 50000" ).arg( split.at( 1 ) ) );
+   m_port = static_cast<quint16>(split.at(1).toUInt(&ok));
+   if (!ok) {
+      REPORT_ERROR(tr("Couldn't decode port: %1\n"
+                      "Setting it to 50000")
+                       .arg(split.at(1)));
       m_port = 50000;
    }
-
 }
 
 /**
@@ -74,16 +73,14 @@ Address::Address( const QString& address )
  *             number as well.
  * @param port Port number of the host application.
  */
-Address::Address( const QString& host, quint16 port )
-   : m_host( host ), m_port( port ) {
-
-}
+Address::Address(const QString& host, quint16 port)
+    : m_host(host), m_port(port) {}
 
 /**
  * @param host String representation of the host name. Can be an IPv4
  *             number as well.
  */
-void Address::setHost( const QHostAddress& host ) {
+void Address::setHost(const QHostAddress& host) {
 
    m_host = host;
    return;
@@ -92,7 +89,7 @@ void Address::setHost( const QHostAddress& host ) {
 /**
  * @param port Port number of the host application.
  */
-void Address::setPort( quint16 port ) {
+void Address::setPort(quint16 port) {
 
    m_port = port;
    return;
@@ -122,18 +119,18 @@ quint16 Address::getPort() const {
  * @returns <code>true</code> if the decoding seems possible,
  *          <code>false</code> otherwise
  */
-bool Address::isAddress( const QString& address ) {
+bool Address::isAddress(const QString& address) {
 
    // Split the string into an address and a port number:
-   QStringList split = address.split( ":", Qt::SkipEmptyParts );
-   if( split.size() != 2 ) {
+   QStringList split = address.split(":", Qt::SkipEmptyParts);
+   if (split.size() != 2) {
       return false;
    }
 
    // Check if the second part of the string is indeed a number:
    bool ok = false;
-   split.at( 1 ).toUInt( &ok );
-   if( ! ok ) {
+   split.at(1).toUInt(&ok);
+   if (!ok) {
       return false;
    }
 

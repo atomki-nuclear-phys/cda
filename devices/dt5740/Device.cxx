@@ -4,302 +4,297 @@
 #include <cmath>
 
 // Qt include(s):
-#include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
+#include <QtCore/QIODevice>
 #include <QtXml/QDomElement>
 
 // CDA include(s):
-#include "event/Fragment.h"
 #include "common/errorcheck.h"
+#include "event/Fragment.h"
 
 // Local include(s):
 #include "Device.h"
 
 namespace dt5740 {
 
+//
+// Make sure that the following Qt classes are available in the
+// current namespace even if Qt has been built in an arbitrary
+// namespace:
+//
+using QT_PREPEND_NAMESPACE(QIODevice);
+using QT_PREPEND_NAMESPACE(QDataStream);
+using QT_PREPEND_NAMESPACE(QDomNode);
+using QT_PREPEND_NAMESPACE(QDomElement);
+
+Device::Device()
+    : m_connType(caen::Digitizer::USB),
+      m_linkNumber(0),
+      m_trigMode(TRG_InputOverThreshold),
+      m_trigOvlpEnabled(false),
+      m_patGenEnabled(false),
+      m_gateMode(GATE_Window),
+      m_bufferMode(BUFF_NBuffers1024),
+      m_postTrigPercentage(0),
+      m_extTrigEnabled(false),
+      m_extTrigOutEnabled(false),
+      m_clockSource(CLK_Internal),
+      m_evCountMode(EV_CountAcceptedTriggers),
+      m_signalType(SGNL_NIM),
+      m_highImpedanceGPO(false),
+      m_acqMode(caen::Digitizer::ACQ_SW_Controlled),
+      m_saveRawNtuple(false),
+      m_cfdFraction(0.1),
+      m_cfdDelay(10),
+      m_cfdLength(5),
+      m_gaussSmoothWidth(0.0),
+      m_logger("dt5740::Device") {
+
+   // Set the ID of each group:
+   for (int i = 0; i < NUMBER_OF_GROUPS; ++i) {
+      m_groups[i].setGroupNumber(i);
+   }
+}
+
+StatusCode Device::readConfig(QIODevice& dev) {
+
+   REPORT_VERBOSE(tr("Reading configuration from binary input"));
+
+   clear();
+
+   QString temp;
+
+   // Read the properties of this class:
+   QDataStream input(&dev);
+   input.setVersion(QDataStream::Qt_4_0);
+
+   // Read the connection parameters of the device:
+   int ctype;
+   input >> ctype;
+   m_connType = caen::Digitizer::convertConnType(ctype);
+   input >> m_linkNumber;
+   input >> temp;
+   m_trigMode = toTriggerMode(temp);
+   input >> m_trigOvlpEnabled;
+   input >> m_patGenEnabled;
+   input >> temp;
+   m_gateMode = toGateMode(temp);
+   input >> temp;
+   m_bufferMode = toBufferMode(temp);
+   input >> m_postTrigPercentage;
+   input >> m_extTrigEnabled;
+   input >> m_extTrigOutEnabled;
+   input >> ctype;
+   m_acqMode = caen::Digitizer::convertAcqMode(ctype);
+   input >> m_saveRawNtuple;
+   input >> temp;
+   m_clockSource = toClockSource(temp);
+   input >> temp;
+   m_evCountMode = toEvCountMode(temp);
+   input >> temp;
+   m_signalType = toSignalType(temp);
+   input >> m_highImpedanceGPO;
+   input >> m_cfdFraction;
+   input >> m_cfdDelay;
+   input >> m_cfdLength;
+   input >> m_gaussSmoothWidth;
+
+   // Read in the configuration of the groups:
+   for (int i = 0; i < NUMBER_OF_GROUPS; ++i) {
+      CHECK(m_groups[i].readConfig(dev));
+      CHECK(m_groups[i].getGroupNumber() != i);
+   }
+
+   return StatusCode::SUCCESS;
+}
+
+StatusCode Device::writeConfig(QIODevice& dev) const {
+
+   REPORT_VERBOSE(tr("Writing configuration to binary output"));
+
+   // Write the properties of this class:
+   QDataStream output(&dev);
+   output.setVersion(QDataStream::Qt_4_0);
+
+   // Write out the connection parameters of the device:
+   output << caen::Digitizer::convertConnType(m_connType);
+   output << m_linkNumber;
+   output << toString(m_trigMode);
+   output << m_trigOvlpEnabled;
+   output << m_patGenEnabled;
+   output << toString(m_gateMode);
+   output << toString(m_bufferMode);
+   output << m_postTrigPercentage;
+   output << m_extTrigEnabled;
+   output << m_extTrigOutEnabled;
+   output << caen::Digitizer::convertAcqMode(m_acqMode);
+   output << m_saveRawNtuple;
+   output << toString(m_clockSource);
+   output << toString(m_evCountMode);
+   output << toString(m_signalType);
+   output << m_highImpedanceGPO;
+   output << m_cfdFraction;
+   output << m_cfdDelay;
+   output << m_cfdLength;
+   output << m_gaussSmoothWidth;
+
+   // Write out the group configurations:
+   for (int i = 0; i < NUMBER_OF_GROUPS; ++i) {
+      CHECK(m_groups[i].writeConfig(dev));
+   }
+
+   return StatusCode::SUCCESS;
+}
+
+StatusCode Device::readConfig(const QDomElement& element) {
+
+   REPORT_VERBOSE(tr("Reading configuration from XML input"));
+
+   clear();
+
    //
-   // Make sure that the following Qt classes are available in the
-   // current namespace even if Qt has been built in an arbitrary
-   // namespace:
+   // Read the device wide configuration:
    //
-   using QT_PREPEND_NAMESPACE( QIODevice );
-   using QT_PREPEND_NAMESPACE( QDataStream );
-   using QT_PREPEND_NAMESPACE( QDomNode );
-   using QT_PREPEND_NAMESPACE( QDomElement );
+   bool ok;
 
-   Device::Device()
-      : m_connType( caen::Digitizer::USB ), m_linkNumber( 0 ),
-        m_trigMode( TRG_InputOverThreshold ), 
-        m_trigOvlpEnabled( false ), m_patGenEnabled( false ),
-        m_gateMode( GATE_Window ), m_bufferMode( BUFF_NBuffers1024 ),
-        m_postTrigPercentage( 0 ), m_extTrigEnabled( false ),
-        m_extTrigOutEnabled( false ),
-        m_clockSource( CLK_Internal ),
-        m_evCountMode( EV_CountAcceptedTriggers ),
-        m_signalType( SGNL_NIM ),
-        m_highImpedanceGPO( false ),
-        m_acqMode( caen::Digitizer::ACQ_SW_Controlled ),
-        m_saveRawNtuple( false ),
-        m_cfdFraction( 0.1 ), m_cfdDelay( 10 ), m_cfdLength( 5 ),
-        m_gaussSmoothWidth( 0.0 ),
-        m_logger( "dt5740::Device" ) {
+   const int ctype = element.attribute("ConnType", "0").toInt(&ok);
+   CHECK(ok);
+   m_connType = caen::Digitizer::convertConnType(ctype);
 
-      // Set the ID of each group:
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         m_groups[ i ].setGroupNumber( i );
+   m_linkNumber = element.attribute("LinkNumber", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_trigMode =
+       toTriggerMode(element.attribute("TrigMode", "InputOverThreshold"));
+
+   m_trigOvlpEnabled = element.attribute("TrigOvlpEnabled", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_patGenEnabled = element.attribute("PatGenEnabled", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_gateMode = toGateMode(element.attribute("GateMode", "Window"));
+
+   m_bufferMode = toBufferMode(element.attribute("BufferMode", "NBuffers1"));
+
+   m_postTrigPercentage =
+       element.attribute("PostTrigPercentage", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_extTrigEnabled = element.attribute("ExtTrigEnabled", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_extTrigOutEnabled = element.attribute("ExtTrigOutEnabled", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_acqMode = caen::Digitizer::convertAcqMode(
+       element.attribute("AcqMode", "0").toInt(&ok));
+   CHECK(ok);
+
+   m_saveRawNtuple = element.attribute("SaveRawNtuple", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_clockSource = toClockSource(element.attribute("ClockSource", "Internal"));
+
+   m_evCountMode =
+       toEvCountMode(element.attribute("EvCountMode", "AcceptedTriggers"));
+
+   m_signalType = toSignalType(element.attribute("SignalType", "NIM"));
+
+   m_highImpedanceGPO = element.attribute("HighImpedanceGPO", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_cfdFraction = element.attribute("CFDFraction", "0.0").toDouble(&ok);
+   CHECK(ok);
+
+   m_cfdDelay = element.attribute("CFDDelay", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_cfdLength = element.attribute("CFDLength", "0").toInt(&ok);
+   CHECK(ok);
+
+   m_gaussSmoothWidth =
+       element.attribute("GaussSmoothWidth", "0.0").toDouble(&ok);
+   CHECK(ok);
+
+   //
+   // Configure the groups:
+   //
+   for (int i = 0; i < element.childNodes().size(); ++i) {
+
+      // Only process "Group" type child-nodes:
+      if (element.childNodes().at(i).nodeName() != "Group") {
+         continue;
+      }
+
+      GroupConfig group;
+      CHECK(group.readConfig(element.childNodes().at(i).toElement()));
+      if ((group.getGroupNumber() >= 0) &&
+          (group.getGroupNumber() < NUMBER_OF_GROUPS)) {
+         m_groups[group.getGroupNumber()] = group;
+      } else {
+         REPORT_ERROR(
+             tr("There was an error reading the configuration "
+                "of a group"));
+         return StatusCode::FAILURE;
       }
    }
 
-   StatusCode Device::readConfig( QIODevice& dev ) {
+   return StatusCode::SUCCESS;
+}
 
-      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
+StatusCode Device::writeConfig(QDomElement& element) const {
 
-      clear();
+   REPORT_VERBOSE(tr("Writing configuration to XML output"));
 
-      QString temp;
+   //
+   // Write the device wide configuration:
+   //
+   element.setAttribute("ConnType",
+                        caen::Digitizer::convertConnType(m_connType));
+   element.setAttribute("LinkNumber", m_linkNumber);
+   element.setAttribute("TrigMode", toString(m_trigMode));
+   element.setAttribute("TrigOvlpEnabled", m_trigOvlpEnabled);
+   element.setAttribute("PatGenEnabled", m_patGenEnabled);
+   element.setAttribute("GateMode", toString(m_gateMode));
+   element.setAttribute("BufferMode", toString(m_bufferMode));
+   element.setAttribute("PostTrigPercentage", m_postTrigPercentage);
+   element.setAttribute("ExtTrigEnabled", m_extTrigEnabled);
+   element.setAttribute("ExtTrigOutEnabled", m_extTrigOutEnabled);
+   element.setAttribute("AcqMode", caen::Digitizer::convertAcqMode(m_acqMode));
+   element.setAttribute("SaveRawNtuple", m_saveRawNtuple);
+   element.setAttribute("ClockSource", toString(m_clockSource));
+   element.setAttribute("EvCountMode", toString(m_evCountMode));
+   element.setAttribute("SignalType", toString(m_signalType));
+   element.setAttribute("HighImpedanceGPO", m_highImpedanceGPO);
+   element.setAttribute("CFDFraction", m_cfdFraction);
+   element.setAttribute("CFDDelay", m_cfdDelay);
+   element.setAttribute("CFDLength", m_cfdLength);
+   element.setAttribute("GaussSmoothWidth", m_gaussSmoothWidth);
 
-      // Read the properties of this class:
-      QDataStream input( &dev );
-      input.setVersion( QDataStream::Qt_4_0 );
+   //
+   // Create a new node for the configuration of each group:
+   //
+   for (int i = 0; i < NUMBER_OF_GROUPS; ++i) {
 
-      // Read the connection parameters of the device:
-      int ctype;
-      input >> ctype;
-      m_connType = caen::Digitizer::convertConnType( ctype );
-      input >> m_linkNumber;
-      input >> temp;
-      m_trigMode = toTriggerMode( temp );
-      input >> m_trigOvlpEnabled;
-      input >> m_patGenEnabled;
-      input >> temp;
-      m_gateMode = toGateMode( temp );
-      input >> temp;
-      m_bufferMode = toBufferMode( temp );
-      input >> m_postTrigPercentage;
-      input >> m_extTrigEnabled;
-      input >> m_extTrigOutEnabled;
-      input >> ctype;
-      m_acqMode = caen::Digitizer::convertAcqMode( ctype );
-      input >> m_saveRawNtuple;
-      input >> temp;
-      m_clockSource = toClockSource( temp );
-      input >> temp;
-      m_evCountMode = toEvCountMode( temp );
-      input >> temp;
-      m_signalType = toSignalType( temp );
-      input >> m_highImpedanceGPO;
-      input >> m_cfdFraction;
-      input >> m_cfdDelay;
-      input >> m_cfdLength;
-      input >> m_gaussSmoothWidth;
-
-      // Read in the configuration of the groups:
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         CHECK( m_groups[ i ].readConfig( dev ) );
-         CHECK( m_groups[ i ].getGroupNumber() != i );
-      }
-
-      return StatusCode::SUCCESS;
+      QDomElement gr_element = element.ownerDocument().createElement("Group");
+      CHECK(m_groups[i].writeConfig(gr_element));
+      element.appendChild(gr_element);
    }
 
-   StatusCode Device::writeConfig( QIODevice& dev ) const {
+   return StatusCode::SUCCESS;
+}
 
-      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
+const QString& Device::deviceName() const {
 
-      // Write the properties of this class:
-      QDataStream output( &dev );
-      output.setVersion( QDataStream::Qt_4_0 );
+   static const QString name("DT5740");
+   return name;
+}
 
-      // Write out the connection parameters of the device:
-      output << caen::Digitizer::convertConnType( m_connType );
-      output << m_linkNumber;
-      output << toString( m_trigMode );
-      output << m_trigOvlpEnabled;
-      output << m_patGenEnabled;
-      output << toString( m_gateMode );
-      output << toString( m_bufferMode );
-      output << m_postTrigPercentage; 
-      output << m_extTrigEnabled;
-      output << m_extTrigOutEnabled;
-      output << caen::Digitizer::convertAcqMode( m_acqMode );
-      output << m_saveRawNtuple;
-      output << toString( m_clockSource );
-      output << toString( m_evCountMode );
-      output << toString( m_signalType );
-      output << m_highImpedanceGPO;
-      output << m_cfdFraction;
-      output << m_cfdDelay;
-      output << m_cfdLength;
-      output << m_gaussSmoothWidth;
+unsigned int Device::getID() const {
 
-      // Write out the group configurations:
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         CHECK( m_groups[ i ].writeConfig( dev ) );
-      }
-
-      return StatusCode::SUCCESS;
-   }
-
-   StatusCode Device::readConfig( const QDomElement& element ) {
-
-      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
-
-      clear();
-
-      //
-      // Read the device wide configuration:
-      //
-      bool ok;
-
-      const int ctype = element.attribute( "ConnType", "0" ).toInt( &ok );
-      CHECK( ok );
-      m_connType = caen::Digitizer::convertConnType( ctype );
-
-      m_linkNumber = element.attribute( "LinkNumber", "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_trigMode = toTriggerMode( element.attribute( "TrigMode",
-                                                     "InputOverThreshold" ) );
-
-      m_trigOvlpEnabled = element.attribute( "TrigOvlpEnabled",
-                                             "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_patGenEnabled = element.attribute( "PatGenEnabled", "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_gateMode = toGateMode( element.attribute( "GateMode",
-                                                  "Window" ) );
-
-      m_bufferMode = toBufferMode( element.attribute( "BufferMode",
-                                                      "NBuffers1" ) );
-
-      m_postTrigPercentage = element.attribute( "PostTrigPercentage",
-                                                "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_extTrigEnabled = element.attribute( "ExtTrigEnabled",
-                                            "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_extTrigOutEnabled = element.attribute( "ExtTrigOutEnabled",
-                                               "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_acqMode =
-         caen::Digitizer::convertAcqMode( element.attribute( "AcqMode",
-                                                             "0" ).toInt( &ok ) );
-      CHECK( ok );
-
-      m_saveRawNtuple = element.attribute( "SaveRawNtuple",
-                                           "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_clockSource = toClockSource( element.attribute( "ClockSource",
-                                                        "Internal" ) );
-
-      m_evCountMode = toEvCountMode( element.attribute( "EvCountMode",
-                                                        "AcceptedTriggers" ) );
-
-      m_signalType = toSignalType( element.attribute( "SignalType",
-                                                      "NIM" ) );
-
-      m_highImpedanceGPO = element.attribute( "HighImpedanceGPO",
-                                              "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_cfdFraction = element.attribute( "CFDFraction", "0.0" ).toDouble( &ok );
-      CHECK( ok );
-
-      m_cfdDelay = element.attribute( "CFDDelay", "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_cfdLength = element.attribute( "CFDLength", "0" ).toInt( &ok );
-      CHECK( ok );
-
-      m_gaussSmoothWidth = element.attribute( "GaussSmoothWidth",
-                                              "0.0" ).toDouble( &ok );
-      CHECK( ok );
-
-      //
-      // Configure the groups:
-      //
-      for( int i = 0; i < element.childNodes().size(); ++i ) {
-
-         // Only process "Group" type child-nodes:
-         if( element.childNodes().at( i ).nodeName() != "Group" ) {
-            continue;
-         }
-
-         GroupConfig group;
-         CHECK( group.readConfig( element.childNodes().at( i ).toElement() ) );
-         if( ( group.getGroupNumber() >= 0 ) &&
-             ( group.getGroupNumber() < NUMBER_OF_GROUPS ) ) {
-            m_groups[ group.getGroupNumber() ] = group;
-         } else {
-            REPORT_ERROR( tr( "There was an error reading the configuration "
-                              "of a group" ) );
-            return StatusCode::FAILURE;
-         }
-      }
-
-      return StatusCode::SUCCESS;
-   }
-
-   StatusCode Device::writeConfig( QDomElement& element ) const {
-
-      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
-
-      //
-      // Write the device wide configuration:
-      //
-      element.setAttribute( "ConnType",
-                            caen::Digitizer::convertConnType( m_connType ) );
-      element.setAttribute( "LinkNumber", m_linkNumber );
-      element.setAttribute( "TrigMode", toString( m_trigMode ) );
-      element.setAttribute( "TrigOvlpEnabled", m_trigOvlpEnabled );
-      element.setAttribute( "PatGenEnabled", m_patGenEnabled );
-      element.setAttribute( "GateMode", toString( m_gateMode ) );
-      element.setAttribute( "BufferMode", toString( m_bufferMode ) );
-      element.setAttribute( "PostTrigPercentage", m_postTrigPercentage );
-      element.setAttribute( "ExtTrigEnabled", m_extTrigEnabled );
-      element.setAttribute( "ExtTrigOutEnabled", m_extTrigOutEnabled );
-      element.setAttribute( "AcqMode",
-                            caen::Digitizer::convertAcqMode( m_acqMode ) );
-      element.setAttribute( "SaveRawNtuple", m_saveRawNtuple );
-      element.setAttribute( "ClockSource", toString( m_clockSource ) );
-      element.setAttribute( "EvCountMode", toString( m_evCountMode ) );
-      element.setAttribute( "SignalType", toString( m_signalType ) );
-      element.setAttribute( "HighImpedanceGPO", m_highImpedanceGPO );
-      element.setAttribute( "CFDFraction", m_cfdFraction );
-      element.setAttribute( "CFDDelay", m_cfdDelay );
-      element.setAttribute( "CFDLength", m_cfdLength );
-      element.setAttribute( "GaussSmoothWidth", m_gaussSmoothWidth );
-
-      //
-      // Create a new node for the configuration of each group:
-      //
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-
-         QDomElement gr_element =
-            element.ownerDocument().createElement( "Group" );
-         CHECK( m_groups[ i ].writeConfig( gr_element ) );
-         element.appendChild( gr_element );
-      }
-
-      return StatusCode::SUCCESS;
-   }
-
-   const QString& Device::deviceName() const {
-
-      static const QString name( "DT5740" );
-      return name;
-   }
-
-   unsigned int Device::getID() const {
-
-      unsigned int result = 0;
-      switch( m_connType ) {
+   unsigned int result = 0;
+   switch (m_connType) {
 
       case caen::Digitizer::USB:
          result = 0;
@@ -316,59 +311,59 @@ namespace dt5740 {
       default:
          result = 0;
          break;
-      }
-
-      result += m_linkNumber;
-
-      return result;
    }
 
-   void Device::setID( unsigned int ) {
+   result += m_linkNumber;
 
-      return;
+   return result;
+}
+
+void Device::setID(unsigned int) {
+
+   return;
+}
+
+void Device::clear() {
+
+   // Reset the simple properties:
+   m_connType = caen::Digitizer::USB;
+   m_linkNumber = 0;
+
+   // Reset the device wide properties:
+   m_trigMode = TRG_InputOverThreshold;
+   m_trigOvlpEnabled = false;
+   m_patGenEnabled = false;
+   m_gateMode = GATE_Window;
+   m_bufferMode = BUFF_NBuffers1024;
+   m_postTrigPercentage = 50;
+   m_extTrigEnabled = false;
+   m_extTrigOutEnabled = false;
+   m_clockSource = CLK_Internal;
+   m_evCountMode = EV_CountAcceptedTriggers;
+   m_signalType = SGNL_NIM;
+   m_highImpedanceGPO = false;
+
+   m_acqMode = caen::Digitizer::ACQ_SW_Controlled;
+
+   m_saveRawNtuple = false;
+
+   m_cfdFraction = 0.1;
+   m_cfdDelay = 10;
+   m_cfdLength = 5;
+
+   m_gaussSmoothWidth = 0.0;
+
+   // Clear all the groups:
+   for (int i = 0; i < NUMBER_OF_GROUPS; ++i) {
+      m_groups[i].clear();
    }
 
-   void Device::clear() {
+   return;
+}
 
-      // Reset the simple properties:
-      m_connType = caen::Digitizer::USB;
-      m_linkNumber = 0;
+int Device::getSamples() const {
 
-      // Reset the device wide properties:
-      m_trigMode = TRG_InputOverThreshold;
-      m_trigOvlpEnabled = false;
-      m_patGenEnabled = false;
-      m_gateMode = GATE_Window;
-      m_bufferMode = BUFF_NBuffers1024;
-      m_postTrigPercentage = 50;
-      m_extTrigEnabled = false;
-      m_extTrigOutEnabled = false;
-      m_clockSource = CLK_Internal;
-      m_evCountMode = EV_CountAcceptedTriggers;
-      m_signalType = SGNL_NIM;
-      m_highImpedanceGPO = false;
-
-      m_acqMode = caen::Digitizer::ACQ_SW_Controlled;
-
-      m_saveRawNtuple = false;
-
-      m_cfdFraction = 0.1;
-      m_cfdDelay = 10;
-      m_cfdLength = 5;
-
-      m_gaussSmoothWidth = 0.0;
-
-      // Clear all the groups:
-      for( int i = 0; i < NUMBER_OF_GROUPS; ++i ) {
-         m_groups[ i ].clear();
-      }
-
-      return;
-   }
-
-   int Device::getSamples() const {
-
-      switch( m_bufferMode ) {
+   switch (m_bufferMode) {
 
       case BUFF_NBuffers1:
          return 196608;
@@ -404,167 +399,160 @@ namespace dt5740 {
          return 192;
          break;
       default:
-         REPORT_ERROR( tr( "Buffer mode (%1) not recognized" )
-                       .arg( m_bufferMode ) );
+         REPORT_ERROR(tr("Buffer mode (%1) not recognized").arg(m_bufferMode));
          break;
-      }
-
-      return 0;
-   } 
-
-   /**
-    * This function is used by the derived classes to decode the content
-    * an event fragment into easier-to-use structures.
-    *
-    * @param fragment The encoded information
-    * @param ei The decoded event information
-    * @param ed The decoded event data
-    * @returns <code>true</code> if the decoding was successful,
-    *          <code>false</code> otherwise
-    */
-   bool Device::decode( const ev::Fragment& fragment,
-                        caen::Digitizer::EventInfo& ei,
-                        caen::Digitizer::EventData16Bit& ed ) const {
-
-      // Calculate the number of active channels:
-      size_t channels = 0;
-      for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
-         for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
-              ++channel ) {
-            if( m_groups[ group ].getChannel( channel ) ) {
-               ++channels;
-            }
-         }
-      }
-
-      // The required size of the fragment:
-      const size_t size =
-         6 +                              // Event info words
-         ( channels * getSamples() / 2 ); // Samples for each channel
-
-      // Check if the fragment is if the expected size:
-      CHECK( fragment.getDataWords().size() == size );
-
-      // Easy access to the data words:
-      const ev::Fragment::Payload_t& data = fragment.getDataWords();
-
-      // Set the event information:
-      ei.eventSize      = data[ 0 ];
-      ei.boardId        = data[ 1 ];
-      ei.pattern        = data[ 2 ];
-      ei.channelMask    = data[ 3 ];
-      ei.eventCounter   = data[ 4 ];
-      ei.triggerTimeTag = data[ 5 ];
-
-      // Set the sample information for each active channel:
-      int index = 6;
-      bool low_bits = true;
-      for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
-         for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
-              ++channel ) {
-
-            // Index of this channel:
-            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP +
-                  channel;
-
-            // Clear the data in the inactive channels:
-            if( ! m_groups[ group ].getChannel( channel ) ) {
-               ed.chData[ chIndex ].clear();
-               continue;
-            }
-
-            // Fill the event data for this channel:
-            ed.chData[ chIndex ].resize( getSamples(), 0 );
-            for( int sample = 0; sample < getSamples();
-                 ++sample ) {
-               if( low_bits ) {
-                  ed.chData[ chIndex ][ sample ] = data[ index ] & 0xffff;
-                  low_bits = false;
-               } else {
-                  ed.chData[ chIndex ][ sample ] =
-                        ( data[ index ] >> 16 ) & 0xffff;
-                  low_bits = true;
-                  ++index;
-               }
-            }
-         }
-      }
-
-      return true;
    }
 
-   /**
-    * This function is used by the Readout class to place the device's data
-    * into an event fragment.
-    *
-    * @param ei The event information
-    * @param ed The event data
-    * @param fragment The encoded event information
-    * @returns <code>true</code> if the decoding was successful,
-    *          <code>false</code> otherwise
-    */
-   bool Device::encode( const caen::Digitizer::EventInfo& ei,
-                        const caen::Digitizer::EventData16Bit& ed,
-                        ev::Fragment& fragment ) const {
+   return 0;
+}
 
-      // Clear the data words, but leave the module ID alone:
-      fragment.clear( false );
+/**
+ * This function is used by the derived classes to decode the content
+ * an event fragment into easier-to-use structures.
+ *
+ * @param fragment The encoded information
+ * @param ei The decoded event information
+ * @param ed The decoded event data
+ * @returns <code>true</code> if the decoding was successful,
+ *          <code>false</code> otherwise
+ */
+bool Device::decode(const ev::Fragment& fragment,
+                    caen::Digitizer::EventInfo& ei,
+                    caen::Digitizer::EventData16Bit& ed) const {
 
-      // Put the event information into the fragment:
-      fragment.addDataWord( ei.eventSize );
-      fragment.addDataWord( ei.boardId );
-      fragment.addDataWord( ei.pattern );
-      fragment.addDataWord( ei.channelMask );
-      fragment.addDataWord( ei.eventCounter );
-      fragment.addDataWord( ei.triggerTimeTag );
+   // Calculate the number of active channels:
+   size_t channels = 0;
+   for (int group = 0; group < NUMBER_OF_GROUPS; ++group) {
+      for (int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
+           ++channel) {
+         if (m_groups[group].getChannel(channel)) {
+            ++channels;
+         }
+      }
+   }
 
-      // Now place all the channel data into the fragment:
-      bool low_bits = true;
-      ev::Fragment::Payload_t::value_type dataWord = 0;
-      for( int group = 0; group < NUMBER_OF_GROUPS; ++group ) {
-         for( int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
-              ++channel ) {
+   // The required size of the fragment:
+   const size_t size =
+       6 +                             // Event info words
+       (channels * getSamples() / 2);  // Samples for each channel
 
-            // Skip inactive channels:
-            if( ! m_groups[ group ].getChannel( channel ) ) {
-               continue;
-            }
+   // Check if the fragment is if the expected size:
+   CHECK(fragment.getDataWords().size() == size);
 
-            // Index of this channel:
-            const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP +
-                  channel;
+   // Easy access to the data words:
+   const ev::Fragment::Payload_t& data = fragment.getDataWords();
 
-            // A security check:
-            CHECK( static_cast< int >( ed.chData[ chIndex ].size() ) ==
-                   getSamples() );
+   // Set the event information:
+   ei.eventSize = data[0];
+   ei.boardId = data[1];
+   ei.pattern = data[2];
+   ei.channelMask = data[3];
+   ei.eventCounter = data[4];
+   ei.triggerTimeTag = data[5];
 
-            // Add the data from this channel to the fragment:
-            for( int sample = 0; sample < getSamples(); ++sample ) {
-               if( low_bits ) {
-                  dataWord = 0;
-                  dataWord |= ed.chData[ chIndex ][ sample ] & 0xffff;
-                  low_bits = false;
-               } else {
-                  dataWord |=
-                        ( ed.chData[ chIndex ][ sample ] << 16 ) & 0xffff0000;
-                  fragment.addDataWord( dataWord );
-                  low_bits = true;
-               }
+   // Set the sample information for each active channel:
+   int index = 6;
+   bool low_bits = true;
+   for (int group = 0; group < NUMBER_OF_GROUPS; ++group) {
+      for (int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
+           ++channel) {
+
+         // Index of this channel:
+         const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP + channel;
+
+         // Clear the data in the inactive channels:
+         if (!m_groups[group].getChannel(channel)) {
+            ed.chData[chIndex].clear();
+            continue;
+         }
+
+         // Fill the event data for this channel:
+         ed.chData[chIndex].resize(getSamples(), 0);
+         for (int sample = 0; sample < getSamples(); ++sample) {
+            if (low_bits) {
+               ed.chData[chIndex][sample] = data[index] & 0xffff;
+               low_bits = false;
+            } else {
+               ed.chData[chIndex][sample] = (data[index] >> 16) & 0xffff;
+               low_bits = true;
+               ++index;
             }
          }
       }
-
-      // If a sample was set, but not added to the payload, let's do that here:
-      if( ! low_bits ) {
-         fragment.addDataWord( dataWord );
-      }
-
-      return true;
    }
 
-   QString Device::toString( Device::TriggerMode mode ) const {
+   return true;
+}
 
-      switch( mode ) {
+/**
+ * This function is used by the Readout class to place the device's data
+ * into an event fragment.
+ *
+ * @param ei The event information
+ * @param ed The event data
+ * @param fragment The encoded event information
+ * @returns <code>true</code> if the decoding was successful,
+ *          <code>false</code> otherwise
+ */
+bool Device::encode(const caen::Digitizer::EventInfo& ei,
+                    const caen::Digitizer::EventData16Bit& ed,
+                    ev::Fragment& fragment) const {
+
+   // Clear the data words, but leave the module ID alone:
+   fragment.clear(false);
+
+   // Put the event information into the fragment:
+   fragment.addDataWord(ei.eventSize);
+   fragment.addDataWord(ei.boardId);
+   fragment.addDataWord(ei.pattern);
+   fragment.addDataWord(ei.channelMask);
+   fragment.addDataWord(ei.eventCounter);
+   fragment.addDataWord(ei.triggerTimeTag);
+
+   // Now place all the channel data into the fragment:
+   bool low_bits = true;
+   ev::Fragment::Payload_t::value_type dataWord = 0;
+   for (int group = 0; group < NUMBER_OF_GROUPS; ++group) {
+      for (int channel = 0; channel < GroupConfig::CHANNELS_IN_GROUP;
+           ++channel) {
+
+         // Skip inactive channels:
+         if (!m_groups[group].getChannel(channel)) {
+            continue;
+         }
+
+         // Index of this channel:
+         const int chIndex = group * GroupConfig::CHANNELS_IN_GROUP + channel;
+
+         // A security check:
+         CHECK(static_cast<int>(ed.chData[chIndex].size()) == getSamples());
+
+         // Add the data from this channel to the fragment:
+         for (int sample = 0; sample < getSamples(); ++sample) {
+            if (low_bits) {
+               dataWord = 0;
+               dataWord |= ed.chData[chIndex][sample] & 0xffff;
+               low_bits = false;
+            } else {
+               dataWord |= (ed.chData[chIndex][sample] << 16) & 0xffff0000;
+               fragment.addDataWord(dataWord);
+               low_bits = true;
+            }
+         }
+      }
+   }
+
+   // If a sample was set, but not added to the payload, let's do that here:
+   if (!low_bits) {
+      fragment.addDataWord(dataWord);
+   }
+
+   return true;
+}
+
+QString Device::toString(Device::TriggerMode mode) const {
+
+   switch (mode) {
 
       case TRG_InputOverThreshold:
          return "InputOverThreshold";
@@ -573,16 +561,16 @@ namespace dt5740 {
          return "InputUnderThreshold";
          break;
       default:
-         REPORT_ERROR( tr( "Trigger mode (%1) not recognized" ).arg( mode ) );
+         REPORT_ERROR(tr("Trigger mode (%1) not recognized").arg(mode));
          break;
-      }
-
-      return "UnknownTriggerMode";
    }
 
-   QString Device::toString( Device::GateMode mode ) const {
+   return "UnknownTriggerMode";
+}
 
-      switch( mode ) {
+QString Device::toString(Device::GateMode mode) const {
+
+   switch (mode) {
 
       case GATE_Window:
          return "Window";
@@ -591,16 +579,16 @@ namespace dt5740 {
          return "SingleShot";
          break;
       default:
-         REPORT_ERROR( tr( "Gate mode (%1) not recognized" ).arg( mode ) );
+         REPORT_ERROR(tr("Gate mode (%1) not recognized").arg(mode));
          break;
-      }
-
-      return "UnknownGateMode";
    }
 
-   QString Device::toString( Device::BufferMode mode ) const {
+   return "UnknownGateMode";
+}
 
-      switch( mode ) {
+QString Device::toString(Device::BufferMode mode) const {
+
+   switch (mode) {
 
       case BUFF_NBuffers1:
          return "NBuffers1";
@@ -636,16 +624,16 @@ namespace dt5740 {
          return "NBuffers1024";
          break;
       default:
-         REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( mode ) );
+         REPORT_ERROR(tr("Buffer mode (%1) not recognized").arg(mode));
          break;
-      }
-
-      return "UnknownBufferMode";
    }
 
-   QString Device::toString( Device::ClockSource source ) const {
+   return "UnknownBufferMode";
+}
 
-      switch( source ) {
+QString Device::toString(Device::ClockSource source) const {
+
+   switch (source) {
 
       case CLK_Internal:
          return "Internal";
@@ -654,16 +642,16 @@ namespace dt5740 {
          return "External";
          break;
       default:
-         REPORT_ERROR( tr( "Clock source (%1) not recognized" ).arg( source ) );
+         REPORT_ERROR(tr("Clock source (%1) not recognized").arg(source));
          break;
-      }
-
-      return "UnknownClockSource";
    }
 
-   QString Device::toString( Device::EvCountMode mode ) const {
+   return "UnknownClockSource";
+}
 
-      switch( mode ) {
+QString Device::toString(Device::EvCountMode mode) const {
+
+   switch (mode) {
 
       case EV_CountAcceptedTriggers:
          return "AcceptedTriggers";
@@ -672,17 +660,16 @@ namespace dt5740 {
          return "AllTriggers";
          break;
       default:
-         REPORT_ERROR( tr( "Event counting mode (%1) not recognized" )
-                       .arg( mode ) );
+         REPORT_ERROR(tr("Event counting mode (%1) not recognized").arg(mode));
          break;
-      }
-
-      return "UnknownEvCountMode";
    }
 
-   QString Device::toString( SignalType type ) const {
+   return "UnknownEvCountMode";
+}
 
-      switch( type ) {
+QString Device::toString(SignalType type) const {
+
+   switch (type) {
 
       case SGNL_NIM:
          return "NIM";
@@ -691,108 +678,101 @@ namespace dt5740 {
          return "TTL";
          break;
       default:
-         REPORT_ERROR( tr( "Signal type (%1) not recognized" ).arg( type ) );
+         REPORT_ERROR(tr("Signal type (%1) not recognized").arg(type));
          break;
-      }
-
-      return "UnknownSignalType";
    }
 
-   Device::TriggerMode
-   Device::toTriggerMode( const QString& value ) const {
+   return "UnknownSignalType";
+}
 
-      if( value == "InputOverThreshold" ) {
-         return TRG_InputOverThreshold;
-      } else if( value == "InputUnderThreshold" ) {
-         return TRG_InputUnderThreshold;
-      }
+Device::TriggerMode Device::toTriggerMode(const QString& value) const {
 
-      REPORT_ERROR( tr( "Trigger mode (%1) not recognized" ).arg( value ) );
+   if (value == "InputOverThreshold") {
       return TRG_InputOverThreshold;
+   } else if (value == "InputUnderThreshold") {
+      return TRG_InputUnderThreshold;
    }
 
-   Device::GateMode
-   Device::toGateMode( const QString& value ) const {
+   REPORT_ERROR(tr("Trigger mode (%1) not recognized").arg(value));
+   return TRG_InputOverThreshold;
+}
 
-      if( value == "Window" ) {
-         return GATE_Window;
-      } else if( value == "SingleShot" ) {
-         return GATE_SingleShot;
-      }
+Device::GateMode Device::toGateMode(const QString& value) const {
 
-      REPORT_ERROR( tr( "Gate mode (%1) not recognized" ).arg( value ) );
+   if (value == "Window") {
       return GATE_Window;
+   } else if (value == "SingleShot") {
+      return GATE_SingleShot;
    }
 
-   Device::BufferMode
-   Device::toBufferMode( const QString& value ) const {
+   REPORT_ERROR(tr("Gate mode (%1) not recognized").arg(value));
+   return GATE_Window;
+}
 
-      if( value == "NBuffers1" ) {
-         return BUFF_NBuffers1;
-      } else if( value == "NBuffers2" ) {
-         return BUFF_NBuffers2;
-      } else if( value == "NBuffers4" ) {
-         return BUFF_NBuffers4;
-      } else if( value == "NBuffers8" ) {
-         return BUFF_NBuffers8;
-      } else if( value == "NBuffers16" ) {
-         return BUFF_NBuffers16;
-      } else if( value == "NBuffers32" ) {
-         return BUFF_NBuffers32;
-      } else if( value == "NBuffers64" ) {
-         return BUFF_NBuffers64;
-      } else if( value == "NBuffers128" ) {
-         return BUFF_NBuffers128;
-      } else if( value == "NBuffers256" ) {
-         return BUFF_NBuffers256;
-      } else if( value == "NBuffers512" ) {
-         return BUFF_NBuffers512;
-      } else if( value == "NBuffers1024" ) {
-         return BUFF_NBuffers1024;
-      }
+Device::BufferMode Device::toBufferMode(const QString& value) const {
 
-      REPORT_ERROR( tr( "Buffer mode (%1) not recognized" ).arg( value ) );
+   if (value == "NBuffers1") {
       return BUFF_NBuffers1;
+   } else if (value == "NBuffers2") {
+      return BUFF_NBuffers2;
+   } else if (value == "NBuffers4") {
+      return BUFF_NBuffers4;
+   } else if (value == "NBuffers8") {
+      return BUFF_NBuffers8;
+   } else if (value == "NBuffers16") {
+      return BUFF_NBuffers16;
+   } else if (value == "NBuffers32") {
+      return BUFF_NBuffers32;
+   } else if (value == "NBuffers64") {
+      return BUFF_NBuffers64;
+   } else if (value == "NBuffers128") {
+      return BUFF_NBuffers128;
+   } else if (value == "NBuffers256") {
+      return BUFF_NBuffers256;
+   } else if (value == "NBuffers512") {
+      return BUFF_NBuffers512;
+   } else if (value == "NBuffers1024") {
+      return BUFF_NBuffers1024;
    }
 
-   Device::ClockSource
-   Device::toClockSource( const QString& value ) const {
+   REPORT_ERROR(tr("Buffer mode (%1) not recognized").arg(value));
+   return BUFF_NBuffers1;
+}
 
-      if( value == "Internal" ) {
-         return CLK_Internal;
-      } else if( value == "External" ) {
-         return CLK_External;
-      }
+Device::ClockSource Device::toClockSource(const QString& value) const {
 
-      REPORT_ERROR( tr( "Clock source (%1) not recognized" ).arg( value ) );
+   if (value == "Internal") {
       return CLK_Internal;
+   } else if (value == "External") {
+      return CLK_External;
    }
 
-   Device::EvCountMode
-   Device::toEvCountMode( const QString& value ) const {
+   REPORT_ERROR(tr("Clock source (%1) not recognized").arg(value));
+   return CLK_Internal;
+}
 
-      if( value == "AcceptedTriggers" ) {
-         return EV_CountAcceptedTriggers;
-      } else if( value == "AllTriggers" ) {
-         return EV_CountAllTriggers;
-      }
+Device::EvCountMode Device::toEvCountMode(const QString& value) const {
 
-      REPORT_ERROR( tr( "Event counting mode (%1) not recognized" )
-                    .arg( value ) );
+   if (value == "AcceptedTriggers") {
       return EV_CountAcceptedTriggers;
+   } else if (value == "AllTriggers") {
+      return EV_CountAllTriggers;
    }
 
-   Device::SignalType
-   Device::toSignalType( const QString& value ) const {
+   REPORT_ERROR(tr("Event counting mode (%1) not recognized").arg(value));
+   return EV_CountAcceptedTriggers;
+}
 
-      if( value == "NIM" ) {
-         return SGNL_NIM;
-      } else if( value == "TTL" ) {
-         return SGNL_TTL;
-      }
+Device::SignalType Device::toSignalType(const QString& value) const {
 
-      REPORT_ERROR( tr( "Signal type (%1) not recognized" ).arg( value ) );
+   if (value == "NIM") {
       return SGNL_NIM;
+   } else if (value == "TTL") {
+      return SGNL_TTL;
    }
 
-} // namespace dt5740
+   REPORT_ERROR(tr("Signal type (%1) not recognized").arg(value));
+   return SGNL_NIM;
+}
+
+}  // namespace dt5740

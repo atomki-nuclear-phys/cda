@@ -26,14 +26,16 @@
  * CHECK( functionCall() );
  * </code>
  */
-#define CHECK( CMD ) {                                               \
-      const auto result = CMD;                                       \
-      if( ! result ) {                                               \
-         REPORT_ERROR( qApp->translate( "CHECK",                     \
-                                        "Failed executing \"%1\"" )  \
-                       .arg( #CMD ) );                               \
-         return result;                                              \
-      }                                                              \
-   } while( 0 ){}
+#define CHECK(CMD)                                                           \
+   {                                                                         \
+      const auto result = CMD;                                               \
+      if (!result) {                                                         \
+         REPORT_ERROR(                                                       \
+             qApp->translate("CHECK", "Failed executing \"%1\"").arg(#CMD)); \
+         return result;                                                      \
+      }                                                                      \
+   }                                                                         \
+   while (0) {                                                               \
+   }
 
-#endif // CDA_CORE_COMMON_ERRORCHECK_H
+#endif  // CDA_CORE_COMMON_ERRORCHECK_H

@@ -9,9 +9,9 @@
 #include "Export.h"
 
 // Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QWidget )
+QT_FORWARD_DECLARE_CLASS(QWidget)
 
 /// Show an information window about CDA
-CDAGUI_EXPORT void aboutCDA( QT_PREPEND_NAMESPACE( QWidget )* parent );
+CDAGUI_EXPORT void aboutCDA(QT_PREPEND_NAMESPACE(QWidget) * parent);
 
-#endif // CDA_GUI_COMMON_ABOUTCDA_H
+#endif  // CDA_GUI_COMMON_ABOUTCDA_H

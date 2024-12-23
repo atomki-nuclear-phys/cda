@@ -9,10 +9,8 @@
  * @param path The name of the FIFO file
  * @param parent The Qt parent of the object
  */
-Fifo::Fifo( const QString& path, QObject* parent )
-   : QT_PREPEND_NAMESPACE( QFile )( path, parent ) {
-
-}
+Fifo::Fifo(const QString& path, QObject* parent)
+    : QT_PREPEND_NAMESPACE(QFile)(path, parent) {}
 
 Fifo::~Fifo() {
 
@@ -29,14 +27,14 @@ Fifo::~Fifo() {
  * @returns <code>true</code> if the operation was successful,
  *          <code>false</code> otherwise
  */
-bool Fifo::open( QIODevice::OpenMode ) {
+bool Fifo::open(QIODevice::OpenMode) {
 
-   msg::Logger m_logger( "Fifo::open()" );
-   if( exists() ) {
-      REPORT_VERBOSE( tr( "%1 exists" ).arg( fileName() ) );
-      return QT_PREPEND_NAMESPACE( QFile )::open( QIODevice::ReadWrite );
+   msg::Logger m_logger("Fifo::open()");
+   if (exists()) {
+      REPORT_VERBOSE(tr("%1 exists").arg(fileName()));
+      return QT_PREPEND_NAMESPACE(QFile)::open(QIODevice::ReadWrite);
    } else {
-      m_logger << msg::WARNING << tr( "%1 does not exist" ).arg( fileName() )
+      m_logger << msg::WARNING << tr("%1 does not exist").arg(fileName())
                << msg::endmsg;
       return false;
    }

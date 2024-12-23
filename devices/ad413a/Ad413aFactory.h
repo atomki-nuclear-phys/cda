@@ -22,46 +22,45 @@
  */
 namespace ad413a {
 
-   //
-   // Make sure that the following Qt classes are available in the
-   // DEV namespace even if Qt has been built in an arbitrary
-   // namespace:
-   //
-   using QT_PREPEND_NAMESPACE( QObject );
-   using QT_PREPEND_NAMESPACE( QString );
+//
+// Make sure that the following Qt classes are available in the
+// DEV namespace even if Qt has been built in an arbitrary
+// namespace:
+//
+using QT_PREPEND_NAMESPACE(QObject);
+using QT_PREPEND_NAMESPACE(QString);
 
-   /**
-    *  @short Factory creating all the AD413A objects
-    *
-    *         This factory is used when loading the AD413A plugin to access
-    *         all the classes provided by the plugin.
-    *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
-    */
-   class Ad413aFactory : public QObject,
-                         virtual public dev::Factory {
+/**
+ *  @short Factory creating all the AD413A objects
+ *
+ *         This factory is used when loading the AD413A plugin to access
+ *         all the classes provided by the plugin.
+ *
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+ *
+ * $Revision$
+ * $Date$
+ */
+class Ad413aFactory : public QObject, virtual public dev::Factory {
 
-      Q_OBJECT
-      Q_INTERFACES( dev::Factory )
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 0, 0 )
-      Q_PLUGIN_METADATA( IID "hu.atomki.CDA.dev.ad413a/1.0" )
+   Q_OBJECT
+   Q_INTERFACES(dev::Factory)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+   Q_PLUGIN_METADATA(IID "hu.atomki.CDA.dev.ad413a/1.0")
 #endif
 
-   public:
-      /// Give the short name of the device implemented in the plug-in
-      virtual const QString& shortName() const;
-      /// Give the long name of the device implemented in the plug-in
-      virtual const QString& longName() const;
+public:
+   /// Give the short name of the device implemented in the plug-in
+   virtual const QString& shortName() const;
+   /// Give the long name of the device implemented in the plug-in
+   virtual const QString& longName() const;
 
-   protected:
-      /// Universal function for creating a device object of this type
-      virtual void* createDevice( const std::type_info& ti ) const;
+protected:
+   /// Universal function for creating a device object of this type
+   virtual void* createDevice(const std::type_info& ti) const;
 
-   }; // class Ad413aFactory
+};  // class Ad413aFactory
 
-} // namespace ad413a
+}  // namespace ad413a
 
-#endif // CDA_DEVICES_AD413A_AD413AFACTORY_H
+#endif  // CDA_DEVICES_AD413A_AD413AFACTORY_H
