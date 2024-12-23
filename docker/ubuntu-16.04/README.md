@@ -8,5 +8,5 @@ Ubuntu at the time of writing.)
 Build the image (for deployment) with:
 
 ```
-docker build --compress --squash -t krasznaa/cda-build:ubuntu-16.04 .
+docker build --compress -t registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-16.04-vX .
 ```
