@@ -14,11 +14,9 @@
  *
  * @param parent The Qt parent of the socket
  */
-Socket::Socket( QObject* parent )
-   : QTcpSocket( parent ) {
+Socket::Socket(QObject* parent) : QTcpSocket(parent) {
 
-   connect( this, SIGNAL( readyRead() ),
-            this, SLOT( handleDataReady() ) );
+   connect(this, SIGNAL(readyRead()), this, SLOT(handleDataReady()));
 }
 
 /**
@@ -33,6 +31,6 @@ Socket::Socket( QObject* parent )
  */
 void Socket::handleDataReady() {
 
-   emit dataReady( this );
+   emit dataReady(this);
    return;
 }

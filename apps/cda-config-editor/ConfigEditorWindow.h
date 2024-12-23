@@ -7,16 +7,16 @@
 #include <memory>
 
 // Qt include(s):
-#include <QtCore/QString>
+#include <QAction>
 #include <QMainWindow>
 #include <QStackedWidget>
-#include <QAction>
+#include <QtCore/QString>
 
 // CDA include(s):
-#include "msg/Logger.h"
-#include "device/CamacEditor.h"
 #include "device/CaenDigitizerEditor.h"
 #include "device/CaenVmeEditor.h"
+#include "device/CamacEditor.h"
+#include "msg/Logger.h"
 
 /**
  *  @short Main window for the configuration editor application
@@ -72,38 +72,38 @@ private:
    /// Function creating the application menus
    void createMenus();
    /// Function reading an XML configuration file
-   void readXMLConfig( const QString& filename );
+   void readXMLConfig(const QString& filename);
    /// Function reading a binary configuration file
-   void readBinaryConfig( const QString& filename );
+   void readBinaryConfig(const QString& filename);
    /// Function writing an XML configuration file
-   void writeXMLConfig( const QString& filename );
+   void writeXMLConfig(const QString& filename);
    /// Function writing a binary configuration file
-   void writeBinaryConfig( const QString& filename );
+   void writeBinaryConfig(const QString& filename);
 
    /// Central widget
-   std::unique_ptr< QWidget > m_centralWidget;
+   std::unique_ptr<QWidget> m_centralWidget;
    /// Stack of the editor widgets
-   std::unique_ptr< QStackedWidget > m_editStack;
+   std::unique_ptr<QStackedWidget> m_editStack;
 
    /// Widget to modify the CAMAC crate settings
-   std::unique_ptr< dev::CamacEditor > m_camacEdit;
+   std::unique_ptr<dev::CamacEditor> m_camacEdit;
    /// Widget to modify the CAEN digitizer device settings
-   std::unique_ptr< dev::CaenDigitizerEditor > m_caenDigitizerEdit;
+   std::unique_ptr<dev::CaenDigitizerEditor> m_caenDigitizerEdit;
    /// Widget to modify the CAEN VME device settings
-   std::unique_ptr< dev::CaenVmeEditor > m_caenVmeEdit;
+   std::unique_ptr<dev::CaenVmeEditor> m_caenVmeEdit;
 
    /// Action triggering the display of the CAMAC confiugration
-   std::unique_ptr< QAction > m_camacConfigAction;
+   std::unique_ptr<QAction> m_camacConfigAction;
    /// Action triggering the display of the CAEN digitizer configuration
-   std::unique_ptr< QAction > m_caenDigitizerConfigAction;
+   std::unique_ptr<QAction> m_caenDigitizerConfigAction;
    /// Action triggering the display of the CAEN VME configuration
-   std::unique_ptr< QAction > m_caenVmeConfigAction;
+   std::unique_ptr<QAction> m_caenVmeConfigAction;
 
    /// Name of the currently "opened" file
    QString m_currFileName;
    /// Message logging object
    mutable msg::Logger m_logger;
 
-}; // class ConfigEditorWindow
+};  // class ConfigEditorWindow
 
-#endif // CDA_APPS_CDA_CONFIG_EDITOR_CONFIGEDITORWINDOW_H
+#endif  // CDA_APPS_CDA_CONFIG_EDITOR_CONFIGEDITORWINDOW_H

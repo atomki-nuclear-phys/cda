@@ -15,41 +15,40 @@
 
 namespace t4300b {
 
-   /**
-    *  @short ROOT file writer for a T4300B CAMAC device
-    *
-    *         This class can write out the charges converted by
-    *         a T4300B CAMAC device into a ROOT file.
-    *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
-    */
-   class RootDisk : public virtual dev::IRootDisk,
-                    public virtual Device {
+/**
+ *  @short ROOT file writer for a T4300B CAMAC device
+ *
+ *         This class can write out the charges converted by
+ *         a T4300B CAMAC device into a ROOT file.
+ *
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+ *
+ * $Revision$
+ * $Date$
+ */
+class RootDisk : public virtual dev::IRootDisk, public virtual Device {
 
-      // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( t4300b::RootDisk )
+   // To get the tr() function:
+   Q_DECLARE_TR_FUNCTIONS(t4300b::RootDisk)
 
-   public:
-      /// Constructor
-      RootDisk();
+public:
+   /// Constructor
+   RootDisk();
 
-      /// Function initializing the device
-      virtual bool initialize( root::NTupleMgr& nmgr );
+   /// Function initializing the device
+   virtual bool initialize(root::NTupleMgr& nmgr);
 
-      /// Function filling the ntuple
-      virtual bool writeEvent( const ev::Fragment& fragment ) const;
+   /// Function filling the ntuple
+   virtual bool writeEvent(const ev::Fragment& fragment) const;
 
-   private:
-      /// The values read from the device
-      mutable unsigned int m_values[ NUMBER_OF_SUBADDRESSES ];
+private:
+   /// The values read from the device
+   mutable unsigned int m_values[NUMBER_OF_SUBADDRESSES];
 
-      mutable msg::Logger m_logger; ///< Message logger object
+   mutable msg::Logger m_logger;  ///< Message logger object
 
-   }; // class RootDisk
+};  // class RootDisk
 
-} // namespace t4300b
+}  // namespace t4300b
 
-#endif // CDA_DEVICES_T4300B_ROOTDISK_H
+#endif  // CDA_DEVICES_T4300B_ROOTDISK_H

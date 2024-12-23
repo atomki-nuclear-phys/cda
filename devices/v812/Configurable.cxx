@@ -11,105 +11,106 @@
 
 namespace std {
 
-   /// Helper function for printing std::vector values
-   template< typename T >
-   std::ostream& operator<<( std::ostream& out, const std::vector< T >& vec ) {
+/// Helper function for printing std::vector values
+template <typename T>
+std::ostream& operator<<(std::ostream& out, const std::vector<T>& vec) {
 
-      out << "[";
-      for( std::size_t i = 0; i < vec.size(); ++i ) {
-         out << vec[ i ];
-         if( i + 1 < vec.size() ) {
-            out << ", ";
-         }
+   out << "[";
+   for (std::size_t i = 0; i < vec.size(); ++i) {
+      out << vec[i];
+      if (i + 1 < vec.size()) {
+         out << ", ";
       }
-      out << "]";
-      return out;
    }
+   out << "]";
+   return out;
+}
 
-} // namespace std
+}  // namespace std
 
 namespace v812 {
 
-   Configurable::Configurable()
-   : Device(), m_logger( "v812::Configurable" ) {
+Configurable::Configurable() : Device(), m_logger("v812::Configurable") {}
 
+StatusCode Configurable::configure(const caen::VmeBus& bus) const {
+
+   // Tell the user what's happening.
+   m_logger << msg::INFO
+            << tr("Configuring device on address: %1").arg(m_vmeAddress, 4, 16)
+            << msg::endmsg;
+
+   // Read the device identifiers, just to make sure that the device is
+   // available.
+   m_logger << msg::DEBUG << tr("Module identifiers:") << msg::endmsg;
+   uint16_t deviceId = 0;
+   CHECK(bus.read(m_vmeAddress + 0xfe, deviceId));
+   m_logger << msg::DEBUG
+            << tr("Version & serial number      : %1").arg(deviceId, 16, 2)
+            << msg::endmsg;
+   CHECK(bus.read(m_vmeAddress + 0xfc, deviceId));
+   m_logger << msg::DEBUG
+            << tr("Manufacturer n. & module type: %1").arg(deviceId, 16, 2)
+            << msg::endmsg;
+   CHECK(bus.read(m_vmeAddress + 0xfa, deviceId));
+   m_logger << msg::DEBUG
+            << tr("Fixed code                   : %1").arg(deviceId, 16, 2)
+            << msg::endmsg;
+
+   // Construct the 16-bit inhibit word, used to enable/disable channels on
+   // the device.
+   uint16_t inhibitWord = 0;
+   std::vector<size_t> enabledChannels;
+   for (size_t i = 0; i < NUMBER_OF_CHANNELS; ++i) {
+      if (!m_channels[i]) {
+         continue;
+      }
+      inhibitWord |= (1 << i);
+      enabledChannels.push_back(i);
+   }
+   m_logger << msg::INFO << tr("Enabled channel(s): ") << enabledChannels
+            << msg::endmsg;
+
+   // Set the inhibit pattern on the device.
+   CHECK(bus.write(m_vmeAddress + 0x4a, inhibitWord));
+
+   // Set the discriminant thresholds for all enabled channels.
+   m_logger << msg::INFO << tr("Setting the channel thresholds...")
+            << msg::endmsg;
+   for (size_t i = 0; i < NUMBER_OF_CHANNELS; ++i) {
+      if (!m_channels[i]) {
+         continue;
+      }
+      CHECK(bus.write(static_cast<unsigned int>(m_vmeAddress + i * 0x2),
+                      m_channels[i]->getThreshold()));
+      m_logger << msg::INFO
+               << tr("  - Channel %1: %2")
+                      .arg(i, 2)
+                      .arg(m_channels[i]->getThreshold())
+               << msg::endmsg;
    }
 
-   StatusCode Configurable::configure( const caen::VmeBus& bus ) const {
+   // Set the device level properties.
+   CHECK(bus.write(m_vmeAddress + 0x40, m_outputWidth1));
+   m_logger << msg::INFO
+            << tr("Output width (channels 0-7) : %1").arg(m_outputWidth1)
+            << msg::endmsg;
+   CHECK(bus.write(m_vmeAddress + 0x42, m_outputWidth2));
+   m_logger << msg::INFO
+            << tr("Output width (channels 8-15): %1").arg(m_outputWidth2)
+            << msg::endmsg;
+   CHECK(bus.write(m_vmeAddress + 0x44, m_deadTime1));
+   m_logger << msg::INFO << tr("Dead time (channels 0-7) : %1").arg(m_deadTime1)
+            << msg::endmsg;
+   CHECK(bus.write(m_vmeAddress + 0x46, m_deadTime2));
+   m_logger << msg::INFO << tr("Dead time (channels 8-15): %1").arg(m_deadTime2)
+            << msg::endmsg;
+   CHECK(bus.write(m_vmeAddress + 0x48, m_majorityThreshold));
+   m_logger << msg::INFO
+            << tr("Majority threshold: %1").arg(m_majorityThreshold)
+            << msg::endmsg;
 
-      // Tell the user what's happening.
-      m_logger << msg::INFO << tr( "Configuring device on address: %1" )
-                               .arg( m_vmeAddress, 4, 16 ) << msg::endmsg;
+   // Return gracefully.
+   return StatusCode::SUCCESS;
+}
 
-      // Read the device identifiers, just to make sure that the device is
-      // available.
-      m_logger << msg::DEBUG << tr( "Module identifiers:" ) << msg::endmsg;
-      uint16_t deviceId = 0;
-      CHECK( bus.read( m_vmeAddress + 0xfe, deviceId ) );
-      m_logger << msg::DEBUG << tr( "Version & serial number      : %1" )
-                                .arg( deviceId, 16, 2 ) << msg::endmsg;
-      CHECK( bus.read( m_vmeAddress + 0xfc, deviceId ) );
-      m_logger << msg::DEBUG << tr( "Manufacturer n. & module type: %1" )
-                                .arg( deviceId, 16, 2 ) << msg::endmsg;
-      CHECK( bus.read( m_vmeAddress + 0xfa, deviceId ) );
-      m_logger << msg::DEBUG << tr( "Fixed code                   : %1" )
-                                .arg( deviceId, 16, 2 ) << msg::endmsg;
-
-      // Construct the 16-bit inhibit word, used to enable/disable channels on
-      // the device.
-      uint16_t inhibitWord = 0;
-      std::vector< size_t > enabledChannels;
-      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         if( ! m_channels[ i ] ) {
-            continue;
-         }
-         inhibitWord |= ( 1 << i );
-         enabledChannels.push_back( i );
-      }
-      m_logger << msg::INFO << tr( "Enabled channel(s): " ) << enabledChannels
-               << msg::endmsg;
-
-      // Set the inhibit pattern on the device.
-      CHECK( bus.write( m_vmeAddress + 0x4a, inhibitWord ) );
-
-      // Set the discriminant thresholds for all enabled channels.
-      m_logger << msg::INFO << tr( "Setting the channel thresholds..." )
-               << msg::endmsg;
-      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
-         if( ! m_channels[ i ] ) {
-            continue;
-         }
-         CHECK( bus.write( static_cast<unsigned int>(m_vmeAddress + i * 0x2),
-                           m_channels[ i ]->getThreshold() ) );
-         m_logger << msg::INFO << tr( "  - Channel %1: %2" ).arg( i, 2 )
-                  .arg( m_channels[ i ]->getThreshold() )
-                  << msg::endmsg;
-      }
-
-      // Set the device level properties.
-      CHECK( bus.write( m_vmeAddress + 0x40, m_outputWidth1 ) );
-      m_logger << msg::INFO << tr( "Output width (channels 0-7) : %1" )
-                               .arg( m_outputWidth1 )
-               << msg::endmsg;
-      CHECK( bus.write( m_vmeAddress + 0x42, m_outputWidth2 ) );
-      m_logger << msg::INFO << tr( "Output width (channels 8-15): %1" )
-                               .arg( m_outputWidth2 )
-               << msg::endmsg;
-      CHECK( bus.write( m_vmeAddress + 0x44, m_deadTime1 ) );
-      m_logger << msg::INFO << tr( "Dead time (channels 0-7) : %1" )
-                               .arg( m_deadTime1 )
-               << msg::endmsg;
-      CHECK( bus.write( m_vmeAddress + 0x46, m_deadTime2 ) );
-      m_logger << msg::INFO << tr( "Dead time (channels 8-15): %1" )
-                               .arg( m_deadTime2 )
-               << msg::endmsg;
-      CHECK( bus.write( m_vmeAddress + 0x48, m_majorityThreshold ) );
-      m_logger << msg::INFO << tr( "Majority threshold: %1" )
-                              .arg( m_majorityThreshold )
-               << msg::endmsg;
-
-      // Return gracefully.
-      return StatusCode::SUCCESS;
-   }
-
-} // namespace v812
+}  // namespace v812

@@ -15,40 +15,39 @@
 
 namespace ad1000 {
 
-   /**
-    *  @short ROOT file writer for an AD1000 CAMAC device
-    *
-    *         This class can write out the single value converted by the
-    *         AD1000 device. Hence it's very simple.
-    *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
-    */
-   class RootDisk : public virtual dev::IRootDisk,
-                    public virtual Device {
+/**
+ *  @short ROOT file writer for an AD1000 CAMAC device
+ *
+ *         This class can write out the single value converted by the
+ *         AD1000 device. Hence it's very simple.
+ *
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+ *
+ * $Revision$
+ * $Date$
+ */
+class RootDisk : public virtual dev::IRootDisk, public virtual Device {
 
-      // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( ad1000::RootDisk )
+   // To get the tr() function:
+   Q_DECLARE_TR_FUNCTIONS(ad1000::RootDisk)
 
-   public:
-      /// Constructor
-      RootDisk();
+public:
+   /// Constructor
+   RootDisk();
 
-      /// Function initializing the device
-      virtual bool initialize( root::NTupleMgr& nmgr );
+   /// Function initializing the device
+   virtual bool initialize(root::NTupleMgr& nmgr);
 
-      /// Function filling the ntuple
-      virtual bool writeEvent( const ev::Fragment& fragment ) const;
+   /// Function filling the ntuple
+   virtual bool writeEvent(const ev::Fragment& fragment) const;
 
-   private:
-      mutable unsigned int m_value; ///< The converted signal's value
+private:
+   mutable unsigned int m_value;  ///< The converted signal's value
 
-      mutable msg::Logger m_logger; ///< Message logger object
+   mutable msg::Logger m_logger;  ///< Message logger object
 
-   }; // class RootDisk
+};  // class RootDisk
 
-} // namespace ad1000
+}  // namespace ad1000
 
-#endif // CDA_DEVICES_AD1000_ROOTDISK_H
+#endif  // CDA_DEVICES_AD1000_ROOTDISK_H

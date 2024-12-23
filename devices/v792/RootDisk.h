@@ -18,45 +18,44 @@
 
 namespace v792 {
 
-   /// Class writing the data read from a V792 device to a ROOT file
-   ///
-   /// This class is used to write ROOT TTree-s with the data read out from
-   /// a V792 device.
-   ///
-   /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-   ///
-   /// $Revision$
-   /// $Date$
-   ///
-   class RootDisk : public virtual dev::IRootDisk,
-         public virtual Device {
+/// Class writing the data read from a V792 device to a ROOT file
+///
+/// This class is used to write ROOT TTree-s with the data read out from
+/// a V792 device.
+///
+/// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+///
+/// $Revision$
+/// $Date$
+///
+class RootDisk : public virtual dev::IRootDisk, public virtual Device {
 
-      // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( v792::RootDisk )
+   // To get the tr() function:
+   Q_DECLARE_TR_FUNCTIONS(v792::RootDisk)
 
-   public:
-      /// Default constructor
-      RootDisk();
+public:
+   /// Default constructor
+   RootDisk();
 
-      /// Function initializing the device
-      virtual bool initialize( root::NTupleMgr& nmgr );
+   /// Function initializing the device
+   virtual bool initialize(root::NTupleMgr& nmgr);
 
-      /// Function filling the ntuple
-      virtual bool writeEvent( const ev::Fragment& fragment ) const;
+   /// Function filling the ntuple
+   virtual bool writeEvent(const ev::Fragment& fragment) const;
 
-   private:
-      /// Helper variable for writing the read data
-      mutable std::array< unsigned int, NUMBER_OF_CHANNELS > m_data;
-      /// Helper variable for writing the under threshold bits
-      mutable std::array< char, NUMBER_OF_CHANNELS > m_underThreshold;
-      /// Helper variable for writing the overflow bits
-      mutable std::array< char, NUMBER_OF_CHANNELS > m_overflow;
+private:
+   /// Helper variable for writing the read data
+   mutable std::array<unsigned int, NUMBER_OF_CHANNELS> m_data;
+   /// Helper variable for writing the under threshold bits
+   mutable std::array<char, NUMBER_OF_CHANNELS> m_underThreshold;
+   /// Helper variable for writing the overflow bits
+   mutable std::array<char, NUMBER_OF_CHANNELS> m_overflow;
 
-      /// Message logging object
-      mutable msg::Logger m_logger;
+   /// Message logging object
+   mutable msg::Logger m_logger;
 
-   }; // class RootDisk
+};  // class RootDisk
 
-} // namespace v792
+}  // namespace v792
 
-#endif // CDA_DEVICES_V792_ROOTDISK_H
+#endif  // CDA_DEVICES_V792_ROOTDISK_H

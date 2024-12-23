@@ -1,8 +1,8 @@
 // $Id$
 
 // Qt include(s):
-#include <QtCore/QIODevice>
 #include <QtCore/QDataStream>
+#include <QtCore/QIODevice>
 #include <QtXml/QDomElement>
 
 // CDA include(s):
@@ -13,182 +13,187 @@
 
 namespace ad2249a {
 
-   //
-   // Make sure that the following Qt classes are available in the
-   // current namespace even if Qt has been built in an arbitrary
-   // namespace:
-   //
-   using QT_PREPEND_NAMESPACE( QIODevice );
-   using QT_PREPEND_NAMESPACE( QDataStream );
-   using QT_PREPEND_NAMESPACE( QDomNode );
-   using QT_PREPEND_NAMESPACE( QDomElement );
+//
+// Make sure that the following Qt classes are available in the
+// current namespace even if Qt has been built in an arbitrary
+// namespace:
+//
+using QT_PREPEND_NAMESPACE(QIODevice);
+using QT_PREPEND_NAMESPACE(QDataStream);
+using QT_PREPEND_NAMESPACE(QDomNode);
+using QT_PREPEND_NAMESPACE(QDomElement);
 
-   ChannelConfig::ChannelConfig()
-      : m_subaddress( 0 ), m_numberOfChannels( 100 ),
-        m_lowerBound( 0. ), m_upperBound( 100. ), m_name( "time" ),
-        m_logger( "ad2249a::ChannelConfig" ) {
+ChannelConfig::ChannelConfig()
+    : m_subaddress(0),
+      m_numberOfChannels(100),
+      m_lowerBound(0.),
+      m_upperBound(100.),
+      m_name("time"),
+      m_logger("ad2249a::ChannelConfig") {
 
-      REPORT_VERBOSE( tr( "Object created" ) );
-   }
+   REPORT_VERBOSE(tr("Object created"));
+}
 
-   StatusCode ChannelConfig::readConfig( QIODevice& dev ) {
+StatusCode ChannelConfig::readConfig(QIODevice& dev) {
 
-      REPORT_VERBOSE( tr( "Reading configuration from binary input" ) );
+   REPORT_VERBOSE(tr("Reading configuration from binary input"));
 
-      clear();
+   clear();
 
-      QDataStream input( &dev );
-      input.setVersion( QDataStream::Qt_4_0 );
-      input >> m_subaddress;
-      input >> m_numberOfChannels;
-      input >> m_lowerBound;
-      input >> m_upperBound;
-      input >> m_name;
+   QDataStream input(&dev);
+   input.setVersion(QDataStream::Qt_4_0);
+   input >> m_subaddress;
+   input >> m_numberOfChannels;
+   input >> m_lowerBound;
+   input >> m_upperBound;
+   input >> m_name;
 
-      printConfig( msg::VERBOSE );
+   printConfig(msg::VERBOSE);
 
-      return StatusCode::SUCCESS;
-   }
+   return StatusCode::SUCCESS;
+}
 
-   StatusCode ChannelConfig::writeConfig( QIODevice& dev ) const {
+StatusCode ChannelConfig::writeConfig(QIODevice& dev) const {
 
-      REPORT_VERBOSE( tr( "Writing configuration to binary output" ) );
+   REPORT_VERBOSE(tr("Writing configuration to binary output"));
 
-      QDataStream output( &dev );
-      output.setVersion( QDataStream::Qt_4_0 );
-      output << m_subaddress;
-      output << m_numberOfChannels;
-      output << m_lowerBound;
-      output << m_upperBound;
-      output << m_name;
+   QDataStream output(&dev);
+   output.setVersion(QDataStream::Qt_4_0);
+   output << m_subaddress;
+   output << m_numberOfChannels;
+   output << m_lowerBound;
+   output << m_upperBound;
+   output << m_name;
 
-      return StatusCode::SUCCESS;
-   }
+   return StatusCode::SUCCESS;
+}
 
-   StatusCode ChannelConfig::readConfig( const QDomElement& element ) {
+StatusCode ChannelConfig::readConfig(const QDomElement& element) {
 
-      REPORT_VERBOSE( tr( "Reading configuration from XML input" ) );
+   REPORT_VERBOSE(tr("Reading configuration from XML input"));
 
-      clear();
+   clear();
 
-      bool ok;
+   bool ok;
 
-      m_subaddress = element.attribute( "Subaddress", "" ).toInt( &ok );
-      CHECK( ok );
+   m_subaddress = element.attribute("Subaddress", "").toInt(&ok);
+   CHECK(ok);
 
-      m_numberOfChannels = element.attribute( "NumberOfChannels",
-                                              "100" ).toInt( &ok );
-      CHECK( ok );
+   m_numberOfChannels = element.attribute("NumberOfChannels", "100").toInt(&ok);
+   CHECK(ok);
 
-      m_lowerBound = element.attribute( "LowerBound", "0." ).toDouble( &ok );
-      CHECK( ok );
+   m_lowerBound = element.attribute("LowerBound", "0.").toDouble(&ok);
+   CHECK(ok);
 
-      m_upperBound = element.attribute( "UpperBound", "100." ).toDouble( &ok );
-      CHECK( ok );
+   m_upperBound = element.attribute("UpperBound", "100.").toDouble(&ok);
+   CHECK(ok);
 
-      m_name = element.attribute( "Name", "" );
+   m_name = element.attribute("Name", "");
 
-      printConfig( msg::VERBOSE );
+   printConfig(msg::VERBOSE);
 
-      return StatusCode::SUCCESS;
-   }
+   return StatusCode::SUCCESS;
+}
 
-   StatusCode ChannelConfig::writeConfig( QDomElement& element ) const {
+StatusCode ChannelConfig::writeConfig(QDomElement& element) const {
 
-      REPORT_VERBOSE( tr( "Writing configuration to XML output" ) );
+   REPORT_VERBOSE(tr("Writing configuration to XML output"));
 
-      element.setAttribute( "Subaddress", m_subaddress );
-      element.setAttribute( "NumberOfChannels", m_numberOfChannels );
-      element.setAttribute( "LowerBound", m_lowerBound );
-      element.setAttribute( "UpperBound", m_upperBound );
-      element.setAttribute( "Name", m_name );
+   element.setAttribute("Subaddress", m_subaddress);
+   element.setAttribute("NumberOfChannels", m_numberOfChannels);
+   element.setAttribute("LowerBound", m_lowerBound);
+   element.setAttribute("UpperBound", m_upperBound);
+   element.setAttribute("Name", m_name);
 
-      return StatusCode::SUCCESS;
-   }
+   return StatusCode::SUCCESS;
+}
 
-   int ChannelConfig::getSubaddress() const {
+int ChannelConfig::getSubaddress() const {
 
-      return m_subaddress;
-   }
+   return m_subaddress;
+}
 
-   int ChannelConfig::getNumberOfChannels() const {
+int ChannelConfig::getNumberOfChannels() const {
 
-      return m_numberOfChannels;
-   }
+   return m_numberOfChannels;
+}
 
-   double ChannelConfig::getLowerBound() const {
+double ChannelConfig::getLowerBound() const {
 
-      return m_lowerBound;
-   }
+   return m_lowerBound;
+}
 
-   double ChannelConfig::getUpperBound() const {
+double ChannelConfig::getUpperBound() const {
 
-      return m_upperBound;
-   }
+   return m_upperBound;
+}
 
-   const QString& ChannelConfig::getName() const {
+const QString& ChannelConfig::getName() const {
 
-      return m_name;
-   }
+   return m_name;
+}
 
-   void ChannelConfig::setSubaddress( int value ) {
+void ChannelConfig::setSubaddress(int value) {
 
-      m_subaddress = value;
-      return;
-   }
+   m_subaddress = value;
+   return;
+}
 
-   void ChannelConfig::setNumberOfChannels( int value ) {
+void ChannelConfig::setNumberOfChannels(int value) {
 
-      m_numberOfChannels = value;
-      return;
-   }
+   m_numberOfChannels = value;
+   return;
+}
 
-   void ChannelConfig::setLowerBound( double value ) {
+void ChannelConfig::setLowerBound(double value) {
 
-      m_lowerBound = value;
-      return;
-   }
+   m_lowerBound = value;
+   return;
+}
 
-   void ChannelConfig::setUpperBound( double value ) {
+void ChannelConfig::setUpperBound(double value) {
 
-      m_upperBound = value;
-      return;
-   }
+   m_upperBound = value;
+   return;
+}
 
-   void ChannelConfig::setName( const QString& value ) {
+void ChannelConfig::setName(const QString& value) {
 
-      m_name = value;
-      return;
-   }
+   m_name = value;
+   return;
+}
 
-   /**
-    * @param level The message level in which the channel configuration should
-    *              be printed
-    */
-   void ChannelConfig::printConfig( msg::Level level ) const {
+/**
+ * @param level The message level in which the channel configuration should
+ *              be printed
+ */
+void ChannelConfig::printConfig(msg::Level level) const {
 
-      m_logger << level
-               << tr( " - Subaddress        : %1\n"
-                      " - Number of channels: %2\n"
-                      " - Lower bound       : %3\n"
-                      " - Upper bound       : %4\n"
-                      " - Name              : %5" )
-         .arg( m_subaddress ).arg( m_numberOfChannels )
-         .arg( m_lowerBound ).arg( m_upperBound ).arg( m_name )
-               << msg::endmsg;
+   m_logger << level
+            << tr(" - Subaddress        : %1\n"
+                  " - Number of channels: %2\n"
+                  " - Lower bound       : %3\n"
+                  " - Upper bound       : %4\n"
+                  " - Name              : %5")
+                   .arg(m_subaddress)
+                   .arg(m_numberOfChannels)
+                   .arg(m_lowerBound)
+                   .arg(m_upperBound)
+                   .arg(m_name)
+            << msg::endmsg;
 
-      return;
-   }
+   return;
+}
 
-   void ChannelConfig::clear() {
+void ChannelConfig::clear() {
 
-      m_subaddress = -1;
-      m_numberOfChannels = 100;
-      m_lowerBound = 0.;
-      m_upperBound = 100.;
-      m_name = "";
+   m_subaddress = -1;
+   m_numberOfChannels = 100;
+   m_lowerBound = 0.;
+   m_upperBound = 100.;
+   m_name = "";
 
-      return;
-   }
+   return;
+}
 
-} // namespace ad2249a
+}  // namespace ad2249a

@@ -5,63 +5,59 @@
 
 // CDA include(s):
 #include "common/errorcheck.h"
-#include "root/NTupleMgr.h"
 #include "event/Fragment.h"
+#include "root/NTupleMgr.h"
 
 // Local include(s):
 #include "RootDisk.h"
 
 namespace t2228a {
 
-   RootDisk::RootDisk()
-      : m_logger( "t2228a::RootDisk" ) {
+RootDisk::RootDisk() : m_logger("t2228a::RootDisk") {}
 
+bool RootDisk::initialize(root::NTupleMgr& nmgr) {
+
+   // Loop over all configured subaddresses:
+   for (int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i) {
+      if (m_channels[i]) {
+         CHECK(nmgr.addVar(m_values[i], m_channels[i]->getName()));
+      }
    }
 
-   bool RootDisk::initialize( root::NTupleMgr& nmgr ) {
+   return true;
+}
 
-      // Loop over all configured subaddresses:
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         if( m_channels[ i ] ) {
-            CHECK( nmgr.addVar( m_values[ i ], m_channels[ i ]->getName() ) );
-         }
-      }
+bool RootDisk::writeEvent(const ev::Fragment& fragment) const {
 
-      return true;
+   // Reset all the ntuple variables:
+   for (int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i) {
+      m_values[i] = 0;
    }
 
-   bool RootDisk::writeEvent( const ev::Fragment& fragment ) const {
+   // The data words in the event fragment:
+   const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
 
-      // Reset all the ntuple variables:
-      for( int i = 0; i < NUMBER_OF_SUBADDRESSES; ++i ) {
-         m_values[ i ] = 0;
+   // Loop over all data words in the event fragment:
+   ev::Fragment::Payload_t::const_iterator dword_itr = dataWords.begin();
+   ev::Fragment::Payload_t::const_iterator dword_end = dataWords.end();
+   for (; dword_itr != dword_end; ++dword_itr) {
+
+      // Decode the data word:
+      const int subaddress = (*dword_itr >> 24) & 0xff;
+      const unsigned int chdata = (*dword_itr & 0xffffff);
+
+      // Check that the decoded information makes sense:
+      if (!((subaddress >= 0) && (subaddress < NUMBER_OF_SUBADDRESSES) &&
+            m_channels[subaddress])) {
+         REPORT_ERROR(tr("Received data word from unknown channel"));
+         return false;
       }
 
-      // The data words in the event fragment:
-      const ev::Fragment::Payload_t& dataWords = fragment.getDataWords();
-
-      // Loop over all data words in the event fragment:
-      ev::Fragment::Payload_t::const_iterator dword_itr = dataWords.begin();
-      ev::Fragment::Payload_t::const_iterator dword_end = dataWords.end();
-      for( ; dword_itr != dword_end; ++dword_itr ) {
-
-         // Decode the data word:
-         const int subaddress      = ( *dword_itr >> 24 ) & 0xff;
-         const unsigned int chdata = ( *dword_itr & 0xffffff );
-
-         // Check that the decoded information makes sense:
-         if( ! ( ( subaddress >= 0 ) &&
-                 ( subaddress < NUMBER_OF_SUBADDRESSES ) &&
-                 m_channels[ subaddress ] ) ) {
-            REPORT_ERROR( tr( "Received data word from unknown channel" ) );
-            return false;
-         }
-
-         // Set the variable:
-         m_values[ subaddress ] = chdata;
-      }
-
-      return true;
+      // Set the variable:
+      m_values[subaddress] = chdata;
    }
 
-} // namespace t2228a
+   return true;
+}
+
+}  // namespace t2228a

@@ -9,114 +9,112 @@
 
 namespace caen_reader {
 
-   Crate::Crate()
-      : dev::Crate< dev::ICaenDigitizerReadout >( "CAEN", true ),
-        m_initialized( false ),
-        m_logger( "caen_reader::Crate" ) {
+Crate::Crate()
+    : dev::Crate<dev::ICaenDigitizerReadout>("CAEN", true),
+      m_initialized(false),
+      m_logger("caen_reader::Crate") {}
 
+Crate::~Crate() {
+
+   // Force a finalization, as that often needs to close devices and
+   // free up memory:
+   if (m_initialized) {
+      m_logger << msg::WARNING
+               << tr("Object getting deleted without being finalized!")
+               << msg::endmsg;
+      finalize();
+   }
+}
+
+StatusCode Crate::initialize() {
+
+   // Initialize all the devices:
+   DeviceMap_t::const_iterator itr = m_devices.begin();
+   DeviceMap_t::const_iterator end = m_devices.end();
+   for (; itr != end; ++itr) {
+      CHECK(itr->second->initialize());
    }
 
-   Crate::~Crate() {
+   // Remember the object's internal state:
+   m_initialized = true;
 
-      // Force a finalization, as that often needs to close devices and
-      // free up memory:
-      if( m_initialized ) {
-         m_logger << msg::WARNING
-                  << tr( "Object getting deleted without being finalized!" )
-                  << msg::endmsg;
-         finalize();
-      }
-   }
+   // Show that we were successful:
+   return StatusCode::SUCCESS;
+}
 
-   StatusCode Crate::initialize() {
+StatusCode Crate::finalize() {
 
-      // Initialize all the devices:
-      DeviceMap_t::const_iterator itr = m_devices.begin();
-      DeviceMap_t::const_iterator end = m_devices.end();
-      for( ; itr != end; ++itr ) {
-         CHECK( itr->second->initialize() );
-      }
-
-      // Remember the object's internal state:
-      m_initialized = true;
-
-      // Show that we were successful:
+   // Don't do anything if the object is not initialized:
+   if (!m_initialized) {
+      m_logger << msg::WARNING
+               << tr("Object not in initialized state, not finalizing")
+               << msg::endmsg;
       return StatusCode::SUCCESS;
    }
 
-   StatusCode Crate::finalize() {
-
-      // Don't do anything if the object is not initialized:
-      if( ! m_initialized ) {
-         m_logger << msg::WARNING
-                  << tr( "Object not in initialized state, not finalizing" )
-                  << msg::endmsg;
-         return StatusCode::SUCCESS;
-      }
-
-      // Finalize all the devices:
-      DeviceMap_t::const_iterator itr = m_devices.begin();
-      DeviceMap_t::const_iterator end = m_devices.end();
-      for( ; itr != end; ++itr ) {
-         CHECK( itr->second->finalize() );
-      }
-
-      // Remember the object's internal state:
-      m_initialized = false;
-
-      // Show that we were successful:
-      return StatusCode::SUCCESS;
+   // Finalize all the devices:
+   DeviceMap_t::const_iterator itr = m_devices.begin();
+   DeviceMap_t::const_iterator end = m_devices.end();
+   for (; itr != end; ++itr) {
+      CHECK(itr->second->finalize());
    }
 
-   StatusCode Crate::start() {
+   // Remember the object's internal state:
+   m_initialized = false;
 
-      // Start all the devices:
-      DeviceMap_t::const_iterator itr = m_devices.begin();
-      DeviceMap_t::const_iterator end = m_devices.end();
-      for( ; itr != end; ++itr ) {
-         CHECK( itr->second->start() );
-      }
+   // Show that we were successful:
+   return StatusCode::SUCCESS;
+}
 
-      // Show that we were successful:
-      return StatusCode::SUCCESS;
+StatusCode Crate::start() {
+
+   // Start all the devices:
+   DeviceMap_t::const_iterator itr = m_devices.begin();
+   DeviceMap_t::const_iterator end = m_devices.end();
+   for (; itr != end; ++itr) {
+      CHECK(itr->second->start());
    }
 
-   StatusCode Crate::stop() {
+   // Show that we were successful:
+   return StatusCode::SUCCESS;
+}
 
-      // Stop all the devices:
-      DeviceMap_t::const_iterator itr = m_devices.begin();
-      DeviceMap_t::const_iterator end = m_devices.end();
-      for( ; itr != end; ++itr ) {
-         CHECK( itr->second->stop() );
-      }
+StatusCode Crate::stop() {
 
-      // Show that we were successful:
-      return StatusCode::SUCCESS;
+   // Stop all the devices:
+   DeviceMap_t::const_iterator itr = m_devices.begin();
+   DeviceMap_t::const_iterator end = m_devices.end();
+   for (; itr != end; ++itr) {
+      CHECK(itr->second->stop());
    }
 
-   /**
-    * Even though in the current setup we will always only have
-    * one device in this "crate", in order to be compatible with the
-    * other parts of CDA, one has to package the data coming from this
-    * one device into a full ev::Event object.
-    *
-    * @returns A full even read from the device(s)
-    */
-   ev::Event Crate::readEvent() const {
+   // Show that we were successful:
+   return StatusCode::SUCCESS;
+}
 
-      // The event object to return:
-      ev::Event event;
+/**
+ * Even though in the current setup we will always only have
+ * one device in this "crate", in order to be compatible with the
+ * other parts of CDA, one has to package the data coming from this
+ * one device into a full ev::Event object.
+ *
+ * @returns A full even read from the device(s)
+ */
+ev::Event Crate::readEvent() const {
 
-      // Read out all the devices:
-      DeviceMap_t::const_iterator itr = m_devices.begin();
-      DeviceMap_t::const_iterator end = m_devices.end();
-      for( ; itr != end; ++itr ) {
-         // Read out the event from a single constituent:
-         event.addFragment( itr->second->readEvent() );
-      }
+   // The event object to return:
+   ev::Event event;
 
-      // Return the event:
-      return event;
+   // Read out all the devices:
+   DeviceMap_t::const_iterator itr = m_devices.begin();
+   DeviceMap_t::const_iterator end = m_devices.end();
+   for (; itr != end; ++itr) {
+      // Read out the event from a single constituent:
+      event.addFragment(itr->second->readEvent());
    }
 
-} // namespace caen_reader
+   // Return the event:
+   return event;
+}
+
+}  // namespace caen_reader

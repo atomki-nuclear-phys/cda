@@ -31,16 +31,16 @@ class CDACORE_EXPORT Socket : public QTcpSocket {
 
 public:
    /// Standard constructor
-   Socket( QObject* parent = 0 );
+   Socket(QObject* parent = 0);
 
 signals:
    /// Special signal showing that data is ready to be read
-   void dataReady( Socket* socket );
+   void dataReady(Socket* socket);
 
 protected slots:
    /// Internal slot for producing the dataReady signal
    void handleDataReady();
 
-}; // class Socket
+};  // class Socket
 
-#endif // CDA_CORE_COMMON_SOCKET_H
+#endif  // CDA_CORE_COMMON_SOCKET_H

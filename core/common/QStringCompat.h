@@ -19,4 +19,4 @@ static const SplitBehavior KeepEmptyParts = QString::KeepEmptyParts;
 }  // namespace Qt
 #endif  // CDA_HAVE_QT_SPLITBEHAVIOR
 
-#endif // CDA_CORE_COMMON_QTSTRINGCOMPAT_H
+#endif  // CDA_CORE_COMMON_QTSTRINGCOMPAT_H

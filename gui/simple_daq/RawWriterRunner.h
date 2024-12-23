@@ -10,107 +10,108 @@
 #include <QWidget>
 
 // CDA include(s):
-#include "msg/Logger.h"
 #include "common/AppRunner.h"
+#include "msg/Logger.h"
 
 // Local include(s):
 #include "../common/Export.h"
 
 // Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QGroupBox )
-QT_FORWARD_DECLARE_CLASS( QPushButton )
-QT_FORWARD_DECLARE_CLASS( QLabel )
-QT_FORWARD_DECLARE_CLASS( QLineEdit )
-QT_FORWARD_DECLARE_CLASS( QSpinBox )
+QT_FORWARD_DECLARE_CLASS(QGroupBox)
+QT_FORWARD_DECLARE_CLASS(QPushButton)
+QT_FORWARD_DECLARE_CLASS(QLabel)
+QT_FORWARD_DECLARE_CLASS(QLineEdit)
+QT_FORWARD_DECLARE_CLASS(QSpinBox)
 
 namespace simple_daq {
 
-   // Make sure that the Qt classes are available in this namespace:
-   using QT_PREPEND_NAMESPACE( QGroupBox );
-   using QT_PREPEND_NAMESPACE( QPushButton );
-   using QT_PREPEND_NAMESPACE( QLabel );
-   using QT_PREPEND_NAMESPACE( QLineEdit );
-   using QT_PREPEND_NAMESPACE( QSpinBox );
+// Make sure that the Qt classes are available in this namespace:
+using QT_PREPEND_NAMESPACE(QGroupBox);
+using QT_PREPEND_NAMESPACE(QPushButton);
+using QT_PREPEND_NAMESPACE(QLabel);
+using QT_PREPEND_NAMESPACE(QLineEdit);
+using QT_PREPEND_NAMESPACE(QSpinBox);
 
-   /**
-    *  @short Widget for starting cda-raw-writer on the local machine
-    *
-    *         This Qt widget makes it easy to run the cda-raw-writer
-    *         application on the local machine. It should in principle
-    *         be used in conjunction with the other *Runner classes in
-    *         this directory.
-    *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    */
-   class CDAGUI_EXPORT RawWriterRunner : public QWidget {
+/**
+ *  @short Widget for starting cda-raw-writer on the local machine
+ *
+ *         This Qt widget makes it easy to run the cda-raw-writer
+ *         application on the local machine. It should in principle
+ *         be used in conjunction with the other *Runner classes in
+ *         this directory.
+ *
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+ */
+class CDAGUI_EXPORT RawWriterRunner : public QWidget {
 
-      Q_OBJECT
+   Q_OBJECT
 
-   public:
-      /// Standard QWidget-type constructor
-      RawWriterRunner( QWidget* parent = 0,
-                       Qt::WindowFlags flags = Qt::WindowFlags() );
-      /// Destructor
-      ~RawWriterRunner();
+public:
+   /// Standard QWidget-type constructor
+   RawWriterRunner(QWidget* parent = 0,
+                   Qt::WindowFlags flags = Qt::WindowFlags());
+   /// Destructor
+   ~RawWriterRunner();
 
-      /// Set the name of the configuration file
-      void setConfigFileName( const QString& fileName );
-      /// Get the name of the configuration file
-      const QString& getConfigFileName() const;
+   /// Set the name of the configuration file
+   void setConfigFileName(const QString& fileName);
+   /// Get the name of the configuration file
+   const QString& getConfigFileName() const;
 
-      /// Set the address of the message server(s)
-      void setMsgServerAddress( const QString& address );
-      /// Get the address of the message server(s)
-      const QString& getMsgServerAddress() const;
+   /// Set the address of the message server(s)
+   void setMsgServerAddress(const QString& address);
+   /// Get the address of the message server(s)
+   const QString& getMsgServerAddress() const;
 
-      /// Set the address where cda-raw-writer listenes for events
-      void setEventAddress( const QString& address );
-      /// Get the address where cda-raw-writer listenes for events
-      const QString& getEventAddress() const;
+   /// Set the address where cda-raw-writer listenes for events
+   void setEventAddress(const QString& address);
+   /// Get the address where cda-raw-writer listenes for events
+   const QString& getEventAddress() const;
 
-      /// Set the verbosity level of the cda-raw-writer application
-      void setVerbosity( msg::Level verbosity );
-      /// Get the verbosity level of the cda-raw-writer application
-      msg::Level getVerbosity() const;
+   /// Set the verbosity level of the cda-raw-writer application
+   void setVerbosity(msg::Level verbosity);
+   /// Get the verbosity level of the cda-raw-writer application
+   msg::Level getVerbosity() const;
 
-      /// Overrides the QWidget::setEnabled(...) function
-      void setEnabled( bool status );
+   /// Overrides the QWidget::setEnabled(...) function
+   void setEnabled(bool status);
 
-   signals:
-      /// Signal showing if the application is running
-      void running( bool );
-      /// Signal sending the event receiver address of this application
-      void receiverRunning( bool, const QString& );
+signals:
+   /// Signal showing if the application is running
+   void running(bool);
+   /// Signal sending the event receiver address of this application
+   void receiverRunning(bool, const QString&);
 
-   public slots:
-      /// Set the address of a statistics receiver
-      void setStatServerAddress( bool status, const QString& address );
+public slots:
+   /// Set the address of a statistics receiver
+   void setStatServerAddress(bool status, const QString& address);
 
-   private slots:
-      /// Internal function starting and stopping cda-raw-writer
-      void startApp( bool start );
+private slots:
+   /// Internal function starting and stopping cda-raw-writer
+   void startApp(bool start);
 
-   private:
-      QGroupBox*   m_mainBox;       ///< Main box holding graphcal objects
-      QPushButton* m_starterButton; ///< Button starting the application
-      QLabel*      m_processStatus; ///< Label giving feedback of the status
-      QLabel*      m_updateFrequencyLabel; ///< Description of file name update frequency
-      QSpinBox*    m_updateFrequency; ///< File name update frequency chooser
-      QLabel*      m_fileNameLabel; ///< Label telling what the line edit is for
-      QLineEdit*   m_fileNameEdit;  ///< Input field for the output file name
+private:
+   QGroupBox* m_mainBox;          ///< Main box holding graphcal objects
+   QPushButton* m_starterButton;  ///< Button starting the application
+   QLabel* m_processStatus;       ///< Label giving feedback of the status
+   QLabel*
+       m_updateFrequencyLabel;   ///< Description of file name update frequency
+   QSpinBox* m_updateFrequency;  ///< File name update frequency chooser
+   QLabel* m_fileNameLabel;      ///< Label telling what the line edit is for
+   QLineEdit* m_fileNameEdit;    ///< Input field for the output file name
 
-      QString m_configFileName;   ///< Name of the configuration file
-      QString m_msgServerAddress; ///< Address of the message server(s)
-      QString m_eventAddress;     ///< Address of cda-raw-writer
-      /// Address(es) of the statistics server(s)
-      std::set< QString > m_statServerAddresses;
-      msg::Level m_level;         ///< Output level of cda-raw-writer
+   QString m_configFileName;    ///< Name of the configuration file
+   QString m_msgServerAddress;  ///< Address of the message server(s)
+   QString m_eventAddress;      ///< Address of cda-raw-writer
+   /// Address(es) of the statistics server(s)
+   std::set<QString> m_statServerAddresses;
+   msg::Level m_level;  ///< Output level of cda-raw-writer
 
-      mutable daq::AppRunner m_runner; ///< The object starting cda-raw-writer
-      mutable msg::Logger m_logger;    ///< Internal logger object
+   mutable daq::AppRunner m_runner;  ///< The object starting cda-raw-writer
+   mutable msg::Logger m_logger;     ///< Internal logger object
 
-   }; // class RawWriterRunner
+};  // class RawWriterRunner
 
-} // namespace simple_daq
+}  // namespace simple_daq
 
-#endif // CDA_GUI_SIMPLE_DAQ_RAWWRITERRUNNER_H
+#endif  // CDA_GUI_SIMPLE_DAQ_RAWWRITERRUNNER_H
