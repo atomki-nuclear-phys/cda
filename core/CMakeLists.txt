@@ -28,8 +28,8 @@ cda_add_library( cdacore
    cernlib/*.cxx root/*.cxx common/*.cxx i18n/*.cxx
    LINK_LIBRARIES ${Qt456_LIBRARIES} )
 set_target_properties( cdacore PROPERTIES
-   VERSION 2.0.0
-   SOVERSION 2 )
+   VERSION ${PROJECT_VERSION}
+   SOVERSION ${PROJECT_VERSION_MAJOR} )
 
 # Decide how to use the SplitBehaviour enum. The Qt::SplitBehavior enum was
 # introduced in some 5.X version. So let's only check with Qt5 if it already has

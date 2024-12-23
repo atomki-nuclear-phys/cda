@@ -17,5 +17,5 @@ cda_add_library( cdadaq
    SOURCES common/*.cxx stat/*.cxx config/*.cxx moni/*.cxx
    LINK_LIBRARIES ${Qt456_LIBRARIES} cdacore )
 set_target_properties( cdadaq PROPERTIES
-   VERSION 2.0.0
-   SOVERSION 2 )
+   VERSION ${PROJECT_VERSION}
+   SOVERSION ${PROJECT_VERSION_MAJOR} )

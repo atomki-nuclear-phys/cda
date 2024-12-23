@@ -12,7 +12,7 @@ macro( cda_add_console_executable name )
   find_package( Qt456 COMPONENTS Core Xml REQUIRED )
 
   # Collect the source files of the executable:
-  file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
+  file( GLOB headers *.h )
   file( GLOB sources *.cxx )
 
   # Get the names and properties of the available plugins:
@@ -63,7 +63,7 @@ macro( cda_add_gui_executable name )
   find_package( Qt456 COMPONENTS Core Gui Widgets Xml REQUIRED )
 
   # Collect the source files of the executable:
-  file( GLOB headers *.h ${CMAKE_SOURCE_DIR}/apps/win32/*.h )
+  file( GLOB headers *.h )
   file( GLOB sources *.cxx *.qrc )
 
   # Get the names of the available plugins:
