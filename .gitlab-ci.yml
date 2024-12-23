@@ -4,6 +4,7 @@
 
 # The build stages to test individually:
 stages:
+   - check
    - config
    - build
    - deploy
@@ -12,6 +13,17 @@ stages:
 variables:
    GIT_STRATEGY: fetch
    DISABLE_FLAGS: "-DCDA_USE_ROOT:BOOL=FALSE -DCDA_USE_CERNLIB:BOOL=FALSE -DCDA_USE_CC32:BOOL=FALSE -DCDA_USE_CAENDIGITIZER:BOOL=FALSE -DCDA_USE_CAENQTPSDK:BOOL=FALSE"
+
+# Run the pre-commit checks.
+pre-commit:
+   tags:
+      - gitlab-org-docker
+   stage: check
+   image: ubuntu:24.04
+   script:
+      - apt-get update
+      - apt-get install -y pre-commit git
+      - pre-commit run --all-files
 
 # Configuration job template
 .config_template: &config_job
