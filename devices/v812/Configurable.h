@@ -11,34 +11,33 @@
 
 namespace v812 {
 
-   /// Class performing the configuration of a V812 CFD
-   ///
-   /// This is the class that, based on an XML/binary configuration can
-   /// configure a CAEN V812 VME CFD through its VME interface.
-   ///
-   /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-   ///
-   class Configurable : public Device,
-                        public virtual dev::ICaenVmeConfigurable {
+/// Class performing the configuration of a V812 CFD
+///
+/// This is the class that, based on an XML/binary configuration can
+/// configure a CAEN V812 VME CFD through its VME interface.
+///
+/// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+///
+class Configurable : public Device, public virtual dev::ICaenVmeConfigurable {
 
-   public:
-      /// Default constructor
-      Configurable();
+public:
+   /// Default constructor
+   Configurable();
 
-      /// @name Function(s) inherited from @c dev::CaenVmeConfigurable
-      /// @{
+   /// @name Function(s) inherited from @c dev::CaenVmeConfigurable
+   /// @{
 
-      /// Configure the device for data taking
-      virtual StatusCode configure( const caen::VmeBus& bus ) const;
+   /// Configure the device for data taking
+   virtual StatusCode configure(const caen::VmeBus& bus) const;
 
-      /// @}
+   /// @}
 
-   private:
-      /// Message logger object
-      mutable msg::Logger m_logger;
+private:
+   /// Message logger object
+   mutable msg::Logger m_logger;
 
-   }; // class Configurable
+};  // class Configurable
 
-} // namespace v812
+}  // namespace v812
 
-#endif // CDA_DEVICES_V812_CONFIGURABLE_H
+#endif  // CDA_DEVICES_V812_CONFIGURABLE_H

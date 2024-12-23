@@ -19,4 +19,4 @@
  */
 CDACORE_EXPORT extern bool g_stopAcquisition;
 
-#endif // CDA_CORE_CAEN_STOPACQUISITION_H
+#endif  // CDA_CORE_CAEN_STOPACQUISITION_H

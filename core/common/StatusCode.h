@@ -18,22 +18,19 @@ class CDACORE_EXPORT StatusCode {
 
 public:
    /// Convenience StatusCode types
-   enum {
-      FAILURE = 0,
-      SUCCESS = 1
-   };
+   enum { FAILURE = 0, SUCCESS = 1 };
 
    /// Constructor from an integer status code
-   StatusCode( unsigned long rstat = SUCCESS );
+   StatusCode(unsigned long rstat = SUCCESS);
    /// Copy constructor
-   StatusCode( const StatusCode& parent );
+   StatusCode(const StatusCode& parent);
    /// Destructor
    ~StatusCode();
 
    /// Assignment operator
-   StatusCode& operator= ( const StatusCode& rhs );
+   StatusCode& operator=(const StatusCode& rhs);
    /// Assignment from an integer code
-   StatusCode& operator= ( unsigned long code );
+   StatusCode& operator=(unsigned long code);
 
    /// Check if the operation was successful
    bool isSuccess() const;
@@ -59,6 +56,6 @@ private:
    /// Internal status flag of whether the code was checked by the user
    mutable bool m_checked;
 
-}; // class StatusCode
+};  // class StatusCode
 
-#endif // CDA_CORE_COMMON_STATUSCODE_H
+#endif  // CDA_CORE_COMMON_STATUSCODE_H

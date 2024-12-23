@@ -13,80 +13,80 @@
 
 namespace v785 {
 
-   /**
-    *  @short Class describing one channel of a V785 ADC module
-    *
-    *         Each channel of a V785 module has a number of properties.
-    *         All these properties are stored in such objects.
-    *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
-    */
-   class ChannelConfig : virtual public dev::IConfig {
+/**
+ *  @short Class describing one channel of a V785 ADC module
+ *
+ *         Each channel of a V785 module has a number of properties.
+ *         All these properties are stored in such objects.
+ *
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+ *
+ * $Revision$
+ * $Date$
+ */
+class ChannelConfig : virtual public dev::IConfig {
 
-      // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( v785::ChannelConfig )
+   // To get the tr() function:
+   Q_DECLARE_TR_FUNCTIONS(v785::ChannelConfig)
 
-   public:
-      /// Constructor
-      ChannelConfig();
+public:
+   /// Constructor
+   ChannelConfig();
 
-      /// Function reading the configuration in binary format
-      virtual StatusCode readConfig( QIODevice& dev );
-      /// Function writing the configuration in binary format
-      virtual StatusCode writeConfig( QIODevice& dev ) const;
+   /// Function reading the configuration in binary format
+   virtual StatusCode readConfig(QIODevice& dev);
+   /// Function writing the configuration in binary format
+   virtual StatusCode writeConfig(QIODevice& dev) const;
 
-      /// Function reading the configuration in XML format
-      virtual StatusCode readConfig( const QDomElement& node );
-      /// Function writing the configuration in XML format
-      virtual StatusCode writeConfig( QDomElement& node ) const;
+   /// Function reading the configuration in XML format
+   virtual StatusCode readConfig(const QDomElement& node);
+   /// Function writing the configuration in XML format
+   virtual StatusCode writeConfig(QDomElement& node) const;
 
-      /// Get the channel (subaddress) number
-      int            getChannel() const;
-      /// Get the number of bins for the monitoring histogram
-      int            getNBins() const;
-      /// Get the lower bound of the monitoring histogram
-      double         getLowerBound() const;
-      /// Get the upper bound of the monitoring histogram
-      double         getUpperBound() const;
-      /// Get the name of the channel
-      const QString& getName() const;
-      /// Get the readout threshold for the channel
-      int            getThreshold() const;
+   /// Get the channel (subaddress) number
+   int getChannel() const;
+   /// Get the number of bins for the monitoring histogram
+   int getNBins() const;
+   /// Get the lower bound of the monitoring histogram
+   double getLowerBound() const;
+   /// Get the upper bound of the monitoring histogram
+   double getUpperBound() const;
+   /// Get the name of the channel
+   const QString& getName() const;
+   /// Get the readout threshold for the channel
+   int getThreshold() const;
 
-      /// Set the channel (subaddress) number
-      void setChannel( int value );
-      /// Set the number of bins for the monitoring histogram
-      void setNBins( int value );
-      /// Set the lower bound of the monitoring histogram
-      void setLowerBound( double value );
-      /// Set the upper bound of the monitoring histogram
-      void setUpperBound( double value );
-      /// Set the name of the channel
-      void setName( const QString& value );
-      /// Set the readout threshold for the channel
-      void setThreshold( int value );
+   /// Set the channel (subaddress) number
+   void setChannel(int value);
+   /// Set the number of bins for the monitoring histogram
+   void setNBins(int value);
+   /// Set the lower bound of the monitoring histogram
+   void setLowerBound(double value);
+   /// Set the upper bound of the monitoring histogram
+   void setUpperBound(double value);
+   /// Set the name of the channel
+   void setName(const QString& value);
+   /// Set the readout threshold for the channel
+   void setThreshold(int value);
 
-      /// Print the configuration of the channel
-      void printConfig( msg::Level level = msg::INFO ) const;
+   /// Print the configuration of the channel
+   void printConfig(msg::Level level = msg::INFO) const;
 
-   private:
-      /// Clear the channel's configuration
-      void clear();
+private:
+   /// Clear the channel's configuration
+   void clear();
 
-      int     m_channel;    ///< Channel number
-      int     m_nBins;      ///< Number of bins in the created histogram
-      double  m_lowerBound; ///< Lower bound of the created histogram
-      double  m_upperBound; ///< Upper bound of the created histogram
-      QString m_name;       ///< Name of the channel
-      int     m_threshold;  ///< Lower threshold applied for the readout
+   int m_channel;        ///< Channel number
+   int m_nBins;          ///< Number of bins in the created histogram
+   double m_lowerBound;  ///< Lower bound of the created histogram
+   double m_upperBound;  ///< Upper bound of the created histogram
+   QString m_name;       ///< Name of the channel
+   int m_threshold;      ///< Lower threshold applied for the readout
 
-      mutable msg::Logger m_logger; ///< Logger member
+   mutable msg::Logger m_logger;  ///< Logger member
 
-   }; // class ChannelConfig
+};  // class ChannelConfig
 
-} // namespace v785
+}  // namespace v785
 
-#endif // CDA_DEVICES_V785_CHANNELCONFIG_H
+#endif  // CDA_DEVICES_V785_CHANNELCONFIG_H

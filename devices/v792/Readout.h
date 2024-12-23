@@ -10,8 +10,8 @@
 #include <QtCore/QCoreApplication>
 
 // CDA include(s):
-#include "device/ICaenVmeReadout.h"
 #include "caen/VmeDevice.h"
+#include "device/ICaenVmeReadout.h"
 #include "msg/Logger.h"
 
 // Local include(s):
@@ -19,62 +19,61 @@
 
 namespace v792 {
 
-   /// Class responsible for communicating with the V792 hardware module
-   ///
-   /// This class is used by the readout application to configure the V792
-   /// device for data acquisition, and then read events from it.
-   ///
-   /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-   ///
-   /// $Revision$
-   /// $Date
-   ///
-   class Readout : public Device,
-                   public virtual dev::ICaenVmeReadout {
+/// Class responsible for communicating with the V792 hardware module
+///
+/// This class is used by the readout application to configure the V792
+/// device for data acquisition, and then read events from it.
+///
+/// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+///
+/// $Revision$
+/// $Date
+///
+class Readout : public Device, public virtual dev::ICaenVmeReadout {
 
-      // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( v792::Readout )
+   // To get the tr() function:
+   Q_DECLARE_TR_FUNCTIONS(v792::Readout)
 
-   public:
-      /// Default constructor
-      Readout();
+public:
+   /// Default constructor
+   Readout();
 
-      /// @name Functions inherited from the dev::ICaenVmeReadout interface
-      /// @{
+   /// @name Functions inherited from the dev::ICaenVmeReadout interface
+   /// @{
 
-      /// Function initialising the device for data acquisition
-      virtual StatusCode initialize( const caen::VmeBus& bus );
-      /// Function finalising the device's data acquisition session
-      virtual StatusCode finalize();
+   /// Function initialising the device for data acquisition
+   virtual StatusCode initialize(const caen::VmeBus& bus);
+   /// Function finalising the device's data acquisition session
+   virtual StatusCode finalize();
 
-      /// Function starting data acquisition on the device
-      virtual StatusCode start();
-      /// Function stopping the device's data acquisition
-      virtual StatusCode stop();
+   /// Function starting data acquisition on the device
+   virtual StatusCode start();
+   /// Function stopping the device's data acquisition
+   virtual StatusCode stop();
 
-      /// Get the number of events processed by the device so far
-      virtual size_t eventsProcessed() const;
+   /// Get the number of events processed by the device so far
+   virtual size_t eventsProcessed() const;
 
-      /// Function reading a single event from the device
-      virtual std::unique_ptr< ev::Fragment > readEvent();
+   /// Function reading a single event from the device
+   virtual std::unique_ptr<ev::Fragment> readEvent();
 
-      /// @}
+   /// @}
 
-   private:
-      /// The object used in communicating with the hardware
-      caen::VmeDevice m_vmeDevice;
+private:
+   /// The object used in communicating with the hardware
+   caen::VmeDevice m_vmeDevice;
 
-      /// Current list of events already read from the device
-      std::vector< caen::VmeDevice::DataEvent > m_events;
+   /// Current list of events already read from the device
+   std::vector<caen::VmeDevice::DataEvent> m_events;
 
-      /// Number of events processed by the device so far
-      size_t m_eventsProcessed;
+   /// Number of events processed by the device so far
+   size_t m_eventsProcessed;
 
-      /// A message logging object
-      mutable msg::Logger m_logger;
+   /// A message logging object
+   mutable msg::Logger m_logger;
 
-   }; // class Readout
+};  // class Readout
 
-} // namespace v792
+}  // namespace v792
 
-#endif // CDA_DEVICES_V792_READOUT_H
+#endif  // CDA_DEVICES_V792_READOUT_H

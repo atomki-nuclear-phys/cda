@@ -15,41 +15,40 @@
 
 namespace ad2249a {
 
-   /**
-    *  @short AD2249A CERNLIB ntuple writer
-    *
-    *         This class can be used to write the information collected
-    *         from an AD2249A CAMAC ADC device to a CERNLIB ntuple.
-    *
-    * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-    *
-    * $Revision$
-    * $Date$
-    */
-   class CernlibDisk : public virtual dev::ICernlibDisk,
-                       public virtual Device {
+/**
+ *  @short AD2249A CERNLIB ntuple writer
+ *
+ *         This class can be used to write the information collected
+ *         from an AD2249A CAMAC ADC device to a CERNLIB ntuple.
+ *
+ * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+ *
+ * $Revision$
+ * $Date$
+ */
+class CernlibDisk : public virtual dev::ICernlibDisk, public virtual Device {
 
-      // To get the tr() function:
-      Q_DECLARE_TR_FUNCTIONS( ad2249a::CernlibDisk )
+   // To get the tr() function:
+   Q_DECLARE_TR_FUNCTIONS(ad2249a::CernlibDisk)
 
-   public:
-      /// Constructor
-      CernlibDisk();
+public:
+   /// Constructor
+   CernlibDisk();
 
-      /// Function initializing the device
-      virtual bool initialize( cernlib::NTupleMgr& nmgr );
-      /// Function filling the ntuple
-      virtual bool writeEvent( const ev::Fragment& fragment,
-                               cernlib::NTupleMgr& nmgr ) const;
+   /// Function initializing the device
+   virtual bool initialize(cernlib::NTupleMgr& nmgr);
+   /// Function filling the ntuple
+   virtual bool writeEvent(const ev::Fragment& fragment,
+                           cernlib::NTupleMgr& nmgr) const;
 
-   private:
-      /// LUT for the ntuple variable positions
-      int m_ntupleTable[ NUMBER_OF_SUBADDRESSES ];
+private:
+   /// LUT for the ntuple variable positions
+   int m_ntupleTable[NUMBER_OF_SUBADDRESSES];
 
-      mutable msg::Logger m_logger; ///< Message logging object
+   mutable msg::Logger m_logger;  ///< Message logging object
 
-   }; // class CernlibDisk
+};  // class CernlibDisk
 
-} // namespace ad2249a
+}  // namespace ad2249a
 
-#endif // CDA_DEVICES_T2249A_CERNLIBDISK_H
+#endif  // CDA_DEVICES_T2249A_CERNLIBDISK_H

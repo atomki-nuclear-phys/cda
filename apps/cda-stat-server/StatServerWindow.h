@@ -7,13 +7,13 @@
 #include <QMainWindow>
 
 // Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS( QSpinBox )
-QT_FORWARD_DECLARE_CLASS( QDockWidget )
-QT_FORWARD_DECLARE_CLASS( QAction )
+QT_FORWARD_DECLARE_CLASS(QSpinBox)
+QT_FORWARD_DECLARE_CLASS(QDockWidget)
+QT_FORWARD_DECLARE_CLASS(QAction)
 namespace cdastat {
-   class Server;
-   class MDIView;
-} // namespace stat
+class Server;
+class MDIView;
+}  // namespace cdastat
 
 /**
  *  @short Main window of cda-stat-server
@@ -51,14 +51,15 @@ private:
    /// Function creating the dock widgets of the window
    void createDockWidgets();
 
-   cdastat::Server*  m_server; ///< Statistics server
-   cdastat::MDIView* m_view; ///< Statistics presenter widget
+   cdastat::Server* m_server;  ///< Statistics server
+   cdastat::MDIView* m_view;   ///< Statistics presenter widget
 
-   QSpinBox* m_portEdit; ///< Listening port editor
-   QDockWidget* m_portDock; ///< Dock widget for the listening port editor
+   QSpinBox* m_portEdit;     ///< Listening port editor
+   QDockWidget* m_portDock;  ///< Dock widget for the listening port editor
 
-   QAction* m_showPortDock; ///< Action showing/hiding the port editor dock widget
+   QAction*
+       m_showPortDock;  ///< Action showing/hiding the port editor dock widget
 
-}; // class StatServerWindow
+};  // class StatServerWindow
 
-#endif // CDA_APPS_CDA_STAT_SERVER_STATSERVERWINDOW_H
+#endif  // CDA_APPS_CDA_STAT_SERVER_STATSERVERWINDOW_H

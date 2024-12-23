@@ -4,94 +4,86 @@
 
 namespace cdastat {
 
-   Statistics::Statistics( quint32 processedEvents, const QString& source,
-                           const QTime& statTime, quint32 lostEvents )
-      : m_processedEvents( processedEvents ), m_lostEvents( lostEvents ),
-        m_source( source ), m_statTime( statTime ) {
+Statistics::Statistics(quint32 processedEvents, const QString& source,
+                       const QTime& statTime, quint32 lostEvents)
+    : m_processedEvents(processedEvents),
+      m_lostEvents(lostEvents),
+      m_source(source),
+      m_statTime(statTime) {}
 
-   }
+/**
+ * @param events The number of events processed by the DAQ system
+ */
+void Statistics::setProcessedEvents(quint32 events) {
 
-   /**
-    * @param events The number of events processed by the DAQ system
-    */
-   void Statistics::setProcessedEvents( quint32 events ) {
+   m_processedEvents = events;
+   return;
+}
 
-      m_processedEvents = events;
-      return;
+/**
+ * @returns The number of events processed by the DAQ system
+ */
+quint32 Statistics::getProcessedEvents() const {
 
-   }
+   return m_processedEvents;
+}
 
-   /**
-    * @returns The number of events processed by the DAQ system
-    */
-   quint32 Statistics::getProcessedEvents() const {
+/**
+ * @param events The number of events lost by the DAQ system
+ */
+void Statistics::setLostEvents(quint32 events) {
 
-      return m_processedEvents;
+   m_lostEvents = events;
+   return;
+}
 
-   }
+/**
+ * @returns The number of events lost by the DAQ system
+ */
+quint32 Statistics::getLostEvents() const {
 
-   /**
-    * @param events The number of events lost by the DAQ system
-    */
-   void Statistics::setLostEvents( quint32 events ) {
+   return m_lostEvents;
+}
 
-      m_lostEvents = events;
-      return;
-   }
+/**
+ * @param source The source of the statistics
+ */
+void Statistics::setSource(const QString& source) {
 
-   /**
-    * @returns The number of events lost by the DAQ system
-    */
-   quint32 Statistics::getLostEvents() const {
+   m_source = source;
+   return;
+}
 
-      return m_lostEvents;
-   }
+/**
+ * @returns The source of the statistics
+ */
+const QString& Statistics::getSource() const {
 
-   /**
-    * @param source The source of the statistics
-    */
-   void Statistics::setSource( const QString& source ) {
+   return m_source;
+}
 
-      m_source = source;
-      return;
+/**
+ * @param statTime The time when this object was created
+ */
+void Statistics::setStatTime(const QTime& statTime) {
 
-   }
+   m_statTime = statTime;
+   return;
+}
 
-   /**
-    * @returns The source of the statistics
-    */
-   const QString& Statistics::getSource() const {
+/**
+ * @returns The time when this object was created
+ */
+const QTime& Statistics::getStatTime() const {
 
-      return m_source;
+   return m_statTime;
+}
 
-   }
+bool Statistics::operator==(const Statistics& stat) const {
 
-   /**
-    * @param statTime The time when this object was created
-    */
-   void Statistics::setStatTime( const QTime& statTime ) {
+   return ((m_processedEvents == stat.m_processedEvents) &&
+           (m_lostEvents == stat.m_lostEvents) && (m_source == stat.m_source) &&
+           (m_statTime == stat.m_statTime));
+}
 
-      m_statTime = statTime;
-      return;
-
-   }
-
-   /**
-    * @returns The time when this object was created
-    */
-   const QTime& Statistics::getStatTime() const {
-
-      return m_statTime;
-
-   }
-
-   bool Statistics::operator== ( const Statistics& stat ) const {
-
-      return ( ( m_processedEvents == stat.m_processedEvents ) &&
-               ( m_lostEvents == stat.m_lostEvents ) &&
-               ( m_source == stat.m_source ) &&
-               ( m_statTime == stat.m_statTime ) );
-
-   }
-
-} // namespace cdastat
+}  // namespace cdastat

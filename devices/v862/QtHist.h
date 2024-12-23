@@ -4,8 +4,8 @@
 #define CDA_DEVICES_V862_QTHIST_H
 
 // System include(s):
-#include <memory>
 #include <array>
+#include <memory>
 
 // Qt include(s):
 #include <QStackedLayout>
@@ -13,72 +13,71 @@
 
 // CDA include(s):
 #include "device/QtHist.h"
-#include "msg/Logger.h"
 #include "moni/Histogram.h"
+#include "msg/Logger.h"
 
 // Local include(s):
 #include "Device.h"
 
 namespace v862 {
 
-   /// Class providing Qt-only monitoring for a V862 device
-   ///
-   /// This class is used to monitor the data taking of V862 devices in a way
-   /// that doesn't rely on any external library.
-   ///
-   /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
-   ///
-   /// $Revision$
-   /// $Date$
-   ///
-   class QtHist : public dev::QtHist,
-                  public virtual Device {
+/// Class providing Qt-only monitoring for a V862 device
+///
+/// This class is used to monitor the data taking of V862 devices in a way
+/// that doesn't rely on any external library.
+///
+/// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+///
+/// $Revision$
+/// $Date$
+///
+class QtHist : public dev::QtHist, public virtual Device {
 
-      Q_OBJECT
+   Q_OBJECT
 
-   public:
-      /// Regular Qt constructor
-      QtHist( QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags() );
-      /// Destructor
-      ~QtHist();
+public:
+   /// Regular Qt constructor
+   QtHist(QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
+   /// Destructor
+   ~QtHist();
 
-      /// @name Function(s) reimplemented from v862::Device
-      /// @{
+   /// @name Function(s) reimplemented from v862::Device
+   /// @{
 
-      /// Read the device configuration from a binary file
-      virtual StatusCode readConfig( QIODevice& dev );
-      /// Read the device configuration from an XML file
-      virtual StatusCode readConfig( const QDomElement& node );
+   /// Read the device configuration from a binary file
+   virtual StatusCode readConfig(QIODevice& dev);
+   /// Read the device configuration from an XML file
+   virtual StatusCode readConfig(const QDomElement& node);
 
-      /// @}
+   /// @}
 
-      /// @name Function(s) inherited from dev::QtHist
-      /// @{
+   /// @name Function(s) inherited from dev::QtHist
+   /// @{
 
-      /// Function displaying a newly received event
-      virtual bool displayEvent( const ev::Fragment& fragment );
-      /// Title to show for the window displaying this object
-      virtual QString windowTitle() const;
+   /// Function displaying a newly received event
+   virtual bool displayEvent(const ev::Fragment& fragment);
+   /// Title to show for the window displaying this object
+   virtual QString windowTitle() const;
 
-      /// @}
+   /// @}
 
-   private:
-      /// Initialize the device after reading a configuration
-      bool initialize();
+private:
+   /// Initialize the device after reading a configuration
+   bool initialize();
 
-      /// Layout for the tab widget
-      std::unique_ptr< QStackedLayout > m_channelLayout;
-      /// Separate tabs for the channels
-      std::unique_ptr< QTabWidget > m_channelTab;
+   /// Layout for the tab widget
+   std::unique_ptr<QStackedLayout> m_channelLayout;
+   /// Separate tabs for the channels
+   std::unique_ptr<QTabWidget> m_channelTab;
 
-      /// Histograms for the monitored channels
-      std::array< std::unique_ptr< moni::Histogram >,
-                  NUMBER_OF_CHANNELS > m_histograms;
+   /// Histograms for the monitored channels
+   std::array<std::unique_ptr<moni::Histogram>, NUMBER_OF_CHANNELS>
+       m_histograms;
 
-      mutable msg::Logger m_logger; ///< Message logger object
+   mutable msg::Logger m_logger;  ///< Message logger object
 
-   }; // class QtHist
+};  // class QtHist
 
-} // namespace v862
+}  // namespace v862
 
-#endif // CDA_DEVICES_V862_QTHIST_H
+#endif  // CDA_DEVICES_V862_QTHIST_H

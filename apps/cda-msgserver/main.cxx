@@ -20,34 +20,34 @@
 #include <QApplication>
 
 // CDA include(s):
-#include "i18n/Loader.h"
 #include "common/DefaultFont.h"
 #include "common/SplashScreen.h"
+#include "i18n/Loader.h"
 
 // Local include(s):
 #include "MsgServerWindow.h"
 
-int main( int argc, char* argv[] ) {
+int main(int argc, char* argv[]) {
 
    //
    // Start a graphical Qt application:
    //
-   QApplication app( argc, argv );
-   app.setFont( gui::DefaultFont() );
+   QApplication app(argc, argv);
+   app.setFont(gui::DefaultFont());
 
    //
    // Create a splash screen:
    //
-   gui::SplashScreen splash( QPixmap( ":/img/splash.png" ),
-                             Qt::WindowStaysOnTopHint |
-                             Qt::X11BypassWindowManagerHint );
+   gui::SplashScreen splash(
+       QPixmap(":/img/splash.png"),
+       Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
    splash.show();
 
    //
    // Load all the available translations:
    //
    i18n::Loader trans_loader;
-   if( ! trans_loader.loadTranslations() ) {
+   if (!trans_loader.loadTranslations()) {
       std::cerr << "Couldn't load the translations!" << std::endl;
       return 1;
    }
@@ -57,11 +57,8 @@ int main( int argc, char* argv[] ) {
    //
    MsgServerWindow window;
    window.show();
-   splash.showMessage( qApp->translate( "cda-msgserver",
-                                        "Message Server Ready" ),
-                       Qt::AlignHCenter | Qt::AlignBottom,
-                       Qt::white );
+   splash.showMessage(qApp->translate("cda-msgserver", "Message Server Ready"),
+                      Qt::AlignHCenter | Qt::AlignBottom, Qt::white);
 
    return app.exec();
-
 }

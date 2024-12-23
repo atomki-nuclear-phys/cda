@@ -4,26 +4,25 @@
 
 namespace dev {
 
-    /**
-     * This function is the "user interface" for this factory
-     * interface. It uses the virtual createDevice function to
-     * create a device object.
-     *
-     * @returns A device object of the requested type, or <code>0</code>
-     *          if the plugin doesn't support this device
-     */
-   template< class T >
-   std::unique_ptr< T > Factory::createDevice() const {
+/**
+ * This function is the "user interface" for this factory
+ * interface. It uses the virtual createDevice function to
+ * create a device object.
+ *
+ * @returns A device object of the requested type, or <code>0</code>
+ *          if the plugin doesn't support this device
+ */
+template <class T>
+std::unique_ptr<T> Factory::createDevice() const {
 
-      // Ask for the creation of the new device:
-      void* ret = createDevice( typeid( T ) );
+   // Ask for the creation of the new device:
+   void* ret = createDevice(typeid(T));
 
-      // Only try the casting if an object was created:
-      std::unique_ptr< T > result( ret ? reinterpret_cast< T* >( ret ) :
-                                   nullptr );
-      return result;
-   }
+   // Only try the casting if an object was created:
+   std::unique_ptr<T> result(ret ? reinterpret_cast<T*>(ret) : nullptr);
+   return result;
+}
 
-} // namespace dev
+}  // namespace dev
 
-#endif // CDA_CORE_DEVICE_FACTORY_ICC
+#endif  // CDA_CORE_DEVICE_FACTORY_ICC

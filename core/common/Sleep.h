@@ -7,12 +7,12 @@
 
 namespace common {
 
-   /// Platform independent function for sleeping for a while
-   CDACORE_EXPORT void Sleep( unsigned int milisec );
+/// Platform independent function for sleeping for a while
+CDACORE_EXPORT void Sleep(unsigned int milisec);
 
-   /// Sleep function sleeping for the shortest possible time
-   CDACORE_EXPORT void SleepMin();
+/// Sleep function sleeping for the shortest possible time
+CDACORE_EXPORT void SleepMin();
 
-} // namespace common
+}  // namespace common
 
-#endif // CDA_CORE_COMMON_SLEEP_H
+#endif  // CDA_CORE_COMMON_SLEEP_H
