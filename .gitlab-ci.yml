@@ -30,13 +30,13 @@ variables:
 # used:
 config:ubuntu1204full:
    <<: *config_job
-   image: krasznaa/cda-build:ubuntu-12.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-12.04-v1
 
 # Test the project's configuration on Ubuntu-12.04, with all optional externals
 # turned off.
 config:ubuntu1204vanilla:
    <<: *config_job
-   image: krasznaa/cda-build:ubuntu-12.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-12.04-v1
    before_script:
       - export CONFIG_FLAGS=${DISABLE_FLAGS}
 
@@ -44,13 +44,13 @@ config:ubuntu1204vanilla:
 # used:
 config:ubuntu1604full:
    <<: *config_job
-   image: krasznaa/cda-build:ubuntu-16.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-16.04-v1
 
 # Test the project's configuration on Ubuntu-16.04, with all optional externals
 # turned off.
 config:ubuntu1604vanilla:
    <<: *config_job
-   image: krasznaa/cda-build:ubuntu-16.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-16.04-v1
    before_script:
       - export CONFIG_FLAGS=${DISABLE_FLAGS}
 
@@ -70,7 +70,7 @@ config:ubuntu1604vanilla:
 # on:
 build:ubuntu1204full:
    <<: *build_job
-   image: krasznaa/cda-build:ubuntu-12.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-12.04-v1
    dependencies:
       - config:ubuntu1204full
 
@@ -78,7 +78,7 @@ build:ubuntu1204full:
 # off:
 build:ubuntu1204vanilla:
    <<: *build_job
-   image: krasznaa/cda-build:ubuntu-12.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-12.04-v1
    dependencies:
       - config:ubuntu1204vanilla
 
@@ -86,7 +86,7 @@ build:ubuntu1204vanilla:
 # on:
 build:ubuntu1604full:
    <<: *build_job
-   image: krasznaa/cda-build:ubuntu-16.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-16.04-v1
    dependencies:
       - config:ubuntu1604full
 
@@ -94,7 +94,7 @@ build:ubuntu1604full:
 # off:
 build:ubuntu1604vanilla:
    <<: *build_job
-   image: krasznaa/cda-build:ubuntu-16.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-16.04-v1
    dependencies:
       - config:ubuntu1604vanilla
 
@@ -103,7 +103,7 @@ pages:
    tags:
       - gitlab-org-docker
    stage: deploy
-   image: krasznaa/cda-build:ubuntu-16.04
+   image: registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-16.04-v1
    dependencies: []
    script:
       - doxygen Doxyfile
