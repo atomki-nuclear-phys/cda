@@ -272,7 +272,11 @@ namespace caen {
    /// @returns The usual status codes
    ///
    StatusCode VmeDevice::open( uint16_t address, DeviceType type,
-                               const VmeBus& bus ) {
+                               const VmeBus&
+#ifdef HAVE_CAEN_QTP_LIBS
+                               bus
+#endif // HAVE_CAEN_QTP_LIBS
+                                ) {
 
       // Make sure that the data is cleared:
       resetData();
