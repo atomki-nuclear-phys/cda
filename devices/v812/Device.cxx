@@ -58,7 +58,7 @@ namespace v812 {
          std::unique_ptr< ChannelConfig > channel( new ChannelConfig() );
          CHECK( channel->readConfig( dev ) );
          if( ( channel->getChannel() >= 0 ) &&
-             ( channel->getChannel() < NUMBER_OF_CHANNELS ) ) {
+             ( channel->getChannel() < static_cast<int>(NUMBER_OF_CHANNELS) ) ) {
             if( m_channels[ channel->getChannel() ] ) {
                m_logger << msg::WARNING
                         << tr( "Redefining channel number: %1" )
@@ -94,7 +94,7 @@ namespace v812 {
 
       // Count the number of configured channels.
       quint32 number_of_channels = 0;
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
+      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          if( m_channels[ i ] ) ++number_of_channels;
       }
 
@@ -102,7 +102,7 @@ namespace v812 {
       output << number_of_channels;
 
       // Write the channel configurations.
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
+      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          if( m_channels[ i ] ) {
             CHECK( m_channels[ i ]->writeConfig( dev ) );
          }
@@ -165,7 +165,7 @@ namespace v812 {
 
          // Make sure that the reading was successful.
          if( ( channel->getChannel() >= 0 ) &&
-             ( channel->getChannel() < NUMBER_OF_CHANNELS ) ) {
+             ( channel->getChannel() < static_cast<int>(NUMBER_OF_CHANNELS) ) ) {
             if( m_channels[ channel->getChannel() ] ) {
                m_logger << msg::WARNING
                         << tr( "Redefining channel number: %1" )
@@ -200,7 +200,7 @@ namespace v812 {
       element.setAttribute( "MajorityThreshold", m_majorityThreshold );
 
       // Create a new node for the configuration of each channel.
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
+      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          if( m_channels[ i ] ) {
             QDomElement ch_element =
                element.ownerDocument().createElement( "Channel" );

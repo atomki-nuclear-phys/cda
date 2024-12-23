@@ -1,4 +1,3 @@
-// $Id$
 
 // Qt include(s):
 #include <QWidget>
@@ -75,12 +74,12 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName,
    m_msgView->setMinimumShownLevel( verbosity );
    connect( &m_msgServer, SIGNAL( messageAvailable( const Message& ) ),
             m_msgView.get(), SLOT( addMessage( const Message& ) ) );
-   if( ! m_msgServer.listen( Address( Const::MSG_SERVER_ADDRESS ) ) ) {
+   if( ! m_msgServer.listen( Address( MSG_SERVER_ADDRESS ) ) ) {
       QMessageBox::critical( this, tr( "Error starting message server" ),
                              tr( "The TCP/IP message server could not be "
                                  "started on address %1. The application has "
                                  "to shut down!" )
-                             .arg( Const::MSG_SERVER_ADDRESS ) );
+                             .arg( MSG_SERVER_ADDRESS ) );
       QApplication::exit( 1 );
    } else {
       m_logger << msg::INFO << tr( "The message server started successfully" )
@@ -92,7 +91,7 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName,
    //
    m_statistics.reset( new simple_daq::Statistics( m_centralWidget.get() ) );
    m_statistics->setGeometry( QRect( 5, 5, 300, 150 ) );
-   m_statistics->setStatAddress( Address( Const::STAT_SERVER_ADDRESS ) );
+   m_statistics->setStatAddress( Address( STAT_SERVER_ADDRESS ) );
 
    //
    // Create the widget controlling cda-caen-vme-reader:
@@ -101,8 +100,8 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName,
             new simple_daq::CaenVmeReaderRunner( m_centralWidget.get() ) );
    m_caenVmeReader->setGeometry( QRect( 310, 5, 300, 150 ) );
    m_caenVmeReader->setConfigFileName( confFileName );
-   m_caenVmeReader->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
-   m_caenVmeReader->setStatServerAddress( true, Const::STAT_SERVER_ADDRESS );
+   m_caenVmeReader->setMsgServerAddress( MSG_SERVER_ADDRESS );
+   m_caenVmeReader->setStatServerAddress( true, STAT_SERVER_ADDRESS );
    m_caenVmeReader->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_caenVmeReader->setEnabled( false );
@@ -115,8 +114,8 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName,
             new simple_daq::GlomemWriterRunner( m_centralWidget.get() ) );
    m_glomemWriter->setGeometry( QRect( 615, 5, 300, 150 ) );
    m_glomemWriter->setConfigFileName( confFileName );
-   m_glomemWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
-   m_glomemWriter->setEventAddress( Const::GLOMEM_WRITER_ADDRESS );
+   m_glomemWriter->setMsgServerAddress( MSG_SERVER_ADDRESS );
+   m_glomemWriter->setEventAddress( GLOMEM_WRITER_ADDRESS );
    m_glomemWriter->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_glomemWriter->setEnabled( false );
@@ -133,8 +132,8 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName,
             new simple_daq::HBookWriterRunner( m_centralWidget.get() ) );
    m_hbookWriter->setGeometry( QRect( 5, 160, 300, 150 ) );
    m_hbookWriter->setConfigFileName( confFileName );
-   m_hbookWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
-   m_hbookWriter->setEventAddress( Const::HBOOK_WRITER_ADDRESS );
+   m_hbookWriter->setMsgServerAddress( MSG_SERVER_ADDRESS );
+   m_hbookWriter->setEventAddress( HBOOK_WRITER_ADDRESS );
    m_hbookWriter->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_hbookWriter->setEnabled( false );
@@ -151,8 +150,8 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName,
             new simple_daq::RootWriterRunner( m_centralWidget.get() ) );
    m_rootWriter->setGeometry( QRect( 310, 160, 300, 150 ) );
    m_rootWriter->setConfigFileName( confFileName );
-   m_rootWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
-   m_rootWriter->setEventAddress( Const::ROOT_WRITER_ADDRESS );
+   m_rootWriter->setMsgServerAddress( MSG_SERVER_ADDRESS );
+   m_rootWriter->setEventAddress( ROOT_WRITER_ADDRESS );
    m_rootWriter->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_rootWriter->setEnabled( false );
@@ -169,8 +168,8 @@ CaenDAQWindow::CaenDAQWindow( const QString& confFileName,
             new simple_daq::RawWriterRunner( m_centralWidget.get() ) );
    m_rawWriter->setGeometry( QRect( 615, 160, 300, 150 ) );
    m_rawWriter->setConfigFileName( confFileName );
-   m_rawWriter->setMsgServerAddress( Const::MSG_SERVER_ADDRESS );
-   m_rawWriter->setEventAddress( Const::RAW_WRITER_ADDRESS );
+   m_rawWriter->setMsgServerAddress( MSG_SERVER_ADDRESS );
+   m_rawWriter->setEventAddress( RAW_WRITER_ADDRESS );
    m_rawWriter->setVerbosity( verbosity );
    if( confFileName.isEmpty() ) {
       m_rawWriter->setEnabled( false );

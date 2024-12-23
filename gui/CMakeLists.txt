@@ -26,5 +26,5 @@ cda_add_library( cdagui
    ${resources}
    LINK_LIBRARIES ${Qt456_LIBRARIES} cdacore cdadaq )
 set_target_properties( cdagui PROPERTIES
-   VERSION 2.0.0
-   SOVERSION 2 )
+   VERSION ${PROJECT_VERSION}
+   SOVERSION ${PROJECT_VERSION_MAJOR} )

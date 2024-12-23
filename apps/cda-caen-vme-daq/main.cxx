@@ -1,4 +1,3 @@
-// $Id$
 /**
  *   @file apps/cda-caen-vme-daq/main.cxx
  *  @short Main file for the cda-caen-vme-daq application
@@ -8,9 +7,6 @@
  *         then sets up CaenDAQWindow to do the rest of the job.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 
 // Qt include(s):
@@ -58,7 +54,7 @@ int main( int argc, char* argv[] ) {
    cmd.parse( argc, argv );
 
    // Set the message server to a fixed address:
-   msg::Sender::addAddress( Address( Const::MSG_SERVER_ADDRESS ) );
+   msg::Sender::addAddress( Address( MSG_SERVER_ADDRESS ) );
 
    // Logger object used to print messages directly from this function:
    msg::Logger logger( "cda-caen-vme-daq" );
