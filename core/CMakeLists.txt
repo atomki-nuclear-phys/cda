@@ -42,6 +42,7 @@ if( Qt456_VERSION VERSION_LESS 6 )
    check_cxx_source_compiles( "#include <QString>
       int main() {
          Qt::SplitBehavior sb = Qt::KeepEmptyParts;
+         (void) sb;
          return 0; }"
       CDA_HAVE_QT_SPLITBEHAVIOR )
 elseif( Qt456_VERSION VERSION_LESS 5 )

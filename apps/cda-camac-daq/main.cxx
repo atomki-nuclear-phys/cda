@@ -1,4 +1,3 @@
-// $Id$
 /**
  *   @file apps/cda-camac-daq/main.cxx
  *  @short Main file for the cda-camac-daq application
@@ -8,9 +7,6 @@
  *         then sets up CamacDAQWindow to do the rest of the job.
  *
  * @author Attila Krasznahorkay Jr.
- *
- * $Revision$
- * $Date$
  */
 
 // STL include(s):
@@ -70,7 +66,7 @@ int main( int argc, char* argv[] ) {
    splash.show();
 
    // Set the message server to a fixed address:
-   msg::Sender::addAddress( Address( Const::MSG_SERVER_ADDRESS ) );
+   msg::Sender::addAddress( Address( MSG_SERVER_ADDRESS ) );
 
    // Logger object used to print messages directly from this function:
    msg::Logger logger( "cda-camac-daq" );

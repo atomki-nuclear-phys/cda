@@ -18,7 +18,7 @@ namespace v785 {
    bool RootDisk::initialize( root::NTupleMgr& nmgr ) {
 
       // Loop over all configured channels:
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
+      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          if( m_channels[ i ] ) {
             CHECK( nmgr.addVar( m_data[ i ], m_channels[ i ]->getName() ) );
             CHECK( nmgr.addVar( m_underThreshold[ i ],
@@ -35,7 +35,7 @@ namespace v785 {
    bool RootDisk::writeEvent( const ev::Fragment& fragment ) const {
 
       // Reset all the ntuple variables:
-      for( int i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
+      for( size_t i = 0; i < NUMBER_OF_CHANNELS; ++i ) {
          m_data[ i ] = 0;
          m_underThreshold[ i ] = 0;
          m_overflow[ i ] = 0;

@@ -431,10 +431,8 @@ namespace moni {
 
 #if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
       const qreal event_x = event->x();
-      const qreal event_y = event->y();
 #else
       const qreal event_x = event->position().x();
-      const qreal event_y = event->position().y();
 #endif
 
       // Decide on the final point of the zoom:
@@ -487,10 +485,8 @@ namespace moni {
 
 #if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
       const qreal event_x = event->x();
-      const qreal event_y = event->y();
 #else
       const qreal event_x = event->position().x();
-      const qreal event_y = event->position().y();
 #endif
 
       // Decide on the final point of the zoom:
