@@ -8,5 +8,5 @@ data acquisition machine at the moment.)
 Build the image (for deployment) with:
 
 ```
-docker build --compress --squash -t krasznaa/cda-build:ubuntu-12.04 .
+docker build --compress -t registry.gitlab.com/atomki-nuclear-phys/cda/reference-os:ubuntu-12.04-vX .
 ```
