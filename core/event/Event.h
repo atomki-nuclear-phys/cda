@@ -33,10 +33,10 @@ namespace ev {
       /// Default constructor
       Event() = default;
       /// Move constructor
-      Event( Event&& parent ) = default;
+      Event( Event&& ) = default;
 
       /// Move operator
-      Event& operator= ( Event&& rh ) = default;
+      Event& operator= ( Event&& ) = default;
 
       /// Get all the event fragments
       const Fragments_t& getFragments() const;

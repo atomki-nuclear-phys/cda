@@ -21,7 +21,7 @@ variables:
    script:
       - mkdir ci_build
       - cd ci_build/
-      - cmake -DCMAKE_BUILD_TYPE:STRING=Release ${CONFIG_FLAGS} ../
+      - cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCDA_FAIL_ON_WARNINGS:BOOL=TRUE ${CONFIG_FLAGS} ../
    artifacts:
       paths:
          - ci_build/

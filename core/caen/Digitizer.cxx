@@ -417,6 +417,7 @@ namespace {
 #endif // Q_OS_WIN
 #endif // HAVE_CAEN_DIGITIZER_LIBS
 
+#ifndef HAVE_CAEN_DIGITIZER_LIBS
 namespace {
 
    /// Convert read mode into human readable format
@@ -506,6 +507,7 @@ namespace {
    }
 
 } // private namespace
+#endif // HAVE_CAEN_DIGITIZER_LIBS
 
 namespace caen {
 
