@@ -4,6 +4,7 @@
 
 // Qt include(s):
 #include <QCoreApplication>
+#include <QDir>
 #include <QFileInfo>
 #include <QProcessEnvironment>
 #include <QStringList>
@@ -61,11 +62,12 @@ QString PathResolver::resolve(const QString& name, const QString& env) {
       const QString envarray = procenv.value(env);
       REPORT_VERBOSE(tr("%1 = %2").arg(env).arg(envarray));
 #ifdef Q_OS_WIN
-      static const QString separator = ";";
+      static const QChar listSeparator = ';';
 #else
-      static const QString separator = ":";
+      static const QChar listSeparator = ':';
 #endif  // QT_ARCH_WINDOW
-      QStringList envsplit = envarray.split(separator, Qt::SkipEmptyParts);
+      const QStringList envsplit =
+          envarray.split(listSeparator, Qt::SkipEmptyParts);
       for (QStringList::const_iterator element = envsplit.begin();
            element != envsplit.end(); ++element) {
          REPORT_VERBOSE(
@@ -78,7 +80,7 @@ QString PathResolver::resolve(const QString& name, const QString& env) {
    //
    // We don't look for files in subdirectories:
    //
-   if (name.contains("/")) {
+   if (name.contains(QDir::separator())) {
       m_logger << msg::WARNING
                << tr("The specified file name (%1) contains a slash.").arg(name)
                << std::endl
@@ -94,7 +96,13 @@ QString PathResolver::resolve(const QString& name, const QString& env) {
         dir != envlist->second.end(); ++dir) {
 
       // Check if the file exists:
-      QFileInfo finfo(*dir + "/" + name);
+      QString fullpath = *dir + QDir::separator() + name;
+#ifdef Q_OS_WIN
+      if (env == "PATH") {
+         fullpath += ".exe";
+      }
+#endif
+      const QFileInfo finfo(fullpath);
       if (finfo.exists()) {
          m_logger << msg::DEBUG
                   << tr("\"%1\" found under \"%2\"").arg(name).arg(*dir)
@@ -109,7 +117,7 @@ QString PathResolver::resolve(const QString& name, const QString& env) {
    m_logger << msg::WARNING
             << tr("Failed to find \"%1\" in environment: %2").arg(name).arg(env)
             << msg::endmsg;
-   return name;
+   return "";
 }
 
 }  // namespace daq
