@@ -1,3 +1,9 @@
+# ATOMKI Common Data Acquisition
+#
+# (c) 2024 ATOMKI, Debrecen, Hungary
+#
+# Apache License Version 2.0
+
 #
 # Ubuntu 16.04 image for building CDA on top of.
 #
@@ -12,7 +18,7 @@ WORKDIR /root
 # Install the required packages:
 RUN apt-get update && apt-get -y install gcc g++ qt5-default \
     qttools5-dev-tools make wget doxygen graphviz cernlib-base-dev \
-    cernlib-core-dev libncurses5-dev \
+    cernlib-core-dev libncurses5-dev git \
     && apt-get clean
 
 # Install a newer version of CMake than what's available in this
