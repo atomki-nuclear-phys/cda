@@ -61,13 +61,6 @@ if( ( "${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" ) OR
   endif()
 endif()
 
-# Configure the use of rpath:
-set( CMAKE_MACOSX_RPATH ON )
-set( CMAKE_SKIP_BUILD_RPATH OFF )
-set( CMAKE_SKIP_INSTALL_RPATH OFF )
-set( CMAKE_BUILD_WITH_INSTALL_RPATH ON )
-set( CMAKE_INSTALL_RPATH_USE_LINK_PATH ON )
-
 # Turn on using folders in certain IDEs (Xcode,VS):
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
