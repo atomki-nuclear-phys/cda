@@ -1,3 +1,9 @@
+# ATOMKI Common Data Acquisition
+#
+# (c) 2024 ATOMKI, Debrecen, Hungary
+#
+# Apache License Version 2.0
+
 #
 # Ubuntu 12.04 image for building CDA on top of.
 #
@@ -16,7 +22,16 @@ RUN sed -i -e "s/archive.ubuntu.com/old-releases.ubuntu.com/g" \
 
 # Install the required packages:
 RUN apt-get update && apt-get -y install gcc g++ libqt4-dev make wget \
-    cernlib-base-dev cernlib-core-dev libncurses5-dev && apt-get clean
+    cernlib-base-dev cernlib-core-dev libncurses5-dev libexpat1-dev gettext \
+    libperl-dev libcurl4-openssl-dev libssl-dev \
+    && apt-get clean
+
+# Install a newer version of Git than what's available in this old release.
+RUN wget --no-check-certificate \
+    https://www.kernel.org/pub/software/scm/git/git-1.8.5.6.tar.gz \
+    && tar -xvf git-*.tar.gz && cd git-*/ && \
+    make prefix=/usr/local all && make prefix=/usr/local install && \
+    cd .. && rm -rf git-*
 
 # Install a newer version of CMake than what's available in this
 # old release:
