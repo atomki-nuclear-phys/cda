@@ -1,0 +1,109 @@
+# ATOMKI Common Data Acquisition
+#
+# (c) 2008-2024 ATOMKI, Debrecen, Hungary
+#
+# Apache License Version 2.0
+
+# The name for this action.
+name: Build Tests
+
+# Perform the builds on every push and pull request.
+on: [ push ]
+
+# All build testing jobs.
+jobs:
+
+   # Native build jobs.
+   native:
+
+      # The different build modes to test.
+      strategy:
+         matrix:
+            BUILD_TYPE: [ "Release", "Debug" ]
+            PLATFORM:
+               - OS: "ubuntu-latest"
+                 NAME: "Ubuntu 'Latest'"
+                 GENERATOR: -G "Unix Makefiles"
+               - OS: "macos-latest"
+                 NAME: "macOS 'Latest'"
+                 GENERATOR: -G "Xcode"
+               - OS: "windows-latest"
+                 NAME: "Windows 'Latest'"
+                 GENERATOR:
+
+      # User friendly name for the job.
+      name: "${{ matrix.PLATFORM.NAME }} (${{ matrix.BUILD_TYPE }})"
+
+      # The system to run on.
+      runs-on: ${{ matrix.PLATFORM.OS }}
+
+      # The build/test steps to execute.
+      steps:
+         # Use a standard checkout of the code.
+         - uses: actions/checkout@v4
+         # Install the Qt development environment.
+         - name: Install Qt
+           uses: jurplel/install-qt-action@v4
+           with:
+              version: '6.5.*'
+         # Run the CMake configuration.
+         - name: Configure
+           run: cmake -DCMAKE_BUILD_TYPE:STRING=${{ matrix.BUILD_TYPE }}
+                      -DCDA_FAIL_ON_WARNINGS:BOOL=TRUE
+                      -S ${{ github.workspace }} -B ci_build
+                      ${{ matrix.PLATFORM.GENERATOR }}
+         # Perform the build.
+         - name: Build
+           run: cmake --build ci_build --config ${{ matrix.BUILD_TYPE }}
+
+   # Containerised build jobs.
+   container:
+
+      # The different build modes to test.
+      strategy:
+         matrix:
+            BUILD_TYPE: [ "Release", "Debug" ]
+            PLATFORM:
+               - NAME: "Ubuntu 12.04 Full"
+                 CONTAINER: "krasznaa/cda-build:ubuntu-12.04-v2"
+                 OPTIONS:
+               - NAME: "Ubuntu 12.04 Vanilla"
+                 CONTAINER: "krasznaa/cda-build:ubuntu-12.04-v2"
+                 OPTIONS: -DCDA_USE_ROOT:BOOL=FALSE -DCDA_USE_CERNLIB:BOOL=FALSE -DCDA_USE_CC32:BOOL=FALSE -DCDA_USE_CAENDIGITIZER:BOOL=FALSE -DCDA_USE_CAENQTPSDK:BOOL=FALSE
+               - NAME: "Ubuntu 16.04 Full"
+                 CONTAINER: "krasznaa/cda-build:ubuntu-16.04-v2"
+                 OPTIONS:
+               - NAME: "Ubuntu 16.04 Vanilla"
+                 CONTAINER: "krasznaa/cda-build:ubuntu-16.04-v2"
+                 OPTIONS: -DCDA_USE_ROOT:BOOL=FALSE -DCDA_USE_CERNLIB:BOOL=FALSE -DCDA_USE_CC32:BOOL=FALSE -DCDA_USE_CAENDIGITIZER:BOOL=FALSE -DCDA_USE_CAENQTPSDK:BOOL=FALSE
+
+      # User friendly name for the job.
+      name: "${{ matrix.PLATFORM.NAME }} (${{ matrix.BUILD_TYPE }})"
+
+      # The system to run on.
+      runs-on: ubuntu-latest
+      container: ${{ matrix.PLATFORM.CONTAINER }}
+
+      # Use BASH as the shell from the image.
+      defaults:
+         run:
+            shell: bash
+
+      # The build/test steps to execute.
+      steps:
+         # Use a checkout that would work with old Ubuntu versions.
+         - uses: taiki-e/checkout-action@v1
+         # Run the CMake configuration.
+         - name: Configure
+           run: |
+              mkdir ci_build
+              cd ci_build/
+              cmake \
+                 -DCMAKE_BUILD_TYPE:STRING=${{ matrix.BUILD_TYPE }} \
+                 -DCDA_FAIL_ON_WARNINGS:BOOL=TRUE \
+                 $${{ matrix.PLATFORM.OPTIONS }} \
+                 ../
+         # Perform the build.
+         - name: Build
+           run: |
+              cmake --build ci_build
