@@ -1,31 +1,24 @@
-// Dear emacs, this is -*- c++ -*-
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 #ifndef CDA_GUI_SIMPLE_DAQ_CAENVMEREADERRUNNER_H
 #define CDA_GUI_SIMPLE_DAQ_CAENVMEREADERRUNNER_H
 
-// System include(s):
-#include <memory>
-#include <set>
+// CDA include(s).
+#include "msg/Level.h"
 
-// Qt include(s):
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
+// Qt include(s).
 #include <QString>
 #include <QWidget>
 
-// CDA include(s):
-#include "common/AppRunner.h"
-#include "msg/Logger.h"
-
-// Local include(s):
-#include "../common/Export.h"
+// System include(s).
+#include <memory>
 
 namespace simple_daq {
-
-// Make sure that the Qt classes are available in this namespace:
-using QT_PREPEND_NAMESPACE(QGroupBox);
-using QT_PREPEND_NAMESPACE(QPushButton);
-using QT_PREPEND_NAMESPACE(QLabel);
 
 /**
  *  @short Widget for starting cda-caen-vme-reader on the local machine
@@ -37,14 +30,16 @@ using QT_PREPEND_NAMESPACE(QLabel);
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
-class CDAGUI_EXPORT CaenVmeReaderRunner : public QWidget {
+class CaenVmeReaderRunner : public QWidget {
 
    Q_OBJECT
 
 public:
    /// Standard QWidget-type constructor
-   CaenVmeReaderRunner(QWidget* parent = 0,
+   CaenVmeReaderRunner(QWidget* parent = nullptr,
                        Qt::WindowFlags flags = Qt::WindowFlags());
+   /// Destructor
+   ~CaenVmeReaderRunner();
 
    /// Set the name of the configuration file
    void setConfigFileName(const QString& fileName);
@@ -75,31 +70,10 @@ private slots:
    void startApp(bool start);
 
 private:
-   /// Main box, holding other graphcal objects
-   std::unique_ptr<QGroupBox> m_mainBox;
-   /// Button starting the application
-   std::unique_ptr<QPushButton> m_starterButton;
-   /// Label giving feedback of the status
-   std::unique_ptr<QLabel> m_processStatus;
-   /// "Start time" label
-   std::unique_ptr<QLabel> m_startTimeLabel;
-   /// Label with the starting time
-   std::unique_ptr<QLabel> m_startTime;
-   /// "Stop time" label
-   std::unique_ptr<QLabel> m_stopTimeLabel;
-   /// Label with the stopping time
-   std::unique_ptr<QLabel> m_stopTime;
-
-   QString m_configFileName;    ///< Name of the configuration file
-   QString m_msgServerAddress;  ///< Address of the message server
-   /// Address(es) of the statistics server(s)
-   std::set<QString> m_statServerAddresses;
-   /// Addresses of event listener applications
-   std::set<QString> m_eventListenerAddresses;
-   msg::Level m_level;  ///< Output level of cda-caen-vme-reader
-
-   mutable daq::AppRunner m_runner;  ///< The object starting the application
-   mutable msg::Logger m_logger;     ///< Internal logger object
+   /// Internal data type
+   struct Impl;
+   /// Internal data
+   std::unique_ptr<Impl> m_impl;
 
 };  // class CaenVmeReaderRunner
 
