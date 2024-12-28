@@ -13,6 +13,49 @@ on: [ push ]
 # All build testing jobs.
 jobs:
 
+   # Native build jobs.
+   native:
+
+      # The different build modes to test.
+      strategy:
+         matrix:
+            BUILD_TYPE: [ "Release", "Debug" ]
+            PLATFORM:
+               - OS: "ubuntu-latest"
+                 NAME: "Ubuntu 'Latest'"
+                 GENERATOR: -G "Unix Makefiles"
+               - OS: "macos-latest"
+                 NAME: "macOS 'Latest'"
+                 GENERATOR: -G "Xcode"
+               - OS: "windows-latest"
+                 NAME: "Windows 'Latest'"
+                 GENERATOR:
+
+      # User friendly name for the job.
+      name: "${{ matrix.PLATFORM.NAME }} (${{ matrix.BUILD_TYPE }})"
+
+      # The system to run on.
+      runs-on: ${{ matrix.PLATFORM.OS }}
+
+      # The build/test steps to execute.
+      steps:
+         # Use a standard checkout of the code.
+         - uses: actions/checkout@v4
+         # Install the Qt development environment.
+         - name: Install Qt
+           uses: jurplel/install-qt-action@v4
+           with:
+              version: '6.5.*'
+         # Run the CMake configuration.
+         - name: Configure
+           run: cmake -DCMAKE_BUILD_TYPE:STRING=${{ matrix.BUILD_TYPE }}
+                      -DCDA_FAIL_ON_WARNINGS:BOOL=TRUE
+                      -S ${{ github.workspace }} -B ci_build
+                      ${{ matrix.PLATFORM.GENERATOR }}
+         # Perform the build.
+         - name: Build
+           run: cmake --build ci_build --config ${{ matrix.BUILD_TYPE }}
+
    # Containerised build jobs.
    container:
 
