@@ -1,4 +1,8 @@
-// $Id$
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
 
 // Qt include(s):
 #include <QtCore/QDataStream>
@@ -136,7 +140,7 @@ bool Crate::devicesAreInSync() const {
       if (msg::Sender::instance()->getMinLevel() <= level) {
          for (const auto& itr : devices) {
             logger << level
-                   << tr("Device %1 (%2) processed %3 events")
+                   << this->tr("Device %1 (%2) processed %3 events")
                           .arg(itr.first)
                           .arg(itr.second->deviceName())
                           .arg(itr.second->eventsProcessed())
