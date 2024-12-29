@@ -1,6 +1,21 @@
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
+
+// Local include(s):
+#include "HBookWriterRunner.h"
+
+// CDA include(s):
+#include "common/AppRunner.h"
+#include "common/PathResolver.h"
 
 // Qt include(s):
 #include <QFont>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QIcon>
 #include <QLabel>
@@ -8,68 +23,111 @@
 #include <QPalette>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QVBoxLayout>
 
-// CDA include(s):
-#include "common/PathResolver.h"
-
-// Local include(s):
-#include "HBookWriterRunner.h"
+// System include(s).
+#include <set>
 
 namespace simple_daq {
 
+struct HBookWriterRunner::Impl {
+
+   /// Constructor
+   Impl(QWidget& parent, const QString& boxTitle, const QString& labelText,
+        const QString& updateFreqText, const QString& fileNameText,
+        const QString& buttonText)
+       : m_mainBox{boxTitle, &parent},
+         m_layout{&m_mainBox},
+         m_processStatus{labelText, &m_mainBox},
+         m_updateFrequencyLabel{updateFreqText, &m_mainBox},
+         m_updateFrequency{&m_mainBox},
+         m_fileNameLabel{fileNameText, &m_mainBox},
+         m_fileNameEdit{&m_mainBox},
+         m_starterButton{QIcon::fromTheme("media-playback-start"), buttonText,
+                         &m_mainBox} {
+
+      m_mainLayout.addWidget(&m_mainBox);
+      parent.setLayout(&m_mainLayout);
+
+      m_layout.addWidget(&m_processStatus, 0, 0, 1, 2, Qt::AlignCenter);
+      m_layout.addWidget(&m_updateFrequencyLabel, 1, 0, Qt::AlignRight);
+      m_layout.addWidget(&m_updateFrequency, 1, 1);
+      m_layout.addWidget(&m_fileNameLabel, 2, 0, Qt::AlignRight);
+      m_layout.addWidget(&m_fileNameEdit, 2, 1);
+      m_layout.addWidget(&m_starterButton, 3, 0, 1, 2);
+   }
+
+   /// Layout connecting the parent to the main box
+   QVBoxLayout m_mainLayout;
+
+   /// Main box holding graphcal objects
+   QGroupBox m_mainBox;
+
+   /// Layout for the elements of the main box.
+   QGridLayout m_layout;
+
+   /// Label giving feedback of the status
+   QLabel m_processStatus;
+   /// Description of file name update frequency
+   QLabel m_updateFrequencyLabel;
+   /// File name update frequency chooser
+   QSpinBox m_updateFrequency;
+   /// Label telling what the line edit is for
+   QLabel m_fileNameLabel;
+   /// Input field for the output file name
+   QLineEdit m_fileNameEdit;
+   /// Button starting the application
+   QPushButton m_starterButton;
+
+   /// Name of the configuration file
+   QString m_configFileName;
+   /// Address of the message server(s)
+   QString m_msgServerAddress;
+   /// Address of cda-hbook-writer
+   QString m_eventAddress;
+   /// Address(es) of the statistics server(s)
+   std::set<QString> m_statServerAddresses;
+   /// Output level of cda-hbook-writer
+   msg::Level m_level;
+
+   /// The object starting cda-hbook-writer
+   daq::AppRunner m_runner;
+};
+
 HBookWriterRunner::HBookWriterRunner(QWidget* parent, Qt::WindowFlags flags)
-    : QWidget(parent, flags), m_runner(), m_logger("sd::HBookWriterRunner") {
-
-   setMinimumSize(300, 150);
-   setMaximumSize(300, 150);
-
-   m_mainBox = new QGroupBox(tr("HBook writing control"), this);
-   m_mainBox->setGeometry(QRect(5, 5, 290, 140));
+    : QWidget(parent, flags),
+      m_impl{new Impl{*this, tr("HBook writing control"),
+                      tr("HBook writer stopped"), tr("Update freq. [min]:"),
+                      tr("Output file:"), tr("Start hbook writer")}} {
 
    //
-   // Set up the big label showing the application status:
+   // Set up the process status label.
    //
-   m_processStatus = new QLabel(tr("HBook writer stopped"), m_mainBox);
-   m_processStatus->setGeometry(QRect(0, 15, 290, 40));
-   m_processStatus->setAlignment(Qt::AlignCenter);
-
-   QPalette palette(m_processStatus->palette());
+   QPalette palette(m_impl->m_processStatus.palette());
    palette.setColor(QPalette::Active, QPalette::WindowText,
                     QColor(10, 150, 10));
    palette.setColor(QPalette::Inactive, QPalette::WindowText,
                     QColor(10, 150, 10));
-   m_processStatus->setPalette(palette);
+   m_impl->m_processStatus.setPalette(palette);
 
-   QFont font(m_processStatus->font());
+   QFont font(m_impl->m_processStatus.font());
    font.setPointSize(14);
-   m_processStatus->setFont(font);
+   m_impl->m_processStatus.setFont(font);
 
    //
    // Set up the widgets for the automatic file name updates:
    //
-   m_updateFrequencyLabel = new QLabel(tr("Update freq. [min]:"), m_mainBox);
-   m_updateFrequencyLabel->setGeometry(QRect(10, 52, 140, 20));
-   m_updateFrequencyLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-   m_updateFrequency = new QSpinBox(m_mainBox);
-   m_updateFrequency->setGeometry(QRect(160, 50, 100, 24));
-   m_updateFrequency->setMinimum(1);
-   m_updateFrequency->setMaximum(360);
-   m_updateFrequency->setValue(120);
-   m_updateFrequency->setToolTip(
+   m_impl->m_updateFrequency.setMinimum(1);
+   m_impl->m_updateFrequency.setMaximum(360);
+   m_impl->m_updateFrequency.setValue(120);
+   m_impl->m_updateFrequency.setToolTip(
        tr("Set the intervals at which a new output "
           "file should be opened"));
 
    //
    // Set up the widgets for the file name specification:
    //
-   m_fileNameLabel = new QLabel(tr("Output file:"), m_mainBox);
-   m_fileNameLabel->setGeometry(QRect(0, 75, 100, 25));
-   m_fileNameLabel->setAlignment(Qt::AlignCenter);
-
-   m_fileNameEdit = new QLineEdit(m_mainBox);
-   m_fileNameEdit->setGeometry(QRect(100, 75, 170, 25));
-   m_fileNameEdit->setToolTip(
+   m_impl->m_fileNameEdit.setToolTip(
        tr("To activate automatic file name updating, put\n"
           "\"%1\" in the file name where a number should\n"
           "be filled in. To disable the automatic updating\n"
@@ -78,62 +136,57 @@ HBookWriterRunner::HBookWriterRunner(QWidget* parent, Qt::WindowFlags flags)
    //
    // Set up the button starting the application:
    //
-   m_starterButton = new QPushButton(QIcon::fromTheme("media-playback-start"),
-                                     tr("Start hbook writer"), m_mainBox);
-   m_starterButton->setGeometry(QRect(20, 100, 250, 35));
-   m_starterButton->setCheckable(true);
-   connect(m_starterButton, SIGNAL(clicked(bool)), this, SLOT(startApp(bool)));
+   m_impl->m_starterButton.setCheckable(true);
+   connect(&(m_impl->m_starterButton), SIGNAL(clicked(bool)), this,
+           SLOT(startApp(bool)));
 
-   m_runner.setExecName(daq::PathResolver::resolve("cda-hbook-writer", "PATH"));
-   if (m_runner.getExecName() == "") {
-      m_logger << msg::WARNING << tr("HBOOK file writing not available")
-               << msg::endmsg;
-      m_mainBox->setEnabled(false);
+   m_impl->m_runner.setExecName(
+       daq::PathResolver::resolve("cda-hbook-writer", "PATH"));
+   if (m_impl->m_runner.getExecName() == "") {
+      m_impl->m_mainBox.setEnabled(false);
    }
 }
 
+HBookWriterRunner::~HBookWriterRunner() {}
+
 void HBookWriterRunner::setConfigFileName(const QString& fileName) {
 
-   m_configFileName = fileName;
-   return;
+   m_impl->m_configFileName = fileName;
 }
 
 const QString& HBookWriterRunner::getConfigFileName() const {
 
-   return m_configFileName;
+   return m_impl->m_configFileName;
 }
 
 void HBookWriterRunner::setMsgServerAddress(const QString& address) {
 
-   m_msgServerAddress = address;
-   return;
+   m_impl->m_msgServerAddress = address;
 }
 
 const QString& HBookWriterRunner::getMsgServerAddress() const {
 
-   return m_msgServerAddress;
+   return m_impl->m_msgServerAddress;
 }
 
 void HBookWriterRunner::setEventAddress(const QString& address) {
 
-   m_eventAddress = address;
-   return;
+   m_impl->m_eventAddress = address;
 }
 
 const QString& HBookWriterRunner::getEventAddress() const {
 
-   return m_eventAddress;
+   return m_impl->m_eventAddress;
 }
 
 void HBookWriterRunner::setVerbosity(msg::Level verbosity) {
 
-   m_level = verbosity;
-   return;
+   m_impl->m_level = verbosity;
 }
 
 msg::Level HBookWriterRunner::getVerbosity() const {
 
-   return m_level;
+   return m_impl->m_level;
 }
 
 /**
@@ -143,14 +196,12 @@ void HBookWriterRunner::setEnabled(bool status) {
 
    // Always allow disabling the widgets:
    if (!status) {
-      m_mainBox->setEnabled(status);
+      m_impl->m_mainBox.setEnabled(status);
    }
    // Only enable the widgets if cda-glomem-writer has been found:
-   else if (m_runner.getExecName() != "") {
-      m_mainBox->setEnabled(status);
+   else if (m_impl->m_runner.getExecName() != "") {
+      m_impl->m_mainBox.setEnabled(status);
    }
-
-   return;
 }
 
 /**
@@ -161,11 +212,10 @@ void HBookWriterRunner::setStatServerAddress(bool status,
                                              const QString& address) {
 
    if (status) {
-      m_statServerAddresses.insert(address);
+      m_impl->m_statServerAddresses.insert(address);
    } else {
-      m_statServerAddresses.erase(address);
+      m_impl->m_statServerAddresses.erase(address);
    }
-   return;
 }
 
 void HBookWriterRunner::startApp(bool start) {
@@ -175,100 +225,91 @@ void HBookWriterRunner::startApp(bool start) {
       //
       // Set up some things for the automatic file name updating:
       //
-      m_fileNameEdit->setReadOnly(true);
-      m_updateFrequency->setEnabled(false);
+      m_impl->m_fileNameEdit.setReadOnly(true);
+      m_impl->m_updateFrequency.setEnabled(false);
 
       //
       // Construct the application arguments:
       //
       QString options;
-      options += " -m " + m_msgServerAddress;
-      options += " -c " + m_configFileName;
-      options += " -v " + QString::number(m_level);
-      options += " -e " + m_eventAddress;
-      options += " -o " + m_fileNameEdit->text();
-      options += " -u " + QString::number(m_updateFrequency->value());
+      options += " -m " + m_impl->m_msgServerAddress;
+      options += " -c " + m_impl->m_configFileName;
+      options += " -v " + QString::number(m_impl->m_level);
+      options += " -e " + m_impl->m_eventAddress;
+      options += " -o " + m_impl->m_fileNameEdit.text();
+      options += " -u " + QString::number(m_impl->m_updateFrequency.value());
 
       //
       // Collect where the application should send statistics information to:
       //
-      for (const QString& server : m_statServerAddresses) {
+      for (const QString& server : m_impl->m_statServerAddresses) {
          options += " -s " + server;
       }
 
-      m_logger << msg::DEBUG << tr("Using options: %1").arg(options)
-               << msg::endmsg;
-      m_runner.setOptions(options);
+      m_impl->m_runner.setOptions(options);
 
-      if (!m_runner.start()) {
-         REPORT_ERROR(tr("Couldn't start HBook writer!"));
+      if (!m_impl->m_runner.start()) {
 
-         m_processStatus->setText(tr("ERROR"));
-         QPalette palette(m_processStatus->palette());
+         m_impl->m_processStatus.setText(tr("ERROR"));
+         QPalette palette(m_impl->m_processStatus.palette());
          palette.setColor(QPalette::Active, QPalette::WindowText,
                           QColor(150, 10, 10));
          palette.setColor(QPalette::Inactive, QPalette::WindowText,
                           QColor(150, 10, 10));
-         m_processStatus->setPalette(palette);
+         m_impl->m_processStatus.setPalette(palette);
 
-         m_starterButton->setText(tr("Reset"));
-         m_starterButton->setIcon(QIcon::fromTheme("edit-clear"));
+         m_impl->m_starterButton.setText(tr("Reset"));
+         m_impl->m_starterButton.setIcon(QIcon::fromTheme("edit-clear"));
 
       } else {
-         m_logger << msg::INFO << tr("HBook writer started") << msg::endmsg;
 
-         m_processStatus->setText(tr("HBook writer running"));
-         QPalette palette(m_processStatus->palette());
+         m_impl->m_processStatus.setText(tr("HBook writer running"));
+         QPalette palette(m_impl->m_processStatus.palette());
          palette.setColor(QPalette::Active, QPalette::WindowText,
                           QColor(150, 10, 10));
          palette.setColor(QPalette::Inactive, QPalette::WindowText,
                           QColor(150, 10, 10));
-         m_processStatus->setPalette(palette);
+         m_impl->m_processStatus.setPalette(palette);
 
-         m_starterButton->setText(tr("Stop hbook writer"));
-         m_starterButton->setIcon(QIcon::fromTheme("media-playback-stop"));
+         m_impl->m_starterButton.setText(tr("Stop hbook writer"));
+         m_impl->m_starterButton.setIcon(
+             QIcon::fromTheme("media-playback-stop"));
 
          emit running(true);
-         emit receiverRunning(true, m_eventAddress);
+         emit receiverRunning(true, m_impl->m_eventAddress);
       }
 
    } else {
 
-      if (!m_runner.stop()) {
-         REPORT_ERROR(
-             tr("The HBook writer could not be stopped "
-                "successfully"));
+      if (!m_impl->m_runner.stop()) {
 
-         m_processStatus->setText(tr("ERROR"));
-         QPalette palette(m_processStatus->palette());
+         m_impl->m_processStatus.setText(tr("ERROR"));
+         QPalette palette(m_impl->m_processStatus.palette());
          palette.setColor(QPalette::Active, QPalette::WindowText,
                           QColor(150, 10, 10));
          palette.setColor(QPalette::Inactive, QPalette::WindowText,
                           QColor(150, 10, 10));
-         m_processStatus->setPalette(palette);
+         m_impl->m_processStatus.setPalette(palette);
 
       } else {
-         m_logger << msg::INFO << tr("HBook writer stopped") << msg::endmsg;
 
-         m_processStatus->setText(tr("HBook writer stopped"));
-         QPalette palette(m_processStatus->palette());
+         m_impl->m_processStatus.setText(tr("HBook writer stopped"));
+         QPalette palette(m_impl->m_processStatus.palette());
          palette.setColor(QPalette::Active, QPalette::WindowText,
                           QColor(10, 150, 10));
          palette.setColor(QPalette::Inactive, QPalette::WindowText,
                           QColor(10, 150, 10));
-         m_processStatus->setPalette(palette);
+         m_impl->m_processStatus.setPalette(palette);
       }
 
       emit running(false);
-      emit receiverRunning(false, m_eventAddress);
-      m_starterButton->setText(tr("Start hbook writer"));
-      m_starterButton->setIcon(QIcon::fromTheme("media-playback-start"));
+      emit receiverRunning(false, m_impl->m_eventAddress);
+      m_impl->m_starterButton.setText(tr("Start hbook writer"));
+      m_impl->m_starterButton.setIcon(QIcon::fromTheme("media-playback-start"));
 
-      m_fileNameEdit->setReadOnly(false);
-      m_updateFrequency->setEnabled(true);
+      m_impl->m_fileNameEdit.setReadOnly(false);
+      m_impl->m_updateFrequency.setEnabled(true);
    }
-
-   return;
 }
 
 }  // namespace simple_daq
