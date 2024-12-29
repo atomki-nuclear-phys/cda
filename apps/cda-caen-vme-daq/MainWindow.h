@@ -1,20 +1,14 @@
-// Dear emacs, this is -*- c++ -*-
-// $Id$
-#ifndef CDA_APPS_CDA_CAEN_VME_DAQ_CAENDAQWINDOW_H
-#define CDA_APPS_CDA_CAEN_VME_DAQ_CAENDAQWINDOW_H
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
+#ifndef CDA_APPS_CDA_CAEN_VME_DAQ_MAINWINDOW_H
+#define CDA_APPS_CDA_CAEN_VME_DAQ_MAINWINDOW_H
 
-// System include(s):
-#include <memory>
-
-// Qt include(s):
-#include <QComboBox>
-#include <QLabel>
-#include <QMainWindow>
-#include <QPushButton>
-#include <QWidget>
-
-// CDA include(s):
-#include "msg/Logger.h"
+// CDA include(s).
 #include "msg/Server.h"
 #include "msg/TextView.h"
 #include "simple_daq/CaenVmeReaderRunner.h"
@@ -23,6 +17,14 @@
 #include "simple_daq/RawWriterRunner.h"
 #include "simple_daq/RootWriterRunner.h"
 #include "simple_daq/Statistics.h"
+
+// Qt include(s).
+#include <QComboBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QMainWindow>
+#include <QPushButton>
+#include <QWidget>
 
 /**
  *  @short Main (and only) window of cda-caen-vme-daq
@@ -33,18 +35,15 @@
  *         start these applications with all the correct command line options.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
-class CaenDAQWindow : public QMainWindow {
+class MainWindow : public QMainWindow {
 
    Q_OBJECT
 
 public:
    /// Constructor with configuration file name and output verbosity setting
-   CaenDAQWindow(const QString& confFileName = "",
-                 msg::Level verbosity = msg::INFO);
+   MainWindow(const QString& confFileName = "",
+              msg::Level verbosity = msg::INFO);
 
 private slots:
    /// Slot for specifying a configuration file
@@ -69,51 +68,48 @@ private slots:
    void removeStatReceiverSlot();
 
 private:
-   /// Private function drawing the menus of the window
-   void drawMenus();
-
    /// Widget to draw on
-   std::unique_ptr<QWidget> m_centralWidget;
+   QWidget m_centralWidget;
+
+   /// Layout of the window
+   QGridLayout m_layout;
 
    /// Message server listening to the child processes
    msg::Server m_msgServer;
    /// Widget showing the incoming messages
-   std::unique_ptr<msg::TextView> m_msgView;
+   msg::TextView m_msgView;
 
    /// Widget showing DAQ statistics
-   std::unique_ptr<simple_daq::Statistics> m_statistics;
+   simple_daq::Statistics m_statistics;
    /// Widget controlling cda-caen-vme-reader
-   std::unique_ptr<simple_daq::CaenVmeReaderRunner> m_caenVmeReader;
+   simple_daq::CaenVmeReaderRunner m_caenVmeReader;
    /// Widget controlling cda-glomem-writer
-   std::unique_ptr<simple_daq::GlomemWriterRunner> m_glomemWriter;
+   simple_daq::GlomemWriterRunner m_glomemWriter;
    /// Widget controlling cda-hbook-writer
-   std::unique_ptr<simple_daq::HBookWriterRunner> m_hbookWriter;
+   simple_daq::HBookWriterRunner m_hbookWriter;
    /// Widget controlling cda-root-writer
-   std::unique_ptr<simple_daq::RootWriterRunner> m_rootWriter;
+   simple_daq::RootWriterRunner m_rootWriter;
    /// Widget controlling cda-raw-writer
-   std::unique_ptr<simple_daq::RawWriterRunner> m_rawWriter;
+   simple_daq::RawWriterRunner m_rawWriter;
 
    /// Description of the extra event receivers
-   std::unique_ptr<QLabel> m_eventReceiversLabel;
+   QLabel m_eventReceiversLabel;
    /// Widget specifying the extra event receivers
-   std::unique_ptr<QComboBox> m_eventReceivers;
+   QComboBox m_eventReceivers;
    /// Button for removing an event receiver
-   std::unique_ptr<QPushButton> m_removeEventReceiver;
+   QPushButton m_removeEventReceiver;
    /// Address of the currently selected event receiver
    QString m_currentEventReceiver;
 
    /// Description of the extra statistics receivers
-   std::unique_ptr<QLabel> m_statReceiversLabel;
+   QLabel m_statReceiversLabel;
    /// Widget specifying the extra statistics receivers
-   std::unique_ptr<QComboBox> m_statReceivers;
+   QComboBox m_statReceivers;
    /// Button for removing an statistics receiver
-   std::unique_ptr<QPushButton> m_removeStatReceiver;
+   QPushButton m_removeStatReceiver;
    /// Address of the currently selected stat. receiver
    QString m_currentStatReceiver;
 
-   /// Private message logger
-   mutable msg::Logger m_logger;
+};  // class MainWindow
 
-};  // class CaenDAQWindow
-
-#endif  // CDA_APPS_CDA_CAEN_VME_DAQ_CAENDAQWINDOW_H
+#endif  // CDA_APPS_CDA_CAEN_VME_DAQ_MAINWINDOW_H

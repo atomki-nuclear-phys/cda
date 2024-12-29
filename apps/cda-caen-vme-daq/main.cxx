@@ -22,8 +22,8 @@
 #include "tclap/CmdLine.h"
 
 // Local include(s):
-#include "CaenDAQWindow.h"
 #include "Constants.h"
+#include "MainWindow.h"
 
 // Description for the executable:
 static const char* description =
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
    //
    // Create and show the main window of the application:
    //
-   CaenDAQWindow window(config.getValue().c_str(), lvl);
+   MainWindow window(config.getValue().c_str(), lvl);
    window.show();
    splash.showMessage(qApp->translate("cda-caen-vme-daq", "CAEN DAQ Ready"),
                       Qt::AlignHCenter | Qt::AlignBottom, Qt::white);
