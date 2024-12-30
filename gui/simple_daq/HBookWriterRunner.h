@@ -1,36 +1,24 @@
-// Dear emacs, this is -*- c++ -*-
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 #ifndef CDA_GUI_SIMPLE_DAQ_HBOOKWRITERRUNNER_H
 #define CDA_GUI_SIMPLE_DAQ_HBOOKWRITERRUNNER_H
 
-// STL include(s):
-#include <set>
+// CDA include(s).
+#include "msg/Level.h"
 
-// Qt include(s):
+// Qt include(s).
 #include <QString>
 #include <QWidget>
 
-// CDA include(s):
-#include "common/AppRunner.h"
-#include "msg/Logger.h"
-
-// Local include(s):
-#include "../common/Export.h"
-
-// Forward declaration(s):
-QT_FORWARD_DECLARE_CLASS(QGroupBox)
-QT_FORWARD_DECLARE_CLASS(QPushButton)
-QT_FORWARD_DECLARE_CLASS(QLabel)
-QT_FORWARD_DECLARE_CLASS(QLineEdit)
-QT_FORWARD_DECLARE_CLASS(QSpinBox)
+// System include(s).
+#include <memory>
 
 namespace simple_daq {
-
-// Make sure that the Qt classes are available in this namespace:
-using QT_PREPEND_NAMESPACE(QGroupBox);
-using QT_PREPEND_NAMESPACE(QPushButton);
-using QT_PREPEND_NAMESPACE(QLabel);
-using QT_PREPEND_NAMESPACE(QLineEdit);
-using QT_PREPEND_NAMESPACE(QSpinBox);
 
 /**
  *  @short Widget for starting cda-hbook-writer on the local machine
@@ -42,7 +30,7 @@ using QT_PREPEND_NAMESPACE(QSpinBox);
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
-class CDAGUI_EXPORT HBookWriterRunner : public QWidget {
+class HBookWriterRunner : public QWidget {
 
    Q_OBJECT
 
@@ -50,6 +38,8 @@ public:
    /// Standard QWidget-type constructor
    HBookWriterRunner(QWidget* parent = 0,
                      Qt::WindowFlags flags = Qt::WindowFlags());
+   /// Destructor
+   ~HBookWriterRunner();
 
    /// Set the name of the configuration file
    void setConfigFileName(const QString& fileName);
@@ -89,24 +79,10 @@ private slots:
    void startApp(bool start);
 
 private:
-   QGroupBox* m_mainBox;          ///< Main box holding graphcal objects
-   QPushButton* m_starterButton;  ///< Button starting the application
-   QLabel* m_processStatus;       ///< Label giving feedback of the status
-   QLabel*
-       m_updateFrequencyLabel;   ///< Description of file name update frequency
-   QSpinBox* m_updateFrequency;  ///< File name update frequency chooser
-   QLabel* m_fileNameLabel;      ///< Label telling what the line edit is for
-   QLineEdit* m_fileNameEdit;    ///< Input field for the output file name
-
-   QString m_configFileName;    ///< Name of the configuration file
-   QString m_msgServerAddress;  ///< Address of the message server(s)
-   QString m_eventAddress;      ///< Address of cda-hbook-writer
-   /// Address(es) of the statistics server(s)
-   std::set<QString> m_statServerAddresses;
-   msg::Level m_level;  ///< Output level of cda-hbook-writer
-
-   mutable daq::AppRunner m_runner;  ///< The object starting cda-hbook-writer
-   mutable msg::Logger m_logger;     ///< Internal logger object
+   /// Internal data type
+   struct Impl;
+   /// Internal data
+   std::unique_ptr<Impl> m_impl;
 
 };  // class HBookWriterRunner
 

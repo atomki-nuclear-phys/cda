@@ -1,93 +1,112 @@
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 
-// Qt include(s):
+// Local include(s).
+#include "Statistics.h"
+
+// CDA include(s):
+#include "common/Address.h"
+#include "stat/Server.h"
+#include "stat/Statistics.h"
+
+// Qt include(s).
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QString>
 #include <QTimer>
-
-// Local include(s):
-#include "Statistics.h"
+#include <QVBoxLayout>
 
 namespace simple_daq {
 
+struct Statistics::Impl {
+
+   /// Constructor
+   Impl(QWidget& parent, const QString& boxTitle, const QString& reLabelText,
+        const QString& reText, const QString& erLabelText,
+        const QString& erText)
+       : m_mainBox{boxTitle, &parent},
+         m_layout{&m_mainBox},
+         m_readEventsLabel(reLabelText, &m_mainBox),
+         m_readEvents(reText, &m_mainBox),
+         m_eventRateLabel(erLabelText, &m_mainBox),
+         m_eventRate(erText, &m_mainBox),
+         m_server(&parent) {
+
+      //
+      // Lay out the widgets.
+      //
+      m_mainLayout.addWidget(&m_mainBox);
+      parent.setLayout(&m_mainLayout);
+
+      m_layout.addWidget(&m_readEventsLabel, 0, 0,
+                         Qt::AlignRight | Qt::AlignVCenter);
+      m_layout.addWidget(&m_readEvents, 0, 1, Qt::AlignLeft | Qt::AlignVCenter);
+      m_layout.addWidget(&m_eventRateLabel, 1, 0,
+                         Qt::AlignRight | Qt::AlignVCenter);
+      m_layout.addWidget(&m_eventRate, 1, 1, Qt::AlignLeft | Qt::AlignVCenter);
+   }
+
+   /// Layout connecting the parent to the main box
+   QVBoxLayout m_mainLayout;
+
+   /// Box holding all other widgets
+   QGroupBox m_mainBox;
+
+   /// Layout for the main box
+   QGridLayout m_layout;
+
+   /// "Events processed" label
+   QLabel m_readEventsLabel;
+   /// Label showing the number of read events
+   QLabel m_readEvents;
+   /// "Event rate" label
+   QLabel m_eventRateLabel;
+   /// Label showing the current event rate
+   QLabel m_eventRate;
+
+   ///< Timer resetting the statistics if needed
+   QTimer m_rateTimer;
+
+   /// The last statistics that was received
+   cdastat::Statistics m_lastStat;
+   /// Statistics server
+   cdastat::Server m_server;
+};
+
 Statistics::Statistics(QWidget* parent, Qt::WindowFlags flags)
-    : QWidget(parent, flags), m_server(this) {
+    : QWidget(parent, flags),
+      m_impl{new Impl{*this, tr("DAQ statistics"), tr("Events processed:"),
+                      tr("n/a"), tr("Event rate:"), tr("n/a Hz")}} {
 
    //
-   // Set the widget to a fixed size:
+   // Set up statistics updates.
    //
-   setMinimumSize(300, 150);
-   setMaximumSize(300, 150);
-
-   //
-   // Create the box into which everything else is put:
-   //
-   m_mainBox = new QGroupBox(tr("DAQ statistics"), this);
-   m_mainBox->setGeometry(QRect(5, 5, 290, 140));
-
-   //
-   // Draw the "Events processed" label:
-   //
-   m_readEventsLabel = new QLabel(tr("Events processed:"), m_mainBox);
-   m_readEventsLabel->setGeometry(QRect(10, 40, 140, 25));
-   m_readEventsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-   //
-   // Create the label showing the number of processed events:
-   //
-   m_readEvents = new QLabel(tr("n/a"), m_mainBox);
-   m_readEvents->setGeometry(QRect(160, 40, 100, 25));
-   m_readEvents->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
-   //
-   // Create the "Event rate" label:
-   //
-   m_eventRateLabel = new QLabel(tr("Event rate:"), m_mainBox);
-   m_eventRateLabel->setGeometry(QRect(10, 80, 140, 25));
-   m_eventRateLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-   //
-   // Create the label showing the event rate:
-   //
-   m_eventRate = new QLabel(tr("n/a Hz"), m_mainBox);
-   m_eventRate->setGeometry(QRect(160, 80, 100, 25));
-   m_eventRate->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
-   //
-   // Set up statistics updates:
-   //
-   connect(&m_server, SIGNAL(statAvailable(const cdastat::Statistics&)), this,
+   connect(&(m_impl->m_server),
+           SIGNAL(statAvailable(const cdastat::Statistics&)), this,
            SLOT(updateStat(const cdastat::Statistics&)));
 
    //
    // Set up the timer that resets the statistics when a new stat information
-   // isn't received for a given amount of time:
+   // isn't received for a given amount of time.
    //
-   m_rateTimer = new QTimer(this);
-   m_rateTimer->setSingleShot(true);
-   connect(m_rateTimer, SIGNAL(timeout()), this, SLOT(updateStat()));
+   m_impl->m_rateTimer.setSingleShot(true);
+   connect(&(m_impl->m_rateTimer), SIGNAL(timeout()), this, SLOT(updateStat()));
 }
 
-/**
- * The destructor simply deletes all the objects created in the constructor.
- */
-Statistics::~Statistics() {
-
-   delete m_rateTimer;
-   delete m_readEventsLabel;
-   delete m_readEvents;
-   delete m_eventRateLabel;
-   delete m_eventRate;
-   delete m_mainBox;
-}
+Statistics::~Statistics() {}
 
 /**
  * @param address Address where the widget should listen to DAQ statistics
  */
 void Statistics::setStatAddress(const Address& address) {
 
-   m_server.listen(address);
-   return;
+   m_impl->m_server.listen(address);
 }
 
 /**
@@ -95,7 +114,8 @@ void Statistics::setStatAddress(const Address& address) {
  */
 Address Statistics::getStatAddress() const {
 
-   return Address(m_server.serverAddress().toString(), m_server.serverPort());
+   return {m_impl->m_server.serverAddress().toString(),
+           m_impl->m_server.serverPort()};
 }
 
 /**
@@ -111,29 +131,27 @@ void Statistics::updateStat(const cdastat::Statistics& stat) {
    // cdastat::Statistics object received, and calculate the event
    // processing rate using the last statistics object:
    //
-   m_readEvents->setText(QString::number(stat.getProcessedEvents()));
-   if (stat.getSource() == m_lastStat.getSource()) {
+   m_impl->m_readEvents.setText(QString::number(stat.getProcessedEvents()));
+   if (stat.getSource() == m_impl->m_lastStat.getSource()) {
       // If the statistics is comign from the same source, then calculate the
       // rate:
-      m_eventRate->setText(
-          QString::number(static_cast<double>(stat.getProcessedEvents() -
-                                              m_lastStat.getProcessedEvents()) /
-                          m_lastStat.getStatTime().msecsTo(stat.getStatTime()) *
-                          1000.0) +
+      m_impl->m_eventRate.setText(
+          QString::number(
+              static_cast<double>(stat.getProcessedEvents() -
+                                  m_impl->m_lastStat.getProcessedEvents()) /
+              m_impl->m_lastStat.getStatTime().msecsTo(stat.getStatTime()) *
+              1000.0) +
           " Hz");
    } else {
-      // If the statistics is from a new source, wait with calculating the rate:
-      m_eventRate->setText("n/a Hz");
+      // If the statistics is from a new source, wait with calculating the rate.
+      m_impl->m_eventRate.setText("n/a Hz");
    }
 
-   // Remember this as the last statistics object:
-   m_lastStat = stat;
+   // Remember this as the last statistics object.
+   m_impl->m_lastStat = stat;
 
-   // If we don't receive an update from cda-camac-reader in 15 seconds, let's
-   // declare the rate zero:
-   m_rateTimer->start(5000);
-
-   return;
+   // If we don't receive an update in 5 seconds, let's declare the rate zero.
+   m_impl->m_rateTimer.start(5000);
 }
 
 /**
@@ -142,10 +160,8 @@ void Statistics::updateStat(const cdastat::Statistics& stat) {
  */
 void Statistics::updateStat() {
 
-   m_eventRate->setText("0 Hz");
-   m_lastStat.setStatTime(QTime::currentTime());
-
-   return;
+   m_impl->m_eventRate.setText("0 Hz");
+   m_impl->m_lastStat.setStatTime(QTime::currentTime());
 }
 
 }  // namespace simple_daq
