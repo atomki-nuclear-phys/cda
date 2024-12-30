@@ -1,8 +1,15 @@
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 
-// System include(s):
-#include <cstdio>
+// Local include(s).
+#include "NTupleMgr.h"
 
-// CERNLIB include(s):
+// CERNLIB include(s).
 #ifdef HAVE_CERNLIB
 extern "C" {
 #include <cfortran/cfortran.h>
@@ -10,15 +17,18 @@ extern "C" {
 }
 #endif  // HAVE_CERNLIB
 
-// Local include(s):
-#include "NTupleMgr.h"
+// System include(s).
+#include <algorithm>
+#include <cstdio>
+#include <memory>
+#include <vector>
 
 //
 // Some CERNLIB definitions. Stolen from ROOT's THbookFile.cxx, and adjusted
 // to work correctly on different flavours of Ubuntu.
 //
+#ifdef HAVE_CERNLIB
 #define PAWC_SIZE 4000000
-#ifndef WIN32
 #define pawc pawc_
 #define quest quest_
 #define hcbits hcbits_
@@ -29,17 +39,6 @@ int quest[100] __attribute__((aligned(64)));
 int hcbits[37] __attribute__((aligned(64)));
 int hcbook[51] __attribute__((aligned(64)));
 int rzcl[11] __attribute__((aligned(64)));
-#else
-#define pawc PAWC
-#define quest QUEST
-#define hcbits HCBITS
-#define hcbook HCBOOK
-#define rzcl RZCL
-extern "C" int pawc[PAWC_SIZE];
-extern "C" int quest[100];
-extern "C" int hcbits[37];
-extern "C" int hcbook[51];
-extern "C" int rzcl[11];
 #endif
 
 namespace cernlib {
@@ -98,7 +97,7 @@ int NTupleMgr::addVar(const QString& name) {
    // Check that the file is not yet open:
    if (m_fileOpen) {
       REPORT_ERROR(
-          tr("You can't add new variables when the output file\n"
+          tr("You can't add new variables when the output file "
              "is already open!"));
       return -1;
    }
@@ -106,7 +105,6 @@ int NTupleMgr::addVar(const QString& name) {
    // Add this name to the variable list:
    int index = static_cast<int>(m_varNames.size());
    m_varNames.push_back(name);
-
    return index;
 }
 
@@ -116,15 +114,14 @@ int NTupleMgr::addVar(const QString& name) {
  * creates an ntuple with the variables defined previously.
  *
  * @param fileName Name of the HBOOK file to create
- * @returns <code>true</code> if the operation was successful,
- *          <code>false</code> otherwise
+ * @returns The usual @c StatusCode values
  */
-bool NTupleMgr::openFile(const QString& fileName) {
+StatusCode NTupleMgr::openFile(const QString& fileName) {
 
    // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
    REPORT_VERBOSE(tr("Opening output file: %1").arg(fileName));
-   return false;
+   return StatusCode::SUCCESS;
 #endif  // HAVE_CERNLIB
 
    // Only one HBOOK file can be open at a time. (It's not a restriction
@@ -133,7 +130,7 @@ bool NTupleMgr::openFile(const QString& fileName) {
    if (m_fileOpen) {
       m_logger << msg::WARNING << tr("The output file is already open")
                << msg::endmsg;
-      return true;
+      return StatusCode::SUCCESS;
    }
 
 #ifdef HAVE_CERNLIB
@@ -164,7 +161,7 @@ bool NTupleMgr::openFile(const QString& fileName) {
    if (snprintf(hname, sizeof(hname), "%s", fileName.toLatin1().constData()) >
        (int)sizeof(hname)) {
       REPORT_ERROR(tr("Output file name too long. File not opened!"));
-      return false;
+      return StatusCode::FAILURE;
    }
 
 #ifdef HAVE_CERNLIB
@@ -192,12 +189,11 @@ bool NTupleMgr::openFile(const QString& fileName) {
    m_events = 0;
 
    // Create the buffer for the event variables:
-   m_variables = new float[m_varNames.size()];
-   for (unsigned int i = 0; i < m_varNames.size(); ++i) {
-      m_variables[i] = 0.;
-   }
+   m_variables.resize(m_varNames.size());
+   std::fill(m_variables.begin(), m_variables.end(), 0.f);
 
-   return true;
+   // Return gracefully.
+   return StatusCode::SUCCESS;
 }
 
 /**
@@ -239,12 +235,6 @@ void NTupleMgr::closeFile() {
 
    m_logger << msg::INFO << tr("Output file closed") << msg::endmsg;
    m_fileOpen = false;
-
-   // Delete the event buffer:
-   delete[] m_variables;
-   m_variables = 0;
-
-   return;
 }
 
 /**
@@ -256,15 +246,14 @@ void NTupleMgr::closeFile() {
  *
  * @param index The index that was returned by the NTupleMgr::addVar function
  * @param value Value of the variable in the current event
- * @returns <code>true</code> if the operation was successful,
- *          <code>false</code> otherwise
+ * @returns The usual @c StatusCode values
  */
-bool NTupleMgr::setVar(int index, float value) {
+StatusCode NTupleMgr::setVar(int index, float value) {
 
    // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
    REPORT_VERBOSE(tr("Setting variable %1 to: %2").arg(index).arg(value));
-   return false;
+   return StatusCode::SUCCESS;
 #endif  // HAVE_CERNLIB
 
    // Check that the file is already open:
@@ -272,31 +261,26 @@ bool NTupleMgr::setVar(int index, float value) {
       REPORT_ERROR(
           tr("You should not be setting variables before opening\n"
              "an output file!"));
-      return false;
-   }
-
-   // Check that this is a valid index:
-   if ((!(index < (int)m_varNames.size())) || (index < 0)) {
-      REPORT_ERROR(tr("Index %1 is not defined in the ntuple!").arg(index));
-      return false;
+      return StatusCode::FAILURE;
    }
 
    // Set the variable value in the internal buffer:
-   m_variables[index] = value;
-
-   return true;
+   m_variables.at(index) = value;
+   return StatusCode::SUCCESS;
 }
 
 /**
  * After the event variables have been set using the NTupleMgr::setVar
  * function, this function has to be called to save the event to the
  * output ntuple.
+ *
+ * @returns The usual @c StatusCode values
  */
-void NTupleMgr::saveEvent() {
+StatusCode NTupleMgr::saveEvent() {
 
    // Return right away if CERNLIB is not available:
 #ifndef HAVE_CERNLIB
-   return;
+   return StatusCode::SUCCESS;
 #endif  // HAVE_CERNLIB
 
    // Check that the output file is open:
@@ -304,36 +288,20 @@ void NTupleMgr::saveEvent() {
       REPORT_ERROR(
           tr("saveEvent() should only be called when an output\n"
              "file is already open!"));
-      return;
+      return StatusCode::FAILURE;
    }
 
    // Fill the ntuple with the event:
 #ifdef HAVE_CERNLIB
-   HFN(NTUPLE_ID, m_variables);
+   HFN(NTUPLE_ID, m_variables.data());
 #endif  // HAVE_CERNLIB
 
    // Clear the event buffer:
-   for (unsigned int i = 0; i < m_varNames.size(); ++i) {
-      m_variables[i] = 0.;
-   }
+   std::fill(m_variables.begin(), m_variables.end(), 0.f);
 
+   // Increment the event count.
    ++m_events;
-
-   return;
-}
-
-/**
- * This function clears all settings of the object. In retrospective,
- * I'm not sure where this would be used in the CDA code... :-/
- */
-void NTupleMgr::clear() {
-
-   if (m_fileOpen)
-      closeFile();
-   m_varNames.clear();
-   m_events = 0;
-
-   return;
+   return StatusCode::SUCCESS;
 }
 
 }  // namespace cernlib

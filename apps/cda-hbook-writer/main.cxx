@@ -359,7 +359,7 @@ void shutDown(int) {
    g_fwriter->stopProcessing();
 
    // Close the current output file:
-   g_crate->finalize();
+   g_crate->finalize().ignore();
 
    g_logger << msg::INFO
             << qApp->translate("cda-hbook-writer",

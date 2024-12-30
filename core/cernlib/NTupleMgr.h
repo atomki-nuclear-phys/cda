@@ -1,17 +1,23 @@
-// Dear emacs, this is -*- c++ -*-
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 #ifndef CDA_CORE_CERNLIB_NTUPLEMGR_H
 #define CDA_CORE_CERNLIB_NTUPLEMGR_H
 
-// STL include(s):
-#include <vector>
+// CDA include(s):
+#include "../common/StatusCode.h"
+#include "../msg/Logger.h"
 
 // Qt include(s):
 #include <QCoreApplication>
 #include <QString>
 
-// CDA include(s):
-#include "../common/Export.h"
-#include "../msg/Logger.h"
+// STL include(s):
+#include <vector>
 
 /**
  *  @short Namespace for the CERNLIB interface classes
@@ -38,7 +44,7 @@ namespace cernlib {
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
  */
-class CDACORE_EXPORT NTupleMgr {
+class NTupleMgr {
 
    // To get the tr() function:
    Q_DECLARE_TR_FUNCTIONS(cernlib::NTupleMgr)
@@ -52,17 +58,14 @@ public:
    /// Add a new variable to the ntuple
    int addVar(const QString& name);
    /// Open an HBOOK file
-   bool openFile(const QString& fileName);
+   StatusCode openFile(const QString& fileName);
    /// Close the currently open HBOOK file
    void closeFile();
 
    /// Set the value of a variable in the current event
-   bool setVar(int index, float value);
+   StatusCode setVar(int index, float value);
    /// Add the event to the ntuple
-   void saveEvent();
-
-   /// Clear all settings of the object
-   void clear();
+   StatusCode saveEvent();
 
    static const int HFILE_ID;   ///< ID of the HBOOK file
    static const int NTUPLE_ID;  ///< ID of the ntuple
@@ -71,11 +74,11 @@ private:
    bool m_fileOpen;  ///< Status of the output file
 
    std::vector<QString> m_varNames;  ///< NTuple variable names
-   float* m_variables;               ///< NTuple event buffer
+   std::vector<float> m_variables;   ///< NTuple event buffer
 
    int m_events;  ///< Number of events written to the ntuple
 
-   mutable msg::Logger m_logger;  ///< Message logging object
+   msg::Logger m_logger;  ///< Message logging object
 
 };  // class NTupleMgr
 
