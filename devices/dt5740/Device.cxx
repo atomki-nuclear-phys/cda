@@ -302,12 +302,6 @@ unsigned int Device::getID() const {
       case caen::Digitizer::PCI_OpticalLink:
          result = 1000;
          break;
-      case caen::Digitizer::PCIE_OpticalLink:
-         result = 2000;
-         break;
-      case caen::Digitizer::PCIE_EmbeddedDigitizer:
-         result = 3000;
-         break;
       default:
          result = 0;
          break;

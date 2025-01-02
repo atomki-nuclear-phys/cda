@@ -84,9 +84,7 @@ Gui::Gui(QWidget* parent, Qt::WindowFlags flags)
    m_connMode.reset(new QComboBox(m_connectionBox.get()));
    m_connMode->setGeometry(QRect(180, 25, 250, 25));
    m_connMode->addItem(tr("USB"));
-   m_connMode->addItem(tr("PCI Optical Link"));
-   m_connMode->addItem(tr("PCIe Optical Link"));
-   m_connMode->addItem(tr("PCIe Embedded Digitizer"));
+   m_connMode->addItem(tr("Optical Link"));
    connect(m_connMode.get(), SIGNAL(currentIndexChanged(int)), this,
            SLOT(connectionModeSlot(int)));
 
@@ -368,12 +366,6 @@ void Gui::connectionModeSlot(int index) {
       case 1:
          m_connType = caen::Digitizer::PCI_OpticalLink;
          break;
-      case 2:
-         m_connType = caen::Digitizer::PCIE_OpticalLink;
-         break;
-      case 3:
-         m_connType = caen::Digitizer::PCIE_EmbeddedDigitizer;
-         break;
       default:
          REPORT_ERROR(tr("Connection mode not recognized"));
          m_connType = caen::Digitizer::USB;
@@ -637,12 +629,6 @@ void Gui::sync() {
          break;
       case caen::Digitizer::PCI_OpticalLink:
          m_connMode->setCurrentIndex(1);
-         break;
-      case caen::Digitizer::PCIE_OpticalLink:
-         m_connMode->setCurrentIndex(2);
-         break;
-      case caen::Digitizer::PCIE_EmbeddedDigitizer:
-         m_connMode->setCurrentIndex(3);
          break;
       default:
          REPORT_ERROR(tr("Connection mode not recognized"));
