@@ -1,10 +1,12 @@
-// Dear emacs, this is -*- c++ -*-
-// $Id$
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 #ifndef CDA_APPS_CDA_HBOOK_WRITER_CRATE_H
 #define CDA_APPS_CDA_HBOOK_WRITER_CRATE_H
-
-// Qt include(s):
-#include <QtCore/QString>
 
 // CDA include(s):
 #include "cernlib/NTupleMgr.h"
@@ -12,6 +14,9 @@
 #include "device/ICernlibDisk.h"
 #include "event/Event.h"
 #include "msg/Logger.h"
+
+// Qt include(s):
+#include <QtCore/QString>
 
 /**
  *  @short Namespace for the classes used in cda-hbook-writer
@@ -21,9 +26,6 @@
  *         for the application.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 namespace hbook {
 
@@ -35,9 +37,6 @@ namespace hbook {
  *         the CERNLIB libraries.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 class Crate : public dev::Crate<dev::ICernlibDisk> {
 
@@ -46,19 +45,17 @@ class Crate : public dev::Crate<dev::ICernlibDisk> {
 public:
    /// Default constructor
    Crate();
-   /// Destructor, closing the output file
-   ~Crate();
 
    /// Create and initialize the output file
-   bool initialize(const QString& fileName);
+   StatusCode initialize(const QString& fileName);
    /// Write one event to the output file
-   bool writeEvent(const ev::Event& event);
+   StatusCode writeEvent(const ev::Event& event);
    /// Finalize and close the output file
-   bool finalize();
+   StatusCode finalize();
 
 private:
-   cernlib::NTupleMgr m_nmgr;     ///< Object actually handling the ntuple
-   mutable msg::Logger m_logger;  ///< Logger object for the class
+   cernlib::NTupleMgr m_nmgr;  ///< Object actually handling the ntuple
+   msg::Logger m_logger;       ///< Logger object for the class
 
 };  // class Crate
 

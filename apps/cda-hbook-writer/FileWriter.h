@@ -1,13 +1,18 @@
-// Dear emacs, this is -*- c++ -*-
-// $Id$
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 #ifndef CDA_APPS_CDA_HBOOK_WRITER_FILEWRITER_H
 #define CDA_APPS_CDA_HBOOK_WRITER_FILEWRITER_H
 
-// Qt include(s):
-#include <QtCore/QThread>
-
 // CDA include(s):
 #include "msg/Logger.h"
+
+// Qt include(s):
+#include <QThread>
 
 // Forward declaration(s):
 namespace ev {
@@ -27,9 +32,6 @@ class Crate;
  *         and to monitor its status.
  *
  * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
- *
- * $Revision$
- * $Date$
  */
 class FileWriter : public QThread {
 
@@ -58,7 +60,7 @@ private:
    Crate& m_crate;               ///< Pre-configured CAMAC crate object
    quint32 m_processedEvents;    ///< Number of processed events
 
-   mutable msg::Logger m_logger;  ///< Logger object for the class
+   msg::Logger m_logger;  ///< Logger object for the class
 
 };  // class FileWriter
 

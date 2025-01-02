@@ -1,12 +1,20 @@
-// $Id$
-
-// CDA include(s):
-#include "event/Event.h"
-#include "event/EventServer.h"
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 
 // Local include(s):
-#include "Crate.h"
 #include "FileWriter.h"
+
+#include "Crate.h"
+
+// CDA include(s):
+#include "common/errorcheck.h"
+#include "event/Event.h"
+#include "event/EventServer.h"
 
 namespace hbook {
 
@@ -37,8 +45,6 @@ void FileWriter::stopProcessing() {
             << tr("Stopping thread after processing %1 events")
                    .arg(m_processedEvents)
             << msg::endmsg;
-
-   return;
 }
 
 void FileWriter::run() {
@@ -56,19 +62,16 @@ void FileWriter::run() {
    // Run the thread:
    int retval = 0;
    if ((retval = exec())) {
-      m_logger << msg::FATAL
-               << tr("Thread exited with return code: %1").arg(retval)
-               << msg::endmsg;
+      REPORT_FATAL(tr("Thread exited with return code: %1").arg(retval));
    }
-
-   return;
 }
 
 void FileWriter::writeEvent() {
 
    // Check if we are running right now:
-   if (!isRunning())
+   if (!isRunning()) {
       return;
+   }
 
    // Read out all the events that are in the buffer at the moment:
    for (size_t i = 0; i < m_evserver.bufferSize(); ++i) {
@@ -79,17 +82,14 @@ void FileWriter::writeEvent() {
       m_evserver >> event;
 
       // Write this event to the file using the crate:
-      if (!m_crate.writeEvent(event)) {
-         m_logger << msg::FATAL << tr("There was a problem writing an event")
-                  << msg::endmsg;
+      if (m_crate.writeEvent(event).isFailure()) {
+         REPORT_FATAL(tr("There was a problem writing an event"));
          exit(1);
       }
 
       // Increment the event counter:
       ++m_processedEvents;
    }
-
-   return;
 }
 
 }  // namespace hbook

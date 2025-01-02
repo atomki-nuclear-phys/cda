@@ -1,4 +1,10 @@
-// $Id$
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 
 // CDA include(s):
 #include "common/errorcheck.h"
@@ -12,35 +18,22 @@ namespace hbook {
 Crate::Crate()
     : dev::Crate<dev::ICernlibDisk>(), m_nmgr(), m_logger("hbook::Crate") {}
 
-Crate::~Crate() {
-
-   m_nmgr.closeFile();
-}
-
-bool Crate::initialize(const QString& fileName) {
-
-   m_nmgr.clear();
+StatusCode Crate::initialize(const QString& fileName) {
 
    //
    // Create the output variables of each device:
    //
-   DeviceMap_t::const_iterator dev_itr = m_devices.begin();
-   DeviceMap_t::const_iterator dev_end = m_devices.end();
-   for (; dev_itr != dev_end; ++dev_itr) {
-      CHECK(dev_itr->second->initialize(m_nmgr));
+   for (auto& device : m_devices) {
+      CHECK(device.second->initialize(m_nmgr));
    }
+   // Open the output file.
+   CHECK(m_nmgr.openFile(fileName));
 
-   if (!m_nmgr.openFile(fileName)) {
-      REPORT_ERROR(tr("The output file couldn't be opened"));
-      return false;
-   } else {
-      m_logger << msg::DEBUG << tr("The output file was opened") << msg::endmsg;
-   }
-
-   return true;
+   // Return gracefully.
+   return StatusCode::SUCCESS;
 }
 
-bool Crate::writeEvent(const ev::Event& event) {
+StatusCode Crate::writeEvent(const ev::Event& event) {
 
    // Loop over the fragments coming from the different modules that
    // are used in data acquisition:
@@ -52,29 +45,24 @@ bool Crate::writeEvent(const ev::Event& event) {
          REPORT_ERROR(tr("Failed to assign fragment with "
                          "module ID: %1")
                           .arg(fragment->getModuleID()));
-         return false;
+         return StatusCode::FAILURE;
       }
 
       // Give this fragment to the device that we just found:
-      if (!device->second->writeEvent(*fragment, m_nmgr)) {
-         REPORT_ERROR(tr("There was a problem writing the data "
-                         "from device with ID: %1")
-                          .arg(fragment->getModuleID()));
-         return false;
-      }
+      CHECK(device->second->writeEvent(*fragment, m_nmgr));
    }
 
    // Persistify the current event:
-   m_nmgr.saveEvent();
+   CHECK(m_nmgr.saveEvent());
 
-   return true;
+   // Return gracefully.
+   return StatusCode::SUCCESS;
 }
 
-bool Crate::finalize() {
+StatusCode Crate::finalize() {
 
    m_nmgr.closeFile();
-
-   return true;
+   return StatusCode::SUCCESS;
 }
 
 }  // namespace hbook
