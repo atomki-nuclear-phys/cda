@@ -245,13 +245,7 @@ CAEN_DGTZ_ConnectionType convert(caen::Digitizer::ConnectionType type) {
          return CAEN_DGTZ_USB;
          break;
       case caen::Digitizer::PCI_OpticalLink:
-         return CAEN_DGTZ_PCI_OpticalLink;
-         break;
-      case caen::Digitizer::PCIE_OpticalLink:
-         return CAEN_DGTZ_PCIE_OpticalLink;
-         break;
-      case caen::Digitizer::PCIE_EmbeddedDigitizer:
-         return CAEN_DGTZ_PCIE_EmbeddedDigitizer;
+         return CAEN_DGTZ_OpticalLink;
          break;
       default:
          return static_cast<CAEN_DGTZ_ConnectionType>(10L);
@@ -544,14 +538,8 @@ int Digitizer::convertConnType(ConnectionType type) {
       case PCI_OpticalLink:
          return 1;
          break;
-      case PCIE_OpticalLink:
-         return 2;
-         break;
-      case PCIE_EmbeddedDigitizer:
-         return 3;
-         break;
       default:
-         return 0;
+         return 1000;
          break;
    }
 
@@ -567,12 +555,6 @@ Digitizer::ConnectionType Digitizer::convertConnType(int type) {
          break;
       case 1:
          return PCI_OpticalLink;
-         break;
-      case 2:
-         return PCIE_OpticalLink;
-         break;
-      case 3:
-         return PCIE_EmbeddedDigitizer;
          break;
       default:
          return USB;
