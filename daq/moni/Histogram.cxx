@@ -1,20 +1,28 @@
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2025 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 
-// System include(s):
-#include <algorithm>
-#include <cmath>
+// Local include(s):
+#include "Histogram.h"
+
+#include "AxisStyleAction.h"
 
 // Qt include(s):
 #include <QActionGroup>
-#include <QLine>
+#include <QLineF>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPoint>
-#include <QRect>
+#include <QRectF>
 
-// Local include(s):
-#include "AxisStyleAction.h"
-#include "Histogram.h"
+// System include(s):
+#include <algorithm>
+#include <cmath>
 
 namespace moni {
 
@@ -24,10 +32,10 @@ namespace moni {
 const int Histogram::TICK_LENGTH_MAJOR = 15;
 const int Histogram::TICK_LENGTH_MINOR = 8;
 const int Histogram::MIN_X_TICK_DISTANCE = 80;
-const int Histogram::MIN_Y_TICK_DISTANCE = 40;
+const int Histogram::MIN_Y_TICK_DISTANCE = 80;
 
-const int Histogram::X_AXIS_SPACING = 60;
-const int Histogram::Y_AXIS_SPACING = 80;
+const int Histogram::X_AXIS_SPACING = 100;
+const int Histogram::Y_AXIS_SPACING = 120;
 
 /**
  * Constructor mostly useful when the properties of the histogram are
@@ -56,8 +64,7 @@ Histogram::Histogram(QWidget* parent, Qt::WindowFlags flags)
       m_entries(0),
       m_logger("moni::Histogram") {
 
-   setMinimumSize(220, 150);
-   setMaximumSize(2200, 2000);
+   setMinimumSize(220. * devicePixelRatioF(), 150. * devicePixelRatioF());
 
    reset();
 
@@ -101,8 +108,7 @@ Histogram::Histogram(const QString& title, int bins, double low, double up,
       m_entries(0),
       m_logger("moni::Histogram") {
 
-   setMinimumSize(220, 150);
-   setMaximumSize(2200, 2000);
+   setMinimumSize(220. * devicePixelRatioF(), 150. * devicePixelRatioF());
 
    reset();
 
@@ -279,11 +285,15 @@ void Histogram::paintEvent(QPaintEvent*) {
    // Draw the white background:
    painter.setPen(Qt::SolidLine);
    painter.setBrush(Qt::white);
-   painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
+   const QPen pen = painter.pen();
+   painter.drawRect(
+       QRectF(0, 0, width() - pen.width(), height() - pen.width()));
 
    // Draw the rectangle of the histogram:
-   painter.drawRect(QRect(Y_AXIS_SPACING, 20, width() - (Y_AXIS_SPACING + 20),
-                          height() - (X_AXIS_SPACING + 20)));
+   painter.drawRect(
+       QRectF(Y_AXIS_SPACING * devicePixelRatioF(), 20. * devicePixelRatioF(),
+              width() - devicePixelRatioF() * (Y_AXIS_SPACING + 20.),
+              height() - devicePixelRatioF() * (X_AXIS_SPACING + 20.)));
 
    // Draw the different parts of the historgam:
    drawXAxis(painter);
@@ -293,11 +303,12 @@ void Histogram::paintEvent(QPaintEvent*) {
    drawStat(painter);
 
    // Finally, show the title of the histogram:
-   painter.setPen(Qt::SolidLine);
-   painter.drawText(QRect(0, height() - X_AXIS_SPACING + 35, width(), 25),
-                    Qt::AlignCenter, m_title);
-
-   return;
+   if (width() > 300. * devicePixelRatioF()) {
+      painter.setPen(Qt::SolidLine);
+      painter.drawText(QRectF(0, height() - 35. * devicePixelRatioF(), width(),
+                              25. * devicePixelRatioF()),
+                       Qt::AlignCenter, m_title);
+   }
 }
 
 void Histogram::mousePressEvent(QMouseEvent* event) {
@@ -538,7 +549,7 @@ size_t Histogram::getBin(double value) const {
 void Histogram::drawXAxis(QPainter& painter) const {
 
    // Some basic value(s) about the axis:
-   const int axis_start = Y_AXIS_SPACING;
+   const qreal axis_start = Y_AXIS_SPACING * devicePixelRatioF();
 
    // Determine the binning for the axis:
    const AxisBinning abin = getXAxisBinning();
@@ -556,14 +567,18 @@ void Histogram::drawXAxis(QPainter& painter) const {
       // Calculate the position of the tick:
       const int tick_location =
           static_cast<int>(std::floor(axis_start + major_itr->position()));
-      if ((tick_location < axis_start) || (tick_location > (width() - 20)))
+      if ((tick_location < axis_start) ||
+          (tick_location > (width() - 20. * devicePixelRatioF())))
          continue;
 
       // Draw the line of the tick:
       painter.setPen(Qt::SolidLine);
-      painter.drawLine(QLine(tick_location, height() - X_AXIS_SPACING,
-                             tick_location,
-                             height() - X_AXIS_SPACING + TICK_LENGTH_MAJOR));
+      painter.drawLine(
+          QLineF(devicePixelRatioF() * tick_location,
+                 height() - devicePixelRatioF() * X_AXIS_SPACING,
+                 devicePixelRatioF() * tick_location,
+                 height() - devicePixelRatioF() *
+                                (X_AXIS_SPACING + TICK_LENGTH_MAJOR)));
 
       // Construct the proper tick value:
       double tick_value = major_itr->value();
@@ -572,23 +587,29 @@ void Histogram::drawXAxis(QPainter& painter) const {
       }
       // Now draw it on the axis:
       painter.drawText(
-          QRect(tick_location - MIN_X_TICK_DISTANCE / 2,
-                height() - (X_AXIS_SPACING - 20), MIN_X_TICK_DISTANCE, 20),
-          Qt::AlignCenter, QString::number(tick_value));
+          QRectF(
+              tick_location - devicePixelRatioF() * (MIN_X_TICK_DISTANCE * 0.5),
+              height() - devicePixelRatioF() * (X_AXIS_SPACING - 20),
+              devicePixelRatioF() * MIN_X_TICK_DISTANCE,
+              20. * devicePixelRatioF()),
+          Qt::AlignCenter, QString::number(tick_value, 'g', 4));
 
       // Draw the dotted line across the pad:
       painter.setPen(Qt::DotLine);
-      painter.drawLine(
-          QLine(tick_location, height() - X_AXIS_SPACING, tick_location, 20));
+      painter.drawLine(QLineF(tick_location,
+                              height() - devicePixelRatioF() * X_AXIS_SPACING,
+                              tick_location, 20. * devicePixelRatioF()));
    }
 
    // If exponents were used, put that beside the axis:
    if (exp.first) {
       painter.drawText(
-          QRect(width() - 70, height() - X_AXIS_SPACING + 35, 50, 20),
-          Qt::AlignCenter,
+          QRectF(width() - 120. * devicePixelRatioF(),
+                 height() - 30. * devicePixelRatio(),
+                 100. * devicePixelRatioF(), 20. * devicePixelRatioF()),
+          Qt::AlignVCenter | Qt::AlignRight,
           // This should be painted much nicer once I'll have time:
-          QString("x10^%1").arg(exp.second));
+          tr("x10^%1").arg(exp.second));
    }
 
    // Draw the "minor ticks":
@@ -602,9 +623,11 @@ void Histogram::drawXAxis(QPainter& painter) const {
           static_cast<int>(std::floor(axis_start + minor_itr->position()));
       if ((tick_location < axis_start) || (tick_location > (width() - 20)))
          continue;
-      painter.drawLine(QLine(tick_location, height() - X_AXIS_SPACING,
-                             tick_location,
-                             height() - X_AXIS_SPACING + TICK_LENGTH_MINOR));
+      painter.drawLine(
+          QLineF(tick_location, height() - devicePixelRatioF() * X_AXIS_SPACING,
+                 tick_location,
+                 height() - devicePixelRatioF() *
+                                (X_AXIS_SPACING + TICK_LENGTH_MINOR)));
    }
 
    return;
@@ -619,7 +642,7 @@ void Histogram::drawXAxis(QPainter& painter) const {
 void Histogram::drawYAxis(QPainter& painter) const {
 
    // Some basic value(s) about the axis:
-   const int axis_start = height() - X_AXIS_SPACING;
+   const int axis_start = height() - X_AXIS_SPACING * devicePixelRatioF();
 
    // Determine the binning for the axis:
    const AxisBinning abin = getYAxisBinning();
@@ -637,13 +660,18 @@ void Histogram::drawYAxis(QPainter& painter) const {
       // Calculate the position of the tick:
       const int tick_location =
           static_cast<int>(std::floor(axis_start - major_itr->position()));
-      if ((tick_location < 20) || (tick_location > axis_start))
+      if ((tick_location < 20. * devicePixelRatioF()) ||
+          (tick_location > axis_start)) {
          continue;
+      }
 
       // Draw the line of the tick:
       painter.setPen(Qt::SolidLine);
-      painter.drawLine(QLine(Y_AXIS_SPACING - TICK_LENGTH_MAJOR, tick_location,
-                             Y_AXIS_SPACING, tick_location));
+      painter.drawLine(
+          QLineF((Y_AXIS_SPACING - TICK_LENGTH_MAJOR) * devicePixelRatioF(),
+                 tick_location * devicePixelRatioF(),
+                 Y_AXIS_SPACING * devicePixelRatioF(),
+                 tick_location * devicePixelRatioF()));
 
       // Construct the proper tick value:
       double tick_value = major_itr->value();
@@ -651,22 +679,33 @@ void Histogram::drawYAxis(QPainter& painter) const {
          tick_value /= std::pow(10.0, exp.second);
       }
       // Now draw it on the axis:
-      painter.drawText(
-          QRect(5, tick_location - MIN_Y_TICK_DISTANCE / 2,
-                Y_AXIS_SPACING - TICK_LENGTH_MAJOR - 3, MIN_Y_TICK_DISTANCE),
-          Qt::AlignCenter, QString::number(tick_value));
+      if (tick_location > 30. * devicePixelRatioF()) {
+         painter.drawText(QRectF(10. * devicePixelRatioF(),
+                                 (tick_location - MIN_Y_TICK_DISTANCE / 2) *
+                                     devicePixelRatioF(),
+                                 (Y_AXIS_SPACING - TICK_LENGTH_MAJOR - 3.) *
+                                     devicePixelRatioF(),
+                                 MIN_Y_TICK_DISTANCE * devicePixelRatioF()),
+                          Qt::AlignVCenter | Qt::AlignLeft,
+                          QString::number(tick_value, 'g', 4));
+      }
 
       // Draw the dotted line across the pad:
       painter.setPen(Qt::DotLine);
-      painter.drawLine(
-          QLine(Y_AXIS_SPACING, tick_location, width() - 20, tick_location));
+      painter.drawLine(QLineF(Y_AXIS_SPACING * devicePixelRatioF(),
+                              tick_location * devicePixelRatioF(),
+                              width() - 20. * devicePixelRatioF(),
+                              tick_location * devicePixelRatioF()));
    }
 
    // If exponents were used, put that beside the axis:
    if (exp.first) {
-      painter.drawText(QRect(5, 5, 50, 20), Qt::AlignCenter,
-                       // This should be painted much nicer once I'll have time:
-                       QString("x10^%1").arg(exp.second));
+      painter.drawText(
+          QRectF(5. * devicePixelRatioF(), 5. * devicePixelRatioF(),
+                 100. * devicePixelRatioF(), 20. * devicePixelRatioF()),
+          Qt::AlignVCenter | Qt::AlignLeft,
+          // This should be painted much nicer once I'll have time:
+          tr("x10^%1").arg(exp.second));
    }
 
    // Draw the "minor ticks":
@@ -678,13 +717,15 @@ void Histogram::drawYAxis(QPainter& painter) const {
    for (; minor_itr != minor_end; ++minor_itr) {
       const int tick_location =
           static_cast<int>(std::floor(axis_start - minor_itr->position()));
-      if ((tick_location < 20) || (tick_location > axis_start))
+      if ((tick_location < 20. * devicePixelRatioF()) ||
+          (tick_location > axis_start))
          continue;
-      painter.drawLine(QLine(Y_AXIS_SPACING - TICK_LENGTH_MINOR, tick_location,
-                             Y_AXIS_SPACING, tick_location));
+      painter.drawLine(
+          QLineF((Y_AXIS_SPACING - TICK_LENGTH_MINOR) * devicePixelRatioF(),
+                 tick_location * devicePixelRatioF(),
+                 Y_AXIS_SPACING * devicePixelRatioF(),
+                 tick_location * devicePixelRatioF()));
    }
-
-   return;
 }
 
 /**
@@ -699,8 +740,8 @@ void Histogram::drawHist(QPainter& painter) const {
    //
    // Some basic values about the drawing area:
    //
-   const int x_axis_start = Y_AXIS_SPACING;
-   const int y_axis_start = height() - X_AXIS_SPACING;
+   const int x_axis_start = Y_AXIS_SPACING * devicePixelRatioF();
+   const int y_axis_start = height() - X_AXIS_SPACING * devicePixelRatioF();
    const double bin_width = ((m_up - m_low) / static_cast<double>(m_nbins));
 
    // Determine the binning for the X axis:
@@ -732,19 +773,17 @@ void Histogram::drawHist(QPainter& painter) const {
          continue;
 
       if (prev_pos > 0) {
-         painter.drawLine(QLine(x_axis_start + x_bin_low_pos, prev_pos,
-                                x_axis_start + x_bin_low_pos, y_bin_pos));
+         painter.drawLine(QLineF(x_axis_start + x_bin_low_pos, prev_pos,
+                                 x_axis_start + x_bin_low_pos, y_bin_pos));
       }
       prev_pos = y_bin_pos;
-      painter.drawLine(QLine(x_axis_start + x_bin_low_pos, y_bin_pos,
-                             x_axis_start + x_bin_up_pos, y_bin_pos));
+      painter.drawLine(QLineF(x_axis_start + x_bin_low_pos, y_bin_pos,
+                              x_axis_start + x_bin_up_pos, y_bin_pos));
    }
 
    // Reset the painter settings:
    painter.setPen(Qt::SolidLine);
    painter.setBrush(Qt::white);
-
-   return;
 }
 
 void Histogram::drawZoom(QPainter& painter) const {
@@ -756,21 +795,21 @@ void Histogram::drawZoom(QPainter& painter) const {
 
    // Draw a line at the start of the zoom:
    painter.setPen(QPen(QBrush(Qt::blue), 1));
-   painter.drawLine(QLine(Y_AXIS_SPACING + m_zoomStart, 20,
-                          Y_AXIS_SPACING + m_zoomStart,
-                          height() - X_AXIS_SPACING));
+   painter.drawLine(QLineF(Y_AXIS_SPACING * devicePixelRatioF() + m_zoomStart,
+                           20. * devicePixelRatioF(),
+                           Y_AXIS_SPACING * devicePixelRatioF() + m_zoomStart,
+                           height() - X_AXIS_SPACING * devicePixelRatioF()));
 
    // Draw a line at the current location of the zoom:
    painter.setPen(QPen(QBrush(Qt::red), 1));
-   painter.drawLine(QLine(Y_AXIS_SPACING + m_zoomCurrent, 20,
-                          Y_AXIS_SPACING + m_zoomCurrent,
-                          height() - X_AXIS_SPACING));
+   painter.drawLine(QLineF(Y_AXIS_SPACING * devicePixelRatioF() + m_zoomCurrent,
+                           20. * devicePixelRatioF(),
+                           Y_AXIS_SPACING * devicePixelRatioF() + m_zoomCurrent,
+                           height() - X_AXIS_SPACING * devicePixelRatioF()));
 
    // Reset the painter settings:
    painter.setPen(Qt::SolidLine);
    painter.setBrush(Qt::white);
-
-   return;
 }
 
 /**
@@ -783,26 +822,29 @@ void Histogram::drawStat(QPainter& painter) const {
 
    // Return right away if the widget is not large enough to hold the
    // statistics information:
-   if ((width() < 400) || (height() < 150)) {
+   if ((width() < 440. * devicePixelRatioF()) ||
+       (height() < 260. * devicePixelRatioF())) {
       return;
    }
 
    // Draw the frame of the statistics info:
    painter.setPen(Qt::SolidLine);
    painter.setBrush(Qt::white);
-   painter.drawRect(QRect(width() - 170, 20, 150, 60));
+   painter.drawRect(
+       QRectF(width() - 300. * devicePixelRatioF(), 20. * devicePixelRatioF(),
+              280. * devicePixelRatioF(), 120. * devicePixelRatioF()));
 
    // Draw the statistics as simple text:
-   painter.drawText(QRect(width() - 160, 20, 130, 60),
-                    Qt::AlignLeft | Qt::AlignVCenter,
-                    tr("Entries: %1\n"
-                       "Underflows: %2\n"
-                       "Overflows: %3")
-                        .arg(m_entries)
-                        .arg(m_values.front())
-                        .arg(m_values.back()));
-
-   return;
+   painter.drawText(
+       QRectF(width() - 290. * devicePixelRatioF(), 20. * devicePixelRatioF(),
+              270. * devicePixelRatioF(), 120. * devicePixelRatioF()),
+       Qt::AlignLeft | Qt::AlignVCenter,
+       tr("Entries: %1\n"
+          "Underflows: %2\n"
+          "Overflows: %3")
+           .arg(m_entries)
+           .arg(m_values.front())
+           .arg(m_values.back()));
 }
 
 /**
@@ -1052,15 +1094,16 @@ bool Histogram::getLogYPossible() const {
 Histogram::AxisBinning Histogram::getXAxisBinning() const {
 
    // Length of the X axis:
-   const int axis_length = width() - (Y_AXIS_SPACING + 20);
+   const int axis_length =
+       width() - devicePixelRatioF() * (Y_AXIS_SPACING + 20.);
 
    // Decide upon the correct axis binning:
    if (m_xAxisStyle == Linear) {
       return getLinearAxisBinning(m_viewLow, m_viewUp, axis_length,
-                                  MIN_X_TICK_DISTANCE);
+                                  devicePixelRatioF() * MIN_X_TICK_DISTANCE);
    } else if (m_xAxisStyle == Logarithmic) {
-      return getLogarithmicAxisBinning(m_low, m_up, axis_length,
-                                       MIN_X_TICK_DISTANCE);
+      return getLogarithmicAxisBinning(
+          m_low, m_up, axis_length, devicePixelRatioF() * MIN_X_TICK_DISTANCE);
    }
 
    // Handle programming errors gracefully:
@@ -1068,7 +1111,7 @@ Histogram::AxisBinning Histogram::getXAxisBinning() const {
                    "not understood, using linear binning")
                     .arg(m_xAxisStyle));
    return getLinearAxisBinning(m_viewLow, m_viewUp, axis_length,
-                               MIN_X_TICK_DISTANCE);
+                               devicePixelRatioF() * MIN_X_TICK_DISTANCE);
 }
 
 Histogram::AxisBinning Histogram::getYAxisBinning() const {
@@ -1081,10 +1124,11 @@ Histogram::AxisBinning Histogram::getYAxisBinning() const {
    // Decide upon the correct axis binning:
    if (m_yAxisStyle == Linear) {
       return getLinearAxisBinning(limits.first, limits.second, axis_length,
-                                  MIN_Y_TICK_DISTANCE);
+                                  devicePixelRatioF() * MIN_Y_TICK_DISTANCE);
    } else if (m_yAxisStyle == Logarithmic) {
-      return getLogarithmicAxisBinning(limits.first, limits.second, axis_length,
-                                       MIN_Y_TICK_DISTANCE);
+      return getLogarithmicAxisBinning(
+          limits.first, limits.second, axis_length,
+          devicePixelRatioF() * MIN_Y_TICK_DISTANCE);
    }
 
    // Handle programming errors gracefully:
@@ -1092,7 +1136,7 @@ Histogram::AxisBinning Histogram::getYAxisBinning() const {
                    "not understood, using linear binning")
                     .arg(m_yAxisStyle));
    return getLinearAxisBinning(limits.first, limits.second, axis_length,
-                               MIN_Y_TICK_DISTANCE);
+                               devicePixelRatioF() * MIN_Y_TICK_DISTANCE);
 }
 
 std::pair<bool, int> Histogram::getExponent(

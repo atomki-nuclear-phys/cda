@@ -1,4 +1,10 @@
-// Dear emacs, this is -*- c++ -*-
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2025 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 #ifndef CDA_DAQ_MONI_HISTOGRAM_H
 #define CDA_DAQ_MONI_HISTOGRAM_H
 
