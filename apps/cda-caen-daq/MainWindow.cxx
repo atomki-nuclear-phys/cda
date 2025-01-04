@@ -1,7 +1,7 @@
 //
 // ATOMKI Common Data Acquisition
 //
-// (c) 2008-2024 ATOMKI, Debrecen, Hungary
+// (c) 2008-2025 ATOMKI, Debrecen, Hungary
 //
 // Apache License Version 2.0
 //
@@ -149,7 +149,7 @@ MainWindow::MainWindow(const QString& confFileName, msg::Level verbosity)
 
    m_currentEventReceiver = m_eventReceivers.currentText();
 
-   m_layout.addWidget(&m_removeEventReceiver, 2, 2);
+   m_layout.addWidget(&m_removeEventReceiver, 2, 2, 1, 1, Qt::AlignLeft);
    m_removeEventReceiver.setEnabled(!confFileName.isEmpty());
    connect(&m_removeEventReceiver, SIGNAL(pressed()), this,
            SLOT(removeEventReceiverSlot()));
@@ -172,7 +172,7 @@ MainWindow::MainWindow(const QString& confFileName, msg::Level verbosity)
 
    m_currentStatReceiver = m_statReceivers.currentText();
 
-   m_layout.addWidget(&m_removeStatReceiver, 3, 2);
+   m_layout.addWidget(&m_removeStatReceiver, 3, 2, 1, 1, Qt::AlignLeft);
    m_removeStatReceiver.setEnabled(!confFileName.isEmpty());
    connect(&m_removeStatReceiver, SIGNAL(pressed()), this,
            SLOT(removeStatReceiverSlot()));
