@@ -1,4 +1,10 @@
-// Dear emacs, this is -*- c++ -*-
+//
+// ATOMKI Common Data Acquisition
+//
+// (c) 2008-2025 ATOMKI, Debrecen, Hungary
+//
+// Apache License Version 2.0
+//
 #ifndef CDA_COMMON_CAEN_DIGITIZER_H
 #define CDA_COMMON_CAEN_DIGITIZER_H
 
@@ -49,10 +55,8 @@ public:
 
    /// Enumeration for the connection type to use
    enum ConnectionType {
-      USB = 0,                    ///< USB connection (direct or V1718->VME)
-      PCI_OpticalLink = 1,        ///< PCI-A2818 (direct or V2718->VME)
-      PCIE_OpticalLink = 2,       ///< PCIe-A3818 (direct or A3818->VME)
-      PCIE_EmbeddedDigitizer = 3  ///< Possible future development
+      USB = 0,             ///< USB connection (direct or V1718->VME)
+      PCI_OpticalLink = 1  ///< PCI-A2818 (direct or V2718->VME)
    };
 
    /// Helper function converting connection type
